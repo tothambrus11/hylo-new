@@ -36,9 +36,8 @@ jobs:
           swift-version: ${{ matrix.swift }}
 
       - uses: compnerd/gha-setup-vsdevenv@main
-          # Note that there was an issue previously with the Windows SDK that seems to have been
-          # that would crash CI. More information at:
-          # https://forums.swift.org/t/swiftpm-plugin-doesnt-work-with-the-latest-visual-studio-version/78183/14
+        with:
+          winsdk: "10.0.26100.0" # Download a recent Windows SDK
 
       - name: Verify swift version
         run: swift --version && swift --version | grep -q ${{ matrix.swift }}
