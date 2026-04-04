@@ -99,12 +99,10 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $archivePath = "${{ steps.locate-distributable.outputs.archive_path }}"
           $binPath = "${{ steps.locate-distributable.outputs.bin_path }}"
-          $binDirName = Split-Path -Path $binPath -Leaf
-          $binParent = Split-Path -Path $binPath -Parent
           if (Test-Path $archivePath) {
             Remove-Item -Force $archivePath
           }
-          tar --zstd -cf $archivePath -C $binParent $binDirName
+          tar --zstd -cf $archivePath -C $binPath .
         shell: pwsh
 
       - name: Upload distributable to draft release
