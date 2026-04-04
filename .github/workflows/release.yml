@@ -19,12 +19,13 @@ jobs:
       - name: Create draft release
         env:
           GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
           TAG: ${{ github.ref_name }}
         run: |
-          if gh release view "$TAG" >/dev/null 2>&1; then
+          if gh release view "$TAG" --repo "$REPOSITORY" >/dev/null 2>&1; then
             exit 0
           fi
-          gh release create "$TAG" --draft --generate-notes --latest=false --title "$TAG"
+          gh release create "$TAG" --repo "$REPOSITORY" --draft --generate-notes --latest=false --title "$TAG"
         shell: bash
 
   build-distributable:
@@ -51,7 +52,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Set up Swift ${{ matrix.swift }} on ${{ matrix.os }}
         uses: SwiftyLab/setup-swift@latest
@@ -107,10 +108,11 @@ jobs:
       - name: Upload distributable to draft release
         env:
           GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
           TAG: ${{ github.ref_name }}
         run: |
           $ErrorActionPreference = 'Stop'
-          gh release upload $env:TAG "${{ steps.locate-distributable.outputs.archive_path }}" --clobber
+          gh release upload $env:TAG "${{ steps.locate-distributable.outputs.archive_path }}" --repo $env:REPOSITORY --clobber
         shell: pwsh
 
 
