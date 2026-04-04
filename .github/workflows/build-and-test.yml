@@ -38,6 +38,10 @@ jobs:
       - uses: compnerd/gha-setup-vsdevenv@main
         with:
           winsdk: "10.0.26100.0" # Download a recent Windows SDK
+          # Note: The GitHub windows-2025 runner has only a very old version of the Windows SDK available by default.
+          #       Swift is said to require version 10.0.22621.0: https://forums.swift.org/t/swiftpm-plugin-doesnt-work-with-the-latest-visual-studio-version/78183/14
+          #       That no longer works, so we had to upgrade to 10.0.26100.0.
+          #       See also: https://github.com/swiftlang/swift/issues/88237
 
       - name: Verify swift version
         run: swift --version && swift --version | grep -q ${{ matrix.swift }}
@@ -60,42 +64,3 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
     runs-on: ${{ matrix.os }}
-
-  build-distributable:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-15, macos-15-intel, windows-2025, windows-11-arm]
-        swift: ["6.2"]
-
-    runs-on: ${{ matrix.os }}
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Swift ${{ matrix.swift }} on ${{ matrix.os }}
-        uses: SwiftyLab/setup-swift@latest
-        with:
-          swift-version: ${{ matrix.swift }}
-
-      - uses: compnerd/gha-setup-vsdevenv@main
-        if: ${{ runner.os == 'Windows' }}
-        with:
-          winsdk: "10.0.26100.0" # Download a recent Windows SDK
-
-      - name: Build in release mode
-        run: swift build -c release --verbose --product hc --static-swift-stdlib
-
-      - name: Prepare distributable
-        id: prepare-distributable
-        run: |
-          BIN_PATH=$(swift build -c release --verbose --product hc --static-swift-stdlib --show-bin-path)
-          ${BIN_PATH}/hc --help
-          echo "path=${BIN_PATH}" >> $GITHUB_OUTPUT
-
-        shell: bash
-      - name: Upload the distributable
-        uses: actions/upload-artifact@v4
-        with:
-          name: hylo-distributable-${{ runner.os }}-${{ runner.arch }}
-          path: ${{ steps.prepare-distributable.outputs.path }}
