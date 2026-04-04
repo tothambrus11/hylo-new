@@ -4,6 +4,10 @@ on:
     tags:
       - "v*"
 
+env:
+  SWIFT_VERSION: "6.2"
+  ARCHIVE_EXTENSION: tar.zst
+
 permissions:
   contents: write
 
@@ -29,12 +33,11 @@ jobs:
         shell: bash
 
   build-distributable:
+    name: Build ${{ matrix.target }}
     needs: prepare-draft-release
     strategy:
       fail-fast: false
       matrix:
-        swift: ["6.2"]
-        archive_extension: [tar.zst]
         include:
           - os: ubuntu-24.04
             target: x86_64-unknown-linux-gnu
@@ -54,10 +57,10 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Set up Swift ${{ matrix.swift }} on ${{ matrix.os }}
+      - name: Set up Swift ${{ env.SWIFT_VERSION }} on ${{ matrix.os }}
         uses: SwiftyLab/setup-swift@latest
         with:
-          swift-version: ${{ matrix.swift }}
+          swift-version: ${{ env.SWIFT_VERSION }}
 
       - uses: compnerd/gha-setup-vsdevenv@main
         if: ${{ runner.os == 'Windows' }}
@@ -73,7 +76,6 @@ jobs:
         env:
           TAG: ${{ github.ref_name }}
           TARGET: ${{ matrix.target }}
-          ARCHIVE_EXTENSION: ${{ matrix.archive_extension }}
         run: |
           $ErrorActionPreference = 'Stop'
           $binPath = (swift build -c release --product hc --static-swift-stdlib --show-bin-path).Trim()
