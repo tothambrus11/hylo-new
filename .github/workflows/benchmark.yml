@@ -1,0 +1,104 @@
+name: Benchmark
+
+# Runs on every PR and every merge to the default branch, so Bencher can both
+# flag per-PR regressions and track the main-branch baseline over time. The
+# actual upload to Bencher happens in bench-upload.yml, which is triggered by
+# workflow_run so that it has secret access even for fork PRs.
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: pwsh
+
+jobs:
+  benchmark:
+    name: Benchmark ${{ matrix.testbed }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-24.04,     testbed: linux-x64 }
+          - { os: ubuntu-24.04-arm, testbed: linux-arm64 }
+          - { os: macos-15,         testbed: macos-arm64 }
+          - { os: macos-15-intel,   testbed: macos-x64 }
+          - { os: windows-2025,     testbed: windows-x64 }
+          - { os: windows-11-arm,   testbed: windows-arm64 }
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-hylo-toolchain
+
+      - name: Build tests (release)
+        run: swift build --build-tests -c release -Xswiftc -enable-testing --verbose
+
+      # SwiftPM has no native --repeat flag (macOS xctest has an undocumented
+      # -XCTestRepetitions, but it's not portable to Linux/Windows), so we
+      # loop in PowerShell. Each iteration emits a JUnit XML via
+      # --xunit-output; summing every <testcase time="..."> entry gives the
+      # pure in-test runtime, excluding test-driver / SwiftPM startup.
+      - name: Run ${{ env.ITERATIONS }} iterations of the test suite
+        env:
+          ITERATIONS: '10'
+        run: |
+          $iterations = [int]$env:ITERATIONS
+          New-Item -ItemType Directory -Force -Path junit | Out-Null
+          $iterationSeconds = @()
+          for ($iteration = 1; $iteration -le $iterations; $iteration++) {
+            Write-Host "::group::Iteration $iteration / $iterations"
+            $junitPath = "junit/run-$iteration.xml"
+            swift test -c release --skip-build --parallel --xunit-output $junitPath
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+            [xml]$junitDocument = Get-Content $junitPath -Raw
+            $seconds = 0.0
+            foreach ($testcase in $junitDocument.SelectNodes('//testcase')) {
+              $seconds += [double]$testcase.GetAttribute('time')
+            }
+            Write-Host ("Iteration {0}: {1:N4} s" -f $iteration, $seconds)
+            $iterationSeconds += $seconds
+            Write-Host '::endgroup::'
+          }
+          $stats = $iterationSeconds | Measure-Object -Average -Minimum -Maximum -StandardDeviation
+          Write-Host ("All iterations (s): {0}" -f ($iterationSeconds -join ', '))
+          Write-Host ("Average: {0:N4}  Min: {1:N4}  Max: {2:N4}  StdDev: {3:N4}" -f `
+            $stats.Average, $stats.Minimum, $stats.Maximum, $stats.StandardDeviation)
+          @{
+            'hylo-test-suite' = @{
+              latency = @{
+                value       = $stats.Average
+                lower_value = $stats.Minimum
+                upper_value = $stats.Maximum
+              }
+            }
+          } | ConvertTo-Json -Depth 5 -Compress | Tee-Object -FilePath benchmark_results.json
+
+      - name: Upload JUnit XMLs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-${{ matrix.testbed }}
+          path: junit/*.xml
+
+      - name: Upload benchmark results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results-${{ matrix.testbed }}
+          path: benchmark_results.json
+
+  # Independent job so the event artifact is produced regardless of which
+  # benchmark matrix rows succeed. bench-upload.yml reads it to reconstruct
+  # PR metadata in a fork-safe way.
+  upload-triggering-event:
+    name: Upload triggering event
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/upload-artifact@v4
+        with:
+          name: triggering-event
+          path: ${{ github.event_path }}

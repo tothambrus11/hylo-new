@@ -1,12 +1,12 @@
 name: Upload Benchmarks to Bencher
 
-# Runs after "Build and Test" completes, in the context of the default branch
-# (so it has access to secrets even when the triggering workflow came from a
-# fork PR). See https://bencher.dev/docs/how-to/github-actions/#pull-requests-from-forks
+# Runs after "Benchmark" completes, in the context of the default branch (so
+# it has access to secrets even when the triggering workflow came from a fork
+# PR). See https://bencher.dev/docs/how-to/github-actions/#pull-requests-from-forks
 # for the canonical fork-safe pattern this implements.
 on:
   workflow_run:
-    workflows: ["Build and Test"]
+    workflows: ["Benchmark"]
     types: [completed]
 
 defaults:
@@ -55,9 +55,12 @@ jobs:
 
       - uses: bencherdev/bencher@main
 
-      # Loop over every benchmark-results-<testbed>-<config> artifact that
-      # build-and-test produced. The artifact name after the common prefix is
-      # the Bencher testbed name.
+      # Loop over every benchmark-results-<testbed> artifact Benchmark produced.
+      # The artifact name after the common prefix is the Bencher testbed name.
+      # Failures of individual bencher-run invocations are collected and
+      # surfaced after the loop so one failing testbed doesn't mask the others.
+      # --error-on-alert is deliberately NOT passed, so a performance alert
+      # surfaces in the PR comment without failing the CI job.
       - name: Upload benchmarks to Bencher
         env:
           EVENT: ${{ github.event.workflow_run.event }}

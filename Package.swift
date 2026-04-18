@@ -11,7 +11,7 @@ import PackageDescription
 let commonSwiftSettings: [SwiftSetting] = [
   .unsafeFlags(["-warnings-as-errors"])
 ]
- 
+
 
 let package = Package(
   name: "Hylo",
