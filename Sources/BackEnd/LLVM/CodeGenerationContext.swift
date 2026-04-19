@@ -1,0 +1,23 @@
+import FrontEnd
+import SwiftyLLVM
+import Utilities
+
+extension Program {
+
+  /// Compiles the IR of `module` in `program` for target `t`.
+  ///
+  /// - Requires: `module` has been lowered and all required passes have been run.
+  public func compileToLLVM(_ module: FrontEnd.Module.ID, target t: consuming TargetMachine) throws -> SwiftyLLVM.Module {
+    var llvm = try SwiftyLLVM.Module("MainModule", targetMachine: t)
+
+    // fun main() -> Int32 { 0 }
+    let mainType = llvm.functionType(from: (), to: llvm.i32)
+    let main = llvm.declareFunction("main", mainType)
+
+    let entry = llvm.appendBlock(to: main)
+    llvm.insertReturn(llvm.i32.unsafe[].zero, at: llvm.endOf(entry))
+
+    return llvm
+  }
+
+}

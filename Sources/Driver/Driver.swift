@@ -1,8 +1,16 @@
 import Archivist
 import Foundation
 import FrontEnd
+import LLVMEmitter
 import StandardLibrary
+import SwiftyLLVM
 import Utilities
+typealias Host = Utilities.Host
+
+public typealias LLVMModule = SwiftyLLVM.Module
+
+/// A FrontEnd module.
+public typealias Module = FrontEnd.Module // Shadowing the name ambiguity
 
 /// A helper to drive the compilation of Hylo source files.
 public struct Driver {
@@ -10,12 +18,50 @@ public struct Driver {
   /// The path containing cached module data.
   public let moduleCachePath: URL?
 
+  /// The target specification (triple + CPU + features).
+  public var target: TargetSpecification
+
+  /// The optimization level for code generation.
+  public var optimization: OptimizationLevel
+
+  /// The relocation model for code generation.
+  public var relocation: RelocationModel
+
+  /// The code model for code generation.
+  public var codeModel: CodeModel
+
+  /// The list of directories in which to search for libraries to link.
+  public var librarySearchPaths: [URL]
+
+  /// The names of the libraries to link.
+  public var libraries: [String]
+
+  /// `true` iff the standard library and its shim should be excluded from compilation and linking.
+  public var noStandardLibrary: Bool = false
+
   /// The program being compiled by the driver.
   public var program: Program
 
+  /// The corresponding LLVM module for each Hylo module.
+  ///
+  /// It's set after LLVM lowering.
+  private var llvmModules: [Module.ID: LLVMModuleBox] = [:]
+
   /// Creates an instance with the given properties.
-  public init(moduleCachePath: URL? = nil) {
+  public init(
+    moduleCachePath: URL? = nil, targetSpecification: TargetSpecification,
+    optimization: OptimizationLevel = .none,
+    relocation: RelocationModel = .default,
+    codeModel: CodeModel = .default,
+    librarySearchPaths: [URL] = [], libraries: [String] = [],
+  ) {
     self.moduleCachePath = moduleCachePath
+    self.target = targetSpecification
+    self.optimization = optimization
+    self.relocation = relocation
+    self.codeModel = codeModel
+    self.librarySearchPaths = librarySearchPaths
+    self.libraries = libraries
     self.program = .init()
   }
 
@@ -87,25 +133,80 @@ public struct Driver {
   }
 
   /// Generates backend code for `module`.
-  public mutating func generateCode(
-    _ module: Module.ID
-  ) async -> (elapsed: Duration, containsError: Bool) {
-    let clock = ContinuousClock()
-    let elapsed = clock.measure {
-      // TODO
+  public mutating func lowerToLLVM(_ module: Module.ID) throws ->
+    (elapsed: Duration, containsError: Bool) {
+    precondition(llvmModules[module] == nil, "LLVM code is already generated for module \(moduleName(module))")
+
+    let elapsed = try ContinuousClock().measure {
+      var m = try program.compileToLLVM(
+        module,
+        target: TargetMachine(target: target, optimization: optimization, relocation: relocation, codeModel: codeModel))
+
+      #if DEBUG
+        try m.verify()
+      #endif
+
+      m.runDefaultModulePasses()
+
+      #if DEBUG
+        try m.verify()
+      #endif
+
+      llvmModules[module] = LLVMModuleBox(consume m)
     }
     return (elapsed, program[module].containsError)
   }
 
-  /// Generates executable from `module`.
+  /// Generates executable from `module`, linking the standard library unless `isFreestanding` is true.
+  ///
+  /// - Requires: `lowerToLLVM(_:)` has been called for `module`.
+  /// - Throws when the parent folder of `output` doesn't exist.
   public mutating func generateExecutable(
-    _ module: Module.ID
-  ) async -> (elapsed: Duration, containsError: Bool) {
-    let clock = ContinuousClock()
-    let elapsed = clock.measure {
-      // TODO
+    for module: Module.ID,
+    writingTo output: URL
+  ) throws -> (elapsed: Duration, containsError: Bool) {
+    let elapsed = try ContinuousClock().measure {
+      let modulesToLink = [module]
+      if !noStandardLibrary {
+        // todo enable this after we can lower the standard library
+        // modulesToLink.append(program.modules[.standardLibrary]!.identity)
+      }
+
+      try FileManager.default.withUniqueTemporaryDirectory{ objectDirectory in
+        let objects = try writeObjectFiles(for: modulesToLink, into: objectDirectory)
+        try linkExecutable(from: objects, writingTo: output)
+      }
     }
     return (elapsed, program[module].containsError)
+  }
+
+  /// Returns the LLVM IR generated for `module`, or `nil` if backend code has not been generated.
+  public func llvmIR(of module: Module.ID) -> String? {
+    llvmModules[module]?.module.llCode()
+  }
+
+  /// Returns the assembly generated for `module`.
+  ///
+  /// - Requires: `lowerToLLVM(_:)` has been called for `module`.
+  public mutating func assembly(of module: Module.ID) throws -> String {
+    let buffer = try llvmModules[module]!.module.compile(.assembly)
+    return Self.decode(buffer)
+  }
+
+  /// Writes object files for `modules` into `directory` and returns their paths.
+  ///
+  /// - Requires: `lowerToLLVM(_:)` has been called for each module in `modules`.
+  @discardableResult
+  public mutating func writeObjectFiles(
+    for modules: [Module.ID], into directory: URL
+  ) throws -> [URL] {
+    try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+    let objectFiles = try modules.map { (module) in
+      let object = directory.appendingPathComponent(moduleName(module) + ".o", isDirectory: false)
+      try llvmModules[module]!.module.write(.objectFile, to: object.path)
+      return object
+    }
+    return objectFiles
   }
 
   /// Loads `module`, whose sources are in `root`, into `program`.
@@ -192,6 +293,100 @@ public struct Driver {
     if program[m].containsError {
       throw CompilationError(diagnostics: .init(program[m].diagnostics))
     }
+  }
+
+  /// Links the provided object files into an executable at `output`, using lld.
+  ///
+  /// - Throws when the parent folder of `output` doesn't exist.
+  private func linkExecutable(from objectFiles: [URL], writingTo output: URL) throws {
+    var arguments = ["-fuse-ld=lld", "-o", output.path]
+    arguments += librarySearchPaths.map({ "-L\($0.path)" })
+    arguments += libraries.map({ "-l\($0)" })
+    arguments += objectFiles.map(\.path)
+
+    #if os(macOS)
+    let sdk = try runCommand(
+      try findExecutable("xcrun"),
+      arguments: ["--sdk", "macosx", "--show-sdk-path"]).standardOutput
+      .trimmingCharacters(in: .whitespacesAndNewlines)
+    arguments += ["-isysroot", sdk, "-lSystem"]
+    #endif
+
+    _ = try Process.executionOutput(try Host.findNativeExecutable(invokedAs: "clang"), arguments: arguments)
+  }
+
+  /// Executes the given `executable` with `arguments, capturing stdout, stderr and exit code.
+  private func runCommand(_ executable: URL, arguments: [String]) throws -> ExecutionResult {
+    let process = Process()
+    let standardOutput = Pipe()
+    let standardError = Pipe()
+    process.executableURL = executable
+    process.arguments = arguments
+    process.standardOutput = standardOutput
+    process.standardError = standardError
+    try process.run()
+    process.waitUntilExit()
+
+    let output = String(
+      decoding: standardOutput.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+    let error = String(
+      decoding: standardError.fileHandleForReading.readDataToEndOfFile(), as: UTF8.self)
+
+    guard process.terminationStatus == 0 else {
+      throw DriverFailure.commandFailed(
+        executable.path, arguments, process.terminationStatus, error.isEmpty ? output : error)
+    }
+
+    return .init(standardOutput: output, standardError: error, terminationStatus: process.terminationStatus)
+  }
+
+  private func moduleName(_ module: Module.ID) -> String {
+    program.modules.elements[module].key
+  }
+
+  private static func decode(_ buffer: borrowing SwiftyLLVM.MemoryBuffer) -> String {
+    buffer.withUnsafeBytes({ (bytes) in
+      String(decoding: bytes.map(UInt8.init(bitPattern:)), as: UTF8.self)
+    })
+  }
+
+  private final class LLVMModuleBox {
+
+    var module: LLVMModule
+
+    init(_ module: consuming LLVMModule) {
+      self.module = module
+    }
+
+  }
+
+  private struct ExecutionResult {
+    let standardOutput: String
+    let standardError: String
+    let terminationStatus: Int32
+  }
+
+  private enum DriverFailure: LocalizedError, CustomStringConvertible {
+
+    case commandFailed(String, [String], Int32, String)
+    case missingBackendArtifact(String)
+
+    var errorDescription: String {
+      switch self {
+      case .commandFailed(let executable, let arguments, let status, let output):
+        let command = ([executable] + arguments).joined(separator: " ")
+        if output.isEmpty {
+          return "command failed with exit code \(status): \(command)"
+        } else {
+          return "command failed with exit code \(status): \n $ \(command)\n\(output)"
+        }
+      case .missingBackendArtifact(let module):
+        return "missing backend artifact for module '\(module)'"
+      }
+    }
+
+    var description: String { "\n\(errorDescription)" }
+
   }
 
 }
