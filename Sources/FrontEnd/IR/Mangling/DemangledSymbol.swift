@@ -172,9 +172,7 @@ internal indirect enum DemangledEntity: Hashable, Sendable {
   }
 
   /// The `Hylo` module.
-  fileprivate static var hylo: DemangledEntity {
-    .module("Hylo")
-  }
+  fileprivate static let hylo: DemangledEntity = .module("Hylo")
 
 }
 
