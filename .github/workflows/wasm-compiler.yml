@@ -175,6 +175,26 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+      # The playground: a static site around the release, using ABI Explorer's editor and panels.
+      - name: Build the playground
+        run: |
+          Tools/wasm/build-site.sh release "$RUNNER_TEMP/hylo-playground"
+          (cd "$RUNNER_TEMP" && zip -qr -9 "$GITHUB_WORKSPACE/hylo-playground.zip" hylo-playground)
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: hylo-playground-${{ steps.meta.outputs.version }}
+          path: ${{ runner.temp }}/hylo-playground/
+          if-no-files-found: error
+          retention-days: 30
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: hylo-playground-zip-${{ steps.meta.outputs.version }}
+          path: hylo-playground.zip
+          if-no-files-found: error
+          retention-days: 30
+
   # A tag publishes what the build job produced and checked. Nothing is rebuilt here.
   release:
     if: startsWith(github.ref, 'refs/tags/wasm-v')
@@ -186,6 +206,11 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: hylo-wasm-${{ needs.build.outputs.version }}
+          path: release
+
+      - uses: actions/download-artifact@v8
+        with:
+          name: hylo-playground-zip-${{ needs.build.outputs.version }}
           path: release
 
       - name: Publish
