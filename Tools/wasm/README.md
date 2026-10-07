@@ -111,12 +111,25 @@ node Tools/wasm/js/conformance.mjs Tools/wasm/.build/dist Tests/CompilerTests
 `build-llvm.sh` runs in stamped steps (`source`, `native`, `libcxx-threads`, `wasm`, `install`),
 so running it again only redoes what changed, and a failed run resumes.
 
+## The playground
+
+`repl/` is a REPL around a release: a Svelte app whose editor (Monaco, with ABI Explorer's port of
+Hylo's TextMate grammar) and dockable tabbed panels (dockview) are taken from
+[ABI Explorer](https://github.com/tothambrus11/abi-explorer-2). It compiles as you type, in a
+worker, and shows the program's exit status or trap, the diagnostics (underlined in the editor
+too), and the raw and refined Hylo IR, LLVM IR and WebAssembly.
+
+```sh
+Tools/wasm/build-site.sh <release> <out>   # then serve <out> over HTTP
+```
+
 ## CI and releases
 
 `.github/workflows/wasm-compiler.yml` builds LLVM when its inputs change (otherwise it is restored
 from the cache, and a cold build that runs out of time is banked and resumed by the next run),
 builds the compiler, runs the smoke test, the compiler's test cases and a browser check, and
-uploads the release as an artifact. A `wasm-v*` tag publishes it as a GitHub release.
+uploads the release and the playground as artifacts. A `wasm-v*` tag publishes both as a GitHub
+release, the playground as `hylo-playground.zip`.
 
 A release is content-addressed: every file but `manifest.json` has a hash of its contents in its
 name and can be served as immutable. `index.mjs` reads the manifest to find the others.
