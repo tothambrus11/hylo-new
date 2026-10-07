@@ -66,15 +66,18 @@ writeFileSync(path.join(out, "manifest.json"), JSON.stringify(manifest, null, 2)
 // The loader keeps its plain name, and is bundled with its one dependency so that a page can
 // import it straight from the release, without a bundler or an import map.
 const here = path.dirname(new URL(import.meta.url).pathname);
+// The worker hosting it is bundled the same way, and finds the release from where it is served.
 const { build } = await import("esbuild");
-await build({
-  entryPoints: [path.join(here, "index.mjs")],
-  bundle: true,
-  format: "esm",
-  target: "es2022",
-  outfile: path.join(out, "index.mjs"),
-  logLevel: "warning",
-});
+for (const entry of ["index.mjs", "worker.mjs"]) {
+  await build({
+    entryPoints: [path.join(here, entry)],
+    bundle: true,
+    format: "esm",
+    target: "es2022",
+    outfile: path.join(out, entry),
+    logLevel: "warning",
+  });
+}
 
 const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
 console.log("| file | size | gzip |\n|---|---:|---:|");

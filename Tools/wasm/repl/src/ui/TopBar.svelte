@@ -5,10 +5,26 @@
   import { THEMES } from '../core/themes';
   import Play from '@lucide/svelte/icons/play';
   import LayoutGrid from '@lucide/svelte/icons/layout-grid';
+  import Link from '@lucide/svelte/icons/link';
+  import { encodeSource } from '../share';
 
   const { onResetLayout }: { onResetLayout: () => void } = $props();
   const mod = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl+';
   let example = $state('');
+  let shared = $state(false);
+
+  /** Copies a link that opens this playground with the current source. */
+  async function share(): Promise<void> {
+    const url = `${location.origin}${location.pathname}#code=${await encodeSource(playground.source)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+    } catch {
+      // No clipboard (an insecure origin, say): the address bar carries it instead.
+      history.replaceState(null, '', url);
+    }
+    shared = true;
+    setTimeout(() => (shared = false), 1500);
+  }
 </script>
 
 <header class="topbar">
@@ -49,6 +65,9 @@
     >
       {#each THEMES as t (t.id)}<option value={t.id}>{t.name}</option>{/each}
     </select>
+    <button class="icon-btn" aria-label="Copy a link to this code" title={shared ? 'Link copied' : 'Copy a link to this code'} onclick={share}>
+      <Link size={16} />
+    </button>
     <button class="icon-btn" aria-label="Reset the panel layout" title="Reset the panel layout" onclick={onResetLayout}>
       <LayoutGrid size={16} />
     </button>

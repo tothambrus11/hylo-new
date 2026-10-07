@@ -2,7 +2,7 @@
 
 import { THEMES, DEFAULT_DARK, DEFAULT_LIGHT, type Theme } from './core/themes';
 import { EXAMPLES } from './examples';
-import CompilerWorker from './compiler.worker?worker';
+import { decodeSource } from './share';
 
 export interface Diagnostic {
   level: 'error' | 'warning' | 'note';
@@ -66,7 +66,8 @@ class Playground {
   diagnostics: Diagnostic[] = $derived(this.result?.compile.diagnostics ?? []);
   errorCount = $derived(this.diagnostics.filter((d) => d.level === 'error').length);
 
-  #worker = new CompilerWorker();
+  // The compiler's release is served beside the app, under `compiler/`, with its own worker.
+  #worker = new Worker(new URL('compiler/worker.mjs', document.baseURI), { type: 'module' });
   #sent = 0;
   #pending = false;
   #debounce: ReturnType<typeof setTimeout> | null = null;
@@ -87,6 +88,17 @@ class Playground {
         if (this.#pending) this.compileNow();
       }
     };
+    void this.#start();
+  }
+
+  /** Compiles the source, after taking it from the URL if a link carries one. */
+  async #start(): Promise<void> {
+    const linked = await decodeSource(location.hash);
+    if (linked !== null) {
+      this.source = linked;
+      // The link has done its job; a reload should show what has been typed since.
+      history.replaceState(null, '', location.pathname + location.search);
+    }
     this.compileNow();
   }
 
@@ -120,7 +132,14 @@ class Playground {
     }
     this.#pending = false;
     this.compiling = true;
-    this.#worker.postMessage({ id: ++this.#sent, source: this.source, optimization: this.optimization });
+    this.#worker.postMessage({
+      id: ++this.#sent,
+      request: {
+        source: this.source,
+        optimization: this.optimization,
+        emit: ['raw-ir', 'ir', 'llvm', 'assembly', 'executable'],
+      },
+    });
   }
 }
 
