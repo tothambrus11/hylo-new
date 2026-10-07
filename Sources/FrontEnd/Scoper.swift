@@ -9,47 +9,27 @@ public struct Scoper {
   /// Computes the scoping relationships in `m`, which is in `p`.
   public func visit(_ m: Module.ID, of p: inout Program) async {
     let ts = p[m].sources.values.indices.map { (i) in
-      Task.detached { [p] in Self.scope(sourceAt: i, of: m, in: p) }
+      Task.detached { [p] in
+        let f = SourceFile.ID(module: m, offset: i)
+        var v = Visitor(p[f])
+        for n in p[f].roots {
+          p.visit(n, calling: &v)
+        }
+        return v
+      }
     }
 
     for (i, t) in ts.enumerated() {
-      install(await t.value, asScopesOfSourceAt: i, of: m, in: &p)
+      let f = SourceFile.ID(module: m, offset: i)
+      var v = await t.value
+      modify(&p[f]) { (w) in
+        swap(&w.topLevelDeclarations, &v.topLevelDeclarations)
+        swap(&w.syntaxToParent, &v.syntaxToParent)
+        swap(&w.scopeToDeclarations, &v.scopeToDeclarations)
+        swap(&w.variableToBinding, &v.variableToBinding)
+      }
+      assert(p[f].syntax.count == v.syntaxToParent.count)
     }
-  }
-
-  /// Computes the scoping relationships in `m`, which is in `p`, on the calling thread.
-  ///
-  /// Unlike `visit(_:of:)`, this method scopes one source after another rather than one per
-  /// task. It is meant for hosts that cannot run Swift's cooperative executor, such as a
-  /// WebAssembly guest driven through exported functions rather than through an entry point.
-  public func visitSerially(_ m: Module.ID, of p: inout Program) {
-    for i in p[m].sources.values.indices {
-      install(Self.scope(sourceAt: i, of: m, in: p), asScopesOfSourceAt: i, of: m, in: &p)
-    }
-  }
-
-  /// Returns the scoping relationships in the `i`-th source of `m`, which is in `p`.
-  private static func scope(sourceAt i: Int, of m: Module.ID, in p: Program) -> Visitor {
-    let f = SourceFile.ID(module: m, offset: i)
-    var v = Visitor(p[f])
-    for n in p[f].roots {
-      p.visit(n, calling: &v)
-    }
-    return v
-  }
-
-  /// Writes the relationships that `v` computed into the `i`-th source of `m`, which is in `p`.
-  private func install(
-    _ v: consuming Visitor, asScopesOfSourceAt i: Int, of m: Module.ID, in p: inout Program
-  ) {
-    let f = SourceFile.ID(module: m, offset: i)
-    modify(&p[f]) { (w) in
-      swap(&w.topLevelDeclarations, &v.topLevelDeclarations)
-      swap(&w.syntaxToParent, &v.syntaxToParent)
-      swap(&w.scopeToDeclarations, &v.scopeToDeclarations)
-      swap(&w.variableToBinding, &v.variableToBinding)
-    }
-    assert(p[f].syntax.count == v.syntaxToParent.count)
   }
 
   /// The computation of the scoping relationships in a single source file.
