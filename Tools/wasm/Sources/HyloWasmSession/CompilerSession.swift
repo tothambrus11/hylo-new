@@ -179,13 +179,29 @@ public struct LinkError: Error, CustomStringConvertible {
 }
 
 /// Calls `body` with `strings` as an array of null-terminated C strings.
+///
+/// The pointers and the characters they point to share one allocation: the table of pointers
+/// first, since it has the stricter alignment, then each string's UTF-8 and its terminator.
 private func withCStrings<T>(
   _ strings: [String], _ body: (UnsafePointer<UnsafePointer<CChar>?>) -> T
 ) -> T {
-  let copies = strings.map({ strdup($0) })
-  defer { copies.forEach({ free($0) }) }
-  let pointers = copies.map({ UnsafePointer($0) })
-  return pointers.withUnsafeBufferPointer({ body($0.baseAddress!) })
+  typealias Element = UnsafePointer<CChar>?
+  let tableSize = MemoryLayout<Element>.stride * strings.count
+  let characterCount = strings.reduce(0, { $0 + $1.utf8.count + 1 })
+  let buffer = UnsafeMutableRawPointer.allocate(
+    byteCount: tableSize + characterCount, alignment: MemoryLayout<Element>.alignment)
+  defer { buffer.deallocate() }
+
+  let table = buffer.bindMemory(to: Element.self, capacity: strings.count)
+  var next = buffer + tableSize
+  for (i, s) in strings.enumerated() {
+    let n = s.utf8.count
+    UnsafeMutableRawBufferPointer(start: next, count: n).copyBytes(from: s.utf8)
+    next.storeBytes(of: 0, toByteOffset: n, as: UInt8.self)
+    table[i] = UnsafePointer(next.bindMemory(to: CChar.self, capacity: n + 1))
+    next += n + 1
+  }
+  return body(table)
 }
 
 /// Returns a URL naming a virtual source file called `name`.
