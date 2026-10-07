@@ -115,7 +115,8 @@ internal struct ModuleGenerationContext: ~Copyable {
       return llvm.i8
     case _ where n <= 0x10000:
       return llvm.i16
-    case _ where n <= 0x1_0000_0000:
+    // Compared as a 64-bit integer since the literal does not fit in `Int` on 32-bit hosts.
+    case _ where UInt64(n) <= 0x1_0000_0000:
       return llvm.i32
     default:
       return llvm.i64
