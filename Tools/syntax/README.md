@@ -1,20 +1,26 @@
-# Hylo IR syntax
+# Syntax of what the compiler prints
 
-`hylo-ir.tmLanguage.json` is a TextMate grammar for Hylo IR as the compiler prints it
-(`hc --emit raw-ir` and `--emit ir`). It works with anything that reads TextMate grammars, such as
-[Shiki](https://shiki.style), which hylo-lang.org and the playground use, and VS Code. Its language
-id is `hylo-ir`.
+TextMate grammars for the compiler's textual outputs, for anything that reads them, such as
+[Shiki](https://shiki.style) (which hylo-lang.org and the playground use) and VS Code:
 
-It lives here, next to the printer, so that the two change together. `test.mjs` highlights the IR
-expected by the compiler's own tests (`Tests/CompilerTests/**/*-ir.expected`) and fails if any
-word is left without a scope, so a construct the printer learns shows up here first:
+| grammar | language id | for |
+|---|---|---|
+| `hylo-ir.tmLanguage.json` | `hylo-ir` | Hylo IR, as `hc --emit raw-ir` and `--emit ir` print it |
+| `wasm-asm.tmLanguage.json` | `wasm-asm` | WebAssembly as LLVM prints it for wasm32 targets (`hc --emit asm`): GNU-style directives and labels, not the WAT text format |
+
+LLVM IR needs no grammar here: Shiki and most editors have one.
+
+They live here, next to the printers, so that the two change together. `test.mjs` highlights the
+IR expected by the compiler's own tests (`Tests/CompilerTests/**/*-ir.expected`) and fails if any
+word is left without a scope, so a construct the printer learns shows up here first; it also
+checks both grammars line by line:
 
 ```sh
 cd Tools/syntax && npm install && npm test
 node test.mjs more.ir   # also check other IR
 ```
 
-The scopes are the conventional TextMate ones, so any theme colours it:
+The scopes are the conventional TextMate ones, so any theme colours them. For Hylo IR:
 
 | what | scope |
 |---|---|
