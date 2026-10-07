@@ -3,7 +3,7 @@ import FrontEnd
 import SwiftyLLVM
 
 /// A request to compile a program.
-public struct CompileRequest: Decodable {
+public struct CompileRequest: Decodable, Sendable {
 
   /// An artifact a request can ask for.
   public enum Artifact: String, Codable, Sendable {
@@ -108,10 +108,10 @@ public struct CompileResponse: Encodable {
 }
 
 /// An issue found in a program.
-public struct DiagnosticDescription: Encodable {
+public struct DiagnosticDescription: Encodable, Sendable {
 
   /// A region of a source file, as 1-based lines and 1-based UTF-16 columns.
-  public struct Region: Encodable {
+  public struct Region: Encodable, Sendable {
 
     public let line: Int
     public let column: Int
