@@ -1,5 +1,6 @@
-// Checks the Hylo IR grammar against IR the compiler printed: the expected outputs of the
-// compiler's own test cases, plus any files named on the command line.
+// Checks the grammars of what the compiler prints. The Hylo IR grammar is checked against the IR
+// the compiler's own test cases expect, plus any files named on the command line; both grammars
+// are checked line by line for the scopes that are easy to get subtly wrong.
 //
 //   node test.mjs [file.ir ...]
 //
@@ -13,13 +14,16 @@ import path from "node:path";
 import { createHighlighter } from "shiki";
 
 const here = path.dirname(new URL(import.meta.url).pathname);
-const grammar = JSON.parse(readFileSync(path.join(here, "hylo-ir.tmLanguage.json"), "utf8"));
-const highlighter = await createHighlighter({ themes: ["github-dark"], langs: [grammar] });
+const grammar = (name) => JSON.parse(readFileSync(path.join(here, `${name}.tmLanguage.json`), "utf8"));
+const highlighter = await createHighlighter({
+  themes: ["github-dark"],
+  langs: [grammar("hylo-ir"), grammar("wasm-asm")],
+});
 
-/** Returns each token of `text` with the innermost scope it was given. */
-function tokens(text) {
+/** Returns each token of `text`, highlighted as `lang`, with the innermost scope it was given. */
+function tokens(text, lang = "hylo-ir") {
   return highlighter
-    .codeToTokens(text, { lang: "hylo-ir", theme: "github-dark", includeExplanation: true })
+    .codeToTokens(text, { lang, theme: "github-dark", includeExplanation: true })
     .tokens.flatMap((line, i) =>
       line.flatMap((t) =>
         t.explanation.map((e) => ({ line: i + 1, text: e.content, scope: e.scopes.at(-1).scopeName })),
@@ -45,10 +49,10 @@ for (const file of corpus) {
 }
 
 /** Asserts that `text` scopes each of `expected`'s words as given, in order. */
-function check(text, expected) {
-  const got = tokens(text)
+function check(text, expected, lang = "hylo-ir") {
+  const got = tokens(text, lang)
     .filter((t) => t.text.trim() !== "")
-    .map((t) => [t.text.trim(), t.scope.replace(/\.hylo-ir$/, "")]);
+    .map((t) => [t.text.trim(), t.scope.replace(/\.(hylo-ir|wasm-asm)$/, "")]);
   for (const [word, scope] of expected) {
     const i = got.findIndex(([w]) => w === word);
     assert.ok(i >= 0, `${JSON.stringify(word)} not found in ${JSON.stringify(text)}`);
@@ -112,6 +116,21 @@ check('  %r78 = property "value" of %r12 as i32', [
   ["i32", "storage.type.machine"],
 ]);
 check("  %r0 = alloca Int32, #preferred", [["#preferred", "constant.language.alignment"]]);
+
+check("\t.functype\tmain (i32, i32) -> (i32)", [
+  [".functype", "keyword.control.directive"],
+  ["main", "variable.other.symbol"],
+  ["i32", "storage.type"],
+  ["->", "keyword.operator"],
+], "wasm-asm");
+check("main:", [["main", "entity.name.function"]], "wasm-asm");
+check(".LBB0_2:", [[".LBB0_2", "entity.name.label"]], "wasm-asm");
+check("\ti32.const\t24", [["i32.const", "keyword.other.instruction"], ["24", "constant.numeric"]], "wasm-asm");
+check("\tbr_if   \t0  # 0: down to label1", [
+  ["br_if", "keyword.other.instruction"],
+  ["# 0: down to label1", "comment.line.number-sign"],
+], "wasm-asm");
+check('\t.section\t.text.main,"",@', [[".section", "keyword.control.directive"], ['""', "string.quoted.double"]], "wasm-asm");
 
 if (failures > 0) {
   console.log(`${failures} unscoped word(s)`);
