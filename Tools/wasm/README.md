@@ -85,6 +85,14 @@ libc++ this configuration needs out of line (`mutex.cpp`, `future.cpp`, ...; 121
 defined by the SDK's libc++) from the same libc++ release into `libc++threads.a`. No type the SDK
 defines changes layout.
 
+**The reactor runs Swift's executor itself.** Its exports are called by the host and must return
+synchronously, and a reactor has no `async` entry point whose return would run pending tasks, so
+the front end's `async` phases would never finish. `runToCompletion` (in `Sources/hylo-wasm`)
+starts the work in a task and runs `MainActor.executor` until it is done. On WASI that executor
+is a cooperative run loop that also runs the tasks of the default executor, so the compiler runs
+its `async` code unchanged, `Task.detached` included. The `runUntil` it relies on is still behind
+`@_spi(ExperimentalCustomExecutors)` in Swift 6.3, which is why it is confined to the reactor.
+
 **A Hylo `main` needs a forwarder on WASI** (`entry.c`). wasi-libc's `_start` calls
 `__main_argc_argv`, the name clang gives a C `main(argc, argv)`. LLVM IR from any other front end
 defines plain `main`, so without the forwarder `_start` calls an undefined weak symbol and traps.

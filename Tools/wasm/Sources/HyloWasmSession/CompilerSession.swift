@@ -10,7 +10,7 @@ import WasmLinker
 /// Compiling the standard library dominates the cost of a session and happens when it is created.
 /// Each request is then compiled in a copy of the resulting program, which is discarded afterwards
 /// so that a long-lived session does not retain every request it has served.
-public struct CompilerSession {
+public struct CompilerSession: Sendable {
 
   /// The program containing the standard library, compiled to refined IR.
   private let baseline: Program
@@ -26,13 +26,13 @@ public struct CompilerSession {
 
   /// Creates an instance compiling the standard library given by `sources`, linking executables
   /// with the files at `sysroot` and writing intermediate files into `scratch`.
-  public init(standardLibrary sources: [SourceFile], sysroot: String, scratch: String) {
+  public init(standardLibrary sources: [SourceFile], sysroot: String, scratch: String) async {
     var p = Program()
     let m = p.demandModule(FrontEnd.Module.standardLibraryName)
     for f in sources {
       _ = p[m].addSource(f)
     }
-    Self.compileToRefinedIR(m, in: &p)
+    await Self.compileToRefinedIR(m, in: &p)
 
     self.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:))
     self.baseline = p
@@ -41,10 +41,12 @@ public struct CompilerSession {
   }
 
   /// Creates an instance compiling the standard library given by `sources`, keyed by file name.
-  public init(standardLibrary sources: [String: String], sysroot: String, scratch: String) {
+  public init(
+    standardLibrary sources: [String: String], sysroot: String, scratch: String
+  ) async {
     // Sorted, so that the identities given to declarations do not depend on the order in which
     // the host happened to serialize the sources.
-    self.init(
+    await self.init(
       standardLibrary: sources.keys.sorted().map { (n) in
         SourceFile(name: .virtual(virtualURL(n)), contents: sources[n]!)
       },
@@ -53,8 +55,8 @@ public struct CompilerSession {
 
   /// Applies the compilation phases up to refined IR to `m`, stopping after the first phase that
   /// reports an error.
-  private static func compileToRefinedIR(_ m: FrontEnd.Module.ID, in p: inout Program) {
-    p.assignScopesSerially(m)
+  private static func compileToRefinedIR(_ m: FrontEnd.Module.ID, in p: inout Program) async {
+    await p.assignScopes(m)
     if p[m].containsError { return }
     p.assignTypes(m, loggingInferenceWhere: nil)
     if p[m].containsError { return }
@@ -64,17 +66,17 @@ public struct CompilerSession {
   }
 
   /// Returns the result of compiling `request`.
-  public func compile(_ request: CompileRequest) -> CompileResponse {
+  public func compile(_ request: CompileRequest) async -> CompileResponse {
     var r = CompileResponse()
-    let elapsed = ContinuousClock().measure {
-      compile(request, into: &r)
-    }
+    let start = ContinuousClock.now
+    await compile(request, into: &r)
+    let elapsed = start.duration(to: .now)
     r.milliseconds = Self.milliseconds(elapsed)
     return r
   }
 
   /// Compiles `request`, writing the results into `r`.
-  private func compile(_ request: CompileRequest, into r: inout CompileResponse) {
+  private func compile(_ request: CompileRequest, into r: inout CompileResponse) async {
     let usesStandardLibrary = request.standardLibrary ?? true
     var p = usesStandardLibrary ? baseline : Program()
     let m = p.demandModule(.init("Main"))
@@ -82,14 +84,16 @@ public struct CompilerSession {
     let main = SourceFile(name: .virtual(virtualURL("main.hylo")), contents: request.source)
     _ = p[m].addSource(main)
 
-    // The front end.
+    // The front end, up to the phase the request asks for.
     defer { r.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:)) }
-    for (phase, run) in frontEndPhases where request.runs(phase) {
-      run(m, &p)
-      if p[m].containsError { return }
-      if phase == .lowering, request.wants(.rawIR) { r.artifacts["raw-ir"] = p.show(p[m].ir) }
-    }
-    if !request.runs(.lowering) { return }
+    if p[m].containsError || !request.runs(.scoping) { return }
+    await p.assignScopes(m)
+    if p[m].containsError || !request.runs(.typing) { return }
+    p.assignTypes(m, loggingInferenceWhere: nil)
+    if p[m].containsError || !request.runs(.lowering) { return }
+    p.lower(m)
+    if p[m].containsError { return }
+    if request.wants(.rawIR) { r.artifacts["raw-ir"] = p.show(p[m].ir) }
     p.applyTransformationPasses(m)
     if p[m].containsError { return }
     if request.wants(.ir) { r.artifacts["ir"] = p.show(p[m].ir) }
@@ -119,17 +123,6 @@ public struct CompilerSession {
       r.error = "\(e)"
     }
   }
-
-  /// A phase of the front end, applied to a module of a program.
-  private typealias FrontEndPhase = (FrontEnd.Module.ID, inout Program) -> Void
-
-  /// The phases of the front end, in order, up to raw IR.
-  private let frontEndPhases: [(CompileRequest.Phase, FrontEndPhase)] = [
-    (.parsing, { (_, _) in }),
-    (.scoping, { (m, p) in p.assignScopesSerially(m) }),
-    (.typing, { (m, p) in p.assignTypes(m, loggingInferenceWhere: nil) }),
-    (.lowering, { (m, p) in p.lower(m) }),
-  ]
 
   /// Returns the executable resulting from linking `object` with the standard library's runtime
   /// support and the C library.

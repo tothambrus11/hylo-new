@@ -44,9 +44,11 @@ public func hylo_free(_ p: UnsafeMutableRawPointer) {
 public func hylo_init(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPointer {
   answer {
     let r = try JSONDecoder().decode(InitRequest.self, from: read(p, n))
-    let s = CompilerSession(
-      standardLibrary: r.standardLibrary, sysroot: r.sysroot ?? "/sysroot",
-      scratch: r.scratch ?? "/tmp")
+    let s = runToCompletion {
+      await CompilerSession(
+        standardLibrary: r.standardLibrary, sysroot: r.sysroot ?? "/sysroot",
+        scratch: r.scratch ?? "/tmp")
+    }
     // A standard library that does not compile would make every request fail in confusing ways,
     // so the session is only installed once it is known to be sound.
     if s.diagnostics.contains(where: { $0.level == "error" }) {
@@ -67,12 +69,13 @@ public func hylo_compile(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawP
     guard let s = session else {
       return try encode(Failure(error: "the standard library has not been loaded"))
     }
-    return try encode(s.compile(try JSONDecoder().decode(CompileRequest.self, from: read(p, n))))
+    let request = try JSONDecoder().decode(CompileRequest.self, from: read(p, n))
+    return try encode(runToCompletion { await s.compile(request) })
   }
 }
 
 /// The argument of `hylo_init`.
-private struct InitRequest: Decodable {
+private struct InitRequest: Decodable, Sendable {
 
   /// The standard library's sources, keyed by file name.
   let standardLibrary: [String: String]
