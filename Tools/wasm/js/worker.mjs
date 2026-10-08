@@ -15,7 +15,8 @@
 //                                             executable's size in `executableBytes`; `run` as
 //                                             `run` returns it, or null
 //
-// A compiler that traps loses its instance, and with it the compiled standard library. The
+// Every request is answered with a result. A compiler that traps loses its instance, and with it
+// the compiled standard library; so does one that reports it cannot serve further requests. The
 // request is then answered with `compile.error`, and the compiler is loaded again for the next.
 
 import { load } from "./index.mjs";
@@ -35,10 +36,16 @@ function start() {
 }
 start();
 
-// Requests are served one at a time, in order.
+// Requests are served one at a time, in order. A request that fails unexpectedly is still
+// answered, and does not hold up the ones after it.
 let queue = Promise.resolve();
 onmessage = ({ data: { id, request, run = true } }) => {
-  queue = queue.then(() => serve(id, request, run));
+  queue = queue
+    .then(() => serve(id, request, run))
+    .catch((e) => {
+      const error = `the request could not be served: ${e?.stack ?? e}`;
+      postMessage({ type: "result", id, compile: { error }, run: null });
+    });
 };
 
 async function serve(id, request, run) {
@@ -62,6 +69,7 @@ async function serve(id, request, run) {
     start();
     return;
   }
+  if (!h.usable) start();
   const executable = compile.executable;
   delete compile.executable;
   if (executable) compile.executableBytes = executable.length;

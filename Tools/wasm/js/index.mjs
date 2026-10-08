@@ -29,7 +29,9 @@ import {
  */
 export async function load({ baseUrl, fetch: get = globalThis.fetch, onProgress } = {}) {
   const base = new URL(baseUrl, globalThis.location?.href);
-  const manifest = await (await get(new URL("manifest.json", base))).json();
+  const response = await get(new URL("manifest.json", base));
+  if (!response.ok) throw new Error(`could not fetch manifest.json (${response.status})`);
+  const manifest = await response.json();
 
   const total = Object.values(manifest.files).reduce((a, f) => a + f.bytes, 0);
   let loaded = 0;
@@ -61,7 +63,13 @@ export async function load({ baseUrl, fetch: get = globalThis.fetch, onProgress 
  * @param {Map<string, Uint8Array>} parts.sysroot The files linked into executables, by name.
  */
 export async function instantiate({ compiler, standardLibrary, sysroot }) {
+  // What the compiler writes is kept for diagnosing it, up to a bound, since a long-lived page may
+  // compile many programs.
   const log = [];
+  const record = (line) => {
+    log.push(line);
+    if (log.length > maximumLogLength) log.splice(0, log.length - maximumLogLength);
+  };
   const lib = new Map([...sysroot].map(([n, b]) => [n, new File(b, { readonly: true })]));
   const scratch = new PreopenDirectory("/tmp", new Map());
   const wasi = new WASI(
@@ -69,8 +77,8 @@ export async function instantiate({ compiler, standardLibrary, sysroot }) {
     [],
     [
       new OpenFile(new File([])),
-      ConsoleStdout.lineBuffered((l) => log.push(l)),
-      ConsoleStdout.lineBuffered((l) => log.push(l)),
+      ConsoleStdout.lineBuffered(record),
+      ConsoleStdout.lineBuffered(record),
       new PreopenDirectory("/sysroot", new Map([["lib", new Directory(lib)]])),
       scratch,
     ],
@@ -82,17 +90,24 @@ export async function instantiate({ compiler, standardLibrary, sysroot }) {
   wasi.initialize(instance);
   const m = instance.exports;
 
+  // Why the instance can no longer be used, once it cannot.
+  let unusable = null;
+
   /** Calls the export `f` with `value` as JSON, and returns its JSON answer. */
   const call = (f, value) => {
+    if (unusable !== null) throw new Error(`the compiler cannot be used anymore: ${unusable}`);
     const request = new TextEncoder().encode(JSON.stringify(value));
     const p = m.hylo_alloc(request.length);
     new Uint8Array(m.memory.buffer).set(request, p);
     let answer;
     try {
       answer = f(p, request.length);
-    } finally {
-      m.hylo_free(p);
+    } catch (e) {
+      // A trap leaves the instance's state wherever it was, so nothing more is asked of it.
+      unusable = e?.message ?? String(e);
+      throw e;
     }
+    m.hylo_free(p);
     try {
       // Read afresh: the call may have grown the memory, detaching any earlier view of it.
       const length = new DataView(m.memory.buffer).getUint32(answer, true);
@@ -112,8 +127,16 @@ export async function instantiate({ compiler, standardLibrary, sysroot }) {
     /** How long compiling the standard library took. */
     standardLibraryMilliseconds,
 
-    /** What the compiler wrote to its standard streams; normally nothing. */
+    /** The last lines the compiler wrote to its standard streams; normally none. */
     log,
+
+    /**
+     * `false` iff the compiler trapped or reported that it cannot serve further requests, in
+     * which case it must be instantiated again.
+     */
+    get usable() {
+      return unusable === null;
+    },
 
     /**
      * Compiles a program.
@@ -124,6 +147,7 @@ export async function instantiate({ compiler, standardLibrary, sysroot }) {
     compile(request) {
       const r = call(m.hylo_compile, { emit: ["executable"], ...request });
       scratch.dir.contents.clear();
+      if (r.compilerUnusable) unusable = r.error;
       if (typeof r.executable === "string") r.executable = fromBase64(r.executable);
       return r;
     },
@@ -135,8 +159,8 @@ export async function instantiate({ compiler, standardLibrary, sysroot }) {
 /**
  * Runs `executable`, a WASI command, and returns its exit code and what it wrote.
  *
- * A trap is reported as `trap` rather than thrown, because a program that traps is a program that
- * ran, as far as a REPL is concerned.
+ * A trap, or running out of stack, is reported as `trap` rather than thrown, because a program
+ * that traps is a program that ran, as far as a REPL is concerned.
  *
  * @param {Uint8Array} executable
  * @param {{ args?: string[], stdin?: Uint8Array }} [options]
@@ -162,12 +186,16 @@ export async function run(executable, { args = [], stdin = new Uint8Array() } = 
     const exitCode = wasi.start(instance);
     return { exitCode, stdout: text(stdout), stderr: text(stderr) };
   } catch (e) {
-    if (e instanceof WebAssembly.RuntimeError) {
+    // Engines report a stack overflow in WebAssembly as a `RangeError` rather than a trap.
+    if (e instanceof WebAssembly.RuntimeError || e instanceof RangeError) {
       return { exitCode: null, trap: e.message, stdout: text(stdout), stderr: text(stderr) };
     }
     throw e;
   }
 }
+
+/** The number of lines of the compiler's output that `log` keeps. */
+const maximumLogLength = 1000;
 
 /** Returns the bytes encoded in `s`. */
 function fromBase64(s) {

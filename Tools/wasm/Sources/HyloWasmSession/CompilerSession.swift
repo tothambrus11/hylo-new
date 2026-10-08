@@ -119,6 +119,9 @@ public struct CompilerSession: Sendable {
         let object = try llvm.compile(.objectFile)
         r.executable = try link(object)
       }
+    } catch let e as LinkError {
+      r.error = "\(e)"
+      r.compilerUnusable = !e.canRunAgain
     } catch let e {
       r.error = "\(e)"
     }
@@ -145,13 +148,15 @@ public struct CompilerSession: Sendable {
       "\(sysroot)/lib/libclang_rt.builtins-wasm32.a",
     ]
     var diagnostics: UnsafeMutablePointer<CChar>? = nil
+    var canRunAgain = true
     let status = withCStrings(arguments) { (argv) in
-      hylo_wasm_link(Int32(arguments.count), argv, &diagnostics)
+      hylo_wasm_link(Int32(arguments.count), argv, &diagnostics, &canRunAgain)
     }
     defer { free(diagnostics) }
 
     if status != 0 {
-      throw LinkError(message: diagnostics.map({ String(cString: $0) }) ?? "")
+      throw LinkError(
+        message: diagnostics.map({ String(cString: $0) }) ?? "", canRunAgain: canRunAgain)
     }
     return try Data(contentsOf: URL(fileURLWithPath: output))
   }
@@ -172,6 +177,9 @@ public struct LinkError: Error, CustomStringConvertible {
 
   /// What the linker reported.
   public let message: String
+
+  /// `false` iff the failure may have left the linker unable to run again in this process.
+  public let canRunAgain: Bool
 
   /// A textual representation of `self`.
   public var description: String { "link failed: \(message)" }

@@ -11,6 +11,7 @@
 
 import { existsSync, readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
+import { readDist } from "./dist.mjs";
 import { instantiate } from "./index.mjs";
 
 const [dist, tests] = process.argv.slice(2);
@@ -19,12 +20,7 @@ if (tests === undefined) {
   process.exit(2);
 }
 
-const lib = path.join(dist, "sysroot", "lib");
-const hylo = await instantiate({
-  compiler: await WebAssembly.compile(readFileSync(path.join(dist, "hylo-wasm.wasm"))),
-  standardLibrary: JSON.parse(readFileSync(path.join(dist, "stdlib.json"), "utf8")),
-  sysroot: new Map(readdirSync(lib).map((n) => [n, readFileSync(path.join(lib, n))])),
-});
+const hylo = await instantiate(await readDist(dist));
 
 /** Returns the test attributes on the first line of `source`. */
 function attributes(source) {
