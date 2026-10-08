@@ -201,6 +201,7 @@ let package = Package(
       name: "BackEndTests",
       dependencies: [
         .target(name: "BackEnd"),
+        .product(name: "BigInt", package: "BigInt"),
         .target(name: "Driver"),
         .target(name: "HostUtilities"),
         .target(name: "Utilities"),
