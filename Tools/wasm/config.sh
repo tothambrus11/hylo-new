@@ -15,6 +15,11 @@
 : "${SWIFT_SDK_CHECKSUM:=a61f0584c93283589f8b2f42db05c1f9a182b506c2957271402992655591dd7c}"
 : "${WASI_TRIPLE:=wasm32-unknown-wasip1}"
 
+# binaryen, whose `wasm-opt` shrinks the release build of the compiler. Optional locally.
+: "${BINARYEN_VERSION:=version_132}"
+: "${BINARYEN_URL:=https://github.com/WebAssembly/binaryen/releases/download/${BINARYEN_VERSION}/binaryen-${BINARYEN_VERSION}-x86_64-linux.tar.gz}"
+: "${BINARYEN_CHECKSUM:=195ddc94f9bc89f45abdabb0b9eea86023d727ba90eac8b35b80f2544fc30572}"
+
 # Everything heavy lives here, outside the repository, so that `git clean -xfd` never throws away
 # an LLVM build.
 : "${HYLO_WASM_CACHE:=${XDG_CACHE_HOME:-$HOME/.cache}/hylo-wasm}"

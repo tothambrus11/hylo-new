@@ -163,3 +163,42 @@ jobs:
           $archive = Join-Path $env:RUNNER_TEMP "dist/$env:ARTIFACT_NAME.tar.zst"
           gh release upload $env:TAG $archive --repo '${{ github.repository }}' --clobber
         shell: pwsh
+
+  # The compiler built for WebAssembly, to run in a browser. It is built and checked by the same
+  # workflow that checks it on every change.
+  build-wasm-distributable:
+    name: Build distributable for wasm32-wasip1
+    needs: prepare-draft-release
+    uses: ./.github/workflows/wasm-compiler.yml
+    with:
+      version: ${{ github.ref_name }}
+
+  verify-and-publish-wasm-distributable:
+    name: Verify and publish distributable for wasm32-wasip1
+    needs: build-wasm-distributable
+    runs-on: ubuntu-24.04
+    env:
+      ARTIFACT_NAME: hylo-${{ github.ref_name }}-wasm32-wasip1
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: Tools/wasm/js
+
+      - name: Download distributable artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ needs.build-wasm-distributable.outputs.artifact }}
+          path: ${{ runner.temp }}/release
+
+      - name: Verify distributable in a Swift-free environment
+        run: node Tools/wasm/js/verify-release.mjs "$RUNNER_TEMP/release" "${GITHUB_REF_NAME#v}"
+
+      - name: Upload distributable to draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          tar --zstd -cf "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" -C "$RUNNER_TEMP/release" .
+          gh release upload "$TAG" "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" \
+            --repo "$GITHUB_REPOSITORY" --clobber

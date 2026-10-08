@@ -1,29 +1,39 @@
 name: Compiler on WebAssembly
 
-# Builds the whole compiler, LLVM back end and in-process linker included, for WebAssembly, checks
-# that it compiles and runs programs, and publishes it on `wasm-v*` tags. See Tools/wasm/README.md.
+# Builds the whole compiler, LLVM back end and in-process linker included, for WebAssembly, and
+# checks that it compiles and runs programs. `release.yml` calls this to build the release's
+# WebAssembly distributable. See Tools/wasm/README.md.
 on:
   push:
     branches:
       - main
-    tags:
-      - "wasm-v*"
-    paths-ignore:
-      - "**.md"
-      - "LICENSE"
-      - ".gitignore"
-  pull_request:
-    paths:
+    paths: &paths
+      - "Sources/**"
+      - "StandardLibrary/**"
+      - "Tests/CompilerTests/**"
       - "Tools/wasm/**"
-      - ".github/workflows/wasm-compiler.yml"
       - "Package.swift"
+      - "Package.resolved"
       - "Swifty-LLVM"
+      - ".github/workflows/wasm-compiler.yml"
+  pull_request:
+    paths: *paths
   workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        description: The version the release records, such as `v1.2.0`, whose `v` is dropped.
+        type: string
+        required: true
+    outputs:
+      artifact:
+        description: The name of the artifact holding the packaged release.
+        value: ${{ jobs.build.outputs.artifact }}
 
 # The LLVM build is the whole cost model here: cold, it is hours; warm, it is a cache restore. A
 # build whose value is its cache must not be cancelled half way by a later push.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: wasm-compiler-${{ github.ref }}
   cancel-in-progress: false
 
 env:
@@ -35,7 +45,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 360
     outputs:
-      version: ${{ steps.meta.outputs.version }}
+      artifact: hylo-wasm-${{ steps.meta.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -43,20 +53,24 @@ jobs:
 
       - name: Read the pinned inputs
         id: meta
+        env:
+          VERSION: ${{ inputs.version }}
         run: |
           source Tools/wasm/config.sh
           # Everything that decides the contents of the wasm LLVM, hashed into its cache key.
           llvm="$(cat Tools/wasm/config.sh Tools/wasm/build-llvm.sh Tools/wasm/wasi-toolchain.cmake \
             Tools/wasm/patches/*.patch | sha256sum | cut -c1-16)"
-          echo "llvm_key=llvm-wasm-$LLVM_TAG-swift-$SWIFT_VERSION-$llvm" >> "$GITHUB_OUTPUT"
-          echo "swift=$SWIFT_VERSION" >> "$GITHUB_OUTPUT"
-          echo "sdk_url=$SWIFT_SDK_URL" >> "$GITHUB_OUTPUT"
-          echo "sdk_checksum=$SWIFT_SDK_CHECKSUM" >> "$GITHUB_OUTPUT"
-          if [[ "$GITHUB_REF" == refs/tags/wasm-v* ]]; then
-            echo "version=${GITHUB_REF_NAME#wasm-v}" >> "$GITHUB_OUTPUT"
-          else
-            echo "version=0.0.0-${GITHUB_SHA::12}" >> "$GITHUB_OUTPUT"
-          fi
+          {
+            echo "llvm_key=llvm-wasm-$LLVM_TAG-swift-$SWIFT_VERSION-$llvm"
+            echo "swift=$SWIFT_VERSION"
+            echo "sdk_url=$SWIFT_SDK_URL"
+            echo "sdk_checksum=$SWIFT_SDK_CHECKSUM"
+            echo "binaryen_version=$BINARYEN_VERSION"
+            echo "binaryen_url=$BINARYEN_URL"
+            echo "binaryen_checksum=$BINARYEN_CHECKSUM"
+            version="${VERSION#v}"
+            echo "version=${version:-0.0.0-${GITHUB_SHA::12}}"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Set up Swift ${{ steps.meta.outputs.swift }}
         uses: SwiftyLab/setup-swift@38f54a76b70d989321de9dc7c840618c08cf56e9 # v1.14.0
@@ -88,8 +102,9 @@ jobs:
         if: steps.llvm.outputs.cache-hit != 'true'
         run: sudo apt-get update && sudo apt-get install -y ninja-build
 
-      # A cold LLVM build may not fit in one job. Whatever a run built is saved even when it fails
-      # or times out, and the next run resumes from it rather than starting over.
+      # A cold LLVM build may not fit in one job. Whatever a run built is saved when it fails or
+      # runs out of time, with the stamps of the steps it completed, and the next run resumes from
+      # it rather than starting over.
       - name: Restore a partial LLVM build
         if: steps.llvm.outputs.cache-hit != 'true'
         uses: actions/cache/restore@v4
@@ -100,11 +115,12 @@ jobs:
           key: ${{ steps.meta.outputs.llvm_key }}-partial-${{ github.run_id }}
           restore-keys: ${{ steps.meta.outputs.llvm_key }}-partial-
 
+      # Bounded below the job's own limit, so that a build running out of time fails this step
+      # and leaves time to save what it built.
       - name: Build LLVM for WebAssembly
         if: steps.llvm.outputs.cache-hit != 'true'
-        run: |
-          Tools/wasm/build-llvm.sh --stamp-only
-          Tools/wasm/build-llvm.sh
+        timeout-minutes: 300
+        run: Tools/wasm/build-llvm.sh
 
       - name: Save the partial LLVM build
         if: steps.llvm.outputs.cache-hit != 'true' && (failure() || cancelled())
@@ -123,10 +139,14 @@ jobs:
           key: ${{ steps.meta.outputs.llvm_key }}
 
       - name: Set up binaryen
+        env:
+          URL: ${{ steps.meta.outputs.binaryen_url }}
+          CHECKSUM: ${{ steps.meta.outputs.binaryen_checksum }}
+          VERSION: ${{ steps.meta.outputs.binaryen_version }}
         run: |
-          VERSION=version_132
-          curl -fsSL "https://github.com/WebAssembly/binaryen/releases/download/$VERSION/binaryen-$VERSION-x86_64-linux.tar.gz" \
-            | tar -xz -C "$RUNNER_TEMP"
+          curl -fsSL -o "$RUNNER_TEMP/binaryen.tar.gz" "$URL"
+          echo "$CHECKSUM  $RUNNER_TEMP/binaryen.tar.gz" | sha256sum -c -
+          tar -xzf "$RUNNER_TEMP/binaryen.tar.gz" -C "$RUNNER_TEMP"
           echo "$RUNNER_TEMP/binaryen-$VERSION/bin" >> "$GITHUB_PATH"
 
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
@@ -138,7 +158,7 @@ jobs:
 
       - name: Install the loader's dependencies
         working-directory: Tools/wasm/js
-        run: npm install --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Compile and run programs with it
         run: node Tools/wasm/js/smoke.mjs Tools/wasm/.build/dist
@@ -154,8 +174,9 @@ jobs:
         run: |
           source Tools/wasm/config.sh
           export LLVM_TAG
-          node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist "$VERSION" release \
-            | tee -a "$GITHUB_STEP_SUMMARY"
+          node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist "$VERSION" \
+            Tools/wasm/.build/release | tee -a "$GITHUB_STEP_SUMMARY"
+          node Tools/wasm/js/verify-release.mjs Tools/wasm/.build/release "$VERSION"
 
       # A release is loaded through its manifest, by a page, which is a different code path from the
       # checks above. Playwright is not a dependency of the loader, so it is installed here.
@@ -166,58 +187,11 @@ jobs:
           ./node_modules/.bin/playwright install --with-deps chromium
           cd "$GITHUB_WORKSPACE"
           PLAYWRIGHT_MODULE="$RUNNER_TEMP/pw/node_modules/playwright/index.mjs" \
-            node Tools/wasm/js/browser-smoke.mjs release
+            node Tools/wasm/js/browser-smoke.mjs Tools/wasm/.build/release
 
       - uses: actions/upload-artifact@v7
         with:
           name: hylo-wasm-${{ steps.meta.outputs.version }}
-          path: release/
+          path: Tools/wasm/.build/release/
           if-no-files-found: error
           retention-days: 30
-
-      # The playground: a static site around the release, using ABI Explorer's editor and panels.
-      - name: Build the playground
-        run: |
-          Tools/wasm/build-site.sh release "$RUNNER_TEMP/hylo-playground"
-          (cd "$RUNNER_TEMP" && zip -qr -9 "$GITHUB_WORKSPACE/hylo-playground.zip" hylo-playground)
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: hylo-playground-${{ steps.meta.outputs.version }}
-          path: ${{ runner.temp }}/hylo-playground/
-          if-no-files-found: error
-          retention-days: 30
-
-      - uses: actions/upload-artifact@v7
-        with:
-          name: hylo-playground-zip-${{ steps.meta.outputs.version }}
-          path: hylo-playground.zip
-          if-no-files-found: error
-          retention-days: 30
-
-  # A tag publishes what the build job produced and checked. Nothing is rebuilt here.
-  release:
-    if: startsWith(github.ref, 'refs/tags/wasm-v')
-    needs: build
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: hylo-wasm-${{ needs.build.outputs.version }}
-          path: release
-
-      - uses: actions/download-artifact@v8
-        with:
-          name: hylo-playground-zip-${{ needs.build.outputs.version }}
-          path: release
-
-      - name: Publish
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
-        run: |
-          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --title "$TAG" --generate-notes \
-            --latest=false || true
-          gh release upload "$TAG" release/* --repo "$GITHUB_REPOSITORY" --clobber

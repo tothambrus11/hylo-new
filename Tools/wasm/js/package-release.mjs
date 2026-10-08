@@ -9,6 +9,7 @@
 import { createHash } from "node:crypto";
 import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 
 const [dist, version, out] = process.argv.slice(2);
@@ -46,6 +47,27 @@ for (const n of readdirSync(lib).sort()) {
   sysroot.push(key);
 }
 
+// The loader keeps its plain name, and is bundled with its one dependency so that a page can
+// import it straight from the release, without a bundler or an import map. The worker hosting it
+// is bundled the same way, and finds the release from where it is served. Neither is
+// content-addressed, since pages name them, but the manifest records what they hold.
+const here = path.dirname(fileURLToPath(import.meta.url));
+const { build } = await import("esbuild");
+const loaders = {};
+for (const entry of ["index.mjs", "worker.mjs"]) {
+  const outfile = path.join(out, entry);
+  await build({
+    entryPoints: [path.join(here, entry)],
+    bundle: true,
+    format: "esm",
+    target: "es2022",
+    outfile,
+    logLevel: "warning",
+  });
+  const bytes = readFileSync(outfile);
+  loaders[entry] = { sha256: createHash("sha256").update(bytes).digest("hex"), bytes: bytes.length };
+}
+
 const manifest = {
   schemaVersion: 1,
   version,
@@ -60,24 +82,9 @@ const manifest = {
   // The keys of `files` that are linked into every executable, in the order a host should
   // install them under `/sysroot/lib`, by their `name`.
   sysroot,
+  loaders,
 };
 writeFileSync(path.join(out, "manifest.json"), JSON.stringify(manifest, null, 2) + "\n");
-
-// The loader keeps its plain name, and is bundled with its one dependency so that a page can
-// import it straight from the release, without a bundler or an import map.
-const here = path.dirname(new URL(import.meta.url).pathname);
-// The worker hosting it is bundled the same way, and finds the release from where it is served.
-const { build } = await import("esbuild");
-for (const entry of ["index.mjs", "worker.mjs"]) {
-  await build({
-    entryPoints: [path.join(here, entry)],
-    bundle: true,
-    format: "esm",
-    target: "es2022",
-    outfile: path.join(out, entry),
-    logLevel: "warning",
-  });
-}
 
 const mb = (n) => `${(n / 1048576).toFixed(1)} MB`;
 console.log("| file | size | gzip |\n|---|---:|---:|");

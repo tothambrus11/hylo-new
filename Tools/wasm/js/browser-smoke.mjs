@@ -5,7 +5,8 @@
 //   node browser-smoke.mjs <release>
 //
 // Requires the `playwright` package, which is not a dependency of the loader: set
-// PLAYWRIGHT_MODULE to its entry point if it is not resolvable from here.
+// PLAYWRIGHT_MODULE to its entry point if it is not resolvable from here, and CHROMIUM to a
+// browser executable to use instead of Playwright's own.
 
 import { readFileSync, existsSync } from "node:fs";
 import { createServer } from "node:http";
@@ -55,7 +56,7 @@ const server = createServer((request, response) => {
 await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
 
 const browser = await chromium.launch(
-  existsSync("/opt/pw-browsers/chromium") ? { executablePath: "/opt/pw-browsers/chromium" } : {},
+  process.env.CHROMIUM ? { executablePath: process.env.CHROMIUM } : {},
 );
 try {
   const tab = await browser.newPage();
