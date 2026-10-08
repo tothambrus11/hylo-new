@@ -7,14 +7,12 @@
 #   4. wasm            LLVM and lld's WebAssembly port, cross-compiled to wasm32-wasip1
 #   5. install         headers, static libraries and `llvm.pc` in $LLVM_WASM_PREFIX
 #
-# Every step is stamped with a hash of its inputs and skipped when they have not changed, so
-# running this again is cheap and a failed run resumes. CI caches the steps separately and runs
-# them one at a time:
+# A step that completes is stamped with a hash of its inputs and skipped while they do not change,
+# so running this again is cheap. A step that was interrupted has no stamp and runs again; the
+# builds resume where they stopped. The stamps live in $HYLO_WASM_CACHE with what they describe,
+# so a cache of that directory carries them along. One step can be run on its own:
 #
-#   build-llvm.sh source|native|libcxx-threads|wasm|install
-#
-# With no argument, all steps run. `--stamp-only` marks the steps whose outputs are present as
-# current, which is what a CI job does after restoring them from its cache.
+#   build-llvm.sh [source|native|libcxx-threads|wasm|install]
 #
 # Requires: swift (with the SDK named by $SWIFT_SDK installed), cmake, ninja, git, a host C++
 # compiler.
@@ -25,17 +23,34 @@ source "$HERE/config.sh"
 
 JOBS="${JOBS:-$(getconf _NPROCESSORS_ONLN)}"
 ONLY="${1:-all}"
+case "$ONLY" in
+  all | source | native | libcxx-threads | wasm | install) ;;
+  *) echo "usage: $0 [source|native|libcxx-threads|wasm|install]" >&2; exit 2 ;;
+esac
 want() { [[ "$ONLY" == all || "$ONLY" == "$1" ]]; }
 step() { printf '\n\033[1m==> %s\033[0m\n' "$1"; }
 
 mkdir -p "$HYLO_WASM_CACHE"
 
-# A step is current when the hash of its inputs is what its stamp records.
+# A step is current when the hash of its inputs is what its stamp records. A step that starts
+# removes its stamp first, so that an interrupted step is never mistaken for a complete one.
 hash() { printf '%s' "$1" | sha256sum | cut -d' ' -f1; }
 stamp() { hash "$1" > "$HYLO_WASM_CACHE/.stamp-$2"; }
+unstamp() { rm -f "$HYLO_WASM_CACHE/.stamp-$1"; }
 current() {
   [[ -f "$HYLO_WASM_CACHE/.stamp-$2" ]] && [[ "$(cat "$HYLO_WASM_CACHE/.stamp-$2")" == "$(hash "$1")" ]]
 }
+
+# Prints `--fresh` unless the build directory of `step` was last configured with `inputs`, so
+# that a build resumed with the same inputs keeps its configuration and one whose inputs changed
+# is reconfigured from scratch. Requires CMake 3.24.
+configure_mode() {
+  local inputs="$1" step="$2" record="$HYLO_WASM_CACHE/.configured-$2"
+  if [[ ! -f "$record" || "$(cat "$record")" != "$(hash "$inputs")" ]]; then
+    printf '%s' --fresh
+  fi
+}
+configured() { hash "$1" > "$HYLO_WASM_CACHE/.configured-$2"; }
 
 locate_swift_toolchain
 export SWIFT_BIN WASI_SYSROOT WASI_RESOURCE_DIR
@@ -56,21 +71,12 @@ TOOLCHAIN_HASH="$(sha256sum "$HERE/wasi-toolchain.cmake" | cut -d' ' -f1)"
 WASM_INPUTS="$SOURCE_INPUTS $THREADS_INPUTS $TOOLCHAIN_HASH $LLVM_WASM_CMAKE_OPTIONS $LLVM_WASM_TARGETS"
 INSTALL_INPUTS="$WASM_INPUTS"
 
-if [[ "$ONLY" == --stamp-only ]]; then
-  [[ -d "$LLVM_SRC/llvm" ]] && stamp "$SOURCE_INPUTS" source
-  [[ -x "$LLVM_NATIVE_BUILD/bin/llvm-tblgen" ]] && stamp "$NATIVE_INPUTS" native
-  [[ -f "$LIBCXX_THREADS/libc++threads.a" ]] && stamp "$THREADS_INPUTS" libcxx-threads
-  [[ -f "$LLVM_WASM_BUILD/lib/libLLVMCore.a" ]] && stamp "$WASM_INPUTS" wasm
-  [[ -f "$LLVM_WASM_PREFIX/lib/pkgconfig/llvm.pc" ]] && stamp "$INSTALL_INPUTS" install
-  step "Stamped the steps whose outputs are present"
-  exit 0
-fi
-
 # ------------------------------------------------------------------------------------ source --
 if ! want source; then :
 elif current "$SOURCE_INPUTS" source; then step "LLVM source ($LLVM_TAG) — current"
 else
   step "Fetching LLVM source ($LLVM_TAG)"
+  unstamp source
   rm -rf "$LLVM_SRC"
   # Sparse and blobless: only the projects that are built are checked out. `libc` provides
   # headers that LLVM's build requires since version 22.
@@ -88,12 +94,15 @@ if ! want native; then :
 elif current "$NATIVE_INPUTS" native; then step "Native tablegen — current"
 else
   step "Building native tablegen"
-  cmake -G Ninja -S "$LLVM_SRC/llvm" -B "$LLVM_NATIVE_BUILD" \
+  unstamp native
+  # shellcheck disable=SC2046 # The mode is one word or none.
+  cmake -G Ninja -S "$LLVM_SRC/llvm" -B "$LLVM_NATIVE_BUILD" $(configure_mode "$NATIVE_INPUTS" native) \
     -DCMAKE_BUILD_TYPE=Release \
     -DLLVM_TARGETS_TO_BUILD=WebAssembly \
     -DLLVM_INCLUDE_TESTS=OFF -DLLVM_INCLUDE_EXAMPLES=OFF -DLLVM_INCLUDE_BENCHMARKS=OFF \
     -DLLVM_INCLUDE_UTILS=OFF -DLLVM_BUILD_TOOLS=OFF \
     -DLLVM_ENABLE_ZSTD=OFF -DLLVM_ENABLE_ZLIB=OFF -DLLVM_ENABLE_LIBXML2=OFF
+  configured "$NATIVE_INPUTS" native
   ninja -C "$LLVM_NATIVE_BUILD" -j "$JOBS" llvm-tblgen llvm-min-tblgen
   stamp "$NATIVE_INPUTS" native
 fi
@@ -110,12 +119,11 @@ if ! want libcxx-threads; then :
 elif current "$THREADS_INPUTS" libcxx-threads; then step "libc++ thread support — current"
 else
   step "Building libc++ thread support ($LIBCXX_TAG)"
-  if [[ ! -d "$LIBCXX_SRC/libcxx" ]]; then
-    git clone --depth 1 --branch "$LIBCXX_TAG" --filter=blob:none --sparse \
-      https://github.com/llvm/llvm-project.git "$LIBCXX_SRC"
-    git -C "$LIBCXX_SRC" sparse-checkout set libcxx
-  fi
-  rm -rf "$LIBCXX_THREADS"
+  unstamp libcxx-threads
+  rm -rf "$LIBCXX_SRC" "$LIBCXX_THREADS"
+  git clone --depth 1 --branch "$LIBCXX_TAG" --filter=blob:none --sparse \
+    https://github.com/llvm/llvm-project.git "$LIBCXX_SRC"
+  git -C "$LIBCXX_SRC" sparse-checkout set libcxx
   mkdir -p "$LIBCXX_THREADS/include" "$LIBCXX_THREADS/obj"
   sed -e 's/#define _LIBCPP_HAS_THREADS 0/#define _LIBCPP_HAS_THREADS 1/' \
       -e 's/#define _LIBCPP_HAS_THREAD_API_PTHREAD 0/#define _LIBCPP_HAS_THREAD_API_PTHREAD 1/' \
@@ -138,13 +146,15 @@ if ! want wasm; then :
 elif current "$WASM_INPUTS" wasm; then step "wasm LLVM — current"
 else
   step "Cross-building LLVM for $WASI_TRIPLE"
-  # shellcheck disable=SC2086 # The options are a list of words.
-  cmake -G Ninja -S "$LLVM_SRC/llvm" -B "$LLVM_WASM_BUILD" \
+  unstamp wasm
+  # shellcheck disable=SC2046,SC2086 # The mode and the options are lists of words.
+  cmake -G Ninja -S "$LLVM_SRC/llvm" -B "$LLVM_WASM_BUILD" $(configure_mode "$WASM_INPUTS" wasm) \
     -DCMAKE_TOOLCHAIN_FILE="$HERE/wasi-toolchain.cmake" \
     -DLLVM_NATIVE_TOOL_DIR="$LLVM_NATIVE_BUILD/bin" \
     -DLLVM_HOST_TRIPLE="$WASI_TRIPLE" \
     -DLLVM_DEFAULT_TARGET_TRIPLE="$WASI_TRIPLE" \
     $LLVM_WASM_CMAKE_OPTIONS
+  configured "$WASM_INPUTS" wasm
   # shellcheck disable=SC2086
   ninja -C "$LLVM_WASM_BUILD" -j "$JOBS" $LLVM_WASM_TARGETS
   stamp "$WASM_INPUTS" wasm
@@ -155,6 +165,7 @@ if ! want install; then :
 elif current "$INSTALL_INPUTS" install; then step "Installed wasm LLVM — current"
 else
   step "Installing wasm LLVM into $LLVM_WASM_PREFIX"
+  unstamp install
   rm -rf "$LLVM_WASM_PREFIX"
   mkdir -p "$LLVM_WASM_PREFIX/include" "$LLVM_WASM_PREFIX/lib/pkgconfig"
   cp -R "$LLVM_SRC/llvm/include/llvm" "$LLVM_SRC/llvm/include/llvm-c" "$LLVM_WASM_PREFIX/include/"
