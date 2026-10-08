@@ -2,8 +2,8 @@
 
 The whole compiler, built as one WebAssembly module that runs in a browser: the front end,
 the lowering to LLVM IR, LLVM's WebAssembly back end, and lld's WebAssembly linker. It turns a
-Hylo program into a WebAssembly executable, which the page then runs. That is the basis for an
-online REPL.
+Hylo program into a WebAssembly executable, which the page then runs. It is what the playground
+and the runnable snippets on [hylo-lang.org](https://hylo-lang.org) run.
 
 ```js
 import { load } from "./index.mjs"; // from a release
@@ -30,9 +30,9 @@ Measured on a release build (`-Osize`, then `wasm-opt -Os`), in Node 22 and head
 | compiling **and linking** a small program | 150–320 ms |
 | the resulting executable | ~10 KB |
 
-Every one of the compiler's 183 single-file test cases (`Tests/CompilerTests`) passes through it:
+Every one of the compiler's single-file test cases (`Tests/CompilerTests`) passes through it:
 positive cases compile, link and run with the exit status or trap they expect, and negative cases
-report the same diagnostics as the native compiler, site for site.
+report the same diagnostics as the native compiler, site for site. CI holds it to that.
 
 ## How it is put together
 
@@ -59,6 +59,8 @@ report the same diagnostics as the native compiler, site for site.
   browser and in Node.
 - **`js/index.mjs`** loads a release, drives the reactor, and runs what it produces. A release
   ships it bundled with its one dependency, so a page can import it directly.
+- **`js/worker.mjs`** hosts `index.mjs` in a Web Worker, so that a page's main thread never waits
+  on the compiler, and loads the compiler again if it ever traps.
 
 This is a package of its own so that the compiler's package, and every CI job building it, is
 unaffected.
@@ -111,40 +113,32 @@ binaryen's `wasm-opt`. Everything heavy goes in `~/.cache/hylo-wasm` (`$HYLO_WAS
 swift sdk install <URL and checksum in config.sh>
 Tools/wasm/build-llvm.sh            # once: ~35 min on 4 cores, ~3 GB of disk
 Tools/wasm/build-compiler.sh        # ~5 min in release, ~2 min in debug
-(cd Tools/wasm/js && npm install)
+(cd Tools/wasm/js && npm ci)
 node Tools/wasm/js/smoke.mjs Tools/wasm/.build/dist
 node Tools/wasm/js/conformance.mjs Tools/wasm/.build/dist Tests/CompilerTests
+node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist 0.0.0-dev Tools/wasm/.build/release
 ```
 
-`build-llvm.sh` runs in stamped steps (`source`, `native`, `libcxx-threads`, `wasm`, `install`),
-so running it again only redoes what changed, and a failed run resumes.
+`build-llvm.sh` runs in steps (`source`, `native`, `libcxx-threads`, `wasm`, `install`), each
+stamped with a hash of its inputs once it completes, so running it again only redoes what changed
+and an interrupted run resumes.
 
-## The playground
+## Releases
 
-`repl/` is a REPL around a release: a Svelte app whose editor (Monaco, with ABI Explorer's port of
-Hylo's TextMate grammar) and dockable tabbed panels (dockview) are taken from
-[ABI Explorer](https://github.com/tothambrus11/abi-explorer-2). It compiles as you type, in a
-worker, and shows the program's exit status or trap, the diagnostics (underlined in the editor
-too), and the raw and refined Hylo IR, LLVM IR and WebAssembly.
-
-```sh
-Tools/wasm/build-site.sh <release> <out>   # then serve <out> over HTTP
-```
-
-## CI and releases
+A release is a directory that a web server can serve as is. It is content-addressed: every file but
+`manifest.json` and the two loaders has a hash of its contents in its name and can be served as
+immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
+hashes too, and `js/verify-release.mjs` checks a release against it.
 
 `.github/workflows/wasm-compiler.yml` builds LLVM when its inputs change (otherwise it is restored
 from the cache, and a cold build that runs out of time is banked and resumed by the next run),
 builds the compiler, runs the smoke test, the compiler's test cases and a browser check, and
-uploads the release and the playground as artifacts. A `wasm-v*` tag publishes both as a GitHub
-release, the playground as `hylo-playground.zip`.
-
-A release is content-addressed: every file but `manifest.json` has a hash of its contents in its
-name and can be served as immutable. `index.mjs` reads the manifest to find the others.
+uploads the release as an artifact. It runs on every change to the compiler, and `release.yml`
+calls it for every `v*` tag, publishing the release as `hylo-<tag>-wasm32-wasip1.tar.zst` next to
+the native distributables.
 
 ## What is next
 
-- **Run it in a Web Worker.** Loading blocks for as long as the standard library takes to compile.
 - **Put the LLVM build in `hylo-lang/llvm-build`**, which already builds LLVM for the native CI,
   as one more target. This workflow could then download it like the others do.
 - **Shrink the module.** Nothing has been done yet: candidates are dropping the LLVM passes that
