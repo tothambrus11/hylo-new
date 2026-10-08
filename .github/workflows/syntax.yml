@@ -26,7 +26,7 @@ jobs:
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
         with:
           node-version: "24.x"
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
         working-directory: Tools/syntax
       - run: npm test
         working-directory: Tools/syntax
