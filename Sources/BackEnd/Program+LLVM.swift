@@ -1487,21 +1487,8 @@ extension Program {
     if n == 0 {
       return t.unsafe[].zero.v
     } else {
-      let w = twosComplementWords(of: n, bitWidth: t.unsafe[].bitWidth)
+      let w = n.twosComplementWords(bitWidth: t.unsafe[].bitWidth)
       return t.unsafe[].constant(words: w).v
-    }
-  }
-
-  /// Returns the two's complement representation of `n` on `bitWidth` bits, as 64-bit words from
-  /// least to most significant.
-  ///
-  /// `n.words` is not used directly because its words have the width of the host's `UInt`, so a
-  /// negative value would be zero-extended rather than sign-extended to 64 bits on 32-bit hosts.
-  private func twosComplementWords(of n: BigInt, bitWidth: Int) -> [UInt64] {
-    var x = n
-    return (0 ..< (bitWidth + 63) / 64).map { (_) in
-      defer { x >>= 64 }
-      return UInt64(truncatingIfNeeded: x)
     }
   }
 
@@ -1874,6 +1861,26 @@ extension FrontEnd.FloatingPointPredicate {
     case .ult: .ult
     case .ule: .ule
     case .uno: .uno
+    }
+  }
+
+}
+
+extension BigInt {
+
+  /// Returns the two's complement representation of `self` on `bitWidth` bits, as 64-bit words
+  /// from least to most significant.
+  ///
+  /// `words` is not used directly because its words have the width of the host's `UInt`, so a
+  /// negative value would be zero-extended rather than sign-extended to 64 bits on 32-bit hosts.
+  internal func twosComplementWords(bitWidth: Int) -> [UInt64] {
+    var x = self
+    return (0 ..< (bitWidth + 63) / 64).map { (_) in
+      let w = UInt64(truncatingIfNeeded: x)
+      // `>>` rounds toward zero, so the bits already taken are removed first to shift a negative
+      // value as its two's complement representation would be.
+      x = (x - BigInt(w)) >> 64
+      return w
     }
   }
 
