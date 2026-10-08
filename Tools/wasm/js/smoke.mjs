@@ -3,11 +3,10 @@
 //
 //   node smoke.mjs <dist>
 //
-// where <dist> is what `build-compiler.sh` produced, or an unpacked release.
+// where <dist> is what `build-compiler.sh` produced.
 
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
-import path from "node:path";
+import { readDist } from "./dist.mjs";
 import { instantiate } from "./index.mjs";
 
 const dist = process.argv[2];
@@ -16,12 +15,7 @@ if (dist === undefined) {
   process.exit(2);
 }
 
-const lib = path.join(dist, "sysroot", "lib");
-const hylo = await instantiate({
-  compiler: await WebAssembly.compile(readFileSync(path.join(dist, "hylo-wasm.wasm"))),
-  standardLibrary: JSON.parse(readFileSync(path.join(dist, "stdlib.json"), "utf8")),
-  sysroot: new Map(readdirSync(lib).map((n) => [n, readFileSync(path.join(lib, n))])),
-});
+const hylo = await instantiate(await readDist(dist));
 console.log(`standard library compiled in ${hylo.standardLibraryMilliseconds.toFixed(0)} ms`);
 
 let failures = 0;
@@ -99,6 +93,21 @@ await check("reports a trap as such", async () => {
   const x = await hylo.run(r.executable);
   assert.equal(x.exitCode, null);
   assert.ok(x.trap);
+});
+
+await check("reports running out of stack as a trap", async () => {
+  const r = hylo.compile({
+    source: `
+      fun deeper() -> Int32 { deeper() + (1 as Int32) }
+      public fun main() -> Int32 { deeper() }
+    `,
+  });
+  assert.equal(r.error, undefined, r.error);
+  assert.deepEqual(r.diagnostics.filter((d) => d.level === "error"), []);
+  const x = await hylo.run(r.executable);
+  assert.equal(x.exitCode, null);
+  assert.ok(x.trap);
+  assert.ok(hylo.usable);
 });
 
 if (hylo.log.length > 0) console.log(`compiler output:\n${hylo.log.join("\n")}`);

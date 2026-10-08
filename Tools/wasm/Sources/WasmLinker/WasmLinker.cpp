@@ -10,7 +10,9 @@
 
 LLD_HAS_DRIVER(wasm)
 
-extern "C" int hylo_wasm_link(int argc, const char *const *argv, char **diagnostics) {
+extern "C" int hylo_wasm_link(
+  int argc, const char *const *argv, char **diagnostics, bool *canRunAgain
+) {
   std::vector<const char *> arguments(argv, argv + argc);
   std::string output;
   llvm::raw_string_ostream stream(output);
@@ -19,5 +21,6 @@ extern "C" int hylo_wasm_link(int argc, const char *const *argv, char **diagnost
   stream.flush();
 
   *diagnostics = strdup(output.c_str());
+  *canRunAgain = r.canRunAgain;
   return r.retCode;
 }

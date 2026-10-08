@@ -18,7 +18,8 @@ import HyloWasmSession
 // `lib/libc.a`, `lib/shims.o` and `lib/libclang_rt.builtins-wasm32.a`, and a writable directory
 // named `scratch`.
 
-/// The session serving `hylo_compile`, or `nil` until `hylo_init` has succeeded.
+/// The session serving `hylo_compile`, or `nil` until `hylo_init` has succeeded and after a
+/// request has left the compiler unusable.
 nonisolated(unsafe) private var session: CompilerSession? = nil
 
 /// Returns a buffer of `n` bytes for the host to write a request into.
@@ -35,10 +36,11 @@ public func hylo_free(_ p: UnsafeMutableRawPointer) {
   p.deallocate()
 }
 
-/// Compiles the standard library described by the JSON `InitRequest` in `p`, and returns a JSON
-/// object reporting whether that succeeded.
+/// Compiles the standard library described by the JSON `InitRequest` in `p`, returning a JSON
+/// object with `ok: true` if it compiled and an `error` otherwise.
 ///
-/// Calling this a second time replaces the session serving later requests.
+/// Calling this again replaces the session serving later requests if, and only if, the new
+/// standard library compiles.
 @_expose(wasm, "hylo_init")
 @_cdecl("hylo_init")
 public func hylo_init(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPointer {
@@ -70,7 +72,9 @@ public func hylo_compile(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawP
       return try encode(Failure(error: "the standard library has not been loaded"))
     }
     let request = try JSONDecoder().decode(CompileRequest.self, from: read(p, n))
-    return try encode(runToCompletion { await s.compile(request) })
+    let r = runToCompletion { await s.compile(request) }
+    if r.compilerUnusable { session = nil }
+    return try encode(r)
   }
 }
 

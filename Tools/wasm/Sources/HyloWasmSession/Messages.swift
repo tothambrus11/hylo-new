@@ -102,6 +102,10 @@ public struct CompileResponse: Encodable {
   /// A failure that is not a diagnostic of the program, such as an internal error.
   public var error: String? = nil
 
+  /// `true` iff the failure reported in `error` left the compiler unable to serve further
+  /// requests, which the host must then serve with a new instance.
+  public var compilerUnusable: Bool = false
+
   /// How long compilation took, in milliseconds.
   public var milliseconds: Double = 0
 
