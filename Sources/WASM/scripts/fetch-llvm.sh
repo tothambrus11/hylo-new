@@ -19,13 +19,7 @@ fi
 
 scratch="$(mktemp -d)"
 trap 'rm -rf "${scratch:?}"' EXIT
-echo "Downloading $LLVM_WASM_URL"
-curl -fsSL --retry 3 -o "$scratch/llvm.tar.zst" "$LLVM_WASM_URL"
-if ! echo "$LLVM_WASM_CHECKSUM  $scratch/llvm.tar.zst" | sha256sum -c --quiet - 2>/dev/null; then
-  echo "the archive's SHA-256 is $(sha256sum "$scratch/llvm.tar.zst" | cut -d' ' -f1)," \
-    "not LLVM_WASM_CHECKSUM ($LLVM_WASM_CHECKSUM)" >&2
-  exit 1
-fi
+download_verified "$LLVM_WASM_URL" "$LLVM_WASM_CHECKSUM" "$scratch/llvm.tar.zst"
 
 # The archive holds one directory named after the package.
 tar --zstd -xf "$scratch/llvm.tar.zst" -C "$scratch"

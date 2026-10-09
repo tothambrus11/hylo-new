@@ -27,11 +27,8 @@ export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONF
 # The SDK's libc++abi has no exception support, and LLVM is built without exceptions.
 # `LLVM_WASM_PREFIX` is also what adds the targets to the package; see `Package.swift`.
 #
-# The toolset keeps Foundation out of the module, leaving only `FoundationEssentials`. Importing
-# Foundation, as some dependencies do, autolinks it ahead of `FoundationEssentials`, so the linker
-# resolves the symbols they share to Foundation's copies, which bring in ICU and its 34 MB of data
-# even if nothing outside `FoundationEssentials` is used. A use of Foundation proper is then a link
-# error. Unlike `-Xswiftc`, a toolset does not apply to the tools built for the host.
+# The toolset links `FoundationEssentials` rather than Foundation, and why is in
+# `Sources/WASM/README.md`.
 flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$REPOSITORY" -Xcxx -fno-exceptions
   --toolset "$REPOSITORY/foundation-essentials.toolset.json")
 if [[ "$CONFIGURATION" == release ]]; then
@@ -50,6 +47,7 @@ mkdir -p "$OUT/sysroot/lib"
 # `wasm-opt` is optional: it roughly halves the time to compile the standard library and shrinks
 # the module by more than half, mostly by dropping the names section, but the module works without
 # it. `-Oz` takes no longer than `-Os` and makes a 2% smaller module, which runs as fast.
+PATH="$BINARYEN_PREFIX/bin:$PATH" # where `fetch-binaryen.sh` puts it, if it did
 if [[ "$CONFIGURATION" == release ]] && command -v wasm-opt >/dev/null; then
   wasm-opt -Oz --strip-debug --strip-dwarf --enable-bulk-memory --enable-sign-ext \
     --enable-mutable-globals --enable-nontrapping-float-to-int \

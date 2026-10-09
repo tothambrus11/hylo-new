@@ -85,11 +85,19 @@ export interface RunOptions {
  * Loads the compiler release at `baseUrl` and compiles its standard library, which is what makes
  * this slow and every later `compile` fast.
  */
-export async function load({
+export async function load(options: LoadOptions): Promise<Compiler> {
+  return instantiate(await fetchParts(options));
+}
+
+/**
+ * Downloads the compiler release at `baseUrl` and compiles the compiler, ready to `instantiate`, as
+ * often as needed.
+ */
+export async function fetchParts({
   baseUrl,
   fetch: get = globalThis.fetch,
   onProgress,
-}: LoadOptions): Promise<Compiler> {
+}: LoadOptions): Promise<CompilerParts> {
   const base = new URL(baseUrl, globalThis.location?.href);
   const response = await get(new URL("manifest.json", base));
   if (!response.ok) throw new Error(`could not fetch manifest.json (${response.status})`);
@@ -119,7 +127,7 @@ export async function load({
       manifest.sysroot.map(async (key) => [manifest.files[key].name!, await bytes(key)] as const),
     ),
   ]);
-  return instantiate({ compiler, standardLibrary, sysroot: new Map(sysroot) });
+  return { compiler, standardLibrary, sysroot: new Map(sysroot) };
 }
 
 /** The exports of the compiler, a WASI reactor. */

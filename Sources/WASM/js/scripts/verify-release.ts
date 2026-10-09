@@ -6,10 +6,10 @@
 // Needs nothing but Node, so that a release can be checked where it is published, away from the
 // toolchain that built it.
 
-import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
 import type { Manifest } from "../src/protocol.ts";
+import { fingerprint } from "./dist.ts";
 
 const [release, version] = process.argv.slice(2);
 if (version === undefined) {
@@ -35,8 +35,8 @@ function check(name: string, expected: { sha256: string; bytes: number }): void 
     problems.push(`${name} is missing`);
     return;
   }
-  const sha256 = createHash("sha256").update(bytes).digest("hex");
-  if (bytes.length !== expected.bytes || sha256 !== expected.sha256) {
+  const actual = fingerprint(bytes);
+  if (actual.bytes !== expected.bytes || actual.sha256 !== expected.sha256) {
     problems.push(`${name} does not have the contents the manifest records`);
   }
 }

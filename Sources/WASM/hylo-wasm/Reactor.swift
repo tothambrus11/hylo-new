@@ -14,9 +14,8 @@ import HyloWASMSession
 // the host frees it with `hylo_free`.
 //
 // Linking happens in-process, through the WASI file system: the host must preopen the directory
-// named `sysroot` in the request to `hylo_init`, holding `lib/crt1-command.o`, `lib/entry.o`,
-// `lib/libc.a`, `lib/shims.o` and `lib/libclang_rt.builtins-wasm32.a`, and a writable directory
-// named `scratch`.
+// named `sysroot` in the request to `hylo_init`, holding the files `CompilerSession` links into
+// every executable in its `lib` subdirectory, and a writable directory named `scratch`.
 
 /// The session serving `hylo_compile`, or `nil` until `hylo_init` has succeeded and after a
 /// request has left the compiler unusable.
@@ -48,8 +47,7 @@ public func hylo_init(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPoin
     let r = try JSONDecoder().decode(InitRequest.self, from: read(p, n))
     let s = runToCompletion {
       await CompilerSession(
-        standardLibrary: r.standardLibrary, sysroot: r.sysroot ?? "/sysroot",
-        scratch: r.scratch ?? "/tmp")
+        standardLibrary: r.standardLibrary, sysroot: r.sysroot, scratch: r.scratch)
     }
     // A standard library that does not compile would make every request fail in confusing ways,
     // so the session is only installed once it is known to be sound.
@@ -84,11 +82,11 @@ private struct InitRequest: Decodable, Sendable {
   /// The standard library's sources, keyed by file name.
   let standardLibrary: [String: String]
 
-  /// The directory containing the files linked into executables; `/sysroot` by default.
-  let sysroot: String?
+  /// The directory containing the files linked into executables.
+  let sysroot: String
 
-  /// A writable directory for intermediate files; `/tmp` by default.
-  let scratch: String?
+  /// A writable directory for intermediate files.
+  let scratch: String
 
 }
 

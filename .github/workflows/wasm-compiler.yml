@@ -28,6 +28,9 @@ on:
       artifact:
         description: The name of the artifact holding the packaged release.
         value: ${{ jobs.build.outputs.artifact }}
+      version:
+        description: The version the release records, such as `1.2.0`.
+        value: ${{ jobs.build.outputs.version }}
 
 concurrency:
   group: wasm-compiler-${{ github.ref }}
@@ -43,6 +46,7 @@ jobs:
     timeout-minutes: 90
     outputs:
       artifact: hylo-wasm-${{ steps.meta.outputs.version }}
+      version: ${{ steps.meta.outputs.version }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -58,9 +62,8 @@ jobs:
             echo "swift=$SWIFT_VERSION"
             echo "sdk_url=$SWIFT_SDK_URL"
             echo "sdk_checksum=$SWIFT_SDK_CHECKSUM"
-            echo "binaryen_version=$BINARYEN_VERSION"
-            echo "binaryen_url=$BINARYEN_URL"
-            echo "binaryen_checksum=$BINARYEN_CHECKSUM"
+            echo "downloads=$HYLO_WASM_CACHE"
+            echo "downloads_key=$LLVM_WASM_CHECKSUM-$BINARYEN_CHECKSUM"
             version="${VERSION#v}"
             echo "version=${version:-0.0.0-${GITHUB_SHA::12}}"
           } >> "$GITHUB_OUTPUT"
@@ -75,24 +78,24 @@ jobs:
           swift sdk install "${{ steps.meta.outputs.sdk_url }}"
           --checksum "${{ steps.meta.outputs.sdk_checksum }}"
 
-      # Built by hylo-lang/llvm-build, at the release and checksum pinned in config.sh.
-      - name: Download the wasm LLVM
-        run: Sources/WASM/scripts/fetch-llvm.sh
+      # LLVM, built by hylo-lang/llvm-build, and binaryen, at the releases and checksums pinned in
+      # config.sh, which the scripts check; cached under the same pins.
+      - name: Restore the downloads
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.meta.outputs.downloads }}
+          key: wasm-downloads-${{ steps.meta.outputs.downloads_key }}
 
-      - name: Set up binaryen
-        env:
-          URL: ${{ steps.meta.outputs.binaryen_url }}
-          CHECKSUM: ${{ steps.meta.outputs.binaryen_checksum }}
-          VERSION: ${{ steps.meta.outputs.binaryen_version }}
+      - name: Download LLVM and binaryen
         run: |
-          curl -fsSL -o "$RUNNER_TEMP/binaryen.tar.gz" "$URL"
-          echo "$CHECKSUM  $RUNNER_TEMP/binaryen.tar.gz" | sha256sum -c -
-          tar -xzf "$RUNNER_TEMP/binaryen.tar.gz" -C "$RUNNER_TEMP"
-          echo "$RUNNER_TEMP/binaryen-$VERSION/bin" >> "$GITHUB_PATH"
+          Sources/WASM/scripts/fetch-llvm.sh
+          Sources/WASM/scripts/fetch-binaryen.sh
 
       - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
         with:
           node-version: "24.x"
+          cache: npm
+          cache-dependency-path: Sources/WASM/js/package-lock.json
 
       - name: Build the compiler for WebAssembly
         run: Sources/WASM/scripts/build-compiler.sh release

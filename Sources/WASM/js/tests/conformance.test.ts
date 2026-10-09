@@ -5,7 +5,8 @@
 // status it expects or trap if it expects to. A negative case must report exactly the diagnostics in
 // its `.diagnostics.expected` file, compared by site, level and message. Package cases
 // (directories) are left out: they exercise the driver's handling of files, which the WebAssembly
-// build does not have.
+// build does not have. The attributes and expectations are those the native harness reads; see
+// `Tests/CompilerTests/Manifest.swift` and `CompilerTests.swift`, which this follows.
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
