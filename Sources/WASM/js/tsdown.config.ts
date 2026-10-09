@@ -1,12 +1,12 @@
 import { defineConfig } from "tsdown";
 
-// The npm package: ES modules and their declarations in `dist/`, with the WASI shim left a
-// dependency. (JSR publishes `src/` as it is; see `jsr.json`. A compiler release bundles the
-// loaders with their dependency instead; see `scripts/package-release.ts`.)
+// ES modules and their declarations in `dist/`, with the WASI shim left a dependency. The
+// compiler's files are copied next to them by `npm run build`, where `src/files.ts` finds them.
 export default defineConfig({
-  entry: ["src/index.ts", "src/worker.ts", "src/protocol.ts"],
+  entry: ["src/index.ts", "src/node.ts", "src/worker.ts", "src/protocol.ts"],
   format: "esm",
   platform: "neutral",
+  deps: { neverBundle: [/^node:/] }, // for `src/node.ts`
   outDir: "dist",
   dts: true,
   clean: true,

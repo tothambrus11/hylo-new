@@ -3,11 +3,12 @@
  * it, and that may have several things to compile: one worker serves them all, and loads the
  * compiler once.
  *
- * The worker loads the compiler release named by its URL's `compiler` parameter, or the one in its
- * own directory, which is where the package and a release ship it:
+ * With Vite, for example:
  *
  * ```ts
- * const w = new Worker(new URL("worker.mjs", releaseBase), { type: "module" });
+ * import HyloWorker from "@hylo-lang/hylo-wasm/worker?worker";
+ *
+ * const w = new HyloWorker();
  * w.postMessage({ id: 1, request: { source, emit: ["executable", "llvm"] } });
  * ```
  *
@@ -20,7 +21,7 @@
  * @module
  */
 
-import { type Compiler, fetchParts, instantiate } from "./index.ts";
+import { type Compiler, instantiate, loadParts } from "./index.ts";
 import type { WorkerMessage, WorkerRequest } from "./protocol.ts";
 
 // The parts of a dedicated worker's global scope this uses, declared here rather than through the
@@ -30,16 +31,11 @@ declare const self: {
   onmessage: ((event: MessageEvent<WorkerRequest>) => void) | null;
 };
 
-const base = new URL(
-  new URL(import.meta.url).searchParams.get("compiler") ?? "./",
-  import.meta.url,
-);
 /** Sends `message` to the page. */
 const send = (message: WorkerMessage): void => self.postMessage(message);
 
-// The release is downloaded once; a compiler that must be replaced is instantiated anew from it.
-const parts = fetchParts({
-  baseUrl: base,
+// The compiler is downloaded once; one that must be replaced is instantiated anew from it.
+const parts = loadParts({
   onProgress: ({ loaded, total }) => send({ type: "progress", loaded, total }),
 });
 let hylo: Promise<Compiler>;

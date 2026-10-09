@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
 # Builds the Hylo compiler for WebAssembly against the LLVM that `fetch-llvm.sh` unpacked, and
-# assembles everything a host needs to run it in `$OUT` (default: `.build/wasm/dist`):
+# assembles everything a host needs to run it in `$OUT` (default: `.build/wasm/compiler`), which
+# the JavaScript package ships as is:
 #
 #   hylo-wasm.wasm      the compiler, as a WASI reactor
 #   stdlib.json         the standard library's sources, keyed by file name
-#   sysroot/lib/*       the files linked into every executable
+#   *.o, *.a            the files linked into every executable
 #
 #   build-compiler.sh [debug|release]
 set -euo pipefail
@@ -14,7 +15,7 @@ WASM="$(dirname "$HERE")"
 REPOSITORY="$(cd "$WASM/../.." && pwd)"
 source "$HERE/config.sh"
 CONFIGURATION="${1:-release}"
-OUT="${OUT:-$REPOSITORY/.build/wasm/dist}"
+OUT="${OUT:-$REPOSITORY/.build/wasm/compiler}"
 
 [[ -f "$LLVM_WASM_PREFIX/pkgconfig/llvm.pc" ]] || {
   echo "no wasm LLVM in $LLVM_WASM_PREFIX; run fetch-llvm.sh first" >&2
@@ -41,8 +42,8 @@ swift build "${flags[@]}" --product hylo-wasm
 swift build "${flags[@]}" --target StandardLibrary
 BIN="$(swift build "${flags[@]}" --show-bin-path)"
 
-rm -rf "$OUT"
-mkdir -p "$OUT/sysroot/lib"
+rm -rf "${OUT:?}"
+mkdir -p "$OUT"
 
 # `wasm-opt` is optional: it roughly halves the time to compile the standard library and shrinks
 # the module by more than half, mostly by dropping the names section, but the module works without
@@ -63,12 +64,11 @@ node "$WASM/js/scripts/collect-stdlib.ts" "$bundle" > "$OUT/stdlib.json"
 
 # What every executable links: the C runtime's entry point and the shim calling a Hylo `main`
 # from it, the C library, compiler-rt's builtins, and the standard library's C shim.
-cp "$WASI_SYSROOT/lib/wasm32-wasip1/crt1-command.o" "$WASI_SYSROOT/lib/wasm32-wasip1/libc.a" \
-  "$OUT/sysroot/lib/"
-cp "$WASI_RESOURCE_DIR/lib/wasip1/libclang_rt.builtins-wasm32.a" "$OUT/sysroot/lib/"
+cp "$WASI_SYSROOT/lib/wasm32-wasip1/crt1-command.o" "$WASI_SYSROOT/lib/wasm32-wasip1/libc.a" "$OUT/"
+cp "$WASI_RESOURCE_DIR/lib/wasip1/libclang_rt.builtins-wasm32.a" "$OUT/"
 "$SWIFT_BIN/clang" --target="$WASI_TRIPLE" --sysroot="$WASI_SYSROOT" \
-  -resource-dir="$WASI_RESOURCE_DIR" -Os -c "$bundle/Sources/shims.c" -o "$OUT/sysroot/lib/shims.o"
+  -resource-dir="$WASI_RESOURCE_DIR" -Os -c "$bundle/Sources/shims.c" -o "$OUT/shims.o"
 "$SWIFT_BIN/clang" --target="$WASI_TRIPLE" --sysroot="$WASI_SYSROOT" \
-  -resource-dir="$WASI_RESOURCE_DIR" -Os -c "$WASM/sysroot/entry.c" -o "$OUT/sysroot/lib/entry.o"
+  -resource-dir="$WASI_RESOURCE_DIR" -Os -c "$WASM/sysroot/entry.c" -o "$OUT/entry.o"
 
-ls -l "$OUT" "$OUT/sysroot/lib"
+ls -l "$OUT"

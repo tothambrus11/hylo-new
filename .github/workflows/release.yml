@@ -172,48 +172,23 @@ jobs:
           gh release upload $env:TAG $archive --repo '${{ github.repository }}' --clobber
         shell: pwsh
 
-  # The compiler built for WebAssembly, to run in a browser. It is built and checked by the same
-  # workflow that checks it on every change.
-  build-wasm-distributable:
-    name: Build distributable for wasm32-wasip1
+  # The compiler built for WebAssembly, to run in a browser or in Node, which the npm package below
+  # ships. It is built and checked by the same workflow that checks it on every change.
+  build-wasm-compiler:
+    name: Build the compiler for WebAssembly
     needs: prepare-draft-release
     uses: ./.github/workflows/wasm-compiler.yml
     with:
       version: ${{ github.ref_name }}
 
-  # The build job has already checked the release against its manifest (`verify-release.ts`).
-  publish-wasm-distributable:
-    name: Publish distributable for wasm32-wasip1
-    needs: build-wasm-distributable
-    runs-on: ubuntu-24.04
-    env:
-      ARTIFACT_NAME: hylo-${{ github.ref_name }}-wasm32-wasip1
-
-    steps:
-      - name: Download distributable artifact
-        uses: actions/download-artifact@v8
-        with:
-          name: ${{ needs.build-wasm-distributable.outputs.artifact }}
-          path: ${{ runner.temp }}/release
-
-      - name: Upload distributable to draft release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
-        run: |
-          tar --zstd -cf "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" -C "$RUNNER_TEMP/release" .
-          gh release upload "$TAG" "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" \
-            --repo "$GITHUB_REPOSITORY" --clobber
-
-  # The JavaScript package that loads the compiler, `@hylo-lang/hylo-wasm`, at the release's version
-  # (`v1.2.0` publishes 1.2.0), once the compiler it loads has been published and checked. The
-  # build job has already type-checked, linted and tested it; the package, packed as it is about to
-  # be published, is tried once more with the release's compiler. npm's trusted publishing
+  # The compiler for WebAssembly and the JavaScript that drives it, `@hylo-lang/hylo-wasm`, at the
+  # release's version (`v1.2.0` publishes 1.2.0). The build job has already type-checked, linted
+  # and tested it; the package, packed as it is about to be published, is tried once more. npm's trusted publishing
   # authenticates the job through GitHub's OIDC token, so no token is stored, and records where the
   # package was built as its provenance.
   publish-npm-package:
     name: Publish the npm package
-    needs: [build-wasm-distributable, publish-wasm-distributable]
+    needs: build-wasm-compiler
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -233,37 +208,37 @@ jobs:
       - name: Update npm
         run: npm install --global npm@^11.5.1
 
-      - name: Download the compiler release
+      # Where `npm run build` takes the compiler's files from.
+      - name: Download the compiler
         uses: actions/download-artifact@v8
         with:
-          name: ${{ needs.build-wasm-distributable.outputs.artifact }}
-          path: ${{ runner.temp }}/release
+          name: ${{ needs.build-wasm-compiler.outputs.artifact }}
+          path: .build/wasm/compiler
 
-      # The package ships the release's compiler, which its loader loads by default. npm checks the
-      # package's repository against the one publishing it, which is this one.
+      # npm checks the package's repository against the one publishing it, which is this one.
       - name: Build the package
         working-directory: Sources/WASM/js
         env:
-          VERSION: ${{ needs.build-wasm-distributable.outputs.version }}
+          VERSION: ${{ needs.build-wasm-compiler.outputs.version }}
         run: |
           npm ci --no-audit --no-fund
           npm version "$VERSION" --no-git-tag-version
           npm pkg set "repository.url=git+https://github.com/$GITHUB_REPOSITORY.git"
           npm run build
-          node scripts/include-compiler.ts "$RUNNER_TEMP/release"
 
-      - name: Test the packed package with the release's compiler
+      - name: Test the packed package
         working-directory: Sources/WASM/js
         run: |
+          npx playwright install --with-deps chromium
           tarball="$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
-          node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball" "$RUNNER_TEMP/release"
+          node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball"
 
       # A pre-release (`v1.2.0-rc.1`) is published under the `next` tag, so that it is not what
       # `npm install` picks by default.
       - name: Publish
         working-directory: Sources/WASM/js
         env:
-          VERSION: ${{ needs.build-wasm-distributable.outputs.version }}
+          VERSION: ${{ needs.build-wasm-compiler.outputs.version }}
         run: |
           if [[ "$VERSION" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
           npm publish --tag "$dist_tag"

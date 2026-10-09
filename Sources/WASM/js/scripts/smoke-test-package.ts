@@ -1,22 +1,29 @@
 // Checks a packed package the way its users get it: installs the tarball `npm pack` produced in an
-// empty project, then imports it by name, loads the compiler it ships and, over HTTP, the release
-// `<release>`, compiles a program with each and runs it, and type-checks a program using its types.
+// empty project, then
 //
-//   node scripts/smoke-test-package.ts <tarball> <release>
+// - in Node, imports it by name, compiles a program and runs it;
+// - type-checks a program using its types;
+// - bundles a page using it with Vite, both directly and through its worker, and runs the page in
+//   Chromium (`CHROMIUM`, or the one Playwright installs), served as a static site would be.
+//
+//   node scripts/smoke-test-package.ts <tarball>
 //
 // This catches what the tests, which import the sources, cannot: files left out of the package,
-// exports that point nowhere, and declarations that don't resolve.
+// exports that point nowhere, declarations that don't resolve, and compiler files a bundler cannot
+// find.
 
-import { execFileSync, spawn } from "node:child_process";
+import { execFileSync } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { chromium } from "playwright";
+import { build } from "vite";
 
-const [tarball, release] = process.argv.slice(2).map((p) => path.resolve(p));
-if (release === undefined) {
-  console.error("usage: node smoke-test-package.ts <tarball> <release>");
+const [tarball] = process.argv.slice(2).map((p) => path.resolve(p));
+if (tarball === undefined) {
+  console.error("usage: node smoke-test-package.ts <tarball>");
   process.exit(2);
 }
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -27,57 +34,38 @@ const sh = (directory: string, command: string, ...args: string[]): void => {
   execFileSync(command, args, { cwd: directory, stdio: "inherit" });
 };
 
-// The release, served as a web server would.
-const types: Record<string, string> = { ".wasm": "application/wasm", ".json": "application/json" };
-const server = createServer((request, response) => {
-  const file = path.join(release, path.basename(new URL(request.url!, "http://x").pathname));
-  try {
-    const type = types[path.extname(file)] ?? "application/octet-stream";
-    response.writeHead(200, { "content-type": type }).end(readFileSync(file));
-  } catch {
-    response.writeHead(404).end();
-  }
-});
-await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
-const address = server.address();
-const baseUrl = `http://127.0.0.1:${typeof address === "object" ? address?.port : 0}/`;
+/** Writes `files`, by path relative to `directory`. */
+const write = (directory: string, files: Record<string, string>): void => {
+  for (const [file, text] of Object.entries(files)) writeFileSync(path.join(directory, file), text);
+};
 
 const project = mkdtempSync(path.join(tmpdir(), "hylo-wasm-package-"));
 try {
-  writeFileSync(
-    path.join(project, "package.json"),
-    JSON.stringify({ name: "consumer", private: true, type: "module" }),
-  );
+  write(project, {
+    "package.json": JSON.stringify({ name: "consumer", private: true, type: "module" }),
+  });
   sh(project, "npm", "install", "--no-audit", "--no-fund", "--silent", tarball);
 
-  writeFileSync(
-    path.join(project, "use.mjs"),
-    `import assert from "node:assert/strict";
+  // Node.
+  write(project, {
+    "use.mjs": `import assert from "node:assert/strict";
 import { load } from "${name}";
 
 for (const entry of ["${name}/worker", "${name}/protocol"]) import.meta.resolve(entry);
 
-for (const [where, options] of [["the package", undefined], ["a URL", { baseUrl: process.argv[2] }]]) {
-  const hylo = await load(options);
-  const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }", emit: ["executable", "llvm"] });
-  assert.deepEqual(r.diagnostics, []);
-  assert.match(r.artifacts.llvm, /define .*@main/);
-  assert.equal((await hylo.run(r.executable)).exitCode, 42);
-  console.log(\`${name}: loaded the compiler from \${where}, compiled and ran a program\`);
-}
+const hylo = await load();
+const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }", emit: ["executable", "llvm"] });
+assert.deepEqual(r.diagnostics, []);
+assert.match(r.artifacts.llvm, /define .*@main/);
+assert.equal((await hylo.run(r.executable)).exitCode, 42);
 `,
-  );
-  // Asynchronous: the server answering the program's requests runs in this process.
-  await new Promise<void>((resolve, reject) => {
-    const child = spawn(process.execPath, ["use.mjs", baseUrl], { cwd: project, stdio: "inherit" });
-    child.on("exit", (code) =>
-      code === 0 ? resolve() : reject(new Error(`use.mjs exited with ${code}`)),
-    );
   });
+  sh(project, process.execPath, "use.mjs");
+  console.log(`${name}: compiled and ran a program in Node`);
 
-  writeFileSync(
-    path.join(project, "use.ts"),
-    `import { load, type Compiler } from "${name}";
+  // Types.
+  write(project, {
+    "use.ts": `import { load, type Compiler } from "${name}";
 import type { CompileRequest, WorkerMessage } from "${name}/protocol";
 
 const request: CompileRequest = { source: "public fun main() {}", emit: ["ir"] };
@@ -85,10 +73,7 @@ const hylo: Compiler = await load();
 const ir: string | undefined = hylo.compile(request).artifacts.ir;
 export const message: WorkerMessage | string | undefined = ir;
 `,
-  );
-  writeFileSync(
-    path.join(project, "tsconfig.json"),
-    JSON.stringify({
+    "tsconfig.json": JSON.stringify({
       compilerOptions: {
         target: "es2022",
         module: "nodenext",
@@ -99,10 +84,75 @@ export const message: WorkerMessage | string | undefined = ir;
       },
       files: ["use.ts"],
     }),
-  );
+  });
   sh(project, path.join(here, "../node_modules/.bin/tsc"), "-p", project);
   console.log(`${name}: its types check`);
+
+  // A page, bundled with Vite.
+  write(project, {
+    "index.html": `<!doctype html><script type="module" src="./main.js"></script>`,
+    "main.js": `import { load } from "${name}";
+import HyloWorker from "${name}/worker?worker";
+
+const source = "public fun main() -> Int32 { 42 }";
+
+async function direct() {
+  const hylo = await load();
+  const r = hylo.compile({ source });
+  return (await hylo.run(r.executable)).exitCode;
+}
+
+function throughWorker() {
+  return new Promise((resolve, reject) => {
+    const w = new HyloWorker();
+    w.onerror = (e) => reject(new Error(e.message));
+    w.onmessage = ({ data }) => {
+      if (data.type === "failed") reject(new Error(data.error));
+      if (data.type === "result") resolve(data.run?.exitCode ?? JSON.stringify(data.compile));
+    };
+    w.postMessage({ id: 1, request: { source } });
+  });
+}
+
+window.outcome = Promise.all([direct(), throughWorker()]);
+`,
+  });
+  await build({ root: project, logLevel: "warn", build: { outDir: "dist" } });
+
+  const site = path.join(project, "dist");
+  const types: Record<string, string> = {
+    ".html": "text/html",
+    ".js": "text/javascript",
+    ".wasm": "application/wasm",
+    ".json": "application/json",
+  };
+  const server = createServer((request, response) => {
+    const file = path.join(site, path.normalize(new URL(request.url!, "http://x").pathname));
+    try {
+      const body = readFileSync(file.endsWith("/") ? path.join(file, "index.html") : file);
+      const type = types[path.extname(file) || ".html"] ?? "application/octet-stream";
+      response.writeHead(200, { "content-type": type }).end(body);
+    } catch {
+      response.writeHead(404).end();
+    }
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address();
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM || undefined });
+  try {
+    const page = await browser.newPage();
+    const errors: string[] = [];
+    page.on("pageerror", (e) => errors.push(e.message));
+    await page.goto(`http://127.0.0.1:${typeof address === "object" ? address?.port : 0}/`);
+    const outcome = await page.evaluate(() => (window as unknown as { outcome: unknown }).outcome);
+    if (JSON.stringify(outcome) !== "[42,42]" || errors.length > 0) {
+      throw new Error(`the page ended with ${JSON.stringify(outcome)} ${errors.join("\n")}`);
+    }
+  } finally {
+    await browser.close();
+    server.close();
+  }
+  console.log(`${name}: compiled and ran a program in a page bundled with Vite, and in its worker`);
 } finally {
-  server.close();
   rmSync(project, { recursive: true, force: true });
 }
