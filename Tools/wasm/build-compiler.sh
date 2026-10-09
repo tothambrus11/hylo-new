@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Builds the Hylo compiler for WebAssembly against the LLVM that `build-llvm.sh` installed, and
+# Builds the Hylo compiler for WebAssembly against the LLVM that `fetch-llvm.sh` unpacked, and
 # assembles everything a host needs to run it in `$OUT` (default: `Tools/wasm/.build/dist`):
 #
 #   hylo-wasm.wasm      the compiler, as a WASI reactor
@@ -14,13 +14,13 @@ source "$HERE/config.sh"
 CONFIGURATION="${1:-release}"
 OUT="${OUT:-$HERE/.build/dist}"
 
-[[ -f "$LLVM_WASM_PREFIX/lib/pkgconfig/llvm.pc" ]] || {
-  echo "no wasm LLVM in $LLVM_WASM_PREFIX; run build-llvm.sh first" >&2
+[[ -f "$LLVM_WASM_PREFIX/pkgconfig/llvm.pc" ]] || {
+  echo "no wasm LLVM in $LLVM_WASM_PREFIX; run fetch-llvm.sh first" >&2
   exit 1
 }
 locate_swift_toolchain
 export LLVM_WASM_PREFIX
-export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/lib/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 
 # The SDK's libc++abi has no exception support, and LLVM is built without exceptions.
 flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$HERE" -Xcxx -fno-exceptions)

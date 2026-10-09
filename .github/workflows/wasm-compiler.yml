@@ -30,11 +30,9 @@ on:
         description: The name of the artifact holding the packaged release.
         value: ${{ jobs.build.outputs.artifact }}
 
-# The LLVM build is the whole cost model here: cold, it is hours; warm, it is a cache restore. A
-# build whose value is its cache must not be cancelled half way by a later push.
 concurrency:
   group: wasm-compiler-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
@@ -43,7 +41,7 @@ jobs:
   build:
     name: Build and check
     runs-on: ubuntu-24.04
-    timeout-minutes: 360
+    timeout-minutes: 90
     outputs:
       artifact: hylo-wasm-${{ steps.meta.outputs.version }}
     steps:
@@ -57,11 +55,7 @@ jobs:
           VERSION: ${{ inputs.version }}
         run: |
           source Tools/wasm/config.sh
-          # Everything that decides the contents of the wasm LLVM, hashed into its cache key.
-          llvm="$(cat Tools/wasm/config.sh Tools/wasm/build-llvm.sh Tools/wasm/wasi-toolchain.cmake \
-            Tools/wasm/patches/*.patch | sha256sum | cut -c1-16)"
           {
-            echo "llvm_key=llvm-wasm-$LLVM_TAG-swift-$SWIFT_VERSION-$llvm"
             echo "swift=$SWIFT_VERSION"
             echo "sdk_url=$SWIFT_SDK_URL"
             echo "sdk_checksum=$SWIFT_SDK_CHECKSUM"
@@ -82,61 +76,9 @@ jobs:
           swift sdk install "${{ steps.meta.outputs.sdk_url }}"
           --checksum "${{ steps.meta.outputs.sdk_checksum }}"
 
-      # The installed LLVM is the only thing the rest of the job needs from the LLVM build, so a
-      # hit here skips it entirely.
-      - name: Restore the wasm LLVM
-        id: llvm
-        uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/hylo-wasm/llvm-wasm
-          key: ${{ steps.meta.outputs.llvm_key }}
-
-      - name: Free disk space
-        if: steps.llvm.outputs.cache-hit != 'true'
-        run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/share/boost \
-            "$AGENT_TOOLSDIRECTORY" || true
-          df -h /
-
-      - name: Install the LLVM build's tools
-        if: steps.llvm.outputs.cache-hit != 'true'
-        run: sudo apt-get update && sudo apt-get install -y ninja-build
-
-      # A cold LLVM build may not fit in one job. Whatever a run built is saved when it fails or
-      # runs out of time, with the stamps of the steps it completed, and the next run resumes from
-      # it rather than starting over.
-      - name: Restore a partial LLVM build
-        if: steps.llvm.outputs.cache-hit != 'true'
-        uses: actions/cache/restore@v4
-        with:
-          path: |
-            ~/.cache/hylo-wasm
-            !~/.cache/hylo-wasm/llvm-wasm
-          key: ${{ steps.meta.outputs.llvm_key }}-partial-${{ github.run_id }}
-          restore-keys: ${{ steps.meta.outputs.llvm_key }}-partial-
-
-      # Bounded below the job's own limit, so that a build running out of time fails this step
-      # and leaves time to save what it built.
-      - name: Build LLVM for WebAssembly
-        if: steps.llvm.outputs.cache-hit != 'true'
-        timeout-minutes: 300
-        run: Tools/wasm/build-llvm.sh
-
-      - name: Save the partial LLVM build
-        if: steps.llvm.outputs.cache-hit != 'true' && (failure() || cancelled())
-        uses: actions/cache/save@v4
-        with:
-          path: |
-            ~/.cache/hylo-wasm
-            !~/.cache/hylo-wasm/llvm-wasm
-          key: ${{ steps.meta.outputs.llvm_key }}-partial-${{ github.run_id }}
-
-      - name: Save the wasm LLVM
-        if: steps.llvm.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: ~/.cache/hylo-wasm/llvm-wasm
-          key: ${{ steps.meta.outputs.llvm_key }}
+      # Built by hylo-lang/llvm-build, at the release and checksum pinned in config.sh.
+      - name: Download the wasm LLVM
+        run: Tools/wasm/fetch-llvm.sh
 
       - name: Set up binaryen
         env:
@@ -173,7 +115,7 @@ jobs:
           SWIFT_VERSION: ${{ steps.meta.outputs.swift }}
         run: |
           source Tools/wasm/config.sh
-          export LLVM_TAG
+          export LLVM_VERSION LLVM_BUILD_RELEASE
           node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist "$VERSION" \
             Tools/wasm/.build/release | tee -a "$GITHUB_STEP_SUMMARY"
           node Tools/wasm/js/verify-release.mjs Tools/wasm/.build/release "$VERSION"
