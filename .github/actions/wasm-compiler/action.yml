@@ -1,0 +1,111 @@
+name: Build and check the compiler for WebAssembly
+description: >
+  Builds the whole compiler for WebAssembly, LLVM back end and in-process linker included, packs it
+  in the npm package `@hylo-lang/hylo-wasm`, and checks that both compile and run programs. Expects
+  the repository checked out with its submodules. See Sources/WASM/README.md.
+
+inputs:
+  version:
+    description: >
+      The version to give the package, such as `1.2.0`, with its repository set to this one, as
+      publishing it requires; by default, the package keeps the version it has in the repository.
+    required: false
+    default: ""
+
+outputs:
+  tarball:
+    description: The packed package, checked as its users get it.
+    value: ${{ steps.pack.outputs.tarball }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read the pinned inputs
+      id: meta
+      shell: bash
+      run: |
+        source Sources/WASM/scripts/config.sh
+        {
+          echo "swift=$SWIFT_VERSION"
+          echo "sdk_url=$SWIFT_SDK_URL"
+          echo "sdk_checksum=$SWIFT_SDK_CHECKSUM"
+          echo "downloads=$HYLO_WASM_CACHE"
+          echo "downloads_key=$LLVM_WASM_CHECKSUM-$BINARYEN_CHECKSUM"
+        } >> "$GITHUB_OUTPUT"
+
+    - name: Set up Swift ${{ steps.meta.outputs.swift }}
+      uses: SwiftyLab/setup-swift@38f54a76b70d989321de9dc7c840618c08cf56e9 # v1.14.0
+      with:
+        swift-version: ${{ steps.meta.outputs.swift }}
+
+    - name: Install the Swift SDK for WebAssembly
+      shell: bash
+      run: >
+        swift sdk install "${{ steps.meta.outputs.sdk_url }}"
+        --checksum "${{ steps.meta.outputs.sdk_checksum }}"
+
+    # LLVM, built by hylo-lang/llvm-build, and binaryen, at the releases and checksums pinned in
+    # config.sh, which the scripts check; cached under the same pins.
+    - name: Restore the downloads
+      uses: actions/cache@v4
+      with:
+        path: ${{ steps.meta.outputs.downloads }}
+        key: wasm-downloads-${{ steps.meta.outputs.downloads_key }}
+
+    - name: Download LLVM and binaryen
+      shell: bash
+      run: |
+        Sources/WASM/scripts/fetch-llvm.sh
+        Sources/WASM/scripts/fetch-binaryen.sh
+
+    - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
+      with:
+        node-version: "24.x"
+        cache: npm
+        cache-dependency-path: Sources/WASM/js/package-lock.json
+
+    - name: Build the compiler for WebAssembly
+      shell: bash
+      run: Sources/WASM/scripts/build-compiler.sh release
+
+    - name: Install the JavaScript package's dependencies
+      shell: bash
+      working-directory: Sources/WASM/js
+      run: npm ci --no-audit --no-fund
+
+    - name: Set the package's version
+      if: inputs.version != ''
+      shell: bash
+      working-directory: Sources/WASM/js
+      env:
+        VERSION: ${{ inputs.version }}
+      run: |
+        npm version "$VERSION" --no-git-tag-version
+        npm pkg set "repository.url=git+https://github.com/$GITHUB_REPOSITORY.git"
+
+    - name: Check and build the JavaScript package
+      shell: bash
+      working-directory: Sources/WASM/js
+      run: |
+        npm run typecheck
+        npm run lint
+        npm run format:check
+        npm run build
+
+    # The smoke test, and the compiler's own test cases, held to what they expect of the native
+    # compiler.
+    - name: Test the compiler through the package
+      shell: bash
+      working-directory: Sources/WASM/js
+      run: npm test
+
+    # The package as its users get it, rather than its sources, which the tests above import.
+    - name: Pack the package and test it
+      id: pack
+      shell: bash
+      working-directory: Sources/WASM/js
+      run: |
+        npx playwright install --with-deps chromium
+        tarball="$RUNNER_TEMP/$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
+        node scripts/smoke-test-package.ts "$tarball"
+        echo "tarball=$tarball" >> "$GITHUB_OUTPUT"

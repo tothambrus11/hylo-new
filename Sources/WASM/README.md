@@ -134,10 +134,11 @@ their output, with hashes in their names, and rewrite the URLs. The compiler is 
 uncompressed, so that it compiles as it downloads (`WebAssembly.compileStreaming`) and servers and
 CDNs compress it on the wire as they do any other file.
 
-`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test and
-the compiler's test cases, packs the package and checks it in Node and in a page bundled with Vite,
-in Chromium. It runs on every change to the compiler, and `release.yml` calls it for every `v*`
-tag, then publishes the package at the tag's version.
+`.github/actions/wasm-compiler` downloads LLVM, builds the compiler, runs the smoke test and the
+compiler's test cases, packs the package and checks it in Node and in a page bundled with Vite, in
+Chromium. The "Compiler on WebAssembly" job of `build-and-test.yml` runs it on every change and
+uploads the packed package, and `release.yml` runs it for every `v*` tag, at the tag's version, and
+publishes the package it checked.
 
 ## What is next
 
