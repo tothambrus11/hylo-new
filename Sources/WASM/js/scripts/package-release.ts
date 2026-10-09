@@ -7,7 +7,7 @@
 //   node scripts/package-release.ts <dist> <version> <out>
 
 import { createHash } from "node:crypto";
-import { copyFileSync, mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
@@ -25,21 +25,26 @@ mkdirSync(out, { recursive: true });
 
 const files: Record<string, ManifestFile> = {};
 const emit = (key: string, source: string, extra: Partial<ManifestFile> = {}): void => {
-  const bytes = readFileSync(source);
+  const compressed = extra.encoding === "gzip";
+  const contents = readFileSync(source);
+  const bytes = compressed ? gzipSync(contents, { level: 9 }) : contents;
   const sha256 = createHash("sha256").update(bytes).digest("hex");
   const { name, ext } = path.parse(source);
-  const published = `${name}-${sha256.slice(0, 12)}${ext}`;
-  copyFileSync(source, path.join(out, published));
+  const published = `${name}-${sha256.slice(0, 12)}${ext}${compressed ? ".gz" : ""}`;
+  writeFileSync(path.join(out, published), bytes);
   files[key] = {
     path: published,
     sha256,
     bytes: bytes.length,
-    gzip: gzipSync(bytes, { level: 9 }).length,
+    gzip: compressed ? bytes.length : gzipSync(bytes, { level: 9 }).length,
     ...extra,
   };
 };
 
-emit("compiler", path.join(dist, "hylo-wasm.wasm"));
+// The compiler is stored compressed, which keeps a release within the 20 MB that package registries
+// such as JSR accept, and needs nothing of the server; gzip is the one format that every browser's
+// `DecompressionStream` reads.
+emit("compiler", path.join(dist, "hylo-wasm.wasm"), { encoding: "gzip" });
 emit("standardLibrary", path.join(dist, "stdlib.json"));
 const lib = path.join(dist, "sysroot", "lib");
 const sysroot: string[] = [];

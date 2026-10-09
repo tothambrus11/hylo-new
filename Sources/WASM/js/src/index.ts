@@ -104,7 +104,7 @@ export async function load({
     const b = new Uint8Array(await response.arrayBuffer());
     loaded += b.length;
     onProgress?.({ loaded, total });
-    return b;
+    return file.encoding === "gzip" ? gunzip(b) : b;
   };
 
   const [compiler, standardLibrary, sysroot] = await Promise.all([
@@ -269,6 +269,18 @@ function fromBase64(s: string): Uint8Array {
   const b = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; ++i) b[i] = binary.charCodeAt(i);
   return b;
+}
+
+/**
+ * Returns `b`, a file stored compressed with gzip, decompressed.
+ *
+ * A server may already have decompressed it, if it serves `.gz` files with a `Content-Encoding`,
+ * so `b` is returned as is unless it starts with gzip's magic number.
+ */
+async function gunzip(b: Uint8Array<ArrayBuffer>): Promise<Uint8Array<ArrayBuffer>> {
+  if (b[0] !== 0x1f || b[1] !== 0x8b) return b;
+  const decompressed = new Blob([b]).stream().pipeThrough(new DecompressionStream("gzip"));
+  return new Uint8Array(await new Response(decompressed).arrayBuffer());
 }
 
 /** Returns `chunks`, end to end. */

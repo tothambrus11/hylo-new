@@ -21,7 +21,7 @@ r.artifacts.llvm; // LLVM IR, as text
 const { exitCode, stdout, trap } = await hylo.run(r.executable!);
 ```
 
-Loading downloads about 28 MB and compiles the standard library, which takes a few seconds; every
+Loading downloads about 15 MB and compiles the standard library, which takes a few seconds; every
 `compile` after that takes a fraction of a second.
 
 ## Entry points
