@@ -47,14 +47,14 @@ report the same diagnostics as the native compiler, site for site. CI holds it t
  page ◀──bytes── a WASI command, run with an in-memory WASI shim
 ```
 
-- **`Sources/hylo-wasm`** is the reactor. The host instantiates it once, hands over the
+- **`Sources/WASM/hylo-wasm`** is the reactor. The host instantiates it once, hands over the
   standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes.
   Strings cross as length-prefixed UTF-8 in linear memory; the protocol is the one
   [hylo-abi-wasm](https://github.com/tothambrus11/hylo-abi-wasm) uses.
-- **`Sources/HyloWasmSession`** is what compiling means, independently of the transport:
+- **`Sources/WASM/HyloWasmSession`** is what compiling means, independently of the transport:
   each request is compiled in a copy of a program whose standard library is already lowered.
-- **`Sources/WasmLinker`** calls `lld::lldMain` with the WebAssembly driver. The files it reads
-  and writes live in a WASI file system that the host keeps in memory
+- **`Sources/WASM/WasmLinker`** calls `lld::lldMain` with the WebAssembly driver. The files it
+  reads and writes live in a WASI file system that the host keeps in memory
   ([`@bjorn3/browser_wasi_shim`](https://github.com/bjorn3/browser_wasi_shim)), the same in a
   browser and in Node.
 - **`js/index.mjs`** loads a release, drives the reactor, and runs what it produces. A release
@@ -62,8 +62,10 @@ report the same diagnostics as the native compiler, site for site. CI holds it t
 - **`js/worker.mjs`** hosts `index.mjs` in a Web Worker, so that a page's main thread never waits
   on the compiler, and loads the compiler again if it ever traps.
 
-This is a package of its own so that the compiler's package, and every CI job building it, is
-unaffected.
+These three are targets of the compiler's package, but only when its manifest is evaluated with
+`LLVM_WASM_PREFIX` set, as `build-compiler.sh` does: they compile against an LLVM built for
+WebAssembly, so every other build of the package, and every CI job building it, leaves them out.
+This directory holds the rest: the build scripts, the C entry point and the JavaScript.
 
 ## The decisions that are not obvious
 
@@ -81,10 +83,10 @@ the include path.
 
 **The reactor runs Swift's executor itself.** Its exports are called by the host and must return
 synchronously, and a reactor has no `async` entry point whose return would run pending tasks, so
-the front end's `async` phases would never finish. `runToCompletion` (in `Sources/hylo-wasm`)
-starts the work in a task and runs `MainActor.executor` until it is done. On WASI that executor
-is a cooperative run loop that also runs the tasks of the default executor, so the compiler runs
-its `async` code unchanged, `Task.detached` included. The `runUntil` it relies on is still behind
+the front end's `async` phases would never finish. `runToCompletion` (in `Sources/WASM/hylo-wasm`)
+starts the work in a task and runs `MainActor.executor` until it is done. On WASI that executor is
+a cooperative run loop that also runs the tasks of the default executor, so the compiler runs its
+`async` code unchanged, `Task.detached` included. The `runUntil` it relies on is still behind
 `@_spi(ExperimentalCustomExecutors)` in Swift 6.3, which is why it is confined to the reactor.
 
 **A Hylo `main` needs a forwarder on WASI** (`entry.c`). wasi-libc's `_start` calls
@@ -121,10 +123,10 @@ A release is a directory that a web server can serve as is. It is content-addres
 immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
 hashes too, and `js/verify-release.mjs` checks a release against it.
 
-`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the compiler's test cases and a browser check, and
-uploads the release as an artifact. It runs on every change to the compiler, and `release.yml`
-calls it for every `v*` tag, publishing the release as `hylo-<tag>-wasm32-wasip1.tar.zst` next to
-the native distributables.
+`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the
+compiler's test cases and a browser check, and uploads the release as an artifact. It runs on every
+change to the compiler, and `release.yml` calls it for every `v*` tag, publishing the release as
+`hylo-<tag>-wasm32-wasip1.tar.zst` next to the native distributables.
 
 ## What is next
 

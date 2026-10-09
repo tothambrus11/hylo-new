@@ -23,7 +23,8 @@ export LLVM_WASM_PREFIX
 export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 
 # The SDK's libc++abi has no exception support, and LLVM is built without exceptions.
-flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$HERE" -Xcxx -fno-exceptions)
+# `LLVM_WASM_PREFIX` is also what adds the targets to the package; see `Package.swift`.
+flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$HERE/../.." -Xcxx -fno-exceptions)
 if [[ "$CONFIGURATION" == release ]]; then
   flags+=(-Xswiftc -Osize -Xswiftc -gnone)
 fi
