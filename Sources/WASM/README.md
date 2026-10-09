@@ -89,11 +89,12 @@ a cooperative run loop that also runs the tasks of the default executor, so the 
 is 34 MB, and it gets linked as soon as anything imports Foundation, as some of the compiler's
 dependencies do: importing it autolinks it ahead of `FoundationEssentials`, so the symbols the two
 share resolve to Foundation's copies, which need the rest of it. `build-compiler.sh` therefore
-builds with `scripts/foundation-essentials.toolset.json`, which stops imports from autolinking
-Foundation, ICU and CoreFoundation, so that using anything outside `FoundationEssentials` is a link
-error. The few such uses are replaced by what `FoundationEssentials` or the standard library offer,
-and the reactor does not link the `StandardLibrary` target, whose resource accessor needs `Bundle`;
-the script builds that target separately for its sources.
+builds with the repository's `foundation-essentials.toolset.json`, as the native releases do on
+Linux and Windows, which stops imports from autolinking Foundation, ICU and CoreFoundation, so that
+using anything outside `FoundationEssentials` is a link error. The few such uses are replaced by
+what `FoundationEssentials` or the standard library offer, and the reactor does not link the
+`StandardLibrary` target, whose resource accessor needs `Bundle`; the script builds that target
+separately for its sources.
 
 **A Hylo `main` needs a forwarder on WASI** (`sysroot/entry.c`). wasi-libc's `_start` calls
 `__main_argc_argv`, the name clang gives a C `main(argc, argv)`. LLVM IR from any other front end

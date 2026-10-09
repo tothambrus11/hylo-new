@@ -85,15 +85,20 @@ jobs:
           #       That no longer works, so we had to upgrade to 10.0.26100.0.
           #       See also: https://github.com/swiftlang/swift/issues/88237
 
+      # On Linux and Windows, Foundation would be linked into the compiler, with ICU, whose data
+      # alone is 34 MB, as soon as anything imports it, although `FoundationEssentials` is all the
+      # compiler needs. The toolset stops imports from autolinking Foundation, making any use of it
+      # a link error; unlike `-Xswiftc`, it leaves the tools built to run during the build alone.
+      # On macOS, Foundation is part of the system.
       - name: Build distributable
-        run: swift build -c release --verbose --product hc --static-swift-stdlib -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization
+        run: swift build -c release --verbose --product hc --static-swift-stdlib ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }} -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization
         shell: pwsh
 
       - name: Locate distributable
         id: locate-distributable
         run: |
           $ErrorActionPreference = 'Stop'
-          $binPath = (swift build -c release --product hc --static-swift-stdlib -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization --show-bin-path).Trim()
+          $binPath = (swift build -c release --product hc --static-swift-stdlib ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }} -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization --show-bin-path).Trim()
           $binaryName = if ($env:RUNNER_OS -eq 'Windows') { 'hc.exe' } else { 'hc' }
           "bin_path=$binPath" >> $env:GITHUB_OUTPUT
           "binary_path=$(Join-Path $binPath $binaryName)" >> $env:GITHUB_OUTPUT
