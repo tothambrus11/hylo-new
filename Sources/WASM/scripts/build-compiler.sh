@@ -48,9 +48,10 @@ rm -rf "$OUT"
 mkdir -p "$OUT/sysroot/lib"
 
 # `wasm-opt` is optional: it roughly halves the time to compile the standard library and shrinks
-# the module by a quarter, but the module works without it.
+# the module by more than half, mostly by dropping the names section, but the module works without
+# it. `-Oz` takes no longer than `-Os` and makes a 2% smaller module, which runs as fast.
 if [[ "$CONFIGURATION" == release ]] && command -v wasm-opt >/dev/null; then
-  wasm-opt -Os --strip-debug --strip-dwarf --enable-bulk-memory --enable-sign-ext \
+  wasm-opt -Oz --strip-debug --strip-dwarf --enable-bulk-memory --enable-sign-ext \
     --enable-mutable-globals --enable-nontrapping-float-to-int \
     -o "$OUT/hylo-wasm.wasm" "$BIN/hylo-wasm.wasm"
 else
