@@ -33,7 +33,7 @@ export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONF
 # even if nothing outside `FoundationEssentials` is used. A use of Foundation proper is then a link
 # error. Unlike `-Xswiftc`, a toolset does not apply to the tools built for the host.
 flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$REPOSITORY" -Xcxx -fno-exceptions
-  --toolset "$HERE/foundation-essentials.toolset.json")
+  --toolset "$REPOSITORY/foundation-essentials.toolset.json")
 if [[ "$CONFIGURATION" == release ]]; then
   flags+=(-Xswiftc -Osize -Xswiftc -gnone)
 fi
