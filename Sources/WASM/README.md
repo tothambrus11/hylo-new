@@ -20,11 +20,11 @@ const { exitCode, stdout, trap } = await hylo.run(r.executable!);
 
 ## What it costs
 
-Measured on a release build (`-Osize`, then `wasm-opt -Os`), in Node 22 and headless Chromium:
+Measured on a release build (`-Osize`, then `wasm-opt -Oz`), in Node 22 and headless Chromium:
 
 | | |
 |---|---:|
-| compiler module | 69 MB (27.5 MB gzipped) |
+| compiler module | 38.6 MB (14.4 MB gzipped, as a release stores it) |
 | everything else (standard library sources, C runtime) | 0.5 MB gzipped |
 | compiling the standard library, once at load | ~2.5 s |
 | compiling **and linking** a small program | 150–320 ms |
@@ -141,8 +141,9 @@ change to the compiler, and `release.yml` calls it for every `v*` tag, publishin
 
 ## What is next
 
-- **Shrink the module.** Nothing has been done yet: candidates are dropping the LLVM passes that
-  `-O0` never runs, LTO, and stripping the names section.
+- **Shrink the module further.** Most of what is left is LLVM's code. The optimization pipelines
+  cannot be dropped by building only the `-O0` one, since lld's LTO, which the compiler never
+  uses, reaches all of them; that would take an lld built without LTO, or LTO of LLVM itself.
 - **Printing.** Programs can only report an exit status so far, because the standard library has no
   output yet. `run` already captures standard output for when it does.
 - **Upstream the WASI host patch** that llvm-build carries, so that LLVM builds for WASI as is.
