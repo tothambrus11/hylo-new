@@ -239,7 +239,8 @@ jobs:
           name: ${{ needs.build-wasm-distributable.outputs.artifact }}
           path: ${{ runner.temp }}/release
 
-      # npm checks the package's repository against the one publishing it, which is this one.
+      # The package ships the release's compiler, which its loader loads by default. npm checks the
+      # package's repository against the one publishing it, which is this one.
       - name: Build the package
         working-directory: Sources/WASM/js
         env:
@@ -249,6 +250,7 @@ jobs:
           npm version "$VERSION" --no-git-tag-version
           npm pkg set "repository.url=git+https://github.com/$GITHUB_REPOSITORY.git"
           npm run build
+          node scripts/include-compiler.ts "$RUNNER_TEMP/release"
 
       - name: Test the packed package with the release's compiler
         working-directory: Sources/WASM/js

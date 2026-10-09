@@ -4,7 +4,7 @@
  * compiler once.
  *
  * The worker loads the compiler release named by its URL's `compiler` parameter, or the one in its
- * own directory, which is where a release ships it, bundled:
+ * own directory, which is where the package and a release ship it:
  *
  * ```ts
  * const w = new Worker(new URL("worker.mjs", releaseBase), { type: "module" });

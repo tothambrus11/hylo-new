@@ -3,12 +3,13 @@
  *
  * Works in browsers and in Node alike: the compiler and the programs it produces see a WASI file
  * system that lives in memory, provided by `@bjorn3/browser_wasi_shim`. Nothing here touches the
- * host's file system or network except through the `fetch` that `load` is given.
+ * host's file system or network except to fetch the compiler, which `load` does on demand: by
+ * default the one shipped next to this module, or the release at another URL.
  *
  * ```ts
  * import { load } from "@hylo-lang/hylo-wasm";
  *
- * const hylo = await load({ baseUrl: "https://example.com/hylo-compiler/" });
+ * const hylo = await load();
  * const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }" });
  * const { exitCode } = await hylo.run(r.executable!);
  * ```
@@ -53,12 +54,16 @@ export interface Compiler {
   run(executable: Uint8Array, options?: RunOptions): Promise<Execution>;
 }
 
-/** What `load` needs. */
+/** How `load` finds the compiler. */
 export interface LoadOptions {
-  /** Where the release's `manifest.json` and the files it names are. */
-  baseUrl: string | URL;
-  /** How to fetch them; `globalThis.fetch` by default. */
-  fetch?: typeof globalThis.fetch;
+  /**
+   * Where the release's `manifest.json` and the files it names are: by default, next to this
+   * module, where the package and every release ship them. A page whose bundler moves this module
+   * away from them serves them itself, or names a copy elsewhere, such as on a CDN.
+   */
+  baseUrl?: string | URL;
+  /** How to fetch them: `globalThis.fetch` by default, reading `file:` URLs from disk. */
+  fetch?: (url: URL) => Promise<Response>;
   /** Called as the release downloads. */
   onProgress?: (event: { loaded: number; total: number }) => void;
 }
@@ -85,7 +90,7 @@ export interface RunOptions {
  * Loads the compiler release at `baseUrl` and compiles its standard library, which is what makes
  * this slow and every later `compile` fast.
  */
-export async function load(options: LoadOptions): Promise<Compiler> {
+export async function load(options: LoadOptions = {}): Promise<Compiler> {
   return instantiate(await fetchParts(options));
 }
 
@@ -94,10 +99,10 @@ export async function load(options: LoadOptions): Promise<Compiler> {
  * often as needed.
  */
 export async function fetchParts({
-  baseUrl,
-  fetch: get = globalThis.fetch,
+  baseUrl = new URL("./", import.meta.url),
+  fetch: get = fetchOrRead,
   onProgress,
-}: LoadOptions): Promise<CompilerParts> {
+}: LoadOptions = {}): Promise<CompilerParts> {
   const base = new URL(baseUrl, globalThis.location?.href);
   const response = await get(new URL("manifest.json", base));
   if (!response.ok) throw new Error(`could not fetch manifest.json (${response.status})`);
@@ -128,6 +133,19 @@ export async function fetchParts({
     ),
   ]);
   return { compiler, standardLibrary, sysroot: new Map(sysroot) };
+}
+
+/** Returns `url`, fetched, or read from disk if it is a `file:` URL, which Node cannot fetch. */
+async function fetchOrRead(url: URL): Promise<Response> {
+  if (url.protocol !== "file:") return globalThis.fetch(url);
+  // Named indirectly, so that bundlers for the web leave the import alone.
+  const module = "node:fs/promises";
+  const fs = (await import(/* @vite-ignore */ module)) as typeof import("node:fs/promises");
+  try {
+    return new Response(new Uint8Array(await fs.readFile(url)));
+  } catch {
+    return new Response(null, { status: 404 });
+  }
 }
 
 /** The exports of the compiler, a WASI reactor. */

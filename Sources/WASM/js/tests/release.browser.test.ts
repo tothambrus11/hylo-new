@@ -22,3 +22,12 @@ test("loads the release, compiles a program and runs it", async () => {
   expect(r.artifacts.llvm).toMatch(/define .*@main/);
   expect((await hylo.run(r.executable!)).exitCode).toBe(42);
 });
+
+test("loads the compiler next to the loader by default", async () => {
+  const { load }: { load: typeof Load } = await import(
+    /* @vite-ignore */ `/@fs${inject("release")}/index.mjs`
+  );
+  const hylo = await load();
+  const r = hylo.compile({ source: "public fun main() -> Int32 { 7 }" });
+  expect((await hylo.run(r.executable!)).exitCode).toBe(7);
+});

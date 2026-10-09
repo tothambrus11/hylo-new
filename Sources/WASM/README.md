@@ -8,7 +8,7 @@ and the runnable snippets on [hylo-lang.org](https://hylo-lang.org) run.
 ```ts
 import { load } from "@hylo-lang/hylo-wasm"; // the package in js/, or index.mjs from a release
 
-const hylo = await load({ baseUrl: releaseUrl }); // ~2.5 s: compiles the standard library
+const hylo = await load();                        // ~2.5 s: compiles the standard library
 const r = hylo.compile({
   source: "public fun main() -> Int32 { 42 }",
   emit: ["executable", "ir", "llvm", "assembly"], // any subset
