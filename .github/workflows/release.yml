@@ -131,8 +131,8 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
-  verify-and-publish-distributable:
-    name: Verify and publish distributable for ${{ matrix.target }}
+  verify-distributable:
+    name: Verify distributable for ${{ matrix.target }}
     needs: build-distributable
     strategy: *distributable-strategy
     runs-on: ${{ matrix.os }}
@@ -162,28 +162,15 @@ jobs:
           }
         shell: pwsh
 
-      - name: Upload distributable to draft release
-        env:
-          GH_TOKEN: ${{ github.token }}
-          TAG: ${{ github.ref_name }}
-        run: |
-          $ErrorActionPreference = 'Stop'
-          $archive = Join-Path $env:RUNNER_TEMP "dist/$env:ARTIFACT_NAME.tar.zst"
-          gh release upload $env:TAG $archive --repo '${{ github.repository }}' --clobber
-        shell: pwsh
-
   # The compiler for WebAssembly and the JavaScript that drives it, `@hylo-lang/hylo-wasm`, at the
-  # release's version (`v1.2.0` publishes 1.2.0), built and checked as on every change, and
-  # published as it was checked. npm's trusted publishing authenticates the job through GitHub's
-  # OIDC token, so no token is stored, and records where the package was built as its provenance.
-  publish-npm-package:
-    name: Publish the npm package
+  # release's version (`v1.2.0` is 1.2.0), built and checked as on every change.
+  build-and-verify-npm-package:
+    name: Build and verify the npm package
     needs: prepare-draft-release
     runs-on: ubuntu-24.04
     timeout-minutes: 90
-    permissions:
-      contents: read
-      id-token: write
+    outputs:
+      version: ${{ steps.version.outputs.version }}
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -202,16 +189,71 @@ jobs:
         with:
           version: ${{ steps.version.outputs.version }}
 
+      - name: Upload the package
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-package
+          path: ${{ steps.wasm.outputs.tarball }}
+          if-no-files-found: error
+          retention-days: 2
+
+  # Everything is published at once, and only once every part of the release has been verified, so
+  # that a failure leaves nothing published: the distributables are attached to the draft release,
+  # the npm package is published, and the release is then taken out of draft. Each step can be
+  # repeated, so a run that fails here can be re-run. npm's trusted publishing authenticates the
+  # job through GitHub's OIDC token, so no token is stored, and records where the package was built
+  # as its provenance.
+  publish:
+    name: Publish the release
+    needs: [verify-distributable, build-and-verify-npm-package]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.ref_name }}
+      VERSION: ${{ needs.build-and-verify-npm-package.outputs.version }}
+
+    steps:
+      - name: Download the distributables
+        uses: actions/download-artifact@v8
+        with:
+          pattern: hylo-${{ github.ref_name }}-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/dist
+
+      - name: Download the npm package
+        uses: actions/download-artifact@v8
+        with:
+          name: npm-package
+          path: ${{ runner.temp }}/npm
+
+      - name: Attach the distributables to the draft release
+        run: gh release upload "$TAG" "$RUNNER_TEMP"/dist/*.tar.zst --repo "$GITHUB_REPOSITORY" --clobber
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
+        with:
+          node-version: "24.x"
+
       # Trusted publishing needs npm 11.5.1 or later.
       - name: Update npm
         run: npm install --global npm@^11.5.1
 
       # A pre-release (`v1.2.0-rc.1`) is published under the `next` tag, so that it is not what
-      # `npm install` picks by default.
-      - name: Publish
-        env:
-          VERSION: ${{ steps.version.outputs.version }}
-          TARBALL: ${{ steps.wasm.outputs.tarball }}
+      # `npm install` picks by default. A version already published, by an earlier attempt, is left.
+      - name: Publish the npm package
         run: |
+          tarball=("$RUNNER_TEMP"/npm/*.tgz)
+          name="$(tar -xOzf "${tarball[0]}" package/package.json | jq -r .name)"
+          if npm view "$name@$VERSION" version >/dev/null 2>&1; then
+            echo "$name@$VERSION is already published."
+            exit 0
+          fi
           if [[ "$VERSION" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
-          npm publish "$TARBALL" --tag "$dist_tag"
+          npm publish "${tarball[0]}" --tag "$dist_tag"
+
+      - name: Publish the release
+        run: |
+          if [[ "$VERSION" == *-* ]]; then kind=--prerelease; else kind=--latest; fi
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false "$kind"
