@@ -128,7 +128,11 @@ To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, 
 A release is a directory that a web server can serve as is. It is content-addressed: every file but
 `manifest.json` and the two loaders has a hash of its contents in its name and can be served as
 immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
-hashes too, and `js/scripts/verify-release.ts` checks a release against it.
+hashes too, and `js/scripts/verify-release.ts` checks a release against it. The compiler is stored
+compressed with gzip (`hylo-wasm-<hash>.wasm.gz`), which the loader undoes with
+`DecompressionStream`, so that a release fits in the 20 MB a package registry such as JSR accepts
+without asking anything of the server. gzip is the one format every browser decompresses: brotli
+would be 30% smaller, but Chromium's `DecompressionStream` does not read it.
 
 `.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the
 compiler's test cases and a browser check, and uploads the release as an artifact. It runs on every

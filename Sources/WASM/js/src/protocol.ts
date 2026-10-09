@@ -105,6 +105,11 @@ export interface ManifestFile {
   bytes: number;
   /** Its size once compressed with gzip, which is roughly what it costs to download. */
   gzip: number;
+  /**
+   * `"gzip"` if the file is stored compressed with gzip, which a loader undoes; the other fields
+   * describe the file as stored.
+   */
+  encoding?: "gzip";
   /** For a file in `sysroot`, the name it has there. */
   name?: string;
 }
