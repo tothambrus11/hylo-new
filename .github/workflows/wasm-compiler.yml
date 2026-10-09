@@ -2,7 +2,7 @@ name: Compiler on WebAssembly
 
 # Builds the whole compiler, LLVM back end and in-process linker included, for WebAssembly, and
 # checks that it compiles and runs programs. `release.yml` calls this to build the release's
-# WebAssembly distributable. See Tools/wasm/README.md.
+# WebAssembly distributable. See Sources/WASM/README.md.
 on:
   push:
     branches:
@@ -11,7 +11,6 @@ on:
       - "Sources/**"
       - "StandardLibrary/**"
       - "Tests/CompilerTests/**"
-      - "Tools/wasm/**"
       - "Package.swift"
       - "Package.resolved"
       - "Swifty-LLVM"
@@ -54,7 +53,7 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
-          source Tools/wasm/config.sh
+          source Sources/WASM/scripts/config.sh
           {
             echo "swift=$SWIFT_VERSION"
             echo "sdk_url=$SWIFT_SDK_URL"
@@ -78,7 +77,7 @@ jobs:
 
       # Built by hylo-lang/llvm-build, at the release and checksum pinned in config.sh.
       - name: Download the wasm LLVM
-        run: Tools/wasm/fetch-llvm.sh
+        run: Sources/WASM/scripts/fetch-llvm.sh
 
       - name: Set up binaryen
         env:
@@ -96,44 +95,48 @@ jobs:
           node-version: "24.x"
 
       - name: Build the compiler for WebAssembly
-        run: Tools/wasm/build-compiler.sh release
+        run: Sources/WASM/scripts/build-compiler.sh release
 
-      - name: Install the loader's dependencies
-        working-directory: Tools/wasm/js
+      - name: Install the JavaScript package's dependencies
+        working-directory: Sources/WASM/js
         run: npm ci --no-audit --no-fund
 
-      - name: Compile and run programs with it
-        run: node Tools/wasm/js/smoke.mjs Tools/wasm/.build/dist
+      - name: Check the JavaScript package
+        working-directory: Sources/WASM/js
+        run: |
+          npm run typecheck
+          npm run lint
+          npm run format:check
+          npm run build
 
-      # The compiler's own test cases, held to what they expect of the native compiler.
-      - name: Run the compiler tests through it
-        run: node Tools/wasm/js/conformance.mjs Tools/wasm/.build/dist Tests/CompilerTests
+      # The smoke test, and the compiler's own test cases, held to what they expect of the native
+      # compiler, against what the build step produced.
+      - name: Test the compiler through the package
+        working-directory: Sources/WASM/js
+        run: npm test
 
       - name: Package the release
         env:
           VERSION: ${{ steps.meta.outputs.version }}
           SWIFT_VERSION: ${{ steps.meta.outputs.swift }}
         run: |
-          source Tools/wasm/config.sh
+          source Sources/WASM/scripts/config.sh
           export LLVM_VERSION LLVM_BUILD_RELEASE
-          node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist "$VERSION" \
-            Tools/wasm/.build/release | tee -a "$GITHUB_STEP_SUMMARY"
-          node Tools/wasm/js/verify-release.mjs Tools/wasm/.build/release "$VERSION"
+          node Sources/WASM/js/scripts/package-release.ts .build/wasm/dist "$VERSION" \
+            .build/wasm/release | tee -a "$GITHUB_STEP_SUMMARY"
+          node Sources/WASM/js/scripts/verify-release.ts .build/wasm/release "$VERSION"
 
       # A release is loaded through its manifest, by a page, which is a different code path from the
-      # checks above. Playwright is not a dependency of the loader, so it is installed here.
+      # tests above.
       - name: Load the release in a browser
+        working-directory: Sources/WASM/js
         run: |
-          mkdir -p "$RUNNER_TEMP/pw" && cd "$RUNNER_TEMP/pw" && npm init -y >/dev/null
-          npm install --no-audit --no-fund playwright >/dev/null
-          ./node_modules/.bin/playwright install --with-deps chromium
-          cd "$GITHUB_WORKSPACE"
-          PLAYWRIGHT_MODULE="$RUNNER_TEMP/pw/node_modules/playwright/index.mjs" \
-            node Tools/wasm/js/browser-smoke.mjs Tools/wasm/.build/release
+          npx playwright install --with-deps chromium
+          npm run test:browser
 
       - uses: actions/upload-artifact@v7
         with:
           name: hylo-wasm-${{ steps.meta.outputs.version }}
-          path: Tools/wasm/.build/release/
+          path: .build/wasm/release/
           if-no-files-found: error
           retention-days: 30

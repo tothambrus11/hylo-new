@@ -1,0 +1,44 @@
+{
+  "name": "@hylo/wasm",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Compile and run Hylo programs in a browser or in Node, with the Hylo compiler compiled to WebAssembly.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hylo-lang/hylo-new.git",
+    "directory": "Sources/WASM/js"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./dist/index.js",
+    "./worker": "./dist/worker.js",
+    "./protocol": "./dist/protocol.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsdown",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "format": "oxfmt src tests scripts",
+    "format:check": "oxfmt --check src tests scripts",
+    "test": "vitest run --project node",
+    "test:browser": "vitest run --project browser"
+  },
+  "dependencies": {
+    "@bjorn3/browser_wasi_shim": "^0.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "@vitest/browser-playwright": "^5.0.3",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "playwright": "^1.64.0",
+    "tsdown": "^0.23.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}

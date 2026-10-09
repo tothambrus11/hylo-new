@@ -183,7 +183,12 @@ jobs:
     steps:
       - uses: actions/checkout@v7
         with:
-          sparse-checkout: Tools/wasm/js
+          sparse-checkout: Sources/WASM/js
+
+      # Runs the verification script, written in TypeScript, as it is.
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
+        with:
+          node-version: "24.x"
 
       - name: Download distributable artifact
         uses: actions/download-artifact@v8
@@ -192,7 +197,7 @@ jobs:
           path: ${{ runner.temp }}/release
 
       - name: Verify distributable in a Swift-free environment
-        run: node Tools/wasm/js/verify-release.mjs "$RUNNER_TEMP/release" "${GITHUB_REF_NAME#v}"
+        run: node Sources/WASM/js/scripts/verify-release.ts "$RUNNER_TEMP/release" "${GITHUB_REF_NAME#v}"
 
       - name: Upload distributable to draft release
         env:

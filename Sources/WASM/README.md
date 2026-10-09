@@ -5,17 +5,17 @@ the lowering to LLVM IR, LLVM's WebAssembly back end, and lld's WebAssembly link
 Hylo program into a WebAssembly executable, which the page then runs. It is what the playground
 and the runnable snippets on [hylo-lang.org](https://hylo-lang.org) run.
 
-```js
-import { load } from "./index.mjs"; // from a release
+```ts
+import { load } from "@hylo/wasm"; // the package in js/, or index.mjs from a release
 
-const hylo = await load({ baseUrl: "./" });       // ~2.5 s: compiles the standard library
+const hylo = await load({ baseUrl: releaseUrl }); // ~2.5 s: compiles the standard library
 const r = hylo.compile({
   source: "public fun main() -> Int32 { 42 }",
   emit: ["executable", "ir", "llvm", "assembly"], // any subset
 });
 r.diagnostics;                                    // [] or errors, with sites and rendered text
 r.artifacts.llvm;                                 // LLVM IR, as text
-const { exitCode, stdout, trap } = await hylo.run(r.executable);
+const { exitCode, stdout, trap } = await hylo.run(r.executable!);
 ```
 
 ## What it costs
@@ -41,31 +41,27 @@ report the same diagnostics as the native compiler, site for site. CI holds it t
                  ├─ FrontEnd       parse, scope, type, lower to Hylo IR
                  ├─ BackEnd        Hylo IR → LLVM IR       ┐
                  ├─ Swifty-LLVM    LLVM's C API + shims    ├ LLVM 23, built for wasm32-wasip1
-                 └─ WasmLinker     lld::wasm, in-process   ┘
+                 └─ WASMLinker     lld::wasm, in-process   ┘
                        │ reads /sysroot/lib/{crt1-command.o, entry.o, libc.a, shims.o, builtins}
                        ▼ writes /tmp/main.wasm
  page ◀──bytes── a WASI command, run with an in-memory WASI shim
 ```
 
-- **`Sources/Tools/hylo-wasm`** is the reactor. The host instantiates it once, hands over the
-  standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes.
-  Strings cross as length-prefixed UTF-8 in linear memory; the protocol is the one
-  [hylo-abi-wasm](https://github.com/tothambrus11/hylo-abi-wasm) uses.
-- **`Sources/Tools/HyloWasmSession`** is what compiling means, independently of the transport:
-  each request is compiled in a copy of a program whose standard library is already lowered.
-- **`Sources/Tools/WasmLinker`** calls `lld::lldMain` with the WebAssembly driver. The files it
-  reads and writes live in a WASI file system that the host keeps in memory
-  ([`@bjorn3/browser_wasi_shim`](https://github.com/bjorn3/browser_wasi_shim)), the same in a
-  browser and in Node.
-- **`js/index.mjs`** loads a release, drives the reactor, and runs what it produces. A release
-  ships it bundled with its one dependency, so a page can import it directly.
-- **`js/worker.mjs`** hosts `index.mjs` in a Web Worker, so that a page's main thread never waits
-  on the compiler, and loads the compiler again if it ever traps.
+Everything is in this directory:
 
-These three are targets of the compiler's package, but only when its manifest is evaluated with
-`LLVM_WASM_PREFIX` set, as `build-compiler.sh` does: they compile against an LLVM built for
-WebAssembly, so every other build of the package, and every CI job building it, leaves them out.
-This directory holds the rest: the build scripts, the C entry point and the JavaScript.
+| | |
+|---|---|
+| `hylo-wasm/` | The reactor. The host instantiates it once, hands over the standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes. Requests and answers are JSON, as length-prefixed UTF-8 in linear memory. |
+| `HyloWASMSession/` | What compiling means, independently of the transport: each request is compiled in a copy of a program whose standard library is already lowered. |
+| `WASMLinker/` | Calls `lld::lldMain` with the WebAssembly driver. The files it reads and writes live in a WASI file system that the host keeps in memory, the same in a browser and in Node. |
+| `sysroot/entry.c` | A file linked into every executable; see below. |
+| `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` downloads LLVM, `build-compiler.sh` builds the module into `.build/wasm/dist`. |
+| `js/` | The JavaScript package `@hylo/wasm`, which loads a compiler release, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it, and its `scripts/` package and verify releases. |
+
+The three Swift targets are targets of the compiler's package, but only when its manifest is
+evaluated with `LLVM_WASM_PREFIX` set, as `build-compiler.sh` does: they compile against an LLVM
+built for WebAssembly, so every other build of the package, and every CI job building it, leaves
+them out.
 
 ## The decisions that are not obvious
 
@@ -83,13 +79,13 @@ the include path.
 
 **The reactor runs Swift's executor itself.** Its exports are called by the host and must return
 synchronously, and a reactor has no `async` entry point whose return would run pending tasks, so
-the front end's `async` phases would never finish. `runToCompletion` (in `Sources/Tools/hylo-wasm`)
+the front end's `async` phases would never finish. `runToCompletion` (in `hylo-wasm/`)
 starts the work in a task and runs `MainActor.executor` until it is done. On WASI that executor is
 a cooperative run loop that also runs the tasks of the default executor, so the compiler runs its
 `async` code unchanged, `Task.detached` included. The `runUntil` it relies on is still behind
 `@_spi(ExperimentalCustomExecutors)` in Swift 6.3, which is why it is confined to the reactor.
 
-**A Hylo `main` needs a forwarder on WASI** (`entry.c`). wasi-libc's `_start` calls
+**A Hylo `main` needs a forwarder on WASI** (`sysroot/entry.c`). wasi-libc's `_start` calls
 `__main_argc_argv`, the name clang gives a C `main(argc, argv)`. LLVM IR from any other front end
 defines plain `main`, so without the forwarder `_start` calls an undefined weak symbol and traps.
 
@@ -104,13 +100,14 @@ Requires Swift 6.3.2 with its Swift SDK for WebAssembly, Node, curl, and optiona
 `wasm-opt`. Downloads go in `~/.cache/hylo-wasm` (`$HYLO_WASM_CACHE`).
 
 ```sh
-swift sdk install <URL and checksum in config.sh>
-Tools/wasm/fetch-llvm.sh            # once per LLVM release: ~150 MB unpacked
-Tools/wasm/build-compiler.sh        # ~5 min in release, ~2 min in debug
-(cd Tools/wasm/js && npm ci)
-node Tools/wasm/js/smoke.mjs Tools/wasm/.build/dist
-node Tools/wasm/js/conformance.mjs Tools/wasm/.build/dist Tests/CompilerTests
-node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist 0.0.0-dev Tools/wasm/.build/release
+swift sdk install <URL and checksum in scripts/config.sh>
+Sources/WASM/scripts/fetch-llvm.sh       # once per LLVM release: ~150 MB unpacked
+Sources/WASM/scripts/build-compiler.sh   # ~5 min in release, ~2 min in debug
+cd Sources/WASM/js
+npm ci
+npm test                                 # the smoke test and Tests/CompilerTests, in Node
+node scripts/package-release.ts ../../../.build/wasm/dist 0.0.0-dev ../../../.build/wasm/release
+npm run test:browser                     # the release, in Chromium
 ```
 
 To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, point
@@ -121,7 +118,7 @@ To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, 
 A release is a directory that a web server can serve as is. It is content-addressed: every file but
 `manifest.json` and the two loaders has a hash of its contents in its name and can be served as
 immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
-hashes too, and `js/verify-release.mjs` checks a release against it.
+hashes too, and `js/scripts/verify-release.ts` checks a release against it.
 
 `.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the
 compiler's test cases and a browser check, and uploads the release as an artifact. It runs on every

@@ -2,7 +2,7 @@ import BackEnd
 import Foundation
 import FrontEnd
 import SwiftyLLVM
-import WasmLinker
+import WASMLinker
 
 /// A Hylo compiler whose standard library has been compiled once, compiling programs written
 /// against it to WebAssembly.

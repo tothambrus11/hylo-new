@@ -1,7 +1,7 @@
 // Checks that a packaged release is complete and intact: every file its manifest names is there
 // with the contents the manifest records, and the release has the version it should.
 //
-//   node verify-release.mjs <release> <version>
+//   node scripts/verify-release.ts <release> <version>
 //
 // Needs nothing but Node, so that a release can be checked where it is published, away from the
 // toolchain that built it.
@@ -9,22 +9,23 @@
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import path from "node:path";
+import type { Manifest } from "../src/protocol.ts";
 
 const [release, version] = process.argv.slice(2);
 if (version === undefined) {
-  console.error("usage: node verify-release.mjs <release> <version>");
+  console.error("usage: node verify-release.ts <release> <version>");
   process.exit(2);
 }
 
-const problems = [];
-const manifest = JSON.parse(readFileSync(path.join(release, "manifest.json"), "utf8"));
+const problems: string[] = [];
+const manifest = JSON.parse(readFileSync(path.join(release, "manifest.json"), "utf8")) as Manifest;
 if (manifest.version !== version) {
   problems.push(`the release is version ${manifest.version}, not ${version}`);
 }
 
 /** Checks that the file at `name` holds `expected.bytes` bytes hashing to `expected.sha256`. */
-function check(name, expected) {
-  let bytes;
+function check(name: string, expected: { sha256: string; bytes: number }): void {
+  let bytes: Buffer;
   try {
     bytes = readFileSync(path.join(release, name));
   } catch {

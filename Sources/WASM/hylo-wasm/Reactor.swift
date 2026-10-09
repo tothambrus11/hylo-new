@@ -1,5 +1,5 @@
 import Foundation
-import HyloWasmSession
+import HyloWASMSession
 
 // A WebAssembly reactor compiling Hylo programs to WebAssembly.
 //
