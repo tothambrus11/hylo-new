@@ -194,20 +194,19 @@ public struct SourceFile: Hashable, Sendable {
     return e ?? endIndex
   }
 
-  // Enumerating a directory takes Foundation proper, which the WebAssembly build of the compiler
-  // leaves out; see `Sources/WASM/README.md`.
-  #if !os(WASI)
-  /// Calls `action` on each source file URL in `directory` having the extension `pathExtension`.
+  /// Calls `action` on each source file URL in `directory` having the extension `pathExtension`,
+  /// skipping hidden files and the contents of hidden directories.
   public static func forEachURL(
     in directory: URL, withPathExtension pathExtension: String = "hylo",
     _ action: (URL) throws -> Void
-  ) rethrows {
-    let items = FileManager.default.enumerator(
-      at: directory,
-      includingPropertiesForKeys: [.isRegularFileKey],
-      options: [.skipsHiddenFiles, .skipsPackageDescendants])!
-
-    for case let f as URL in items where f.pathExtension == pathExtension {
+  ) throws {
+    // `subpathsOfDirectory` rather than `enumerator`, which is not in `FoundationEssentials`, the
+    // only part of Foundation the WebAssembly build of the compiler links.
+    let depth = directory.pathComponents.count
+    for p in try FileManager.default.subpathsOfDirectory(atPath: directory.path) {
+      let f = directory.appendingPathComponent(p)
+      if f.pathExtension != pathExtension { continue }
+      if f.pathComponents[depth...].contains(where: { (c) in c.hasPrefix(".") }) { continue }
       try action(f)
     }
   }
@@ -219,7 +218,6 @@ public struct SourceFile: Hashable, Sendable {
   ) throws {
     try forEachURL(in: directory, { (u) in try action(SourceFile(contentsOf: u)) })
   }
-  #endif
 
 }
 
