@@ -1,7 +1,6 @@
 {
-  "name": "@hylo/wasm",
+  "name": "@hylo-lang/hylo-wasm",
   "version": "0.0.0",
-  "private": true,
   "description": "Compile and run Hylo programs in a browser or in Node, with the Hylo compiler compiled to WebAssembly.",
   "license": "Apache-2.0",
   "repository": {
@@ -19,6 +18,10 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
   "scripts": {
     "build": "tsdown",
     "typecheck": "tsc --noEmit",

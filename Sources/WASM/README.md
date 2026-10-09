@@ -6,7 +6,7 @@ Hylo program into a WebAssembly executable, which the page then runs. It is what
 and the runnable snippets on [hylo-lang.org](https://hylo-lang.org) run.
 
 ```ts
-import { load } from "@hylo/wasm"; // the package in js/, or index.mjs from a release
+import { load } from "@hylo-lang/hylo-wasm"; // the package in js/, or index.mjs from a release
 
 const hylo = await load({ baseUrl: releaseUrl }); // ~2.5 s: compiles the standard library
 const r = hylo.compile({
@@ -56,7 +56,7 @@ Everything is in this directory:
 | `WASMLinker/` | Calls `lld::lldMain` with the WebAssembly driver. The files it reads and writes live in a WASI file system that the host keeps in memory, the same in a browser and in Node. |
 | `sysroot/entry.c` | A file linked into every executable; see below. |
 | `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` downloads LLVM, `build-compiler.sh` builds the module into `.build/wasm/dist`. |
-| `js/` | The JavaScript package `@hylo/wasm`, which loads a compiler release, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it, and its `scripts/` package and verify releases. |
+| `js/` | The JavaScript package `@hylo-lang/hylo-wasm`, which loads a compiler release, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it, and its `scripts/` package and verify releases. |
 
 The three Swift targets are targets of the compiler's package, but only when its manifest is
 evaluated with `LLVM_WASM_PREFIX` set, as `build-compiler.sh` does: they compile against an LLVM

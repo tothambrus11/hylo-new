@@ -207,3 +207,50 @@ jobs:
           tar --zstd -cf "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" -C "$RUNNER_TEMP/release" .
           gh release upload "$TAG" "$RUNNER_TEMP/$ARTIFACT_NAME.tar.zst" \
             --repo "$GITHUB_REPOSITORY" --clobber
+
+  # The JavaScript package that loads the compiler, `@hylo-lang/hylo-wasm`, at the release's version
+  # (`v1.2.0` publishes 1.2.0), once the compiler it loads has been published and checked. The
+  # build job has already type-checked, linted and tested it. npm's trusted publishing
+  # authenticates the job through GitHub's OIDC token, so no token is stored, and records where the
+  # package was built as its provenance.
+  publish-npm-package:
+    name: Publish the npm package
+    needs: [build-wasm-distributable, verify-and-publish-wasm-distributable]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: Sources/WASM/js
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
+        with:
+          node-version: "24.x"
+          registry-url: https://registry.npmjs.org
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Update npm
+        run: npm install --global npm@^11.5.1
+
+      - name: Build the package
+        working-directory: Sources/WASM/js
+        run: |
+          npm ci --no-audit --no-fund
+          npm run build
+
+      # A pre-release (`v1.2.0-rc.1`) is published under the `next` tag, so that it is not what
+      # `npm install` picks by default. npm checks the package's repository against the one
+      # publishing it, which is this one.
+      - name: Publish
+        working-directory: Sources/WASM/js
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          version="${TAG#v}"
+          npm version "$version" --no-git-tag-version
+          npm pkg set "repository.url=git+https://github.com/$GITHUB_REPOSITORY.git"
+          if [[ "$version" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
+          npm publish --tag "$dist_tag"
