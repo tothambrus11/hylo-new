@@ -47,13 +47,13 @@ report the same diagnostics as the native compiler, site for site. CI holds it t
  page ◀──bytes── a WASI command, run with an in-memory WASI shim
 ```
 
-- **`Sources/WASM/hylo-wasm`** is the reactor. The host instantiates it once, hands over the
+- **`Sources/Tools/hylo-wasm`** is the reactor. The host instantiates it once, hands over the
   standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes.
   Strings cross as length-prefixed UTF-8 in linear memory; the protocol is the one
   [hylo-abi-wasm](https://github.com/tothambrus11/hylo-abi-wasm) uses.
-- **`Sources/WASM/HyloWasmSession`** is what compiling means, independently of the transport:
+- **`Sources/Tools/HyloWasmSession`** is what compiling means, independently of the transport:
   each request is compiled in a copy of a program whose standard library is already lowered.
-- **`Sources/WASM/WasmLinker`** calls `lld::lldMain` with the WebAssembly driver. The files it
+- **`Sources/Tools/WasmLinker`** calls `lld::lldMain` with the WebAssembly driver. The files it
   reads and writes live in a WASI file system that the host keeps in memory
   ([`@bjorn3/browser_wasi_shim`](https://github.com/bjorn3/browser_wasi_shim)), the same in a
   browser and in Node.
@@ -83,7 +83,7 @@ the include path.
 
 **The reactor runs Swift's executor itself.** Its exports are called by the host and must return
 synchronously, and a reactor has no `async` entry point whose return would run pending tasks, so
-the front end's `async` phases would never finish. `runToCompletion` (in `Sources/WASM/hylo-wasm`)
+the front end's `async` phases would never finish. `runToCompletion` (in `Sources/Tools/hylo-wasm`)
 starts the work in a task and runs `MainActor.executor` until it is done. On WASI that executor is
 a cooperative run loop that also runs the tasks of the default executor, so the compiler runs its
 `async` code unchanged, `Task.detached` included. The `runUntil` it relies on is still behind
