@@ -270,7 +270,7 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
         // build directory, where `build-compiler.sh` collects them.
         .target(name: "StandardLibrary"),
       ],
-      path: "Sources/WASM/hylo-wasm",
+      path: "Sources/Tools/hylo-wasm",
       swiftSettings: commonSwiftSettings,
       linkerSettings: [
         .unsafeFlags([
@@ -293,14 +293,14 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
         .target(name: "WasmLinker"),
         .product(name: "SwiftyLLVM", package: "Swifty-LLVM"),
       ],
-      path: "Sources/WASM/HyloWasmSession",
+      path: "Sources/Tools/HyloWasmSession",
       swiftSettings: commonSwiftSettings),
 
     // lld's WebAssembly port, called in-process. Swifty-LLVM finds LLVM through the `llvm.pc` in
     // `LLVM_WASM_PREFIX`; this needs lld's headers from it too.
     .target(
       name: "WasmLinker",
-      path: "Sources/WASM/WasmLinker",
+      path: "Sources/Tools/WasmLinker",
       cxxSettings: [
         .unsafeFlags([
           "-I", "\(llvm)/include",
