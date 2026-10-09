@@ -41,4 +41,4 @@ with it; see `Sources/WASM/README.md`.
 |---|---|
 | `src/` | What is published. |
 | `tests/` | Tests of the compiler through this package, against a build of it (`npm test`), and of a packaged release in Chromium (`npm run test:browser`). |
-| `scripts/` | What CI uses to package a compiler release and check one. |
+| `scripts/` | What CI uses to package a compiler release and check one, and to check this package as its users get it (`smoke-test-package.ts`). |

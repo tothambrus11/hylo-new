@@ -134,6 +134,13 @@ jobs:
           npx playwright install --with-deps chromium
           npm run test:browser
 
+      # The package as its users get it, rather than its sources, which the tests above import.
+      - name: Test the packed package
+        working-directory: Sources/WASM/js
+        run: |
+          tarball="$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
+          node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball" ../../../.build/wasm/release
+
       - uses: actions/upload-artifact@v7
         with:
           name: hylo-wasm-${{ steps.meta.outputs.version }}
