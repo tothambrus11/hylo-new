@@ -1,8 +1,8 @@
 name: Compiler on WebAssembly
 
 # Builds the whole compiler, LLVM back end and in-process linker included, for WebAssembly, and
-# checks that it compiles and runs programs. `release.yml` calls this to build the release's
-# WebAssembly distributable. See Sources/WASM/README.md.
+# checks that it compiles and runs programs, through the npm package that ships it. `release.yml`
+# calls this to build what it publishes. See Sources/WASM/README.md.
 on:
   push:
     branches:
@@ -26,7 +26,7 @@ on:
         required: true
     outputs:
       artifact:
-        description: The name of the artifact holding the packaged release.
+        description: The name of the artifact holding the compiler's files, as `build-compiler.sh` writes them.
         value: ${{ jobs.build.outputs.artifact }}
       version:
         description: The version the release records, such as `1.2.0`.
@@ -118,36 +118,17 @@ jobs:
         working-directory: Sources/WASM/js
         run: npm test
 
-      - name: Package the release
-        env:
-          VERSION: ${{ steps.meta.outputs.version }}
-          SWIFT_VERSION: ${{ steps.meta.outputs.swift }}
-        run: |
-          source Sources/WASM/scripts/config.sh
-          export LLVM_VERSION LLVM_BUILD_RELEASE
-          node Sources/WASM/js/scripts/package-release.ts .build/wasm/dist "$VERSION" \
-            .build/wasm/release | tee -a "$GITHUB_STEP_SUMMARY"
-          node Sources/WASM/js/scripts/verify-release.ts .build/wasm/release "$VERSION"
-
-      # A release is loaded through its manifest, by a page, which is a different code path from the
-      # tests above.
-      - name: Load the release in a browser
-        working-directory: Sources/WASM/js
-        run: |
-          npx playwright install --with-deps chromium
-          npm run test:browser
-
       # The package as its users get it, rather than its sources, which the tests above import.
       - name: Test the packed package
         working-directory: Sources/WASM/js
         run: |
-          node scripts/include-compiler.ts ../../../.build/wasm/release
+          npx playwright install --with-deps chromium
           tarball="$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
-          node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball" ../../../.build/wasm/release
+          node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball"
 
       - uses: actions/upload-artifact@v7
         with:
           name: hylo-wasm-${{ steps.meta.outputs.version }}
-          path: .build/wasm/release/
+          path: .build/wasm/compiler/
           if-no-files-found: error
           retention-days: 30

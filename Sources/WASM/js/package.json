@@ -10,9 +10,24 @@
   },
   "type": "module",
   "exports": {
-    ".": "./dist/index.js",
-    "./worker": "./dist/worker.js",
-    "./protocol": "./dist/protocol.js",
+    ".": {
+      "node": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./worker": {
+      "types": "./dist/worker.d.ts",
+      "default": "./dist/worker.js"
+    },
+    "./protocol": {
+      "types": "./dist/protocol.d.ts",
+      "default": "./dist/protocol.js"
+    },
     "./package.json": "./package.json"
   },
   "files": [
@@ -23,25 +38,24 @@
     "provenance": true
   },
   "scripts": {
-    "build": "tsdown",
+    "build": "tsdown && cp \"${HYLO_WASM_DIST:-../../../.build/wasm/compiler}\"/* dist/",
     "typecheck": "tsc --noEmit",
     "lint": "oxlint",
     "format": "oxfmt src tests scripts",
     "format:check": "oxfmt --check src tests scripts",
-    "test": "vitest run --project node",
-    "test:browser": "vitest run --project browser"
+    "test": "vitest run"
   },
   "dependencies": {
     "@bjorn3/browser_wasi_shim": "^0.4.2"
   },
   "devDependencies": {
     "@types/node": "^24.19.1",
-    "@vitest/browser-playwright": "^5.0.3",
     "oxfmt": "^0.72.0",
     "oxlint": "^1.87.0",
     "playwright": "^1.64.0",
     "tsdown": "^0.23.0",
     "typescript": "^5.9.3",
+    "vite": "^8.3.4",
     "vitest": "^5.0.3"
   }
 }

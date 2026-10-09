@@ -1,5 +1,5 @@
 /**
- * What a host and the compiler say to each other, and what a compiler release holds.
+ * What a host and the compiler say to each other.
  *
  * The requests and answers mirror `Sources/WASM/HyloWASMSession/Messages.swift`, which the
  * reactor encodes and decodes as JSON.
@@ -67,54 +67,6 @@ export interface Execution {
   stdout: string;
   /** What the program wrote to its standard error, decoded as UTF-8. */
   stderr: string;
-}
-
-/**
- * The `manifest.json` of a compiler release, naming its files.
- *
- * Every file but the manifest and the loaders has a hash of its contents in its name, so it can be
- * served as immutable.
- */
-export interface Manifest {
-  /**
-   * The version of this format, which a loader checks: 2, since the compiler is stored compressed
-   * (see `ManifestFile.encoding`).
-   */
-  schemaVersion: 2;
-  /** The version of the compiler. */
-  version: string;
-  /** When the release was built, as an ISO 8601 date. */
-  built: string;
-  /** What the release was built from, where known. */
-  inputs: Record<string, string | null>;
-  /**
-   * The release's files by role: `compiler` (the reactor), `standardLibrary` (its sources, as a
-   * JSON object keyed by file name), and those named in `sysroot`.
-   */
-  files: Record<string, ManifestFile>;
-  /** The keys of `files` linked into every executable, installed under `/sysroot/lib`. */
-  sysroot: string[];
-  /** The bundled loaders, `index.mjs` and `worker.mjs`, which keep their names. */
-  loaders?: Record<string, { sha256: string; bytes: number }>;
-}
-
-/** A file of a compiler release. */
-export interface ManifestFile {
-  /** The file's name in the release. */
-  path: string;
-  /** The SHA-256 of its contents, in hexadecimal. */
-  sha256: string;
-  /** Its size. */
-  bytes: number;
-  /** Its size once compressed with gzip, which is roughly what it costs to download. */
-  gzip: number;
-  /**
-   * `"gzip"` if the file is stored compressed with gzip, which a loader undoes; the other fields
-   * describe the file as stored.
-   */
-  encoding?: "gzip";
-  /** For a file in `sysroot`, the name it has there. */
-  name?: string;
 }
 
 /** A message to the worker (`worker.ts`). */

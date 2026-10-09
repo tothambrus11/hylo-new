@@ -1,12 +1,12 @@
 # The Hylo compiler on WebAssembly
 
-The whole compiler, built as one WebAssembly module that runs in a browser: the front end,
+The whole compiler, built as one WebAssembly module that runs in a browser or in Node: the front end,
 the lowering to LLVM IR, LLVM's WebAssembly back end, and lld's WebAssembly linker. It turns a
 Hylo program into a WebAssembly executable, which the page then runs. It is what the playground
 and the runnable snippets on [hylo-lang.org](https://hylo-lang.org) run.
 
 ```ts
-import { load } from "@hylo-lang/hylo-wasm"; // the package in js/, or index.mjs from a release
+import { load } from "@hylo-lang/hylo-wasm"; // the package in js/
 
 const hylo = await load();                        // ~2.5 s: compiles the standard library
 const r = hylo.compile({
@@ -24,7 +24,7 @@ Measured on a release build (`-Osize`, then `wasm-opt -Oz`), in Node 22 and head
 
 | | |
 |---|---:|
-| compiler module | 38.6 MB (14.4 MB gzipped, as a release stores it) |
+| compiler module | 38.6 MB (14.4 MB gzipped) |
 | everything else (standard library sources, C runtime) | 0.5 MB gzipped |
 | compiling the standard library, once at load | ~2.5 s |
 | compiling **and linking** a small program | 150–320 ms |
@@ -55,8 +55,8 @@ Everything is in this directory:
 | `HyloWASMSession/` | What compiling means, independently of the transport: each request is compiled in a copy of a program whose standard library is already lowered. |
 | `WASMLinker/` | Calls `lld::lldMain` with the WebAssembly driver. The files it reads and writes live in a WASI file system that the host keeps in memory, the same in a browser and in Node. |
 | `sysroot/entry.c` | A file linked into every executable; see below. |
-| `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` and `fetch-binaryen.sh` download LLVM and binaryen, `build-compiler.sh` builds the module into `.build/wasm/dist`. |
-| `js/` | The JavaScript package `@hylo-lang/hylo-wasm`, which loads a compiler release, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it, and its `scripts/` package and verify releases. |
+| `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` and `fetch-binaryen.sh` download LLVM and binaryen, `build-compiler.sh` builds the module and the files it needs into `.build/wasm/compiler`. |
+| `js/` | The npm package `@hylo-lang/hylo-wasm`, which ships the compiler, loads it, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it. |
 
 The three Swift targets are targets of the compiler's package, but only when its manifest is
 evaluated with `LLVM_WASM_PREFIX` set, as `build-compiler.sh` does: they compile against an LLVM
@@ -118,8 +118,8 @@ Sources/WASM/scripts/build-compiler.sh   # ~5 min in release, ~2 min in debug
 cd Sources/WASM/js
 npm ci
 npm test                                 # the smoke test and Tests/CompilerTests, in Node
-node scripts/package-release.ts ../../../.build/wasm/dist 0.0.0-dev ../../../.build/wasm/release
-npm run test:browser                     # the release, in Chromium
+npm run build && npm pack                # the package, with the compiler
+node scripts/smoke-test-package.ts hylo-lang-hylo-wasm-0.0.0.tgz  # in Node, and bundled, in Chromium
 ```
 
 To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, point
@@ -127,19 +127,17 @@ To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, 
 
 ## Releases
 
-A release is a directory that a web server can serve as is. It is content-addressed: every file but
-`manifest.json` and the two loaders has a hash of its contents in its name and can be served as
-immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
-hashes too, and `js/scripts/verify-release.ts` checks a release against it. The compiler is stored
-compressed with gzip (`hylo-wasm-<hash>.wasm.gz`), which the loader undoes with
-`DecompressionStream`, so that a release fits in the 20 MB a package registry such as JSR accepts
-without asking anything of the server. gzip is the one format every browser decompresses: brotli
-would be 30% smaller, but Chromium's `DecompressionStream` does not read it.
+The compiler is published as part of the npm package `@hylo-lang/hylo-wasm`, whose `README.md`
+says how pages and Node programs load it. Its files keep fixed names, and the loader refers to each
+with `new URL("./<file>", import.meta.url)`, which bundlers recognize: they copy the files into
+their output, with hashes in their names, and rewrite the URLs. The compiler is shipped
+uncompressed, so that it compiles as it downloads (`WebAssembly.compileStreaming`) and servers and
+CDNs compress it on the wire as they do any other file.
 
-`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the
-compiler's test cases and a browser check, and uploads the release as an artifact. It runs on every
-change to the compiler, and `release.yml` calls it for every `v*` tag, publishing the release as
-`hylo-<tag>-wasm32-wasip1.tar.zst` next to the native distributables.
+`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test and
+the compiler's test cases, packs the package and checks it in Node and in a page bundled with Vite,
+in Chromium. It runs on every change to the compiler, and `release.yml` calls it for every `v*`
+tag, then publishes the package at the tag's version.
 
 ## What is next
 
