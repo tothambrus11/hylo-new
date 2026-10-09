@@ -1,6 +1,6 @@
 // Checks a packed package the way its users get it: installs the tarball `npm pack` produced in an
-// empty project, then imports it by name, loads a compiler release over HTTP with it, compiles a
-// program and runs it, and type-checks a program using its types.
+// empty project, then imports it by name, loads the compiler it ships and, over HTTP, the release
+// `<release>`, compiles a program with each and runs it, and type-checks a program using its types.
 //
 //   node scripts/smoke-test-package.ts <tarball> <release>
 //
@@ -57,12 +57,14 @@ import { load } from "${name}";
 
 for (const entry of ["${name}/worker", "${name}/protocol"]) import.meta.resolve(entry);
 
-const hylo = await load({ baseUrl: process.argv[2] });
-const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }", emit: ["executable", "llvm"] });
-assert.deepEqual(r.diagnostics, []);
-assert.match(r.artifacts.llvm, /define .*@main/);
-assert.equal((await hylo.run(r.executable)).exitCode, 42);
-console.log("${name}: loaded, compiled and ran a program");
+for (const [where, options] of [["the package", undefined], ["a URL", { baseUrl: process.argv[2] }]]) {
+  const hylo = await load(options);
+  const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }", emit: ["executable", "llvm"] });
+  assert.deepEqual(r.diagnostics, []);
+  assert.match(r.artifacts.llvm, /define .*@main/);
+  assert.equal((await hylo.run(r.executable)).exitCode, 42);
+  console.log(\`${name}: loaded the compiler from \${where}, compiled and ran a program\`);
+}
 `,
   );
   // Asynchronous: the server answering the program's requests runs in this process.
@@ -79,7 +81,7 @@ console.log("${name}: loaded, compiled and ran a program");
 import type { CompileRequest, WorkerMessage } from "${name}/protocol";
 
 const request: CompileRequest = { source: "public fun main() {}", emit: ["ir"] };
-const hylo: Compiler = await load({ baseUrl: "https://example.com/" });
+const hylo: Compiler = await load();
 const ir: string | undefined = hylo.compile(request).artifacts.ir;
 export const message: WorkerMessage | string | undefined = ir;
 `,

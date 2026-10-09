@@ -141,6 +141,7 @@ jobs:
       - name: Test the packed package
         working-directory: Sources/WASM/js
         run: |
+          node scripts/include-compiler.ts ../../../.build/wasm/release
           tarball="$(npm pack --silent --pack-destination "$RUNNER_TEMP")"
           node scripts/smoke-test-package.ts "$RUNNER_TEMP/$tarball" ../../../.build/wasm/release
 
