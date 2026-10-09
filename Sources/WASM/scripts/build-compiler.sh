@@ -26,11 +26,22 @@ export PKG_CONFIG_PATH="$LLVM_WASM_PREFIX/pkgconfig${PKG_CONFIG_PATH:+:$PKG_CONF
 
 # The SDK's libc++abi has no exception support, and LLVM is built without exceptions.
 # `LLVM_WASM_PREFIX` is also what adds the targets to the package; see `Package.swift`.
-flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$REPOSITORY" -Xcxx -fno-exceptions)
+#
+# The toolset keeps Foundation out of the module, leaving only `FoundationEssentials`. Importing
+# Foundation, as some dependencies do, autolinks it ahead of `FoundationEssentials`, so the linker
+# resolves the symbols they share to Foundation's copies, which bring in ICU and its 34 MB of data
+# even if nothing outside `FoundationEssentials` is used. A use of Foundation proper is then a link
+# error. Unlike `-Xswiftc`, a toolset does not apply to the tools built for the host.
+flags=(-c "$CONFIGURATION" --swift-sdk "$SWIFT_SDK" --package-path "$REPOSITORY" -Xcxx -fno-exceptions
+  --toolset "$HERE/foundation-essentials.toolset.json")
 if [[ "$CONFIGURATION" == release ]]; then
   flags+=(-Xswiftc -Osize -Xswiftc -gnone)
 fi
 swift build "${flags[@]}" --product hylo-wasm
+# The reactor is handed the standard library's sources by its host, so it does not link the target
+# holding them, whose resource accessor needs Foundation. Building that target puts the sources,
+# including the generated ones, in the build directory, where they are collected below.
+swift build "${flags[@]}" --target StandardLibrary
 BIN="$(swift build "${flags[@]}" --show-bin-path)"
 
 rm -rf "$OUT"

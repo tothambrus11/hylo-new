@@ -194,6 +194,9 @@ public struct SourceFile: Hashable, Sendable {
     return e ?? endIndex
   }
 
+  // Enumerating a directory takes Foundation proper, which the WebAssembly build of the compiler
+  // leaves out; see `Sources/WASM/README.md`.
+  #if !os(WASI)
   /// Calls `action` on each source file URL in `directory` having the extension `pathExtension`.
   public static func forEachURL(
     in directory: URL, withPathExtension pathExtension: String = "hylo",
@@ -216,6 +219,7 @@ public struct SourceFile: Hashable, Sendable {
   ) throws {
     try forEachURL(in: directory, { (u) in try action(SourceFile(contentsOf: u)) })
   }
+  #endif
 
 }
 

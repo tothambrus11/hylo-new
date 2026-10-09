@@ -1,7 +1,8 @@
 import BackEnd
-import Foundation
+import FoundationEssentials
 import FrontEnd
 import SwiftyLLVM
+import WASILibc
 import WASMLinker
 
 /// A Hylo compiler whose standard library has been compiled once, compiling programs written
@@ -214,9 +215,20 @@ private func withCStrings<T>(
 
 /// Returns a URL naming a virtual source file called `name`.
 private func virtualURL(_ name: String) -> URL {
-  let escaped = name.unicodeScalars.map({ (u) in urlSafe.contains(u) ? String(u) : "_" }).joined()
+  let escaped = name.unicodeScalars.map({ (u) in isURLSafe(u) ? String(u) : "_" }).joined()
   return URL(string: "hylo:///\(escaped)")!
 }
 
-/// The characters a virtual file name may contain verbatim.
-private let urlSafe = CharacterSet.alphanumerics.union(.init(charactersIn: "-._~/"))
+/// Returns `true` iff a virtual file name may contain `u` verbatim.
+///
+/// That is a letter, a mark or a number, which is what Foundation's `CharacterSet.alphanumerics`
+/// contains, or one of `-._~/`. `CharacterSet` itself is not in `FoundationEssentials`.
+private func isURLSafe(_ u: Unicode.Scalar) -> Bool {
+  switch u.properties.generalCategory {
+  case .uppercaseLetter, .lowercaseLetter, .titlecaseLetter, .modifierLetter, .otherLetter,
+    .nonspacingMark, .spacingMark, .enclosingMark, .decimalNumber, .letterNumber, .otherNumber:
+    return true
+  default:
+    return "-._~/".unicodeScalars.contains(u)
+  }
+}

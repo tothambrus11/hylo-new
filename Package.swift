@@ -264,11 +264,7 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
     .executableTarget(
       name: "hylo-wasm",
       dependencies: [
-        .target(name: "HyloWASMSession"),
-        // Not used by the reactor, which is handed the standard library's sources by its host,
-        // but depending on it is what puts the sources, including the generated ones, in the
-        // build directory, where `build-compiler.sh` collects them.
-        .target(name: "StandardLibrary"),
+        .target(name: "HyloWASMSession")
       ],
       path: "Sources/WASM/hylo-wasm",
       swiftSettings: commonSwiftSettings,

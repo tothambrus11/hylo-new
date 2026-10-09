@@ -1,4 +1,4 @@
-import Foundation
+import FoundationEssentials
 import HyloWASMSession
 
 // A WebAssembly reactor compiling Hylo programs to WebAssembly.
