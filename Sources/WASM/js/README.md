@@ -1,4 +1,4 @@
-# @hylo/wasm
+# @hylo-lang/hylo-wasm
 
 Compile and run [Hylo](https://hylo-lang.org) programs in a browser or in Node, with the Hylo
 compiler compiled to WebAssembly.
@@ -9,7 +9,7 @@ not in the package, since it is tens of megabytes: it is a release, a directory 
 web server serves as is, published with every Hylo release.
 
 ```ts
-import { load } from "@hylo/wasm";
+import { load } from "@hylo-lang/hylo-wasm";
 
 const hylo = await load({ baseUrl: "https://example.com/hylo/" }); // where a release is served
 const r = hylo.compile({
@@ -28,9 +28,9 @@ Loading downloads about 28 MB and compiles the standard library, which takes a f
 
 | | |
 |---|---|
-| `@hylo/wasm` | `load` a release by URL, or `instantiate` one from its files; `run` an executable. |
-| `@hylo/wasm/worker` | A Web Worker hosting the compiler, so that a page's main thread never waits on it. It loads the release its URL's `compiler` parameter names. |
-| `@hylo/wasm/protocol` | The types of requests, answers, worker messages, and a release's `manifest.json`. |
+| `@hylo-lang/hylo-wasm` | `load` a release by URL, or `instantiate` one from its files; `run` an executable. |
+| `@hylo-lang/hylo-wasm/worker` | A Web Worker hosting the compiler, so that a page's main thread never waits on it. It loads the release its URL's `compiler` parameter names. |
+| `@hylo-lang/hylo-wasm/protocol` | The types of requests, answers, worker messages, and a release's `manifest.json`. |
 
 ## Developing
 

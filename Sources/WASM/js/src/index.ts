@@ -6,7 +6,7 @@
  * host's file system or network except through the `fetch` that `load` is given.
  *
  * ```ts
- * import { load } from "@hylo/wasm";
+ * import { load } from "@hylo-lang/hylo-wasm";
  *
  * const hylo = await load({ baseUrl: "https://example.com/hylo-compiler/" });
  * const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }" });
