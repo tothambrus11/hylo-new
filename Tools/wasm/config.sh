@@ -18,7 +18,7 @@
 : "${LLVM_WASM_PACKAGE:=llvm-${LLVM_VERSION}-wasm32-unknown-wasip1-swift${SWIFT_VERSION}-MinSizeRel}"
 : "${LLVM_WASM_URL:=https://github.com/hylo-lang/llvm-build/releases/download/${LLVM_BUILD_RELEASE}/${LLVM_WASM_PACKAGE}.tar.zst}"
 # The SHA-256 of that archive, which `fetch-llvm.sh` checks.
-: "${LLVM_WASM_CHECKSUM:=TODO-set-once-llvm-build-publishes-the-release}"
+: "${LLVM_WASM_CHECKSUM:=b4e015b6bed6f8fbdfd27260c50a1ec0898a8a38129c246b76368dd71993a1fc}"
 
 # binaryen, whose `wasm-opt` shrinks the release build of the compiler. Optional locally.
 : "${BINARYEN_VERSION:=version_132}"
