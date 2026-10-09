@@ -19,6 +19,9 @@ if (version === undefined) {
 
 const problems: string[] = [];
 const manifest = JSON.parse(readFileSync(path.join(release, "manifest.json"), "utf8")) as Manifest;
+if (manifest.schemaVersion !== 2) {
+  problems.push(`the manifest's schema is version ${manifest.schemaVersion}, not 2`);
+}
 if (manifest.version !== version) {
   problems.push(`the release is version ${manifest.version}, not ${version}`);
 }

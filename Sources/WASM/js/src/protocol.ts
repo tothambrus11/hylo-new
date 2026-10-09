@@ -76,8 +76,11 @@ export interface Execution {
  * served as immutable.
  */
 export interface Manifest {
-  /** The version of this format; 1. */
-  schemaVersion: 1;
+  /**
+   * The version of this format, which a loader checks: 2, since the compiler is stored compressed
+   * (see `ManifestFile.encoding`).
+   */
+  schemaVersion: 2;
   /** The version of the compiler. */
   version: string;
   /** When the release was built, as an ISO 8601 date. */
