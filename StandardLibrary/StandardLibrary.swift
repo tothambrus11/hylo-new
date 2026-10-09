@@ -29,9 +29,6 @@ package let cShimSource = "shims.c"
 
   /// The directory holding this target's resources, which SwiftPM, like the distributable bundles,
   /// puts next to the executables.
-  ///
-  /// `Bundle.module` finds the same directory, but `Bundle` belongs to Foundation proper, which
-  /// distributable builds leave out on these platforms; see `.github/workflows/release.yml`.
   private let resourceDirectory = executableURL().deletingLastPathComponent().appending(
     component: "Hylo_StandardLibrary.resources", directoryHint: .isDirectory)
 

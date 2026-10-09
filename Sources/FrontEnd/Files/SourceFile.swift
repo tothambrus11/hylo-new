@@ -199,8 +199,6 @@ public struct SourceFile: Hashable, Sendable {
     in directory: URL, withPathExtension pathExtension: String = "hylo",
     _ action: (URL) throws -> Void
   ) throws {
-    // `subpathsOfDirectory` rather than `enumerator`, which is not in `FoundationEssentials`, the
-    // only part of Foundation the WebAssembly build of the compiler links.
     for p in try FileManager.default.subpathsOfDirectory(atPath: directory.path)
     where p.hasSuffix(".\(pathExtension)") {
       try action(directory.appendingPathComponent(p))

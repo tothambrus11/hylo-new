@@ -213,8 +213,7 @@ private func virtualURL(_ name: String) -> URL {
 
 /// Returns `true` iff a virtual file name may contain `u` verbatim.
 ///
-/// That is a letter, a mark or a number, which is what Foundation's `CharacterSet.alphanumerics`
-/// contains, or one of `-._~/`. `CharacterSet` itself is not in `FoundationEssentials`.
+/// That is a letter, a mark or a number, or one of `-._~/`.
 private func isURLSafe(_ u: Unicode.Scalar) -> Bool {
   switch u.properties.generalCategory {
   case .uppercaseLetter, .lowercaseLetter, .titlecaseLetter, .modifierLetter, .otherLetter,

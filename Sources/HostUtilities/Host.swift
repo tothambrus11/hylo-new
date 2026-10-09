@@ -35,7 +35,6 @@ public enum Host: Sendable {
     public subscript(_ key: String) -> String? {
       #if os(Windows)
         // Windows compares the names of environment variables by their upper case forms.
-        // (`caseInsensitiveCompare` is not in `FoundationEssentials`.)
         let k = key.uppercased()
         return ProcessInfo.processInfo.environment
           .first(where: { $0.key.uppercased() == k })?.value

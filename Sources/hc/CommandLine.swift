@@ -722,7 +722,7 @@ extension ContinuousClock.Instant.Duration {
     guard abs(μs) >= 1_000 else { return "\(μs)μs" }
     guard abs(ms) >= 1_000 else { return "\(ms)ms" }
 
-    // Hours, minutes and seconds, as `formatted()` would print them, which needs ICU.
+    // Hours, minutes and seconds.
     let s = Int64((Double(ns) / 1_000_000_000).rounded(.toNearestOrEven))
     return "\(s / 3_600):\((s / 60 % 60).digits(width: 2)):\((s % 60).digits(width: 2))"
   }
