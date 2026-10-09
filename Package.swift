@@ -255,8 +255,8 @@ let package = Package(
 
 // The compiler built for WebAssembly, to run in a browser, which the website's playground runs.
 // Its targets exist only when the manifest is evaluated with `LLVM_WASM_PREFIX` naming an LLVM
-// built to run in WebAssembly, which `Tools/wasm/build-compiler.sh` sets: they compile against
-// that LLVM, so no other build could build them. See `Tools/wasm/README.md`.
+// built to run in WebAssembly, which `Sources/WASM/scripts/build-compiler.sh` sets: they compile
+// against that LLVM, so no other build could build them. See `Sources/WASM/README.md`.
 if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
   package.products.append(.executable(name: "hylo-wasm", targets: ["hylo-wasm"]))
   package.targets += [
@@ -264,13 +264,13 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
     .executableTarget(
       name: "hylo-wasm",
       dependencies: [
-        .target(name: "HyloWasmSession"),
+        .target(name: "HyloWASMSession"),
         // Not used by the reactor, which is handed the standard library's sources by its host,
         // but depending on it is what puts the sources, including the generated ones, in the
         // build directory, where `build-compiler.sh` collects them.
         .target(name: "StandardLibrary"),
       ],
-      path: "Sources/Tools/hylo-wasm",
+      path: "Sources/WASM/hylo-wasm",
       swiftSettings: commonSwiftSettings,
       linkerSettings: [
         .unsafeFlags([
@@ -286,21 +286,21 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
 
     // What compiling a program is, independently of how a request arrives.
     .target(
-      name: "HyloWasmSession",
+      name: "HyloWASMSession",
       dependencies: [
         .target(name: "BackEnd"),
         .target(name: "FrontEnd"),
-        .target(name: "WasmLinker"),
+        .target(name: "WASMLinker"),
         .product(name: "SwiftyLLVM", package: "Swifty-LLVM"),
       ],
-      path: "Sources/Tools/HyloWasmSession",
+      path: "Sources/WASM/HyloWASMSession",
       swiftSettings: commonSwiftSettings),
 
     // lld's WebAssembly port, called in-process. Swifty-LLVM finds LLVM through the `llvm.pc` in
     // `LLVM_WASM_PREFIX`; this needs lld's headers from it too.
     .target(
-      name: "WasmLinker",
-      path: "Sources/Tools/WasmLinker",
+      name: "WASMLinker",
+      path: "Sources/WASM/WASMLinker",
       cxxSettings: [
         .unsafeFlags([
           "-I", "\(llvm)/include",
