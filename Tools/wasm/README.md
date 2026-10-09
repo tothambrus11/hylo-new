@@ -67,25 +67,17 @@ unaffected.
 
 ## The decisions that are not obvious
 
-**LLVM is compiled by the Swift toolchain's own clang, against the Swift SDK's sysroot.** The
-compiler is one binary, so LLVM's C++ and the Swift runtime must agree on the C++ standard library.
-The Swift SDK for WebAssembly ships wasi-libc and libc++ (ABI version 2); building LLVM with the
-toolchain's clang against exactly those (`wasi-toolchain.cmake`) rules out a mismatch, and needs
-no wasi-sdk.
-
-**LLVM needs a patch to build for a WASI host** (`patches/llvm-wasi-host.patch`). It is
-[YoWASP](https://github.com/YoWASP/llvm-project)'s, written for LLVM 22, ported to 23.1.0 (four
-hunks moved, and LLVM 23 added a `posix_madvise` call and a parameter to `AddSignalHandler`
-that the original does not know about). It stubs out signals, process spawning, file locking and
-the like, none of which the compiler reaches.
-
-**The Swift SDK's libc++ is built without threads, and LLVM does not compile without them.** LLVM
-uses `std::mutex`, `std::shared_future` and the like even when configured with
-`LLVM_ENABLE_THREADS=OFF`. wasi-libc does provide single-threaded pthread stubs, so `build-llvm.sh`
-compiles LLVM against a `__config_site` that enables threads over pthreads, and builds the parts of
-libc++ this configuration needs out of line (`mutex.cpp`, `future.cpp`, ...; 121 symbols, none
-defined by the SDK's libc++) from the same libc++ release into `libc++threads.a`. No type the SDK
-defines changes layout.
+**LLVM comes from [hylo-lang/llvm-build](https://github.com/hylo-lang/llvm-build)**, which builds
+it to run in WebAssembly and publishes it with its native packages (see its `docs/wasm.md`).
+`fetch-llvm.sh` downloads the release pinned in `config.sh` and checks it against the pinned
+checksum. It is compiled by the Swift toolchain's own clang against the Swift SDK's sysroot,
+because the compiler is one binary, so LLVM's C++ and the Swift runtime must agree on the C++
+standard library. That makes the package specific to the Swift version, which its name records.
+Two things in it are particular to the Swift SDK: the SDK's libc++ is built without threads, which
+LLVM does not compile without, so the package carries a `libcxx-threads/__config_site` turning
+them back on and a `libc++threads.a` with the parts of libc++ that need; and every C++ file
+including LLVM's headers must see that `__config_site`, which `llvm.pc` and `Package.swift` put on
+the include path.
 
 **The reactor runs Swift's executor itself.** Its exports are called by the host and must return
 synchronously, and a reactor has no `async` entry point whose return would run pending tasks, so
@@ -106,12 +98,12 @@ constants built from `BigInt.words`, whose words are host-sized, so that `-1 as 
 
 ## Building
 
-Requires Swift 6.3.2 with its Swift SDK for WebAssembly, CMake, Ninja, Node, and optionally
-binaryen's `wasm-opt`. Everything heavy goes in `~/.cache/hylo-wasm` (`$HYLO_WASM_CACHE`).
+Requires Swift 6.3.2 with its Swift SDK for WebAssembly, Node, curl, and optionally binaryen's
+`wasm-opt`. Downloads go in `~/.cache/hylo-wasm` (`$HYLO_WASM_CACHE`).
 
 ```sh
 swift sdk install <URL and checksum in config.sh>
-Tools/wasm/build-llvm.sh            # once: ~35 min on 4 cores, ~3 GB of disk
+Tools/wasm/fetch-llvm.sh            # once per LLVM release: ~150 MB unpacked
 Tools/wasm/build-compiler.sh        # ~5 min in release, ~2 min in debug
 (cd Tools/wasm/js && npm ci)
 node Tools/wasm/js/smoke.mjs Tools/wasm/.build/dist
@@ -119,9 +111,8 @@ node Tools/wasm/js/conformance.mjs Tools/wasm/.build/dist Tests/CompilerTests
 node Tools/wasm/js/package-release.mjs Tools/wasm/.build/dist 0.0.0-dev Tools/wasm/.build/release
 ```
 
-`build-llvm.sh` runs in steps (`source`, `native`, `libcxx-threads`, `wasm`, `install`), each
-stamped with a hash of its inputs once it completes, so running it again only redoes what changed
-and an interrupted run resumes.
+To try an LLVM package built locally with llvm-build's `ci/build-llvm-wasi.ts`, point
+`LLVM_WASM_PREFIX` at its install directory and skip `fetch-llvm.sh`.
 
 ## Releases
 
@@ -130,19 +121,15 @@ A release is a directory that a web server can serve as is. It is content-addres
 immutable. `index.mjs` reads the manifest to find the others; the manifest records the loaders'
 hashes too, and `js/verify-release.mjs` checks a release against it.
 
-`.github/workflows/wasm-compiler.yml` builds LLVM when its inputs change (otherwise it is restored
-from the cache, and a cold build that runs out of time is banked and resumed by the next run),
-builds the compiler, runs the smoke test, the compiler's test cases and a browser check, and
+`.github/workflows/wasm-compiler.yml` downloads LLVM, builds the compiler, runs the smoke test, the compiler's test cases and a browser check, and
 uploads the release as an artifact. It runs on every change to the compiler, and `release.yml`
 calls it for every `v*` tag, publishing the release as `hylo-<tag>-wasm32-wasip1.tar.zst` next to
 the native distributables.
 
 ## What is next
 
-- **Put the LLVM build in `hylo-lang/llvm-build`**, which already builds LLVM for the native CI,
-  as one more target. This workflow could then download it like the others do.
 - **Shrink the module.** Nothing has been done yet: candidates are dropping the LLVM passes that
   `-O0` never runs, LTO, and stripping the names section.
 - **Printing.** Programs can only report an exit status so far, because the standard library has no
   output yet. `run` already captures standard output for when it does.
-- **Upstream the WASI patch** to LLVM, so that this stops depending on a ported fork.
+- **Upstream the WASI host patch** that llvm-build carries, so that LLVM builds for WASI as is.

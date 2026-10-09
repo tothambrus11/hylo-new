@@ -6,9 +6,9 @@ import PackageDescription
 // This is a separate package so that the compiler's own package, and every CI job building it,
 // is unaffected by the WebAssembly build and its prerequisites. It is meant to be built with the
 // Swift SDK for WebAssembly, against an LLVM cross-compiled for `wasm32-unknown-wasip1` by
-// `build-llvm.sh`; see `README.md`.
+// hylo-lang/llvm-build, which `fetch-llvm.sh` downloads; see `README.md`.
 
-/// The installation of LLVM for wasm32 that `build-llvm.sh` produces.
+/// The LLVM package for wasm32 that `fetch-llvm.sh` unpacks, built by hylo-lang/llvm-build.
 ///
 /// Swifty-LLVM finds the same installation through the `llvm.pc` file it contains, which must be
 /// in `PKG_CONFIG_PATH`; this package additionally needs lld's headers from it.
@@ -43,7 +43,7 @@ let package = Package(
       cxxSettings: [
         .unsafeFlags([
           "-I", "\(llvmPrefix)/include",
-          // Configures libc++ the way LLVM was compiled; see `build-llvm.sh`.
+          // Configures libc++ the way LLVM was compiled; see llvm-build's docs/wasm.md.
           "-I", "\(llvmPrefix)/libcxx-threads",
           "-fno-exceptions", "-fno-rtti",
         ])

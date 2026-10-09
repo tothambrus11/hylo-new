@@ -75,7 +75,8 @@ const manifest = {
   // What the build was made from.
   inputs: {
     hylo: process.env.GITHUB_SHA ?? null,
-    llvm: process.env.LLVM_TAG ?? null,
+    llvm: process.env.LLVM_VERSION ?? null,
+    llvmBuild: process.env.LLVM_BUILD_RELEASE ?? null,
     swift: process.env.SWIFT_VERSION ?? null,
   },
   files,
