@@ -82,7 +82,7 @@ for (const name of ["index", "worker"]) {
 }
 
 const manifest: Manifest = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   version,
   built: new Date().toISOString(),
   // What the build was made from.

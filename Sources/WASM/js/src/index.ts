@@ -94,6 +94,9 @@ export async function load({
   const response = await get(new URL("manifest.json", base));
   if (!response.ok) throw new Error(`could not fetch manifest.json (${response.status})`);
   const manifest = (await response.json()) as Manifest;
+  if (manifest.schemaVersion !== 2) {
+    throw new Error(`unsupported compiler release (manifest schema ${manifest.schemaVersion})`);
+  }
 
   const total = Object.values(manifest.files).reduce((a, f) => a + f.bytes, 0);
   let loaded = 0;
