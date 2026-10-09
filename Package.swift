@@ -22,7 +22,6 @@ let package = Package(
     .executable(name: "hylo-demangle", targets: ["hylo-demangle"]),
     .library(name: "HyloStandardLibrary", targets: ["StandardLibrary"]),
     .library(name: "HyloFrontEnd", targets: ["FrontEnd"]),
-    .library(name: "HyloBackEnd", targets: ["BackEnd"]),
   ],
   dependencies: [
     .package(
@@ -253,3 +252,62 @@ let package = Package(
         .target(name: "hc-generate-stdlib"),
       ]),
   ])
+
+// The compiler built for WebAssembly, to run in a browser, which the website's playground runs.
+// Its targets exist only when the manifest is evaluated with `LLVM_WASM_PREFIX` naming an LLVM
+// built to run in WebAssembly, which `Tools/wasm/build-compiler.sh` sets: they compile against
+// that LLVM, so no other build could build them. See `Tools/wasm/README.md`.
+if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
+  package.products.append(.executable(name: "hylo-wasm", targets: ["hylo-wasm"]))
+  package.targets += [
+    // The browser transport: functions exported from a WebAssembly reactor.
+    .executableTarget(
+      name: "hylo-wasm",
+      dependencies: [
+        .target(name: "HyloWasmSession"),
+        // Not used by the reactor, which is handed the standard library's sources by its host,
+        // but depending on it is what puts the sources, including the generated ones, in the
+        // build directory, where `build-compiler.sh` collects them.
+        .target(name: "StandardLibrary"),
+      ],
+      path: "Sources/WASM/hylo-wasm",
+      swiftSettings: commonSwiftSettings,
+      linkerSettings: [
+        .unsafeFlags([
+          "-Xclang-linker", "-mexec-model=reactor",
+          // LLVM reaches mmap in code the compiler never runs; wasi-libc emulates it.
+          "-Xlinker", "-lwasi-emulated-mman",
+          // Compiling takes more stack than the default 64 KiB. (`--stack-first`, which would make
+          // an overflow trap instead of corrupting data, conflicts with the `--global-base` that
+          // the Swift driver passes.)
+          "-Xlinker", "-z", "-Xlinker", "stack-size=8388608",
+        ])
+      ]),
+
+    // What compiling a program is, independently of how a request arrives.
+    .target(
+      name: "HyloWasmSession",
+      dependencies: [
+        .target(name: "BackEnd"),
+        .target(name: "FrontEnd"),
+        .target(name: "WasmLinker"),
+        .product(name: "SwiftyLLVM", package: "Swifty-LLVM"),
+      ],
+      path: "Sources/WASM/HyloWasmSession",
+      swiftSettings: commonSwiftSettings),
+
+    // lld's WebAssembly port, called in-process. Swifty-LLVM finds LLVM through the `llvm.pc` in
+    // `LLVM_WASM_PREFIX`; this needs lld's headers from it too.
+    .target(
+      name: "WasmLinker",
+      path: "Sources/WASM/WasmLinker",
+      cxxSettings: [
+        .unsafeFlags([
+          "-I", "\(llvm)/include",
+          // Configures libc++ the way LLVM was compiled; see llvm-build's docs/wasm.md.
+          "-I", "\(llvm)/libcxx-threads",
+          "-std=c++20", "-fno-exceptions", "-fno-rtti",
+        ])
+      ]),
+  ]
+}
