@@ -271,6 +271,9 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
       linkerSettings: [
         .unsafeFlags([
           "-Xclang-linker", "-mexec-model=reactor",
+          // `build-compiler.sh` runs wasm-opt on the module; clang would otherwise run it too,
+          // whenever it is on `PATH`, which takes minutes and gains nothing.
+          "-Xclang-linker", "--no-wasm-opt",
           // LLVM reaches mmap in code the compiler never runs; wasi-libc emulates it.
           "-Xlinker", "-lwasi-emulated-mman",
           // Compiling takes more stack than the default 64 KiB. (`--stack-first`, which would make
