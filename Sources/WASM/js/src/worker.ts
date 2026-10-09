@@ -20,7 +20,7 @@
  * @module
  */
 
-import { type Compiler, load } from "./index.ts";
+import { type Compiler, fetchParts, instantiate } from "./index.ts";
 import type { WorkerMessage, WorkerRequest } from "./protocol.ts";
 
 // The parts of a dedicated worker's global scope this uses, declared here rather than through the
@@ -34,17 +34,19 @@ const base = new URL(
   new URL(import.meta.url).searchParams.get("compiler") ?? "./",
   import.meta.url,
 );
-let hylo: Promise<Compiler>;
-
 /** Sends `message` to the page. */
 const send = (message: WorkerMessage): void => self.postMessage(message);
 
-/** Starts loading the compiler, anew. */
+// The release is downloaded once; a compiler that must be replaced is instantiated anew from it.
+const parts = fetchParts({
+  baseUrl: base,
+  onProgress: ({ loaded, total }) => send({ type: "progress", loaded, total }),
+});
+let hylo: Promise<Compiler>;
+
+/** Starts instantiating the compiler, anew. */
 function start(): void {
-  hylo = load({
-    baseUrl: base,
-    onProgress: ({ loaded, total }) => send({ type: "progress", loaded, total }),
-  });
+  hylo = parts.then(instantiate);
   hylo.then(
     (h) => send({ type: "ready", standardLibraryMilliseconds: h.standardLibraryMilliseconds }),
     (e) => send({ type: "failed", error: describe(e) }),

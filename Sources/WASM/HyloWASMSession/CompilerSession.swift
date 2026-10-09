@@ -25,13 +25,15 @@ public struct CompilerSession: Sendable {
   /// The issues found in the standard library.
   public let diagnostics: [DiagnosticDescription]
 
-  /// Creates an instance compiling the standard library given by `sources`, linking executables
-  /// with the files at `sysroot` and writing intermediate files into `scratch`.
-  public init(standardLibrary sources: [SourceFile], sysroot: String, scratch: String) async {
+  /// Creates an instance compiling the standard library given by `sources`, keyed by file name,
+  /// linking executables with the files at `sysroot` and writing intermediate files into `scratch`.
+  public init(standardLibrary sources: [String: String], sysroot: String, scratch: String) async {
     var p = Program()
     let m = p.demandModule(FrontEnd.Module.standardLibraryName)
-    for f in sources {
-      _ = p[m].addSource(f)
+    // Sorted, so that the identities given to declarations do not depend on the order in which
+    // the host happened to serialize the sources.
+    for n in sources.keys.sorted() {
+      _ = p[m].addSource(SourceFile(name: .virtual(virtualURL(n)), contents: sources[n]!))
     }
     await Self.compileToRefinedIR(m, in: &p)
 
@@ -41,28 +43,22 @@ public struct CompilerSession: Sendable {
     self.scratch = scratch
   }
 
-  /// Creates an instance compiling the standard library given by `sources`, keyed by file name.
-  public init(
-    standardLibrary sources: [String: String], sysroot: String, scratch: String
+  /// Applies the front end's phases to `m`, up to refined IR or up to and including `last`, and
+  /// stops after the first phase that reports an error; calls `lowered` with `p` once `m` is
+  /// lowered, before its mandatory transformations.
+  private static func compileToRefinedIR(
+    _ m: FrontEnd.Module.ID, in p: inout Program, through last: CompileRequest.Phase? = nil,
+    lowered: (Program) -> Void = { (_) in }
   ) async {
-    // Sorted, so that the identities given to declarations do not depend on the order in which
-    // the host happened to serialize the sources.
-    await self.init(
-      standardLibrary: sources.keys.sorted().map { (n) in
-        SourceFile(name: .virtual(virtualURL(n)), contents: sources[n]!)
-      },
-      sysroot: sysroot, scratch: scratch)
-  }
-
-  /// Applies the compilation phases up to refined IR to `m`, stopping after the first phase that
-  /// reports an error.
-  private static func compileToRefinedIR(_ m: FrontEnd.Module.ID, in p: inout Program) async {
+    let runs = { (q: CompileRequest.Phase) in last.map({ q <= $0 }) ?? true }
+    if p[m].containsError || !runs(.scoping) { return }
     await p.assignScopes(m)
-    if p[m].containsError { return }
+    if p[m].containsError || !runs(.typing) { return }
     p.assignTypes(m, loggingInferenceWhere: nil)
-    if p[m].containsError { return }
+    if p[m].containsError || !runs(.lowering) { return }
     p.lower(m)
     if p[m].containsError { return }
+    lowered(p)
     p.applyTransformationPasses(m)
   }
 
@@ -87,16 +83,12 @@ public struct CompilerSession: Sendable {
 
     // The front end, up to the phase the request asks for.
     defer { r.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:)) }
-    if p[m].containsError || !request.runs(.scoping) { return }
-    await p.assignScopes(m)
-    if p[m].containsError || !request.runs(.typing) { return }
-    p.assignTypes(m, loggingInferenceWhere: nil)
+    var rawIR: String? = nil
+    await Self.compileToRefinedIR(m, in: &p, through: request.stopAfter) { (p) in
+      if request.wants(.rawIR) { rawIR = p.show(p[m].ir) }
+    }
+    r.artifacts["raw-ir"] = rawIR
     if p[m].containsError || !request.runs(.lowering) { return }
-    p.lower(m)
-    if p[m].containsError { return }
-    if request.wants(.rawIR) { r.artifacts["raw-ir"] = p.show(p[m].ir) }
-    p.applyTransformationPasses(m)
-    if p[m].containsError { return }
     if request.wants(.ir) { r.artifacts["ir"] = p.show(p[m].ir) }
     guard request.wants(.llvm) || request.wants(.assembly) || request.wants(.executable) else {
       return
@@ -104,7 +96,7 @@ public struct CompilerSession: Sendable {
 
     // The back end.
     do {
-      let target = try TargetSpecification(target: Target(triple))
+      let target = try TargetSpecification(target: Target(Self.triple))
       let machine = TargetMachine(target: target, optimization: request.optimizationLevel)
       var llvm = try p.compileToLLVM(m, target: machine)
       // The back end reports some errors as diagnostics of the program.
@@ -163,7 +155,7 @@ public struct CompilerSession: Sendable {
   }
 
   /// The triple of the code this session generates.
-  public let triple = "wasm32-unknown-wasip1"
+  private static let triple = "wasm32-unknown-wasip1"
 
   /// Returns `d` in milliseconds.
   private static func milliseconds(_ d: Duration) -> Double {

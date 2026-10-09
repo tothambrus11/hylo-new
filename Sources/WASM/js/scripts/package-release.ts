@@ -6,13 +6,13 @@
 //
 //   node scripts/package-release.ts <dist> <version> <out>
 
-import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { gzipSync } from "node:zlib";
 import { build } from "tsdown";
 import type { Manifest, ManifestFile } from "../src/protocol.ts";
+import { distLayout, fingerprint } from "./dist.ts";
 
 const [dist, version, out] = process.argv.slice(2);
 if (out === undefined) {
@@ -28,14 +28,13 @@ const emit = (key: string, source: string, extra: Partial<ManifestFile> = {}): v
   const compressed = extra.encoding === "gzip";
   const contents = readFileSync(source);
   const bytes = compressed ? gzipSync(contents, { level: 9 }) : contents;
-  const sha256 = createHash("sha256").update(bytes).digest("hex");
+  const { sha256 } = fingerprint(bytes);
   const { name, ext } = path.parse(source);
   const published = `${name}-${sha256.slice(0, 12)}${ext}${compressed ? ".gz" : ""}`;
   writeFileSync(path.join(out, published), bytes);
   files[key] = {
     path: published,
-    sha256,
-    bytes: bytes.length,
+    ...fingerprint(bytes),
     gzip: compressed ? bytes.length : gzipSync(bytes, { level: 9 }).length,
     ...extra,
   };
@@ -44,9 +43,9 @@ const emit = (key: string, source: string, extra: Partial<ManifestFile> = {}): v
 // The compiler is stored compressed, which keeps a release within the 20 MB that package registries
 // such as JSR accept, and needs nothing of the server; gzip is the one format that every browser's
 // `DecompressionStream` reads.
-emit("compiler", path.join(dist, "hylo-wasm.wasm"), { encoding: "gzip" });
-emit("standardLibrary", path.join(dist, "stdlib.json"));
-const lib = path.join(dist, "sysroot", "lib");
+emit("compiler", path.join(dist, distLayout.compiler), { encoding: "gzip" });
+emit("standardLibrary", path.join(dist, distLayout.standardLibrary));
+const lib = path.join(dist, distLayout.sysroot);
 const sysroot: string[] = [];
 for (const n of readdirSync(lib).sort()) {
   const key = `sysroot:${n}`;
@@ -74,11 +73,7 @@ for (const name of ["index", "worker"]) {
     logLevel: "warn",
     outExtensions: () => ({ js: ".mjs" }),
   });
-  const bytes = readFileSync(path.join(out, `${name}.mjs`));
-  loaders[`${name}.mjs`] = {
-    sha256: createHash("sha256").update(bytes).digest("hex"),
-    bytes: bytes.length,
-  };
+  loaders[`${name}.mjs`] = fingerprint(readFileSync(path.join(out, `${name}.mjs`)));
 }
 
 const manifest: Manifest = {

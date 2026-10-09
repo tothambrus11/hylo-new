@@ -20,15 +20,29 @@
 # The SHA-256 of that archive, which `fetch-llvm.sh` checks.
 : "${LLVM_WASM_CHECKSUM:=b4e015b6bed6f8fbdfd27260c50a1ec0898a8a38129c246b76368dd71993a1fc}"
 
-# binaryen, whose `wasm-opt` shrinks the release build of the compiler. Optional locally.
+# binaryen, whose `wasm-opt` shrinks the release build of the compiler, as `fetch-binaryen.sh`
+# downloads it (for x86_64 Linux). Optional: any `wasm-opt` on `PATH` serves too.
 : "${BINARYEN_VERSION:=version_132}"
 : "${BINARYEN_URL:=https://github.com/WebAssembly/binaryen/releases/download/${BINARYEN_VERSION}/binaryen-${BINARYEN_VERSION}-x86_64-linux.tar.gz}"
 : "${BINARYEN_CHECKSUM:=195ddc94f9bc89f45abdabb0b9eea86023d727ba90eac8b35b80f2544fc30572}"
 
 # Downloads live here, outside the repository.
 : "${HYLO_WASM_CACHE:=${XDG_CACHE_HOME:-$HOME/.cache}/hylo-wasm}"
+# The unpacked binaryen release.
+: "${BINARYEN_PREFIX:=$HYLO_WASM_CACHE/binaryen-$BINARYEN_VERSION}"
 # The unpacked LLVM package: headers, static libraries, the libc++ overlay and `pkgconfig/llvm.pc`.
 : "${LLVM_WASM_PREFIX:=$HYLO_WASM_CACHE/$LLVM_WASM_PACKAGE}"
+
+# Downloads `url` to `file`, failing unless its SHA-256 is `checksum`.
+download_verified() {
+  local url="$1" checksum="$2" file="$3"
+  echo "Downloading $url"
+  curl -fsSL --retry 3 -o "$file" "$url"
+  if ! echo "$checksum  $file" | sha256sum -c --quiet - 2>/dev/null; then
+    echo "$url has SHA-256 $(sha256sum "$file" | cut -d' ' -f1), not the pinned $checksum" >&2
+    return 1
+  fi
+}
 
 # Locates the Swift toolchain and the Swift SDK for WebAssembly, setting `SWIFT_BIN`,
 # `WASI_SYSROOT` and `WASI_RESOURCE_DIR`.

@@ -49,6 +49,14 @@ jobs:
     env: &distributable-env
       ARTIFACT_NAME: hylo-${{ github.ref_name }}-${{ matrix.target }}
       RELEASE_TAG: ${{ github.ref_name }}
+      # How `hc` is built, the same for building it and for finding it. On Linux and Windows, the
+      # toolset links `FoundationEssentials` rather than Foundation, with its 34 MB of ICU data (see
+      # `Sources/WASM/README.md`); on macOS, Foundation is part of the system.
+      HC_BUILD_FLAGS: >-
+        -c release --product hc --static-swift-stdlib
+        ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }}
+        -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED
+        -Xswiftc -cross-module-optimization
 
     steps:
       - uses: actions/checkout@v7
@@ -85,20 +93,15 @@ jobs:
           #       That no longer works, so we had to upgrade to 10.0.26100.0.
           #       See also: https://github.com/swiftlang/swift/issues/88237
 
-      # On Linux and Windows, Foundation would be linked into the compiler, with ICU, whose data
-      # alone is 34 MB, as soon as anything imports it, although `FoundationEssentials` is all the
-      # compiler needs. The toolset stops imports from autolinking Foundation, making any use of it
-      # a link error; unlike `-Xswiftc`, it leaves the tools built to run during the build alone.
-      # On macOS, Foundation is part of the system.
       - name: Build distributable
-        run: swift build -c release --verbose --product hc --static-swift-stdlib ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }} -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization
+        run: swift build --verbose ${{ env.HC_BUILD_FLAGS }}
         shell: pwsh
 
       - name: Locate distributable
         id: locate-distributable
         run: |
           $ErrorActionPreference = 'Stop'
-          $binPath = (swift build -c release --product hc --static-swift-stdlib ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }} -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization --show-bin-path).Trim()
+          $binPath = (swift build ${{ env.HC_BUILD_FLAGS }} --show-bin-path).Trim()
           $binaryName = if ($env:RUNNER_OS -eq 'Windows') { 'hc.exe' } else { 'hc' }
           "bin_path=$binPath" >> $env:GITHUB_OUTPUT
           "binary_path=$(Join-Path $binPath $binaryName)" >> $env:GITHUB_OUTPUT
@@ -178,31 +181,20 @@ jobs:
     with:
       version: ${{ github.ref_name }}
 
-  verify-and-publish-wasm-distributable:
-    name: Verify and publish distributable for wasm32-wasip1
+  # The build job has already checked the release against its manifest (`verify-release.ts`).
+  publish-wasm-distributable:
+    name: Publish distributable for wasm32-wasip1
     needs: build-wasm-distributable
     runs-on: ubuntu-24.04
     env:
       ARTIFACT_NAME: hylo-${{ github.ref_name }}-wasm32-wasip1
 
     steps:
-      - uses: actions/checkout@v7
-        with:
-          sparse-checkout: Sources/WASM/js
-
-      # Runs the verification script, written in TypeScript, as it is.
-      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
-        with:
-          node-version: "24.x"
-
       - name: Download distributable artifact
         uses: actions/download-artifact@v8
         with:
           name: ${{ needs.build-wasm-distributable.outputs.artifact }}
           path: ${{ runner.temp }}/release
-
-      - name: Verify distributable in a Swift-free environment
-        run: node Sources/WASM/js/scripts/verify-release.ts "$RUNNER_TEMP/release" "${GITHUB_REF_NAME#v}"
 
       - name: Upload distributable to draft release
         env:
@@ -221,7 +213,7 @@ jobs:
   # package was built as its provenance.
   publish-npm-package:
     name: Publish the npm package
-    needs: [build-wasm-distributable, verify-and-publish-wasm-distributable]
+    needs: [build-wasm-distributable, publish-wasm-distributable]
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -251,10 +243,10 @@ jobs:
       - name: Build the package
         working-directory: Sources/WASM/js
         env:
-          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.build-wasm-distributable.outputs.version }}
         run: |
           npm ci --no-audit --no-fund
-          npm version "${TAG#v}" --no-git-tag-version
+          npm version "$VERSION" --no-git-tag-version
           npm pkg set "repository.url=git+https://github.com/$GITHUB_REPOSITORY.git"
           npm run build
 
@@ -269,7 +261,7 @@ jobs:
       - name: Publish
         working-directory: Sources/WASM/js
         env:
-          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.build-wasm-distributable.outputs.version }}
         run: |
-          if [[ "$TAG" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
+          if [[ "$VERSION" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
           npm publish --tag "$dist_tag"

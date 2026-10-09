@@ -55,7 +55,7 @@ Everything is in this directory:
 | `HyloWASMSession/` | What compiling means, independently of the transport: each request is compiled in a copy of a program whose standard library is already lowered. |
 | `WASMLinker/` | Calls `lld::lldMain` with the WebAssembly driver. The files it reads and writes live in a WASI file system that the host keeps in memory, the same in a browser and in Node. |
 | `sysroot/entry.c` | A file linked into every executable; see below. |
-| `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` downloads LLVM, `build-compiler.sh` builds the module into `.build/wasm/dist`. |
+| `scripts/` | The build: `config.sh` pins every input, `fetch-llvm.sh` and `fetch-binaryen.sh` download LLVM and binaryen, `build-compiler.sh` builds the module into `.build/wasm/dist`. |
 | `js/` | The JavaScript package `@hylo-lang/hylo-wasm`, which loads a compiler release, drives the reactor, and runs what it produces, in a browser or in Node; see its `README.md`. Its `tests/` test the compiler through it, and its `scripts/` package and verify releases. |
 
 The three Swift targets are targets of the compiler's package, but only when its manifest is
@@ -113,6 +113,7 @@ Requires Swift 6.3.2 with its Swift SDK for WebAssembly, Node, curl, and optiona
 ```sh
 swift sdk install <URL and checksum in scripts/config.sh>
 Sources/WASM/scripts/fetch-llvm.sh       # once per LLVM release: ~150 MB unpacked
+Sources/WASM/scripts/fetch-binaryen.sh   # optional: wasm-opt, for release builds
 Sources/WASM/scripts/build-compiler.sh   # ~5 min in release, ~2 min in debug
 cd Sources/WASM/js
 npm ci

@@ -194,20 +194,16 @@ public struct SourceFile: Hashable, Sendable {
     return e ?? endIndex
   }
 
-  /// Calls `action` on each source file URL in `directory` having the extension `pathExtension`,
-  /// skipping hidden files and the contents of hidden directories.
+  /// Calls `action` on each source file URL in `directory` having the extension `pathExtension`.
   public static func forEachURL(
     in directory: URL, withPathExtension pathExtension: String = "hylo",
     _ action: (URL) throws -> Void
   ) throws {
     // `subpathsOfDirectory` rather than `enumerator`, which is not in `FoundationEssentials`, the
     // only part of Foundation the WebAssembly build of the compiler links.
-    let depth = directory.pathComponents.count
-    for p in try FileManager.default.subpathsOfDirectory(atPath: directory.path) {
-      let f = directory.appendingPathComponent(p)
-      if f.pathExtension != pathExtension { continue }
-      if f.pathComponents[depth...].contains(where: { (c) in c.hasPrefix(".") }) { continue }
-      try action(f)
+    for p in try FileManager.default.subpathsOfDirectory(atPath: directory.path)
+    where p.hasSuffix(".\(pathExtension)") {
+      try action(directory.appendingPathComponent(p))
     }
   }
 

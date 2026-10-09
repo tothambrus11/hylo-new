@@ -53,18 +53,6 @@ public struct CompileRequest: Decodable, Sendable {
   /// The phase after which compilation stops, or `nil` to compile everything `emit` requires.
   public let stopAfter: Phase?
 
-  /// Creates an instance with the given properties.
-  public init(
-    source: String, emit: [Artifact] = [.executable], optimization: Int? = nil,
-    standardLibrary: Bool? = nil, stopAfter: Phase? = nil
-  ) {
-    self.source = source
-    self.emit = emit
-    self.optimization = optimization
-    self.standardLibrary = standardLibrary
-    self.stopAfter = stopAfter
-  }
-
   /// Returns `true` iff `self` asks for phase `p` to run.
   internal func runs(_ p: Phase) -> Bool {
     stopAfter.map({ p <= $0 }) ?? true
