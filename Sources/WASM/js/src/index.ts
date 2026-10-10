@@ -17,7 +17,8 @@
  */
 
 import { type Compiler, type CompilerParts, instantiate } from "./core.ts";
-import { compilerFile, standardLibraryFile, sysrootFiles } from "./files.ts";
+import { allFiles, sysrootFiles } from "./files.ts";
+import { totalSize } from "./sizes.ts";
 
 export * from "./core.ts";
 export type * from "./protocol.ts";
@@ -39,37 +40,25 @@ export async function load(options: LoadOptions = {}): Promise<Compiler> {
   return instantiate(await loadParts(options));
 }
 
-/** Downloads the compiler and compiles it, ready to `instantiate` as often as needed. */
+/**
+ * Downloads the compiler and compiles it, ready to `instantiate` as often as needed.
+ *
+ * Reports progress to `onProgress` as the files arrive, against the sizes the package records, or
+ * against a total of 0 if it records none. Rejects if a file cannot be fetched or the compiler
+ * does not compile.
+ */
 export async function loadParts({ onProgress }: LoadOptions = {}): Promise<CompilerParts> {
-  const sysrootNames = [...sysrootFiles.keys()];
   const responses = await Promise.all(
-    [compilerFile, standardLibraryFile, ...sysrootFiles.values()].map(async (url) => {
+    allFiles.map(async (url) => {
       const r = await fetch(url);
       if (!r.ok) throw new Error(`could not fetch ${url} (${r.status})`);
       return r;
     }),
   );
+  if (onProgress) countProgress(responses, onProgress);
 
-  // Progress is counted as the bodies arrive.
-  const sizes = responses.map((r) => Number(r.headers.get("content-length")));
-  const total = sizes.every((n) => n > 0) ? sizes.reduce((a, n) => a + n, 0) : 0;
-  let loaded = 0;
-  const [compiler, standardLibrary, ...sysroot] = responses.map(
-    (r) =>
-      new Response(
-        r.body!.pipeThrough(
-          new TransformStream<Uint8Array, Uint8Array>({
-            transform(chunk, controller) {
-              loaded += chunk.length;
-              onProgress?.({ loaded, total });
-              controller.enqueue(chunk);
-            },
-          }),
-        ),
-        { headers: r.headers },
-      ),
-  );
-
+  const [compiler, standardLibrary, ...sysroot] = responses;
+  const sysrootNames = [...sysrootFiles.keys()];
   return {
     compiler: await compile(compiler),
     standardLibrary: (await standardLibrary.json()) as Record<string, string>,
@@ -81,6 +70,33 @@ export async function loadParts({ onProgress }: LoadOptions = {}): Promise<Compi
       ),
     ),
   };
+}
+
+/**
+ * Reports to `onProgress` the bytes of `responses`, the responses for `allFiles`, as they arrive,
+ * reading copies of their bodies, so that the responses themselves stay as fetched.
+ *
+ * The responses are not wrapped, so that `compileStreaming` is given the one fetched, which an
+ * engine may cache the compiled module with.
+ */
+function countProgress(
+  responses: readonly Response[],
+  onProgress: NonNullable<LoadOptions["onProgress"]>,
+): void {
+  const total = totalSize() ?? 0;
+  let loaded = 0;
+  for (const r of responses) {
+    const reader = r.clone().body!.getReader();
+    const read = (): Promise<void> =>
+      reader.read().then(({ done, value }) => {
+        if (done) return;
+        loaded += value.length;
+        onProgress({ loaded, total });
+        return read();
+      });
+    // A body that fails to arrive fails `loadParts` through the response itself.
+    read().catch(() => {});
+  }
 }
 
 /**

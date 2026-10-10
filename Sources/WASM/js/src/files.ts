@@ -21,3 +21,13 @@ export const sysrootFiles: ReadonlyMap<string, URL> = new Map([
   ["libclang_rt.builtins-wasm32.a", new URL("./libclang_rt.builtins-wasm32.a", import.meta.url)],
   ["shims.o", new URL("./shims.o", import.meta.url)],
 ]);
+
+/**
+ * Every file, in the order the loaders fetch them: the compiler, the standard library, and the
+ * files of `sysrootFiles` in its order. `tsdown.config.ts` records their sizes in this order.
+ */
+export const allFiles: readonly URL[] = [
+  compilerFile,
+  standardLibraryFile,
+  ...sysrootFiles.values(),
+];
