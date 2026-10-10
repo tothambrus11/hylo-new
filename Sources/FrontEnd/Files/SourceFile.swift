@@ -198,14 +198,10 @@ public struct SourceFile: Hashable, Sendable {
   public static func forEachURL(
     in directory: URL, withPathExtension pathExtension: String = "hylo",
     _ action: (URL) throws -> Void
-  ) rethrows {
-    let items = FileManager.default.enumerator(
-      at: directory,
-      includingPropertiesForKeys: [.isRegularFileKey],
-      options: [.skipsHiddenFiles, .skipsPackageDescendants])!
-
-    for case let f as URL in items where f.pathExtension == pathExtension {
-      try action(f)
+  ) throws {
+    for p in try FileManager.default.subpathsOfDirectory(atPath: directory.path)
+    where p.hasSuffix(".\(pathExtension)") {
+      try action(directory.appendingPathComponent(p))
     }
   }
 

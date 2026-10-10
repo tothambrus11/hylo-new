@@ -1487,7 +1487,8 @@ extension Program {
     if n == 0 {
       return t.unsafe[].zero.v
     } else {
-      return t.unsafe[].constant(words: n.words.map(UInt64.init(_:))).v
+      let w = n.twosComplement64BitComponents(bitWidth: t.unsafe[].bitWidth)
+      return t.unsafe[].constant(words: w).v
     }
   }
 
@@ -1860,6 +1861,23 @@ extension FrontEnd.FloatingPointPredicate {
     case .ult: .ult
     case .ule: .ule
     case .uno: .uno
+    }
+  }
+
+}
+
+extension BigInt {
+
+  /// Returns the two's complement representation of `self` on `bitWidth` bits, as 64-bit words
+  /// from least to most significant.
+  internal func twosComplement64BitComponents(bitWidth: Int) -> [UInt64] {
+    var x = self
+    return (0 ..< (bitWidth + 63) / 64).map { (_) in
+      let w = UInt64(truncatingIfNeeded: x)
+      // `>>` rounds toward zero, so the bits already taken are removed first to shift a negative
+      // value as its two's complement representation would be.
+      x = (x - BigInt(w)) >> 64
+      return w
     }
   }
 

@@ -49,6 +49,14 @@ jobs:
     env: &distributable-env
       ARTIFACT_NAME: hylo-${{ github.ref_name }}-${{ matrix.target }}
       RELEASE_TAG: ${{ github.ref_name }}
+      # How `hc` is built, the same for building it and for finding it. On Linux and Windows, the
+      # toolset links `FoundationEssentials` rather than Foundation, with its 34 MB of ICU data (see
+      # `Sources/WASM/README.md`); on macOS, Foundation is part of the system.
+      HC_BUILD_FLAGS: >-
+        -c release --product hc --static-swift-stdlib
+        ${{ !startsWith(matrix.target, 'macos') && '--toolset foundation-essentials.toolset.json' || '' }}
+        -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED
+        -Xswiftc -cross-module-optimization
 
     steps:
       - uses: actions/checkout@v7
@@ -86,14 +94,14 @@ jobs:
           #       See also: https://github.com/swiftlang/swift/issues/88237
 
       - name: Build distributable
-        run: swift build -c release --verbose --product hc --static-swift-stdlib -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization
+        run: swift build --verbose ${{ env.HC_BUILD_FLAGS }}
         shell: pwsh
 
       - name: Locate distributable
         id: locate-distributable
         run: |
           $ErrorActionPreference = 'Stop'
-          $binPath = (swift build -c release --product hc --static-swift-stdlib -Xswiftc -DUSE_BUNDLED_STANDARD_LIBRARY -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -Xswiftc -cross-module-optimization --show-bin-path).Trim()
+          $binPath = (swift build ${{ env.HC_BUILD_FLAGS }} --show-bin-path).Trim()
           $binaryName = if ($env:RUNNER_OS -eq 'Windows') { 'hc.exe' } else { 'hc' }
           "bin_path=$binPath" >> $env:GITHUB_OUTPUT
           "binary_path=$(Join-Path $binPath $binaryName)" >> $env:GITHUB_OUTPUT
@@ -123,8 +131,8 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
-  verify-and-publish-distributable:
-    name: Verify and publish distributable for ${{ matrix.target }}
+  verify-distributable:
+    name: Verify distributable for ${{ matrix.target }}
     needs: build-distributable
     strategy: *distributable-strategy
     runs-on: ${{ matrix.os }}
@@ -154,12 +162,98 @@ jobs:
           }
         shell: pwsh
 
-      - name: Upload distributable to draft release
+  # The compiler for WebAssembly and the JavaScript that drives it, `@hylo-lang/hylo-wasm`, at the
+  # release's version (`v1.2.0` is 1.2.0), built and checked as on every change.
+  build-and-verify-npm-package:
+    name: Build and verify the npm package
+    needs: prepare-draft-release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+
+      - name: Read the version
+        id: version
         env:
-          GH_TOKEN: ${{ github.token }}
           TAG: ${{ github.ref_name }}
+        run: echo "version=${TAG#v}" >> "$GITHUB_OUTPUT"
+
+      - name: Build and check the compiler for WebAssembly
+        id: wasm
+        uses: ./.github/actions/wasm-compiler
+        with:
+          version: ${{ steps.version.outputs.version }}
+
+      - name: Upload the package
+        uses: actions/upload-artifact@v7
+        with:
+          name: npm-package
+          path: ${{ steps.wasm.outputs.tarball }}
+          if-no-files-found: error
+          retention-days: 2
+
+  # Everything is published at once, and only once every part of the release has been verified, so
+  # that a failure leaves nothing published: the distributables are attached to the draft release,
+  # the npm package is published, and the release is then taken out of draft. Each step can be
+  # repeated, so a run that fails here can be re-run. npm's trusted publishing authenticates the
+  # job through GitHub's OIDC token, so no token is stored, and records where the package was built
+  # as its provenance.
+  publish:
+    name: Publish the release
+    needs: [verify-distributable, build-and-verify-npm-package]
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+      id-token: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      TAG: ${{ github.ref_name }}
+      VERSION: ${{ needs.build-and-verify-npm-package.outputs.version }}
+
+    steps:
+      - name: Download the distributables
+        uses: actions/download-artifact@v8
+        with:
+          pattern: hylo-${{ github.ref_name }}-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/dist
+
+      - name: Download the npm package
+        uses: actions/download-artifact@v8
+        with:
+          name: npm-package
+          path: ${{ runner.temp }}/npm
+
+      - name: Attach the distributables to the draft release
+        run: gh release upload "$TAG" "$RUNNER_TEMP"/dist/*.tar.zst --repo "$GITHUB_REPOSITORY" --clobber
+
+      - uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v7.0.0
+        with:
+          node-version: "24.x"
+
+      # Trusted publishing needs npm 11.5.1 or later.
+      - name: Update npm
+        run: npm install --global npm@^11.5.1
+
+      # A pre-release (`v1.2.0-rc.1`) is published under the `next` tag, so that it is not what
+      # `npm install` picks by default. A version already published, by an earlier attempt, is left.
+      - name: Publish the npm package
         run: |
-          $ErrorActionPreference = 'Stop'
-          $archive = Join-Path $env:RUNNER_TEMP "dist/$env:ARTIFACT_NAME.tar.zst"
-          gh release upload $env:TAG $archive --repo '${{ github.repository }}' --clobber
-        shell: pwsh
+          tarball=("$RUNNER_TEMP"/npm/*.tgz)
+          name="$(tar -xOzf "${tarball[0]}" package/package.json | jq -r .name)"
+          if npm view "$name@$VERSION" version >/dev/null 2>&1; then
+            echo "$name@$VERSION is already published."
+            exit 0
+          fi
+          if [[ "$VERSION" == *-* ]]; then dist_tag=next; else dist_tag=latest; fi
+          npm publish "${tarball[0]}" --tag "$dist_tag"
+
+      - name: Publish the release
+        run: |
+          if [[ "$VERSION" == *-* ]]; then kind=--prerelease; else kind=--latest; fi
+          gh release edit "$TAG" --repo "$GITHUB_REPOSITORY" --draft=false "$kind"
