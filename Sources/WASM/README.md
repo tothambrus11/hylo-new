@@ -51,7 +51,7 @@ Everything is in this directory:
 
 | | |
 |---|---|
-| `hylo-wasm/` | The reactor. The host instantiates it once, hands over the standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes. Requests and answers are JSON, as length-prefixed UTF-8 in linear memory. |
+| `hylo-wasm/` | The reactor. The host instantiates it once, hands over the standard library's sources through `hylo_init`, and calls `hylo_compile` as often as it likes. Requests and answers are JSON, as length-prefixed UTF-8 in linear memory. While compiling, it hands the host what the front end produced through the function `hylo_host.front_end_done`, which the host provides. |
 | `HyloWASMSession/` | What compiling means, independently of the transport: each request is compiled in a copy of a program whose standard library is already lowered. |
 | `WASMLinker/` | Calls `lld::lldMain` with the WebAssembly driver. The files it reads and writes live in a WASI file system that the host keeps in memory, the same in a browser and in Node. |
 | `sysroot/entry.c` | A file linked into every executable; see below. |

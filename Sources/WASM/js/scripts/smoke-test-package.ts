@@ -102,15 +102,20 @@ async function direct() {
   return (await hylo.run(r.executable)).exitCode;
 }
 
+// Resolves to the stages the worker reported, then the exit status.
 function throughWorker() {
   return new Promise((resolve, reject) => {
     const w = new HyloWorker();
+    const stages = [];
     w.onerror = (e) => reject(new Error(e.message));
     w.onmessage = ({ data }) => {
       if (data.type === "failed") reject(new Error(data.error));
-      if (data.type === "result") resolve(data.run?.exitCode ?? JSON.stringify(data.compile));
+      if (data.type === "stage") stages.push(data.stage);
+      if (data.type === "result") {
+        resolve([...stages, data.run?.exitCode ?? JSON.stringify(data.compile)].join(" "));
+      }
     };
-    w.postMessage({ id: 1, request: { source } });
+    w.postMessage({ id: 1, request: { source, emit: ["ir", "executable"] } });
   });
 }
 
@@ -145,7 +150,7 @@ window.outcome = Promise.all([direct(), throughWorker()]);
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`http://127.0.0.1:${typeof address === "object" ? address?.port : 0}/`);
     const outcome = await page.evaluate(() => (window as unknown as { outcome: unknown }).outcome);
-    if (JSON.stringify(outcome) !== "[42,42]" || errors.length > 0) {
+    if (JSON.stringify(outcome) !== '[42,"front-end back-end 42"]' || errors.length > 0) {
       throw new Error(`the page ended with ${JSON.stringify(outcome)} ${errors.join("\n")}`);
     }
   } finally {

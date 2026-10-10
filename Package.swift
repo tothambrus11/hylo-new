@@ -267,7 +267,8 @@ if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
         .target(name: "HyloWASMSession")
       ],
       path: "Sources/WASM/hylo-wasm",
-      swiftSettings: commonSwiftSettings,
+      // `Extern` declares the functions the reactor imports from its host.
+      swiftSettings: commonSwiftSettings + [.enableExperimentalFeature("Extern")],
       linkerSettings: [
         .unsafeFlags([
           "-Xclang-linker", "-mexec-model=reactor",

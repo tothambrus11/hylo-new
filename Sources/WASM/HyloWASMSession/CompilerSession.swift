@@ -62,18 +62,34 @@ public struct CompilerSession: Sendable {
     p.applyTransformationPasses(m)
   }
 
-  /// Returns the result of compiling `request`.
-  public func compile(_ request: CompileRequest) async -> CompileResponse {
+  /// Returns the result of compiling `request`, calling `reportFrontEnd` with what the front end
+  /// produced once it is done, if the back end is to run next.
+  ///
+  /// The back end takes most of the time, so a host can show the front end's results, such as Hylo
+  /// IR, sooner. `reportFrontEnd` is given the diagnostics and the Hylo IR requested, and how long
+  /// compiling has taken so far; the result returned includes them.
+  public func compile(
+    _ request: CompileRequest,
+    reportingFrontEnd reportFrontEnd: (CompileResponse) -> Void = { (_) in }
+  ) async -> CompileResponse {
     var r = CompileResponse()
     let start = ContinuousClock.now
-    await compile(request, into: &r)
+    await compile(request, into: &r) { (frontEnd) in
+      var f = frontEnd
+      f.milliseconds = Self.milliseconds(start.duration(to: .now))
+      reportFrontEnd(f)
+    }
     let elapsed = start.duration(to: .now)
     r.milliseconds = Self.milliseconds(elapsed)
     return r
   }
 
-  /// Compiles `request`, writing the results into `r`.
-  private func compile(_ request: CompileRequest, into r: inout CompileResponse) async {
+  /// Compiles `request`, writing the results into `r`, and calling `reportFrontEnd` with them
+  /// once the front end is done, if the back end is to run next.
+  private func compile(
+    _ request: CompileRequest, into r: inout CompileResponse,
+    reportingFrontEnd reportFrontEnd: (CompileResponse) -> Void
+  ) async {
     let usesStandardLibrary = request.standardLibrary ?? true
     var p = usesStandardLibrary ? baseline : Program()
     let m = p.demandModule(.init("Main"))
@@ -90,9 +106,14 @@ public struct CompilerSession: Sendable {
     r.artifacts["raw-ir"] = rawIR
     if p[m].containsError || !request.runs(.lowering) { return }
     if request.wants(.ir) { r.artifacts["ir"] = p.show(p[m].ir) }
+    // Every phase `stopAfter` names is the front end's.
+    if request.stopAfter != nil { return }
     guard request.wants(.llvm) || request.wants(.assembly) || request.wants(.executable) else {
       return
     }
+    var frontEnd = r
+    frontEnd.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:))
+    reportFrontEnd(frontEnd)
 
     // The back end.
     do {
