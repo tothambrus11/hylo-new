@@ -1,7 +1,7 @@
 /**
  * A Web Worker running programs the compiler produced, one at a time, apart from the compiler's
- * worker (`compiler-worker.ts`): a page can terminate it to stop a program that runs too long, or whose
- * result is no longer wanted, without losing the compiler and its compiled standard library.
+ * worker (`compiler-worker.ts`): a page can terminate it to stop a program that runs too long, or
+ * whose result is no longer wanted, without losing the compiler and its compiled standard library.
  *
  * With Vite, for example:
  *
