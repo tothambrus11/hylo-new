@@ -11,7 +11,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { beforeAll, describe, expect, test } from "vitest";
-import type { CompileRequest, CompileResponse, Compiler, Phase } from "../src/index.ts";
+import type { CompileRequest, CompileResponse, Compiler, Diagnostic, Phase } from "../src/index.ts";
 import { compiler, repository } from "./support.ts";
 
 const cases = path.join(repository, "Tests/CompilerTests");
@@ -63,9 +63,12 @@ function request(source: string, a: Attributes, optimization = 0): CompileReques
   return { source, optimization, standardLibrary: a.standardLibrary, stopAfter, emit };
 }
 
-/** Returns the first line of each diagnostic of `r`, without the file name, sorted. */
+/** Returns `ds` and their notes, and their notes' notes, flattened. */
+const flatten = (ds: Diagnostic[]): Diagnostic[] => ds.flatMap((d) => [d, ...flatten(d.notes)]);
+
+/** Returns the first line of each diagnostic of `r`, notes included, without the file name, sorted. */
 const sites = (r: CompileResponse, levels = ["error", "warning", "note"]): string[] =>
-  r.diagnostics
+  flatten(r.diagnostics)
     .filter((d) => levels.includes(d.level))
     .map((d) => withoutFile(d.rendered.split("\n", 1)[0]))
     .sort();

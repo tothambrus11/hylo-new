@@ -27,15 +27,23 @@ export interface CompileRequest {
   stopAfter?: Phase;
 }
 
-/** An issue found in a program, at 1-based lines and 1-based UTF-16 columns. */
+/**
+ * An issue found in a program, at 1-based lines and 1-based UTF-16 columns, with the notes saying
+ * more about it.
+ */
 export interface Diagnostic {
   level: "error" | "warning" | "note";
   message: string;
   /** The file containing the issue. */
   file: string;
   site: { line: number; column: number; endLine: number; endColumn: number };
-  /** The diagnostic as the command-line compiler renders it, without styling. */
+  /** The diagnostic as the command-line compiler renders it, without styling, its notes included. */
   rendered: string;
+  /**
+   * The notes attached to the diagnostic, which may be in other files than the program's, such as
+   * the standard library's declarations of candidates that did not match.
+   */
+  notes: Diagnostic[];
 }
 
 /** The result of a `CompileRequest`. */
