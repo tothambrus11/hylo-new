@@ -83,12 +83,21 @@ export type WorkerMessage =
   | { type: "progress"; loaded: number; total: number }
   | { type: "ready"; standardLibraryMilliseconds: number }
   | { type: "failed"; error: string }
-  | { type: "result"; id: number; compile: WorkerCompilation; run: Execution | null };
+  | WorkerResult;
+
+/** The worker's answer to a `WorkerRequest`. */
+export interface WorkerResult {
+  type: "result";
+  /** The `id` of the request. */
+  id: number;
+  compile: WorkerCompilation;
+  /** What running the executable did, if it was run. */
+  run: Execution | null;
+}
 
 /**
  * A `CompileResponse` as the worker sends it: with the executable's size rather than the
- * executable, which it runs itself, or only an `error` when the request could not be served.
+ * executable, which it runs itself. A request that could not be served at all is answered with an
+ * `error`, no diagnostics and no artifacts.
  */
-export type WorkerCompilation =
-  | (Omit<CompileResponse, "executable"> & { executableBytes?: number })
-  | { error: string };
+export type WorkerCompilation = Omit<CompileResponse, "executable"> & { executableBytes?: number };

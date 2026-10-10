@@ -58,7 +58,7 @@ self.onmessage = ({ data: { id, request, run = true } }: MessageEvent<WorkerRequ
     .then(() => serve(id, request, run))
     .catch((e) => {
       const error = `the request could not be served: ${describe(e)}`;
-      send({ type: "result", id, compile: { error }, run: null });
+      fail(id, error);
     });
 };
 
@@ -69,7 +69,7 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
     h = await hylo;
   } catch (e) {
     const error = `the compiler failed to load: ${describe(e)}`;
-    send({ type: "result", id, compile: { error }, run: null });
+    fail(id, error);
     return;
   }
 
@@ -78,7 +78,7 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
     compiled = h.compile(request);
   } catch (e) {
     const error = `the compiler crashed (${describe(e)}); this is a compiler bug`;
-    send({ type: "result", id, compile: { error }, run: null });
+    fail(id, error);
     start();
     return;
   }
@@ -91,6 +91,16 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
     id,
     compile: executable ? { ...compile, executableBytes: executable.length } : compile,
     run: outcome,
+  });
+}
+
+/** Answers request `id` with `error`, saying why it could not be served. */
+function fail(id: number, error: string): void {
+  send({
+    type: "result",
+    id,
+    compile: { diagnostics: [], artifacts: {}, error, milliseconds: 0 },
+    run: null,
   });
 }
 
