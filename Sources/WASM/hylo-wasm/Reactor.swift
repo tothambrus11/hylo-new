@@ -13,6 +13,9 @@ import HyloWASMSession
 // prefixed with its length as a little-endian `UInt32`, so one pointer is enough to return one;
 // the host frees it with `hylo_free`.
 //
+// While compiling, the reactor calls the function `front_end_done` that the host provides in the
+// module `hylo_host`; see `hostFrontEndDone`.
+//
 // Linking happens in-process, through the WASI file system: the host must preopen the directory
 // named `sysroot` in the request to `hylo_init`, holding the files `CompilerSession` links into
 // every executable in its `lib` subdirectory, and a writable directory named `scratch`.
@@ -20,6 +23,14 @@ import HyloWASMSession
 /// The session serving `hylo_compile`, or `nil` until `hylo_init` has succeeded and after a
 /// request has left the compiler unusable.
 nonisolated(unsafe) private var session: CompilerSession? = nil
+
+/// Hands the host the JSON `CompileResponse` in the `n` bytes at `p`, holding what the front end
+/// produced for the request `hylo_compile` is serving, before the back end runs.
+///
+/// The buffer is valid only during the call. The host must not call the reactor's exports from
+/// it.
+@_extern(wasm, module: "hylo_host", name: "front_end_done")
+private func hostFrontEndDone(_ p: UnsafeRawPointer, _ n: Int32)
 
 /// Returns a buffer of `n` bytes for the host to write a request into.
 @_expose(wasm, "hylo_alloc")
@@ -61,7 +72,8 @@ public func hylo_init(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPoin
 }
 
 /// Compiles the program described by the JSON `CompileRequest` in `p`, returning a JSON
-/// `CompileResponse`.
+/// `CompileResponse`, and handing the host what the front end produced through
+/// `hostFrontEndDone` first if the back end runs.
 @_expose(wasm, "hylo_compile")
 @_cdecl("hylo_compile")
 public func hylo_compile(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPointer {
@@ -70,7 +82,13 @@ public func hylo_compile(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawP
       return try encode(Failure(error: "the standard library has not been loaded"))
     }
     let request = try JSONDecoder().decode(CompileRequest.self, from: read(p, n))
-    let r = runToCompletion { await s.compile(request) }
+    let r = runToCompletion {
+      await s.compile(request) { (frontEnd) in
+        // A report that cannot be encoded is left out; the answer has the same contents.
+        guard let d = try? encode(frontEnd) else { return }
+        d.withUnsafeBytes { (b) in hostFrontEndDone(b.baseAddress!, Int32(b.count)) }
+      }
+    }
     if r.compilerUnusable { session = nil }
     return try encode(r)
   }

@@ -33,11 +33,26 @@ export interface Compiler {
    * Compiles `request`.
    *
    * Throws if the compiler traps, which is a bug in the compiler; it is then no longer `usable`.
+   * Throws what `options.onFrontEnd` throws, once compiling is done.
    */
-  compile(request: CompileRequest): CompileResponse;
+  compile(request: CompileRequest, options?: CompileOptions): CompileResponse;
 
   /** Runs `executable`; the same as the module's `run`. */
   run(executable: Uint8Array, options?: RunOptions): Promise<Execution>;
+}
+
+/** How `Compiler.compile` reports on its progress. */
+export interface CompileOptions {
+  /**
+   * Called during compilation, once the front end is done and before the back end runs, with
+   * what the front end produced: the diagnostics, the Hylo IR requested (`raw-ir`, `ir`), and how
+   * long compiling has taken so far. Not called if the back end does not run: if the request
+   * asks for nothing it produces, sets `stopAfter`, or the program has errors.
+   *
+   * The back end takes most of the time, so this lets a host show the front end's results sooner.
+   * It must not call the compiler.
+   */
+  onFrontEnd?: (frontEnd: Omit<CompileResponse, "executable">) => void;
 }
 
 /** The parts of the compiler that `instantiate` needs. */
@@ -98,11 +113,29 @@ export async function instantiate({
     ],
     { debug: false },
   );
+  // The `onFrontEnd` of the request being compiled, and what it threw. What it throws is rethrown
+  // once compiling is done: thrown from the import, it would unwind through the compiler, leaving
+  // it in an unknown state.
+  let onFrontEnd: CompileOptions["onFrontEnd"];
+  const thrown: unknown[] = [];
   const instance = await WebAssembly.instantiate(compiler, {
     wasi_snapshot_preview1: wasi.wasiImport,
+    hylo_host: {
+      front_end_done(p: number, n: number): void {
+        try {
+          onFrontEnd?.(JSON.parse(readString(p, n)));
+        } catch (e) {
+          thrown.push(e);
+        }
+      },
+    },
   });
   wasi.initialize(instance as Parameters<WASI["initialize"]>[0]);
   const m = instance.exports as unknown as Exports;
+
+  /** Returns the `n` bytes of UTF-8 at `p` in the compiler's memory. */
+  const readString = (p: number, n: number): string =>
+    new TextDecoder().decode(new Uint8Array(m.memory.buffer, p, n));
 
   // Why the instance can no longer be used, once it cannot.
   let unusable: string | null = null;
@@ -125,8 +158,7 @@ export async function instantiate({
     try {
       // Read afresh: the call may have grown the memory, detaching any earlier view of it.
       const length = new DataView(m.memory.buffer).getUint32(answer, true);
-      const text = new TextDecoder().decode(new Uint8Array(m.memory.buffer, answer + 4, length));
-      return JSON.parse(text);
+      return JSON.parse(readString(answer + 4, length));
     } finally {
       m.hylo_free(answer);
     }
@@ -146,13 +178,18 @@ export async function instantiate({
     get usable() {
       return unusable === null;
     },
-    compile(request) {
-      const r = call(m.hylo_compile, { emit: ["executable"], ...request }) as Omit<
-        CompileResponse,
-        "executable"
-      > & { executable?: string };
+    compile(request, options = {}) {
+      onFrontEnd = options.onFrontEnd;
+      thrown.length = 0;
+      let r: Omit<CompileResponse, "executable"> & { executable?: string };
+      try {
+        r = call(m.hylo_compile, { emit: ["executable"], ...request }) as typeof r;
+      } finally {
+        onFrontEnd = undefined;
+      }
       scratch.dir.contents.clear();
       if (r.compilerUnusable) unusable = r.error ?? "the compiler reported it cannot run again";
+      if (thrown.length > 0) throw thrown[0];
       const { executable, ...rest } = r;
       return executable === undefined ? rest : { ...rest, executable: fromBase64(executable) };
     },

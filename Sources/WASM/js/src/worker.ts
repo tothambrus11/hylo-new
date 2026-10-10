@@ -12,10 +12,10 @@
  * w.postMessage({ id: 1, request: { source, emit: ["executable", "llvm"] } });
  * ```
  *
- * It answers every `WorkerRequest` with a `result` message, and reports on loading with
- * `progress`, `ready` and `failed` messages; see `WorkerMessage`. A compiler that traps loses its
- * instance, and with it the compiled standard library; so does one that reports it cannot serve
- * further requests. The request is then answered with an error and `compile.compilerUnusable`,
+ * It answers every `WorkerRequest` with a `result` message, which `stage` messages may precede
+ * with what compiling produced so far, and reports on loading with `progress`, `ready` and
+ * `failed` messages; see `WorkerMessage`. A compiler that traps loses its instance, and with it
+ * the compiled standard library; so does one that reports it cannot serve further requests. The request is then answered with an error and `compile.compilerUnusable`,
  * and the compiler is instantiated again for the next, which is announced by another `ready`.
  * Requests sent meanwhile wait for it. A compiler that fails to load (`failed`) is not loaded
  * again: every later request is answered with an error, and the page replaces the worker.
@@ -24,7 +24,13 @@
  */
 
 import { type Compiler, instantiate, loadParts } from "./index.ts";
-import type { WorkerMessage, WorkerRequest } from "./protocol.ts";
+import type {
+  CompileRequest,
+  CompileResponse,
+  Execution,
+  WorkerMessage,
+  WorkerRequest,
+} from "./protocol.ts";
 
 // The parts of a dedicated worker's global scope this uses, declared here rather than through the
 // `webworker` library, which would change the globals of every program importing this module.
@@ -64,8 +70,11 @@ self.onmessage = ({ data: { id, request, run = true } }: MessageEvent<WorkerRequ
     });
 };
 
-/** Compiles `request`, runs the result if `run` is set, and answers with what happened. */
-async function serve(id: number, request: WorkerRequest["request"], run: boolean): Promise<void> {
+/**
+ * Compiles `request`, runs the result if `run` is set, and answers with what happened, sending
+ * what each stage produced as soon as it is done; see `WorkerStage`.
+ */
+async function serve(id: number, request: CompileRequest, run: boolean): Promise<void> {
   let h: Compiler;
   try {
     h = await hylo;
@@ -75,9 +84,11 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
     return;
   }
 
-  let compiled: ReturnType<Compiler["compile"]>;
+  let compiled: CompileResponse;
   try {
-    compiled = h.compile(request);
+    compiled = h.compile(request, {
+      onFrontEnd: (compile) => send({ type: "stage", id, stage: "front-end", compile }),
+    });
   } catch (e) {
     const error = `the compiler crashed (${describe(e)}); this is a compiler bug`;
     fail(id, error, { compilerUnusable: true });
@@ -86,14 +97,14 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
   }
   if (!h.usable) start();
 
-  const { executable, ...compile } = compiled;
-  const outcome = run && executable ? await h.run(executable) : null;
-  send({
-    type: "result",
-    id,
-    compile: executable ? { ...compile, executableBytes: executable.length } : compile,
-    run: outcome,
-  });
+  const { executable, ...rest } = compiled;
+  const compile = executable ? { ...rest, executableBytes: executable.length } : rest;
+  let outcome: Execution | null = null;
+  if (run && executable) {
+    send({ type: "stage", id, stage: "back-end", compile });
+    outcome = await h.run(executable);
+  }
+  send({ type: "result", id, compile, run: outcome });
 }
 
 /**

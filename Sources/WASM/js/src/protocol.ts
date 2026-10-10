@@ -83,7 +83,33 @@ export type WorkerMessage =
   | { type: "progress"; loaded: number; total: number }
   | { type: "ready"; standardLibraryMilliseconds: number }
   | { type: "failed"; error: string }
+  | WorkerStage
   | WorkerResult;
+
+/**
+ * A stage of serving a request:
+ * - `"front-end"`: parsing, typing and lowering to Hylo IR;
+ * - `"back-end"`: generating LLVM IR, WebAssembly and the executable.
+ */
+export type Stage = "front-end" | "back-end";
+
+/**
+ * What a stage of serving a request produced, sent as soon as the stage is done, before the
+ * `WorkerResult` that answers the request.
+ *
+ * `"front-end"` is sent iff the back end runs next (see `CompileOptions.onFrontEnd`), with the
+ * front end's diagnostics and the Hylo IR requested. `"back-end"` is sent iff the executable is
+ * about to be run, with everything compiling produced, as the `WorkerResult` will have it. A
+ * request whose program never returns thus still gets what compiling it produced.
+ */
+export interface WorkerStage {
+  type: "stage";
+  /** The `id` of the request. */
+  id: number;
+  /** The stage done. */
+  stage: Stage;
+  compile: WorkerCompilation;
+}
 
 /** The worker's answer to a `WorkerRequest`. */
 export interface WorkerResult {

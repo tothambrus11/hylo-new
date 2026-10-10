@@ -49,6 +49,65 @@ test("emits every intermediate representation", () => {
   expect(r.executable).toBeUndefined();
 });
 
+test("stops after the phase `stopAfter` names", () => {
+  const r = hylo.compile({
+    source: "public fun main() -> Int32 { 1 }",
+    emit: ["ir", "llvm", "executable"],
+    stopAfter: "lowering",
+  });
+  expect(r.error).toBeUndefined();
+  expect(Object.keys(r.artifacts)).toEqual(["ir"]);
+  expect(r.executable).toBeUndefined();
+});
+
+test("reports what the front end produced before the back end runs", () => {
+  const reports: unknown[] = [];
+  const r = hylo.compile(
+    { source: "public fun main() -> Int32 { 1 }", emit: ["raw-ir", "ir", "llvm"] },
+    { onFrontEnd: (f) => reports.push(f) },
+  );
+  expect(r.error).toBeUndefined();
+  expect(reports).toEqual([
+    {
+      diagnostics: [],
+      artifacts: { "raw-ir": r.artifacts["raw-ir"], ir: r.artifacts.ir },
+      compilerUnusable: false,
+      milliseconds: expect.any(Number),
+    },
+  ]);
+});
+
+test("reports nothing early when the back end does not run", () => {
+  let reports = 0;
+  const onFrontEnd = () => ++reports;
+  hylo.compile({ source: "public fun main() -> Int32 { 1 }", emit: ["ir"] }, { onFrontEnd });
+  hylo.compile(
+    { source: "public fun main() -> Int32 { x }", emit: ["ir", "llvm"] },
+    { onFrontEnd },
+  );
+  hylo.compile(
+    { source: "public fun main() -> Int32 { 1 }", emit: ["ir", "llvm"], stopAfter: "lowering" },
+    { onFrontEnd },
+  );
+  expect(reports).toBe(0);
+});
+
+test("throws what the front end's report threw, once compiling is done", () => {
+  const thrown = new Error("from the host");
+  expect(() =>
+    hylo.compile(
+      { source: "public fun main() -> Int32 { 1 }", emit: ["ir", "llvm"] },
+      {
+        onFrontEnd: () => {
+          throw thrown;
+        },
+      },
+    ),
+  ).toThrow(thrown);
+  expect(hylo.usable).toBe(true);
+  expect(hylo.compile({ source: "public fun main() -> Int32 { 1 }" }).error).toBeUndefined();
+});
+
 test("optimizes", () => {
   const r = hylo.compile({
     source: "public fun main() -> Int32 { 3 }",
