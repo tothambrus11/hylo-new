@@ -99,7 +99,9 @@ export async function instantiate({
     log.push(line);
     if (log.length > maximumLogLength) log.splice(0, log.length - maximumLogLength);
   };
-  const lib = new Map([...sysroot].map(([n, b]) => [n, new File(b, { readonly: true })]));
+  const libraries = new Map(
+    [...sysroot].map(([name, contents]) => [name, new File(contents, { readonly: true })]),
+  );
   const scratch = new PreopenDirectory("/tmp", new Map());
   const wasi = new WASI(
     ["hylo-wasm"],
@@ -108,7 +110,7 @@ export async function instantiate({
       new OpenFile(new File([])),
       ConsoleStdout.lineBuffered(record),
       ConsoleStdout.lineBuffered(record),
-      new PreopenDirectory("/sysroot", new Map([["lib", new Directory(lib)]])),
+      new PreopenDirectory("/sysroot", new Map([["lib", new Directory(libraries)]])),
       scratch,
     ],
     { debug: false },
@@ -117,59 +119,65 @@ export async function instantiate({
   // once compiling is done: thrown from the import, it would unwind through the compiler, leaving
   // it in an unknown state.
   let onFrontEnd: CompileOptions["onFrontEnd"];
-  const thrown: unknown[] = [];
+  const thrownByOnFrontEnd: unknown[] = [];
   const instance = await WebAssembly.instantiate(compiler, {
     wasi_snapshot_preview1: wasi.wasiImport,
     hylo_host: {
-      front_end_done(p: number, n: number): void {
+      front_end_done(address: number, length: number): void {
         try {
-          onFrontEnd?.(JSON.parse(readString(p, n)));
-        } catch (e) {
-          thrown.push(e);
+          onFrontEnd?.(JSON.parse(readString(address, length)));
+        } catch (thrown) {
+          thrownByOnFrontEnd.push(thrown);
         }
       },
     },
   });
   wasi.initialize(instance as Parameters<WASI["initialize"]>[0]);
-  const m = instance.exports as unknown as Exports;
+  const exports = instance.exports as unknown as Exports;
 
-  /** Returns the `n` bytes of UTF-8 at `p` in the compiler's memory. */
-  const readString = (p: number, n: number): string =>
-    new TextDecoder().decode(new Uint8Array(m.memory.buffer, p, n));
+  /** Returns the `length` bytes of UTF-8 at `address` in the compiler's memory. */
+  const readString = (address: number, length: number): string =>
+    new TextDecoder().decode(new Uint8Array(exports.memory.buffer, address, length));
 
   // Why the instance can no longer be used, once it cannot.
   let unusable: string | null = null;
 
-  /** Calls the export `f` with `value` as JSON, and returns its JSON answer. */
-  const call = (f: (request: number, size: number) => number, value: unknown): unknown => {
+  /** Calls `exported`, an export of the compiler, with `argument` as JSON, and returns its JSON answer. */
+  const callExport = (
+    exported: (address: number, length: number) => number,
+    argument: unknown,
+  ): unknown => {
     if (unusable !== null) throw new Error(`the compiler cannot be used anymore: ${unusable}`);
-    const request = new TextEncoder().encode(JSON.stringify(value));
-    const p = m.hylo_alloc(request.length);
-    new Uint8Array(m.memory.buffer).set(request, p);
-    let answer: number;
+    const request = new TextEncoder().encode(JSON.stringify(argument));
+    const requestAddress = exports.hylo_alloc(request.length);
+    new Uint8Array(exports.memory.buffer).set(request, requestAddress);
+    let answerAddress: number;
     try {
-      answer = f(p, request.length);
-    } catch (e) {
+      answerAddress = exported(requestAddress, request.length);
+    } catch (thrown) {
       // A trap leaves the instance's state wherever it was, so nothing more is asked of it.
-      unusable = e instanceof Error ? e.message : String(e);
-      throw e;
+      unusable = thrown instanceof Error ? thrown.message : String(thrown);
+      throw thrown;
     }
-    m.hylo_free(p);
+    exports.hylo_free(requestAddress);
     try {
       // Read afresh: the call may have grown the memory, detaching any earlier view of it.
-      const length = new DataView(m.memory.buffer).getUint32(answer, true);
-      return JSON.parse(readString(answer + 4, length));
+      const length = new DataView(exports.memory.buffer).getUint32(answerAddress, true);
+      return JSON.parse(readString(answerAddress + 4, length));
     } finally {
-      m.hylo_free(answer);
+      exports.hylo_free(answerAddress);
     }
   };
 
   const started = performance.now();
-  const init = call(m.hylo_init, { standardLibrary, sysroot: "/sysroot", scratch: "/tmp" }) as {
-    ok?: true;
-    error?: string;
-  };
-  if (init.ok !== true) throw new Error(init.error ?? "the standard library did not load");
+  const initialization = callExport(exports.hylo_init, {
+    standardLibrary,
+    sysroot: "/sysroot",
+    scratch: "/tmp",
+  }) as { ok?: true; error?: string };
+  if (initialization.ok !== true) {
+    throw new Error(initialization.error ?? "the standard library did not load");
+  }
   const standardLibraryMilliseconds = performance.now() - started;
 
   return {
@@ -180,17 +188,22 @@ export async function instantiate({
     },
     compile(request, options = {}) {
       onFrontEnd = options.onFrontEnd;
-      thrown.length = 0;
-      let r: Omit<CompileResponse, "executable"> & { executable?: string };
+      thrownByOnFrontEnd.length = 0;
+      let response: Omit<CompileResponse, "executable"> & { executable?: string };
       try {
-        r = call(m.hylo_compile, { emit: ["executable"], ...request }) as typeof r;
+        response = callExport(exports.hylo_compile, {
+          emit: ["executable"],
+          ...request,
+        }) as typeof response;
       } finally {
         onFrontEnd = undefined;
       }
       scratch.dir.contents.clear();
-      if (r.compilerUnusable) unusable = r.error ?? "the compiler reported it cannot run again";
-      if (thrown.length > 0) throw thrown[0];
-      const { executable, ...rest } = r;
+      if (response.compilerUnusable) {
+        unusable = response.error ?? "the compiler reported it cannot run again";
+      }
+      if (thrownByOnFrontEnd.length > 0) throw thrownByOnFrontEnd[0];
+      const { executable, ...rest } = response;
       return executable === undefined ? rest : { ...rest, executable: fromBase64(executable) };
     },
     run,
@@ -214,8 +227,8 @@ export async function run(
     [],
     [
       new OpenFile(new File(stdin)),
-      new ConsoleStdout((b) => stdout.push(b.slice())),
-      new ConsoleStdout((b) => stderr.push(b.slice())),
+      new ConsoleStdout((chunk) => stdout.push(chunk.slice())),
+      new ConsoleStdout((chunk) => stderr.push(chunk.slice())),
     ],
     { debug: false },
   );
@@ -227,33 +240,33 @@ export async function run(
   try {
     const exitCode = wasi.start(instance as Parameters<WASI["start"]>[0]);
     return { exitCode, stdout: text(stdout), stderr: text(stderr) };
-  } catch (e) {
+  } catch (thrown) {
     // Engines report a stack overflow in WebAssembly as a `RangeError` rather than a trap.
-    if (e instanceof WebAssembly.RuntimeError || e instanceof RangeError) {
-      return { exitCode: null, trap: e.message, stdout: text(stdout), stderr: text(stderr) };
+    if (thrown instanceof WebAssembly.RuntimeError || thrown instanceof RangeError) {
+      return { exitCode: null, trap: thrown.message, stdout: text(stdout), stderr: text(stderr) };
     }
-    throw e;
+    throw thrown;
   }
 }
 
 /** The number of lines of the compiler's output that `log` keeps. */
 const maximumLogLength = 1000;
 
-/** Returns the bytes encoded in `s`, in base64. */
-function fromBase64(s: string): Uint8Array {
-  const binary = atob(s);
-  const b = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; ++i) b[i] = binary.charCodeAt(i);
-  return b;
+/** Returns the bytes `base64` encodes. */
+function fromBase64(base64: string): Uint8Array {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; ++i) bytes[i] = binary.charCodeAt(i);
+  return bytes;
 }
 
 /** Returns `chunks`, end to end. */
 function concatenate(chunks: Uint8Array[]): Uint8Array {
-  const r = new Uint8Array(chunks.reduce((a, c) => a + c.length, 0));
-  let i = 0;
-  for (const c of chunks) {
-    r.set(c, i);
-    i += c.length;
+  const whole = new Uint8Array(chunks.reduce((length, chunk) => length + chunk.length, 0));
+  let offset = 0;
+  for (const chunk of chunks) {
+    whole.set(chunk, offset);
+    offset += chunk.length;
   }
-  return r;
+  return whole;
 }

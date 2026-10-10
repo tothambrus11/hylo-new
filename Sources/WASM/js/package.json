@@ -20,9 +20,13 @@
         "default": "./dist/index.js"
       }
     },
-    "./worker": {
-      "types": "./dist/worker.d.ts",
-      "default": "./dist/worker.js"
+    "./compiler-worker": {
+      "types": "./dist/compiler-worker.d.ts",
+      "default": "./dist/compiler-worker.js"
+    },
+    "./program-worker": {
+      "types": "./dist/program-worker.d.ts",
+      "default": "./dist/program-worker.js"
     },
     "./protocol": {
       "types": "./dist/protocol.d.ts",

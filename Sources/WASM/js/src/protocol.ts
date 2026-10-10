@@ -69,61 +69,89 @@ export interface Execution {
   stderr: string;
 }
 
-/** A message to the worker (`worker.ts`). */
-export interface WorkerRequest {
+/** A message to the compiler's worker (`compiler-worker.ts`). */
+export interface CompilerWorkerRequest {
   /** An identifier the answer carries. */
   id: number;
   request: CompileRequest;
-  /** Whether to run the executable, if one is produced; `true` by default. */
+  /**
+   * Whether the worker runs the executable, if one is produced; `true` by default. If `false`, the
+   * worker answers with the executable instead, for the page to run elsewhere, such as in a
+   * program worker (`program-worker.ts`), which it can terminate without losing the compiler.
+   */
   run?: boolean;
 }
 
-/** A message from the worker (`worker.ts`). */
-export type WorkerMessage =
+/** A message from the compiler's worker (`compiler-worker.ts`). */
+export type CompilerWorkerMessage =
   | { type: "progress"; loaded: number; total: number }
   | { type: "ready"; standardLibraryMilliseconds: number }
   | { type: "failed"; error: string }
-  | WorkerStage
-  | WorkerResult;
+  | CompilerWorkerStage
+  | CompilerWorkerResult;
 
 /**
- * A stage of serving a request:
+ * A stage of compiling:
  * - `"front-end"`: parsing, typing and lowering to Hylo IR;
  * - `"back-end"`: generating LLVM IR, WebAssembly and the executable.
  */
-export type Stage = "front-end" | "back-end";
+export type CompilationStage = "front-end" | "back-end";
 
 /**
  * What a stage of serving a request produced, sent as soon as the stage is done, before the
- * `WorkerResult` that answers the request.
+ * `CompilerWorkerResult` that answers the request.
  *
  * `"front-end"` is sent iff the back end runs next (see `CompileOptions.onFrontEnd`), with the
- * front end's diagnostics and the Hylo IR requested. `"back-end"` is sent iff the executable is
- * about to be run, with everything compiling produced, as the `WorkerResult` will have it. A
- * request whose program never returns thus still gets what compiling it produced.
+ * front end's diagnostics and the Hylo IR requested. `"back-end"` is sent iff the worker is about
+ * to run the executable, with everything compiling produced, as the `CompilerWorkerResult` will
+ * have it. A request whose program never returns thus still gets what compiling it produced.
  */
-export interface WorkerStage {
+export interface CompilerWorkerStage {
   type: "stage";
   /** The `id` of the request. */
   id: number;
   /** The stage done. */
-  stage: Stage;
-  compile: WorkerCompilation;
+  stage: CompilationStage;
+  /** What compiling produced so far. */
+  compilation: Compilation;
 }
 
-/** The worker's answer to a `WorkerRequest`. */
-export interface WorkerResult {
+/** The compiler's worker's answer to a `CompilerWorkerRequest`. */
+export interface CompilerWorkerResult {
   type: "result";
   /** The `id` of the request. */
   id: number;
-  compile: WorkerCompilation;
-  /** What running the executable did, if it was run. */
-  run: Execution | null;
+  /** What compiling produced. */
+  compilation: Compilation;
+  /** What running the executable did, if the worker ran it. */
+  execution: Execution | null;
+  /** The executable, if the request produced one and asked not to `run` it. */
+  executable?: Uint8Array;
 }
 
+/** A message to a program worker (`program-worker.ts`): run `executable`. */
+export interface ProgramWorkerRequest {
+  /** An identifier the answer carries. */
+  id: number;
+  /** A WASI command, as `CompileResponse.executable`. */
+  executable: Uint8Array;
+  /** The program's arguments, after its name. */
+  args?: string[];
+  /** What the program reads from its standard input. */
+  stdin?: Uint8Array;
+}
+
+/** A program worker's answer to a `ProgramWorkerRequest`. */
+export type ProgramWorkerResult =
+  /** The program ran: it returned, exited, or trapped. */
+  | { type: "ran"; id: number; execution: Execution }
+  /** The program could not be run, for the reason `error` gives, such as an invalid module. */
+  | { type: "failed"; id: number; error: string };
+
 /**
- * A `CompileResponse` as the worker sends it: with the executable's size rather than the
- * executable, which it runs itself. A request that could not be served at all is answered with an
- * `error`, no diagnostics and no artifacts.
+ * A `CompileResponse` as the compiler's worker sends it: with the executable's size in bytes
+ * rather than the executable, which goes in `CompilerWorkerResult.executable` if anywhere. A
+ * request that could not be served at all is answered with an `error`, no diagnostics and no
+ * artifacts.
  */
-export type WorkerCompilation = Omit<CompileResponse, "executable"> & { executableBytes?: number };
+export type Compilation = Omit<CompileResponse, "executable"> & { executableByteCount?: number };
