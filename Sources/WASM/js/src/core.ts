@@ -142,7 +142,10 @@ export async function instantiate({
   // Why the instance can no longer be used, once it cannot.
   let unusable: string | null = null;
 
-  /** Calls `exported`, an export of the compiler, with `argument` as JSON, and returns its JSON answer. */
+  /**
+   * Calls `exported`, an export of the compiler, with `argument` as JSON, and returns its JSON
+   * answer.
+   */
   const callExport = (
     exported: (address: number, length: number) => number,
     argument: unknown,
