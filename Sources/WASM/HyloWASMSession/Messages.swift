@@ -99,7 +99,7 @@ public struct CompileResponse: Encodable {
 
 }
 
-/// An issue found in a program.
+/// An issue found in a program, with the notes saying more about it.
 public struct DiagnosticDescription: Encodable, Sendable {
 
   /// A region of a source file, as 1-based lines and 1-based UTF-16 columns.
@@ -134,17 +134,23 @@ public struct DiagnosticDescription: Encodable, Sendable {
   /// Where the issue is.
   public let site: Region
 
-  /// The diagnostic as the command-line compiler renders it, without styling.
+  /// The diagnostic as the command-line compiler renders it, without styling, its notes included.
   public let rendered: String
 
-  /// Returns descriptions of `d` and the notes attached to it, flattened.
-  static func all(of d: Diagnostic) -> [Self] {
+  /// The notes attached to the diagnostic, which may be in other files, such as the standard
+  /// library's declarations of candidates that did not match.
+  public let notes: [DiagnosticDescription]
+
+  /// Creates a description of `d` and its notes.
+  init(_ d: Diagnostic) {
     var text = ""
     d.render(into: &text, showingPaths: .absolute, style: .unstyled)
-    let me = Self(
-      level: "\(d.level)", message: d.message, file: d.site.source.name.url.path,
-      site: .init(d.site), rendered: text)
-    return [me] + d.notes.flatMap(Self.all(of:))
+    self.level = "\(d.level)"
+    self.message = d.message
+    self.file = d.site.source.name.url.path
+    self.site = .init(d.site)
+    self.rendered = text
+    self.notes = d.notes.map(Self.init)
   }
 
 }

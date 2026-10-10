@@ -37,7 +37,7 @@ public struct CompilerSession: Sendable {
     }
     await Self.compileToRefinedIR(m, in: &p)
 
-    self.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:))
+    self.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init)
     self.baseline = p
     self.sysroot = sysroot
     self.scratch = scratch
@@ -98,7 +98,7 @@ public struct CompilerSession: Sendable {
     _ = p[m].addSource(main)
 
     // The front end, up to the phase the request asks for.
-    defer { r.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:)) }
+    defer { r.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init) }
     var rawIR: String? = nil
     await Self.compileToRefinedIR(m, in: &p, through: request.stopAfter) { (p) in
       if request.wants(.rawIR) { rawIR = p.show(p[m].ir) }
@@ -112,7 +112,7 @@ public struct CompilerSession: Sendable {
       return
     }
     var frontEnd = r
-    frontEnd.diagnostics = p[m].diagnostics.flatMap(DiagnosticDescription.all(of:))
+    frontEnd.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init)
     reportFrontEnd(frontEnd)
 
     // The back end.

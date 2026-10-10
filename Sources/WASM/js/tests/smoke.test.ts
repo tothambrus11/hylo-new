@@ -108,6 +108,22 @@ test("throws what the front end's report threw, once compiling is done", () => {
   expect(hylo.compile({ source: "public fun main() -> Int32 { 1 }" }).error).toBeUndefined();
 });
 
+test("reports notes inside the diagnostic they belong to, once", () => {
+  const r = hylo.compile({
+    source: "public fun main() -> Int32 { let x = Int32(bogus: 1); return 0 }",
+    emit: [],
+  });
+  expect(r.diagnostics.map((d) => d.level)).toEqual(["error"]);
+  const [error] = r.diagnostics;
+  expect(error.notes.length).toBeGreaterThan(0);
+  // The notes are about the standard library's candidates, and rendered with the error.
+  for (const note of error.notes) {
+    expect(note.level).toBe("note");
+    expect(note.file).not.toBe("/main.hylo");
+    expect(error.rendered).toContain(note.message);
+  }
+});
+
 test("optimizes", () => {
   const r = hylo.compile({
     source: "public fun main() -> Int32 { 3 }",
