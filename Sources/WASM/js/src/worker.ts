@@ -15,8 +15,10 @@
  * It answers every `WorkerRequest` with a `result` message, and reports on loading with
  * `progress`, `ready` and `failed` messages; see `WorkerMessage`. A compiler that traps loses its
  * instance, and with it the compiled standard library; so does one that reports it cannot serve
- * further requests. The request is then answered with an error, and the compiler is loaded again
- * for the next.
+ * further requests. The request is then answered with an error and `compile.compilerUnusable`,
+ * and the compiler is instantiated again for the next, which is announced by another `ready`.
+ * Requests sent meanwhile wait for it. A compiler that fails to load (`failed`) is not loaded
+ * again: every later request is answered with an error, and the page replaces the worker.
  *
  * @module
  */
@@ -78,7 +80,7 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
     compiled = h.compile(request);
   } catch (e) {
     const error = `the compiler crashed (${describe(e)}); this is a compiler bug`;
-    fail(id, error);
+    fail(id, error, { compilerUnusable: true });
     start();
     return;
   }
@@ -94,12 +96,21 @@ async function serve(id: number, request: WorkerRequest["request"], run: boolean
   });
 }
 
-/** Answers request `id` with `error`, saying why it could not be served. */
-function fail(id: number, error: string): void {
+/**
+ * Answers request `id` with `error`, saying why it could not be served, and with
+ * `compilerUnusable` if the compiler is being replaced because of it.
+ */
+function fail(id: number, error: string, { compilerUnusable = false } = {}): void {
   send({
     type: "result",
     id,
-    compile: { diagnostics: [], artifacts: {}, error, milliseconds: 0 },
+    compile: {
+      diagnostics: [],
+      artifacts: {},
+      error,
+      ...(compilerUnusable && { compilerUnusable }),
+      milliseconds: 0,
+    },
     run: null,
   });
 }
