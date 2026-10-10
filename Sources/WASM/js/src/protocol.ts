@@ -37,7 +37,10 @@ export interface Diagnostic {
   /** The file containing the issue. */
   file: string;
   site: { line: number; column: number; endLine: number; endColumn: number };
-  /** The diagnostic as the command-line compiler renders it, without styling, its notes included. */
+  /**
+   * The diagnostic as the command-line compiler renders it, without styling or a final newline,
+   * its notes included.
+   */
   rendered: string;
   /**
    * The notes attached to the diagnostic, which may be in other files than the program's, such as
