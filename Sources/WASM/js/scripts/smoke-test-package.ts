@@ -51,7 +51,9 @@ try {
     "use.mjs": `import assert from "node:assert/strict";
 import { load } from "${name}";
 
-for (const entry of ["${name}/worker", "${name}/protocol"]) import.meta.resolve(entry);
+for (const entry of ["${name}/compiler-worker", "${name}/program-worker", "${name}/protocol"]) {
+  import.meta.resolve(entry);
+}
 
 const hylo = await load();
 const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }", emit: ["executable", "llvm"] });
@@ -66,12 +68,12 @@ assert.equal((await hylo.run(r.executable)).exitCode, 42);
   // Types.
   write(project, {
     "use.ts": `import { load, type Compiler } from "${name}";
-import type { CompileRequest, WorkerMessage } from "${name}/protocol";
+import type { CompileRequest, CompilerWorkerMessage } from "${name}/protocol";
 
 const request: CompileRequest = { source: "public fun main() {}", emit: ["ir"] };
 const hylo: Compiler = await load();
 const ir: string | undefined = hylo.compile(request).artifacts.ir;
-export const message: WorkerMessage | string | undefined = ir;
+export const message: CompilerWorkerMessage | string | undefined = ir;
 `,
     "tsconfig.json": JSON.stringify({
       compilerOptions: {
@@ -92,7 +94,8 @@ export const message: WorkerMessage | string | undefined = ir;
   write(project, {
     "index.html": `<!doctype html><script type="module" src="./main.js"></script>`,
     "main.js": `import { load } from "${name}";
-import HyloWorker from "${name}/worker?worker";
+import CompilerWorker from "${name}/compiler-worker?worker";
+import ProgramWorker from "${name}/program-worker?worker";
 
 const source = "public fun main() -> Int32 { 42 }";
 
@@ -105,21 +108,41 @@ async function direct() {
 // Resolves to the stages the worker reported, then the exit status.
 function throughWorker() {
   return new Promise((resolve, reject) => {
-    const w = new HyloWorker();
+    const w = new CompilerWorker();
     const stages = [];
     w.onerror = (e) => reject(new Error(e.message));
     w.onmessage = ({ data }) => {
       if (data.type === "failed") reject(new Error(data.error));
       if (data.type === "stage") stages.push(data.stage);
       if (data.type === "result") {
-        resolve([...stages, data.run?.exitCode ?? JSON.stringify(data.compile)].join(" "));
+        resolve([...stages, data.execution?.exitCode ?? JSON.stringify(data.compilation)].join(" "));
       }
     };
     w.postMessage({ id: 1, request: { source, emit: ["ir", "executable"] } });
   });
 }
 
-window.outcome = Promise.all([direct(), throughWorker()]);
+// Resolves to the exit status of the program compiled by the compiler's worker without running it,
+// and run by a program worker.
+function throughProgramWorker() {
+  return new Promise((resolve, reject) => {
+    const compiler = new CompilerWorker();
+    compiler.onerror = (e) => reject(new Error(e.message));
+    compiler.onmessage = ({ data }) => {
+      if (data.type === "failed") reject(new Error(data.error));
+      if (data.type !== "result") return;
+      if (!data.executable) return reject(new Error(JSON.stringify(data.compilation)));
+      const program = new ProgramWorker();
+      program.onerror = (e) => reject(new Error(e.message));
+      program.onmessage = ({ data: ran }) =>
+        ran.type === "ran" ? resolve(ran.execution.exitCode) : reject(new Error(ran.error));
+      program.postMessage({ id: 2, executable: data.executable }, [data.executable.buffer]);
+    };
+    compiler.postMessage({ id: 1, request: { source }, run: false });
+  });
+}
+
+window.outcome = Promise.all([direct(), throughWorker(), throughProgramWorker()]);
 `,
   });
   await build({ root: project, logLevel: "warn", build: { outDir: "dist" } });
@@ -150,14 +173,16 @@ window.outcome = Promise.all([direct(), throughWorker()]);
     page.on("pageerror", (e) => errors.push(e.message));
     await page.goto(`http://127.0.0.1:${typeof address === "object" ? address?.port : 0}/`);
     const outcome = await page.evaluate(() => (window as unknown as { outcome: unknown }).outcome);
-    if (JSON.stringify(outcome) !== '[42,"front-end back-end 42"]' || errors.length > 0) {
+    if (JSON.stringify(outcome) !== '[42,"front-end back-end 42",42]' || errors.length > 0) {
       throw new Error(`the page ended with ${JSON.stringify(outcome)} ${errors.join("\n")}`);
     }
   } finally {
     await browser.close();
     server.close();
   }
-  console.log(`${name}: compiled and ran a program in a page bundled with Vite, and in its worker`);
+  console.log(
+    `${name}: compiled and ran a program in a page bundled with Vite, and in its workers`,
+  );
 } finally {
   rmSync(project, { recursive: true, force: true });
 }

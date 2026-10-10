@@ -57,7 +57,8 @@ In Node, the `node` export condition selects a loader that reads the files from 
 | | |
 |---|---|
 | `@hylo-lang/hylo-wasm` | `load` the compiler, or `instantiate` one from its parts; `run` an executable. |
-| `@hylo-lang/hylo-wasm/worker` | A Web Worker hosting the compiler, so that a page's main thread never waits on it; with Vite, `import HyloWorker from "@hylo-lang/hylo-wasm/worker?worker"`. |
+| `@hylo-lang/hylo-wasm/compiler-worker` | A Web Worker hosting the compiler, so that a page's main thread never waits on it; with Vite, `import CompilerWorker from "@hylo-lang/hylo-wasm/compiler-worker?worker"`. |
+| `@hylo-lang/hylo-wasm/program-worker` | A Web Worker running the programs the compiler produced, so that a page can stop one by terminating it without losing the compiler; see `src/program-worker.ts`. |
 | `@hylo-lang/hylo-wasm/protocol` | The types of requests, answers, and worker messages. |
 
 

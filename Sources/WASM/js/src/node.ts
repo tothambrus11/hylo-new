@@ -5,9 +5,9 @@
  * ```ts
  * import { load } from "@hylo-lang/hylo-wasm";
  *
- * const hylo = await load();
- * const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }" });
- * const { exitCode } = await hylo.run(r.executable!);
+ * const compiler = await load();
+ * const response = compiler.compile({ source: "public fun main() -> Int32 { 42 }" });
+ * const { exitCode } = await compiler.run(response.executable!);
  * ```
  *
  * @module
@@ -28,8 +28,10 @@ export async function load(): Promise<Compiler> {
 /** Reads the compiler and compiles it, ready to `instantiate` as often as needed. */
 export async function loadParts(): Promise<CompilerParts> {
   const [compiler, standardLibrary, sysroot] = await Promise.all([
-    readFile(compilerFile).then((b) => WebAssembly.compile(new Uint8Array(b))),
-    readFile(standardLibraryFile, "utf8").then((t) => JSON.parse(t) as Record<string, string>),
+    readFile(compilerFile).then((bytes) => WebAssembly.compile(new Uint8Array(bytes))),
+    readFile(standardLibraryFile, "utf8").then(
+      (json) => JSON.parse(json) as Record<string, string>,
+    ),
     Promise.all(
       [...sysrootFiles].map(
         async ([name, url]) => [name, new Uint8Array(await readFile(url))] as const,

@@ -8,9 +8,9 @@
  * ```ts
  * import { load } from "@hylo-lang/hylo-wasm";
  *
- * const hylo = await load();
- * const r = hylo.compile({ source: "public fun main() -> Int32 { 42 }" });
- * const { exitCode } = await hylo.run(r.executable!);
+ * const compiler = await load();
+ * const response = compiler.compile({ source: "public fun main() -> Int32 { 42 }" });
+ * const { exitCode } = await compiler.run(response.executable!);
  * ```
  *
  * @module
@@ -44,20 +44,20 @@ export async function loadParts({ onProgress }: LoadOptions = {}): Promise<Compi
   const sysrootNames = [...sysrootFiles.keys()];
   const responses = await Promise.all(
     [compilerFile, standardLibraryFile, ...sysrootFiles.values()].map(async (url) => {
-      const r = await fetch(url);
-      if (!r.ok) throw new Error(`could not fetch ${url} (${r.status})`);
-      return r;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`could not fetch ${url} (${response.status})`);
+      return response;
     }),
   );
 
   // Progress is counted as the bodies arrive.
-  const sizes = responses.map((r) => Number(r.headers.get("content-length")));
-  const total = sizes.every((n) => n > 0) ? sizes.reduce((a, n) => a + n, 0) : 0;
+  const sizes = responses.map((response) => Number(response.headers.get("content-length")));
+  const total = sizes.every((size) => size > 0) ? sizes.reduce((sum, size) => sum + size, 0) : 0;
   let loaded = 0;
   const [compiler, standardLibrary, ...sysroot] = responses.map(
-    (r) =>
+    (response) =>
       new Response(
-        r.body!.pipeThrough(
+        response.body!.pipeThrough(
           new TransformStream<Uint8Array, Uint8Array>({
             transform(chunk, controller) {
               loaded += chunk.length;
@@ -66,7 +66,7 @@ export async function loadParts({ onProgress }: LoadOptions = {}): Promise<Compi
             },
           }),
         ),
-        { headers: r.headers },
+        { headers: response.headers },
       ),
   );
 
@@ -76,7 +76,8 @@ export async function loadParts({ onProgress }: LoadOptions = {}): Promise<Compi
     sysroot: new Map(
       await Promise.all(
         sysroot.map(
-          async (r, i) => [sysrootNames[i], new Uint8Array(await r.arrayBuffer())] as const,
+          async (response, i) =>
+            [sysrootNames[i], new Uint8Array(await response.arrayBuffer())] as const,
         ),
       ),
     ),
