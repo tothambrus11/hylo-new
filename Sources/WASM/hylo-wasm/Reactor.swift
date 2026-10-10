@@ -63,7 +63,7 @@ public func hylo_init(_ p: UnsafeRawPointer, _ n: Int32) -> UnsafeMutableRawPoin
     // A standard library that does not compile would make every request fail in confusing ways,
     // so the session is only installed once it is known to be sound.
     if s.diagnostics.contains(where: { $0.level == "error" }) {
-      let text = s.diagnostics.map(\.rendered).joined()
+      let text = s.diagnostics.map(\.rendered).joined(separator: "\n")
       return try encode(Failure(error: "the standard library does not compile:\n\(text)"))
     }
     session = s

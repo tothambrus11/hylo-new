@@ -43,14 +43,14 @@ public struct CompilerSession: Sendable {
     self.scratch = scratch
   }
 
-  /// Applies the front end's phases to `m`, up to refined IR or up to and including `last`, and
-  /// stops after the first phase that reports an error; calls `lowered` with `p` once `m` is
-  /// lowered, before its mandatory transformations.
+  /// Applies the front end's phases to `m`, up to refined IR or as far as `runs` allows, and stops
+  /// after the first phase that reports an error; calls `lowered` with `p` once `m` is lowered,
+  /// before its mandatory transformations.
   private static func compileToRefinedIR(
-    _ m: FrontEnd.Module.ID, in p: inout Program, through last: CompileRequest.Phase? = nil,
+    _ m: FrontEnd.Module.ID, in p: inout Program,
+    running runs: (CompileRequest.Phase) -> Bool = { (_) in true },
     lowered: (Program) -> Void = { (_) in }
   ) async {
-    let runs = { (q: CompileRequest.Phase) in last.map({ q <= $0 }) ?? true }
     if p[m].containsError || !runs(.scoping) { return }
     await p.assignScopes(m)
     if p[m].containsError || !runs(.typing) { return }
@@ -100,7 +100,7 @@ public struct CompilerSession: Sendable {
     // The front end, up to the phase the request asks for.
     defer { r.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init) }
     var rawIR: String? = nil
-    await Self.compileToRefinedIR(m, in: &p, through: request.stopAfter) { (p) in
+    await Self.compileToRefinedIR(m, in: &p, running: request.runs) { (p) in
       if request.wants(.rawIR) { rawIR = p.show(p[m].ir) }
     }
     r.artifacts["raw-ir"] = rawIR
@@ -111,9 +111,8 @@ public struct CompilerSession: Sendable {
     guard request.wants(.llvm) || request.wants(.assembly) || request.wants(.executable) else {
       return
     }
-    var frontEnd = r
-    frontEnd.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init)
-    reportFrontEnd(frontEnd)
+    r.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init)
+    reportFrontEnd(r)
 
     // The back end.
     do {

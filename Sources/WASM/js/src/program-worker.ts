@@ -18,6 +18,7 @@
  */
 
 import { run } from "./core.ts";
+import { describeThrown } from "./describe.ts";
 import type { ProgramWorkerRequest, ProgramWorkerResult } from "./protocol.ts";
 
 // The parts of a dedicated worker's global scope this uses; see `compiler-worker.ts`.
@@ -35,8 +36,7 @@ self.onmessage = ({
     try {
       self.postMessage({ type: "ran", id, execution: await run(executable, { args, stdin }) });
     } catch (thrown) {
-      const error = thrown instanceof Error ? (thrown.stack ?? thrown.message) : String(thrown);
-      self.postMessage({ type: "failed", id, error });
+      self.postMessage({ type: "failed", id, error: describeThrown(thrown) });
     }
   });
 };

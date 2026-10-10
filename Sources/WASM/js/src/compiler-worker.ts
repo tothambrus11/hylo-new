@@ -25,6 +25,7 @@
  * @module
  */
 
+import { describeThrown } from "./describe.ts";
 import { type Compiler, instantiate, loadParts } from "./index.ts";
 import type {
   CompileRequest,
@@ -57,7 +58,7 @@ function instantiateCompiler(): void {
   instantiation.then(
     (compiler) =>
       send({ type: "ready", standardLibraryMilliseconds: compiler.standardLibraryMilliseconds }),
-    (error) => send({ type: "failed", error: describe(error) }),
+    (error) => send({ type: "failed", error: describeThrown(error) }),
   );
 }
 instantiateCompiler();
@@ -68,7 +69,9 @@ let queue = Promise.resolve();
 self.onmessage = ({ data: { id, request, run = true } }: MessageEvent<CompilerWorkerRequest>) => {
   queue = queue
     .then(() => serve(id, request, run))
-    .catch((error) => answerWithError(id, `the request could not be served: ${describe(error)}`));
+    .catch((error) =>
+      answerWithError(id, `the request could not be served: ${describeThrown(error)}`),
+    );
 };
 
 /**
@@ -81,7 +84,7 @@ async function serve(id: number, request: CompileRequest, run: boolean): Promise
   try {
     compiler = await instantiation;
   } catch (error) {
-    answerWithError(id, `the compiler failed to load: ${describe(error)}`);
+    answerWithError(id, `the compiler failed to load: ${describeThrown(error)}`);
     return;
   }
 
@@ -91,7 +94,7 @@ async function serve(id: number, request: CompileRequest, run: boolean): Promise
       onFrontEnd: (compilation) => send({ type: "stage", id, stage: "front-end", compilation }),
     });
   } catch (error) {
-    const reason = `the compiler crashed (${describe(error)}); this is a compiler bug`;
+    const reason = `the compiler crashed (${describeThrown(error)}); this is a compiler bug`;
     answerWithError(id, reason, { compilerUnusable: true });
     instantiateCompiler();
     return;
@@ -131,9 +134,4 @@ function answerWithError(id: number, error: string, { compilerUnusable = false }
     },
     execution: null,
   });
-}
-
-/** Returns a description of `thrown`, a thrown value. */
-function describe(thrown: unknown): string {
-  return thrown instanceof Error ? (thrown.stack ?? thrown.message) : String(thrown);
 }

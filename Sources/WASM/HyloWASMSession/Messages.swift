@@ -26,14 +26,14 @@ public struct CompileRequest: Decodable, Sendable {
   }
 
   /// A phase of compilation after which a request can stop.
-  public enum Phase: String, Codable, Sendable, Comparable {
+  public enum Phase: String, Codable, Sendable, Comparable, CaseIterable {
 
+    /// The phases, in the order they run.
     case parsing, scoping, typing, lowering
 
     /// Returns `true` iff `l` happens before `r`.
     public static func < (l: Self, r: Self) -> Bool {
-      let order: [Self] = [.parsing, .scoping, .typing, .lowering]
-      return order.firstIndex(of: l)! < order.firstIndex(of: r)!
+      allCases.firstIndex(of: l)! < allCases.firstIndex(of: r)!
     }
 
   }
@@ -134,7 +134,8 @@ public struct DiagnosticDescription: Encodable, Sendable {
   /// Where the issue is.
   public let site: Region
 
-  /// The diagnostic as the command-line compiler renders it, without styling, its notes included.
+  /// The diagnostic as the command-line compiler renders it, without styling or a final newline,
+  /// its notes included.
   public let rendered: String
 
   /// The notes attached to the diagnostic, which may be in other files, such as the standard
@@ -149,7 +150,7 @@ public struct DiagnosticDescription: Encodable, Sendable {
     self.message = d.message
     self.file = d.site.source.name.url.path
     self.site = .init(d.site)
-    self.rendered = text
+    self.rendered = text.hasSuffix("\n") ? String(text.dropLast()) : text
     self.notes = d.notes.map(Self.init)
   }
 

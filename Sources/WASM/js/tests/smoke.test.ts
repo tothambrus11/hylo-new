@@ -115,6 +115,7 @@ test("reports notes inside the diagnostic they belong to, once", () => {
   });
   expect(r.diagnostics.map((d) => d.level)).toEqual(["error"]);
   const [error] = r.diagnostics;
+  expect(error.rendered).not.toMatch(/\n$/);
   expect(error.notes.length).toBeGreaterThan(0);
   // The notes are about the standard library's candidates, and rendered with the error.
   for (const note of error.notes) {
