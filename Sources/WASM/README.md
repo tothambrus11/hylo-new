@@ -30,9 +30,10 @@ Measured on a release build (`-Osize`, then `wasm-opt -Oz`), in Node 22 and head
 | compiling **and linking** a small program | 150–320 ms |
 | the resulting executable | ~10 KB |
 
-Every one of the compiler's single-file test cases (`Tests/CompilerTests`) passes through it:
-positive cases compile, link and run with the exit status or trap they expect, and negative cases
-report the same diagnostics as the native compiler, site for site. CI holds it to that.
+Every one of the compiler's test cases (`Tests/CompilerTests`) that is made of Hylo sources alone
+passes through it, those of several files included: positive cases compile, link and run with the
+exit status or trap they expect, and negative cases report the same diagnostics as the native
+compiler, site for site. CI holds it to that. (Their expected IR is not compared.)
 
 ## How it is put together
 

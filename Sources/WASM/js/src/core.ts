@@ -125,7 +125,7 @@ export async function instantiate({
     hylo_host: {
       front_end_done(address: number, length: number): void {
         try {
-          onFrontEnd?.(JSON.parse(readString(address, length)));
+          onFrontEnd?.(JSON.parse(readString(address >>> 0, length)));
         } catch (thrown) {
           thrownByOnFrontEnd.push(thrown);
         }
@@ -152,11 +152,13 @@ export async function instantiate({
   ): unknown => {
     if (unusable !== null) throw new Error(`the compiler cannot be used anymore: ${unusable}`);
     const request = new TextEncoder().encode(JSON.stringify(argument));
-    const requestAddress = exports.hylo_alloc(request.length);
+    // WebAssembly passes addresses as `i32`, which JavaScript reads as signed: one past 2 GiB would
+    // be negative unless read as unsigned.
+    const requestAddress = exports.hylo_alloc(request.length) >>> 0;
     new Uint8Array(exports.memory.buffer).set(request, requestAddress);
     let answerAddress: number;
     try {
-      answerAddress = exported(requestAddress, request.length);
+      answerAddress = exported(requestAddress, request.length) >>> 0;
     } catch (thrown) {
       // A trap leaves the instance's state wherever it was, so nothing more is asked of it.
       unusable = thrown instanceof Error ? thrown.message : String(thrown);
@@ -194,10 +196,13 @@ export async function instantiate({
       thrownByOnFrontEnd.length = 0;
       let response: Omit<CompileResponse, "executable"> & { executable?: string };
       try {
-        response = callExport(exports.hylo_compile, {
-          emit: ["executable"],
+        // The reactor requires `emit`, which the request may leave out or set to `undefined`.
+        const answer = callExport(exports.hylo_compile, {
           ...request,
-        }) as typeof response;
+          emit: request.emit ?? ["executable"],
+        }) as Partial<typeof response>;
+        // A request the reactor cannot decode is answered with an `error` alone.
+        response = { diagnostics: [], artifacts: {}, milliseconds: 0, ...answer };
       } finally {
         onFrontEnd = undefined;
       }

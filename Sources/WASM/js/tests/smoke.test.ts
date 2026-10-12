@@ -2,7 +2,7 @@
 // the same in-memory WASI file system a browser uses.
 
 import { beforeAll, expect, test } from "vitest";
-import type { Compiler } from "../src/index.ts";
+import type { CompileRequest, Compiler } from "../src/index.ts";
 import { compiler } from "./support.ts";
 
 let hylo: Compiler;
@@ -165,4 +165,69 @@ test("reports running out of stack as a trap", async () => {
   expect(x.exitCode).toBeNull();
   expect(x.trap).toBeDefined();
   expect(hylo.usable).toBe(true);
+});
+
+test("compiles a program of several files, which see each other's declarations", async () => {
+  const r = hylo.compile({
+    files: [
+      { name: "main.hylo", contents: "public fun main() -> Int32 { seven() }" },
+      { name: "geometry/seven.hylo", contents: "fun seven() -> Int32 { 7 }" },
+    ],
+  });
+  expect(r.error).toBeUndefined();
+  expect(r.diagnostics).toEqual([]);
+  expect((await hylo.run(r.executable!)).exitCode).toBe(7);
+});
+
+test("names the file a diagnostic is in", () => {
+  const r = hylo.compile({
+    files: [
+      { name: "main.hylo", contents: "public fun main() -> Int32 { 0 }" },
+      { name: "b.hylo", contents: "\nfun f() -> Int32 { undefined_name }" },
+    ],
+  });
+  expect(r.diagnostics.map((d) => [d.file, d.site.line, d.level])).toEqual([
+    ["/b.hylo", 2, "error"],
+  ]);
+  expect(r.diagnostics[0].rendered).toMatch(/^hylo:\/\/\/b\.hylo:2\.\d+/);
+});
+
+test.each([
+  ["neither `source` nor `files`", {}, "neither `source` nor `files`"],
+  ["both `source` and `files`", { source: "", files: [{ name: "a.hylo", contents: "" }] }, "both"],
+  ["no files", { files: [] }, "`files` is empty"],
+  ["a file without a name", { files: [{ name: "", contents: "" }] }, "empty name"],
+  [
+    "two files of the same name",
+    {
+      files: [
+        { name: "a.hylo", contents: "" },
+        { name: "a.hylo", contents: "" },
+      ],
+    },
+    "two files are named 'a.hylo'",
+  ],
+  [
+    "two files whose names differ only in characters diagnostics replace",
+    {
+      files: [
+        { name: "a b.hylo", contents: "" },
+        { name: "a?b.hylo", contents: "" },
+      ],
+    },
+    "too similar",
+  ],
+  ["a request the compiler cannot decode", { source: "", optimization: 1.5 }, ""],
+])("refuses a request with %s, answering in full, and serves the next", (_, request, error) => {
+  const r = hylo.compile(request as CompileRequest);
+  expect(r.error).toContain(error);
+  expect(r).toMatchObject({ diagnostics: [], artifacts: {} });
+  expect(r.compilerUnusable).toBeFalsy();
+  expect(hylo.compile({ source: "public fun main() -> Int32 { 0 }" }).error).toBeUndefined();
+});
+
+test("produces an executable when `emit` is set to `undefined`", async () => {
+  const r = hylo.compile({ source: "public fun main() -> Int32 { 3 }", emit: undefined });
+  expect(r.error).toBeUndefined();
+  expect((await hylo.run(r.executable!)).exitCode).toBe(3);
 });

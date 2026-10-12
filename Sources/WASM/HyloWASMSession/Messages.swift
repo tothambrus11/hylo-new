@@ -38,8 +38,26 @@ public struct CompileRequest: Decodable, Sendable {
 
   }
 
-  /// The program's source, as a single file depending on the standard library.
-  public let source: String
+  /// A source file of a program.
+  public struct File: Decodable, Sendable {
+
+    /// The file's name, such as `main.hylo` or `geometry/point.hylo`, which diagnostics name.
+    public let name: String
+
+    /// The file's contents.
+    public let contents: String
+
+  }
+
+  /// The program's source, as a single file called `main.hylo`; `nil` iff `files` is given.
+  public let source: String?
+
+  /// The program's source files, in the order the compiler reads them; `nil` iff `source` is
+  /// given.
+  ///
+  /// The files form a single module, so each sees the declarations of the others. Their names
+  /// must be distinct.
+  public let files: [File]?
 
   /// The artifacts to produce; only diagnostics are produced if empty.
   public let emit: [Artifact]
@@ -52,6 +70,29 @@ public struct CompileRequest: Decodable, Sendable {
 
   /// The phase after which compilation stops, or `nil` to compile everything `emit` requires.
   public let stopAfter: Phase?
+
+  /// The program's source files, in order, or a description of why `self` names none or names
+  /// them ambiguously.
+  internal var sourceFiles: Result<[File], RequestError> {
+    switch (source, files) {
+    case (let s?, nil):
+      return .success([File(name: "main.hylo", contents: s)])
+    case (nil, let fs?):
+      if fs.isEmpty { return .failure(.init("`files` is empty")) }
+      var seen = Set<String>()
+      for f in fs {
+        if f.name.isEmpty { return .failure(.init("a file has an empty name")) }
+        if !seen.insert(f.name).inserted {
+          return .failure(.init("two files are named '\(f.name)'"))
+        }
+      }
+      return .success(fs)
+    case (nil, nil):
+      return .failure(.init("the request has neither `source` nor `files`"))
+    case (_?, _?):
+      return .failure(.init("the request has both `source` and `files`"))
+    }
+  }
 
   /// Returns `true` iff `self` asks for phase `p` to run.
   internal func runs(_ p: Phase) -> Bool {
@@ -72,6 +113,17 @@ public struct CompileRequest: Decodable, Sendable {
     default: .aggressive
     }
   }
+
+}
+
+/// A request that cannot be served as it is written.
+internal struct RequestError: Error, CustomStringConvertible {
+
+  /// What is wrong with the request.
+  let description: String
+
+  /// Creates an instance saying `description`.
+  init(_ description: String) { self.description = description }
 
 }
 

@@ -90,12 +90,27 @@ public struct CompilerSession: Sendable {
     _ request: CompileRequest, into r: inout CompileResponse,
     reportingFrontEnd reportFrontEnd: (CompileResponse) -> Void
   ) async {
+    let files: [CompileRequest.File]
+    switch request.sourceFiles {
+    case .success(let fs): files = fs
+    case .failure(let e): r.error = e.description; return
+    }
+    // Names that differ only in characters `virtualURL` replaces would name the same file.
+    var urls = [URL: String]()
+    for f in files {
+      if let other = urls.updateValue(f.name, forKey: virtualURL(f.name)) {
+        r.error = "the file names '\(other)' and '\(f.name)' are too similar to tell apart"
+        return
+      }
+    }
+
     let usesStandardLibrary = request.standardLibrary ?? true
     var p = usesStandardLibrary ? baseline : Program()
     let m = p.demandModule(.init("Main"))
     if usesStandardLibrary { p[m].addDependency(FrontEnd.Module.standardLibraryName) }
-    let main = SourceFile(name: .virtual(virtualURL("main.hylo")), contents: request.source)
-    _ = p[m].addSource(main)
+    for f in files {
+      _ = p[m].addSource(SourceFile(name: .virtual(virtualURL(f.name)), contents: f.contents))
+    }
 
     // The front end, up to the phase the request asks for.
     defer { r.diagnostics = p[m].diagnostics.map(DiagnosticDescription.init) }

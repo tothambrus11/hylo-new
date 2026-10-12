@@ -13,10 +13,42 @@ export type Artifact = "raw-ir" | "ir" | "llvm" | "assembly";
 /** A phase of compilation after which a request can stop. */
 export type Phase = "parsing" | "scoping" | "typing" | "lowering";
 
-/** A request to compile a program. */
-export interface CompileRequest {
-  /** The program's source, as a single file. */
-  source: string;
+/** A source file of a program. */
+export interface SourceFile {
+  /**
+   * The file's name, such as `main.hylo` or `geometry/point.hylo`, by which diagnostics name it
+   * (as `/main.hylo`).
+   */
+  name: string;
+  /** The file's contents. */
+  contents: string;
+}
+
+/**
+ * A request to compile a program, given either as a single file, `source`, or as several,
+ * `files`.
+ */
+export type CompileRequest = CompileSettings &
+  (
+    | {
+        /** The program's source, as a single file called `main.hylo`. */
+        source: string;
+        files?: never;
+      }
+    | {
+        /**
+         * The program's source files, in the order the compiler reads them. They form a single
+         * module, so each sees the declarations of the others. Their names must be distinct, and
+         * not differ only in characters other than letters, marks, numbers and `-._~/`, which the
+         * compiler replaces in diagnostics.
+         */
+        files: SourceFile[];
+        source?: never;
+      }
+  );
+
+/** How a `CompileRequest` compiles its program. */
+export interface CompileSettings {
   /** The artifacts to produce: by default, only an executable. */
   emit?: (Artifact | "executable")[];
   /** LLVM's optimization level, from 0 (the default) to 3. */
