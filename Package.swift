@@ -35,7 +35,7 @@ let package = Package(
       from: "1.2.0"),
     .package(
       url: "https://github.com/apple/swift-argument-parser.git",
-      from: "1.1.4"),
+      from: "1.7.0"),
     .package(
       url: "https://github.com/apple/swift-collections.git",
       from: "1.1.0"),
@@ -200,6 +200,7 @@ let package = Package(
       name: "BackEndTests",
       dependencies: [
         .target(name: "BackEnd"),
+        .product(name: "BigInt", package: "BigInt"),
         .target(name: "Driver"),
         .target(name: "HostUtilities"),
         .target(name: "Utilities"),
@@ -251,3 +252,62 @@ let package = Package(
         .target(name: "hc-generate-stdlib"),
       ]),
   ])
+
+// The compiler built for WebAssembly, to run in a browser, which the website's playground runs.
+// Its targets exist only when the manifest is evaluated with `LLVM_WASM_PREFIX` naming an LLVM
+// built to run in WebAssembly, which `Sources/WASM/scripts/build-compiler.sh` sets: they compile
+// against that LLVM, so no other build could build them. See `Sources/WASM/README.md`.
+if let llvm = Context.environment["LLVM_WASM_PREFIX"] {
+  package.products.append(.executable(name: "hylo-wasm", targets: ["hylo-wasm"]))
+  package.targets += [
+    // The browser transport: functions exported from a WebAssembly reactor.
+    .executableTarget(
+      name: "hylo-wasm",
+      dependencies: [
+        .target(name: "HyloWASMSession")
+      ],
+      path: "Sources/WASM/hylo-wasm",
+      // `Extern` declares the functions the reactor imports from its host.
+      swiftSettings: commonSwiftSettings + [.enableExperimentalFeature("Extern")],
+      linkerSettings: [
+        .unsafeFlags([
+          "-Xclang-linker", "-mexec-model=reactor",
+          // `build-compiler.sh` runs wasm-opt on the module; clang would otherwise run it too,
+          // whenever it is on `PATH`, which takes minutes and gains nothing.
+          "-Xclang-linker", "--no-wasm-opt",
+          // LLVM reaches mmap in code the compiler never runs; wasi-libc emulates it.
+          "-Xlinker", "-lwasi-emulated-mman",
+          // Compiling takes more stack than the default 64 KiB. (`--stack-first`, which would make
+          // an overflow trap instead of corrupting data, conflicts with the `--global-base` that
+          // the Swift driver passes.)
+          "-Xlinker", "-z", "-Xlinker", "stack-size=8388608",
+        ])
+      ]),
+
+    // What compiling a program is, independently of how a request arrives.
+    .target(
+      name: "HyloWASMSession",
+      dependencies: [
+        .target(name: "BackEnd"),
+        .target(name: "FrontEnd"),
+        .target(name: "WASMLinker"),
+        .product(name: "SwiftyLLVM", package: "Swifty-LLVM"),
+      ],
+      path: "Sources/WASM/HyloWASMSession",
+      swiftSettings: commonSwiftSettings),
+
+    // lld's WebAssembly port, called in-process. Swifty-LLVM finds LLVM through the `llvm.pc` in
+    // `LLVM_WASM_PREFIX`; this needs lld's headers from it too.
+    .target(
+      name: "WASMLinker",
+      path: "Sources/WASM/WASMLinker",
+      cxxSettings: [
+        .unsafeFlags([
+          "-I", "\(llvm)/include",
+          // Configures libc++ the way LLVM was compiled; see llvm-build's docs/wasm.md.
+          "-I", "\(llvm)/libcxx-threads",
+          "-std=c++20", "-fno-exceptions", "-fno-rtti",
+        ])
+      ]),
+  ]
+}

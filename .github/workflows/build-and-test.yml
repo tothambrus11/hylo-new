@@ -156,3 +156,24 @@ jobs:
         run: |
           BIN=$(swift build --swift-sdk swift-6.3.2-RELEASE_wasm --show-bin-path)
           wasmtime run --dir "$BIN::$BIN" "$BIN/frontend-smoke-test.wasm"
+
+  wasm-compiler:
+    name: "Compiler on WebAssembly"
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: recursive
+
+      - name: Build and check the compiler for WebAssembly
+        id: wasm
+        uses: ./.github/actions/wasm-compiler
+
+      # The package, for trying it out before it is published, such as in the website.
+      - uses: actions/upload-artifact@v7
+        with:
+          name: hylo-wasm-package
+          path: ${{ steps.wasm.outputs.tarball }}
+          if-no-files-found: error
+          retention-days: 14

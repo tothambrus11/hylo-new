@@ -1,0 +1,65 @@
+{
+  "name": "@hylo-lang/hylo-wasm",
+  "version": "0.0.0",
+  "description": "Compile and run Hylo programs in a browser or in Node, with the Hylo compiler compiled to WebAssembly.",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hylo-lang/hylo-new.git",
+    "directory": "Sources/WASM/js"
+  },
+  "type": "module",
+  "exports": {
+    ".": {
+      "node": {
+        "types": "./dist/node.d.ts",
+        "default": "./dist/node.js"
+      },
+      "default": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      }
+    },
+    "./compiler-worker": {
+      "types": "./dist/compiler-worker.d.ts",
+      "default": "./dist/compiler-worker.js"
+    },
+    "./program-worker": {
+      "types": "./dist/program-worker.d.ts",
+      "default": "./dist/program-worker.js"
+    },
+    "./protocol": {
+      "types": "./dist/protocol.d.ts",
+      "default": "./dist/protocol.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "provenance": true
+  },
+  "scripts": {
+    "build": "tsdown && cp \"${HYLO_WASM_DIST:-../../../.build/wasm/compiler}\"/* dist/",
+    "typecheck": "tsc --noEmit",
+    "lint": "oxlint",
+    "format": "oxfmt src tests scripts",
+    "format:check": "oxfmt --check src tests scripts",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@bjorn3/browser_wasi_shim": "^0.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.1",
+    "oxfmt": "^0.72.0",
+    "oxlint": "^1.87.0",
+    "playwright": "^1.64.0",
+    "tsdown": "^0.23.0",
+    "typescript": "^5.9.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.3"
+  }
+}

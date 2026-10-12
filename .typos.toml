@@ -7,6 +7,8 @@
 extend-exclude = [
   "Swifty-LLVM",
   "*-ir.expected",
+  # Patches to LLVM quote its sources, whose spelling is managed upstream.
+  "*.patch",
 ]
 
 [default.extend-identifiers]
