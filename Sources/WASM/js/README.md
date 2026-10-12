@@ -23,6 +23,18 @@ const { exitCode, stdout, trap } = await hylo.run(r.executable!);
 Loading compiles the standard library, which takes a few seconds; every `compile` after that takes
 a fraction of a second.
 
+A program of several files gives them as `files` rather than `source`. They form one module, in
+which each file sees the others' declarations, and diagnostics name them (as `/main.hylo`):
+
+```ts
+hylo.compile({
+  files: [
+    { name: "main.hylo", contents: "public fun main() -> Int32 { seven() }" },
+    { name: "geometry/seven.hylo", contents: "fun seven() -> Int32 { 7 }" },
+  ],
+});
+```
+
 ## Serving the compiler
 
 The compiler's files sit next to the loader in `dist/`, and the loader refers to each with
