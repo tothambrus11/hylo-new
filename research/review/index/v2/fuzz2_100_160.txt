@@ -35,3 +35,6 @@ seed 133: base=timeout diags=0 index=same
 seed 134: base=timeout diags=0 index=same
 seed 135: base=ok diags=6 index=same
 seed 136: base=ok diags=9 index=same
+seed 137: base=timeout diags=0 index=same
+seed 138: base=ok diags=3 index=same
+seed 139: base=ok diags=1 index=same
