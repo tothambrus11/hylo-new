@@ -73,6 +73,14 @@ let package = Package(
       swiftSettings: commonSwiftSettings),
 
     .executableTarget(
+      name: "tc-bench",
+      dependencies: [
+        .target(name: "FrontEnd"),
+        .target(name: "StandardLibrary"),
+      ],
+      swiftSettings: commonSwiftSettings),
+
+    .executableTarget(
       name: "frontend-smoke-test",
       dependencies: [
         .target(name: "FrontEnd"),

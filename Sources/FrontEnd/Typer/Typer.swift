@@ -3575,8 +3575,10 @@ public struct Typer {
   internal mutating func summon(
     _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity
   ) -> [SummonResult] {
+    TyperCounters.bump("summon.calls")
     // Did we already compute the result?
     if let table = cache.scopeToSummoned[scopeOfUse], let result = table[t] {
+      TyperCounters.bump("summon.cacheHits")
       return result
     }
 
@@ -3700,6 +3702,7 @@ public struct Typer {
     _ thread: ResolutionThread, in scopeOfUse: ScopeIdentity
   ) -> ResolutionThread.Advanced {
     assert(!program.types.hasContext(thread.witness.type))
+    TyperCounters.bump("summon.matches")
     let (a, b) = (thread.witness.type, thread.queried)
 
     // The witness has a simple type; attempt a match.
@@ -3713,6 +3716,7 @@ public struct Typer {
     // No coercion required?
     if coercions.isEmpty {
       let s = thread.environment.substitutions.union(substitutions)
+      TyperCounters.bump("summon.matchOK")
       let w = program.types.reify(thread.witness, applying: s, withVariables: .kept)
       if w.type[.hasError] { return .next([]) }
 
@@ -3933,6 +3937,7 @@ public struct Typer {
     // Slow path: compute an elaboration.
     let scopeOfUse = program.parent(containing: e)
     let root = WitnessExpression(value: .identity(e), type: head)
+    TyperCounters.bump("coerced.slowPath")
     var threads = [formThread(matching: root, to: goal, in: .empty)]
 
     if canDeriveCoercions(root.type, goal, in: scopeOfUse, where: .empty) {
