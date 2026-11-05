@@ -16,7 +16,7 @@ const PERF = (args && args.perf) || 'perf'
 
 const COMMON = `
 You are reviewing research optimizations to the Hylo compiler's type checker (Swift).
-Repo: ${REPO} (branch tc-perf-research, changes are UNCOMMITTED; full diff in ${RES}/tc-experiments.patch).
+Repo: ${REPO} (git branch with all experiments committed; see the full change with \`git -C ${REPO} diff origin/main -- Sources\`; per-flag branches: origin/tc/names, tc/unify, tc/solver, tc/resolution, all stacked on tc/infra).
 Write-up with all claims: ${RES}/REPORT.md. Original question: ${RES}/intro.md (not committed: ask the user for it; summary in ${RES}/HANDOFF.md). Literature notes: ${RES}/lit-resolution.md, lit-solver-names.md, papers in research/papers/md/.
 Each optimization is behind a runtime flag: env HYLO_TC_EXPERIMENTS=comma,list from {names,unify,index,absmodel,solver,loopcheck}; HYLO_TC_ABSDEPTH=2 is the depth used for absmodel. Flag definitions: Sources/FrontEnd/Typer/TyperCounters.swift.
 Main changed files: Sources/FrontEnd/Typer/Typer.swift, Solver.swift, AbstractResolution.swift, Sources/FrontEnd/Types/TypeStore.swift.
@@ -24,12 +24,15 @@ Main changed files: Sources/FrontEnd/Typer/Typer.swift, Solver.swift, AbstractRe
 DEFINITION OF SOUND: an optimization is sound iff, for every program, the type checker produces exactly the same elaboration (types of all syntax trees, name→declaration bindings including implicit/witness arguments, witness tables) and the same diagnostics as with the flag off (or differs only where the baseline is itself broken, e.g. a crash or depth-cap; such cases must be called out explicitly). Resolution must stay deterministic and pick the same (smallest/highest-priority) proof term.
 
 ORACLE (use it!): a frozen release binary with a semantic-dump mode. To test a program under configurations against the baseline:
-  cd ${RES}/exp && python3 tcx.py semtest --bin ${BINID} --jobs 3 --env '{"HYLO_TC_ABSDEPTH":"2"}' --configs "index;names,index" --files /path/to/a.hylo /path/to/b.hylo
+  cd ${RES}/exp && python3 tcx.py semtest --bin ${BINID} --jobs 2 --env '{"HYLO_TC_ABSDEPTH":"2"}' --configs "index;names,index" --files /path/to/a.hylo /path/to/b.hylo
 It prints per config "N/M identical" and a unified diff of the dump for mismatches (exit 1 on any mismatch). Lines look like "file:node : Type", "file:node -> Declaration", "file:node witness...", "diag ...". To inspect raw output: ${RES}/exp/bin/${BINID}/tc-bench --quiet --dump OUT.txt prog.hylo (the stdlib is typed first, then the user file; prefix the command with HYLO_TC_EXPERIMENTS=... to enable flags).
 Already established: the 'names' review is done (see ${RES}/review/RESULTS-partial.md: names diverges on programs with cyclic extendee dependencies because skipping applies() changes evaluation order). On all 192 single-file tests in Tests/CompilerTests/{positive,negative} plus research/workloads/*.hylo, every flag alone is dump-identical EXCEPT solver (and configs containing it), which differs on positive/overload-priority.hylo: node 0:75 (the call a.f() in 'let z = a.f() as A<Void>') is typed 'X' in the baseline but 'A<Void>' with solver (X is an associated-type alias = A<Void>).
 Hylo syntax: see Tests/CompilerTests/positive/*.hylo for many examples (traits, given/conformances, implicit parameters, extensions, overloading, coercions, generics); research/scripts/gen.py generates stress workloads. Note "fun f(x: T)" means an unlabeled parameter in this version.
 
-RULES: The working tree is shared with other reviewers. Do NOT edit anything under ${REPO} and do NOT run swift build/test there. Put every file you create under ${RES}/review/<your-topic>/ . Keep --jobs at 3 or below. Never compile the compiler anywhere (no swift build, no repo copies): parallel builds by several agents exhausted memory and crashed the machine. The frozen tc-bench wrapper caps memory at 2.5 GB. Do not attempt precise timing measurements (a controlled benchmark runs separately); rough counters via 'tc-bench --count' are fine.
+PREVIOUS ATTEMPT: an earlier run of this review was interrupted by machine crashes before reporting. Files it left (test programs, oracle outputs) may already be in ${RES}/review/<your-topic>/ — read them first and reuse them (their absolute paths mention /home/hylo/hylo-tc; the same files are now under ${RES}). Do not trust any conclusion they contain without re-running it.
+MACHINE: 4 cores, 15 GB RAM, shared with other reviewers. perf is NOT installed; use the profiles in ${RES}/profile/*.txt.
+
+RULES: The working tree is shared with other reviewers. Do NOT edit anything under ${REPO} and do NOT run swift build/test there. Put every file you create under ${RES}/review/<your-topic>/ . Keep --jobs at 2 or below. Never compile the compiler anywhere (no swift build, no repo copies): parallel builds by several agents exhausted memory and crashed the machine. The frozen tc-bench wrapper caps memory at 2.5 GB. Do not attempt precise timing measurements (a controlled benchmark runs separately); rough counters via 'tc-bench --count' are fine.
 
 METHOD: (1) Read the implementation of your technique carefully, line by line, and the REPORT.md section about it. (2) State the soundness argument precisely and look for every way it can break: ordering/penalties/tie-breaking changes, missed candidates, cache keys that are too coarse, scope/visibility differences, generic/existential/associated types, coercions and equality, implicit parameters, recursion, extensions with where-clauses, conditional conformances, aliases, tuples, metatypes, error recovery paths, incrementality/memo invalidation, mutation-order hazards in Swift (e.g. reading program.types before a mutating call). (3) Try hard to construct counterexample Hylo programs and run them through the oracle; a confirmed counterexample is worth far more than a hypothesis. Write at least 8 targeted test programs. (4) Also note where the technique is redundant with another one (overlapping benefit) or adds overhead that might not pay off, and any performance bug (e.g. index fallback taken too often, cache never hit). (5) Report.
 Every finding needs concrete evidence: a repro file path + oracle output, or exact code lines and a precise argument. Say 'no issue found' for areas you checked and found sound — list them in checked_ok.`
@@ -77,6 +80,7 @@ const VERDICT = {
   required: ['confirmed', 'severity', 'reasoning', 'reproduced', 'fix'],
 }
 
+const MAXV = (args && args.maxVerify) || 3  // verifiers per topic (most severe first)
 const ONLY = args && args.topics  // e.g. ['unify','index','absmodel','solver','loopcheck','claims']
 const results = await pipeline(
   ONLY ? TOPICS.filter(t => ONLY.includes(t.key)) : TOPICS,
@@ -84,10 +88,11 @@ const results = await pipeline(
     { label: `review:${t.key}`, phase: 'Review', schema: FINDINGS }),
   (rev, t) => {
     if (!rev) return null
-    const toVerify = rev.findings.filter(f => f.severity !== 'info')
+    const rank = { critical: 0, major: 1, minor: 2 }
+    const toVerify = rev.findings.filter(f => f.severity !== 'info').sort((a, b) => rank[a.severity] - rank[b.severity]).slice(0, MAXV)
     return parallel(toVerify.map(f => () => agent(`${COMMON}\n\nYou are an independent skeptic. Another reviewer (topic ${t.key}) reported the finding below. Try to REFUTE it: re-run any repro with the oracle, read the cited code yourself, and check whether the claimed behavior really differs from the baseline or the claim is really wrong. If uncertain, say confirmed=false. Also propose the best concrete fix. Scratch dir: ${RES}/review/${t.key}/verify-${f.id}/\n\nFINDING:\n${JSON.stringify(f, null, 1)}`,
       { label: `verify:${t.key}:${f.id}`, phase: 'Verify', schema: VERDICT }).then(v => ({ ...f, verdict: v }))))
-      .then(vs => ({ topic: t.key, verdict: rev.verdict, soundness_argument: rev.soundness_argument, checked_ok: rev.checked_ok, tests_written: rev.tests_written, redundancy_notes: rev.redundancy_notes, info: rev.findings.filter(f => f.severity === 'info'), verified: vs.filter(Boolean) }))
+      .then(vs => ({ topic: t.key, verdict: rev.verdict, soundness_argument: rev.soundness_argument, checked_ok: rev.checked_ok, tests_written: rev.tests_written, redundancy_notes: rev.redundancy_notes, info: rev.findings.filter(f => f.severity === 'info' || !toVerify.includes(f)), verified: vs.filter(Boolean) }))
   },
 )
 return results.filter(Boolean)

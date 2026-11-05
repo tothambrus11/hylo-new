@@ -15,13 +15,13 @@ const BINID = (args && args.binid) || 'REPLACE_WITH_FROZEN_BINARY_ID'
 const PERF = (args && args.perf) || 'perf'
 
 const CTX = `
-Context: research on speeding up the Hylo compiler's type checker (Swift). Repo ${REPO} (uncommitted changes on branch tc-perf-research; diff in ${RES}/tc-experiments.patch). Write-up: ${RES}/REPORT.md. Literature notes: ${RES}/lit-resolution.md, lit-solver-names.md, research/papers/md/.
+Context: research on speeding up the Hylo compiler's type checker (Swift). Repo ${REPO} (all experiments committed; see \`git -C ${REPO} diff origin/main -- Sources\`). Write-up: ${RES}/REPORT.md. Literature notes: ${RES}/lit-resolution.md, lit-solver-names.md, research/papers/md/.
 Six optimizations already exist behind env flags HYLO_TC_EXPERIMENTS=names,unify,index,absmodel,solver,loopcheck (see REPORT.md §5). With all on, stdlib typing went 461 ms → ~160 ms.
 FRESH PROFILES with all six flags on (perf, 4 kHz, frame-pointer call graphs, symbolized self% and inclusive%):
   ${RES}/profile/allon.txt (stdlib only, 5 repeats incl. parsing)
   ${RES}/profile/members-big.txt, breadth80.txt, ovl-8-8.txt, ovr-3-10.txt (stress workloads in research/workloads/, generator research/scripts/gen.py)
 Notable already: Program.initializeStandardLibraryCaches() ≈14% inclusive of the whole stdlib run (it calls select(from:.symbol(name)) once per StandardLibraryEntity, each scanning all stdlib syntax with 'as? any Annotatable' casts); canDeriveCoercions ≈12.6%; resolve(memberOf:) 30%; swift_dynamicCast 18% inclusive; retain/release ~20% self; TupleCache getOrInsert 3.7% self (runtime tuple metadata instantiation in unspecialized generic code); TypeStore.subscript.getter 8.9%; on members-big, specialized resolve<A>(declaredIn:applyingTo:...) 41% and Dictionary.find 16%; on breadth80, evaluateTypeAscription/declaredType 27% and StableDictionary.assignValue 12%.
-A frozen binary for experiments: ${RES}/exp/bin/${BINID}/tc-bench (usage: [HYLO_TC_EXPERIMENTS=..] tc-bench [--count] [--quiet] [--repeat N] [--dump out.txt] file.hylo). You may run perf: ${PERF} record -F 4000 -g -o X.data <cmd>; then python3 ${RES}/scripts/perfsym.py <perf> X.data 60 to symbolize. Put any file you create under ${RES}/ideas/<your-lens>/. Do NOT edit hylo-new, and do NOT compile the compiler ANYWHERE (no copies of the repo, no swift build): parallel builds exhausted the machine's memory and crashed it. Reason from code, counters (--count), profiles and the frozen binary only. If earlier attempts left a copy of the repo under research/ideas/<lens>/hylo, you may read it but delete its .build directory.
+A frozen binary for experiments: ${RES}/exp/bin/${BINID}/tc-bench (usage: [HYLO_TC_EXPERIMENTS=..] tc-bench [--count] [--quiet] [--repeat N] [--dump out.txt] file.hylo). perf is NOT installed on this machine (4 cores, 15 GB, shared): rely on the existing symbolized profiles above, on counters (--count) and on code reading. Results already finished in an earlier, interrupted run of this brainstorm are in ${RES}/ideas/RESULTS-partial.md (the 'algorithms' lens: dtree, symindex, memberindex, probereuse, knuthtable) — read it and do NOT re-propose those ideas; propose different ones or refinements. Soundness findings from the review so far are in ${RES}/review/RESULTS-partial.md. Put any file you create under ${RES}/ideas/<your-lens>/. Do NOT edit hylo-new, and do NOT compile the compiler ANYWHERE (no copies of the repo, no swift build): parallel builds exhausted the machine's memory and crashed it. Reason from code, counters (--count), profiles and the frozen binary only. If earlier attempts left a copy of the repo under research/ideas/<lens>/hylo, you may read it but delete its .build directory.
 Hard constraint for every idea: it must be SOUND = produce exactly the same elaboration (types, bindings, witnesses) and diagnostics as the baseline on every program, and be implementable behind a new runtime flag in TyperExperiments, independently of the other flags (it may assume nothing about which other flags are on). An idea that changes semantics (e.g. removing the resolution depth cap) is allowed only if clearly labeled 'semantic change' and kept separate.
 Read the relevant code before proposing; each idea must cite the exact functions/lines it changes and the profile evidence (which % it attacks), estimate the gain on stdlib and on the stress workloads, and explain the soundness argument and the risk. Also tell which existing flags it overlaps with (redundancy) — we want to find out whether some existing flags become unnecessary.`
 
@@ -54,9 +54,11 @@ const IDEAS = {
 }
 
 phase('Ideate')
-const all = await parallel(LENSES.map(l => () => agent(`${CTX}\n\n${l.prompt}\nPropose 3–6 ideas, best first.`, { label: `ideate:${l.key}`, phase: 'Ideate', schema: IDEAS })))
-const ideas = all.filter(Boolean).flatMap((r, i) => r.ideas.map(x => ({ ...x, lens: LENSES[i].key })))
-const measurements = all.filter(Boolean).map((r, i) => `[${LENSES[i].key}] ${r.measurements}`).join('\n\n')
+const ONLY = args && args.lenses  // e.g. ['constant-factors','caching','redundancy']
+const RUN = ONLY ? LENSES.filter(l => ONLY.includes(l.key)) : LENSES
+const all = await parallel(RUN.map(l => () => agent(`${CTX}\n\n${l.prompt}\nPropose 3–6 ideas, best first.`, { label: `ideate:${l.key}`, phase: 'Ideate', schema: IDEAS })))
+const ideas = all.flatMap((r, i) => r ? r.ideas.map(x => ({ ...x, lens: RUN[i].key })) : [])
+const measurements = all.map((r, i) => r ? `[${RUN[i].key}] ${r.measurements}` : '').filter(Boolean).join('\n\n')
 log(`${ideas.length} ideas proposed`)
 
 phase('Judge')
@@ -73,5 +75,5 @@ const SLATE = {
   },
   required: ['slate', 'rejected', 'redundancy_hypotheses'],
 }
-const verdict = await agent(`${CTX}\n\nYou are the judge. Below are ideas from four independent lenses plus their measurements. Deduplicate and merge overlapping ideas, check the key claims against the code yourself (spot-check at least the top candidates' code locations and soundness arguments), and select a slate of 5–8 ideas to implement now, each as an independent runtime flag, ranked by expected payoff / (effort × risk). Prefer ideas with large measured profile shares. Include at most one 'semantic change' idea and mark it. Each spec must be complete enough for an engineer who has not seen this conversation.\n\nIDEAS:\n${JSON.stringify(ideas, null, 1)}\n\nMEASUREMENTS:\n${measurements}`, { label: 'judge', phase: 'Judge', schema: SLATE })
+const verdict = await agent(`${CTX}\n\nYou are the judge. Below are ideas from independent lenses plus their measurements. The ideas of the 'algorithms' lens (finished in an earlier run) are in ${RES}/ideas/RESULTS-partial.md: read that file and judge them together with the ones below. Deduplicate and merge overlapping ideas, check the key claims against the code yourself (spot-check at least the top candidates' code locations and soundness arguments), and select a slate of 5–8 ideas to implement now, each as an independent runtime flag, ranked by expected payoff / (effort × risk). Prefer ideas with large measured profile shares. Include at most one 'semantic change' idea and mark it. Each spec must be complete enough for an engineer who has not seen this conversation.\n\nIDEAS:\n${JSON.stringify(ideas, null, 1)}\n\nMEASUREMENTS:\n${measurements}`, { label: 'judge', phase: 'Judge', schema: SLATE })
 return { verdict, ideas }

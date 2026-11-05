@@ -54,7 +54,10 @@ def cmd_freeze(argv):
         shutil.rmtree(tmp, ignore_errors=True)
         os.makedirs(tmp)
         shutil.copy2(exe, tmp)
-        shutil.copytree(os.path.join(src, BUNDLE), os.path.join(tmp, BUNDLE))
+        # The resource bundle is `.bundle` on macOS and Windows, `.resources` on Linux.
+        for b in (BUNDLE, BUNDLE.replace(".bundle", ".resources")):
+            if os.path.exists(os.path.join(src, b)):
+                shutil.copytree(os.path.join(src, b), os.path.join(tmp, b))
         os.rename(os.path.join(tmp, "tc-bench"), os.path.join(tmp, "tc-bench.real"))
         w = os.path.join(tmp, "tc-bench")
         open(w, "w").write('#!/bin/bash\n# Memory-capped wrapper.\nulimit -v ${TCX_MEM_LIMIT_KB:-2500000}\n'
