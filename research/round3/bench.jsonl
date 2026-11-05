@@ -8,3 +8,21 @@
 {"config": "absmodel", "workload": "stdlib", "ms": 786.82}
 {"config": "typevec", "workload": "stdlib", "ms": 806.19}
 {"config": "sound set", "workload": "stdlib", "ms": 234.61}
+{"config": "baseline", "workload": "members-big", "ms": 20108.87}
+{"config": "symindex", "workload": "members-big", "ms": 20473.23}
+{"config": "coesrc", "workload": "members-big", "ms": 20234.46}
+{"config": "traitindex", "workload": "members-big", "ms": 20269.68}
+{"config": "memberskip", "workload": "members-big", "ms": 1371.73}
+{"config": "unify", "workload": "members-big", "ms": 19392.7}
+{"config": "index", "workload": "members-big", "ms": 15818.74}
+{"config": "absmodel", "workload": "members-big", "ms": 15392.28}
+{"config": "typevec", "workload": "members-big", "ms": 14141.85}
+{"config": "sound set", "workload": "members-big", "ms": 958.74}
+{"config": "baseline", "workload": "breadth40", "ms": 7423.62}
+{"config": "symindex", "workload": "breadth40", "ms": 8108.73}
+{"config": "coesrc", "workload": "breadth40", "ms": 985.66}
+{"config": "traitindex", "workload": "breadth40", "ms": 8525.83}
+{"config": "memberskip", "workload": "breadth40", "ms": 7916.1}
+{"config": "unify", "workload": "breadth40", "ms": 7474.65}
+{"config": "index", "workload": "breadth40", "ms": 91.24}
+{"config": "absmodel", "workload": "breadth40", "ms": 8108.87}
