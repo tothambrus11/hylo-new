@@ -35,7 +35,49 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
-## Status (2026-11-05)
+## Status after round 2 (2026-11-05, later the same day)
+
+Round 2 ran on a fresh cloud machine (4 cores, 15 GB, Swift 6.3 in /opt/swift). The full write-up is `ROUND2.md`; this is the short version.
+
+1. **Both workflows finished.**
+   - Review of unify, index, absmodel, solver, loopcheck and claims: `review/RESULTS-round2.md`.
+   - Brainstorm (constant-factors, caching and redundancy lenses, plus the judge): `ideas/RESULTS-round2.md`.
+2. **Verdicts:**
+
+   | Flag | Verdict |
+   |---|---|
+   | `unify` | sound (release builds) |
+   | `index` | sound |
+   | `absmodel` | was unsound: critical subsumption and occurs-check bugs; **fixed in round 2** |
+   | `names` | unsound; **replaced by `memberskip`** |
+   | `solver` | unsound: 3 confirmed divergences, plus overload-priority |
+   | `loopcheck` | unsound: 3 confirmed divergences; also redundant with `absmodel` |
+
+3. **New code**, on local branch `tc/impl-wip`, stored as patches in `impl/`, on top of `tc/research`:
+   - `symindex`: single-pass stdlib symbol table.
+   - `coesrc`: remembers which givens can never be coercion sources.
+   - `traitindex`: per-identifier index of the visible traits; exact.
+   - `memberskip`: the sound replacement for `names`. It skips an extension that does not declare the name only when `applies` provably has no effect: the extendee is memoized, and either the heads fail at the root or every visible given is memoized.
+   - `absmodel` fixes: no subsumption of ⊤ by a repeated variable; occurs ⇒ ⊤; file models keyed by imports; disjoint renaming of fact variables.
+   - `absDepth` now defaults to 2.
+4. **Oracle results.**
+   - On the 216 corpus files, `symindex`, `coesrc`, `traitindex`, `memberskip` and `absmodel` alone, and the set `{symindex, coesrc, traitindex, memberskip, unify, index, absmodel}`, are all identical to the baseline.
+   - `memberskip` is identical on all 47 `names` counterexamples (`names`: 12 mismatches).
+   - The fixed `absmodel` is identical on the 25 absmodel review programs at k=2 and k=3 (before: 2 crashes and 1 wrong refutation). Its refutation counts are unchanged.
+5. **Speed.** Best of 3, pinned, typing time in ms:
+
+   | Workload | Baseline | Sound set | Round-1 all six (unsound) |
+   |---|---|---|---|
+   | stdlib | 952 | **291** | 355 |
+   | breadth40 | 9000 | 101 | 95 |
+   | members | 4676 | 164 | 134 |
+   | div-* | ≈195 | ≈5 | ≈5 |
+   | ovl-4-8 | 7392 | 262 | 5 |
+   | ovr-3-8 | 375 | 323 | 4 |
+
+   The overload workloads still need a sound `solver`.
+
+## Status after round 1 (superseded; kept for history)
 
 1. **Semantic oracle.** `tcx.py semtest` compares, against the baseline, the dump of every type, binding (including implicit/witness arguments) and witness table, plus the diagnostics. It is much stronger than the old diagnostics-only differential test.
    - It found that `solver` changes the elaboration of `Tests/CompilerTests/positive/overload-priority.hylo`: node 0:75 is typed `X` in the baseline and `A<Void>` with `solver`.
@@ -66,23 +108,29 @@ All six branches are pushed:
 
 ## How to continue
 
-1. Build and freeze a binary:
-   ```sh
-   swift build -c release --product tc-bench
-   python3 research/exp/tcx.py freeze
-   ```
-   `freeze` prints the binary id.
-2. Re-run the oracle on everything:
-   ```sh
-   python3 research/exp/tcx.py semtest --bin ID --env '{"HYLO_TC_ABSDEPTH":"2"}' \
-     --configs "names;unify;index;absmodel;solver;loopcheck" --corpus all --jobs 4
-   ```
-3. Resume the review for the remaining topics with the Workflow tool:
-   - script: `research/workflows/review.js`;
-   - args: `{repo: <abs path>, binid: ID, topics: ["unify","index","absmodel","solver","loopcheck","claims"]}`.
-4. Run the brainstorm: `research/workflows/ideas.js`, with args `{repo, binid, perf}`.
-5. Fix the confirmed findings. Then implement the judged ideas, each as a new flag, **one build at a time**, and gate each one with semtest.
-6. Large experiment:
-   - Write a spec in `research/exp/specs/` for a full factorial over all sound flags if there are 8 or fewer (otherwise `"design": {"kind":"ga"}`).
-   - Workloads: stdlib (metric `type.stdlib`), chain8, breadth40, members, ovl-4-8, ovr-3-8, div-loop-20, div-grow-20, div-dead-20. Set `cpu` to pin the runs and use 5 reps.
-   - Start it with `python3 research/exp/tcx.py queue specs/X.json`. After a crash, run `python3 research/exp/tcx.py resume`. The report is `runs/X/report.md`, which includes leave-one-out and add-one tests, the parsimonious choice and the factorial interactions.
+1. **Toolchain.**
+   - Install Swift 6.3 if it is missing: `curl -sSL https://download.swift.org/swift-6.3-release/ubuntu2404/swift-6.3-RELEASE/swift-6.3-RELEASE-ubuntu24.04.tar.gz | tar xz -C /opt/swift --strip-components=1`.
+   - Run `git submodule update --init`, which Swifty-LLVM needs for package resolution.
+   - A clean `swift build -c release --product tc-bench` takes 16–28 minutes on 4 cores; an incremental one takes 2–4.
+2. **Apply the round-2 patches.** On a branch from `tc/research`, run `git am research/impl/*.patch`, then build and `python3 research/exp/tcx.py freeze .build/release LABEL`.
+   - On Linux the resource bundle is `Hylo_StandardLibrary.resources`; `freeze` now handles it.
+   - `semtest`'s `--files` option consumes the rest of the command line, so put `--jobs` before it.
+3. **Make `solver` sound.** This is the largest remaining gap (ovl/ovr).
+   - The verifiers' fixes (S1–S3 in `review/RESULTS-round2.md`): do not park; resolve an overload at the point where the baseline pops it; and probe with "stop at the next overload" so the error count is a lower bound.
+   - Alternatively, implement `solver1` from `ideas/RESULTS-round2.md`.
+   - Gate it with semtest plus `review/solver/*.hylo`.
+4. **Retire `names`, `loopcheck` and the current `solver`.**
+   - Keep loopcheck only if a restricted version (LC-1..3 fixes: prune only without pending sibling premises) is wanted for termination. `absmodel` already covers every divergence workload.
+5. **Next ideas from the judged slate** (`ideas/RESULTS-round2.md`):
+   - `typevec`: type-store storage and tag fast paths, about −15% on the stdlib.
+   - `givenfacts`: supersedes `coesrc`, and adds settled source lists.
+   - `nocopy`.
+   - `membermemo`.
+   - `index-2`: a finer coercion-source fallback.
+6. **The depth cap is a real semantic issue.**
+   - Copying a 5-tuple of Bool already fails (review C2). The cap counts BFS steps (proof size), not height (C1).
+   - Any fix is a semantic change: a per-thread height cap plus a large global step budget. Keep it as a separate PR.
+7. **REPORT.md has known false claims.**
+   - names "by construction"; loopcheck/Bol–Apt–Klop; absmodel "all sound"; solver "order preserved"; §6.1 height vs steps.
+   - See ROUND2.md §Corrections. Fix them before the report is shared.
+8. **Large factorial experiment.** Still not run. Use the sound flags only: symindex, coesrc, traitindex, memberskip, unify, index, absmodel. That is 7 flags, so a full 2^7 factorial is feasible with `tcx.py queue`.
