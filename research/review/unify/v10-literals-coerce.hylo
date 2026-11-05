@@ -1,0 +1,17 @@
+//! stage:typing
+// Literal types with coercions to stdlib numeric types (exercise areCoercible after shape fail).
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun f(x: Int) -> Int { x }
+fun f(x: Float64) -> Float64 { x }
+public fun main() {
+  same(1, 2)
+  same(1, 2.0)
+  same(1 as Int, 2)
+  check<Int>(f(1))
+  check<Float64>(f(1.5))
+  let a: {Int, Float64} = (1, 2.5)
+  let b = (1, 2.5)
+  same(a, b)
+  let c: [](Int) -> Int = f
+}

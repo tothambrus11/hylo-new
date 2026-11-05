@@ -1,0 +1,18 @@
+//! stage:typing no-std
+// Error types and mismatched shapes, recovery paths.
+struct A<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun f<T>(x: A<T>, y: T) -> T { y }
+public fun main() {
+  same(nope, A<Void>())
+  same(A<nope>(), A<Void>())
+  let a = f(A<Void>(), ((), ()))
+  let b = f(nope, ())
+  check<Void>(b)
+  let c: [](Void) -> Void = ()
+  let d: {Void, Void} = A<Void>()
+  let e: A<Void> = fun[](x: Void) -> Void { x }
+  same(A<Void>, ())
+  same(fun[](x: Void) -> Void { x }, ((), ()))
+}

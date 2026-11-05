@@ -1,0 +1,22 @@
+// Fresh-variable numbering: under `index`, threads for generic givens with a different head are
+// never formed, so fewer fresh variables are created. Diagnostics that print an unresolved type
+// variable (%N) could then differ in text.
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+
+given <T> => Box<T> is Q {}
+given <T, U> => Box<T> is Q {}
+given <T where T is Q> => Box<Box<T>> is Q {}
+given A is P {}
+
+fun need<T is P>() {}
+fun mk<T>() -> Box<T> { Box<T>() }
+fun take(x: A) {}
+
+fun main() {
+  need<A>()
+  take(x: mk())
+  let y: A = mk()
+}

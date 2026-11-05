@@ -1,0 +1,22 @@
+//! stage:typing no-std
+struct S {}
+struct T<X> {}
+trait P {}
+fun check<X>(x: X) {}
+fun same<X>(x: X, y: X) {}
+fun meta<X>(x: Metatype<X>) -> X { Builtin.trap() }
+public fun main() {
+  same(S, S)
+  same(S, T<Void>)
+  same(T<Void>, T<S>)
+  check<Metatype<S>>(S)
+  check<Metatype<T<S>>>(T<S>)
+  let a = meta(T<S>)
+  check<T<S>>(a)
+  let b = meta(S)
+  check<S>(b)
+  same(Metatype<S>, Metatype<S>)
+  same(Metatype<S>, S)
+  let c = meta(Metatype<S>)
+  check<Metatype<S>>(c)
+}

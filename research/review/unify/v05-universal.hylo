@@ -1,0 +1,20 @@
+//! stage:typing no-std
+// Universal types and implications as types of generic functions / givens.
+trait P { fun get() -> Self }
+struct A {}
+given A is P { fun get() -> A { A() } }
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun g1<T>(x: T) -> T { x }
+fun g2<U>(x: U) -> U { x }
+fun g3<T, U>(x: T) -> U { Builtin.trap() }
+fun g4<T is P>(x: T) -> T { x.get() }
+fun g5<U is P>(x: U) -> U { x.get() }
+public fun main() {
+  same(g1, g2)
+  same(g1, g3)
+  same(g4, g5)
+  same(g1, g4)
+  check<Void>(g1(()))
+  check<A>(g4(A()))
+}

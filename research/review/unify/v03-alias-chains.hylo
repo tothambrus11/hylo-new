@@ -1,0 +1,27 @@
+//! stage:typing no-std
+// Aliases on one side, both sides, generic aliases, alias of tuple vs tuple.
+struct A<T> { public memberwise init }
+type P1 = {Void, Void}
+type P2 = P1
+type Q1 = A<Void>
+type Q2 = Q1
+type F1 = [](Void) -> Void
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun idA<T>(x: A<T>) -> T { Builtin.trap() }
+fun idP(x: P2) -> P1 { x }
+public fun main() {
+  let a: P2 = ((), ())
+  let b: {Void, Void} = a
+  same(a, b)
+  let c: Q2 = A<Void>()
+  same(c, A<Void>())
+  let d = idA(c)
+  check<Void>(d)
+  check<Q1>(A<Void>())
+  check<P2>(idP(((), ())))
+  let f: F1 = fun[](x) { x }
+  check<[](Void) -> Void>(f)
+  same(f, fun[](x: Void) -> Void { x })
+  let g: Q2 = A<{Void}>()
+}

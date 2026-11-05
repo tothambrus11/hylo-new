@@ -1,0 +1,17 @@
+//! stage:typing no-std
+// Equality constraints without the T == U self-loop that hangs the baseline.
+trait P { type X; fun f() -> X }
+struct S {}
+struct A<T> { public memberwise init }
+given S is P { type X = Void; fun f() -> Void { () } }
+given <T> A<T> is P { type X = T; fun f() -> T { Builtin.trap() } }
+fun check<T>(x: T) {}
+fun g<T is P where T.X == Void>(x: T) -> Void { x.f() }
+fun h<T is P, U is P where T.X == U.X>(x: T, y: U) -> T.X { y.f() }
+public fun main() {
+  check<Void>(g(S()))
+  check<Void>(g(A<Void>()))
+  g(A<{Void, Void}>())
+  check<Void>(h(S(), A<Void>()))
+  h(S(), A<S>())
+}

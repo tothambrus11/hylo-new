@@ -1,0 +1,13 @@
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun needA<where let a: A>() -> B { B() }
+fun needB<where let b: B>() -> A { A() }
+fun check<T>(x: T) {}
+fun f<T, U where T == U>(x: T) {
+  check<U>(x)
+}
+given let h = needA()
+given let g = needB()
+fun kh() {
+  let z = h
+}

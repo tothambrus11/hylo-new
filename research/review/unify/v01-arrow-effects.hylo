@@ -1,0 +1,26 @@
+//! stage:typing no-std
+// Arrows differing only in effect, access, labels, arity, environment.
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun a1(x: Void) -> Void { () }
+fun a2(x: inout Void) -> Void { () }
+fun a3(x: sink Void) -> Void { () }
+fun a4(label x: Void) -> Void { () }
+fun a5(x: Void, y: Void) -> Void { () }
+fun a6(x: Void) -> {Void, Void} { ((), ()) }
+public fun main() {
+  same(a1, a1)
+  same(a1, a2)
+  same(a1, a3)
+  same(a1, a4)
+  same(a1, a5)
+  same(a1, a6)
+  check<[](Void) -> Void>(a1)
+  check<[](inout Void) -> Void>(a2)
+  check<[](inout Void) -> Void>(a1)
+  check<[](label: Void) -> Void>(a4)
+  check<[](Void) -> Void>(a4)
+  let f: [](Void) -> Void = fun[](x) { x }
+  let g: [](sink Void) -> Void = fun[](x) { () }
+  same(f, g)
+}

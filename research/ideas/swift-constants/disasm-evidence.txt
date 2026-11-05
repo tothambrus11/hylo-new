@@ -1,0 +1,138 @@
+Call sequences in frozen binary 4587ce9e1a23 (objdump | swift-demangle | grep call)
+### TypeStore.subscript<T>(T.ID)->T
+00000000003915f0 <TypeStore.subscript.getter>:
+  391647:	call   15f790 <lazy protocol witness table accessor for type ErrorType and conformance ErrorType>
+  39165f:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  391671:	call   73430 <swift_allocObject@plt>
+  391698:	call   15f730 <lazy protocol witness table accessor for type UniversalType and conformance UniversalType>
+  3916b9:	call   15f760 <lazy protocol witness table accessor for type Tuple and conformance Tuple>
+  3916ff:	call   15f6c0 <lazy protocol witness table accessor for type TypeVariable and conformance TypeVariable>
+  391721:	call   15a890 <lazy protocol witness table accessor for type AnyTypeTree and conformance AnyTypeTree>
+  39173d:	call   47f470 <StableSet.subscript.getter>
+  391749:	call   15e8c0 <outlined init with take of TypeTree>
+  391755:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  39176d:	call   73930 <swift_dynamicCast@plt>
+0000000000391790 <TypeStore.substitute(_:in:)>:
+### StableSet.subscript(p)
+000000000047f470 <StableSet.subscript.getter>:
+  47f495:	call   47e770 <type metadata accessor for StableSet.Empty>
+  47f4ad:	call   47cef0 <StableDictionary.subscript.getter>
+### StableDictionary.subscript(p)
+000000000047cef0 <StableDictionary.subscript.getter>:
+  47cf28:	call   73060 <swift_getTupleTypeMetadata2@plt>
+  47cf67:	call   47bab0 <type metadata accessor for StableDictionary.Bucket>
+  47cf86:	call   731a0 <swift_retain@plt>
+  47cfaa:	call   47ad50 <closure #1 in StableDictionary.subscript.getter>
+  47cfb6:	call   73320 <swift_release@plt>
+  47cfd4:	call   *0x20(%rax)
+  47cfe5:	call   *0x20(%rax)
+### closure in StableDictionary.subscript(p)
+000000000047ad50 <closure #1 in StableDictionary.subscript.getter>:
+  47ad99:	call   47bab0 <type metadata accessor for StableDictionary.Bucket>
+  47adcb:	call   73060 <swift_getTupleTypeMetadata2@plt>
+  47ade5:	call   *0x10(%rax)
+  47adfd:	call   *0x10(%rax)
+### TypeTree.equals
+000000000039b320 <TypeTree.equals(_:)>:
+  39b365:	call   730b0 <type metadata accessor for Optional@plt>
+  39b37e:	call   73060 <swift_getTupleTypeMetadata2@plt>
+  39b3ec:	call   *0x10(%r15)
+  39b408:	call   *%r15
+  39b419:	call   15e8e0 <outlined init with copy of TypeTree>
+  39b425:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  39b43c:	call   73930 <swift_dynamicCast@plt>
+  39b451:	call   *%r15
+  39b479:	call   *%r15
+  39b49b:	call   *%r15
+  39b4b5:	call   *%r14
+  39b4d0:	call   *%r13
+  39b4df:	call   *%r14
+  39b4ee:	call   *%r13
+  39b504:	call   *-0x88(%rbp)
+  39b519:	call   *%r14
+  39b534:	call   *%r13
+  39b542:	call   *0x8(%rax)
+  39b554:	call   *0x8(%rax)
+  39b56c:	call   *0x20(%r15)
+  39b589:	call   73170 <dispatch thunk of static Equatable.== infix(_:_:)@plt>
+  39b59a:	call   *%r12
+  39b5b0:	call   *%r14
+  39b5bd:	call   *%r12
+  39b5c7:	call   *%r14
+  39b5d1:	call   *%r13
+### demand(any:) generic
+000000000038f6a0 <specialized TypeStore.demand(any:)>:
+  38f6da:	call   15e140 <__swift_allocate_boxed_opaque_existential_1>
+  38f6ef:	call   *0x10(%rax)
+  38f6fc:	call   15e8e0 <outlined init with copy of TypeTree>
+  38f708:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  38f720:	call   73930 <swift_dynamicCast@plt>
+  38f757:	call   73930 <swift_dynamicCast@plt>
+  38f77f:	call   73930 <swift_dynamicCast@plt>
+  38f7a9:	call   73320 <swift_release@plt>
+  38f7b9:	call   73320 <swift_release@plt>
+  38f7d3:	call   73930 <swift_dynamicCast@plt>
+  38f802:	call   38fc50 <specialized TypeStore.insert(_:)>
+  38f80e:	call   1015f0 <__swift_destroy_boxed_opaque_existential_1>
+  38f81a:	call   1015f0 <__swift_destroy_boxed_opaque_existential_1>
+000000000038f840 <specialized TypeStore.insert(_:)>:
+### demand(any:) specialized for Arrow
+00000000003e4ea0 <specialized TypeStore.demand(any:)>:
+  3e4ed9:	call   38b090 <lazy protocol witness table accessor for type Arrow and conformance Arrow>
+  3e4efa:	call   73430 <swift_allocObject@plt>
+  3e4f37:	call   3ec780 <outlined init with copy of TypeTree>
+  3e4f3f:	call   731a0 <swift_retain@plt>
+  3e4f4b:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  3e4f63:	call   73930 <swift_dynamicCast@plt>
+  3e4f9d:	call   73930 <swift_dynamicCast@plt>
+  3e4fc8:	call   73930 <swift_dynamicCast@plt>
+  3e4ff2:	call   73320 <swift_release@plt>
+  3e5005:	call   73320 <swift_release@plt>
+  3e5022:	call   73930 <swift_dynamicCast@plt>
+### Typer.lookup(_:memberOfTraitVisibleFrom:)
+00000000003dc430 <Typer.lookup(_:memberOfTraitVisibleFrom:)>:
+  3dc460:	call   3dcff0 <Typer.traits(visibleFrom:)>
+  3dc4a5:	call   3dbd10 <Typer.declarations(lexicallyIn:)>
+  3dc4ca:	call   388ec0 <specialized OrderedDictionary.subscript.getter>
+  3dc4d5:	call   73320 <swift_release@plt>
+  3dc4dd:	call   73320 <swift_release@plt>
+  3dc4e5:	call   73320 <swift_release@plt>
+  3dc51c:	call   3dbaa0 <Typer.refineLookupResults(_:matching:)>
+  3dc53a:	call   731d0 <memcpy@plt>
+  3dc54e:	call   208680 <outlined init with copy of Typer>
+  3dc60a:	call   1b4100 <lazy protocol witness table accessor for type GenericParameterDeclaration and conformance GenericParameterDeclaration>
+  3dc61c:	call   167230 <lazy protocol witness table accessor for type BindingDeclaration and conformance BindingDeclaration>
+  3dc653:	call   169580 <outlined init with copy of AnySyntax>
+  3dc665:	call   3ec520 <partial apply for closure #1 in Program.scopes(from:)+0x1b0>
+  3dc671:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  3dc690:	call   73930 <swift_dynamicCast@plt>
+  3dc6ab:	call   73320 <swift_release@plt>
+  3dc6b3:	call   73320 <swift_release@plt>
+  3dc6c9:	call   73c50 <swift_isUniquelyReferenced_nonNull_native@plt>
+  3dc6e8:	call   244560 <specialized ContiguousArray._createNewBuffer(bufferIsUnique:minimumCapacity:growForAppend:)>
+  3dc742:	call   244560 <specialized ContiguousArray._createNewBuffer(bufferIsUnique:minimumCapacity:growForAppend:)>
+  3dc767:	call   73320 <swift_release@plt>
+  3dc773:	call   2086e0 <outlined destroy of Typer>
+  3dc786:	call   73c50 <swift_isUniquelyReferenced_nonNull_native@plt>
+  3dc7a0:	call   247580 <specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:)>
+  3dc7e3:	call   73320 <swift_release@plt>
+  3dc821:	call   247580 <specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:)>
+  3dc82e:	call   73320 <swift_release@plt>
+  3dc83f:	call   73320 <swift_release@plt>
+00000000003dc870 <specialized append #1 (_:) in Typer.lookup(_:unqualifiedIn:containedIn:)>:
+### Program.scopes(from:)
+000000000033bf90 <Program.scopes(from:)>:
+  33bfb4:	call   73430 <swift_allocObject@plt>
+  33bfd5:	call   73430 <swift_allocObject@plt>
+  33c015:	call   8da10 <__swift_instantiateConcreteTypeFromMangledName>
+  33c027:	call   73430 <swift_allocObject@plt>
+  33c045:	call   1789c0 <outlined init with copy of Program>
+### Typer.hasImplicitOnStack
+00000000003d0560 <Typer.hasImplicitOnStack()>:
+  3d05f2:	call   1789c0 <outlined init with copy of Program>
+  3d0601:	call   1789c0 <outlined init with copy of Program>
+  3d0618:	call   3ee5a0 <outlined init with copy of [DeclarationIdentity]>
+  3d0640:	call   174d70 <lazy protocol witness table accessor for type ConformanceDeclaration and conformance ConformanceDeclaration>
+  3d06fe:	call   167230 <lazy protocol witness table accessor for type BindingDeclaration and conformance BindingDeclaration>
+  3d073c:	call   169580 <outlined init with copy of AnySyntax>
+  3d074e:	call   3ec520 <partial apply for closure #1 in Program.scopes(from:)+0x1b0>

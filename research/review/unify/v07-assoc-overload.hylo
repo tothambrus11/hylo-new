@@ -1,0 +1,24 @@
+//! stage:typing no-std
+// Associated types vs their witnesses; overloads distinguished by an associated type alias.
+trait P { type X; fun f() -> X }
+struct A<T> { public memberwise init }
+struct S { public memberwise init }
+given S is P { type X = A<Void>; fun f() -> A<Void> { A() } }
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun h<T is P>(x: T) -> T.X { x.f() }
+fun k<T is P, U is P>(x: T, y: U) -> {T.X, U.X} { (x.f(), y.f()) }
+fun pick(x: A<Void>) -> Void { () }
+fun pick(x: S) -> {Void} { (()) }
+public fun main() {
+  let a = h(S())
+  check<A<Void>>(a)
+  check<S.X>(a)
+  same(a, A<Void>())
+  same(h(S()), S().f())
+  let b = k(S(), S())
+  check<{A<Void>, A<Void>}>(b)
+  let c = pick(h(S()))
+  check<Void>(c)
+  let d = S().f() as A<Void>
+}

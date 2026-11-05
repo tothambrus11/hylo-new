@@ -1,0 +1,9 @@
+//! stage:typing no-std
+trait P { type X; fun f() -> X }
+struct S { public memberwise init }
+given S is P { type X = Void; fun f() -> Void { () } }
+fun check<T>(x: T) {}
+fun g<T is P where T.X == Void>(x: T) -> Void { x.f() }
+public fun main() {
+  check<Void>(g(S()))
+}

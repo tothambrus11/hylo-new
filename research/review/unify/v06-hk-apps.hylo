@@ -1,0 +1,20 @@
+//! stage:typing no-std
+struct A<T> { public memberwise init }
+struct B<T> { public memberwise init }
+struct C<T, U> { public memberwise init }
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun head<F :: * -> *, U>(x: F<U>) -> F<Void> { Builtin.trap() }
+fun arg<F :: * -> *, U>(x: F<U>) -> U { Builtin.trap() }
+public fun main() {
+  same(A<Void>(), A<Void>())
+  same(A<Void>(), B<Void>())
+  same(A<Void>(), A<{Void}>())
+  same(C<Void, Void>(), C<Void, {Void}>())
+  let a = head(B<A<Void>>())
+  check<B<Void>>(a)
+  let b = arg(A<B<Void>>())
+  check<B<Void>>(b)
+  let c = arg(C<Void, A<Void>>())
+  same(head(A<Void>()), head(B<Void>()))
+}

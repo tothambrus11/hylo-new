@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// Tuples of different arity/element types; labels only via arrow parameter labels (tuple-type labels don't parse).
+fun check<T>(x: T) {}
+fun same<T>(x: T, y: T) {}
+fun pick<T, U>(x: {T, U}) -> U { x.1 }
+fun lab(a x: Void, b y: Void) -> Void { () }
+fun lab2(a x: Void, c y: Void) -> Void { () }
+fun lab3(a x: Void, b y: Void) -> Void { () }
+public fun main() {
+  same(lab, lab2)
+  same(lab, lab3)
+  let p: {Void, Void} = ((), ())
+  let q: {Void, {Void}} = p
+  same(p, ((), ()))
+  same(((), ()), ((), (), ()))
+  let x = pick(((), ((), ())))
+  check<{Void, Void}>(x)
+  let y = pick(p)
+  check<{}>(())
+  same((), ())
+  same((), ((), ()))
+  same((((), ()), ()), (((), ()), ((), ())))
+}
