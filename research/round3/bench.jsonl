@@ -26,3 +26,85 @@
 {"config": "unify", "workload": "breadth40", "ms": 7474.65}
 {"config": "index", "workload": "breadth40", "ms": 91.24}
 {"config": "absmodel", "workload": "breadth40", "ms": 8108.87}
+{"config": "typevec", "workload": "breadth40", "ms": 5711.27}
+{"config": "sound set", "workload": "breadth40", "ms": 78.6}
+{"config": "baseline", "workload": "div-loop-20", "ms": 190.69}
+{"config": "symindex", "workload": "div-loop-20", "ms": 189.93}
+{"config": "coesrc", "workload": "div-loop-20", "ms": 208.6}
+{"config": "traitindex", "workload": "div-loop-20", "ms": 188.64}
+{"config": "memberskip", "workload": "div-loop-20", "ms": 176.47}
+{"config": "unify", "workload": "div-loop-20", "ms": 175.71}
+{"config": "index", "workload": "div-loop-20", "ms": 18.24}
+{"config": "absmodel", "workload": "div-loop-20", "ms": 16.5}
+{"config": "typevec", "workload": "div-loop-20", "ms": 141.76}
+{"config": "sound set", "workload": "div-loop-20", "ms": 4.59}
+{"config": "baseline", "workload": "div-branch", "ms": 2219.57}
+{"config": "symindex", "workload": "div-branch", "ms": 2140.09}
+{"config": "coesrc", "workload": "div-branch", "ms": 2136.8}
+{"config": "traitindex", "workload": "div-branch", "ms": 2122.49}
+{"config": "memberskip", "workload": "div-branch", "ms": 2259.63}
+{"config": "unify", "workload": "div-branch", "ms": 1937.61}
+{"config": "index", "workload": "div-branch", "ms": 291.84}
+{"config": "absmodel", "workload": "div-branch", "ms": 14.75}
+{"config": "typevec", "workload": "div-branch", "ms": 1704.84}
+{"config": "sound set", "workload": "div-branch", "ms": 2.57}
+{"config": "baseline", "workload": "wide-tuple-5", "ms": 84.95}
+{"config": "symindex", "workload": "wide-tuple-5", "ms": 84.38}
+{"config": "coesrc", "workload": "wide-tuple-5", "ms": 72.57}
+{"config": "traitindex", "workload": "wide-tuple-5", "ms": 90.12}
+{"config": "memberskip", "workload": "wide-tuple-5", "ms": 76.69}
+{"config": "unify", "workload": "wide-tuple-5", "ms": 86.11}
+{"config": "index", "workload": "wide-tuple-5", "ms": 10.62}
+{"config": "absmodel", "workload": "wide-tuple-5", "ms": 79.84}
+{"config": "typevec", "workload": "wide-tuple-5", "ms": 78.82}
+{"config": "sound set", "workload": "wide-tuple-5", "ms": 4.84}
+{"config": "baseline", "workload": "trans-8", "ms": 1854.78}
+{"config": "symindex", "workload": "trans-8", "ms": 1815.05}
+{"config": "coesrc", "workload": "trans-8", "ms": 1866.06}
+{"config": "traitindex", "workload": "trans-8", "ms": 1864.17}
+{"config": "memberskip", "workload": "trans-8", "ms": 1830.49}
+{"config": "unify", "workload": "trans-8", "ms": 1689.15}
+{"config": "index", "workload": "trans-8", "ms": 1903.06}
+{"config": "absmodel", "workload": "trans-8", "ms": 1807.06}
+{"config": "typevec", "workload": "trans-8", "ms": 1469.93}
+{"config": "sound set", "workload": "trans-8", "ms": 1375.34}
+{"config": "baseline", "workload": "assoceq-5", "ms": 2618.69}
+{"config": "symindex", "workload": "assoceq-5", "ms": 2796.01}
+{"config": "coesrc", "workload": "assoceq-5", "ms": 2878.36}
+{"config": "traitindex", "workload": "assoceq-5", "ms": 2630.53}
+{"config": "memberskip", "workload": "assoceq-5", "ms": 2761.7}
+{"config": "unify", "workload": "assoceq-5", "ms": 2602.46}
+{"config": "index", "workload": "assoceq-5", "ms": 2552.67}
+{"config": "absmodel", "workload": "assoceq-5", "ms": 2708.19}
+{"config": "typevec", "workload": "assoceq-5", "ms": 2147.08}
+{"config": "sound set", "workload": "assoceq-5", "ms": 1999.73}
+{"config": "baseline", "workload": "coerc-cache", "ms": 3531.54}
+{"config": "symindex", "workload": "coerc-cache", "ms": 3495.31}
+{"config": "coesrc", "workload": "coerc-cache", "ms": 3739.2}
+{"config": "traitindex", "workload": "coerc-cache", "ms": 3612.19}
+{"config": "memberskip", "workload": "coerc-cache", "ms": 3614.97}
+{"config": "unify", "workload": "coerc-cache", "ms": 3478.5}
+{"config": "index", "workload": "coerc-cache", "ms": 3667.57}
+{"config": "absmodel", "workload": "coerc-cache", "ms": 3764.14}
+{"config": "typevec", "workload": "coerc-cache", "ms": 2811.57}
+{"config": "sound set", "workload": "coerc-cache", "ms": 2770.62}
+{"config": "baseline", "workload": "refine-8", "ms": 77.98}
+{"config": "symindex", "workload": "refine-8", "ms": 76.1}
+{"config": "coesrc", "workload": "refine-8", "ms": 59.53}
+{"config": "traitindex", "workload": "refine-8", "ms": 76.94}
+{"config": "memberskip", "workload": "refine-8", "ms": 47.78}
+{"config": "unify", "workload": "refine-8", "ms": 73.09}
+{"config": "index", "workload": "refine-8", "ms": 14.1}
+{"config": "absmodel", "workload": "refine-8", "ms": 57.09}
+{"config": "typevec", "workload": "refine-8", "ms": 74.9}
+{"config": "sound set", "workload": "refine-8", "ms": 5.81}
+{"config": "baseline", "workload": "nestwide-8", "ms": 99.1}
+{"config": "symindex", "workload": "nestwide-8", "ms": 99.71}
+{"config": "coesrc", "workload": "nestwide-8", "ms": 74.13}
+{"config": "traitindex", "workload": "nestwide-8", "ms": 100.47}
+{"config": "memberskip", "workload": "nestwide-8", "ms": 67.36}
+{"config": "unify", "workload": "nestwide-8", "ms": 95.74}
+{"config": "index", "workload": "nestwide-8", "ms": 17.17}
+{"config": "absmodel", "workload": "nestwide-8", "ms": 80.32}
+{"config": "typevec", "workload": "nestwide-8", "ms": 94.35}
+{"config": "sound set", "workload": "nestwide-8", "ms": 8.67}

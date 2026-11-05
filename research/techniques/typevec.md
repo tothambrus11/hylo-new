@@ -28,7 +28,7 @@ Everything, as a constant factor. It is especially effective on workloads domina
 | trans-8 (transitive equalities) | 1823 ms | 1477 ms (−19%) |
 | breadth40 (wide resolution) | 8960 ms | 8219 ms (−8%) |
 
-Measured with `--repeat 3`, best time, pinned.
+Measured with `--repeat 3`, best time, pinned. The full per-flag table (`../round3/bench.md`) confirms 1.1–1.4× on every workload: stdlib 1007 → 806, members-big 20.1 → 14.1 s, coerc-cache 3532 → 2812.
 
 ## Costs
 

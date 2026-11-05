@@ -41,6 +41,8 @@ Member lookups in programs with many extensions, where the extensions are typed 
 | `applies` calls, stdlib | 7332 | 32 | 36 |
 | `applies` calls, members-big | 4,008,000 | 1000 | 1000 |
 
+Measured alone (`../round3/bench.md`): stdlib 1007 → 599 ms (1.7×), members-big 20.1 s → 1.37 s (14.7×), refine-8 78 → 48 and nestwide-8 99 → 67.
+
 Early in a module, while some givens are still unsettled, lookups through universal extensions (`extension<T where T is P> T`) cannot be skipped, so `memberskip` does slightly more work than `names`.
 
 ## Costs

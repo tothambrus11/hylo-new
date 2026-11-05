@@ -22,7 +22,7 @@ Oracle: identical on all 216 corpus files and on 32 review programs.
 
 ## What it speeds up
 
-Every unification. It is a constant factor that grows with the number of unifications: about −10% on the stdlib alone, less once `index`/`memberskip` have removed most unifications.
+Every unification, as a constant factor. Measured alone (`../round3/bench.md`): stdlib 1007 → 910 ms (1.1×), trans-8 1855 → 1689, div-branch 2220 → 1938; the others are within noise. The gain shrinks once `index`/`memberskip` have removed most unifications, and `typevec` overlaps with it.
 
 ## Costs
 

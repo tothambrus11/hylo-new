@@ -34,6 +34,18 @@ Oracle: identical on all 216 corpus files. The review (`review/RESULTS-round2.md
 
 Resolution with many givens of different traits in scope, which is the common case. Measured: stdlib matches 41,452 → 15,051, and breadth80 49.9 s → 0.14 s.
 
+Measured alone (`../round3/bench.md`):
+
+| Workload | Baseline | `index` |
+|---|---:|---:|
+| stdlib | 1007 ms | 454 ms (2.2×) |
+| breadth40 | 7424 ms | 91 ms (81×) |
+| div-branch (exponential failure) | 2220 ms | 292 ms (7.6×) |
+| div-loop-20 | 191 ms | 18 ms (10.5×) |
+| wide-tuple-5 | 85 ms | 11 ms (8×) |
+| refine-8 | 78 ms | 14 ms (5.5×) |
+| nestwide-8 | 99 ms | 17 ms (5.8×) |
+
 It does **not** help, by construction, on:
 - generic code with `where T == U` (any coercion source disables it; see review index-2 for a finer test);
 - equality-heavy resolution (the round-3 `trans`/`assoceq` workloads).

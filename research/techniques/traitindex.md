@@ -25,6 +25,8 @@ Oracle: identical on all 216 corpus files.
 
 Qualified member lookups (`T.X`, `x.m` through a conformance) in programs with many visible traits. On the stdlib the effect is small (a few percent at most), because the lookup loop was already cheap per trait. It mostly removes the `Typer` closure copy.
 
+Measured alone (`../round3/bench.md`, ms, baseline → flag): stdlib 1007 → 947. No workload in the benchmark changes beyond noise, so this flag is a cleanliness and scaling measure (O(hits) trait lookup) rather than a measured win.
+
 ## Costs
 
 - One map per scope that performs a trait member lookup. It shares storage with its parent (copy-on-write) until local traits are added.

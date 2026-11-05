@@ -19,6 +19,7 @@ Every technique sits behind a runtime flag: `HYLO_TC_EXPERIMENTS=a,b,…` (see `
 | `index` | implicit resolution: candidate selection | sound, recommended | [index.md](index.md) |
 | `absmodel` | implicit resolution: refutation ("will fail") | sound after the round-2 fixes, recommended | [absmodel.md](absmodel.md) |
 | `unify` | unification constant factor | sound in release builds, recommended | [unify.md](unify.md) |
+| `typevec` | type-store storage | sound, recommended | [typevec.md](typevec.md) |
 | `coercememo` | memo of coercion queries under assumptions | sound, **no measurable gain**, not recommended | [coercememo.md](coercememo.md) |
 | `names` | member lookup through extensions | **unsound**, retired | [names.md](names.md) |
 | `loopcheck` | implicit resolution: ancestor loop check | **unsound**, retired | [loopcheck.md](loopcheck.md) |
@@ -30,3 +31,13 @@ Every technique sits behind a runtime flag: `HYLO_TC_EXPERIMENTS=a,b,…` (see `
 - the topic's review programs (`research/review/<topic>/`).
 
 **Measurements.** "Speed" numbers are user-typing times in ms, best of `--repeat 3`, pinned to one core. They are single runs on a 4-core cloud VM, so treat differences under about 10% as noise. Raw numbers: `research/round3/bench.md`.
+
+## All sound flags together
+
+`symindex, coesrc, traitindex, memberskip, unify, index, absmodel, typevec` (`../round3/bench.md`, ms):
+
+| stdlib | members-big | breadth40 | div-loop-20 | div-branch | wide-tuple-5 | trans-8 | assoceq-5 | coerc-cache | refine-8 | nestwide-8 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| 1007 → **235** (4.3×) | 20109 → 959 (21×) | 7424 → 79 (94×) | 191 → 5 (42×) | 2220 → 3 (864×) | 85 → 5 (18×) | 1855 → 1375 (1.3×) | 2619 → 2000 (1.3×) | 3532 → 2771 (1.3×) | 78 → 6 (13×) | 99 → 9 (11×) |
+
+Equality reasoning (`trans`, `assoceq`, `coerc-cache`) is the one pattern that is still slow: only `typevec` helps there. See `../round3/README.md` §2.

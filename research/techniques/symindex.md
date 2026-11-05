@@ -21,11 +21,7 @@ Oracle: identical on all 216 corpus files.
 
 Every compilation that types the standard library, or loads it from an archive (the same function runs there). The saving is a fixed amount per compilation, independent of the user program.
 
-| | Baseline | `symindex` |
-|---|---:|---:|
-| stdlib typing | ≈950 ms | ≈820 ms (−13%) |
-
-The judge's profile estimate was 13.7% of stdlib typing; the measurement agrees.
+Measured alone (`../round3/bench.md`): stdlib typing 1007 → 885 ms (−12%). The profile estimated 13.7%, and the measurement agrees. User-typing workloads are unaffected (±noise).
 
 ## Costs
 

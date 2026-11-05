@@ -35,6 +35,22 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
+## Status after round 3 (2026-11-05)
+
+- **Write-ups.**
+  - `round3/README.md`: equality workloads, depth-cap scans, and a new baseline soundness bug.
+  - `techniques/`: one document per flag (how it works, why it is sound, what it speeds up, its cost).
+- **New flags** (patches 0005–0006):
+  - `typevec`: sound; 1.1–1.4× everywhere.
+  - `coercememo`: sound, no gain.
+  - `HYLO_TC_MAXDEPTH`: a measurement knob.
+- **Sound set with `typevec`.** Identical on all 216 corpus files. Speed-ups: stdlib 4.3×, members-big 21×, breadth40 94×, div-branch 864×.
+- **Equality reasoning** (`T0 == T1 == …`, `T.X == U.X`) is the remaining slow pattern: 1.3× only, 2–6 s for tiny functions.
+- **Baseline bug.** Two unrelated equalities make any two equality-mentioned types interchangeable (`workloads/round3/bug-assoc-eq-two-links.hylo`).
+- **Depth cap.**
+  - No corpus test reaches it.
+  - Branching failures are exponential in the cap (div-branch: 2.3 s at cap 10, 44.5 s at cap 14), except when `absmodel` refutes them (3 ms at any cap).
+
 ## Status after round 2 (2026-11-05, later the same day)
 
 Round 2 ran on a fresh cloud machine (4 cores, 15 GB, Swift 6.3 in /opt/swift). The full write-up is `ROUND2.md`; this is the short version.

@@ -143,7 +143,25 @@ The cap counts BFS steps along a thread, which is roughly the proof size. A wide
 2. Do not raise the cap blindly. Branching failures that the model cannot refute (`div-branch-trunc`) are exponential in it.
 3. Replace the BFS step count with a per-thread **height** bound, plus a global budget on matches. That accepts `wide-tuple-N` and `wide-given-N` for any N without making divergent searches longer. This is a semantic change (review C1/C2) and belongs in a separate PR.
 
-## 5. New code in this round (`research/impl/0005-*.patch`, `0006-*.patch`)
+## 5. Headline numbers (`bench.md`)
+
+All sound flags (`symindex, coesrc, traitindex, memberskip, unify, index, absmodel, typevec`) against the baseline:
+
+| Workload | Baseline | Sound set | Speed-up |
+|---|---:|---:|---:|
+| stdlib | 1007 | 235 | 4.3× |
+| members-big | 20109 | 959 | 21× |
+| breadth40 | 7424 | 79 | 94× |
+| div-loop-20 | 191 | 5 | 42× |
+| div-branch | 2220 | 3 | 864× |
+| wide-tuple-5 | 85 | 5 | 18× |
+| trans-8 | 1855 | 1375 | 1.3× |
+| assoceq-5 | 2619 | 2000 | 1.3× |
+| coerc-cache | 3532 | 2771 | 1.3× |
+| refine-8 | 78 | 6 | 13× |
+| nestwide-8 | 99 | 9 | 11× |
+
+## 6. New code in this round (`research/impl/0005-*.patch`, `0006-*.patch`)
 
 | Flag | What | Sound | Measured |
 |---|---|---|---|

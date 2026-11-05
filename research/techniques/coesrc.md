@@ -29,6 +29,18 @@ Any program whose resolution meets structural mismatches with many givens in sco
 - stdlib: 511k given visits skipped;
 - generic-heavy user code: for example 2.2M skips on members-big.
 
+Measured alone (`../round3/bench.md`):
+
+| Workload | Baseline | `coesrc` |
+|---|---:|---:|
+| stdlib | 1007 ms | 814 ms (1.2×) |
+| breadth40 | 7424 ms | 986 ms (**7.5×**) |
+| refine-8 | 78 ms | 60 ms |
+| nestwide-8 | 99 ms | 74 ms |
+| wide-tuple-5 | 85 ms | 73 ms |
+
+On equality-heavy workloads it gives nothing: there every given with an equality head is a source.
+
 The gain is limited by what the `index` flag already removes, since `index` also keeps a list of coercion sources. `coesrc` still helps where `index` is unavailable: while a declaration is on the stack, which is most of the stdlib.
 
 ## Costs
