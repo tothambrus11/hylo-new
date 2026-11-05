@@ -1,0 +1,13 @@
+//! Control for absmodel-2: t18 with a non-reflexive fact Eq<Int2, Int2> instead of <U> U is Eq<U>.
+trait Eq<Other> {}
+trait Ord {}
+trait Show {}
+struct List<T> {}
+struct Int2 {}
+given Int2 is Eq<Int2> {}
+given <T where T is Eq<List<T>>> => T is Ord {}
+given Int2 is Show {}
+fun show<T where T is Show>() {}
+public fun main() {
+  show<Int2>()
+}

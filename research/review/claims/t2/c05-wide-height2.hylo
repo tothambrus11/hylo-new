@@ -1,0 +1,19 @@
+// Depth cap vs. proof height: 9 premises, proof height 2, proof size 10 (rejected?) and
+// the same proof split in a balanced tree of 3x3.
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct M0 {}
+struct M1 {}
+struct M2 {}
+struct B {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given <where A0 is P, A1 is P, A2 is P> => M0 is P {}
+given <where A0 is P, A1 is P, A2 is P> => M1 is P {}
+given <where A0 is P, A1 is P, A2 is P> => M2 is P {}
+given <where M0 is P, M1 is P, M2 is P> => B is P {}
+fun need<where B is P>() {}
+public fun main() { need() }

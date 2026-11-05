@@ -1,4 +1,0 @@
-public fun main() {
-  var x = ()
-  inout (y, z) = (&x, &x)
-}

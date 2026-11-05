@@ -1,7 +1,0 @@
-public fun f() {
-  Builtin.trap()
-}
-
-public fun main() {
-  f()
-}

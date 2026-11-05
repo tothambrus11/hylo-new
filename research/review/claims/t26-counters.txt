@@ -1,0 +1,9 @@
+== t26 []
+counters.user:   coerced.slowPath=450 solver.goalSteps=3990 solver.systems=642 summon.layers=1650 summon.matchOK=1950 summon.matches=142500 summon.subgoals=1350
+type.user   5550.57 ms
+== t26 [absmodel]
+counters.user:   absmodel.built=151 absmodel.facts=19326 absmodel.micros=20801 absmodel.work=286650 coerced.slowPath=450 solver.goalSteps=3990 solver.systems=642 summon.layers=1650 summon.matchOK=1950 summon.matches=142500 summon.subgoals=1350
+type.user   5359.33 ms
+== t26 [index,absmodel]
+counters.user:   absmodel.built=151 absmodel.facts=19326 absmodel.micros=16882 absmodel.work=286650 coerced.slowPath=450 index.skipped=108150 solver.goalSteps=3990 solver.systems=642 summon.layers=1650 summon.matchOK=1950 summon.matches=30300 summon.subgoals=1350
+type.user    414.24 ms

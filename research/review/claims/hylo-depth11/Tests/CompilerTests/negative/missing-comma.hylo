@@ -1,3 +1,0 @@
-//! no-std
-
-fun f<T U>(_ x: T, _ y: U) {}

@@ -1,0 +1,71 @@
+[solver] 0/9 identical
+  MISMATCH Tests/CompilerTests/positive/overload-priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16785 +16785 @@
+      -0:75 : X
+      +0:75 : A<Void>
+  MISMATCH research/review/solver/s10_ext_conf_priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16798 +16798 @@
+      -0:78 : X
+      +0:78 : A<Void>
+  MISMATCH research/review/solver/s02_alias_free_v2.hylo
+      --- baseline
+      +++ solver
+      @@ -16707 +16707 @@
+      -0:25 : X
+      +0:25 : A
+  MISMATCH research/review/solver/s03_alias_binding_v2.hylo
+      --- baseline
+      +++ solver
+      @@ -16736 +16736 @@
+      -0:45 : X
+      +0:45 : A
+  MISMATCH research/review/solver/s26_generic_ret_as.hylo
+      --- baseline
+      +++ solver
+      @@ -16749 +16749 @@
+      -0:53 : X
+      +0:53 : B<A>
+  MISMATCH research/review/solver/t06_alias_coerce.hylo
+      --- baseline
+      +++ solver
+      @@ -16736 +16736 @@
+      -0:45 : X
+      +0:45 : A
+  MISMATCH research/review/solver/e_s02_alias_free_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16703 +16703 @@
+      -0:23 : #!
+      +0:23 : A
+      @@ -16727 +16727 @@
+      -diag /home/user/hylo-new/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: no conversion from '#!' to 'A'
+      +diag /home/user/hylo-new/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s03_alias_binding_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16732 +16732 @@
+      -0:43 : #!
+      +0:43 : A
+      @@ -16762 +16762 @@
+      -diag /home/user/hylo-new/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: no conversion from '#!' to 'A'
+      +diag /home/user/hylo-new/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s04_if_branch_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16705,2 +16705,2 @@
+      -0:25 : let #!
+      -0:26 : #!
+      +0:25 : let A
+      +0:26 : A
+      @@ -16714,2 +16714,2 @@
+      -0:33 : #!
+      -0:34 : #!
+      +0:33 : A
+      +0:34 : A
+      @@ -16749 +16749 @@
+      -diag /home/user/hylo-new/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.34-35: error: no coercion from 'A' to '#!'
+      +diag /home/user/hylo-new/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.21-24: error: no coercion from '#!' to 'A'

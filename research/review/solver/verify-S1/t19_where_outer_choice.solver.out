@@ -1,0 +1,4 @@
+parse     57.14 ms
+scope      7.06 ms
+type.stdlib   1034.42 ms
+type.user     56.66 ms

@@ -155,7 +155,9 @@ def semtest(bid, configs, files, env=None, jobs=8, timeout=300, verbose=True):
     envkey = hashlib.md5(json.dumps(env or {}, sort_keys=True).encode()).hexdigest()[:6]
 
     def base(f):
-        c = os.path.join(cache, f"{envkey}-{hashlib.md5(f.encode()).hexdigest()}.json")
+        # Key on the path and the content, so an edited file is never compared with a stale dump.
+        k = hashlib.md5(f.encode() + b"\0" + open(f, "rb").read()).hexdigest()
+        c = os.path.join(cache, f"{envkey}-{k}.json")
         if os.path.exists(c):
             return json.load(open(c))
         s, h, t = dump(bid, env, "baseline", f, timeout)

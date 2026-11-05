@@ -1,3 +1,0 @@
-negative/undefined-symbol.hylo:4.12-13: error: type 'A' has no static member 'B'
-fun f(x: A.B) { () }
-           ^

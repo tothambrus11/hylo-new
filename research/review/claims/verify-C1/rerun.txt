@@ -1,0 +1,31 @@
+== t/chain8.hylo
+missing
+== t/chain9.hylo
+summon.depthExhausted=1
+summon.layers=20
+error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== t/wide-given-8.hylo
+summon.layers=10
+== t/wide-given-9.hylo
+summon.depthExhausted=1
+summon.layers=20
+error: no coercion from 'P<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== t2/c05-wide-height2.hylo
+summon.depthExhausted=2
+summon.layers=20
+error: no coercion from 'P<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== t2/c07-shared-premise-height.hylo
+summon.layers=8
+== shared9
+error: failed to allocate 736165760 bytes of memory with alignment 8
+== wide9-sep
+summon.calls=3158
+summon.layers=5679
+summon.layers=10
+== shared6
+summon.layers=5679
+summon.matches=41452
+summon.layers=8
+summon.matches=89856
+== shared10
+error: failed to allocate 402653240 bytes of memory with alignment 8

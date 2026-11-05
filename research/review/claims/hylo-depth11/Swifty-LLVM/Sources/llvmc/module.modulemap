@@ -1,4 +1,0 @@
-module llvmc {
-  umbrella header "llvmc.h"
-  export *
-}

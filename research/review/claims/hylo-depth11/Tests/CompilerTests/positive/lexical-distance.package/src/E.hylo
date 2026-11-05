@@ -1,5 +1,0 @@
-extension S {
-
-  public static fun g() -> B { B() }
-
-}

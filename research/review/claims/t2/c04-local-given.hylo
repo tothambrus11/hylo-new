@@ -1,0 +1,18 @@
+// Givens declared in a function body and in a struct body; refutation at the top level must not
+// leak into these scopes and vice versa.
+trait P {}
+struct Xi {}
+struct Yb {}
+struct S<T> {}
+given <T where T is P> => S<T> is P {}
+fun need<T where T is P>() {}
+fun f() {
+  given Xi is P {}
+  need<Xi>()
+  need<S<S<Xi>>>()
+}
+struct Box {
+  given Yb is P {}
+  fun g() { need<S<Yb>>() }
+}
+public fun main() { f() }

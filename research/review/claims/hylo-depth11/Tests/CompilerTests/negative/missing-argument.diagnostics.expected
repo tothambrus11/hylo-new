@@ -1,3 +1,0 @@
-negative/missing-argument.hylo:8.3-6: error: incompatible labels: found '()', expected '(first:second:)'
-  f()
-  ~~~

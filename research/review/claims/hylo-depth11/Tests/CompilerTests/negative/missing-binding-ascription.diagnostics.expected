@@ -1,3 +1,0 @@
-negative/missing-binding-ascription.hylo:4.3-6: error: binding declaration requires an ascription
-  let x
-  ~~~

@@ -1,3 +1,0 @@
-negative/invalid-wildcard.hylo:3.15: error: expected '='
-fun main() { _ }
-              ^

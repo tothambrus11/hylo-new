@@ -1,0 +1,6 @@
+[absmodel] 2/3 identical
+  MISMATCH research/review/absmodel/verify-absmodel-2/v3-ord-used.hylo
+      baseline=ok config=crash
+[absmodel,index] 2/3 identical
+  MISMATCH research/review/absmodel/verify-absmodel-2/v3-ord-used.hylo
+      baseline=ok config=crash

@@ -1,0 +1,5 @@
+fun dup<T is Copyable>(x: T) -> T { x.copy() }
+public fun main() {
+  let c = ((true, false), (true, false), true)
+  let d = dup(c)
+}

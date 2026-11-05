@@ -1,3 +1,0 @@
-negative/illegal-inlining.hylo:14.5-14: error: use of non-exposed function in inlined function
-    self.m1()
-    ~~~~~~~~~

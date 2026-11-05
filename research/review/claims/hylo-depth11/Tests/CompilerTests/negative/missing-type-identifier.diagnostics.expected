@@ -1,3 +1,0 @@
-negative/missing-type-identifier.hylo:3.15: error: expected identifier
-trait A { type }
-              ^

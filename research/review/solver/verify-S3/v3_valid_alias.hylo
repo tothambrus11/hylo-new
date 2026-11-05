@@ -1,0 +1,12 @@
+// Valid alias program (type X = A), overloaded call under `as`, binding and annotation.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+public fun main() {
+  let a = A()
+  let p = if true { f() } else { a }
+  let z = f() as A
+  let w: A = f()
+}

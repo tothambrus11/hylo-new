@@ -1,0 +1,28 @@
+trait P {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+trait Q0 {}
+given <T, U where T == U> => Box<U> is Q0 {}
+trait Q1 {}
+given <T, U where T == U> => Box<U> is Q1 {}
+trait Q2 {}
+given <T, U where T == U> => Box<U> is Q2 {}
+trait Q3 {}
+given <T, U where T == U> => Box<U> is Q3 {}
+trait Q4 {}
+given <T, U where T == U> => Box<U> is Q4 {}
+trait Q5 {}
+given <T, U where T == U> => Box<U> is Q5 {}
+trait Q6 {}
+given <T, U where T == U> => Box<U> is Q6 {}
+trait Q7 {}
+given <T, U where T == U> => Box<U> is Q7 {}
+trait Q8 {}
+given <T, U where T == U> => Box<U> is Q8 {}
+trait Q9 {}
+given <T, U where T == U> => Box<U> is Q9 {}
+given Box<A> is P {}
+fun need<T is P>() {}
+fun bad() {
+  need<Box<Box<A>>>()
+}

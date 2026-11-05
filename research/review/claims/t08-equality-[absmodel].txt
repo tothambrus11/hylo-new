@@ -1,0 +1,2 @@
+# tc-bench --count review/absmodel/t08-equality.hylo, HYLO_TC_EXPERIMENTS=[absmodel], 2.5 GB cap, ~90 s to abort
+Fatal error: failed to allocate 9248 bytes of memory with alignment 8

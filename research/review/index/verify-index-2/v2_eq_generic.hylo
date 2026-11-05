@@ -1,0 +1,7 @@
+trait P {}
+struct A<X> { public memberwise init }
+struct C { public memberwise init }
+given <X> A<X> is P {}
+fun need<T is P>() {}
+fun f0<T, U where T == A<U>>() { need<T>() }
+fun f1<T, U where T == U>() { need<A<T>>(); need<A<U>>() }

@@ -1,0 +1,19 @@
+// intro.md example with both queries; plus a query that only the loop check (not absmodel at k=2)
+// can refute: `S<Yb> is P` where `S<Xi> is P` is a fact and `S<T> is P` loops on itself.
+trait P {}
+trait Q {}
+struct I {}
+struct Bo {}
+struct S<T> {}
+given <T where T is P> => T is Q {}
+given <T where T is P> => T is P {}
+given I is P {}
+given S<I> is P {}
+fun needQI<where I is Q>() {}
+fun needQB<where Bo is Q>() {}
+fun needSB<where S<Bo> is Q>() {}
+public fun main() {
+  needQI()
+  needQB()
+  needSB()
+}

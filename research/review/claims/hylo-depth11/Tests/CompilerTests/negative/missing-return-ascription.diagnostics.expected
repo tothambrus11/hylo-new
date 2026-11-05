@@ -1,3 +1,0 @@
-negative/missing-return-ascription.hylo:3.16: error: missing return type ascription
-subscript foo() { () }
-               ^

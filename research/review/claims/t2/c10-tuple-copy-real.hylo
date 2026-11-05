@@ -1,0 +1,8 @@
+// Realistic use: copying tuples of 4 and 5 booleans.
+fun dup<T is Copyable>(x: T) -> T { x.copy() }
+public fun main() {
+  let a = (true, false, true, false)
+  let b = dup(a)
+  let c = (true, false, true, false, true)
+  let d = dup(c)
+}

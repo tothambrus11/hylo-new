@@ -1,0 +1,9 @@
+// A nested given inside a trait, used at top level (no where-clause in scope):
+// R<Xi> holds, so `Yb is P` is derivable through R's nested given. absmodel must not refute it.
+trait P {}
+trait R { given Yb is P }
+struct Xi {}
+struct Yb {}
+given Xi is R {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

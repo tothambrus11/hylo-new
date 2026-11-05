@@ -1,5 +1,0 @@
-//! no-std stage:typing
-
-fun outer() -> Void {
-  fun inner()
-}

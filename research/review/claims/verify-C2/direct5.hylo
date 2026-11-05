@@ -1,0 +1,4 @@
+public fun main() {
+  let c = (true, false, true, false, true)
+  let d = c.copy()
+}

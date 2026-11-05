@@ -1,0 +1,13 @@
+//! Control for absmodel-2: same as t18 but premise is Eq<T> (no List<T> wrap) -> no cycle.
+trait Eq<Other> {}
+trait Ord {}
+trait Show {}
+struct List<T> {}
+struct Int2 {}
+given <U> => U is Eq<U> {}
+given <T where T is Eq<T>> => T is Ord {}
+given Int2 is Show {}
+fun show<T where T is Show>() {}
+public fun main() {
+  show<Int2>()
+}

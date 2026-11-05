@@ -1,3 +1,0 @@
-negative/missing-associated-type-conformance.hylo:17.1-6: error: no given instance of 'P<X>' in this scope
-given B is P {
-~~~~~

@@ -1,0 +1,10 @@
+// Diagnostic mentioning the call type under `as` with a wrong target.
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+public fun main() {
+  let z = f() as C
+}

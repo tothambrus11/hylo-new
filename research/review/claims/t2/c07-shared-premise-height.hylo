@@ -1,0 +1,17 @@
+// Sharing of a pending premise: two identical premises `M0 is P`; the second can be discharged by
+// the pending first one (1 step) instead of a full re-derivation.
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct M0 {}
+struct B {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given <where A0 is P, A1 is P, A2 is P, A3 is P> => M0 is P {}
+given <where M0 is P, M0 is P> => B is P {}
+fun need<where B is P>() {}
+public fun main() { need() }

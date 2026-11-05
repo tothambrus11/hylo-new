@@ -1,3 +1,0 @@
-negative/incompatible-if-branches.hylo:5.30-33: error: no coercion from 'B' to 'A'
-  _ = if true { A() } else { B() }
-                             ~~~

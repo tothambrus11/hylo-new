@@ -2,3 +2,6 @@
 [absmodel] 18/18 identical
 [loopcheck] 18/18 identical
 [names] 18/18 identical
+[unify] 18/18 identical
+[solver] 18/18 identical
+[absmodel,index,loopcheck] 18/18 identical

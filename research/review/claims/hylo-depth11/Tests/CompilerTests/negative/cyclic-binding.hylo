@@ -1,5 +1,0 @@
-//! no-std
-
-fun main() {
-  let y = y
-}

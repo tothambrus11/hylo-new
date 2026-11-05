@@ -1,3 +1,0 @@
-negative/missing-yield-value.hylo:4.8: error: expected expression
-  yield
-       ^

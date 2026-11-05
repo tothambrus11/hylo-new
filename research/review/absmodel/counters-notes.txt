@@ -1,0 +1,9 @@
+Rough counters (tc-bench --count, machine shared/loaded; micros are wall-clock-ish, not precise)
+stdlib (empty.hylo), absmodel alone:
+  k=2: absmodel.built=22 facts=1399 work=14783 micros=20053 refuted=225 summon.matches=29955 (baseline 41452)
+  k=3: absmodel.built=22 facts=14082 work=3768008 micros=10767235 refuted=224 summon.matches=29667
+  index alone: summon.matches=15051 ; index,absmodel: 14138 (absmodel adds ~6% over index on stdlib)
+t26-perf-many-scopes.hylo (150 generic fns, user module):
+  baseline:       summon.matches=142500 type.user 5638 ms
+  absmodel k=2:   built=151 facts=19326 work=286650 micros=23586 matches=142500 (0 refuted) type.user 6370 ms
+  absmodel k=3:   built=151 facts=413159 work=639382980 micros=31791974 matches=142500 type.user 38028 ms

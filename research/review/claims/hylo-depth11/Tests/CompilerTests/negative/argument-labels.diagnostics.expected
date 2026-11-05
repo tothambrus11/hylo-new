@@ -1,9 +1,0 @@
-negative/argument-labels.hylo:9.3-6: error: no candidate matches the argument list
-  one(y: A())
-  ~~~
-negative/argument-labels.hylo:5.5-8: note: incompatible labels: found '(x:)', expected '(y:)'
-fun one(_ x: A) {}
-    ~~~
-negative/argument-labels.hylo:6.5-8: note: incompatible labels: found '(x:y:)', expected '(y:)'
-fun one(_ x: A, _ y: A) {}
-    ~~~

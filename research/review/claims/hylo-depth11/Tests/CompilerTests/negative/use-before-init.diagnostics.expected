@@ -1,3 +1,0 @@
-negative/use-before-init.hylo:5.3-9: error: use of uninitialized object
-  use(x)
-  ~~~~~~

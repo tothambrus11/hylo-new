@@ -1,0 +1,18 @@
+// A given whose head (Q) differs from the goal's (P) but whose own context has an equality
+// premise. In the baseline the thread survives its first match: canDeriveCoercions(Q, P) sees
+// the assumed premise `%t ~ %u` (0b11), so the thread assumes Q ~ P and keeps going until it
+// fails or the depth cap. The index never forms it. Result must still be identical.
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+
+given <U> Box<U> is Q {}
+given Box<A> is P {}
+
+fun need<T is P>() {}
+fun needQ<T is Q>() {}
+
+fun bad() {
+  need<Box<Box<A>>>()
+}

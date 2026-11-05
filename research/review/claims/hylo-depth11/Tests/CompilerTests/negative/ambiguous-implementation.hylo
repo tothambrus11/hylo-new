@@ -1,8 +1,0 @@
-//! no-std
-
-trait P { fun f() }
-
-given Void is P {
-  fun f() {}
-  fun f() {}
-}

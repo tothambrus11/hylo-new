@@ -1,0 +1,12 @@
+// Open goal / skolem goals in generic context: refutation of a skolem goal `T is Q` where T only
+// has `T is P` must match baseline failure; and a derivable one through a conditional given.
+trait P {}
+trait Q {}
+struct S<T> {}
+given <T where T is P> => S<T> is Q {}
+fun needQ<T where T is Q>() {}
+fun f<T where T is P>() {
+  needQ<S<T>>()
+  needQ<T>()
+}
+public fun main() {}

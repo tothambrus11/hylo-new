@@ -1,0 +1,15 @@
+== chain8
+counters.user:   coerced.slowPath=1 solver.goalSteps=30 solver.systems=5 summon.layers=10 summon.matchOK=10 summon.matches=649 summon.subgoals=9
+== chain9
+counters.user:   coerced.slowPath=1 solver.goalSteps=32 solver.systems=5 summon.calls=2 summon.depthExhausted=1 summon.layers=20 summon.matchOK=20 summon.matches=1369 summon.subgoals=20
+   /home/user/hylo-new/research/review/claims/t/chain9.hylo:7.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== wide-given-8
+counters.user:   coerced.slowPath=1 solver.goalSteps=40 solver.systems=19 summon.layers=10 summon.matchOK=10 summon.matches=740 summon.subgoals=9
+== wide-given-9
+counters.user:   coerced.slowPath=1 solver.goalSteps=44 solver.systems=21 summon.calls=2 summon.depthExhausted=1 summon.layers=20 summon.matchOK=20 summon.matches=1593 summon.subgoals=20
+   /home/user/hylo-new/research/review/claims/t/wide-given-9.hylo:23.21-25: error: no coercion from 'P<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== wide-tuple-4
+counters.user:   coerced.slowPath=1 solver.goalSteps=6 solver.systems=2 summon.layers=10 summon.matchOK=15 summon.matches=933 summon.subgoals=13
+== wide-tuple-5
+counters.user:   coerced.slowPath=1 solver.goalSteps=6 solver.systems=2 summon.calls=2 summon.depthExhausted=2 summon.layers=20 summon.matchOK=43 summon.matches=2611 summon.subgoals=44
+   /home/user/hylo-new/research/review/claims/t/wide-tuple-5.hylo:2.21-25: error: no coercion from 'Copyable<{Bool, Float32, Float64, Void, Bool}> ==> [Void]() let -> Void' to '[Void]() let -> Void'

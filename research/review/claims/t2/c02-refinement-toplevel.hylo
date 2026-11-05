@@ -1,0 +1,13 @@
+// Refinement at top level: `Xi is Q` and `Q refines P` give `Xi is P`.
+trait P {}
+trait Q refines P {}
+struct Xi {}
+struct W<T> {}
+given Xi is Q {}
+given <T where T is P> => W<T> is Q {}
+fun need<T where T is P>() {}
+public fun main() {
+  need<Xi>()
+  need<W<Xi>>()
+  need<W<W<Xi>>>()
+}

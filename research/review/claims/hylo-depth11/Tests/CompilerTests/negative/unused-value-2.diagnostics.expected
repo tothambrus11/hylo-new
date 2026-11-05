@@ -1,3 +1,0 @@
-negative/unused-value-2.hylo:2.37-42: error: unused value of type 'Int'
-  if true { Builtin.trap() } else { Int() }
-                                    ~~~~~

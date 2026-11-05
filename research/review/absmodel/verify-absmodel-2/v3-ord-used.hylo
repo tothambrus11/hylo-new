@@ -1,0 +1,11 @@
+//! absmodel-2 variant: with an actual Ord query on a concrete type (baseline must fail to derive, top-down).
+trait Eq<Other> {}
+trait Ord {}
+struct List<T> {}
+struct Int2 {}
+given <U> => U is Eq<U> {}
+given <T where T is Eq<List<T>>> => T is Ord {}
+fun needOrd<T where T is Ord>() {}
+public fun main() {
+  needOrd<Int2>()
+}

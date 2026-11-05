@@ -1,4 +1,0 @@
-//! no-std
-
-struct A {}
-fun f(x: A.B) { () }

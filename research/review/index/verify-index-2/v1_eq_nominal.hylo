@@ -1,0 +1,11 @@
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+given A is P {}
+given B is Q {}
+fun need<T is P>() {}
+fun needq<T is Q>() {}
+fun f0<T where T == A>() { need<T>(); need<A>() }
+fun f1<T, U where T == U>() { need<A>(); needq<B>() }
+fun f2<T where T == B>() { needq<T>() }

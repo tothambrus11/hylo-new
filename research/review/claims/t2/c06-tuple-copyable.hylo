@@ -1,0 +1,6 @@
+// Realistic depth-cap victim: a 5-tuple of trivially copyable types.
+fun need<T where T is Copyable>() {}
+public fun main() {
+  need<{Bool, Bool, Bool, Bool}>()
+  need<{Bool, Bool, Bool, Bool, Bool}>()
+}

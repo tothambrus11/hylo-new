@@ -1,7 +1,0 @@
-//! trap
-
-public fun main() {
-  var work = true
-  Builtin.trap()
-  while work { &work = false }
-}

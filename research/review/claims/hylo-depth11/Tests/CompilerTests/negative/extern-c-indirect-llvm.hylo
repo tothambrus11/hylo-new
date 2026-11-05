@@ -1,3 +1,0 @@
-// Must not have zero-sized parameters.
-@extern_c_indirect("f4")
-fun f1(x: Void)

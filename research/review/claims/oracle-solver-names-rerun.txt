@@ -1,0 +1,32 @@
+[solver] 1/2 identical
+  MISMATCH Tests/CompilerTests/positive/overload-priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16785 +16785 @@
+      -0:75 : X
+      +0:75 : A<Void>
+[index,names,unify] 1/2 identical
+  MISMATCH research/review/names/n04_reverse_poison_min.hylo
+      --- baseline
+      +++ index,names,unify
+      @@ -16689,2 +16689 @@
+      -0:13 -> Foo
+      -0:13 : Metatype<Foo>
+      +0:13 : #!
+      @@ -16694 +16693 @@
+      -0:16 : Foo
+      +0:16 : #!
+      @@ -16707,4 +16706,3 @@
+      -0:23 -> Inner
+      -0:23 : Metatype<Inner>
+      -0:24 : Metatype<let Inner>
+      -0:25 : let Inner
+      +0:23 : #!
+      +0:24 : Metatype<let #!>
+      +0:25 : let #!
+      @@ -16712 +16710 @@
+      -0:27 : [Void](let Inner) let -> Void
+      +0:27 : [Void](let #!) let -> Void
+      @@ -16721,0 +16720,2 @@
+      +diag /home/user/hylo-new/research/review/names/n04_reverse_poison_min.hylo:6.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/user/hylo-new/research/review/names/n04_reverse_poison_min.hylo:9.16-21: error: type 'Int' has no static member 'Inner'

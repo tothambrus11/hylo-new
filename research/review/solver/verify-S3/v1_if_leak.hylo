@@ -1,0 +1,11 @@
+// Alias sugar via if-branch join, leaking into a later diagnostic.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+public fun main() {
+  let a = A()
+  let p = if true { f() } else { a }
+  let q: B = p
+}

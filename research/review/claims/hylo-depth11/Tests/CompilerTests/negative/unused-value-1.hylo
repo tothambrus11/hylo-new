@@ -1,6 +1,0 @@
-//! no-std
-
-fun foo() {
-  ((),)
-  return
-}

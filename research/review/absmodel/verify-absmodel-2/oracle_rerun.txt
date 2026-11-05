@@ -1,0 +1,5 @@
+[absmodel] 1/3 identical
+  MISMATCH research/review/absmodel/t01-occurs-cycle.hylo
+      baseline=ok config=crash
+  MISMATCH research/review/absmodel/t18-occurs-realistic.hylo
+      baseline=ok config=crash

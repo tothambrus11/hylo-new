@@ -1,3 +1,0 @@
-negative/missing-implementation.hylo:14.1-6: error: no implementation of 'f3'
-given Void is P {
-~~~~~

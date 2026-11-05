@@ -1,9 +1,0 @@
-//! no-std
-
-fun f(first x: Void = (), second y: Void) {}
-
-fun main() {
-  f(first: (), second: ())
-  f(second: ())
-  f()
-}

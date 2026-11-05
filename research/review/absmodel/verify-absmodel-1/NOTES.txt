@@ -1,0 +1,6 @@
+verify-absmodel-1: re-ran oracle (bin 4587ce9e1a23, config absmodel) -> oracle_k2.txt, oracle_k3.txt
+k=2: t03 MISMATCH; t02, t15, t23 identical.
+k=3: t03, t02, t23 MISMATCH; t15 identical.
+Mechanism confirmed by code reading: AbstractResolution.swift subsumes() line 312 `if let u = s[v] { return u == t }`
+treats ⊤ syntactically; R(v,v) drops R(S(⊤),S(⊤)); mayDerive then fails to unify the query with R(v,v).
+Corrections: t15 is NOT affected (identical at k=2 and k=3); t23 is identical at k=2.

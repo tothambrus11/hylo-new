@@ -1,0 +1,5 @@
+fun g<W>(w: W) -> W { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = k(x, g(y)) as U
+}

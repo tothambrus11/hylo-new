@@ -1,0 +1,12 @@
+// Conformances stated in a struct header (conditional one too), not as `given` declarations.
+trait P {}
+trait Q<T> {}
+struct Xi is P {}
+struct S2<T> is P & Q<T> {}
+fun need<T where T is P>() {}
+fun needQ<T, U where T is Q<U>>() {}
+public fun main() {
+  need<Xi>()
+  need<S2<Xi>>()
+  needQ<S2<Xi>, Xi>()
+}

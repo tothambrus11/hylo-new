@@ -1,0 +1,3 @@
+absmodel.facts=14082
+absmodel.micros=9604329
+type.stdlib  10440.78 ms

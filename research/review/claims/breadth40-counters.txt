@@ -1,0 +1,9 @@
+== breadth40 []
+counters.user:   coerced.slowPath=40 solver.goalSteps=3440 solver.systems=1680 summon.layers=80 summon.matchOK=80 summon.matches=66840 summon.subgoals=40
+type.user   9194.98 ms
+== breadth40 [index]
+counters.user:   coerced.slowPath=40 index.skipped=65080 solver.goalSteps=3440 solver.systems=1680 summon.layers=80 summon.matchOK=80 summon.matches=1640 summon.subgoals=40
+type.user    101.30 ms
+== breadth40 [names,unify,index,absmodel,loopcheck]
+counters.user:   absmodel.built=1 absmodel.facts=1663 absmodel.micros=9762 absmodel.work=654 coerced.slowPath=40 index.skipped=65080 solver.goalSteps=3440 solver.systems=1680 summon.layers=80 summon.matchOK=80 summon.matches=1640 summon.subgoals=40
+type.user     99.28 ms

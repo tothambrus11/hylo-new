@@ -1,4 +1,0 @@
-public fun main() {
-  if true { Builtin.trap() } else { Int() }
-  return
-}

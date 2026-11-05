@@ -1,0 +1,26 @@
+== c01-nested-given-toplevel.hylo
+counters.user:   coerced.slowPath=1 solver.goalSteps=10 solver.systems=4 summon.calls=2 summon.layers=5 summon.matchOK=4 summon.matches=287 summon.subgoals=4
+   /home/user/hylo-new/research/review/claims/t2/c01-nested-given-toplevel.hylo:7.1-6: error: no given instance of 'P<Yb>' in this scope
+== c02-refinement-toplevel.hylo
+counters.user:   coerced.slowPath=3 solver.goalSteps=36 solver.systems=8 summon.calls=3 summon.layers=19 summon.matchOK=17 summon.matches=1169 summon.subgoals=16
+   /home/user/hylo-new/research/review/claims/t2/c02-refinement-toplevel.hylo:6.1-6: error: no given instance of 'P<Xi>' in this scope
+   /home/user/hylo-new/research/review/claims/t2/c02-refinement-toplevel.hylo:7.1-6: error: no given instance of 'P<W<T>>' in this scope
+== c03-struct-header-conformance.hylo
+counters.user:   coerced.slowPath=3 solver.goalSteps=32 solver.systems=8 summon.layers=6 summon.matchOK=6 summon.matches=222 summon.subgoals=3
+== c04-local-given.hylo
+counters.user:   coerced.slowPath=3 solver.goalSteps=39 solver.systems=9 summon.layers=9 summon.matchOK=9 summon.matches=435 summon.subgoals=6
+== c05-wide-height2.hylo
+counters.user:   coerced.slowPath=1 solver.goalSteps=44 solver.systems=21 summon.calls=2 summon.depthExhausted=2 summon.layers=20 summon.matchOK=20 summon.matches=1500 summon.subgoals=21
+   /home/user/hylo-new/research/review/claims/t2/c05-wide-height2.hylo:19.21-25: error: no coercion from 'P<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== c06-tuple-copyable.hylo
+counters.user:   coerced.slowPath=2 solver.goalSteps=14 solver.systems=3 summon.calls=2 summon.depthExhausted=2 summon.layers=30 summon.matchOK=373 summon.matches=12143 summon.subgoals=350
+   /home/user/hylo-new/research/review/claims/t2/c06-tuple-copyable.hylo:5.3-39: error: no coercion from 'Copyable<{Bool, Bool, Bool, Bool, Bool}> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== c07-shared-premise-height.hylo
+counters.user:   coerced.slowPath=1 solver.goalSteps=30 solver.systems=14 summon.layers=8 summon.matchOK=14 summon.matches=930 summon.subgoals=13
+== c08-intro-letter.hylo
+counters.user:   coerced.slowPath=3 solver.goalSteps=34 solver.systems=12 summon.calls=4 summon.depthExhausted=4 summon.layers=43 summon.matchOK=44 summon.matches=2963 summon.subgoals=45
+   /home/user/hylo-new/research/review/claims/t2/c08-intro-letter.hylo:17.3-9: error: no coercion from 'Q<Bo> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/user/hylo-new/research/review/claims/t2/c08-intro-letter.hylo:18.3-9: error: no coercion from 'Q<S<Bo>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+== c09-generic-refute.hylo
+counters.user:   coerced.slowPath=2 solver.goalSteps=24 solver.systems=6 summon.calls=1 summon.layers=6 summon.matchOK=4 summon.matches=290 summon.subgoals=4
+   /home/user/hylo-new/research/review/claims/t2/c09-generic-refute.hylo:10.3-11: error: no coercion from 'Q<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
