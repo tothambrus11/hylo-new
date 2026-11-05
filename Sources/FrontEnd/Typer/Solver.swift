@@ -27,6 +27,15 @@ internal struct Solver {
   /// The number of root goals.
   private let rootCount: Int
 
+  /// Experiment: overload constraints whose resolution is deferred until other goals settle.
+  private var parked: [GoalIdentity] = []
+
+  /// Experiment: `true` iff this solver is probing the consequences of a single choice.
+  private var probing: Bool = false
+
+  /// Experiment: `true` iff a probe has run to quiescence.
+  private var probeFinished: Bool = false
+
   /// The type and term substitutions made by the solver.
   ///
   /// This map is monotonically extended during constraint solving to assign a type or term to each
@@ -77,6 +86,7 @@ internal struct Solver {
   /// Returns a solution discharging the goals in `self` using `typer` for querying type relations
   /// and resolve names.
   internal mutating func solution(using typer: inout Typer) -> Solution {
+    TyperCounters.bump("solver.systems")
     log("steps:")
     return solution(betterThanOrEqualTo: .worst, using: &typer)!
   }
@@ -89,7 +99,25 @@ internal struct Solver {
     self.typer = consume typer
     defer { typer = self.typer.sink() }
 
-    while let g = fresh.popLast() {
+    let deferring = TyperExperiments.solver
+    while true {
+      guard let g = fresh.popLast() else {
+        if !deferring { break }
+        if probing {
+          probeFinished = true
+          return nil
+        }
+        if !parked.isEmpty {
+          switch resolveParked() {
+          case .running: continue
+          case .canceled: return nil
+          case .terminated(let r): return r
+          }
+        }
+        refreshCoercionAndWideningConstraints()
+        if fresh.isEmpty { break } else { continue }
+      }
+      TyperCounters.bump("solver.goalSteps")
       goals[g].update { (t) in
         self.typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
       }
@@ -117,6 +145,10 @@ internal struct Solver {
         case is TupleMemberConstraint:
           o = me.solve(tupleMember: g)
         case is OverloadConstraint:
+          if deferring {
+            me.parked.append(g)
+            return .running
+          }
           return me.solve(overload: g).map(SolverStatus.terminated(_:)) ?? .canceled
         default:
           unreachable()
@@ -131,7 +163,7 @@ internal struct Solver {
 
       switch status {
       case .running:
-        if fresh.isEmpty { refreshCoercionAndWideningConstraints() }
+        if fresh.isEmpty && !deferring { refreshCoercionAndWideningConstraints() }
       case .canceled:
         return nil
       case .terminated(let result):
@@ -551,13 +583,85 @@ internal struct Solver {
     }
   }
 
+  /// Experiment: resolves one parked overload constraint, either by committing to its only viable
+  /// choice or by branching over its viable choices.
+  ///
+  /// The viability of each choice is determined by forward checking: the consequences of binding
+  /// the overloaded name to that choice are propagated (without branching on other overloads)
+  /// and the choice is discarded if this propagation produces more errors than another choice.
+  /// Pruning is only applied when at least one choice propagates without any error, in which
+  /// case discarded choices could not have led to an error-free solution.
+  private mutating func resolveParked() -> SolverStatus {
+    var selected: (index: Int, survivors: [NameResolutionCandidate])? = nil
+
+    for (i, g) in parked.enumerated() {
+      let k = goals[g] as! OverloadConstraint
+      var scores: [(NameResolutionCandidate, Int)] = []
+      for choice in k.candidates {
+        if let e = probe(g, choice) { scores.append((choice, e)) }
+      }
+      let least = scores.map(\.1).min()
+      let survivors = (least == 0) ? scores.filter({ $0.1 == 0 }).map(\.0) : k.candidates
+      TyperCounters.bump("solver.probedChoices", by: k.candidates.count)
+      TyperCounters.bump("solver.prunedChoices", by: k.candidates.count - survivors.count)
+
+      if survivors.count == 1 {
+        selected = (i, survivors)
+        break
+      } else if selected == nil || (survivors.count < selected!.survivors.count) {
+        selected = (i, survivors)
+      }
+    }
+
+    let (i, survivors) = selected!
+    let g = parked.remove(at: i)
+    let k = goals[g] as! OverloadConstraint
+
+    // Commit without forking if there's only one viable choice.
+    if let choice = survivors.uniqueElement {
+      TyperCounters.bump("solver.commits")
+      let subgoal = insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
+      outcomes[g] = delegate([subgoal])
+      bindings[k.name] = choice.reference
+      return .running
+    }
+
+    return solve(overload: g, among: survivors).map(SolverStatus.terminated(_:)) ?? .canceled
+  }
+
+  /// Experiment: returns the number of errors after propagating the consequences of binding the
+  /// name of `g` to `choice`, or `nil` if propagation is canceled.
+  private mutating func probe(_ g: GoalIdentity, _ choice: NameResolutionCandidate) -> Int? {
+    let k = goals[g] as! OverloadConstraint
+    TyperCounters.bump("solver.probes")
+    var fork = Self(forking: self)
+    fork.probing = true
+    fork.parked.removeAll(where: { $0 == g })
+    let subgoal = fork.insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
+    fork.outcomes[g] = fork.delegate([subgoal])
+    fork.bindings[k.name] = choice.reference
+    _ = fork.solution(betterThanOrEqualTo: best, using: &typer)
+    return fork.probeFinished ? fork.current.errors : nil
+  }
+
   /// Discharges `g`, which is an overload constraint.
   private mutating func solve(overload g: GoalIdentity) -> Solution? {
     let k = goals[g] as! OverloadConstraint
+    return solve(overload: g, among: k.candidates)
+  }
+
+  /// Discharges `g`, which is an overload constraint, considering only `candidates`.
+  private mutating func solve(
+    overload g: GoalIdentity, among candidates: [NameResolutionCandidate]
+  ) -> Solution? {
+    let k = goals[g] as! OverloadConstraint
+    TyperCounters.bump("solver.overloads")
 
     var viable: [(choice: NameResolutionCandidate, solution: Solution)] = []
-    for choice in k.candidates {
+    for choice in candidates {
+
       let equality = EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site)
+      TyperCounters.bump("solver.forks")
       log("- pick: \(program.show(equality))")
 
       let s = indenting { (me) in
@@ -642,6 +746,7 @@ internal struct Solver {
     var end = stale.count
     for i in (0 ..< stale.count).reversed() {
       var changed = false
+      TyperCounters.bump("solver.refreshScans")
       goals[stale[i]].update { (t) in
         let u = typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
         if t != u { changed = true }
