@@ -4390,6 +4390,12 @@ public struct Typer {
   ) -> [NameResolutionCandidate] {
     var candidates: [NameResolutionCandidate] = []
     for e in extensions where !declarationsOnStack.contains(.init(e)) {
+      // Experiment: skip extensions that do not declare any member named `n`.
+      if TyperExperiments.names && (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil) {
+        TyperCounters.bump("names.skippedExtensions")
+        continue
+      }
+      TyperCounters.bump("names.appliesCalls")
       if let a = applies(e, to: q, in: scopeOfUse) {
         let w = program.types.reify(
           a.witness, applying: a.substitutions, withVariables: .substitutedByError)
