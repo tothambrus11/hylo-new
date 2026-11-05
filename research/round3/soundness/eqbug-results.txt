@@ -1,0 +1,10 @@
+eqbug-1.hylo [baseline] diags=0 ms=1334.18 matches=47781
+eqbug-1.hylo [fixsubst] diags= ms=TIMEOUT matches=
+eqbug-2.hylo [baseline] diags=0 ms=1571.60 matches=48859
+eqbug-2.hylo [fixsubst] diags= ms=TIMEOUT matches=
+eqbug-3.hylo [baseline] diags=0 ms=1492.70 matches=47781
+eqbug-3.hylo [fixsubst] diags= ms=TIMEOUT matches=
+eqbug-4.hylo [baseline] diags=0 ms=1424.56 matches=47781
+eqbug-4.hylo [fixsubst] diags= ms=TIMEOUT matches=
+eqbug-5.hylo [baseline] diags=0 ms=138.23 matches=1608
+eqbug-5.hylo [fixsubst] diags=0 ms=136.38 matches=1608

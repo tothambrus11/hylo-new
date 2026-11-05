@@ -35,6 +35,17 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
+## Soundness investigation (after round 3)
+
+`round3/soundness.md` investigates five baseline defects:
+1. An unsound equality derivation. Root cause: `match` drops substitutions in its coercion path. Fixes: `fixsubst` + `eqrefute`.
+2. Genuine equality search is exponential once (1) is fixed: valid chains of 5 are rejected. Needs congruence closure.
+3. `where T.X == B` requirements at call sites are never discharged; at the default cap this runs out of memory.
+4. A SIGSEGV on cyclic substitutions. Fix: `occurs`.
+5. Order-dependent memoization across cycle cuts. Partial fix: transactional `cyclecut`.
+
+Patch `impl/0007-*.patch`. All fixes are identical on the 192 tests. Repros are in `round3/soundness/`. `HYLO_TC_EXPERIMENTS=trace` prints resolution derivations.
+
 ## Status after round 3 (2026-11-05)
 
 - **Write-ups.**

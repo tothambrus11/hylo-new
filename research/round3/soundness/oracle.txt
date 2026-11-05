@@ -1,0 +1,13 @@
+# Oracle runs for the soundness fixes (192 compiler tests, against the baseline of the same binary)
+## semtest-fix
+[fixsubst] 192/192 identical
+## semtest-occ
+[occurs] 192/192 identical
+[fixsubst,occurs] 192/192 identical
+## semtest-cyc
+[cyclecut] 192/192 identical
+[cyclecut,fixsubst,occurs] 192/192 identical
+## semtest-fix2
+[cyclecut] 192/192 identical
+[eqrefute,fixsubst] 192/192 identical
+[cyclecut,eqrefute,fixsubst,occurs] 192/192 identical
