@@ -1,0 +1,106 @@
+import Archivist
+import Utilities
+
+/// The declaration of a bundle of related functions.
+@Archivable
+public struct FunctionBundleDeclaration: RoutineDeclaration, Annotatable, Scope {
+
+  /// The annotations on this declaration.
+  public let annotations: [Annotation]
+
+  /// The modifiers applied to this declaration.
+  public let modifiers: [Parsed<DeclarationModifier>]
+
+  /// The introducer of this declaration.
+  public let introducer: Parsed<FunctionDeclaration.Introducer>
+
+  /// The name of the declared function.
+  public let identifier: Parsed<String>
+
+  /// The type parameters and usings of the function.
+  public let contextParameters: ContextParameters
+
+  /// The capture-list of the function.
+  public let captures: CaptureList
+
+  /// The explicit parameters of the bundle.
+  public let parameters: [ParameterDeclaration.ID]
+
+  /// The effect of the bundle's call operator.
+  public let effect: Parsed<AccessEffect>
+
+  /// The type of the bundle's return value.
+  public let output: ExpressionIdentity?
+
+  /// The variants of the bundle.
+  public let variants: [VariantDeclaration.ID]
+
+  /// The site from which `self` was parsed.
+  public let site: SourceSpan
+
+  /// Creates an instance with the given properties.
+  public init(
+    annotations: [Annotation],
+    modifiers: [Parsed<DeclarationModifier>],
+    introducer: Parsed<FunctionDeclaration.Introducer>,
+    identifier: Parsed<String>,
+    contextParameters: ContextParameters,
+    captures: CaptureList,
+    parameters: [ParameterDeclaration.ID],
+    effect: Parsed<AccessEffect>,
+    output: ExpressionIdentity?,
+    variants: [VariantDeclaration.ID],
+    site: SourceSpan
+  ) {
+    assert(!introducer.value.isInitializer)
+    self.annotations = annotations
+    self.modifiers = modifiers
+    self.introducer = introducer
+    self.identifier = identifier
+    self.contextParameters = contextParameters
+    self.captures = captures
+    self.parameters = parameters
+    self.effect = effect
+    self.output = output
+    self.variants = variants
+    self.site = site
+  }
+
+}
+
+extension FunctionBundleDeclaration: Showable {
+
+  /// Returns a textual representation of `self` using `printer`.
+  public func show(using printer: inout TreePrinter) -> String {
+    var result = ""
+    for m in modifiers { result.append("\(m) ") }
+
+    switch introducer.value {
+    case .fun:
+      result.append("fun \(identifier.value)")
+    case .subscript:
+      result.append("subscript \(identifier.value)")
+    default:
+      unreachable()
+    }
+
+    if !contextParameters.isEmpty {
+      result.append(printer.show(contextParameters))
+    }
+
+    result.append(printer.show(captures))
+    result.append("(")
+    result.append(printer.show(parameters))
+    result.append(") \(effect.value) -> ")
+    result.append(output.map({ (o) in printer.show(o) }) ?? "Void")
+
+    result.append(" {\n")
+    for v in variants {
+      result.append(printer.show(v).indented + "\n")
+    }
+    result.append(output.map({ (o) in printer.show(o) }) ?? "}")
+
+    return result
+  }
+
+}

@@ -1,0 +1,24 @@
+//! stage:typing no-std
+// Tuples: labels, lengths, nesting, empty tuple (void identity special-case).
+fun check<T>(x: T) {}
+fun first<T, U>(x: {T, U}) -> T { x.0 }
+fun lab<T>(x: {a: T, b: T}) -> T { x.a }
+
+fun main() {
+  let t0 = ((), ())
+  let t1 = (a: (), b: ())
+  check<{Void, Void}>(t0)
+  check<{a: Void, b: Void}>(t1)
+  check<{a: Void, b: Void}>(t0)
+  check<{b: Void, a: Void}>(t1)
+  check<{Void, Void}>(t1)
+  let f0 = first(t0)
+  let f1 = first(t1)
+  let l0 = lab(t1)
+  let l1 = lab(t0)
+  check<{Void}>(((),))
+  check<{Void, Void, Void}>(t0)
+  check<{}>(())
+  check<Void>(())
+  check<{{Void}, {}}>((((),), ()))
+}

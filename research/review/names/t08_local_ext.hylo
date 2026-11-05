@@ -1,0 +1,11 @@
+struct A {}
+fun outer(a: A) -> Int {
+  let _ = a.k()
+  return 1
+}
+extension A { fun k() -> Int { 1 } }
+struct B {
+  fun inner() -> Int { 2 }
+}
+extension B { fun inner() -> Bool { true } }
+fun useB(b: B) { let _ = b.inner() as Bool; let _ = b.inner() as Int }

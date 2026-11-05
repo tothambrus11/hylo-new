@@ -1,0 +1,14 @@
+//! stage:typing no-std
+
+struct A { public memberwise init }
+struct B { public memberwise init }
+
+fun f() -> A { A() }
+
+fun f() -> B { B() }
+
+fun g(x: A) {}
+
+fun main() {
+  g(f())
+}

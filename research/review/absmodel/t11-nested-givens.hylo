@@ -1,0 +1,23 @@
+trait P {}
+trait Q refines P {}
+trait R { given Void is P }
+trait T2 refines Q {}
+struct A {}
+struct S<X> {}
+given A is T2 {}
+given <X where X is Q> => S<X> is T2 {}
+fun use<X>(x: X) {}
+fun needP<X where X is P>() {}
+fun f<X is Q & R>() {
+  use(summon[P<X>])
+  use(summon[P<Void>])
+}
+fun g<X is R>() {
+  needP<Void>()
+  needP<X>()
+}
+public fun main() {
+  needP<A>()
+  needP<S<S<A>>>()
+  needP<Void>()
+}

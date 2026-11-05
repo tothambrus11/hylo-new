@@ -1,0 +1,51 @@
+[solver] 5/10 identical
+  MISMATCH research/review/solver/s01_err_commit.hylo
+      --- baseline
+      +++ solver
+      @@ -16735 +16735 @@
+      -0:46 : [Void](let C) let -> Void
+      +0:46 : [Void](let B) let -> Void
+      @@ -16758 +16758,2 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'C'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.3-4: error: ambiguous use of 'g'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'B'
+  MISMATCH research/review/solver/s02_alias_free.hylo
+      --- baseline
+      +++ solver
+      @@ -16703 +16703 @@
+      -0:23 : #!
+      +0:23 : A
+      @@ -16727 +16727 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s02_alias_free.hylo:8.11-14: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/s02_alias_free.hylo:8.11-14: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/s03_alias_binding.hylo
+      --- baseline
+      +++ solver
+      @@ -16732 +16732 @@
+      -0:43 : #!
+      +0:43 : A
+      @@ -16762 +16762 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s03_alias_binding.hylo:12.12-15: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/s03_alias_binding.hylo:12.12-15: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/s04_if_branch.hylo
+      --- baseline
+      +++ solver
+      @@ -16705,2 +16705,2 @@
+      -0:25 : let #!
+      -0:26 : #!
+      +0:25 : let A
+      +0:26 : A
+      @@ -16714,2 +16714,2 @@
+      -0:33 : #!
+      -0:34 : #!
+      +0:33 : A
+      +0:34 : A
+      @@ -16749 +16749 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s04_if_branch.hylo:9.34-35: error: no coercion from 'A' to '#!'
+      +diag /home/hylo/hylo-tc/research/review/solver/s04_if_branch.hylo:9.21-24: error: no coercion from '#!' to 'A'
+  MISMATCH research/review/solver/s10_ext_conf_priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16798 +16798 @@
+      -0:78 : X
+      +0:78 : A<Void>

@@ -1,0 +1,3 @@
+counters.user:   coerced.slowPath=50617 names.appliesCalls=144512 solver.forks=36128 solver.goalSteps=384715 solver.overloads=4516 solver.systems=1 summon.cacheHits=72240 summon.calls=72272 summon.layers=267401 summon.matchOK=72256 summon.matches=5254169 summon.subgoals=72272
+diagnostics: 0
+type.user 109313.74 ms

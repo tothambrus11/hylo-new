@@ -114,6 +114,15 @@ public struct Typer {
     /// The cache of `Typer.canDeriveCoercion(_:applying:)`.
     fileprivate var canDeriveCoercion: [Given: [TypePair: UInt8]]
 
+    /// The cache of `Typer.givenIndex(visibleFrom:)`.
+    fileprivate var scopeToGivenIndex: [ScopeIdentity: GivenIndex] = [:]
+
+    /// The cache of `Typer.abstractModel(visibleFrom:)`.
+    fileprivate var scopeToAbstractModel: [ScopeIdentity: AbstractResolutionModel] = [:]
+
+    /// The abstract model of the givens visible at the top level of each module.
+    fileprivate var moduleToAbstractModel: [Module.ID: AbstractResolutionModel] = [:]
+
     /// The cache of `Typer.applies(_:to:in:)`.
     fileprivate var scopeToExtensionApplies: [ScopeIdentity: [ExtensionAndType: SummonResult]]
 
@@ -3500,12 +3509,17 @@ public struct Typer {
       /// The identifier of the next assumed given.
       let nextGivenIdentifier: Int
 
+      /// Experiment: for each assumed given introduced as the premise of a given, the goals of
+      /// which the premise is a (transitive) subgoal.
+      var ancestry: [Int: [AnyTypeIdentity]] = [:]
+
       /// Returns a copy of `self` in which `ts` are assumed given.
       func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
         let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
-        let e = Environment(
+        var e = Environment(
           substitutions: substitutions, givens: givens + gs,
           nextGivenIdentifier: nextGivenIdentifier + gs.count)
+        e.ancestry = ancestry
         return e
       }
 
@@ -3514,8 +3528,9 @@ public struct Typer {
       func assuming(given t: AnyTypeIdentity) -> (Environment, WitnessExpression) {
         let i = nextGivenIdentifier
         let g = Given.assumed(i, t)
-        let e = Environment(
+        var e = Environment(
           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
+        e.ancestry = ancestry
         return (e, .init(value: .assumed(i), type: t))
       }
 
@@ -3575,8 +3590,10 @@ public struct Typer {
   internal mutating func summon(
     _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity
   ) -> [SummonResult] {
+    TyperCounters.bump("summon.calls")
     // Did we already compute the result?
     if let table = cache.scopeToSummoned[scopeOfUse], let result = table[t] {
+      TyperCounters.bump("summon.cacheHits")
       return result
     }
 
@@ -3615,8 +3632,31 @@ public struct Typer {
     _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
     where environment: ResolutionThread.Environment,
     then continuation: [ResolutionThread.ContinuationItem],
-    penalties: Int
+    penalties: Int,
+    ancestors: [AnyTypeIdentity] = []
   ) -> [ResolutionThread] {
+    TyperCounters.bump("summon.subgoals")
+
+    // Experiment: a subgoal identical to one of its ancestors can't be part of a smallest
+    // derivation, since the derivation of the ancestor could be replaced by that of the subgoal.
+    if TyperExperiments.loopcheck && !ancestors.isEmpty {
+      let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
+      for a in ancestors {
+        let b = program.types.reify(a, applying: environment.substitutions, withVariables: .kept)
+        if b == u {
+          TyperCounters.bump("loopcheck.pruned")
+          return []
+        }
+      }
+    }
+    if TyperExperiments.index || TyperExperiments.absmodel,
+      let r = indexedSummon(
+        t, in: scopeOfUse, where: environment, then: continuation, penalties: penalties,
+        ancestors: ancestors)
+    {
+      return r
+    }
+
     var gs: [[Given]] = []
 
     // Assumed givens.
@@ -3638,7 +3678,7 @@ public struct Typer {
         let w = expression(referringTo: g)
         let r = formThread(
           matching: w, to: u, in: environment, then: continuation,
-          penalties: penalties + grouping.offset)
+          penalties: penalties + grouping.offset, ancestors: ancestors)
         result.append(r)
       }
     }
@@ -3654,7 +3694,8 @@ public struct Typer {
     matching witness: WitnessExpression, to queried: AnyTypeIdentity,
     in environment: ResolutionThread.Environment,
     then tail: [ResolutionThread.ContinuationItem] = [],
-    penalties: Int = 0
+    penalties: Int = 0,
+    ancestors: [AnyTypeIdentity] = []
   ) -> ResolutionThread {
     var environment = environment
     var witness = program.types.reify(
@@ -3676,7 +3717,10 @@ public struct Typer {
       if let i = program.types[witness.type] as? Implication {
         // Assume that the implication has a non-empty context.
         let h = i.usings.first!
-        let (e, v) = environment.assuming(given: h)
+        var (e, v) = environment.assuming(given: h)
+        if TyperExperiments.loopcheck {
+          e.ancestry[environment.nextGivenIdentifier] = ancestors.appending(queried)
+        }
         witness = WitnessExpression(
           value: .termApplication(witness, v),
           type: program.types.dropFirstRequirement(.init(uncheckedFrom: witness.type)))
@@ -3700,6 +3744,7 @@ public struct Typer {
     _ thread: ResolutionThread, in scopeOfUse: ScopeIdentity
   ) -> ResolutionThread.Advanced {
     assert(!program.types.hasContext(thread.witness.type))
+    TyperCounters.bump("summon.matches")
     let (a, b) = (thread.witness.type, thread.queried)
 
     // The witness has a simple type; attempt a match.
@@ -3713,6 +3758,7 @@ public struct Typer {
     // No coercion required?
     if coercions.isEmpty {
       let s = thread.environment.substitutions.union(substitutions)
+      TyperCounters.bump("summon.matchOK")
       let w = program.types.reify(thread.witness, applying: s, withVariables: .kept)
       if w.type[.hasError] { return .next([]) }
 
@@ -3750,13 +3796,17 @@ public struct Typer {
   ) -> ResolutionThread.Advanced {
     // Are there assumptions to discharge?
     if case .assumed(let i, let assumed) = thread.environment.givens.last {
-      let e = ResolutionThread.Environment(
+      var e = ResolutionThread.Environment(
         substitutions: operand.substitutions, givens: thread.environment.givens.dropLast(),
         nextGivenIdentifier: thread.environment.nextGivenIdentifier)
+      e.ancestry = thread.environment.ancestry
+      let ancestors = e.ancestry.removeValue(forKey: i) ?? []
       var t = thread.tail
       t.append(.init(i, in: operand))
       return .next(
-        summon(assumed, in: scopeOfUse, where: e, then: t, penalties: operand.penalties))
+        summon(
+          assumed, in: scopeOfUse, where: e, then: t, penalties: operand.penalties,
+          ancestors: ancestors))
     }
 
     // We're done; apply the continuation.
@@ -3805,10 +3855,247 @@ public struct Typer {
       }
       depth += 1
       swap(&next, &work)
+      TyperCounters.bump("summon.layers")
+      if depth == maxImplicitDepth && done.isEmpty && !work.isEmpty {
+        TyperCounters.bump("summon.depthExhausted")
+      }
     }
 
     return done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
   }
+
+  // MARK: Experiments: indexed and refuted implicit resolution
+
+  /// The givens visible from a scope, indexed by the head constructor of their conclusion.
+  internal struct GivenIndex {
+
+    /// A given together with the offset of its group in `givens(visibleFrom:)` and its position
+    /// in the flattened sequence of visible givens.
+    typealias Entry = (group: Int, position: Int, given: Given)
+
+    /// The givens whose conclusion is headed by a nominal constructor, by constructor.
+    var byHead: [AnyTypeIdentity: [Entry]] = [:]
+
+    /// The givens whose conclusion has no nominal head (they may match anything).
+    var wildcards: [Entry] = []
+
+    /// All visible givens, in order.
+    var all: [Entry] = []
+
+    /// The givens that may be used to derive a coercion (i.e., `T ~ U` or `<T> T` heads).
+    var coercionSources: [Given] = []
+
+    /// The number of groups.
+    var groupCount: Int = 0
+
+    /// Returns the entries whose conclusion may match a type headed by `k`, in order.
+    func candidates(headedBy k: AnyTypeIdentity?) -> [Entry] {
+      guard let k else { return all }
+      let xs = byHead[k] ?? []
+      if wildcards.isEmpty { return xs }
+      if xs.isEmpty { return wildcards }
+      return (xs + wildcards).sorted(by: { (a, b) in a.position < b.position })
+    }
+
+  }
+
+  /// Returns the nominal constructor heading `t`, if any.
+  private func nominalHead(_ t: AnyTypeIdentity) -> AnyTypeIdentity? {
+    if t.isVariable { return nil }
+    switch program.types[t] {
+    case is Struct, is Enum, is Trait, is MachineType:
+      return t
+    case let u as TypeApplication:
+      switch program.types[u.abstraction] {
+      case is Struct, is Enum, is Trait: return u.abstraction
+      default: return nil
+      }
+    case let u as TypeAlias:
+      return nominalHead(u.aliasee)
+    default:
+      return nil
+    }
+  }
+
+  /// Returns the index of the givens visible from `scopeOfUse`, or `nil` if it can't be computed
+  /// because some declarations are being typed.
+  internal mutating func givenIndex(visibleFrom scopeOfUse: ScopeIdentity) -> GivenIndex? {
+    if !declarationsOnStack.isEmpty {
+      TyperCounters.bump("index.unavailable")
+      return nil
+    }
+    if givens(lexicallyIn: scopeOfUse).isEmpty, let p = program.parent(containing: scopeOfUse) {
+      return givenIndex(visibleFrom: p)
+    }
+    if let ix = cache.scopeToGivenIndex[scopeOfUse] { return ix }
+
+    var ix = GivenIndex()
+    let groups = givens(visibleFrom: scopeOfUse)
+    ix.groupCount = groups.count
+    var position = 0
+    for (o, gs) in groups.enumerated() {
+      for g in gs {
+        let e: GivenIndex.Entry = (o, position, g)
+        position += 1
+        ix.all.append(e)
+        let gt = declaredType(of: g)
+        let (context, head) = program.types.contextAndHead(gt)
+        if context.parameters.contains(where: { (p) in p.erased == head })
+          || program.types.isEquality(head)
+        {
+          ix.coercionSources.append(g)
+        }
+        if let k = nominalHead(head) {
+          ix.byHead[k, default: []].append(e)
+        } else {
+          ix.wildcards.append(e)
+        }
+      }
+    }
+
+    if declarationsOnStack.isEmpty {
+      cache.scopeToGivenIndex[scopeOfUse] = ix
+    }
+    return ix
+  }
+
+  /// Returns the abstract model of the givens visible from `scopeOfUse`, or `nil` if it can't be
+  /// computed because some declarations are being typed.
+  internal mutating func abstractModel(
+    visibleFrom scopeOfUse: ScopeIdentity
+  ) -> AbstractResolutionModel? {
+    if !declarationsOnStack.isEmpty { return nil }
+    if givens(lexicallyIn: scopeOfUse).isEmpty, let p = program.parent(containing: scopeOfUse) {
+      return abstractModel(visibleFrom: p)
+    }
+    if let m = cache.scopeToAbstractModel[scopeOfUse] { return m }
+
+    // The givens visible from `scopeOfUse` are those of its lexical parent plus those declared
+    // in `scopeOfUse`. Since least models are monotonic, start from the parent's model.
+    var m: AbstractResolutionModel
+    var local: [Given]
+    if let p = program.parent(containing: scopeOfUse), let n = abstractModel(visibleFrom: p) {
+      m = n
+      local = givens(lexicallyIn: scopeOfUse).filter(notOnStack(_:))
+    } else if let n = cache.moduleToAbstractModel[scopeOfUse.module] {
+      // All files of a module see the same set of givens.
+      cache.scopeToAbstractModel[scopeOfUse] = n
+      return n
+    } else {
+      m = AbstractResolutionModel(depth: TyperExperiments.absDepth)
+      local = Array(givens(visibleFrom: scopeOfUse).joined())
+    }
+    let start = TyperCounters.enabled ? TyperClock.now() : 0
+    let firstNew = m.clauses.count
+    for g in local {
+      let gt = declaredType(of: g)
+      m.add(abstractClause(of: gt))
+    }
+    m.saturate(from: firstNew)
+    if TyperCounters.enabled {
+      TyperCounters.bump("absmodel.built")
+      TyperCounters.bump("absmodel.facts", by: m.factCount)
+      TyperCounters.bump("absmodel.work", by: m.work)
+      TyperCounters.bump("absmodel.micros", by: Int((TyperClock.now() - start) * 1000))
+      if m.isInconclusive { TyperCounters.bump("absmodel.inconclusive") }
+    }
+
+    if declarationsOnStack.isEmpty {
+      cache.scopeToAbstractModel[scopeOfUse] = m
+      if program.parent(containing: scopeOfUse) == nil {
+        cache.moduleToAbstractModel[scopeOfUse.module] = m
+      }
+    }
+    return m
+  }
+
+  /// Returns the Horn clause abstracting a given of type `t`.
+  private func abstractClause(of t: AnyTypeIdentity) -> AbstractResolutionModel.Clause {
+    let (context, head) = program.types.contextAndHead(t)
+    var bound: [GenericParameter.ID: Int] = [:]
+    for (i, p) in context.parameters.enumerated() { bound[p] = i }
+    var vs: [AnyTypeIdentity: Int] = [:]
+    let h = program.types.abstraction(of: head, binding: bound, variables: &vs)
+    // Premises that are themselves quantified or conditional are dropped (over-approximation).
+    let ps = context.usings.compactMap { (u) -> AbstractResolutionModel.Term? in
+      program.types.hasContext(u)
+        ? nil : program.types.abstraction(of: u, binding: bound, variables: &vs)
+    }
+    return .init(head: h, premises: ps)
+  }
+
+  /// Returns `true` iff `t` might be derivable from the givens visible from `scopeOfUse`.
+  ///
+  /// A `false` result is a proof that implicit resolution of `t` fails.
+  internal mutating func mayDerive(_ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity) -> Bool {
+    guard let m = abstractModel(visibleFrom: scopeOfUse) else { return true }
+    var vs: [AnyTypeIdentity: Int] = [:]
+    let q = program.types.abstraction(of: t, binding: [:], variables: &vs)
+    let r = m.mayDerive(m.truncated(q, at: m.depth))
+    if !r { TyperCounters.bump("absmodel.refuted") }
+    return r
+  }
+
+  /// Returns the resolution threads for `t` computed using the index of givens visible from
+  /// `scopeOfUse`, or `nil` if the index can't be used.
+  ///
+  /// The result is the same as that of the unindexed algorithm (modulo threads that are bound to
+  /// fail at their first step) when no coercion can be derived in `scopeOfUse`.
+  private mutating func indexedSummon(
+    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
+    where environment: ResolutionThread.Environment,
+    then continuation: [ResolutionThread.ContinuationItem],
+    penalties: Int,
+    ancestors: [AnyTypeIdentity]
+  ) -> [ResolutionThread]? {
+    let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
+
+    // Refutation by the abstract model.
+    if TyperExperiments.absmodel && !u.isVariable && !mayDerive(u, in: scopeOfUse) {
+      return []
+    }
+    if !TyperExperiments.index { return nil }
+
+    guard let ix = givenIndex(visibleFrom: scopeOfUse), ix.coercionSources.isEmpty else {
+      TyperCounters.bump("index.fallback")
+      return nil
+    }
+    if environment.givens.contains(where: { (g) in
+      if case .assumed(_, let gt) = g { return program.types.isEquality(program.types.head(gt)) }
+      return true
+    }) {
+      TyperCounters.bump("index.fallback")
+      return nil
+    }
+
+    var result: [ResolutionThread] = []
+    let a = environment.givens.count
+    for (i, g) in environment.givens.reversed().enumerated() {
+      result.append(formThread(
+        matching: expression(referringTo: g), to: u, in: environment, then: continuation,
+        penalties: penalties + i, ancestors: ancestors))
+    }
+
+    let k = nominalHead(u)
+    let cs = ix.candidates(headedBy: k)
+    TyperCounters.bump("index.skipped", by: ix.all.count - cs.count)
+    for e in cs {
+      result.append(formThread(
+        matching: expression(referringTo: e.given), to: u, in: environment, then: continuation,
+        penalties: penalties + a + e.group, ancestors: ancestors))
+    }
+
+    // Built-in givens only conclude equalities.
+    if k == nil {
+      for g in [Given.coercion(.reflexivity), .coercion(.symmetry), .coercion(.transitivity)] {
+        result.append(formThread(
+          matching: expression(referringTo: g), to: u, in: environment, then: continuation,
+          penalties: penalties + a + ix.groupCount, ancestors: ancestors))
+      }
+    }
+    return result
+  }
+
 
   /// Returns the givens whose definitions are at the top-level of `m`.
   private mutating func givens(atTopLevelOf m: Module.ID) -> [Given] {
@@ -3933,6 +4220,7 @@ public struct Typer {
     // Slow path: compute an elaboration.
     let scopeOfUse = program.parent(containing: e)
     let root = WitnessExpression(value: .identity(e), type: head)
+    TyperCounters.bump("coerced.slowPath")
     var threads = [formThread(matching: root, to: goal, in: .empty)]
 
     if canDeriveCoercions(root.type, goal, in: scopeOfUse, where: .empty) {
@@ -3977,7 +4265,13 @@ public struct Typer {
 
     // Check if there are givens in scope that could be used to derive a coercion.
     var result: UInt8 = 0
-    for g in chain(environment.givens, givens(visibleFrom: scopeOfUse).joined())  {
+    let sources: [Given]
+    if TyperExperiments.index, let ix = givenIndex(visibleFrom: scopeOfUse) {
+      sources = ix.coercionSources
+    } else {
+      sources = Array(givens(visibleFrom: scopeOfUse).joined())
+    }
+    for g in chain(environment.givens, sources)  {
       result |= canDeriveCoercion(p, applying: g)
       if result == 0b11 {
         if memoizable && !hasImplicitOnStack() {
@@ -4385,6 +4679,12 @@ public struct Typer {
   ) -> [NameResolutionCandidate] {
     var candidates: [NameResolutionCandidate] = []
     for e in extensions where !declarationsOnStack.contains(.init(e)) {
+      // Experiment: skip extensions that do not declare any member named `n`.
+      if TyperExperiments.names && (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil) {
+        TyperCounters.bump("names.skippedExtensions")
+        continue
+      }
+      TyperCounters.bump("names.appliesCalls")
       if let a = applies(e, to: q, in: scopeOfUse) {
         let w = program.types.reify(
           a.witness, applying: a.substitutions, withVariables: .substitutedByError)

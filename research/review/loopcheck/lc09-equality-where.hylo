@@ -1,0 +1,22 @@
+trait P { type X }
+trait Q {}
+trait R refines Q {}
+struct A {}
+struct B {}
+struct C {}
+
+given A is P { typealias X = B }
+given B is Q {}
+given <T where T is P, T.X is Q> => T is Q {}
+given <T, U where T == U, U is Q> => T is Q {}
+given C is P { typealias X = C }
+
+fun need<where A is Q>() {}
+fun need2<T where T is P, T.X is Q>(_ x: T) {}
+
+public fun main() {
+  need()
+  need2(A())
+}
+
+given A is R {}

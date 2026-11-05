@@ -1,0 +1,4 @@
+trait P {}
+struct A { public memberwise init }
+fun need<T is P>() {}
+fun g() { need<A>() }

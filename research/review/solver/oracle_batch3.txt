@@ -1,0 +1,7 @@
+[solver] 7/8 identical
+  MISMATCH research/review/solver/s26_generic_ret_as.hylo
+      --- baseline
+      +++ solver
+      @@ -16749 +16749 @@
+      -0:53 : X
+      +0:53 : B<A>

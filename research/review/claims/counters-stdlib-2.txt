@@ -1,0 +1,6 @@
+== [solver]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7216 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=5620 summon.matchOK=818 summon.matches=41393 summon.subgoals=699
+type.stdlib    917.11 ms
+== [loopcheck]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib    907.42 ms

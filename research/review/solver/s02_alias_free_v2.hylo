@@ -1,0 +1,9 @@
+// Overloaded free function whose winning return type is an alias, used under `as`.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+public fun main() {
+  let z = f() as A
+}

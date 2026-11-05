@@ -1,0 +1,23 @@
+trait P { fun f() }
+trait Q {}
+struct A<T> { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given B is Q {}
+extension <T where T is Q> A<T> {
+  public fun g() {}
+}
+given <T where T is Q> => A<T> is P {
+  public fun f() {}
+}
+given <T where T is P> => A<T> is Q {}
+public fun main() {
+  let a = A<B>()
+  a.g()
+  a.f()
+  let b = A<A<B>>()
+  b.g()
+  b.f()
+  let c = A<C>()
+  c.f()
+}

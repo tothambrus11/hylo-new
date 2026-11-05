@@ -1,0 +1,171 @@
+type Size = Int
+
+type Alignment = Int
+
+// Because the integer types are incomplete
+extension Int {
+
+  @inline(always)
+  public fun infix% (other: Self) -> Self {
+    .new(value: Builtin.urem_word(self.value, other.value))
+  }
+
+  /// Returns the least n >= `self` that is a multiple of `a`.
+  @inline(always)
+  public fun rounded_up(to_nearest_multiple_of a: Alignment) -> Self {
+    // The distance from the nearest multiple of `a` <= `self` to `self`.
+    let excess = self % a
+    return if excess == 0 { self.copy() } else { self - excess + a }
+  }
+
+  @inline(always)
+  public fun copy() -> Int {
+    .new(value: self.value)
+  }
+
+}
+
+/// The header of the structure representing information stored in all type witnesses.
+///
+/// See Sources/BackEnd/ModuleGenerationContext.swift for a complete description.
+public struct TypeWitnessHeader {
+
+  /// The size and alignment requirement of the type, in bytes.
+  ///
+  /// The 48 most significant bits encode the size whereas the 16 least significant bits encode the
+  /// alignment requirement.
+  let size_and_alignment: UInt64
+
+  memberwise init
+
+}
+
+extension Pointer<TypeWitnessHeader> {
+
+  /// Returns the size of an instance.
+  @exposed @inline(always)
+  fun size() -> Size {
+    let x = UInt64(value: Builtin.lshr_i64(
+      (self.value as* let TypeWitnessHeader).size_and_alignment.value,
+      (16 as UInt64).value))
+    return .new(value: Builtin.trunc_or_zext_i64_word(x.value))
+  }
+
+  /// Returns the alignment of an instance.
+  @exposed @inline(always)
+  fun alignment() -> Alignment {
+    let x = UInt64(value: Builtin.and_i64(
+      (self.value as* let TypeWitnessHeader).size_and_alignment.value,
+      (0xffff as UInt64).value))
+    return .new(value: Builtin.trunc_or_zext_i64_word(x.value))
+  }
+
+}
+
+// TODO
+// The two following functions should be removed from the public API once we'll have implemented
+// testable imports. Currently they are used to test the run-time.
+
+/// Returns `base` advanced by `n` times the size of an instance of `T` in bytes.
+@inline(always)
+public fun __advanced<T>(base: Builtin.ptr, by n: Int) -> Builtin.ptr {
+  let layout = Pointer<TypeWitnessHeader>(value: Builtin.address(of: T))
+  let offset = layout.size() * n
+  return Builtin.advanced_by_bytes_word(base, offset.value)
+}
+
+/// Initializes `offsets` with the byte offsets of each of the `n` fields described in `members`
+/// and returns the size and alignment of a record having said fields.
+///
+/// `members` points to a buffer initialized in the range `0 ..< n` with witnesses describing the
+/// stored members of some record type (e.g., a tuple), laid out in declaration order. `offsets`
+/// points to an uninitialized buffer capable of storing at least `n` elements. When the function
+/// returns, `offsets` is initialized in the range `0 ..< n` with the offset of each member at the
+/// corresponding position. That is, `offsets[i]` is the byte offset of the `i`-th member.
+///
+/// The 48 most significant bits of the return value encode the size of a record composed of the
+/// given members, in bytes. The 16 least significant bits encode its alignment requirement.
+@inline(always)
+@_symbol("initialize_record_offsets(offsets:aggregating:count:)")
+public fun __initialize_record_offsets(
+  offsets: Pointer<Int>,
+  aggregating members: Pointer<Pointer<TypeWitnessHeader>>,
+  count n: Int
+) -> UInt64 {
+  type W = Pointer<TypeWitnessHeader>
+
+  // Allocate a temporary buffer for storing member indices.
+  sink let layout = Pointer<Int>(value: Builtin.alloca_word(n.value))
+  var size = 0
+
+  // Write in `layout` the index of the member laid out at the corresponding position.
+  var i = 0
+  while i < n {
+    // layout[i] = i
+    set o = __advanced<Int>(layout.value, by: i) as* set Int
+    &o = i.copy()
+
+    var j = i.copy()
+    while j > 0 {
+      // (a, b) = (layout[j - 1], layout[j])
+      inout a = __advanced<Int>(layout.value, by: j - 1) as* inout Int
+      inout b = __advanced<Int>(layout.value, by: j) as* inout Int
+
+      // if members[a].alignment >= members[b].alignment() { break }
+      let x = __advanced<W>(members.value, by: a) as* let W
+      let y = __advanced<W>(members.value, by: b) as* let W
+      if x.alignment() >= y.alignment() { break }
+
+      // layout.swap_at(j - 1, j)
+      sink let c = a
+      &a = b
+      &b = c
+
+      &j -= 1
+    }
+
+    &i += 1
+  }
+
+  // Write in `offsets` the byte offset of each member.
+  &i = 0
+  while i < n {
+    // let s = members[layout[i]].size()
+    let a = __advanced<Int>(layout.value, by: i) as* let Int
+    let x = __advanced<W>(members.value, by: a) as* let W
+    let s = x.size()
+
+    // offsets[a] = ...
+    set o = __advanced<Int>(offsets.value, by: a) as* set Int
+    if s > 0 {
+      sink let n = size.rounded_up(to_nearest_multiple_of: x.alignment())
+      &size = n + s
+      &o = n
+    } else {
+      &o = 0
+    }
+
+    &i += 1
+  }
+
+  // Use of `layout` extends its lifetime.
+  return .new((size << 16) | __alignment(members, layout, count: n))
+}
+
+/// Returns the alignment of a record having the `n` fields described in `members` and laid out
+/// according to `layout`.
+///
+/// `layout` is a table mapping the index of a member to its position in the record.
+@exposed @inline(always)
+fun __alignment(
+  members: Pointer<Pointer<TypeWitnessHeader>>, layout: Pointer<Int>, count n: Int
+) -> Int {
+  if n == 0 {
+    return 1
+  } else {
+    type W = Pointer<TypeWitnessHeader>
+    let a = layout.value as* let Int
+    let x = __advanced<W>(members.value, by: a) as* let W
+    return x.alignment()
+  }
+}

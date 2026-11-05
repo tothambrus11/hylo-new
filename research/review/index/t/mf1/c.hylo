@@ -1,0 +1,2 @@
+given wc: A is P { fun t() -> Int { 3 } }
+fun h() -> Int { need(A()) }

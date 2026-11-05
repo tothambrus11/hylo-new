@@ -1,0 +1,13 @@
+// Erroneous program: f(x: A) probes clean but leaves g with no viable choice;
+// f(x: B) fails at the argument but lets g(x: B) succeed.
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+fun f(x: A) -> A { A() }
+fun f(x: B) -> B { B() }
+fun g(x: B) {}
+fun g(x: C) {}
+public fun main() {
+  let a = A()
+  g(f(a))
+}

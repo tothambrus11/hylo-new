@@ -1,0 +1,14 @@
+// Generic parameters are rigid constants in the model; a local given in a nested scope must be
+// added to the parent's model.
+trait P {}
+struct S<T> {}
+given <T where T is P> => S<T> is P {}
+fun need<T where T is P>() {}
+fun f<T where T is P>() {
+  need<S<S<T>>>()
+}
+fun g<T>() {
+  given T is P {}
+  need<S<T>>()
+}
+public fun main() {}

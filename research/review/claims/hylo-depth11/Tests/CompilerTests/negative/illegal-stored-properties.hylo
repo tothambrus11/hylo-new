@@ -1,0 +1,15 @@
+//! no-std
+
+struct S<T> {
+  static let bar: Void = ()
+}
+
+enum E<T> {
+  let foo: Void
+  static let bar: Void = ()
+}
+
+extension <T> S<T> {
+  let foo: Void
+  static let bar: Void = ()
+}

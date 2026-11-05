@@ -1,0 +1,8 @@
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+fun need<T is P>() {}
+given <where Q == P> => A is Q {}
+fun f() {
+  need<A>()
+}

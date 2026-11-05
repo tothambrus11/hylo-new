@@ -64,6 +64,16 @@ public struct WitnessTable: Hashable, Sendable {
     associatedConformances[r.offset]
   }
 
+  /// Research instrumentation: the contents of the table, sorted by requirement offset.
+  internal var researchEntries: (
+    conformances: [(Int, WitnessExpression)], types: [(Int, AnyTypeIdentity)],
+    members: [(Int, DeclarationReference)]
+  ) {
+    (associatedConformances.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }),
+     associatedTypes.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }),
+     members.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }))
+  }
+
   /// Returns the member implementing the function or subscript requirement `r`.
   internal func member(implementing r: DeclarationIdentity) -> DeclarationReference? {
     members[r.offset]

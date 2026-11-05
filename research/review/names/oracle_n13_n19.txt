@@ -1,0 +1,6 @@
+[names] 6/7 identical
+  MISMATCH research/review/names/n17_alias_cycle_generic.hylo
+      --- baseline
+      +++ names
+      @@ -16742 +16741,0 @@
+      -diag /home/hylo/hylo-tc/research/review/names/n17_alias_cycle_generic.hylo:3.6-7: error: definition of 'X' refers to itself

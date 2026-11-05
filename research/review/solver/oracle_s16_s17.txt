@@ -1,0 +1,14 @@
+[solver] 1/2 identical
+  MISMATCH research/review/solver/s17_where_eq_reject.hylo
+      --- baseline
+      +++ solver
+      @@ -16747,2 +16747,2 @@
+      -0:52 -> g(_:)
+      -0:52 : <W> [Void](let W) let -> W
+      +0:52 -> k(_:_:)
+      +0:52 : <V> [Void](let V, let V) let -> V
+      @@ -16750,2 +16750,2 @@
+      -0:54 -> k(_:_:)
+      -0:54 : <V> [Void](let V, let V) let -> V
+      +0:54 -> g(_:)
+      +0:54 : <W> [Void](let W) let -> W

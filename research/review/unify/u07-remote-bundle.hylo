@@ -1,0 +1,30 @@
+//! stage:typing
+fun use<T>(x: T) {}
+fun takeInout<T>(x: inout T) {}
+subscript f(x: auto Int) auto -> Int {
+  let { yield 0 }
+  inout { yield &0 }
+}
+subscript g<T>(x: auto T) auto -> T {
+  let { yield x }
+  inout { yield &x }
+}
+fun modify(x: inout Int) {}
+fun modifyB(x: inout Bool) {}
+fun foo(p: {{Int, Int}, Bool}) {
+  let ((x, _), y) = p
+  use(x)
+  use(y)
+}
+public fun main() {
+  var s = 1
+  inout t = f[&s]
+  modify(&t)
+  modifyB(&t)
+  var b = true
+  inout u = g[&b]
+  modifyB(&u)
+  modify(&u)
+  let v = g[s]
+  use(v)
+}

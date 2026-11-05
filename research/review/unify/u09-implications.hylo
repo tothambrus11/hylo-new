@@ -1,0 +1,27 @@
+//! stage:typing no-std
+// Implications (givens with usings), conditional conformances, implicit parameters.
+trait P { fun g() -> Self }
+trait R {}
+struct A<T> { public memberwise init }
+struct B {}
+struct C {}
+given B is P { fun g() -> B { B() } }
+given B is R {}
+given <T where T is P> => A<T> is P { fun g() -> A<T> { A() } }
+given <T where T is P, T is R> => A<T> is R {}
+
+fun need<T where T is P>(x: T) -> T { x.g() }
+fun needR<T where T is R>(x: T) {}
+fun check<T>(x: T) {}
+
+fun main() {
+  let a = need(A<B>())
+  check<A<B>>(a)
+  let b = need(A<A<B>>())
+  check<A<A<B>>>(b)
+  needR(A<B>())
+  needR(A<A<B>>())
+  let c = need(A<C>())
+  needR(A<C>())
+  let d = need(C())
+}

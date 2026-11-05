@@ -1,0 +1,17 @@
+// Control for s15: with equal survivor counts (2 and 2) the most-constrained heuristic keeps
+// the baseline nesting order, so the result is expected to be identical.
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun b() -> X { X() }
+}
+fun k<V>(x: V, y: V) {}
+fun main() {
+  extension S {
+    static fun a() -> X { X() }
+    static fun b() -> Y { Y() }
+  }
+  extension <T> T { static fun a() -> Y { Y() } }
+  k(S.a(), S.b())
+}

@@ -1,0 +1,10 @@
+// Valid in the baseline: g is resolved first, so the last argument binds V := U (subgoals are
+// popped LIFO), x: T is coerced to U through the where clause, and `as U` holds.
+// With parking, g's call is still stale when k's argument coercions run: x binds V := T, and
+// `as U` then requires T == U syntactically.
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = k(x, g(y)) as U
+}

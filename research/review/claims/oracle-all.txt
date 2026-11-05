@@ -1,0 +1,19 @@
+[names] 21/21 identical
+[unify] 21/21 identical
+[index] 21/21 identical
+[absmodel] 21/21 identical
+[solver] 20/21 identical
+  MISMATCH hylo-new/Tests/CompilerTests/positive/overload-priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16785 +16785 @@
+      -0:75 : X
+      +0:75 : A<Void>
+[loopcheck] 21/21 identical
+[absmodel,index,loopcheck,names,solver,unify] 20/21 identical
+  MISMATCH hylo-new/Tests/CompilerTests/positive/overload-priority.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16785 +16785 @@
+      -0:75 : X
+      +0:75 : A<Void>

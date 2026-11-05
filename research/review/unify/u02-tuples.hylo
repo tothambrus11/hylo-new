@@ -1,0 +1,19 @@
+//! stage:typing no-std
+fun check<T>(x: T) {}
+fun first<A, B>(p: {A, B}) -> A { Builtin.trap() }
+fun labeled<A, B>(p: {x: A, y: B}) -> B { Builtin.trap() }
+public fun main() {
+  let p = ((), ((), ()))
+  check<{Void, {Void, Void}}>(p)
+  let a = first(p)
+  check<Void>(a)
+  let q = (x: (), y: ((), ()))
+  let b = labeled(q)
+  check<{Void, Void}>(b)
+  // label mismatch
+  let c = labeled(p)
+  let d: {x: Void, z: Void} = (x: (), y: ())
+  // arity mismatch
+  check<{Void, Void, Void}>(p)
+  check<{}>(())
+}

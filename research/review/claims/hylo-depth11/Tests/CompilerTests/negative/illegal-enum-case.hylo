@@ -1,0 +1,10 @@
+//! no-std
+
+struct A {
+  case one
+}
+
+enum B {
+  case one(x: Void) = ()
+  case two(x: let Void)
+}

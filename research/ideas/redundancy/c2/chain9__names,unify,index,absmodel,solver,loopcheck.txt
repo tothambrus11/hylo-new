@@ -1,0 +1,8 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=3152 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+counters.user:   absmodel.built=1 absmodel.facts=65 absmodel.micros=3055 absmodel.work=656 coerced.slowPath=1 index.skipped=1340 solver.goalSteps=32 solver.systems=5 summon.calls=2 summon.depthExhausted=1 summon.layers=20 summon.matchOK=20 summon.matches=39 summon.subgoals=20
+diagnostics: 1
+   /home/hylo/hylo-tc/research/workloads/chain9.hylo:7.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     49.30 ms
+scope      6.21 ms
+type.stdlib    265.44 ms
+type.user      7.15 ms

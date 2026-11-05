@@ -1,0 +1,16 @@
+trait P {}
+trait Q refines P {}
+struct A { public memberwise init }
+
+fun check<T>(x: T) {}
+fun mk2<T is Q>(x: T) -> T { x }
+
+fun f<T, U where T == U>(x: T) {
+  let y: U = x
+  check<U>(x)
+}
+
+given A is Q {}
+
+given gk = mk2(A())
+given A is P {}

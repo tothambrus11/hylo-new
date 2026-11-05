@@ -1,0 +1,29 @@
+trait P { fun id() -> Int }
+
+struct A {}
+
+given wFile: A is P { fun id() -> Int { 1 } }
+
+fun check<T>(_ x: T) {}
+fun use<T is P>(_ x: T) -> Int { x.id() }
+
+fun outer<where let u: Void>() {
+  given wFun: A is P { fun id() -> Int { 2 } }
+  check(summon[P<A>])
+  if true {
+    given wInner: A is P { fun id() -> Int { 3 } }
+    check(summon[P<A>])
+    let x = use(A())
+  }
+  let y = use(A())
+}
+
+fun noLocal() {
+  check(summon[P<A>])
+}
+
+fun ambiguous() {
+  given w1: A is P { fun id() -> Int { 4 } }
+  given w2: A is P { fun id() -> Int { 5 } }
+  check(summon[P<A>])
+}

@@ -1,0 +1,14 @@
+//! Subsumption with ⊤ from a higher-kinded head (works at k = 2): R(⊤,⊤) is dropped because
+//! R(v,v) exists, but ⊤ (F<A>) concretely matches first-order types.
+trait R<B> {}
+trait W<B> {}
+struct S<T> {}
+struct Y {}
+struct Z {}
+given <T> => T is R<T> {}
+given <F :: * -> *, A, G :: * -> *, B> => F<A> is R<G<B>> {}
+given <A, B where S<A> is R<S<B>>> => A is W<B> {}
+fun need<where Z is W<Y>>() {}
+public fun main() {
+  need()
+}

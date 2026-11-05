@@ -1,0 +1,6 @@
+struct A {}
+type X = Y
+type Y = X
+extension A { fun k() {} }
+extension X { fun g() {} }
+fun h(a: A) { a.k() }

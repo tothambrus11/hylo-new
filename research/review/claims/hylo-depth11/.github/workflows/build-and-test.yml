@@ -1,0 +1,158 @@
+name: Build and Test
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+      - "LICENSE"
+      - ".gitignore"
+      - ".editorconfig"
+env:
+  ACTIONS_RUNNER_DISABLE_NODE_MAGLEV: 1
+
+jobs:
+  line-length:
+    name: "Line length"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check max line length of 100 characters
+        # Lines ending with "[allow long]" are exempt.
+        run: >
+          ! grep -rnE --include=*.swift --exclude-dir=cmake.* --exclude-dir=.build '.{101,}' .
+          | grep -vE '\[allow long\]$'
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        # Note: all combinations of the following will be run independently
+        os: [macos-26, ubuntu-24.04, windows-2025]
+        swift: ["6.3.2"]
+        config: [release, debug]
+
+        include:
+          # Disable exporting code coverage by default.
+          - export-coverage: false
+
+          # Enable exporting code coverage in a single configuration.
+          - os: "ubuntu-24.04"
+            config: debug
+            export-coverage: true
+
+          - config: release
+            llvm-build-type: MinSizeRel
+
+          - config: debug
+            llvm-build-type: Debug
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: recursive
+
+      - name: Set up Swift ${{ matrix.swift }} on ${{ matrix.os }}
+        uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: ${{ matrix.swift }}
+
+      - name: Download Recent Visual Studio and Windows SDK
+        uses: compnerd/gha-setup-vsdevenv@main
+        with:
+          winsdk: "10.0.26100.0"
+          # Note: The GitHub windows-2025 runner has only a very old version of the Windows SDK available by default.
+          #       Swift is said to require version 10.0.22621.0: https://forums.swift.org/t/swiftpm-plugin-doesnt-work-with-the-latest-visual-studio-version/78183/14
+          #       That no longer works, so we had to upgrade to 10.0.26100.0.
+          #       See also: https://github.com/swiftlang/swift/issues/88237
+
+      - name: Verify Swift version
+        run: swift --version && swift --version | grep -q ${{ matrix.swift }}
+        shell: bash
+
+      - name: Set up LLVM
+        uses: hylo-lang/get-llvm@6a49368ad6b8b735b444d4b9840b0bc466e7875a # v0.4.0
+        id: get-llvm
+        with:
+          llvmVersion: "23.1.0"
+          llvmBuildRelease: "20260905-220739"
+          llvmBuildConfig: ${{ matrix.llvm-build-type }}
+          addToPkgConfigPath: true
+          addToPath: true
+
+      - name: Build Swift project
+        run: swift build --build-tests -Xswiftc -enable-testing -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -c ${{ matrix.config }} --verbose ${{ matrix.export-coverage && '--enable-code-coverage' || '' }}
+
+      - name: Run tests
+        run: swift test --skip-build -Xswiftc -enable-testing -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -c ${{ matrix.config }} --verbose ${{ matrix.export-coverage && '--enable-code-coverage' || '' }}
+
+      - name: Export code coverage
+        if: ${{ matrix.export-coverage }}
+        # The merge picks up the .profraw files written by 'hc' subprocesses spawned from the
+        # end-to-end command-line tests.
+        # '-object' includes the 'hc' binary's coverage mapping in the export.
+        run: |
+          BIN_PATH=$(swift build --show-bin-path)
+          llvm-profdata merge -sparse $BIN_PATH/codecov/*.profraw -o $BIN_PATH/codecov/merged.profdata
+          llvm-cov export $BIN_PATH/HyloPackageTests.xctest -object $BIN_PATH/hc --format="lcov" --instr-profile $BIN_PATH/codecov/merged.profdata > info.lcov
+
+      - name: Install qemu and the cross toolchains
+        if: ${{ runner.os == 'Linux' && runner.arch == 'X64' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-user gcc-arm-linux-gnueabihf
+
+      - name: Cross-compile and run the compiler tests under qemu
+        if: ${{ runner.os == 'Linux' && runner.arch == 'X64' }}
+        env:
+          HYLO_TEST_TARGET: armv7-unknown-linux-gnueabihf
+          HYLO_TEST_RUNNER: qemu-arm
+          QEMU_LD_PREFIX: /usr/arm-linux-gnueabihf
+        run: swift test --skip-build -Xswiftc -enable-testing -Xswiftc -DSWIFTY_LLVM_CROSS_COMPILATION_ENABLED -c ${{ matrix.config }} --filter 'CompilerTests\.CompilerTests/'
+
+      - name: Upload coverage report to Codecov
+        if: ${{ matrix.export-coverage }}
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+    runs-on: ${{ matrix.os }}
+
+  test-wasm:
+    name: "Front-end on WebAssembly"
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Swifty-LLVM is not built for wasm32 but SwiftPM needs its manifest to resolve ours.
+          submodules: recursive
+
+      - name: Set up Swift 6.3.2
+        uses: SwiftyLab/setup-swift@38f54a76b70d989321de9dc7c840618c08cf56e9 # v1.14.0
+        with:
+          swift-version: "6.3.2"
+
+      - name: Install the Swift SDK for WebAssembly
+        # The URL and checksum are published at https://www.swift.org/install/linux/
+        run: >
+          swift sdk install
+          https://download.swift.org/swift-6.3.2-release/wasm-sdk/swift-6.3.2-RELEASE/swift-6.3.2-RELEASE_wasm.artifactbundle.tar.gz
+          --checksum a61f0584c93283589f8b2f42db05c1f9a182b506c2957271402992655591dd7c
+
+      - name: Set up wasmtime
+        uses: bytecodealliance/actions/wasmtime/setup@9152e710e9f7182e4c29ad218e4f335a7b203613 # v1.1.3
+
+      - name: Build the front-end for wasm32
+        run: swift build --swift-sdk swift-6.3.2-RELEASE_wasm --target FrontEnd
+
+      - name: Build the smoke test for wasm32
+        run: swift build --swift-sdk swift-6.3.2-RELEASE_wasm --product frontend-smoke-test
+
+      - name: Run the smoke test
+        # The path of the resource bundle containing the standard library's sources is baked into
+        # the binary as an absolute path, so it is mapped into the wasm guest as-is.
+        run: |
+          BIN=$(swift build --swift-sdk swift-6.3.2-RELEASE_wasm --show-bin-path)
+          wasmtime run --dir "$BIN::$BIN" "$BIN/frontend-smoke-test.wasm"

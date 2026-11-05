@@ -1,0 +1,15 @@
+//! no-std
+
+trait P {}
+
+struct A { public memberwise init }
+struct B { public memberwise init }
+
+given A is P {}
+
+fun f<T where T is P, A is P>(x: T) {}
+
+fun main() {
+  f(B())
+}
+

@@ -1,0 +1,22 @@
+trait P { fun f() }
+trait Q {}
+struct S<T> {}
+struct A {}
+struct W<T> { fun f() {} }
+
+given A is Q {}
+given <T where T is Q> => W<T> is P {}
+// Self-loop on a generic head: subgoal `W<?T> is P` is identical to its ancestor, with a variable.
+given <T where W<T> is P> => W<T> is P {}
+given <T where S<T> is Q> => T is Q {}
+
+fun use<T is P>(x: T) {}
+
+fun g(w: W<A>) {
+  w.f()
+  use(w)
+}
+fun h<T where T is Q>(w: W<T>) {
+  w.f()
+  use(w)
+}

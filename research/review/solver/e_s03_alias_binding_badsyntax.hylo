@@ -1,0 +1,13 @@
+// Same with an expected type from a binding ascription, an argument, and a return.
+struct A { public memberwise init }
+struct B { public memberwise init }
+typealias X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+fun take(x: A) {}
+fun r() -> A { f() }
+public fun main() {
+  let y: A = f()
+  take(f())
+  let w = (f() as A, f() as B)
+}

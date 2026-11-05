@@ -1,0 +1,9 @@
+//! A higher-kinded given head must not be refuted.
+trait R {}
+struct S<T> {}
+struct Z {}
+given <F :: * -> *, A> => F<A> is R {}
+fun need<where S<Z> is R>() {}
+public fun main() {
+  need()
+}

@@ -1,0 +1,11 @@
+// If-expression mixing an overloaded call and a concrete value (coercion to a fresh variable).
+struct A { public memberwise init }
+struct B { public memberwise init }
+typealias X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+public fun main() {
+  let a = A()
+  let p = if true { f() } else { a }
+  let q = if true { a } else { f() }
+}

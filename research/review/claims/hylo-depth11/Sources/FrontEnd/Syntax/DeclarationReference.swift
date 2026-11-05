@@ -1,0 +1,102 @@
+import Archivist
+
+/// The way in which an entity is referred to.
+@Archivable
+public enum DeclarationReference: Hashable, Sendable {
+
+  /// A reference to a built-in entity.
+  case builtin(BuiltinEntity)
+
+  /// A direct reference.
+  case direct(DeclarationIdentity)
+
+  /// A reference to a member declaration that is bound to a receiver.
+  ///
+  /// The reference was formed from an expression `x.m` where `m` is a non-static member of `x`'s
+  /// type. The whole expression denotes a function or subscript partially applied to `x`
+  case member(DeclarationIdentity)
+
+  /// A reference to a member inherited by conformance or extension.
+  ///
+  /// The reference was formed from an expression `x.member` where `member` refers to a symbol
+  /// declared in an extension of `x`'s type, or defined as a requirement of a trait to which the
+  /// type of `x` conforms.
+  ///
+  /// In either case, the first value in the payload is an expression computing a record containing
+  /// the `member`s implementation (e.g., a conformance witness), the second value is the identity
+  /// of the `member`'s declaration, and the last value is a flag indicating whether `member` is
+  /// used statically.
+  case inherited(WitnessExpression, DeclarationIdentity, statically: Bool)
+
+  /// A reference to a synthetic implementation of a trait requirement.
+  ///
+  /// The second element of the payload is `true` iff the implementation is transitively synthetic,
+  /// meaning that it does not involve any user code. This property is set during typing.
+  case synthetic(DeclarationIdentity, transitively: Bool)
+
+  /// `true` iff this reference mentions open variable.
+  public var hasVariable: Bool {
+    switch self {
+    case .builtin, .direct, .member, .synthetic:
+      return false
+    case .inherited(let w, _, _):
+      return w.hasVariable
+    }
+  }
+
+  /// `true` iff `self` is a synthetic implementation of a some trait requirement.
+  public var isSynthetic: Bool {
+    if case .synthetic = self {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// `true` iff `self` is a synthetic implementation of some trait requirement that does not
+  /// involve any user code.
+  public var isTransitivelySynthetic: Bool {
+    if case .synthetic(_, let t) = self {
+      return t
+    } else {
+      return false
+    }
+  }
+
+  /// The referred declaration, unless it is built-in.
+  public var target: DeclarationIdentity? {
+    switch self {
+    case .direct(let d), .member(let d), .inherited(_, let d, _):
+      return d
+    case .builtin, .synthetic:
+      return nil
+    }
+  }
+
+  /// A measure of the complexity of reference's elaborated expression.
+  public var elaborationCost: Int {
+    switch self {
+    case .builtin, .direct, .member, .synthetic:
+      return 1
+    case .inherited(let w, _, _):
+      return 1 + w.elaborationCost
+    }
+  }
+
+}
+
+extension DeclarationReference: Showable {
+
+  /// Returns a textual representation of `self` using `printer`.
+  public func show(using printer: inout TreePrinter) -> String {
+    switch self {
+    case .builtin(let e):
+      return "$<builtin \(e)>"
+    case .synthetic(let d, _):
+      return "$<synthetic implementation of \(printer.program.nameOrTag(of: d))>"
+    case .direct(let d), .member(let d), .inherited(_, let d, _):
+      return printer.program.nameOrTag(of: d)
+    }
+  }
+
+}

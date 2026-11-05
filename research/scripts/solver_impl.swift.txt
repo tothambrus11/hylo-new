@@ -1,0 +1,76 @@
+  /// Experiment: resolves one parked overload constraint, either by committing to its only viable
+  /// choice or by branching over its viable choices.
+  ///
+  /// The viability of each choice is determined by forward checking: the consequences of binding
+  /// the overloaded name to that choice are propagated (without branching on other overloads)
+  /// and the choice is discarded if this propagation produces more errors than another choice.
+  /// Pruning is only applied when at least one choice propagates without any error, in which
+  /// case discarded choices could not have led to an error-free solution.
+  private mutating func resolveParked() -> SolverStatus {
+    var selected: (index: Int, survivors: [NameResolutionCandidate])? = nil
+
+    for (i, g) in parked.enumerated() {
+      let k = goals[g] as! OverloadConstraint
+      var scores: [(NameResolutionCandidate, Int)] = []
+      for choice in k.candidates {
+        if let e = probe(g, choice) { scores.append((choice, e)) }
+      }
+      let least = scores.map(\.1).min()
+      let survivors = (least == 0) ? scores.filter({ $0.1 == 0 }).map(\.0) : k.candidates
+      TyperCounters.bump("solver.probedChoices", by: k.candidates.count)
+      TyperCounters.bump("solver.prunedChoices", by: k.candidates.count - survivors.count)
+
+      if survivors.count == 1 {
+        selected = (i, survivors)
+        break
+      } else if selected == nil || (survivors.count < selected!.survivors.count) {
+        selected = (i, survivors)
+      }
+    }
+
+    let (i, survivors) = selected!
+    let g = parked.remove(at: i)
+    let k = goals[g] as! OverloadConstraint
+
+    // Commit without forking if there's only one viable choice.
+    if let choice = survivors.uniqueElement {
+      TyperCounters.bump("solver.commits")
+      let subgoal = insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
+      outcomes[g] = delegate([subgoal])
+      bindings[k.name] = choice.reference
+      return .running
+    }
+
+    return solve(overload: g, among: survivors).map(SolverStatus.terminated(_:)) ?? .canceled
+  }
+
+  /// Experiment: returns the number of errors after propagating the consequences of binding the
+  /// name of `g` to `choice`, or `nil` if propagation is canceled.
+  private mutating func probe(_ g: GoalIdentity, _ choice: NameResolutionCandidate) -> Int? {
+    let k = goals[g] as! OverloadConstraint
+    TyperCounters.bump("solver.probes")
+    var fork = Self(forking: self)
+    fork.probing = true
+    fork.parked.removeAll(where: { $0 == g })
+    let subgoal = fork.insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
+    fork.outcomes[g] = fork.delegate([subgoal])
+    fork.bindings[k.name] = choice.reference
+    _ = fork.solution(betterThanOrEqualTo: best, using: &typer)
+    return fork.probeFinished ? fork.current.errors : nil
+  }
+
+  /// Discharges `g`, which is an overload constraint.
+  private mutating func solve(overload g: GoalIdentity) -> Solution? {
+    let k = goals[g] as! OverloadConstraint
+    return solve(overload: g, among: k.candidates)
+  }
+
+  /// Discharges `g`, which is an overload constraint, considering only `candidates`.
+  private mutating func solve(
+    overload g: GoalIdentity, among candidates: [NameResolutionCandidate]
+  ) -> Solution? {
+    let k = goals[g] as! OverloadConstraint
+    TyperCounters.bump("solver.overloads")
+
+    var viable: [(choice: NameResolutionCandidate, solution: Solution)] = []
+    for choice in candidates {

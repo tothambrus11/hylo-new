@@ -1,0 +1,33 @@
+trait P {}
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+fun needP<T where T is P>() {}
+fun needQ<T where T is Q>() {}
+given A is P {}
+fun f() {
+  given <T where T is P> => T is Q {}
+  needQ<A>()
+  fun g() {
+    given B is P {}
+    needQ<B>()
+    needQ<A>()
+    needQ<C>()
+  }
+  needQ<B>()
+}
+fun h() {
+  needQ<A>()
+  given C is P {}
+  needP<C>()
+}
+fun k<T where T is P>() {
+  given <U where U is P> => U is Q {}
+  needQ<T>()
+  fun l<V where V is Q>() {
+    needQ<V>()
+    needP<V>()
+  }
+}
+public fun main() { f(); h() }

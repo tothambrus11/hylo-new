@@ -1,0 +1,19 @@
+//! stage:typing no-std
+trait P { type X; fun get() -> X }
+trait Q { type Y }
+struct S is P { public typealias X = {Void, Void}; fun get() -> {Void, Void} { ((), ()) } }
+struct R<T> {}
+given <T> R<T> is P { type X = T; fun get() -> T { Builtin.trap() } }
+fun check<T>(x: T) {}
+fun f0<T is P>(x: T) -> T.X { x.get() }
+fun f1<T, U where T == U, T is P, U is P>(x: T.X) -> U.X { x }
+fun f2<T is P, U is P>(x: T.X) -> U.X { x }
+fun f3<T is P where T.X == Void>(x: T) { check<Void>(x.get()) }
+public fun main() {
+  check<{Void, Void}>(f0(S()))
+  check<Void>(f0(R<Void>()))
+  check<S.X>(f0(S()))
+  let a: R<S>.X = S()
+  f3(R<Void>())
+  f3(S())
+}

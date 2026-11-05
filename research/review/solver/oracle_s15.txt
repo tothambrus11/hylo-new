@@ -1,0 +1,17 @@
+[solver] 0/1 identical
+  MISMATCH research/review/solver/s15_branch_order.hylo
+      --- baseline
+      +++ solver
+      @@ -16756 +16756 @@
+      -0:59 : [Void](let X, let X) let -> Void
+      +0:59 : [Void](let Y, let Y) let -> Void
+      @@ -16761,2 +16761,2 @@
+      -0:61 : [Void]() let -> X
+      -0:62 : X
+      +0:61 : [Void]() let -> Y
+      +0:62 : Y
+      @@ -16766,2 +16766,2 @@
+      -0:64 : [Void]() let -> X
+      -0:65 : X
+      +0:64 : [Void]() let -> Y
+      +0:65 : Y

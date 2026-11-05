@@ -1,0 +1,11 @@
+// An unrelated earlier error disables pruning (least != 0); check diagnostics stay identical.
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun f(x: A) -> A { x }
+fun f(x: B) -> B { x }
+fun take(x: A) {}
+public fun main() {
+  take(f(A()), undefined_thing)
+  let p: B = (f(A()), q)
+  take(f(B()))
+}

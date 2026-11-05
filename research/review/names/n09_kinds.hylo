@@ -1,0 +1,30 @@
+struct S is Deinitializable {
+  var x: Int
+  memberwise init
+}
+
+extension S {
+  fun infix+ (other: S) -> S { S(x: self.x) }
+  fun f(a: Int) -> Int { a }
+  fun f(b: Int) -> Bool { true }
+  static fun make() -> S { S(x: 2) }
+  subscript at(_ i: Int) -> Int { yield self.x }
+}
+
+extension S {
+  init(y: Int) { &self.x = y }
+  fun g(_ x: Int) -> Int { x }
+}
+
+extension Bool { fun f(a: Int) -> Int { a } }
+
+fun use(s: S) {
+  let t = s + s
+  let a = s.f(a: 1)
+  let b = s.f(b: 1)
+  let c = S.make()
+  let d = s.at[1]
+  let e = S(y: 3)
+  let g = s.g(1)
+  let h = S.f(a:)
+}

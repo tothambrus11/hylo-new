@@ -1,0 +1,29 @@
+trait P {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+
+fun need<T is P>() {}
+
+fun f() {
+  // Use before the local given in the same block.
+  need<A>()
+  given A is P {}
+  need<A>()
+  if true {
+    need<A>()
+    given B is P {}
+    need<B>()
+  }
+  // B not visible here.
+  need<B>()
+}
+
+fun g() {
+  need<A>()
+}
+
+fun k() {
+  given <where A is P> => B is P {}
+  given A is P {}
+  need<B>()
+}

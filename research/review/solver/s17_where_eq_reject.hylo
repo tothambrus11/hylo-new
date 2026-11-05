@@ -1,0 +1,9 @@
+// Valid in the baseline: g is resolved first, so the join variable V of k is U and the
+// argument x: T is coerced to U through the where clause. With parking, the argument
+// coercion binds V := T before g is decided, and `as U` then requires T == U syntactically.
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = k(g(y), x) as U
+}

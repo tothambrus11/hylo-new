@@ -1,0 +1,18 @@
+trait T {}
+trait U refines T {}
+struct SA {}
+struct SP {}
+struct SQ1 {}
+struct SQ2 {}
+struct SX {}
+
+// The shared lemma comes from the generic context: `SP is T` is a where-clause of `f`, and the
+// looping given makes it cheaper. Exercises local (context) givens plus pending premises.
+given SX is T {}
+given <where SX is T, SQ1 is T, SQ2 is T> => SA is T {}
+given <where SP is T> => SQ1 is T {}
+given <where SP is T> => SQ2 is T {}
+given <where SP is T, SA is T> => SA is T {}
+
+fun need<where SA is T>() {}
+fun f<where SP is T>() { need() }

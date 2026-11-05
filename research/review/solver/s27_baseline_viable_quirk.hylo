@@ -1,0 +1,20 @@
+// Baseline quirk: solve(overload:) appends solutions whose score is worse than `best` when the
+// extra errors are nested-ambiguity diagnostics (not counted in `current.errors`). The preferred
+// choice (local extension, -> B) then wins although it has an error and `-> A` is clean.
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  let x = S.f().n()
+}

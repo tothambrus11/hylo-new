@@ -1,0 +1,11 @@
+//! Second occurs-check shape: fact P(S(w), w) against premise P(t, t).
+trait P<B> {}
+trait R {}
+struct S<T> {}
+struct Z {}
+given <U> => S<U> is P<U> {}
+given <T where T is P<T>> => T is R {}
+trait Q {}
+given Z is Q {}
+fun need<where Z is Q>() {}
+public fun main() { need() }

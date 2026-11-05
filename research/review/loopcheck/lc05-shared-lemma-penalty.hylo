@@ -1,0 +1,27 @@
+trait T {}
+trait U refines T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SQ1 {}
+struct SQ2 {}
+struct SX {}
+
+// D_P has 3 nodes.
+given SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+given SX is T {}
+
+// Direct derivation of SA (g3): 1 + (1+3) + (1+3) + 1 = 10 matches.
+given <where SX is T, SQ1 is T, SQ2 is T> => SA is T {}
+given <where SP is T> => SQ1 is T {}
+given <where SP is T> => SQ2 is T {}
+
+// Loop derivation (g1): 1 + 1 + 2 + 2 + 1 + 3 = 10 matches; the inner `SA is T` reuses the
+// pending premise `SP is T` of g1 twice. Same BFS layer as the direct one, lower penalties.
+given <where SP is T, SA is T> => SA is T {}
+
+// Resolving the refined requirement `T<SA>` records the chosen term in the witness table.
+given SA is U {}

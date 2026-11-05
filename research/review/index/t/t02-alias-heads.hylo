@@ -1,0 +1,35 @@
+trait P {}
+trait Q {}
+
+struct A<T> {}
+struct S {}
+
+typealias X = A<Void>
+typealias Y = X
+typealias Z = S
+typealias V = Void
+
+given Y is P {}
+given Z is Q {}
+given V is Q {}
+
+fun needP<W is P>() {}
+fun needQ<W is Q>() {}
+fun check<T>(_ x: T) {}
+
+fun f() {
+  needP<A<Void>>()
+  needP<X>()
+  needP<Y>()
+  needQ<S>()
+  needQ<Z>()
+  needQ<Void>()
+  needQ<V>()
+  check(summon[P<X>])
+  check(summon[Q<V>])
+}
+
+fun g() {
+  needP<A<S>>()
+  needQ<A<Void>>()
+}

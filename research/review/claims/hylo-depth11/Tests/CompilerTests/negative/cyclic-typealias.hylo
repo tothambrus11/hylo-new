@@ -1,0 +1,5 @@
+//! no-std
+
+type X = Y
+type Y = Z
+type Z = X

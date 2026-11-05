@@ -1,0 +1,18 @@
+// Member access on the result of an overloaded call creates a nested overload set.
+struct A {
+  public memberwise init
+  public fun h() -> A { A() }
+  public fun h() -> B { B() }
+}
+struct B {
+  public memberwise init
+  public fun k() -> B { B() }
+}
+fun f(x: A) -> A { x }
+fun f(x: B) -> B { x }
+fun use(x: B) {}
+public fun main() {
+  let a = A()
+  use(f(a).h())
+  use(f(a).h().k())
+}

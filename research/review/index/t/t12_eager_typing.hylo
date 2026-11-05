@@ -1,0 +1,18 @@
+trait P {}
+trait Q refines P {}
+struct A { public memberwise init }
+
+fun check<T>(x: T) {}
+fun mk2<T is Q>(x: T) -> T { x }
+
+// Coercion query at an empty typing stack; the where-clause equality is a coercion source found
+// first, so the baseline's canDeriveCoercions exits early, before typing later givens.
+fun f<T, U where T == U>(x: T) {
+  check<U>(x)
+}
+
+given A is P {}
+given A is Q {}
+
+// Value given whose type is inferred; inference needs Q<A>.
+given gk = mk2(A())

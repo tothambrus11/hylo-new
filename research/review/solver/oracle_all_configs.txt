@@ -1,0 +1,423 @@
+[solver] 14/29 identical
+  MISMATCH research/review/solver/e_s02_alias_free_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16703 +16703 @@
+      -0:23 : #!
+      +0:23 : A
+      @@ -16727 +16727 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s03_alias_binding_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16732 +16732 @@
+      -0:43 : #!
+      +0:43 : A
+      @@ -16762 +16762 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s04_if_branch_badsyntax.hylo
+      --- baseline
+      +++ solver
+      @@ -16705,2 +16705,2 @@
+      -0:25 : let #!
+      -0:26 : #!
+      +0:25 : let A
+      +0:26 : A
+      @@ -16714,2 +16714,2 @@
+      -0:33 : #!
+      -0:34 : #!
+      +0:33 : A
+      +0:34 : A
+      @@ -16749 +16749 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.34-35: error: no coercion from 'A' to '#!'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.21-24: error: no coercion from '#!' to 'A'
+  MISMATCH research/review/solver/s01_err_commit.hylo
+      --- baseline
+      +++ solver
+      @@ -16735 +16735 @@
+      -0:46 : [Void](let C) let -> Void
+      +0:46 : [Void](let B) let -> Void
+      @@ -16758 +16758,2 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'C'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.3-4: error: ambiguous use of 'g'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'B'
+  MISMATCH research/review/solver/s02_alias_free_v2.hylo
+      --- baseline
+      +++ solver
+      @@ -16707 +16707 @@
+      -0:25 : X
+      +0:25 : A
+  MISMATCH research/review/solver/s03_alias_binding_v2.hylo
+      --- baseline
+      +++ solver
+      @@ -16736 +16736 @@
+      -0:45 : X
+      +0:45 : A
+  MISMATCH research/review/solver/s10_ext_conf_priority.hylo
+      --- baseline
+      +++ solver
+      @@ -16798 +16798 @@
+      -0:78 : X
+      +0:78 : A<Void>
+  MISMATCH research/review/solver/s11_where_eq_if.hylo
+      --- baseline
+      +++ solver
+      @@ -16710 +16710 @@
+      -0:29 : let U
+      +0:29 : let T
+      @@ -16712 +16712 @@
+      -0:30 : U
+      +0:30 : T
+      @@ -16718 +16718 @@
+      -0:34 : U
+      +0:34 : T
+      @@ -16720,3 +16720,3 @@
+      -0:36 : U
+      -0:38 : U
+      -0:39 : U
+      +0:36 : T
+      +0:38 : T
+      +0:39 : T
+      @@ -16740,7 +16740,6 @@
+      -0:52 -> f(_:)
+      -0:52 : <V> [Void](let V) let -> V
+      -0:53 -> x
+      -0:53 : T
+      -0:54 -> f(_:)
+      -0:54 : <V> [Void](let V) let -> V
+  MISMATCH research/review/solver/s12_where_eq_as.hylo
+      --- baseline
+      +++ solver
+      @@ -16729 +16729 @@
+      -0:40 : U
+      +0:40 : T
+      @@ -16757 +16757 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: no conversion from 'U' to 'T'
+      +diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: type 'U' is not compatible with 'T'
+  MISMATCH research/review/solver/s13_where_eq_member.hylo
+      --- baseline
+      +++ solver
+      @@ -16730,2 +16730,2 @@
+      -0:41 : let U
+      -0:42 : U
+      +0:41 : let T
+      +0:42 : T
+      @@ -16737 +16737 @@
+      -0:46 : U
+      +0:46 : T
+      @@ -16739 +16739 @@
+      -0:48 : U
+      +0:48 : T
+      @@ -16741,4 +16741,4 @@
+      -0:50 : U
+      -0:51 : U
+      -0:52 : let U
+      -0:53 : U
+      +0:50 : T
+      +0:51 : T
+      +0:52 : let T
+      +0:53 : T
+      @@ -16746 +16746 @@
+      -0:54 : U
+      +0:54 : T
+  MISMATCH research/review/solver/s14_where_eq_member_rev.hylo
+      --- baseline
+      +++ solver
+      @@ -16730,2 +16730,2 @@
+      -0:41 : let U
+      -0:42 : U
+      +0:41 : let T
+      +0:42 : T
+      @@ -16737 +16737 @@
+      -0:46 : U
+      +0:46 : T
+      @@ -16739 +16739 @@
+      -0:48 : U
+      +0:48 : T
+      @@ -16741,4 +16741,4 @@
+      -0:50 : U
+      -0:51 : U
+      -0:52 : let U
+      -0:53 : U
+      +0:50 : T
+      +0:51 : T
+      +0:52 : let T
+      +0:53 : T
+      @@ -16746 +16746 @@
+      -0:54 : U
+      +0:54 : T
+  MISMATCH research/review/solver/s15_branch_order.hylo
+      --- baseline
+      +++ solver
+      @@ -16756 +16756 @@
+      -0:59 : [Void](let X, let X) let -> Void
+      +0:59 : [Void](let Y, let Y) let -> Void
+      @@ -16761,2 +16761,2 @@
+      -0:61 : [Void]() let -> X
+      -0:62 : X
+      +0:61 : [Void]() let -> Y
+      +0:62 : Y
+      @@ -16766,2 +16766,2 @@
+      -0:64 : [Void]() let -> X
+      -0:65 : X
+      +0:64 : [Void]() let -> Y
+      +0:65 : Y
+  MISMATCH research/review/solver/s17_where_eq_reject.hylo
+      --- baseline
+      +++ solver
+      @@ -16747,2 +16747,2 @@
+      -0:52 -> g(_:)
+      -0:52 : <W> [Void](let W) let -> W
+      +0:52 -> k(_:_:)
+      +0:52 : <V> [Void](let V, let V) let -> V
+      @@ -16750,2 +16750,2 @@
+      -0:54 -> k(_:_:)
+      -0:54 : <V> [Void](let V, let V) let -> V
+      +0:54 -> g(_:)
+      +0:54 : <W> [Void](let W) let -> W
+  MISMATCH research/review/solver/s18_where_eq_reject.hylo
+      --- baseline
+      +++ solver
+      @@ -16731 +16731 @@
+      -0:42 : [Void](let U, let U) let -> U
+      +0:42 : [Void](let T, let T) let -> T
+      @@ -16733 +16733 @@
+      -0:43 : U
+      +0:43 : T
+      @@ -16738,2 +16738,2 @@
+      -0:46 : U
+      -0:47 : U
+      +0:46 : T
+      +0:47 : T
+      @@ -16747,6 +16747,5 @@
+      -0:52 -> g(_:)
+      -0:52 : <W> [Void](let W) let -> W
+      -0:53 -> x
+      -0:53 : T
+      -0:54 -> k(_:_:)
+      -0:54 : <V> [Void](let V, let V) let -> V
+      +0:52 -> k(_:_:)
+      +0:52 : <V> [Void](let V, let V) let -> V
+      +0:53 : U
+      +0:54 -> g(_:)
+      +0:54 : <W> [Void](let W) let -> W
+  MISMATCH research/review/solver/s26_generic_ret_as.hylo
+      --- baseline
+      +++ solver
+      @@ -16749 +16749 @@
+      -0:53 : X
+      +0:53 : B<A>
+[absmodel,index,loopcheck,names,unify] 29/29 identical
+[absmodel,index,loopcheck,names,solver,unify] 14/29 identical
+  MISMATCH research/review/solver/e_s02_alias_free_badsyntax.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16703 +16703 @@
+      -0:23 : #!
+      +0:23 : A
+      @@ -16727 +16727 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s02_alias_free_badsyntax.hylo:8.11-14: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s03_alias_binding_badsyntax.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16732 +16732 @@
+      -0:43 : #!
+      +0:43 : A
+      @@ -16762 +16762 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: no conversion from '#!' to 'A'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s03_alias_binding_badsyntax.hylo:12.12-15: error: type '#!' is not compatible with 'A'
+  MISMATCH research/review/solver/e_s04_if_branch_badsyntax.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16705,2 +16705,2 @@
+      -0:25 : let #!
+      -0:26 : #!
+      +0:25 : let A
+      +0:26 : A
+      @@ -16714,2 +16714,2 @@
+      -0:33 : #!
+      -0:34 : #!
+      +0:33 : A
+      +0:34 : A
+      @@ -16749 +16749 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.34-35: error: no coercion from 'A' to '#!'
+      +diag /home/hylo/hylo-tc/research/review/solver/e_s04_if_branch_badsyntax.hylo:9.21-24: error: no coercion from '#!' to 'A'
+  MISMATCH research/review/solver/s01_err_commit.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16735 +16735 @@
+      -0:46 : [Void](let C) let -> Void
+      +0:46 : [Void](let B) let -> Void
+      @@ -16758 +16758,2 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'C'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.3-4: error: ambiguous use of 'g'
+      +diag /home/hylo/hylo-tc/research/review/solver/s01_err_commit.hylo:12.5-9: error: cannot pass value of type 'A' to parameter 'B'
+  MISMATCH research/review/solver/s02_alias_free_v2.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16707 +16707 @@
+      -0:25 : X
+      +0:25 : A
+  MISMATCH research/review/solver/s03_alias_binding_v2.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16736 +16736 @@
+      -0:45 : X
+      +0:45 : A
+  MISMATCH research/review/solver/s10_ext_conf_priority.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16798 +16798 @@
+      -0:78 : X
+      +0:78 : A<Void>
+  MISMATCH research/review/solver/s11_where_eq_if.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16710 +16710 @@
+      -0:29 : let U
+      +0:29 : let T
+      @@ -16712 +16712 @@
+      -0:30 : U
+      +0:30 : T
+      @@ -16718 +16718 @@
+      -0:34 : U
+      +0:34 : T
+      @@ -16720,3 +16720,3 @@
+      -0:36 : U
+      -0:38 : U
+      -0:39 : U
+      +0:36 : T
+      +0:38 : T
+      +0:39 : T
+      @@ -16740,7 +16740,6 @@
+      -0:52 -> f(_:)
+      -0:52 : <V> [Void](let V) let -> V
+      -0:53 -> x
+      -0:53 : T
+      -0:54 -> f(_:)
+      -0:54 : <V> [Void](let V) let -> V
+  MISMATCH research/review/solver/s12_where_eq_as.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16729 +16729 @@
+      -0:40 : U
+      +0:40 : T
+      @@ -16757 +16757 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: no conversion from 'U' to 'T'
+      +diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: type 'U' is not compatible with 'T'
+  MISMATCH research/review/solver/s13_where_eq_member.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16730,2 +16730,2 @@
+      -0:41 : let U
+      -0:42 : U
+      +0:41 : let T
+      +0:42 : T
+      @@ -16737 +16737 @@
+      -0:46 : U
+      +0:46 : T
+      @@ -16739 +16739 @@
+      -0:48 : U
+      +0:48 : T
+      @@ -16741,4 +16741,4 @@
+      -0:50 : U
+      -0:51 : U
+      -0:52 : let U
+      -0:53 : U
+      +0:50 : T
+      +0:51 : T
+      +0:52 : let T
+      +0:53 : T
+      @@ -16746 +16746 @@
+      -0:54 : U
+      +0:54 : T
+  MISMATCH research/review/solver/s14_where_eq_member_rev.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16730,2 +16730,2 @@
+      -0:41 : let U
+      -0:42 : U
+      +0:41 : let T
+      +0:42 : T
+      @@ -16737 +16737 @@
+      -0:46 : U
+      +0:46 : T
+      @@ -16739 +16739 @@
+      -0:48 : U
+      +0:48 : T
+      @@ -16741,4 +16741,4 @@
+      -0:50 : U
+      -0:51 : U
+      -0:52 : let U
+      -0:53 : U
+      +0:50 : T
+      +0:51 : T
+      +0:52 : let T
+      +0:53 : T
+      @@ -16746 +16746 @@
+      -0:54 : U
+      +0:54 : T
+  MISMATCH research/review/solver/s15_branch_order.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16756 +16756 @@
+      -0:59 : [Void](let X, let X) let -> Void
+      +0:59 : [Void](let Y, let Y) let -> Void
+      @@ -16761,2 +16761,2 @@
+      -0:61 : [Void]() let -> X
+      -0:62 : X
+      +0:61 : [Void]() let -> Y
+      +0:62 : Y
+      @@ -16766,2 +16766,2 @@
+      -0:64 : [Void]() let -> X
+      -0:65 : X
+      +0:64 : [Void]() let -> Y
+      +0:65 : Y
+  MISMATCH research/review/solver/s17_where_eq_reject.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16747,2 +16747,2 @@
+      -0:52 -> g(_:)
+      -0:52 : <W> [Void](let W) let -> W
+      +0:52 -> k(_:_:)
+      +0:52 : <V> [Void](let V, let V) let -> V
+      @@ -16750,2 +16750,2 @@
+      -0:54 -> k(_:_:)
+      -0:54 : <V> [Void](let V, let V) let -> V
+      +0:54 -> g(_:)
+      +0:54 : <W> [Void](let W) let -> W
+  MISMATCH research/review/solver/s18_where_eq_reject.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16731 +16731 @@
+      -0:42 : [Void](let U, let U) let -> U
+      +0:42 : [Void](let T, let T) let -> T
+      @@ -16733 +16733 @@
+      -0:43 : U
+      +0:43 : T
+      @@ -16738,2 +16738,2 @@
+      -0:46 : U
+      -0:47 : U
+      +0:46 : T
+      +0:47 : T
+      @@ -16747,6 +16747,5 @@
+      -0:52 -> g(_:)
+      -0:52 : <W> [Void](let W) let -> W
+      -0:53 -> x
+      -0:53 : T
+      -0:54 -> k(_:_:)
+      -0:54 : <V> [Void](let V, let V) let -> V
+      +0:52 -> k(_:_:)
+      +0:52 : <V> [Void](let V, let V) let -> V
+      +0:53 : U
+      +0:54 -> g(_:)
+      +0:54 : <W> [Void](let W) let -> W
+  MISMATCH research/review/solver/s26_generic_ret_as.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,solver,unify
+      @@ -16749 +16749 @@
+      -0:53 : X
+      +0:53 : B<A>

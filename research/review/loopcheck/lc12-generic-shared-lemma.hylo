@@ -1,0 +1,22 @@
+trait T {}
+trait U refines T {}
+struct SA<X> {}
+struct SP<X> {}
+struct SP1<X> {}
+struct SP2<X> {}
+struct SQ1<X> {}
+struct SQ2<X> {}
+struct SX {}
+struct Z {}
+
+// Generic version of lc05: the pending premise `SP<X> is T` contains the given's type parameter.
+given <X> => SP2<X> is T {}
+given <X where SP2<X> is T> => SP1<X> is T {}
+given <X where SP1<X> is T> => SP<X> is T {}
+given SX is T {}
+given <X where SX is T, SQ1<X> is T, SQ2<X> is T> => SA<X> is T {}
+given <X where SP<X> is T> => SQ1<X> is T {}
+given <X where SP<X> is T> => SQ2<X> is T {}
+given <X where SP<X> is T, SA<X> is T> => SA<X> is T {}
+
+given SA<Z> is U {}

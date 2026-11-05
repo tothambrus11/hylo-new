@@ -1,0 +1,38 @@
+//! stage:lowering
+
+struct A<T> {
+  public var x: T
+  public memberwise init
+  public static fun make<where T is Movable>(x: sink T) -> A<T> { .new(x: x) }
+}
+
+given A<Void> is Deinitializable {}
+
+extension <T> A<T> {
+  public fun id() -> Self { fatal_error() }
+}
+
+struct B<T> is Deinitializable {
+  public fun initialize() set {}
+}
+
+extension B<Void> {
+  public init<U>() { &self.initialize() }
+  public static fun make<U>() -> Self { .new<U>() }
+}
+
+public fun use<T>(x: A<T>) {}
+
+public fun main() {
+  let a0: A<_> = .new(x: ())
+  let a1: A<_> = .make(())
+  let a2: A<_> = .make(()).id()
+
+  use(.new(x: ()))
+  use(.make(()).id())
+
+  // Some type arguments are expressed in the static member's qualification while others are
+  // expressed in the type application of the member itself.
+  let b0: B<Void> = .new<Bool>()
+  let b1: B<Void> = .make<Bool>()
+}

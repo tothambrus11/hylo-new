@@ -1,0 +1,26 @@
+trait T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SQ1 {}
+struct SQ2 {}
+
+// D_P has 3 nodes; declared at top level (farther group, higher penalty per use).
+given SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+
+fun need<where SA is T>() {}
+
+public fun main() {
+  // Direct: g3(g4(D_P), g5(D_P)) = 9 matches. Loop: g1(D_P, g3(g4(p), g5(p))) = 9 matches, where
+  // p is the pending premise `SP is T` of g1. Two copies of g1 give two equally good loop terms,
+  // so the baseline reports an ambiguity; with loopcheck only the direct term is left.
+  given <where SQ1 is T, SQ2 is T> => SA is T {}
+  given <where SP is T> => SQ1 is T {}
+  given <where SP is T> => SQ2 is T {}
+  given <where SP is T, SA is T> => SA is T {}
+  given <where SP is T, SA is T> => SA is T {}
+  need()
+}

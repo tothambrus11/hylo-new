@@ -1,0 +1,106 @@
+[loopcheck] 2/4 identical
+  MISMATCH research/review/loopcheck/lc10-variables.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16686,0 +16687,10 @@
+      +0:100 -> use(_:)
+      +0:100 : [Void](let W<T>) let -> Void
+      +0:101 -> w
+      +0:101 : W<T>
+      +0:102 : Void
+      +0:103 : <T> Q<T> ==> [Void](let W<T>) let -> Void
+      +0:104 -> use(_:)
+      +0:104 : <T> P<T> ==> [Void](let T) let -> Void
+      +0:105 -> use(_:)
+      +0:105 : <T> P<T> ==> [Void](let T) let -> Void
+      @@ -16781,10 +16791,12 @@
+      -0:72 : <T> P<T> ==> [Void](x: let T) let -> Void
+      -0:73 : let #!
+      -0:74 : #!
+      -0:75 -> W
+      -0:75 : Metatype<<T> W<T>>
+      -0:76 -> A
+      -0:76 : Metatype<A>
+      -0:77 : Metatype<W<A>>
+      -0:78 : #!
+      -0:79 : #!
+      +0:72 : <T> P<T> ==> [Void](let T) let -> Void
+  MISMATCH research/review/loopcheck/lc11-refinement-cycle.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16687,15 +16687,15 @@
+      -0:100 -> need(x:)
+      -0:100 : [Void](x: let A) let -> Void
+      -0:101 -> B
+      -0:101 : Metatype<<T> B<T>>
+      -0:102 -> T
+      -0:102 : Metatype<T>
+      -0:103 : Metatype<B<T>>
+      -0:104 : #!
+      -0:105 : Void
+      -0:106 : <T> Q<T> ==> [Void](x: let T) let -> Void
+      -0:107 -> need(x:)
+      -0:107 : [Void](x: let A) let -> Void
+      -0:108 -> A
+      -0:108 : Metatype<A>
+      -0:109 : #!
+      +0:100 -> A
+      +0:100 : Metatype<A>
+      +0:101 : Metatype<B<A>>
+      +0:102 : Metatype<let B<A>>
+      +0:103 : let B<A>
+      +0:104 -> need(_:)
+      +0:104 : [Void](let A) let -> Void
+[absmodel,index,loopcheck] 2/4 identical
+  MISMATCH research/review/loopcheck/lc10-variables.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16686,0 +16687,10 @@
+      +0:100 -> use(_:)
+      +0:100 : [Void](let W<T>) let -> Void
+      +0:101 -> w
+      +0:101 : W<T>
+      +0:102 : Void
+      +0:103 : <T> Q<T> ==> [Void](let W<T>) let -> Void
+      +0:104 -> use(_:)
+      +0:104 : <T> P<T> ==> [Void](let T) let -> Void
+      +0:105 -> use(_:)
+      +0:105 : <T> P<T> ==> [Void](let T) let -> Void
+      @@ -16781,10 +16791,12 @@
+      -0:72 : <T> P<T> ==> [Void](x: let T) let -> Void
+      -0:73 : let #!
+      -0:74 : #!
+      -0:75 -> W
+      -0:75 : Metatype<<T> W<T>>
+      -0:76 -> A
+      -0:76 : Metatype<A>
+      -0:77 : Metatype<W<A>>
+      -0:78 : #!
+      -0:79 : #!
+      +0:72 : <T> P<T> ==> [Void](let T) let -> Void
+  MISMATCH research/review/loopcheck/lc11-refinement-cycle.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16687,15 +16687,15 @@
+      -0:100 -> need(x:)
+      -0:100 : [Void](x: let A) let -> Void
+      -0:101 -> B
+      -0:101 : Metatype<<T> B<T>>
+      -0:102 -> T
+      -0:102 : Metatype<T>
+      -0:103 : Metatype<B<T>>
+      -0:104 : #!
+      -0:105 : Void
+      -0:106 : <T> Q<T> ==> [Void](x: let T) let -> Void
+      -0:107 -> need(x:)
+      -0:107 : [Void](x: let A) let -> Void
+      -0:108 -> A
+      -0:108 : Metatype<A>
+      -0:109 : #!
+      +0:100 -> A
+      +0:100 : Metatype<A>
+      +0:101 : Metatype<B<A>>
+      +0:102 : Metatype<let B<A>>
+      +0:103 : let B<A>
+      +0:104 -> need(_:)
+      +0:104 : [Void](let A) let -> Void

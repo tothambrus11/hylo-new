@@ -1,0 +1,27 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=13432 absmodel.refuted=225 absmodel.work=14783 coerced.slowPath=54 names.appliesCalls=7216 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=5473 summon.matchOK=765 summon.matches=29896 summon.subgoals=646
+counters.user:   absmodel.built=1 absmodel.facts=64 absmodel.micros=2481 absmodel.refuted=21 absmodel.work=655 coerced.slowPath=20 solver.goalSteps=126 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.layers=20 summon.matchOK=20 summon.matches=20 summon.subgoals=21
+diagnostics: 20
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:28.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:29.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:30.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:31.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:32.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:33.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:34.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:35.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:36.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:37.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:38.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:39.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:40.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:41.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:42.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:43.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:44.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:45.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:46.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-loop-20.hylo:47.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     85.74 ms
+scope      7.67 ms
+type.stdlib   1152.83 ms
+type.user     17.97 ms

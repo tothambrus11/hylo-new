@@ -1,0 +1,11 @@
+// If-expressions with an expected type and overloaded branches; return statements.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+fun r() -> A { if true { f() } else { A() } }
+public fun main() {
+  let p: A = if true { f() } else { f() }
+  let q = (if true { f() } else { A() }) as A
+}

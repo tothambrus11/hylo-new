@@ -1,0 +1,14 @@
+//! Occurs-check: bottom-up matching of premise `P<T, S<T>>` against fact `P<U, U>` creates a
+//! cyclic substitution in the abstract unifier.
+trait P<B> {}
+trait R {}
+trait Q {}
+struct S<T> {}
+struct Z {}
+given <U> => U is P<U> {}
+given <T where T is P<S<T>>> => T is R {}
+given Z is Q {}
+fun need<where Z is Q>() {}
+public fun main() {
+  need()
+}

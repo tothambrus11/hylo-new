@@ -1,0 +1,92 @@
+== self (797 samples)
+ 10.41%  libswiftCore.s swift_release
+  8.91%  libswiftCore.s swift_retain
+  4.77%  libswiftCore.s _ZL52swift_conformsToProtocolMaybeInstantiateSuperclassesPKN5swift14TargetMetadataINS_9InProcessEEEPKNS_24TargetProtocolDescriptorIS1_EEb
+  4.52%  libswiftCore.s _ZL25_swift_getGenericMetadataN5swift15MetadataRequestEPKPKvPKNS_27TargetTypeContextDescriptorINS_9InProcessEEE
+  4.39%  libswiftCore.s _ZL7tryCastPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+  3.39%  libswiftCore.s _ZN5swift20LockingConcurrentMapIN12_GLOBAL__N_115TupleCacheEntryENS1_17TupleCacheStorageEE11getOrInsertINS2_3KeyEJRNS_15MetadataRequestERPKNS_23Target
+  2.51%  libswiftCore.s _swift_stdlib_getBinaryProperties
+  2.38%  tc-bench       _init
+  1.88%  libswiftCore.s Hasher.init(_seed:)
+  1.63%  libswiftCore.s _ZL8getCacheRKN5swift27TargetTypeContextDescriptorINS_9InProcessEEE
+  1.51%  libswiftCore.s Hasher._finalize()
+  1.13%  libswiftCore.s swift_dynamicCast
+  1.00%  libswiftCore.s _ZN7__swift9__runtime4llvm7hashing6detail10hash_shortEPKcmm
+  1.00%  libswiftCore.s _ZN5swift38StableAddressConcurrentReadableHashMapINS_17GenericCacheEntryENS_23TaggedMetadataAllocatorILt14EEENS_5MutexEE11getOrInsertINS_16MetadataCac
+  0.88%  libswiftCore.s _stringCompareInternal(_:_:_:_:expecting:)
+  0.88%  libswiftCore.s swift_conformsToProtocolWithExecutionContext
+  0.88%  libswiftCore.s _ZN7__swift9__runtime4llvm12hash_combineIJPvPKN5swift24TargetProtocolDescriptorINS4_9InProcessEEEEEENS1_9hash_codeEDpRKT_
+  0.88%  libswiftCore.s _ZN5swift9RefCountsINS_13RefCountBitsTILNS_19RefCountInlinednessE1EEEE15doDecrementSlowILNS_13PerformDeinitE1EEEbS3_j
+  0.88%  tc-bench       specialized __RawDictionaryStorage.find<A>(_:hashValue:)
+  0.75%  tc-bench       specialized Module.tag<A>(of:)
+  0.75%  libswiftCore.s _ZN5swift25ConcurrentReadableHashMapIN12_GLOBAL__N_121ConformanceCacheEntryENS_9LazyMutexEE4findINS1_19ConformanceCacheKeyEEESt4pairIPS2_jERKT_NS4_12I
+  0.75%  libswiftCore.s _ZN5swift22MetadataCacheEntryBaseINS_17GenericCacheEntryEJPKvEE20awaitSatisfyingStateERNS_18ConcurrencyControlENS_15MetadataRequestE
+  0.63%  libswiftCore.s _ZNK5swift16MetadataCacheKeyeqERKS0_
+  0.63%  libswiftCore.s _ZN5swift22MetadataCacheEntryBaseIN12_GLOBAL__N_115TupleCacheEntryEJNS_23TargetTupleTypeMetadataINS_9InProcessEE7ElementEEE20awaitSatisfyingStateERNS_
+  0.63%  libswiftCore.s swift_getTupleTypeMetadata
+  0.63%  tc-bench       closure #1 in StableDictionary.lookup(_:)
+  0.63%  libswiftCore.s _ZN5swift20LockingConcurrentMapINS_17GenericCacheEntryENS_27LockingConcurrentMapStorageIS1_Lt14EEEE11getOrInsertINS_16MetadataCacheKeyEJRNS_15Metadata
+  0.50%  libswiftCore.s swift_isUniquelyReferenced_nonNull_native
+  0.50%  tc-bench       initializeWithCopy for AnySyntax
+  0.50%  libswiftCore.s _ZL37tryCastToConstrainedOpaqueExistentialPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+  0.50%  libswiftCore.s _ZN5swift15AtomicWaitQueueINS_17MetadataWaitQueueENS_13IndirectMutexEE6WorkerD2Ev
+  0.50%  tc-bench       TypeTree.equals(_:)
+  0.38%  libswiftCore.s _allASCII(_:)
+  0.38%  tc-bench       specialized Collection.first.getter
+  0.38%  libswiftCore.s Collection.firstIndex(where:)
+  0.38%  libswiftCore.s Substring.subscript.getter
+  0.38%  libswiftCore.s _StringGuts.validateScalarIndex(_:)
+  0.38%  libswiftCore.s String.Iterator.next()
+  0.38%  libswiftCore.s _ZN5swift28_conformsToProtocolInContextEPKNS_11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEENS_27TargetProtocolDescriptorRefIS4_EEPPKNS_18TargetW
+  0.38%  tc-bench       specialized Program.symbol<A>(annotating:)
+  0.38%  tc-bench       specialized Program.annotation<A>(_:appliedTo:)
+  0.38%  libswiftCore.s _ZN5swift12metadataimpl14ValueWitnessesINS0_20OpaqueExistentialBoxILj1EEEE7destroyEPNS_11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEE
+  0.38%  tc-bench       specialized __RawDictionaryStorage.find<A>(_:hashValue:)
+  0.38%  tc-bench       specialized __RawDictionaryStorage.find<A>(_:hashValue:)
+  0.38%  libswiftCore.s swift_arrayDestroy
+== inclusive (797 samples)
+ 98.62%  libswift_Concu _ZN5swift34runJobInEstablishedExecutorContextEPNS_3JobENS_17SerialExecutorRefENS_15TaskExecutorRefE
+ 98.62%  libswift_Concu swift_job_run
+ 85.57%  libdispatch.so _dispatch_worker_thread
+ 85.57%  libc.so.6      0x1375cc
+ 85.57%  libc.so.6      0xa3dfa
+ 83.69%  libdispatch.so _dispatch_lane_invoke
+ 83.69%  libdispatch.so _dispatch_lane_serial_drain
+ 83.69%  tc-bench       specialized static TypeCheckBench.main()
+ 82.43%  tc-bench       Program.assignTypes(_:loggingInferenceWhere:)
+ 82.31%  tc-bench       Typer.apply()
+ 55.08%  tc-bench       Typer.check(_:)
+ 47.93%  tc-bench       Typer.check(_:)
+ 43.29%  tc-bench       Typer.check(_:requiring:reason:)
+ 32.75%  tc-bench       specialized Typer.discharge<A>(_:relatedTo:)
+ 31.87%  tc-bench       Typer.resolve(_:memberOf:visibleFrom:)
+ 29.11%  tc-bench       Solver.solution(using:)
+ 28.98%  tc-bench       Solver.solution(betterThanOrEqualTo:using:)
+ 28.11%  tc-bench       Typer.check(body:of:expectingOutputType:)
+ 26.85%  tc-bench       Typer.check(_:requiring:)
+ 25.97%  tc-bench       closure #2 in Solver.solution(betterThanOrEqualTo:using:)
+ 24.22%  tc-bench       Typer.summon(_:in:)
+ 24.22%  tc-bench       Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+ 20.33%  tc-bench       Typer.inferredType(of:occurringAsStatement:in:)
+ 18.44%  tc-bench       Typer.inferredType(of:in:)
+ 18.19%  tc-bench       Typer.resolve(_:in:)
+ 17.94%  tc-bench       Typer.inferredType(of:in:)
+ 17.82%  tc-bench       Solver.solve(member:)
+ 17.44%  libswiftCore.s swift_dynamicCast
+ 16.44%  tc-bench       Typer.takeSummonResults(from:in:)
+ 15.81%  tc-bench       Typer.match(_:in:)
+ 15.68%  libswiftCore.s _ZL7tryCastPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+ 14.18%  tc-bench       Typer.inferredType(calleeOf:in:)
+ 13.80%  tc-bench       Typer.check(_:)
+ 13.30%  tc-bench       Typer.check(_:)
+ 13.30%  tc-bench       Typer.declaredType(of:)
+ 13.17%  libc.so.6      0x2a718
+ 13.17%  libc.so.6      0x2a601
+ 13.17%  tc-bench       main
+ 13.17%  tc-bench       _start
+ 12.92%  tc-bench       specialized static TypeCheckBench.main()
+ 12.92%  tc-bench       specialized Sequence.filter<A>(_:)
+ 12.92%  tc-bench       Program.initializeStandardLibraryCaches()
+ 12.67%  tc-bench       static SourceFile.forEach(in:withPathExtension:_:)
+ 12.55%  tc-bench       SyntaxFilter.callAsFunction(_:in:)
+ 12.55%  tc-bench       StableSet.subscript.getter

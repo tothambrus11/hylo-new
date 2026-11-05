@@ -1,0 +1,12 @@
+// Genuinely ambiguous sets, two of them, independent; diagnostics order/selection.
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun f() -> A { A() }
+fun f() -> B { B() }
+fun g(x: A) -> A { x }
+fun g(x: A) -> B { B() }
+fun g(x: A) -> {A} { (x,) }
+public fun main() {
+  let x = f()
+  let y = (f(), g(A()))
+}

@@ -1,0 +1,33 @@
+fun check<T>(_ x: T) {}
+
+struct S {}
+struct Box<T> {}
+
+fun f<where let u: Void, let i: Int, let s: S>() {
+  check<Void>(summon[Void])
+  check<Int>(summon[Int])
+  check<S>(summon[S])
+  g()
+}
+
+fun g<where let s: S, let i: Int>() {
+  check<S>(summon[S])
+}
+
+fun h<T where let x: T, let b: Box<T>>() {
+  check<T>(summon[T])
+  check<Box<T>>(summon[Box<T>])
+}
+
+fun k<where let f: [](Int) -> Int>() {
+  check(summon[[](Int) -> Int])
+}
+
+public fun main() {
+  given Void = ()
+  given S = S()
+  given Int = 3
+  f()
+  given Box<Int> = Box<Int>()
+  h<Int>()
+}

@@ -1,0 +1,15 @@
+trait P {}
+trait U refines P {}
+struct M<X, Y> {}
+struct A {}
+struct B {}
+
+// Ancestor `P<M<?x, ?y>>` vs subgoal `P<M<?y, ?x>>`: identical only after both are bound; the
+// swap given loops through a variant (not identical) goal and must not be pruned.
+given <X, Y where M<Y, X> is P> => M<X, Y> is P {}
+given M<A, B> is P {}
+
+given M<B, A> is U {}
+
+fun need<X, Y where M<X, Y> is P>(x: X, y: Y) {}
+fun k(a: A, b: B) { need(a, b) ; need(b, a) }

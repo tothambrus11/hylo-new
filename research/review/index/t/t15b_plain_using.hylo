@@ -1,0 +1,20 @@
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct S { public memberwise init }
+struct S2 { public memberwise init }
+type Z = S
+
+fun need<T is P>() {}
+fun check<T>(x: T) {}
+
+given A is Q {}
+given A is Q {}
+
+fun f() {
+  need<A>()
+}
+
+fun g<where let s2: S2>() {
+  check<S>(summon[Z])
+}

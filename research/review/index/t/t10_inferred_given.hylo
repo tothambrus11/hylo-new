@@ -1,0 +1,26 @@
+trait P { fun v() -> Int }
+trait Q refines P {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+
+given A is P { fun v() -> Int { 1 } }
+given A is Q {}
+
+fun mk<T is Q>(x: T) -> Box<T> { Box<T>() }
+fun check<T>(x: T) {}
+
+fun f<T, U where T == U>(x: T) {
+  check<U>(x)
+}
+
+// Value givens with partial ascriptions: the initializer is inferred while computing the type.
+given Box<_> = mk(A())
+
+fun main() {
+  given Box<_> = mk(A())
+  check<Box<A>>(summon[Box<A>])
+}
+
+fun later() {
+  check<Box<A>>(summon[Box<A>])
+}

@@ -1,0 +1,35 @@
+//! stage:typing no-std
+// Associated types (abstract vs concrete qualification), equality witnesses, where-clauses.
+trait P { type X }
+trait Q { type Y }
+given Void is P { type X = Void }
+struct A<T> { public memberwise init }
+given <T> => A<T> is P { type X = T }
+
+fun check<T>(x: T) {}
+
+fun f0<T where T == Void>(x: T.X) { check<Void>(x) }
+fun f1<T, U where T == U, T is P>(x: U.X) {
+  check<T.X>(x)
+  let y: T.X = x
+}
+fun f2<T, U where T == U, T is P, U is P, T.X == U.X>(x: U.X) {
+  check<T.X>(x)
+  let y: T.X = x
+}
+fun f3<T, U where T is P, U is P>(x: U.X) {
+  check<T.X>(x)
+}
+fun f4<T where T is P, T is Q>(x: T.X, y: T.Y) {
+  check<T.X>(y)
+  check<T.Y>(y)
+}
+fun f5<T where T is P>(x: A<T>.X) -> T { Builtin.trap() }
+fun f6<T where T is P, T.X == A<T>>(x: T.X) { check<A<T>>(x) }
+
+fun main() {
+  f0<Void>(())
+  let v = f5<Void>(())
+  check<Void>(v)
+  check<A<Void>.X>(())
+}

@@ -1,0 +1,459 @@
+[names] 16/22 identical
+  MISMATCH research/review/names/n01_alias_cycle.hylo
+      --- baseline
+      +++ names
+      @@ -16686,2 +16686,2 @@
+      -0:11 : [Void](self: let #!) let -> Void
+      -0:12 : #!
+      +0:11 : [Void](self: let X) let -> Void
+      +0:12 : X
+      @@ -16694,2 +16694,3 @@
+      -0:17 : #!
+      -0:18 : #!
+      +0:17 -> g
+      +0:17 : [let X]() let -> Void
+      +0:18 : Void
+      @@ -16705 +16706 @@
+      -0:6 : #!
+      +0:6 : Metatype<X>
+      @@ -16707,5 +16708,3 @@
+      -0:7 : Metatype<#!>
+      -0:8 : Metatype<let #!>
+      -0:9 : let #!
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:11.19-20: error: type 'Int' has no member 'g'
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:5.6-7: error: definition of 'X' refers to itself
+      +0:7 : Metatype<X>
+      +0:8 : Metatype<let X>
+      +0:9 : let X
+  MISMATCH research/review/names/n03_reverse_poison.hylo
+      --- baseline
+      +++ names
+      @@ -16709,2 +16709 @@
+      -0:26 -> Foo
+      -0:26 : Metatype<Foo>
+      +0:26 : #!
+      @@ -16714 +16713 @@
+      -0:29 : Foo
+      +0:29 : #!
+      @@ -16726,4 +16725,3 @@
+      -0:36 -> Inner
+      -0:36 : Metatype<Inner>
+      -0:37 : Metatype<let Inner>
+      -0:38 : let Inner
+      +0:36 : #!
+      +0:37 : Metatype<let #!>
+      +0:38 : let #!
+      @@ -16732 +16730 @@
+      -0:40 : [Void](let Inner) let -> Void
+      +0:40 : [Void](let #!) let -> Void
+      @@ -16738,0 +16737,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:14.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:22.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n04_reverse_poison_min.hylo
+      --- baseline
+      +++ names
+      @@ -16689,2 +16689 @@
+      -0:13 -> Foo
+      -0:13 : Metatype<Foo>
+      +0:13 : #!
+      @@ -16694 +16693 @@
+      -0:16 : Foo
+      +0:16 : #!
+      @@ -16707,4 +16706,3 @@
+      -0:23 -> Inner
+      -0:23 : Metatype<Inner>
+      -0:24 : Metatype<let Inner>
+      -0:25 : let Inner
+      +0:23 : #!
+      +0:24 : Metatype<let #!>
+      +0:25 : let #!
+      @@ -16712 +16710 @@
+      -0:27 : [Void](let Inner) let -> Void
+      +0:27 : [Void](let #!) let -> Void
+      @@ -16721,0 +16720,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:6.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:9.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n05_spurious_cycle_conformance.hylo
+      --- baseline
+      +++ names
+      @@ -16686 +16686 @@
+      -0:10 : #!
+      +0:10 : Metatype<X>
+      @@ -16688,3 +16688,3 @@
+      -0:11 : Metatype<#!>
+      -0:12 : Metatype<let #!>
+      -0:13 : let #!
+      +0:11 : Metatype<X>
+      +0:12 : Metatype<let X>
+      +0:13 : let X
+      @@ -16692,2 +16692,2 @@
+      -0:15 : [Void](self: let #!) let -> Void
+      -0:16 : #!
+      +0:15 : [Void](self: let X) let -> Void
+      +0:16 : X
+      @@ -16695 +16695 @@
+      -0:17 : #!
+      +0:17 : Metatype<X>
+      @@ -16698 +16698 @@
+      -0:19 : Metatype<P<#!>>
+      +0:19 : Metatype<P<X>>
+      @@ -16700 +16700 @@
+      -0:20 : P<#!>
+  MISMATCH research/review/names/t01_ext_order.hylo
+      --- baseline
+      +++ names
+      @@ -16687 +16687,2 @@
+      -0:12 : #!
+      +0:12 -> V
+      +0:12 : Metatype<V>
+      @@ -16689,3 +16690,3 @@
+      -0:13 : Metatype<#!>
+      -0:14 : Metatype<let #!>
+      -0:15 : let #!
+      +0:13 : Metatype<V>
+      +0:14 : Metatype<let V>
+      +0:15 : let V
+      @@ -16693,2 +16694,2 @@
+      -0:17 : [Void](self: let #!) let -> Void
+      -0:18 : #!
+      +0:17 : [Void](self: let V) let -> Void
+      +0:18 : V
+      @@ -16698,2 +16699,3 @@
+      -0:20 : #!
+      -0:21 : #!
+      +0:20 -> hello
+      +0:20 : [let V]() let -> Void
+      +0:21 : Void
+      @@ -16713,2 +16714,0 @@
+  MISMATCH research/review/names/t03_names_worse.hylo
+      --- baseline
+      +++ names
+      @@ -16684,2 +16684 @@
+      -0:10 -> V
+      -0:10 : Metatype<V>
+      +0:10 : #!
+      @@ -16690,3 +16689,3 @@
+      -0:13 : Metatype<V>
+      -0:14 : Metatype<let V>
+      -0:15 : let V
+      +0:13 : Metatype<#!>
+      +0:14 : Metatype<let #!>
+      +0:15 : let #!
+      @@ -16694,2 +16693,2 @@
+      -0:17 : [Void](self: let V) let -> Void
+      -0:18 : V
+      +0:17 : [Void](self: let #!) let -> Void
+      +0:18 : #!
+      @@ -16707,3 +16706,2 @@
+      -0:25 -> hello
+      -0:25 : [let V]() let -> Void
+      -0:26 : Void
+      +0:25 : #!
+      +0:26 : #!
+      @@ -16722,0 +16721,2 @@
+[index,names] 16/22 identical
+  MISMATCH research/review/names/n01_alias_cycle.hylo
+      --- baseline
+      +++ index,names
+      @@ -16686,2 +16686,2 @@
+      -0:11 : [Void](self: let #!) let -> Void
+      -0:12 : #!
+      +0:11 : [Void](self: let X) let -> Void
+      +0:12 : X
+      @@ -16694,2 +16694,3 @@
+      -0:17 : #!
+      -0:18 : #!
+      +0:17 -> g
+      +0:17 : [let X]() let -> Void
+      +0:18 : Void
+      @@ -16705 +16706 @@
+      -0:6 : #!
+      +0:6 : Metatype<X>
+      @@ -16707,5 +16708,3 @@
+      -0:7 : Metatype<#!>
+      -0:8 : Metatype<let #!>
+      -0:9 : let #!
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:11.19-20: error: type 'Int' has no member 'g'
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:5.6-7: error: definition of 'X' refers to itself
+      +0:7 : Metatype<X>
+      +0:8 : Metatype<let X>
+      +0:9 : let X
+  MISMATCH research/review/names/n03_reverse_poison.hylo
+      --- baseline
+      +++ index,names
+      @@ -16709,2 +16709 @@
+      -0:26 -> Foo
+      -0:26 : Metatype<Foo>
+      +0:26 : #!
+      @@ -16714 +16713 @@
+      -0:29 : Foo
+      +0:29 : #!
+      @@ -16726,4 +16725,3 @@
+      -0:36 -> Inner
+      -0:36 : Metatype<Inner>
+      -0:37 : Metatype<let Inner>
+      -0:38 : let Inner
+      +0:36 : #!
+      +0:37 : Metatype<let #!>
+      +0:38 : let #!
+      @@ -16732 +16730 @@
+      -0:40 : [Void](let Inner) let -> Void
+      +0:40 : [Void](let #!) let -> Void
+      @@ -16738,0 +16737,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:14.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:22.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n04_reverse_poison_min.hylo
+      --- baseline
+      +++ index,names
+      @@ -16689,2 +16689 @@
+      -0:13 -> Foo
+      -0:13 : Metatype<Foo>
+      +0:13 : #!
+      @@ -16694 +16693 @@
+      -0:16 : Foo
+      +0:16 : #!
+      @@ -16707,4 +16706,3 @@
+      -0:23 -> Inner
+      -0:23 : Metatype<Inner>
+      -0:24 : Metatype<let Inner>
+      -0:25 : let Inner
+      +0:23 : #!
+      +0:24 : Metatype<let #!>
+      +0:25 : let #!
+      @@ -16712 +16710 @@
+      -0:27 : [Void](let Inner) let -> Void
+      +0:27 : [Void](let #!) let -> Void
+      @@ -16721,0 +16720,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:6.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:9.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n05_spurious_cycle_conformance.hylo
+      --- baseline
+      +++ index,names
+      @@ -16686 +16686 @@
+      -0:10 : #!
+      +0:10 : Metatype<X>
+      @@ -16688,3 +16688,3 @@
+      -0:11 : Metatype<#!>
+      -0:12 : Metatype<let #!>
+      -0:13 : let #!
+      +0:11 : Metatype<X>
+      +0:12 : Metatype<let X>
+      +0:13 : let X
+      @@ -16692,2 +16692,2 @@
+      -0:15 : [Void](self: let #!) let -> Void
+      -0:16 : #!
+      +0:15 : [Void](self: let X) let -> Void
+      +0:16 : X
+      @@ -16695 +16695 @@
+      -0:17 : #!
+      +0:17 : Metatype<X>
+      @@ -16698 +16698 @@
+      -0:19 : Metatype<P<#!>>
+      +0:19 : Metatype<P<X>>
+      @@ -16700 +16700 @@
+      -0:20 : P<#!>
+  MISMATCH research/review/names/t01_ext_order.hylo
+      --- baseline
+      +++ index,names
+      @@ -16687 +16687,2 @@
+      -0:12 : #!
+      +0:12 -> V
+      +0:12 : Metatype<V>
+      @@ -16689,3 +16690,3 @@
+      -0:13 : Metatype<#!>
+      -0:14 : Metatype<let #!>
+      -0:15 : let #!
+      +0:13 : Metatype<V>
+      +0:14 : Metatype<let V>
+      +0:15 : let V
+      @@ -16693,2 +16694,2 @@
+      -0:17 : [Void](self: let #!) let -> Void
+      -0:18 : #!
+      +0:17 : [Void](self: let V) let -> Void
+      +0:18 : V
+      @@ -16698,2 +16699,3 @@
+      -0:20 : #!
+      -0:21 : #!
+      +0:20 -> hello
+      +0:20 : [let V]() let -> Void
+      +0:21 : Void
+      @@ -16713,2 +16714,0 @@
+  MISMATCH research/review/names/t03_names_worse.hylo
+      --- baseline
+      +++ index,names
+      @@ -16684,2 +16684 @@
+      -0:10 -> V
+      -0:10 : Metatype<V>
+      +0:10 : #!
+      @@ -16690,3 +16689,3 @@
+      -0:13 : Metatype<V>
+      -0:14 : Metatype<let V>
+      -0:15 : let V
+      +0:13 : Metatype<#!>
+      +0:14 : Metatype<let #!>
+      +0:15 : let #!
+      @@ -16694,2 +16693,2 @@
+      -0:17 : [Void](self: let V) let -> Void
+      -0:18 : V
+      +0:17 : [Void](self: let #!) let -> Void
+      +0:18 : #!
+      @@ -16707,3 +16706,2 @@
+      -0:25 -> hello
+      -0:25 : [let V]() let -> Void
+      -0:26 : Void
+      +0:25 : #!
+      +0:26 : #!
+      @@ -16722,0 +16721,2 @@
+[absmodel,index,loopcheck,names,unify] 16/22 identical
+  MISMATCH research/review/names/n01_alias_cycle.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16686,2 +16686,2 @@
+      -0:11 : [Void](self: let #!) let -> Void
+      -0:12 : #!
+      +0:11 : [Void](self: let X) let -> Void
+      +0:12 : X
+      @@ -16694,2 +16694,3 @@
+      -0:17 : #!
+      -0:18 : #!
+      +0:17 -> g
+      +0:17 : [let X]() let -> Void
+      +0:18 : Void
+      @@ -16705 +16706 @@
+      -0:6 : #!
+      +0:6 : Metatype<X>
+      @@ -16707,5 +16708,3 @@
+      -0:7 : Metatype<#!>
+      -0:8 : Metatype<let #!>
+      -0:9 : let #!
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:11.19-20: error: type 'Int' has no member 'g'
+      -diag /home/hylo/hylo-tc/research/review/names/n01_alias_cycle.hylo:5.6-7: error: definition of 'X' refers to itself
+      +0:7 : Metatype<X>
+      +0:8 : Metatype<let X>
+      +0:9 : let X
+  MISMATCH research/review/names/n03_reverse_poison.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16709,2 +16709 @@
+      -0:26 -> Foo
+      -0:26 : Metatype<Foo>
+      +0:26 : #!
+      @@ -16714 +16713 @@
+      -0:29 : Foo
+      +0:29 : #!
+      @@ -16726,4 +16725,3 @@
+      -0:36 -> Inner
+      -0:36 : Metatype<Inner>
+      -0:37 : Metatype<let Inner>
+      -0:38 : let Inner
+      +0:36 : #!
+      +0:37 : Metatype<let #!>
+      +0:38 : let #!
+      @@ -16732 +16730 @@
+      -0:40 : [Void](let Inner) let -> Void
+      +0:40 : [Void](let #!) let -> Void
+      @@ -16738,0 +16737,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:14.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n03_reverse_poison.hylo:22.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n04_reverse_poison_min.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16689,2 +16689 @@
+      -0:13 -> Foo
+      -0:13 : Metatype<Foo>
+      +0:13 : #!
+      @@ -16694 +16693 @@
+      -0:16 : Foo
+      +0:16 : #!
+      @@ -16707,4 +16706,3 @@
+      -0:23 -> Inner
+      -0:23 : Metatype<Inner>
+      -0:24 : Metatype<let Inner>
+      -0:25 : let Inner
+      +0:23 : #!
+      +0:24 : Metatype<let #!>
+      +0:25 : let #!
+      @@ -16712 +16710 @@
+      -0:27 : [Void](let Inner) let -> Void
+      +0:27 : [Void](let #!) let -> Void
+      @@ -16721,0 +16720,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:6.19-22: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n04_reverse_poison_min.hylo:9.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n05_spurious_cycle_conformance.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16686 +16686 @@
+      -0:10 : #!
+      +0:10 : Metatype<X>
+      @@ -16688,3 +16688,3 @@
+      -0:11 : Metatype<#!>
+      -0:12 : Metatype<let #!>
+      -0:13 : let #!
+      +0:11 : Metatype<X>
+      +0:12 : Metatype<let X>
+      +0:13 : let X
+      @@ -16692,2 +16692,2 @@
+      -0:15 : [Void](self: let #!) let -> Void
+      -0:16 : #!
+      +0:15 : [Void](self: let X) let -> Void
+      +0:16 : X
+      @@ -16695 +16695 @@
+      -0:17 : #!
+      +0:17 : Metatype<X>
+      @@ -16698 +16698 @@
+      -0:19 : Metatype<P<#!>>
+      +0:19 : Metatype<P<X>>
+      @@ -16700 +16700 @@
+      -0:20 : P<#!>
+  MISMATCH research/review/names/t01_ext_order.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16687 +16687,2 @@
+      -0:12 : #!
+      +0:12 -> V
+      +0:12 : Metatype<V>
+      @@ -16689,3 +16690,3 @@
+      -0:13 : Metatype<#!>
+      -0:14 : Metatype<let #!>
+      -0:15 : let #!
+      +0:13 : Metatype<V>
+      +0:14 : Metatype<let V>
+      +0:15 : let V
+      @@ -16693,2 +16694,2 @@
+      -0:17 : [Void](self: let #!) let -> Void
+      -0:18 : #!
+      +0:17 : [Void](self: let V) let -> Void
+      +0:18 : V
+      @@ -16698,2 +16699,3 @@
+      -0:20 : #!
+      -0:21 : #!
+      +0:20 -> hello
+      +0:20 : [let V]() let -> Void
+      +0:21 : Void
+      @@ -16713,2 +16714,0 @@
+  MISMATCH research/review/names/t03_names_worse.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16684,2 +16684 @@
+      -0:10 -> V
+      -0:10 : Metatype<V>
+      +0:10 : #!
+      @@ -16690,3 +16689,3 @@
+      -0:13 : Metatype<V>
+      -0:14 : Metatype<let V>
+      -0:15 : let V
+      +0:13 : Metatype<#!>
+      +0:14 : Metatype<let #!>
+      +0:15 : let #!
+      @@ -16694,2 +16693,2 @@
+      -0:17 : [Void](self: let V) let -> Void
+      -0:18 : V
+      +0:17 : [Void](self: let #!) let -> Void
+      +0:18 : #!
+      @@ -16707,3 +16706,2 @@
+      -0:25 -> hello
+      -0:25 : [let V]() let -> Void
+      -0:26 : Void
+      +0:25 : #!
+      +0:26 : #!
+      @@ -16722,0 +16721,2 @@

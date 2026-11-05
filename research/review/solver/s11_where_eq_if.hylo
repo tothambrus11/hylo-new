@@ -1,0 +1,9 @@
+// Order-dependent coercion: T and U are equal only through a where clause, so a coercion
+// between them needs a witness. Which branch gets coerced depends on whether the overloaded
+// call is resolved before the other branch's coercion binds the join variable.
+fun f<V>(x: V) -> V { x }
+fun f(x: Bool) -> Bool { x }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = if true { f(y) } else { x }
+  let q = if true { x } else { f(y) }
+}

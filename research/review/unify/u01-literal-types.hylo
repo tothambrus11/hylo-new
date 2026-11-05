@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// Unifies two distinct LiteralType values (Builtin.IntegerLiteral vs Builtin.FloatingPointLiteral).
+// LiteralType has no case in the baseline switch: release -> false via default (debug: assert).
+
+fun check<T>(x: T) {}
+fun takeInt(x: Builtin.IntegerLiteral) {}
+fun takeFloat(x: Builtin.FloatingPointLiteral) {}
+
+fun h(x: Builtin.IntegerLiteral) -> Void { () }
+fun h(x: Builtin.FloatingPointLiteral) -> {Void, Void} { ((), ()) }
+
+fun g(a: Builtin.IntegerLiteral, b: Builtin.FloatingPointLiteral) {
+  takeInt(a)
+  takeFloat(b)
+  takeInt(b)
+  takeFloat(a)
+  check<Builtin.IntegerLiteral>(b)
+  let r = h(a)
+  let s = h(b)
+  check<Void>(r)
+  check<{Void, Void}>(s)
+  let t: {Builtin.IntegerLiteral, Builtin.FloatingPointLiteral} = (b, a)
+}

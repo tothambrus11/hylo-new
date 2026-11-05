@@ -1,0 +1,10 @@
+//! no-std
+
+fun f(x: auto Void) auto {
+  let { ((), ()) }
+}
+
+public fun main() {
+  let a = f@let(())
+  let b = f@sink(())
+}

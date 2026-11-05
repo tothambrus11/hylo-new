@@ -1,0 +1,20 @@
+//! stage:typing no-std
+// Enums, namespaces, machine types, traits as values (nominal kinds with same tag).
+enum E { case a; case b }
+enum F { case a }
+struct S {}
+struct T {}
+trait P {}
+trait Q {}
+fun check<X>(x: X) {}
+fun same<X>(x: X, y: X) {}
+
+fun main() {
+  same(E.a, F.a)
+  same(S(), T())
+  same(S, T)
+  same(Builtin.i1, Builtin.i64)
+  check<Builtin.i64>(Builtin.zeroinitializer_ptr())
+  check<Builtin.ptr>(Builtin.zeroinitializer_ptr())
+  same(E.a, E.b)
+}

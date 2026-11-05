@@ -1,0 +1,27 @@
+[names] 0/1 identical
+  MISMATCH research/review/names/t01_ext_order.hylo
+      --- baseline
+      +++ names
+      @@ -16687 +16687,2 @@
+      -0:12 : #!
+      +0:12 -> V
+      +0:12 : Metatype<V>
+      @@ -16689,3 +16690,3 @@
+      -0:13 : Metatype<#!>
+      -0:14 : Metatype<let #!>
+      -0:15 : let #!
+      +0:13 : Metatype<V>
+      +0:14 : Metatype<let V>
+      +0:15 : let V
+      @@ -16693,2 +16694,2 @@
+      -0:17 : [Void](self: let #!) let -> Void
+      -0:18 : #!
+      +0:17 : [Void](self: let V) let -> Void
+      +0:18 : V
+      @@ -16698,2 +16699,3 @@
+      -0:20 : #!
+      -0:21 : #!
+      +0:20 -> hello
+      +0:20 : [let V]() let -> Void
+      +0:21 : Void
+      @@ -16713,2 +16714,0 @@

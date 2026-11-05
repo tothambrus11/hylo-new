@@ -1,0 +1,24 @@
+trait P { fun d() -> Int }
+struct W<T> { public memberwise init }
+struct L<T> { public memberwise init }
+struct Z { public memberwise init }
+
+given Z is P { fun d() -> Int { 0 } }
+given <T is P> => W<T> is P { fun d() -> Int { 1 } }
+given <T where T is P> => L<T> is P { fun d() -> Int { 2 } }
+// A more expensive alternative path for W<W<Z>> (generic over the argument shape).
+given <T where W<T> is P> => L<W<T>> is P { fun d() -> Int { 3 } }
+
+fun need<T is P>(x: T) -> Int { x.d() }
+
+extension <T where T is P> W<T> {
+  fun e() -> Int { need(self) }
+}
+
+fun main() {
+  _ = need(W<W<W<W<Z>>>>())
+  _ = need(L<W<Z>>())
+  _ = need(L<L<W<L<Z>>>>())
+  _ = W<W<Z>>().e()
+  _ = need(W<L<Int>>())
+}

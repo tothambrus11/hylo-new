@@ -1,0 +1,34 @@
+trait P {}
+trait Q {}
+trait R {}
+struct Box<X> { public memberwise init }
+struct Other {}
+
+given Void is P {}
+
+fun need<W is P>() {}
+fun needQ<W is Q>() {}
+fun needR<W is R>() {}
+
+// Equality where-clauses in the function scope: coercion sources visible.
+fun f<T, U where T == U, T is P>() {
+  need<U>()
+  need<T>()
+}
+
+// Conditional given whose premise is an equality between fresh variables: thread with a
+// mismatched head survives its first match in the baseline (canDeriveCoercions sees `?x ~ Void`).
+given <X where X == Void> => Box<X> is Q {}
+given <X where X == Void> => Box<X> is R {}
+
+fun g() {
+  needQ<Box<Void>>()
+  needR<Box<Void>>()
+  // No P given for Box<Void>: resolution fails; baseline explores junk threads.
+  need<Box<Void>>()
+}
+
+fun h<T, V where Box<T> == V>() {
+  given Box<T> is P {}
+  need<V>()
+}

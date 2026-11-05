@@ -1003,6 +1003,10 @@ public struct TypeStore: Sendable {
 
     // The two types have the same shape?
     let result: Bool
+    if TyperExperiments.unify {
+      result = unifiableSameShape(a, b, extending: &ss, handlingCoercionsWith: areCoercible)
+      return result || areCoercible(a, b)
+    }
     switch (self[a], self[b]) {
     case (let t as Arrow, let u as Arrow):
       result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
@@ -1052,6 +1056,46 @@ public struct TypeStore: Sendable {
     }
 
     return result || areCoercible(a, b)
+  }
+
+  /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
+  /// but compares type tags before projecting and casting each operand once.
+  private func unifiableSameShape(
+    _ a: AnyTypeIdentity, _ b: AnyTypeIdentity, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith h: CoercionHandler
+  ) -> Bool {
+    let x = self[a]
+    let y = self[b]
+    let tx = ObjectIdentifier(type(of: x))
+    if tx != ObjectIdentifier(type(of: y)) { return false }
+    switch x {
+    case let t as TypeApplication:
+      return unifiable(t, y as! TypeApplication, extending: &ss, handlingCoercionsWith: h)
+    case let t as Arrow:
+      return unifiable(t, y as! Arrow, extending: &ss, handlingCoercionsWith: h)
+    case let t as Tuple:
+      return unifiable(t, y as! Tuple, extending: &ss, handlingCoercionsWith: h)
+    case let t as EqualityWitness:
+      return unifiable(t, y as! EqualityWitness, extending: &ss, handlingCoercionsWith: h)
+    case let t as AssociatedType:
+      return unifiable(t, y as! AssociatedType, extending: &ss, handlingCoercionsWith: h)
+    case let t as Bundle:
+      return unifiable(t, y as! Bundle, extending: &ss, handlingCoercionsWith: h)
+    case let t as FunctionPointer:
+      return unifiable(t, y as! FunctionPointer, extending: &ss, handlingCoercionsWith: h)
+    case let t as Implication:
+      return unifiable(t, y as! Implication, extending: &ss, handlingCoercionsWith: h)
+    case let t as Metatype:
+      return unifiable(t, y as! Metatype, extending: &ss, handlingCoercionsWith: h)
+    case let t as RemoteType:
+      return unifiable(t, y as! RemoteType, extending: &ss, handlingCoercionsWith: h)
+    case let t as UniversalType:
+      return unifiable(t, y as! UniversalType, extending: &ss, handlingCoercionsWith: h)
+    default:
+      // Nominal and atomic types (structs, traits, parameters, ...) unify only if identical,
+      // which has been checked by the caller.
+      return false
+    }
   }
 
   /// Returns `true` if `lhs` and `rhs` are unifiable.

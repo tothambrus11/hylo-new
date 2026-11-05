@@ -1,0 +1,16 @@
+// Baseline quirk: a preferred outer choice whose fork contains a nested ambiguity is kept in
+// `viable` (its errors are diagnostics only) and wins over a clean, less preferred choice.
+struct A { public memberwise init }
+struct B {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  let x = S.f().n()
+}

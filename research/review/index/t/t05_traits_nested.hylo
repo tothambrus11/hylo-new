@@ -1,0 +1,40 @@
+trait P { fun one() -> Int }
+trait Q refines P { fun two() -> Int { self.one() } }
+trait R { type X; given X is P }
+trait S2 { given Void is P }
+
+struct A { public memberwise init }
+struct B { public memberwise init }
+
+given A is Q { fun one() -> Int { 1 } }
+given B is R { type X = A }
+
+fun needP<T is P>() {}
+fun needQ<T is Q>() {}
+fun check<T>(x: T) {}
+
+fun f<T is Q>() {
+  needP<T>()
+  check(summon[P<T>])
+}
+
+fun g<T is R>() {
+  needP<T.X>()
+}
+
+fun h<T is S2>() {
+  needP<Void>()
+}
+
+fun main() {
+  needP<A>()
+  f<A>()
+  g<B>()
+}
+
+// Default implementation requiring resolution of Self inside the trait.
+trait T3 {
+  fun a() -> Int
+  fun b() -> Int { let x = summon[T3<Self>]; return self.a() }
+}
+given A is T3 { fun a() -> Int { 3 } }

@@ -1,0 +1,9 @@
+//! stage:lowering
+
+fun use<T>(x: T) {}
+
+fun foo(p: {{Int, Int}, Bool}) {
+  let ((x, _), y) = p
+  use(x)
+  use(y)
+}

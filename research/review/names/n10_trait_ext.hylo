@@ -1,0 +1,23 @@
+trait P {
+  type X
+  fun get() -> X
+}
+
+extension P {
+  fun twice() -> {X, X} { (get(), get()) }
+}
+
+struct A is P {
+  type X = Bool
+  fun get() -> Bool { true }
+}
+
+extension A {
+  type Y = A.X
+  fun y() -> Y { true }
+}
+
+fun use(a: A) {
+  let p = a.twice()
+  let q: A.Y = a.y()
+}

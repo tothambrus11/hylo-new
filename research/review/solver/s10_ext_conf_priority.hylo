@@ -1,0 +1,23 @@
+// Variants of overload-priority.hylo: extension member vs conformance member.
+struct A<T> { public memberwise init }
+trait P {
+  type X
+  fun f() -> X
+}
+extension A<Void> {
+  fun f() { () }
+}
+given A<Void> is P {
+  type X = A<Void>
+  fun f() -> X { A() }
+}
+fun use(x: Void) {}
+fun take(x: A<Void>) {}
+fun main() {
+  let a = A<Void>()
+  take(a.f())
+  let y: A<Void> = a.f()
+  let z = (a.f() as A<Void>, a.f())
+  let w = a.f() as Void
+  use(a.f())
+}

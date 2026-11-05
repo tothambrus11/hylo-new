@@ -1,0 +1,8 @@
+// Mirror of s13: the conformance is declared on U instead of T.
+trait P { fun m() -> Self }
+fun f<V>(x: V) -> V { x }
+fun f(x: Bool) -> Bool { x }
+fun h<T, U is P where T == U>(x: T, y: U) {
+  let p = if true { f(y) } else { x }
+  let r = p.m()
+}

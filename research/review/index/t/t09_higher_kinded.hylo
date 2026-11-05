@@ -1,0 +1,15 @@
+trait P {}
+struct A<T> { public memberwise init }
+struct B<T> { public memberwise init }
+
+given <T> => A<T> is P {}
+
+fun need<T is P>() {}
+fun hk<F :: * -> *, U where F<U> is P>() {}
+fun hk2<F :: * -> *, U>() { need<F<U>>() }
+fun hk3<F :: * -> *, U where let x: F<U>>() { let y = summon[F<U>] }
+
+fun main() {
+  hk<A, Void>()
+  hk<B, Void>()
+}

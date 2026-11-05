@@ -1,0 +1,15 @@
+trait R<B> {}
+trait P {}
+struct S<T> {}
+struct Box<T> {}
+struct Y {}
+struct Z {}
+given <F :: * -> *, A> => F<A> is R<A> {}
+given <A where S<A> is R<Y>> => A is P {}
+given <A where Box<A> is R<A>> => S<A> is P {}
+fun needP<T where T is P>() {}
+public fun main() {
+  needP<Y>()
+  needP<Z>()
+  needP<S<Z>>()
+}
