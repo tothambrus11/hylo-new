@@ -1,0 +1,7 @@
+// Isolated from t09: overloaded call with literal argument inside a tuple with an `as`.
+fun f(x: Int8) -> Int8 { x }
+fun f(x: Int) -> Int { x }
+fun f(x: Int32) -> Bool { true }
+public fun main() {
+  let d = (f(4), f(5) as Int8)
+}

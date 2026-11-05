@@ -1,0 +1,20 @@
+// Most-constrained-first changes which set is ranked at the outer level.
+// Free a() has 3 incomparable overloads (all probe-clean), S.b has 2 (local ext -> Y preferred).
+// Valid combinations: (a->X, b->X) and (a->Y, b->Y).
+// Baseline branches on a first: a->X and a->Y both clean and incomparable => "ambiguous use of 'a'".
+// Solver branches on b first (2 < 3 survivors) and picks b->Y by preference => accepted.
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct Z { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun b() -> X { X() }
+}
+fun a() -> X { X() }
+fun a() -> Y { Y() }
+fun a() -> Z { Z() }
+fun k<V>(x: V, y: V) {}
+fun main() {
+  extension S { static fun b() -> Y { Y() } }
+  k(a(), S.b())
+}

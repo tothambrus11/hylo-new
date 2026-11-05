@@ -1,0 +1,10 @@
+// Lambdas whose parameter type is fixed by an overloaded higher-order callee.
+struct A { public memberwise init; public fun ma() -> A { A() } }
+struct B { public memberwise init; public fun mb() -> B { B() } }
+fun h(f: [](A) -> A) -> A { f(A()) }
+fun h(f: [](B) -> B) -> B { f(B()) }
+public fun main() {
+  let x = h(fun(a) { a.ma() })
+  let y = h(fun(b) { b.mb() })
+  let z: A = h(fun(a) { a })
+}

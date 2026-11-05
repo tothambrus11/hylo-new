@@ -1,0 +1,19 @@
+// Mirror of t02. S.a has 3 choices with a unique preferred one (local ext -> Y); free b() has 2
+// incomparable overloads. Valid combinations: (a->X, b->X), (a->Y, b->Y).
+// Baseline branches on S.a first and picks the preferred a->Y => accepted.
+// Solver branches on b first (2 < 3): b->X and b->Y both clean and incomparable => ambiguity.
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct Z { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> X { X() }
+}
+fun b() -> X { X() }
+fun b() -> Y { Y() }
+fun k<V>(x: V, y: V) {}
+fun main() {
+  extension S { static fun a() -> Y { Y() } }
+  extension <T> T { static fun a() -> Z { Z() } }
+  k(S.a(), b())
+}

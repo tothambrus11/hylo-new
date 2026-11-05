@@ -1,0 +1,215 @@
+== module Hylo
+0:0 -> Equatable
+0:0 : Metatype<<Self> Equatable<Self>>
+0:1 -> Comparable
+0:1 : Metatype<<Self> Comparable<Self>>
+0:10 : let Self
+0:11 -> Bool
+0:11 : Metatype<Bool>
+0:12 : [Void](self: let Self, let Self) let -> Bool
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<Self>
+0:14 : Metatype<let Self>
+0:15 : let Self
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<Self>
+0:17 : Metatype<let Self>
+0:18 : let Self
+0:19 -> Bool
+0:19 : Metatype<Bool>
+0:2 -> $<builtin selfAlias>
+0:2 : Metatype<Self>
+0:20 -> other
+0:20 : Self
+0:21 -> self
+0:21 : Self
+0:22 -> infix<
+0:22 : [let Self](let Self) let -> Bool
+0:23 : Bool
+0:24 -> prefix!
+0:24 : [let Bool]() let -> Bool
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](self: let Self, let Self) let -> Bool
+0:28 -> $<builtin selfAlias>
+0:28 : Metatype<Self>
+0:29 : Metatype<let Self>
+0:3 : Metatype<Equatable<Self>>
+0:30 : let Self
+0:31 -> $<builtin selfAlias>
+0:31 : Metatype<Self>
+0:32 : Metatype<let Self>
+0:33 : let Self
+0:34 -> Bool
+0:34 : Metatype<Bool>
+0:35 -> other
+0:35 : Self
+0:36 -> self
+0:36 : Self
+0:37 -> infix<
+0:37 : [let Self](let Self) let -> Bool
+0:38 : Bool
+0:39 : Void
+0:4 : Equatable<Self>
+0:40 : [Void](self: let Self, let Self) let -> Bool
+0:41 -> $<builtin selfAlias>
+0:41 : Metatype<Self>
+0:42 : Metatype<let Self>
+0:43 : let Self
+0:44 -> $<builtin selfAlias>
+0:44 : Metatype<Self>
+0:45 : Metatype<let Self>
+0:46 : let Self
+0:47 -> Bool
+0:47 : Metatype<Bool>
+0:48 -> self
+0:48 : Self
+0:49 -> other
+0:49 : Self
+0:5 -> $<builtin selfAlias>
+0:5 : Metatype<Self>
+0:50 -> infix<
+0:50 : [let Self](let Self) let -> Bool
+0:51 : Bool
+0:52 -> prefix!
+0:52 : [let Bool]() let -> Bool
+0:53 : Bool
+0:54 : Void
+0:55 : [Void](self: let Self, let Self) let -> Bool
+0:56 : Metatype<<Self> Comparable<Self>>
+0:6 : Metatype<let Self>
+0:7 : let Self
+0:8 -> $<builtin selfAlias>
+0:8 : Metatype<Self>
+0:9 : Metatype<let Self>
+== module Test
+0:0 -> $<builtin selfAlias>
+0:0 : Metatype<A>
+0:1 : Metatype<set A>
+0:10 : Void
+0:11 : [Void](self: let A) let -> A
+0:12 : Metatype<A>
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<B>
+0:14 : Metatype<set B>
+0:15 : set B
+0:16 : [Void](self: set B) let -> Void
+0:17 -> $<builtin selfAlias>
+0:17 : Metatype<B>
+0:18 : Metatype<let B>
+0:19 : let B
+0:2 : set A
+0:20 -> B
+0:20 : Metatype<B>
+0:21 -> B
+0:21 : Metatype<B>
+0:22 : B
+0:23 : Void
+0:24 : [Void](self: let B) let -> B
+0:25 : Metatype<B>
+0:26 -> A
+0:26 : Metatype<A>
+0:27 : Metatype<let A>
+0:28 -> A
+0:28 : Metatype<A>
+0:29 : Metatype<[Void](let A) let -> A>
+0:3 : [Void](self: set A) let -> Void
+0:30 : Metatype<let [Void](let A) let -> A>
+0:31 : let [Void](let A) let -> A
+0:32 -> A
+0:32 : Metatype<A>
+0:33 -> f
+0:33 : [Void](let A) let -> A
+0:34 -> A
+0:34 : Metatype<A>
+0:35 : A
+0:36 : A
+0:37 : Void
+0:38 : [Void](let [Void](let A) let -> A) let -> A
+0:39 -> B
+0:39 : Metatype<B>
+0:4 -> $<builtin selfAlias>
+0:4 : Metatype<A>
+0:40 : Metatype<let B>
+0:41 -> B
+0:41 : Metatype<B>
+0:42 : Metatype<[Void](let B) let -> B>
+0:43 : Metatype<let [Void](let B) let -> B>
+0:44 : let [Void](let B) let -> B
+0:45 -> B
+0:45 : Metatype<B>
+0:46 -> f
+0:46 : [Void](let B) let -> B
+0:47 -> B
+0:47 : Metatype<B>
+0:48 : B
+0:49 : B
+0:5 : Metatype<let A>
+0:50 : Void
+0:51 : [Void](let [Void](let B) let -> B) let -> B
+0:52 : let A
+0:53 : A
+0:54 -> h(_:)
+0:54 : [Void](let [Void](let A) let -> A) let -> A
+0:55 : let #!
+0:56 -> a
+0:56 : #!
+0:57 : #!
+0:58 : #!
+0:59 : Void
+0:6 : let A
+0:60 : [{some}](let #!) let -> #!
+0:61 : [{some}](let #!) let -> #!
+0:62 : A
+0:63 : A
+0:64 : let A
+0:65 : A
+0:66 -> h(_:)
+0:66 : [Void](let [Void](let A) let -> A) let -> A
+0:67 : let #!
+0:68 -> b
+0:68 : #!
+0:69 : #!
+0:7 -> A
+0:7 : Metatype<A>
+0:70 : #!
+0:71 : Void
+0:72 : [{some}](let #!) let -> #!
+0:73 : [{some}](let #!) let -> #!
+0:74 : A
+0:75 : A
+0:76 : let A
+0:77 -> A
+0:77 : Metatype<A>
+0:78 : A
+0:79 -> h(_:)
+0:79 : [Void](let [Void](let A) let -> A) let -> A
+0:8 -> A
+0:8 : Metatype<A>
+0:80 : let #!
+0:81 -> a
+0:81 : #!
+0:82 : Void
+0:83 : [{some}](let #!) let -> #!
+0:84 : [{some}](let #!) let -> #!
+0:85 : A
+0:86 : A
+0:87 : [Void]() let -> Void
+0:88 : [Void]() let -> A
+0:89 -> init
+0:89 : [Void](self: set A) let -> Void
+0:9 : A
+0:90 : [Void]() let -> B
+0:91 -> init
+0:91 : [Void](self: set B) let -> Void
+0:92 : [Void]() let -> A
+0:93 -> init
+0:93 : [Void](self: set A) let -> Void
+0:94 : [Void]() let -> B
+0:95 -> init
+0:95 : [Void](self: set B) let -> Void
+diag /home/user/hylo-new/research/review/solver/t14_lambda_expected.hylo:7.11-12: error: ambiguous use of 'h'
+diag /home/user/hylo-new/research/review/solver/t14_lambda_expected.hylo:7.13-30: error: cannot pass value of type '[{some}](let #!) let -> #!' to parameter '[Void](let A) let -> A'
+diag /home/user/hylo-new/research/review/solver/t14_lambda_expected.hylo:8.11-12: error: ambiguous use of 'h'
+diag /home/user/hylo-new/research/review/solver/t14_lambda_expected.hylo:8.13-30: error: cannot pass value of type '[{some}](let #!) let -> #!' to parameter '[Void](let A) let -> A'
+diag /home/user/hylo-new/research/review/solver/t14_lambda_expected.hylo:9.16-28: error: cannot pass value of type '[{some}](let #!) let -> #!' to parameter '[Void](let A) let -> A'

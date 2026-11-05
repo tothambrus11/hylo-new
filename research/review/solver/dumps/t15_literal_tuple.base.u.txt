@@ -1,0 +1,143 @@
+== module Hylo
+0:0 -> Equatable
+0:0 : Metatype<<Self> Equatable<Self>>
+0:1 -> Comparable
+0:1 : Metatype<<Self> Comparable<Self>>
+0:10 : let Self
+0:11 -> Bool
+0:11 : Metatype<Bool>
+0:12 : [Void](self: let Self, let Self) let -> Bool
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<Self>
+0:14 : Metatype<let Self>
+0:15 : let Self
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<Self>
+0:17 : Metatype<let Self>
+0:18 : let Self
+0:19 -> Bool
+0:19 : Metatype<Bool>
+0:2 -> $<builtin selfAlias>
+0:2 : Metatype<Self>
+0:20 -> other
+0:20 : Self
+0:21 -> self
+0:21 : Self
+0:22 -> infix<
+0:22 : [let Self](let Self) let -> Bool
+0:23 : Bool
+0:24 -> prefix!
+0:24 : [let Bool]() let -> Bool
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](self: let Self, let Self) let -> Bool
+0:28 -> $<builtin selfAlias>
+0:28 : Metatype<Self>
+0:29 : Metatype<let Self>
+0:3 : Metatype<Equatable<Self>>
+0:30 : let Self
+0:31 -> $<builtin selfAlias>
+0:31 : Metatype<Self>
+0:32 : Metatype<let Self>
+0:33 : let Self
+0:34 -> Bool
+0:34 : Metatype<Bool>
+0:35 -> other
+0:35 : Self
+0:36 -> self
+0:36 : Self
+0:37 -> infix<
+0:37 : [let Self](let Self) let -> Bool
+0:38 : Bool
+0:39 : Void
+0:4 : Equatable<Self>
+0:40 : [Void](self: let Self, let Self) let -> Bool
+0:41 -> $<builtin selfAlias>
+0:41 : Metatype<Self>
+0:42 : Metatype<let Self>
+0:43 : let Self
+0:44 -> $<builtin selfAlias>
+0:44 : Metatype<Self>
+0:45 : Metatype<let Self>
+0:46 : let Self
+0:47 -> Bool
+0:47 : Metatype<Bool>
+0:48 -> self
+0:48 : Self
+0:49 -> other
+0:49 : Self
+0:5 -> $<builtin selfAlias>
+0:5 : Metatype<Self>
+0:50 -> infix<
+0:50 : [let Self](let Self) let -> Bool
+0:51 : Bool
+0:52 -> prefix!
+0:52 : [let Bool]() let -> Bool
+0:53 : Bool
+0:54 : Void
+0:55 : [Void](self: let Self, let Self) let -> Bool
+0:56 : Metatype<<Self> Comparable<Self>>
+0:6 : Metatype<let Self>
+0:7 : let Self
+0:8 -> $<builtin selfAlias>
+0:8 : Metatype<Self>
+0:9 : Metatype<let Self>
+== module Test
+0:0 -> Int8
+0:0 : Metatype<Int8>
+0:1 : Metatype<let Int8>
+0:10 -> Int
+0:10 : Metatype<Int>
+0:11 -> x
+0:11 : Int
+0:12 : Void
+0:13 : [Void](let Int) let -> Int
+0:14 -> Int32
+0:14 : Metatype<Int32>
+0:15 : Metatype<let Int32>
+0:16 : let Int32
+0:17 -> Bool
+0:17 : Metatype<Bool>
+0:18 : Bool
+0:19 : Void
+0:2 : let Int8
+0:20 : [Void](let Int32) let -> Bool
+0:21 : let {Int, Int8}
+0:22 : {Int, Int8}
+0:23 -> f(_:)
+0:23 : [Void](let Int) let -> Int
+0:24 : Int
+0:25 : Int
+0:26 -> f(_:)
+0:26 : [Void](let Int8) let -> Int8
+0:27 : Int
+0:28 : Int8
+0:29 -> Int8
+0:29 : Metatype<Int8>
+0:3 -> Int8
+0:3 : Metatype<Int8>
+0:30 : Int8
+0:31 : {Int, Int8}
+0:32 : {Int, Int8}
+0:33 : [Void]() let -> Void
+0:34 : IntegerLiteral
+0:35 : Metatype<Int>
+0:36 -> init(integer_literal:)
+0:36 : [Void](self: set Int, integer_literal: let IntegerLiteral) let -> Void
+0:37 : [Void](integer_literal: let IntegerLiteral) let -> Int
+0:38 : IntegerLiteral
+0:39 : Metatype<Int>
+0:4 -> x
+0:4 : Int8
+0:40 -> init(integer_literal:)
+0:40 : [Void](self: set Int, integer_literal: let IntegerLiteral) let -> Void
+0:41 : [Void](integer_literal: let IntegerLiteral) let -> Int
+0:5 : Void
+0:6 : [Void](let Int8) let -> Int8
+0:7 -> Int
+0:7 : Metatype<Int>
+0:8 : Metatype<let Int>
+0:9 : let Int
+diag /home/user/hylo-new/research/review/solver/t15_literal_tuple.hylo:6.12-13: error: ambiguous use of 'f'
+diag /home/user/hylo-new/research/review/solver/t15_literal_tuple.hylo:6.18-19: error: ambiguous use of 'f'
+diag /home/user/hylo-new/research/review/solver/t15_literal_tuple.hylo:6.20-21: error: cannot pass value of type 'Int' to parameter 'Int8'

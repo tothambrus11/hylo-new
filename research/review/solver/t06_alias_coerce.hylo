@@ -1,0 +1,14 @@
+// Alias sugar with overloaded calls under coercion contexts (annotation, argument, return).
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun f() -> X { A() }
+fun f() -> B { B() }
+fun take(x: A) {}
+fun ret() -> A { f() }
+public fun main() {
+  let p: A = f()
+  take(f())
+  let q = (f() as A, f() as B)
+  let r = f() as X
+}

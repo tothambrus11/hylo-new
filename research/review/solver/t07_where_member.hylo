@@ -1,0 +1,10 @@
+// Order dependence: which of T / U the join variable V of k is bound to decides whether
+// member m (only declared through `U is P`) is found on the receiver.
+trait P { fun m() -> Self }
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U, U is P>(x: T, y: U) {
+  let r = k(x, g(y)).m()
+  let s = k(g(y), x).m()
+}

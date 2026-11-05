@@ -1,0 +1,9 @@
+// Outer overload o decides whether the join result must equal U syntactically (o1 via `as`-free
+// call output) or is only coerced (o2). Looks for a probe error that is an artifact of parking g.
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = (k(x, g(y)) as U, k(x, g(y)))
+  let q = k(k(x, g(y)), y) as U
+}

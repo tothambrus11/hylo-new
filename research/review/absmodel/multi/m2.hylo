@@ -1,0 +1,5 @@
+given <T where T is P> => B<T> is Q {}
+fun h() {
+  given <T where T is Q> => T is P {}
+  needQ<B<B<A>>>()
+}

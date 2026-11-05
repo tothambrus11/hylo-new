@@ -1,0 +1,198 @@
+== module Hylo
+0:0 -> Equatable
+0:0 : Metatype<<Self> Equatable<Self>>
+0:1 -> Comparable
+0:1 : Metatype<<Self> Comparable<Self>>
+0:10 : let Self
+0:11 -> Bool
+0:11 : Metatype<Bool>
+0:12 : [Void](self: let Self, let Self) let -> Bool
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<Self>
+0:14 : Metatype<let Self>
+0:15 : let Self
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<Self>
+0:17 : Metatype<let Self>
+0:18 : let Self
+0:19 -> Bool
+0:19 : Metatype<Bool>
+0:2 -> $<builtin selfAlias>
+0:2 : Metatype<Self>
+0:20 -> other
+0:20 : Self
+0:21 -> self
+0:21 : Self
+0:22 -> infix<
+0:22 : [let Self](let Self) let -> Bool
+0:23 : Bool
+0:24 -> prefix!
+0:24 : [let Bool]() let -> Bool
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](self: let Self, let Self) let -> Bool
+0:28 -> $<builtin selfAlias>
+0:28 : Metatype<Self>
+0:29 : Metatype<let Self>
+0:3 : Metatype<Equatable<Self>>
+0:30 : let Self
+0:31 -> $<builtin selfAlias>
+0:31 : Metatype<Self>
+0:32 : Metatype<let Self>
+0:33 : let Self
+0:34 -> Bool
+0:34 : Metatype<Bool>
+0:35 -> other
+0:35 : Self
+0:36 -> self
+0:36 : Self
+0:37 -> infix<
+0:37 : [let Self](let Self) let -> Bool
+0:38 : Bool
+0:39 : Void
+0:4 : Equatable<Self>
+0:40 : [Void](self: let Self, let Self) let -> Bool
+0:41 -> $<builtin selfAlias>
+0:41 : Metatype<Self>
+0:42 : Metatype<let Self>
+0:43 : let Self
+0:44 -> $<builtin selfAlias>
+0:44 : Metatype<Self>
+0:45 : Metatype<let Self>
+0:46 : let Self
+0:47 -> Bool
+0:47 : Metatype<Bool>
+0:48 -> self
+0:48 : Self
+0:49 -> other
+0:49 : Self
+0:5 -> $<builtin selfAlias>
+0:5 : Metatype<Self>
+0:50 -> infix<
+0:50 : [let Self](let Self) let -> Bool
+0:51 : Bool
+0:52 -> prefix!
+0:52 : [let Bool]() let -> Bool
+0:53 : Bool
+0:54 : Void
+0:55 : [Void](self: let Self, let Self) let -> Bool
+0:56 : Metatype<<Self> Comparable<Self>>
+0:6 : Metatype<let Self>
+0:7 : let Self
+0:8 -> $<builtin selfAlias>
+0:8 : Metatype<Self>
+0:9 : Metatype<let Self>
+== module Test
+0:0 -> $<builtin selfAlias>
+0:0 : Metatype<Self>
+0:1 : Metatype<let Self>
+0:10 -> W
+0:10 : Metatype<W>
+0:11 -> w
+0:11 : W
+0:12 : Void
+0:13 : <W> [Void](let W) let -> W
+0:14 -> Bool
+0:14 : Metatype<Bool>
+0:15 : Metatype<let Bool>
+0:16 : let Bool
+0:17 -> Bool
+0:17 : Metatype<Bool>
+0:18 -> w
+0:18 : Bool
+0:19 : Void
+0:2 : let Self
+0:20 : [Void](let Bool) let -> Bool
+0:21 : Metatype<V>
+0:22 -> V
+0:22 : Metatype<V>
+0:23 : Metatype<let V>
+0:24 : let V
+0:25 -> V
+0:25 : Metatype<V>
+0:26 : Metatype<let V>
+0:27 : let V
+0:28 -> V
+0:28 : Metatype<V>
+0:29 -> a
+0:29 : V
+0:3 -> $<builtin selfAlias>
+0:3 : Metatype<Self>
+0:30 : Void
+0:31 : <V> [Void](let V, let V) let -> V
+0:32 : Metatype<T>
+0:33 : Metatype<U>
+0:34 -> T
+0:34 : Metatype<T>
+0:35 -> U
+0:35 : Metatype<U>
+0:37 : let (T ~ U)
+0:38 : (T ~ U)
+0:39 : (T ~ U)
+0:4 : [Void](self: let Self) let -> Self
+0:40 -> T
+0:40 : Metatype<T>
+0:41 -> P
+0:41 : Metatype<<Self> P<Self>>
+0:42 : Metatype<P<T>>
+0:43 : let P<T>
+0:44 : P<T>
+0:45 : P<T>
+0:46 -> T
+0:46 : Metatype<T>
+0:47 : Metatype<let T>
+0:48 : let T
+0:49 -> U
+0:49 : Metatype<U>
+0:5 : Metatype<<Self> P<Self>>
+0:50 : Metatype<let U>
+0:51 : let U
+0:52 : let U
+0:53 : U
+0:54 -> k(_:_:)
+0:54 : [Void](let U, let U) let -> U
+0:55 -> x
+0:55 : U
+0:56 -> g(_:)
+0:56 : [Void](let U) let -> U
+0:57 -> y
+0:57 : U
+0:58 : U
+0:59 : U
+0:6 : Metatype<W>
+0:60 -> m
+0:60 : [let U]() let -> U
+0:61 : U
+0:62 : U
+0:63 : let T
+0:64 : T
+0:65 -> k(_:_:)
+0:65 : [Void](let T, let T) let -> T
+0:66 -> g(_:)
+0:66 : [Void](let U) let -> U
+0:67 -> y
+0:67 : U
+0:68 : T
+0:69 -> x
+0:69 : T
+0:7 -> W
+0:7 : Metatype<W>
+0:70 : T
+0:71 -> m
+0:71 : [let T]() let -> T
+0:72 : T
+0:73 : T
+0:74 : <T, U> ((T ~ U), P<T>) ==> [Void](let T, let U) let -> Void
+0:75 -> g(_:)
+0:75 : <W> [Void](let W) let -> W
+0:76 -> x
+0:76 : T
+0:77 -> k(_:_:)
+0:77 : <V> [Void](let V, let V) let -> V
+0:78 -> g(_:)
+0:78 : <W> [Void](let W) let -> W
+0:79 : U
+0:8 : Metatype<let W>
+0:80 -> k(_:_:)
+0:80 : <V> [Void](let V, let V) let -> V
+0:9 : let W

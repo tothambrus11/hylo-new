@@ -1,0 +1,17 @@
+// Overloads on conditionally conforming generic types, extension members with where clauses.
+trait P { fun h() -> Self }
+struct A is Deinitializable { public memberwise init }
+struct W<T> { public memberwise init }
+given A is P { fun h() -> A { A() } }
+given <T where T is P> => W<T> is P { fun h() -> W<T> { W() } }
+extension <T where T is P> W<T> { fun k() -> T { fatal_error() } }
+extension W<Bool> { fun k() -> Bool { true } }
+fun f<T where T is P>(x: T) -> T { x.h() }
+fun f(x: W<Bool>) -> Bool { true }
+public fun main() {
+  let a = W<A>().k()
+  let b = W<Bool>().k()
+  let c = f(W<A>())
+  let d = f(W<Bool>())
+  let e: A = W<A>().k()
+}

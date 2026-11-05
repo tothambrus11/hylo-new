@@ -1,0 +1,13 @@
+// Valid literal programs with overloads (no ambiguity in the baseline expected).
+fun f(x: Int) -> Int { x }
+fun f(x: Bool) -> Bool { x }
+fun g(x: Int16) -> Int16 { x }
+fun g(x: Bool) -> Bool { x }
+public fun main() {
+  let a = f(1)
+  let b = f(true)
+  let c = g(1 as Int16)
+  let d = (f(2), g(true), f(f(3)))
+  let e = 1 as Int16
+  let h = g(e)
+}

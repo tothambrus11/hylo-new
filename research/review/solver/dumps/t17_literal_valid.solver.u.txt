@@ -1,0 +1,209 @@
+== module Hylo
+0:0 -> Equatable
+0:0 : Metatype<<Self> Equatable<Self>>
+0:1 -> Comparable
+0:1 : Metatype<<Self> Comparable<Self>>
+0:10 : let Self
+0:11 -> Bool
+0:11 : Metatype<Bool>
+0:12 : [Void](self: let Self, let Self) let -> Bool
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<Self>
+0:14 : Metatype<let Self>
+0:15 : let Self
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<Self>
+0:17 : Metatype<let Self>
+0:18 : let Self
+0:19 -> Bool
+0:19 : Metatype<Bool>
+0:2 -> $<builtin selfAlias>
+0:2 : Metatype<Self>
+0:20 -> other
+0:20 : Self
+0:21 -> self
+0:21 : Self
+0:22 -> infix<
+0:22 : [let Self](let Self) let -> Bool
+0:23 : Bool
+0:24 -> prefix!
+0:24 : [let Bool]() let -> Bool
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](self: let Self, let Self) let -> Bool
+0:28 -> $<builtin selfAlias>
+0:28 : Metatype<Self>
+0:29 : Metatype<let Self>
+0:3 : Metatype<Equatable<Self>>
+0:30 : let Self
+0:31 -> $<builtin selfAlias>
+0:31 : Metatype<Self>
+0:32 : Metatype<let Self>
+0:33 : let Self
+0:34 -> Bool
+0:34 : Metatype<Bool>
+0:35 -> other
+0:35 : Self
+0:36 -> self
+0:36 : Self
+0:37 -> infix<
+0:37 : [let Self](let Self) let -> Bool
+0:38 : Bool
+0:39 : Void
+0:4 : Equatable<Self>
+0:40 : [Void](self: let Self, let Self) let -> Bool
+0:41 -> $<builtin selfAlias>
+0:41 : Metatype<Self>
+0:42 : Metatype<let Self>
+0:43 : let Self
+0:44 -> $<builtin selfAlias>
+0:44 : Metatype<Self>
+0:45 : Metatype<let Self>
+0:46 : let Self
+0:47 -> Bool
+0:47 : Metatype<Bool>
+0:48 -> self
+0:48 : Self
+0:49 -> other
+0:49 : Self
+0:5 -> $<builtin selfAlias>
+0:5 : Metatype<Self>
+0:50 -> infix<
+0:50 : [let Self](let Self) let -> Bool
+0:51 : Bool
+0:52 -> prefix!
+0:52 : [let Bool]() let -> Bool
+0:53 : Bool
+0:54 : Void
+0:55 : [Void](self: let Self, let Self) let -> Bool
+0:56 : Metatype<<Self> Comparable<Self>>
+0:6 : Metatype<let Self>
+0:7 : let Self
+0:8 -> $<builtin selfAlias>
+0:8 : Metatype<Self>
+0:9 : Metatype<let Self>
+== module Test
+0:0 -> Int
+0:0 : Metatype<Int>
+0:1 : Metatype<let Int>
+0:10 -> Bool
+0:10 : Metatype<Bool>
+0:11 -> x
+0:11 : Bool
+0:12 : Void
+0:13 : [Void](let Bool) let -> Bool
+0:14 -> Int16
+0:14 : Metatype<Int16>
+0:15 : Metatype<let Int16>
+0:16 : let Int16
+0:17 -> Int16
+0:17 : Metatype<Int16>
+0:18 -> x
+0:18 : Int16
+0:19 : Void
+0:2 : let Int
+0:20 : [Void](let Int16) let -> Int16
+0:21 -> Bool
+0:21 : Metatype<Bool>
+0:22 : Metatype<let Bool>
+0:23 : let Bool
+0:24 -> Bool
+0:24 : Metatype<Bool>
+0:25 -> x
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](let Bool) let -> Bool
+0:28 : let Int
+0:29 : Int
+0:3 -> Int
+0:3 : Metatype<Int>
+0:30 -> f(_:)
+0:30 : [Void](let Int) let -> Int
+0:31 : Int
+0:32 : Int
+0:33 : Int
+0:34 : let Bool
+0:35 : Bool
+0:36 -> f(_:)
+0:36 : [Void](let Bool) let -> Bool
+0:37 : Bool
+0:38 : Bool
+0:39 : Bool
+0:4 -> x
+0:4 : Int
+0:40 : let Int16
+0:41 : Int16
+0:42 -> g(_:)
+0:42 : [Void](let Int16) let -> Int16
+0:43 : Int16
+0:44 -> Int16
+0:44 : Metatype<Int16>
+0:45 : Int16
+0:46 : Int16
+0:47 : Int16
+0:48 : let {Int, Bool, Int}
+0:49 : {Int, Bool, Int}
+0:5 : Void
+0:50 -> f(_:)
+0:50 : [Void](let Int) let -> Int
+0:51 : Int
+0:52 : Int
+0:53 -> g(_:)
+0:53 : [Void](let Bool) let -> Bool
+0:54 : Bool
+0:55 : Bool
+0:56 -> f(_:)
+0:56 : [Void](let Int) let -> Int
+0:57 -> f(_:)
+0:57 : [Void](let Int) let -> Int
+0:58 : Int
+0:59 : Int
+0:6 : [Void](let Int) let -> Int
+0:60 : Int
+0:61 : {Int, Bool, Int}
+0:62 : {Int, Bool, Int}
+0:63 : let Int16
+0:64 : Int16
+0:65 : Int16
+0:66 -> Int16
+0:66 : Metatype<Int16>
+0:67 : Int16
+0:68 : Int16
+0:69 : let Int16
+0:7 -> Bool
+0:7 : Metatype<Bool>
+0:70 : Int16
+0:71 -> g(_:)
+0:71 : [Void](let Int16) let -> Int16
+0:72 -> e
+0:72 : Int16
+0:73 : Int16
+0:74 : Int16
+0:75 : [Void]() let -> Void
+0:76 : IntegerLiteral
+0:77 : Metatype<Int>
+0:78 -> init(integer_literal:)
+0:78 : [Void](self: set Int, integer_literal: let IntegerLiteral) let -> Void
+0:79 : [Void](integer_literal: let IntegerLiteral) let -> Int
+0:8 : Metatype<let Bool>
+0:80 : IntegerLiteral
+0:81 : Metatype<Int16>
+0:82 -> init(integer_literal:)
+0:82 : [Void](self: set Int16, integer_literal: let IntegerLiteral) let -> Void
+0:83 : [Void](integer_literal: let IntegerLiteral) let -> Int16
+0:84 : IntegerLiteral
+0:85 : Metatype<Int>
+0:86 -> init(integer_literal:)
+0:86 : [Void](self: set Int, integer_literal: let IntegerLiteral) let -> Void
+0:87 : [Void](integer_literal: let IntegerLiteral) let -> Int
+0:88 : IntegerLiteral
+0:89 : Metatype<Int>
+0:9 : let Bool
+0:90 -> init(integer_literal:)
+0:90 : [Void](self: set Int, integer_literal: let IntegerLiteral) let -> Void
+0:91 : [Void](integer_literal: let IntegerLiteral) let -> Int
+0:92 : IntegerLiteral
+0:93 : Metatype<Int16>
+0:94 -> init(integer_literal:)
+0:94 : [Void](self: set Int16, integer_literal: let IntegerLiteral) let -> Void
+0:95 : [Void](integer_literal: let IntegerLiteral) let -> Int16

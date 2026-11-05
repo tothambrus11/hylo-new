@@ -1,0 +1,14 @@
+// Overloads feeding tuples, tuple members and member chains.
+struct A { public memberwise init; public fun m() -> B { B() } }
+struct B { public memberwise init; public fun m() -> A { A() } }
+fun f() -> A { A() }
+fun f() -> (A, B) { (A(), B()) }
+fun g(x: A) -> B { B() }
+fun g(x: B) -> A { A() }
+public fun main() {
+  let t = f()
+  let u: (A, B) = f()
+  let v = f().1.m()
+  let w = g(g(g(A())))
+  let z = (g(A()), g(B())).0.m()
+}

@@ -1,0 +1,23 @@
+// Pruning vs the baseline "viable" quirk. S.f has two choices: the local extension f -> B
+// (preferred, lexically closer) gives a real error (takeA(B)); the type member f -> A is clean
+// in a probe, but A.n is ambiguous (nested ambiguity diagnostic, not counted in current.errors).
+// Baseline keeps both solutions (1 diag each) and picks the preferred, erroneous one.
+// Solver prunes f -> B (probe error 1 vs 0) and commits f -> A.
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> B { B() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+fun takeA(x: A) {}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  takeA(S.f().n())
+}

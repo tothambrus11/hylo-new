@@ -1,0 +1,17 @@
+// Overloaded functions with implicit (given) parameters and where clauses.
+trait P { fun p() -> Self }
+struct A is Deinitializable { public memberwise init }
+struct B is Deinitializable { public memberwise init }
+given A is P { fun p() -> A { A() } }
+fun f<T where T is P>(x: T) -> T { x.p() }
+fun f(x: B) -> B { x }
+fun g<T where T is P>(x: T) -> A { A() }
+fun g(x: A) -> B { B() }
+fun take(x: B) {}
+public fun main() {
+  let a = f(A())
+  let b = f(B())
+  take(g(A()))
+  let c = g(f(A()))
+  let d: A = g(f(A()))
+}

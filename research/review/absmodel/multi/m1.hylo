@@ -1,0 +1,10 @@
+trait P {}
+trait Q {}
+struct A {}
+struct B<T> {}
+given A is P {}
+fun needQ<T where T is Q>() {}
+public fun main() {
+  needQ<B<A>>()
+  needQ<A>()
+}

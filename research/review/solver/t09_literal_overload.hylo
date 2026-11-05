@@ -1,0 +1,15 @@
+// Overloads selected by integer literal defaulting vs expected type. Literal defaulting happens in
+// refreshCoercionAndWideningConstraints, which the solver flag delays until parked sets resolve.
+fun f(x: Int8) -> Int8 { x }
+fun f(x: Int) -> Int { x }
+fun f(x: Int32) -> Bool { true }
+fun take16(x: Int16) {}
+fun check<T>(x: T) {}
+public fun main() {
+  let a = f(1)
+  let b: Int8 = f(2)
+  let c = f(3) as Bool
+  let d = (f(4), f(5) as Int8)
+  check<Int>(f(6))
+  let e = if true { f(7) } else { 8 as Int8 }
+}

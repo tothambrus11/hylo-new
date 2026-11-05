@@ -1,0 +1,13 @@
+// Overloads inside closures and higher-order generic calls.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type X = A
+fun g(x: A) -> X { x }
+fun g(x: B) -> B { x }
+fun apply<T, U>(x: T, f: [](T) -> U) -> U { f(x) }
+public fun main() {
+  let a = A()
+  let r = apply(a, fun(x) { g(x) })
+  let s = apply(a, g)
+  let t: X = apply(B(), fun(x) { g(x) }) 
+}

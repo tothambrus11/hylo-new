@@ -1,0 +1,824 @@
+trait P {}
+trait Q {}
+trait R<B> {}
+struct S<T> {}
+struct W<T> {}
+struct A {}
+struct K0 {}
+struct K1 {}
+struct K2 {}
+struct K3 {}
+struct K4 {}
+struct K5 {}
+struct K6 {}
+struct K7 {}
+struct K8 {}
+struct K9 {}
+struct K10 {}
+struct K11 {}
+struct K12 {}
+struct K13 {}
+struct K14 {}
+struct K15 {}
+struct K16 {}
+struct K17 {}
+struct K18 {}
+struct K19 {}
+struct K20 {}
+struct K21 {}
+struct K22 {}
+struct K23 {}
+struct K24 {}
+struct K25 {}
+struct K26 {}
+struct K27 {}
+struct K28 {}
+struct K29 {}
+given K0 is P {}
+given K1 is P {}
+given K2 is P {}
+given K3 is P {}
+given K4 is P {}
+given K5 is P {}
+given K6 is P {}
+given K7 is P {}
+given K8 is P {}
+given K9 is P {}
+given K10 is P {}
+given K11 is P {}
+given K12 is P {}
+given K13 is P {}
+given K14 is P {}
+given K15 is P {}
+given K16 is P {}
+given K17 is P {}
+given K18 is P {}
+given K19 is P {}
+given K20 is P {}
+given K21 is P {}
+given K22 is P {}
+given K23 is P {}
+given K24 is P {}
+given K25 is P {}
+given K26 is P {}
+given K27 is P {}
+given K28 is P {}
+given K29 is P {}
+given <T where T is P> => S<T> is P {}
+given <T where T is P> => W<T> is Q {}
+given <T, U where T is P, U is Q> => T is R<U> {}
+given <T, U where T is R<U>, U is R<T>> => S<T> is Q {}
+fun needQ<T where T is Q>() {}
+fun needR<T, U where T is R<U>>() {}
+fun f0<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f1<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f2<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f3<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f4<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f5<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f6<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f7<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f8<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f9<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f10<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f11<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f12<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f13<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f14<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f15<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f16<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f17<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f18<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f19<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f20<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f21<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f22<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f23<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f24<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f25<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f26<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f27<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f28<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f29<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f30<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f31<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f32<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f33<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f34<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f35<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f36<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f37<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f38<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f39<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f40<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f41<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f42<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f43<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f44<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f45<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f46<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f47<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f48<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f49<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f50<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f51<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f52<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f53<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f54<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f55<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f56<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f57<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f58<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f59<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f60<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f61<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f62<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f63<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f64<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f65<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f66<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f67<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f68<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f69<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f70<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f71<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f72<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f73<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f74<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f75<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f76<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f77<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f78<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f79<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f80<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f81<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f82<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f83<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f84<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f85<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f86<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f87<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f88<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f89<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f90<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f91<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f92<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f93<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f94<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f95<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f96<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f97<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f98<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f99<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f100<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f101<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f102<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f103<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f104<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f105<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f106<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f107<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f108<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f109<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f110<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f111<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f112<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f113<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f114<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f115<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f116<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f117<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f118<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f119<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f120<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f121<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f122<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f123<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f124<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f125<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f126<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f127<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f128<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f129<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f130<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f131<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f132<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f133<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f134<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f135<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f136<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f137<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f138<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f139<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f140<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f141<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f142<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f143<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f144<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f145<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f146<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f147<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f148<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+fun f149<T where T is P>() {
+  needQ<W<T>>()
+  needR<T, W<S<T>>>()
+}
+public fun main() {
+  f0<K0>()
+  f1<K1>()
+  f2<K2>()
+  f3<K3>()
+  f4<K4>()
+  f5<K5>()
+  f6<K6>()
+  f7<K7>()
+  f8<K8>()
+  f9<K9>()
+  f10<K10>()
+  f11<K11>()
+  f12<K12>()
+  f13<K13>()
+  f14<K14>()
+  f15<K15>()
+  f16<K16>()
+  f17<K17>()
+  f18<K18>()
+  f19<K19>()
+  f20<K20>()
+  f21<K21>()
+  f22<K22>()
+  f23<K23>()
+  f24<K24>()
+  f25<K25>()
+  f26<K26>()
+  f27<K27>()
+  f28<K28>()
+  f29<K29>()
+  f30<K0>()
+  f31<K1>()
+  f32<K2>()
+  f33<K3>()
+  f34<K4>()
+  f35<K5>()
+  f36<K6>()
+  f37<K7>()
+  f38<K8>()
+  f39<K9>()
+  f40<K10>()
+  f41<K11>()
+  f42<K12>()
+  f43<K13>()
+  f44<K14>()
+  f45<K15>()
+  f46<K16>()
+  f47<K17>()
+  f48<K18>()
+  f49<K19>()
+  f50<K20>()
+  f51<K21>()
+  f52<K22>()
+  f53<K23>()
+  f54<K24>()
+  f55<K25>()
+  f56<K26>()
+  f57<K27>()
+  f58<K28>()
+  f59<K29>()
+  f60<K0>()
+  f61<K1>()
+  f62<K2>()
+  f63<K3>()
+  f64<K4>()
+  f65<K5>()
+  f66<K6>()
+  f67<K7>()
+  f68<K8>()
+  f69<K9>()
+  f70<K10>()
+  f71<K11>()
+  f72<K12>()
+  f73<K13>()
+  f74<K14>()
+  f75<K15>()
+  f76<K16>()
+  f77<K17>()
+  f78<K18>()
+  f79<K19>()
+  f80<K20>()
+  f81<K21>()
+  f82<K22>()
+  f83<K23>()
+  f84<K24>()
+  f85<K25>()
+  f86<K26>()
+  f87<K27>()
+  f88<K28>()
+  f89<K29>()
+  f90<K0>()
+  f91<K1>()
+  f92<K2>()
+  f93<K3>()
+  f94<K4>()
+  f95<K5>()
+  f96<K6>()
+  f97<K7>()
+  f98<K8>()
+  f99<K9>()
+  f100<K10>()
+  f101<K11>()
+  f102<K12>()
+  f103<K13>()
+  f104<K14>()
+  f105<K15>()
+  f106<K16>()
+  f107<K17>()
+  f108<K18>()
+  f109<K19>()
+  f110<K20>()
+  f111<K21>()
+  f112<K22>()
+  f113<K23>()
+  f114<K24>()
+  f115<K25>()
+  f116<K26>()
+  f117<K27>()
+  f118<K28>()
+  f119<K29>()
+  f120<K0>()
+  f121<K1>()
+  f122<K2>()
+  f123<K3>()
+  f124<K4>()
+  f125<K5>()
+  f126<K6>()
+  f127<K7>()
+  f128<K8>()
+  f129<K9>()
+  f130<K10>()
+  f131<K11>()
+  f132<K12>()
+  f133<K13>()
+  f134<K14>()
+  f135<K15>()
+  f136<K16>()
+  f137<K17>()
+  f138<K18>()
+  f139<K19>()
+  f140<K20>()
+  f141<K21>()
+  f142<K22>()
+  f143<K23>()
+  f144<K24>()
+  f145<K25>()
+  f146<K26>()
+  f147<K27>()
+  f148<K28>()
+  f149<K29>()
+}

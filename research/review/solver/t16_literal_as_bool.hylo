@@ -1,0 +1,7 @@
+// Isolated from t09: `f(3) as Bool` where only the Int32 overload returns Bool.
+fun f(x: Int8) -> Int8 { x }
+fun f(x: Int) -> Int { x }
+fun f(x: Int32) -> Bool { true }
+public fun main() {
+  let c = f(3) as Bool
+}

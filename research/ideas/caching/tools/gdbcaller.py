@@ -12,8 +12,8 @@ class BP(gdb.Breakpoint):
     def stop(self):
         global base
         f = gdb.selected_frame()
-        rsp = int(f.read_register("rsp"))
-        ret = int(gdb.parse_and_eval(f"*(unsigned long*){rsp}"))
+        o = f.older()
+        ret = int(o.pc()) if o is not None else 0
         if base is None:
             a = [r for r in rng if r[2] == callee][0][0]
             m = gdb.execute("info proc mappings", to_string=True)

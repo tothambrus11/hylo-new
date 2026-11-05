@@ -1,0 +1,298 @@
+== module Hylo
+0:0 -> Equatable
+0:0 : Metatype<<Self> Equatable<Self>>
+0:1 -> Comparable
+0:1 : Metatype<<Self> Comparable<Self>>
+0:10 : let Self
+0:11 -> Bool
+0:11 : Metatype<Bool>
+0:12 : [Void](self: let Self, let Self) let -> Bool
+0:13 -> $<builtin selfAlias>
+0:13 : Metatype<Self>
+0:14 : Metatype<let Self>
+0:15 : let Self
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<Self>
+0:17 : Metatype<let Self>
+0:18 : let Self
+0:19 -> Bool
+0:19 : Metatype<Bool>
+0:2 -> $<builtin selfAlias>
+0:2 : Metatype<Self>
+0:20 -> other
+0:20 : Self
+0:21 -> self
+0:21 : Self
+0:22 -> infix<
+0:22 : [let Self](let Self) let -> Bool
+0:23 : Bool
+0:24 -> prefix!
+0:24 : [let Bool]() let -> Bool
+0:25 : Bool
+0:26 : Void
+0:27 : [Void](self: let Self, let Self) let -> Bool
+0:28 -> $<builtin selfAlias>
+0:28 : Metatype<Self>
+0:29 : Metatype<let Self>
+0:3 : Metatype<Equatable<Self>>
+0:30 : let Self
+0:31 -> $<builtin selfAlias>
+0:31 : Metatype<Self>
+0:32 : Metatype<let Self>
+0:33 : let Self
+0:34 -> Bool
+0:34 : Metatype<Bool>
+0:35 -> other
+0:35 : Self
+0:36 -> self
+0:36 : Self
+0:37 -> infix<
+0:37 : [let Self](let Self) let -> Bool
+0:38 : Bool
+0:39 : Void
+0:4 : Equatable<Self>
+0:40 : [Void](self: let Self, let Self) let -> Bool
+0:41 -> $<builtin selfAlias>
+0:41 : Metatype<Self>
+0:42 : Metatype<let Self>
+0:43 : let Self
+0:44 -> $<builtin selfAlias>
+0:44 : Metatype<Self>
+0:45 : Metatype<let Self>
+0:46 : let Self
+0:47 -> Bool
+0:47 : Metatype<Bool>
+0:48 -> self
+0:48 : Self
+0:49 -> other
+0:49 : Self
+0:5 -> $<builtin selfAlias>
+0:5 : Metatype<Self>
+0:50 -> infix<
+0:50 : [let Self](let Self) let -> Bool
+0:51 : Bool
+0:52 -> prefix!
+0:52 : [let Bool]() let -> Bool
+0:53 : Bool
+0:54 : Void
+0:55 : [Void](self: let Self, let Self) let -> Bool
+0:56 : Metatype<<Self> Comparable<Self>>
+0:6 : Metatype<let Self>
+0:7 : let Self
+0:8 -> $<builtin selfAlias>
+0:8 : Metatype<Self>
+0:9 : Metatype<let Self>
+== module Test
+0:0 -> $<builtin selfAlias>
+0:0 : Metatype<Self>
+0:1 : Metatype<let Self>
+0:10 -> $<builtin selfAlias>
+0:10 : Metatype<A>
+0:100 : B
+0:101 -> take(_:)
+0:101 : [Void](let B) let -> Void
+0:102 -> g(_:)
+0:102 : [Void](let A) let -> B
+0:103 -> A
+0:103 : Metatype<A>
+0:104 : A
+0:105 : B
+0:106 : Void
+0:107 : let A
+0:108 : A
+0:109 -> g(_:)
+0:109 : [Void](let A) let -> A
+0:11 : Metatype<set A>
+0:110 -> f(_:)
+0:110 : [Void](let A) let -> A
+0:111 -> A
+0:111 : Metatype<A>
+0:112 : A
+0:113 : A
+0:114 : A
+0:115 : A
+0:116 : let A
+0:117 -> A
+0:117 : Metatype<A>
+0:118 : A
+0:119 -> g(_:)
+0:119 : [Void](let A) let -> A
+0:12 : set A
+0:120 -> f(_:)
+0:120 : [Void](let A) let -> A
+0:121 -> A
+0:121 : Metatype<A>
+0:122 : A
+0:123 : A
+0:124 : A
+0:125 : A
+0:126 : [Void]() let -> Void
+0:127 : [Void]() let -> A
+0:128 -> init
+0:128 : [Void](self: set A) let -> Void
+0:129 : [Void]() let -> A
+0:13 : [Void](self: set A) let -> Void
+0:130 -> init
+0:130 : [Void](self: set A) let -> Void
+0:131 : [Void]() let -> B
+0:132 -> init
+0:132 : [Void](self: set B) let -> Void
+0:133 : [Void]() let -> A
+0:134 -> init
+0:134 : [Void](self: set A) let -> Void
+0:135 -> f(_:)
+0:135 : <T> P<T> ==> [Void](let T) let -> T
+0:136 : [Void]() let -> B
+0:137 -> init
+0:137 : [Void](self: set B) let -> Void
+0:138 : [Void]() let -> A
+0:139 -> init
+0:139 : [Void](self: set A) let -> Void
+0:14 : Metatype<A>
+0:140 : [Void]() let -> A
+0:141 -> init
+0:141 : [Void](self: set A) let -> Void
+0:142 -> f(_:)
+0:142 : <T> P<T> ==> [Void](let T) let -> T
+0:143 -> g(_:)
+0:143 : <T> P<T> ==> [Void](let T) let -> A
+0:144 : [Void]() let -> A
+0:145 -> init
+0:145 : [Void](self: set A) let -> Void
+0:146 -> f(_:)
+0:146 : <T> P<T> ==> [Void](let T) let -> T
+0:147 -> g(_:)
+0:147 : <T> P<T> ==> [Void](let T) let -> A
+0:15 -> Deinitializable
+0:15 : Metatype<<Self> Deinitializable<Self>>
+0:16 -> $<builtin selfAlias>
+0:16 : Metatype<B>
+0:17 : Metatype<Deinitializable<B>>
+0:18 : Deinitializable<B>
+0:18 witness Deinitializable
+0:18 witness.m3 = $<synthetic implementation of deinit>
+0:19 -> $<builtin selfAlias>
+0:19 : Metatype<B>
+0:2 : let Self
+0:20 : Metatype<set B>
+0:21 : set B
+0:22 : [Void](self: set B) let -> Void
+0:23 : Metatype<B>
+0:24 -> A
+0:24 : Metatype<A>
+0:25 -> P
+0:25 : Metatype<<Self> P<Self>>
+0:26 : Metatype<P<A>>
+0:27 -> $<builtin selfAlias>
+0:27 : Metatype<A>
+0:28 : Metatype<let A>
+0:29 : let A
+0:3 -> $<builtin selfAlias>
+0:3 : Metatype<Self>
+0:30 -> A
+0:30 : Metatype<A>
+0:31 -> A
+0:31 : Metatype<A>
+0:32 : A
+0:33 : Void
+0:34 : [Void](self: let A) let -> A
+0:35 : P<A>
+0:35 witness P
+0:35 witness.m4 = p
+0:36 : Metatype<T>
+0:37 -> T
+0:37 : Metatype<T>
+0:38 -> P
+0:38 : Metatype<<Self> P<Self>>
+0:39 : Metatype<P<T>>
+0:4 : [Void](self: let Self) let -> Self
+0:40 : let P<T>
+0:41 : P<T>
+0:42 : P<T>
+0:43 -> T
+0:43 : Metatype<T>
+0:44 : Metatype<let T>
+0:45 : let T
+0:46 -> T
+0:46 : Metatype<T>
+0:47 -> x
+0:47 : T
+0:48 -> p
+0:48 : [let T]() let -> T
+0:49 : T
+0:5 : Metatype<<Self> P<Self>>
+0:50 : Void
+0:51 : <T> P<T> ==> [Void](let T) let -> T
+0:52 -> B
+0:52 : Metatype<B>
+0:53 : Metatype<let B>
+0:54 : let B
+0:55 -> B
+0:55 : Metatype<B>
+0:56 -> x
+0:56 : B
+0:57 : Void
+0:58 : [Void](let B) let -> B
+0:59 : Metatype<T>
+0:6 -> Deinitializable
+0:6 : Metatype<<Self> Deinitializable<Self>>
+0:60 -> T
+0:60 : Metatype<T>
+0:61 -> P
+0:61 : Metatype<<Self> P<Self>>
+0:62 : Metatype<P<T>>
+0:63 : let P<T>
+0:64 : P<T>
+0:65 : P<T>
+0:66 -> T
+0:66 : Metatype<T>
+0:67 : Metatype<let T>
+0:68 : let T
+0:69 -> A
+0:69 : Metatype<A>
+0:7 -> $<builtin selfAlias>
+0:7 : Metatype<A>
+0:70 -> A
+0:70 : Metatype<A>
+0:71 : A
+0:72 : Void
+0:73 : <T> P<T> ==> [Void](let T) let -> A
+0:74 -> A
+0:74 : Metatype<A>
+0:75 : Metatype<let A>
+0:76 : let A
+0:77 -> B
+0:77 : Metatype<B>
+0:78 -> B
+0:78 : Metatype<B>
+0:79 : B
+0:8 : Metatype<Deinitializable<A>>
+0:80 : Void
+0:81 : [Void](let A) let -> B
+0:82 -> B
+0:82 : Metatype<B>
+0:83 : Metatype<let B>
+0:84 : let B
+0:85 : Void
+0:86 : [Void](let B) let -> Void
+0:87 : let A
+0:88 : A
+0:89 -> f(_:)
+0:89 : [Void](let A) let -> A
+0:9 : Deinitializable<A>
+0:9 witness Deinitializable
+0:9 witness.m3 = $<synthetic implementation of deinit>
+0:90 -> A
+0:90 : Metatype<A>
+0:91 : A
+0:92 : A
+0:93 : A
+0:94 : let B
+0:95 : B
+0:96 -> f(_:)
+0:96 : [Void](let B) let -> B
+0:97 -> B
+0:97 : Metatype<B>
+0:98 : B
+0:99 : B
+diag /home/user/hylo-new/research/review/solver/t10_implicit_overload.hylo:15.11-12: error: ambiguous use of 'g'
