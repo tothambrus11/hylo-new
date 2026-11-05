@@ -1,0 +1,88 @@
+[loopcheck] 17/25 identical
+  MISMATCH research/review/loopcheck/run3/lc04-cap-witness-r3.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<ConformanceDeclaration at lc04-cap-witness-r3:23.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>))))($<ConformanceDeclaration at lc04-cap-witness-r3:17.1>($<ConformanceDeclaration at lc04-cap-witness-r3:18.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>)))))($<ConformanceDeclaration at lc04-cap-witness-r3:19.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/user/hylo-new/research/review/loopcheck/run3/lc04-cap-witness-r3.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+  MISMATCH research/review/loopcheck/run3/lc05-shared-lemma-penalty-r3.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16693 +16693 @@
+      -0:103 witness.c5 = $<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:24.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>)))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:18.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:15.1>)($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:19.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:20.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>)))))
+      +0:103 witness.c5 = $<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:18.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:15.1>)($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:19.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:20.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))
+  MISMATCH research/review/loopcheck/run3/lc06-ambiguity-call-r3.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16697 +16697 @@
+      -0:107 : T<SA> ==> [Void]() let -> Void
+      +0:107 : [Void]() let -> Void
+      @@ -16701,0 +16702,2 @@
+      +0:110 -> need
+      +0:110 : T<SA> ==> [Void]() let -> Void
+      @@ -16839 +16840,0 @@
+      -diag /home/user/hylo-new/research/review/loopcheck/run3/lc06-ambiguity-call-r3.hylo:25.3-7: error: no coercion from 'T<SA> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  MISMATCH research/review/loopcheck/run3/lc07-ambiguity-witness-r3.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16716,0 +16717 @@
+      +0:119 witness.c5 = $<ConformanceDeclaration at lc07-ambiguity-witness-r3:15.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:14.1>)($<ConformanceDeclaration at lc07-ambiguity-witness-r3:16.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:13.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:12.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:11.1>))))($<ConformanceDeclaration at lc07-ambiguity-witness-r3:17.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:13.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:12.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:11.1>))))
+      @@ -16857 +16857,0 @@
+      -diag /home/user/hylo-new/research/review/loopcheck/run3/lc07-ambiguity-witness-r3.hylo:23.1-6: error: multiple given instance of 'T<SA>' in this scope
+  MISMATCH research/review/loopcheck/run3/lc08-generic-self-loop-alt-r3.hylo
+      baseline=crash config=ok
+  MISMATCH research/review/loopcheck/run3/lc12-generic-shared-lemma-r3.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16765 +16765 @@
+      -0:149 witness.c5 = $<ConformanceDeclaration at lc12-generic-shared-lemma-r3:20.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>)))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:17.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:16.1>)($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:18.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:19.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>)))))
+      +0:149 witness.c5 = $<ConformanceDeclaration at lc12-generic-shared-lemma-r3:17.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:16.1>)($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:18.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:19.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))
+  MISMATCH research/review/loopcheck/run3/lc14-equality-context-r3.hylo
+      baseline=crash config=ok
+  MISMATCH research/review/loopcheck/run3/lc24-coercion-sharing-r3.hylo
+      baseline=crash config=ok
+[absmodel,index,loopcheck] 17/25 identical
+  MISMATCH research/review/loopcheck/run3/lc04-cap-witness-r3.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<ConformanceDeclaration at lc04-cap-witness-r3:23.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>))))($<ConformanceDeclaration at lc04-cap-witness-r3:17.1>($<ConformanceDeclaration at lc04-cap-witness-r3:18.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>)))))($<ConformanceDeclaration at lc04-cap-witness-r3:19.1>($<ConformanceDeclaration at lc04-cap-witness-r3:14.1>($<ConformanceDeclaration at lc04-cap-witness-r3:13.1>($<ConformanceDeclaration at lc04-cap-witness-r3:12.1>($<ConformanceDeclaration at lc04-cap-witness-r3:11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/user/hylo-new/research/review/loopcheck/run3/lc04-cap-witness-r3.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+  MISMATCH research/review/loopcheck/run3/lc05-shared-lemma-penalty-r3.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16693 +16693 @@
+      -0:103 witness.c5 = $<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:24.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>)))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:18.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:15.1>)($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:19.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:20.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>)))))
+      +0:103 witness.c5 = $<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:18.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:15.1>)($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:19.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:20.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:14.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:13.1>($<ConformanceDeclaration at lc05-shared-lemma-penalty-r3:12.1>))))
+  MISMATCH research/review/loopcheck/run3/lc06-ambiguity-call-r3.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16697 +16697 @@
+      -0:107 : T<SA> ==> [Void]() let -> Void
+      +0:107 : [Void]() let -> Void
+      @@ -16701,0 +16702,2 @@
+      +0:110 -> need
+      +0:110 : T<SA> ==> [Void]() let -> Void
+      @@ -16839 +16840,0 @@
+      -diag /home/user/hylo-new/research/review/loopcheck/run3/lc06-ambiguity-call-r3.hylo:25.3-7: error: no coercion from 'T<SA> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  MISMATCH research/review/loopcheck/run3/lc07-ambiguity-witness-r3.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16716,0 +16717 @@
+      +0:119 witness.c5 = $<ConformanceDeclaration at lc07-ambiguity-witness-r3:15.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:14.1>)($<ConformanceDeclaration at lc07-ambiguity-witness-r3:16.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:13.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:12.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:11.1>))))($<ConformanceDeclaration at lc07-ambiguity-witness-r3:17.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:13.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:12.1>($<ConformanceDeclaration at lc07-ambiguity-witness-r3:11.1>))))
+      @@ -16857 +16857,0 @@
+      -diag /home/user/hylo-new/research/review/loopcheck/run3/lc07-ambiguity-witness-r3.hylo:23.1-6: error: multiple given instance of 'T<SA>' in this scope
+  MISMATCH research/review/loopcheck/run3/lc08-generic-self-loop-alt-r3.hylo
+      baseline=crash config=ok
+  MISMATCH research/review/loopcheck/run3/lc12-generic-shared-lemma-r3.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck
+      @@ -16765 +16765 @@
+      -0:149 witness.c5 = $<ConformanceDeclaration at lc12-generic-shared-lemma-r3:20.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>)))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:17.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:16.1>)($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:18.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:19.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>)))))
+      +0:149 witness.c5 = $<ConformanceDeclaration at lc12-generic-shared-lemma-r3:17.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:16.1>)($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:18.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:19.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:15.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:14.1><Z>($<ConformanceDeclaration at lc12-generic-shared-lemma-r3:13.1><Z>))))
+  MISMATCH research/review/loopcheck/run3/lc14-equality-context-r3.hylo
+      baseline=crash config=ok
+  MISMATCH research/review/loopcheck/run3/lc24-coercion-sharing-r3.hylo
+      baseline=crash config=ok

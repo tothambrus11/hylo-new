@@ -1,0 +1,39 @@
+== []
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib   1059.06 ms
+== [names]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=32 names.skippedExtensions=7300 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=341 summon.matchOK=302 summon.matches=20052 summon.subgoals=327
+type.stdlib    676.54 ms
+== [index]
+counters.stdlib: coerced.slowPath=54 index.fallback=85 index.skipped=36081 index.unavailable=1353 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=15051 summon.subgoals=699
+type.stdlib    528.06 ms
+== [names,index]
+counters.stdlib: coerced.slowPath=54 index.fallback=35 index.skipped=17756 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7300 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=341 summon.matchOK=302 summon.matches=4057 summon.subgoals=327
+type.stdlib    354.44 ms
+== [unify]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib    914.35 ms
+== [absmodel]
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=7986 absmodel.refuted=225 absmodel.work=14783 coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5532 summon.matchOK=765 summon.matches=29955 summon.subgoals=646
+type.stdlib    825.67 ms
+== [solver]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7216 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=5620 summon.matchOK=818 summon.matches=41393 summon.subgoals=699
+type.stdlib   1269.70 ms
+== [loopcheck]
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib   1097.02 ms
+== [names,unify,index]
+counters.stdlib: coerced.slowPath=54 index.fallback=35 index.skipped=17756 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7300 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=341 summon.matchOK=302 summon.matches=4057 summon.subgoals=327
+type.stdlib    376.86 ms
+== [names,unify,index,absmodel,solver,loopcheck]
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=7828 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+type.stdlib    355.61 ms
+== absmodel k=1
+counters.stdlib: absmodel.built=22 absmodel.facts=198 absmodel.micros=5463 absmodel.work=242 coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib    970.08 ms
+== absmodel k=2
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=8023 absmodel.refuted=225 absmodel.work=14783 coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5532 summon.matchOK=765 summon.matches=29955 summon.subgoals=646
+type.stdlib    883.83 ms
+== absmodel k=3
+counters.stdlib: absmodel.built=22 absmodel.facts=14082 absmodel.micros=9791202 absmodel.refuted=224 absmodel.work=3768008 coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5530 summon.matchOK=760 summon.matches=29667 summon.subgoals=641
+type.stdlib  10767.24 ms

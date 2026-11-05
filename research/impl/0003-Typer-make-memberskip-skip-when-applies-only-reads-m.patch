@@ -1,0 +1,194 @@
+From e391e61c0f83e0bf96b417a06d741415fdc1403e Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 19:24:54 +0000
+Subject: [PATCH 3/3] Typer: make memberskip skip when applies only reads
+ memoized types
+
+An extension that does not declare the looked-up name is skipped iff its
+extendee type is memoized and either the match fails at the root (distinct
+nominal heads or heads of different kinds) or the types of all givens
+visible from the scope of use are memoized. In both cases applies() has no
+effect beyond fresh variables and cache fills, so unlike names this does
+not change the order in which extendees and givens are first evaluated.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift | 137 +++++++++++++++++++++++------
+ 1 file changed, 110 insertions(+), 27 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index f7d3325..3412cf7 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -78,6 +78,12 @@ public struct Typer {
+     /// The cache of `Typer.extensions(visibleFrom:)`.
+     fileprivate var scopeToExtensions: [ScopeIdentity: [ExtensionDeclaration.ID]]
+ 
++    /// The scopes from which the types of all visible givens are memoized.
++    fileprivate var scopesWithSettledGivens: Set<ScopeIdentity> = []
++
++    /// The cache of `Typer.memoizedExtendeeShape(_:)`.
++    fileprivate var extendeeShape: [ExtensionDeclaration.ID: HeadShape?] = [:]
++
+     /// The cache of `Typer.traits(named:visibleFrom:)`.
+     fileprivate var scopeToTraitsByName: [ScopeIdentity: [String: [TraitDeclaration.ID]]] = [:]
+ 
+@@ -4694,12 +4700,14 @@ public struct Typer {
+     statically selectionIsStatic: Bool
+   ) -> [NameResolutionCandidate] {
+     var candidates: [NameResolutionCandidate] = []
++    let qs = TyperExperiments.memberskip ? headShape(of: q) : nil
++    var settled: Bool? = nil
+     for e in extensions where !declarationsOnStack.contains(.init(e)) {
+       // Experiment: skip extensions that do not declare any member named `n` and whose
+       // applicability check is known to fail without any observable effect.
+-      if TyperExperiments.memberskip
+-        && (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil)
+-        && appliesTriviallyFails(e, to: q)
++      if TyperExperiments.memberskip,
++        (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil),
++        appliesHasNoEffect(e, to: qs, givensSettled: &settled, in: scopeOfUse)
+       {
+         TyperCounters.bump("memberskip.skipped")
+         continue
+@@ -4929,37 +4937,112 @@ public struct Typer {
+     }
+   }
+ 
++  /// The classification of the head of a type used by `appliesTriviallyFails`.
++  internal struct HeadShape: Equatable {
++
++    /// The head.
++    let head: AnyTypeIdentity
++
++    /// The dynamic type of the head's tree.
++    let kind: ObjectIdentifier
++
++    /// `true` iff the head is a struct, enum, trait, or machine type.
++    let isAtom: Bool
++
++  }
++
++  /// Returns the shape of the head of `t` if it can be used to predict a unification failure, or
++  /// `nil` if `t` contains errors or its head is a variable, an alias, or a generic parameter.
++  ///
++  /// Unification may see through variables, aliases, and generic parameters (the latter once
++  /// opened in an extendee), so these heads give no prediction.
++  private func headShape(of t: AnyTypeIdentity) -> HeadShape? {
++    if t[.hasError] { return nil }
++    let h = program.types.contextAndHead(t).head
++    if h.isVariable { return nil }
++    let x = program.types[h]
++    if (x is TypeAlias) || (x is GenericParameter) { return nil }
++    let atom = (x is Struct) || (x is Enum) || (x is Trait) || (x is MachineType)
++    return .init(head: h, kind: ObjectIdentifier(type(of: x)), isAtom: atom)
++  }
++
++  /// Returns the head shape of the extendee of `e` if it is already memoized.
++  ///
++  /// This method never evaluates the extendee, so it has no side effect on the typer's state.
++  private mutating func memoizedExtendeeShape(_ e: ExtensionDeclaration.ID) -> HeadShape? {
++    if let s = cache.extendeeShape[e] { return s }
++    guard let u = program[e.module].type(assignedTo: e) else { return nil }
++    let s = headShape(of: u)
++    cache.extendeeShape[e] = .some(s)
++    return s
++  }
++
++  /// Returns `true` if `applies(e, to: q, in: scopeOfUse)` has no observable effect other than
++  /// allocating fresh type variables, inserting types in the type store, and filling caches with
++  /// values that any later computation would reproduce, given that `qs` is `headShape(of: q)`
++  /// and `settled` is either `nil` or `allGivensSettled(visibleFrom: scopeOfUse)`.
++  ///
++  /// That holds if the extendee of `e` is memoized and either the match fails at the root (see
++  /// `appliesTriviallyFails`) or the type of every given visible from `scopeOfUse` is memoized,
++  /// in which case implicit resolution only reads memoized types.
++  private mutating func appliesHasNoEffect(
++    _ e: ExtensionDeclaration.ID, to qs: HeadShape?, givensSettled settled: inout Bool?,
++    in scopeOfUse: ScopeIdentity
++  ) -> Bool {
++    if program[e.module].type(assignedTo: e) == nil { return false }
++    if let qs, appliesTriviallyFails(e, toTypeWithHead: qs) { return true }
++    if settled == nil { settled = allGivensSettled(visibleFrom: scopeOfUse) }
++    if settled! { TyperCounters.bump("memberskip.settled") }
++    return settled!
++  }
++
++  /// Returns `true` iff the types of all givens visible from `s`, including those that are on the
++  /// stack, are memoized. The result does not depend on which declarations are on the stack.
++  private mutating func allGivensSettled(visibleFrom s: ScopeIdentity) -> Bool {
++    if cache.scopesWithSettledGivens.contains(s) { return true }
++    for x in program.scopes(from: s) {
++      for g in givens(lexicallyIn: x) where !isSettled(g) { return false }
++    }
++    for f in program[s.module].sourceFileIdentities where f != s.file {
++      for g in givens(lexicallyIn: .init(file: f)) where !isSettled(g) { return false }
++    }
++    for i in imports(of: s.file) {
++      for g in givens(atTopLevelOf: i) where !isSettled(g) { return false }
++    }
++    // Memoized types are never overwritten, so the property is monotonic.
++    cache.scopesWithSettledGivens.insert(s)
++    return true
++  }
++
++  /// Returns `true` iff computing `declaredType(of: g)` only reads memoized results.
++  private func isSettled(_ g: Given) -> Bool {
++    switch g {
++    case .user(let d):
++      return program[d.module].type(assignedTo: d) != nil
++    case .nested(let t, let h):
++      return (cache.traitToTypeOfTraitSelf[t] != nil) && isSettled(h)
++    default:
++      return true
++    }
++  }
++
+   /// Returns `true` if `applies(e, to: q, in: s)` is known to return `nil` for any `s`, with no
+-  /// effect other than allocating fresh type variables and filling caches with `nil`.
++  /// effect other than allocating fresh type variables and filling caches with `nil`, given that
++  /// `qs` is `headShape(of: q)`.
+   ///
+   /// That is the case if the type of `e`'s extendee is already memoized and if its head and the
+   /// head of `q` are such that the match judgement of implicit resolution fails at the root:
+   /// unification then reports only the coercion `(a, b)` between the two heads, which `match`
+   /// rejects without querying givens. It happens if the heads have different kinds, or if both
+-  /// are distinct nominal or machine types. Variables, aliases and generic parameters are excluded
+-  /// since unification may see through them, and so are other kinds having the same shape, since
+-  /// they are unified structurally.
+-  private func appliesTriviallyFails(
+-    _ e: ExtensionDeclaration.ID, to q: AnyTypeIdentity
++  /// are distinct nominal or machine types. Other kinds having the same shape are unified
++  /// structurally and give no prediction.
++  private mutating func appliesTriviallyFails(
++    _ e: ExtensionDeclaration.ID, toTypeWithHead qs: HeadShape
+   ) -> Bool {
+-    guard
+-      let u = program[e.module].type(assignedTo: e), !u[.hasError], !q[.hasError]
+-    else { return false }
+-
+-    let a = program.types.contextAndHead(u).head
+-    let b = program.types.contextAndHead(q).head
+-    if (a == b) || a.isVariable || b.isVariable { return false }
+-
+-    let x = program.types[a]
+-    let y = program.types[b]
+-    if (x is TypeAlias) || (y is TypeAlias) || (x is GenericParameter) { return false }
+-    if type(of: x) != type(of: y) { return true }
+-    switch x {
+-    case is Struct, is Enum, is Trait, is MachineType:
+-      return true
+-    default:
+-      return false
+-    }
++    guard let es = memoizedExtendeeShape(e) else { return false }
++    if es.head == qs.head { return false }
++    if es.kind != qs.kind { return true }
++    return es.isAtom
+   }
+ 
+   /// Returns the traits visible from `scopeOfUse` that lexically declare a member with
+-- 
+2.43.0
+

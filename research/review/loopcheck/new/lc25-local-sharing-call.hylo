@@ -1,0 +1,22 @@
+trait T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SQ1 {}
+struct SQ2 {}
+
+// lc06 with only one looping given: baseline should pick the loop term (local, same layer?).
+given SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+
+fun need<where SA is T>() {}
+
+public fun main() {
+  given <where SQ1 is T, SQ2 is T> => SA is T {}
+  given <where SP is T> => SQ1 is T {}
+  given <where SP is T> => SQ2 is T {}
+  given <where SP is T, SA is T> => SA is T {}
+  need()
+}

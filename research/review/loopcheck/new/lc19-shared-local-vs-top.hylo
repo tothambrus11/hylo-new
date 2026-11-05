@@ -1,0 +1,20 @@
+trait T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SQ {}
+
+// Sharing with a local looping given (penalty 0) and a top-level direct one: the loop term is in
+// the same layer and nearer, so the baseline picks it.
+given SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+given <where SQ is T, SQ is T> => SA is T {}
+given <where SP is T> => SQ is T {}
+
+fun need<where SA is T>() {}
+public fun main() {
+  given <where SP is T, SA is T> => SA is T {}
+  need()
+}

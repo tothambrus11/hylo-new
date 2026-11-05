@@ -1,0 +1,20 @@
+trait T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SP3 {}
+struct SP4 {}
+
+// The pending premise `SP is T` of g makes the inner `SA is T` cheap (via h), but inner `SA is T`
+// is identical to its ancestor. Direct derivation of SA needs D_P (5 nodes) + 2.
+given SP4 is T {}
+given <where SP4 is T> => SP3 is T {}
+given <where SP3 is T> => SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+given <where SP is T> => SA is T {}
+given <where SP is T, SA is T> => SA is T {}
+
+fun need<where SA is T>() {}
+public fun main() { need() }

@@ -1,0 +1,22 @@
+trait T {}
+trait U refines T {}
+struct SA<X> {}
+struct SP<X> {}
+struct SP1<X> {}
+struct SP2<X> {}
+struct SQ1<X> {}
+struct SQ2<X> {}
+struct Z {}
+
+// Shared lemma where the looping given's pending premise is generic and the query is reached
+// through an implicit parameter of a generic function (open variable at use site).
+given <X> => SP2<X> is T {}
+given <X where SP2<X> is T> => SP1<X> is T {}
+given <X where SP1<X> is T> => SP<X> is T {}
+given <X where SQ1<X> is T, SQ2<X> is T> => SA<X> is T {}
+given <X where SP<X> is T> => SQ1<X> is T {}
+given <X where SP<X> is T> => SQ2<X> is T {}
+given <X where SP<X> is T, SA<X> is T> => SA<X> is T {}
+
+fun need<X where SA<X> is T>(x: X) {}
+fun g(z: Z) { need(z) }

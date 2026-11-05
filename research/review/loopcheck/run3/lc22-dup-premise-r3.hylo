@@ -1,0 +1,13 @@
+trait T {}
+trait U refines T {}
+struct SA {}
+struct SB {}
+
+// Duplicate premise: the second `SA is T` is pruned (identical ancestor) and the first may use
+// the pending second as hypothesis? Order: last premise solved first.
+given SB is T {}
+given <where SB is T> => SA is T {}
+given <where SA is T, SA is T> => SA is T {}
+fun need<where SA is T>() {}
+public fun main() { need() }
+given SA is U {}

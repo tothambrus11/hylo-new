@@ -1,0 +1,107 @@
+[loopcheck] 2/7 identical
+  MISMATCH research/review/loopcheck/new/lc16-generic-var-sharing.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16754,6 +16754,5 @@
+      -0:146 : <X> T<SA<X>> ==> [Void](x: let X) let -> Void
+      -0:147 -> need(x:)
+      -0:147 : [Void](x: let #!) let -> Void
+      -0:148 -> Z
+      -0:148 : Metatype<Z>
+      -0:149 : #!
+      +0:146 : <X> T<SA<X>> ==> [Void](let X) let -> Void
+      +0:147 -> Z
+      +0:147 : Metatype<Z>
+      +0:148 : Metatype<let Z>
+      +0:149 : let Z
+      @@ -16761,7 +16760,9 @@
+      -0:150 : Void
+      -0:151 : Void
+      -0:152 : [Void]() let -> Void
+      -0:153 : #!
+      -0:154 : #!
+      -0:155 -> need(x:)
+      -0:155 : <X> T<SA<X>> ==> [Void](x: let X) let -> Void
+      +0:150 -> need(_:)
+      +0:150 : [Void](let Z) let -> Void
+      +0:151 -> z
+  MISMATCH research/review/loopcheck/new/lc20-equality-loop.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16704 +16704 @@
+      -0:24 : <T> P<T> ==> [Void](x: let T) let -> Void
+      +0:24 : <T> P<T> ==> [Void](let T) let -> Void
+      @@ -16732,2 +16732,2 @@
+      -0:43 -> need(x:)
+      -0:43 : [Void](x: let A) let -> Void
+      +0:43 -> need(_:)
+      +0:43 : [Void](let A) let -> Void
+      @@ -16737,2 +16737,2 @@
+      -0:46 -> need(x:)
+      -0:46 : [Void](x: let A) let -> Void
+      +0:46 -> need(_:)
+      +0:46 : [Void](let B) let -> Void
+      @@ -16744,4 +16744,4 @@
+      -0:50 -> need(x:)
+      -0:50 : <T> P<T> ==> [Void](x: let T) let -> Void
+      -0:51 -> need(x:)
+      -0:51 : <T> P<T> ==> [Void](x: let T) let -> Void
+      +0:50 -> need(_:)
+      +0:50 : <T> P<T> ==> [Void](let T) let -> Void
+      +0:51 -> need(_:)
+      +0:51 : <T> P<T> ==> [Void](let T) let -> Void
+      @@ -16753,2 +16752,0 @@
+  MISMATCH research/review/loopcheck/new/lc21-pending-equality-sharing.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16792 +16792 @@
+      -0:79 : <T> Q<T> ==> [Void](x: let T) let -> Void
+      +0:79 : <T> Q<T> ==> [Void](let T) let -> Void
+      @@ -16794,12 +16794,11 @@
+      -0:80 -> need(x:)
+      -0:80 : [Void](x: let C) let -> Void
+      -0:81 -> A
+      -0:81 : Metatype<A>
+      -0:82 : #!
+      -0:83 : Void
+      -0:84 : Void
+      -0:85 : [Void]() let -> Void
+      -0:86 : #!
+      -0:87 : #!
+      -0:88 -> need(x:)
+      -0:88 : <T> Q<T> ==> [Void](x: let T) let -> Void
+      +0:80 -> A
+      +0:80 : Metatype<A>
+      +0:81 : Metatype<let A>
+      +0:82 : let A
+      +0:83 -> need(_:)
+      +0:83 : <T> Q<T> ==> [Void](let T) let -> Void
+      +0:84 -> a
+  MISMATCH research/review/loopcheck/new/lc23-extension-where.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16721,11 +16721,12 @@
+      -0:122 : <X> P<X> ==> [Void](x: let X) let -> Void
+      -0:123 -> use(x:)
+      -0:123 : [Void](x: let S2) let -> Void
+      -0:124 -> Box
+      -0:124 : Metatype<<X> Box<X>>
+      -0:125 -> A
+      -0:125 : Metatype<A>
+      -0:126 : Metatype<Box<A>>
+      -0:127 : #!
+      -0:128 : Void
+      -0:129 : Void
+      +0:122 : <X> P<X> ==> [Void](let X) let -> Void
+      +0:123 -> Box
+      +0:123 : Metatype<<X> Box<X>>
+      +0:124 -> A
+      +0:124 : Metatype<A>
+      +0:125 : Metatype<Box<A>>
+      +0:126 : Metatype<let Box<A>>
+      +0:127 : let Box<A>
+      +0:128 -> use(_:)
+      +0:128 : [Void](let Box<A>) let -> Void
+      +0:129 -> b
+  MISMATCH research/review/loopcheck/new/lc24-coercion-sharing.hylo
+      baseline=crash config=ok

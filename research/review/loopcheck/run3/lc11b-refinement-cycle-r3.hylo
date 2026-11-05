@@ -1,0 +1,22 @@
+trait P {}
+trait Q refines P {}
+trait R {}
+trait V refines R {}
+struct A {}
+struct B<T> {}
+
+given <T where T is Q> => B<T> is Q {}
+given A is Q {}
+given <T where T is R, T is P> => T is R {}
+given <T where T is P> => T is R {}
+
+fun need<T where T is R>(x: T) {}
+fun g<T where T is Q>(x: T, y: B<T>) {
+  need(x)
+  need(y)
+}
+fun k(x: A, y: B<A>) {
+  need(x)
+  need(y)
+}
+given A is V {}

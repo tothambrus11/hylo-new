@@ -1,0 +1,18 @@
+trait T {}
+trait U refines T {}
+struct SA {}
+struct SB {}
+struct SC {}
+
+// Pure (no sharing) loop: SA <- SB <- SA, plus a direct, far (top-level) derivation of SA and a
+// near (local) looping one. Loopcheck must not change the result.
+given SC is T {}
+given <where SC is T> => SA is T {}
+
+fun need<where SA is T>() {}
+public fun main() {
+  given <where SB is T> => SA is T {}
+  given <where SA is T> => SB is T {}
+  need()
+}
+given SA is U {}

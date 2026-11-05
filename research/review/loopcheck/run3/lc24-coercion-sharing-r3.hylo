@@ -1,0 +1,24 @@
+trait T {}
+trait U refines T {}
+struct SA {}
+struct SP {}
+struct SP1 {}
+struct SP2 {}
+struct SQ1 {}
+struct SQ2 {}
+struct SX {}
+
+// Shared-lemma loop where the outer goal is reached through a where-clause equality (coercion
+// path in match); ancestors are lost across coercion-assumed givens.
+given SP2 is T {}
+given <where SP2 is T> => SP1 is T {}
+given <where SP1 is T> => SP is T {}
+given SX is T {}
+given <where SX is T, SQ1 is T, SQ2 is T> => SA is T {}
+given <where SP is T> => SQ1 is T {}
+given <where SP is T> => SQ2 is T {}
+given <where SP is T, SA is T> => SA is T {}
+
+fun need<X where X is T>(x: X) {}
+fun f<Y where Y == SA>(y: Y) { need(y) }
+fun g(a: SA) { need(a) }

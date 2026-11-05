@@ -1,0 +1,11 @@
+trait P {}
+struct A {}
+struct B {}
+
+// Loop through an equality: B == A in context; `A is P` <- `B is P` <- `A is P`.
+given <where B is P> => A is P {}
+fun need<T where T is P>(x: T) {}
+fun f<where B == A, A is P>(x: A, y: B) {
+  need(x)
+  need(y)
+}

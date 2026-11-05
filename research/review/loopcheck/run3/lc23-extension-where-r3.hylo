@@ -1,0 +1,16 @@
+trait P { fun p() }
+struct Box<X> {}
+struct A {}
+struct S {}
+struct S1 {}
+struct S2 {}
+
+given S2 is P { fun p() {} }
+given <where S2 is P> => S1 is P { fun p() {} }
+given <where S1 is P> => S is P { fun p() {} }
+given <X where X is P> => Box<X> is P { fun p() {} }
+given <where S is P, Box<A> is P> => Box<A> is P { fun p() {} }
+given <where S is P> => A is P { fun p() {} }
+
+fun use<X where X is P>(x: X) { x.p() }
+fun g(b: Box<A>) { use(b) }

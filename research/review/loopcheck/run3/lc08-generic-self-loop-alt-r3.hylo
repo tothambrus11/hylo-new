@@ -1,0 +1,19 @@
+trait P {}
+trait U refines P {}
+struct S<T> {}
+struct A {}
+struct B {}
+
+// Self-loop plus a real derivation; loopcheck should only drop the self-loop.
+given <T where T is P> => T is P {}
+given <T where S<T> is P> => T is P {}
+given <T where T is P> => S<T> is P {}
+given A is P {}
+
+fun need<where S<S<A>> is P>() {}
+public fun main() { need() }
+
+given B is U {}
+given <where B is P> => B is P {}
+given <where S<B> is P> => B is P {}
+given <where B is P> => S<B> is P {}

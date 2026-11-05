@@ -1,0 +1,15 @@
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+
+given A is P { type X = B }
+given C is Q {}
+given <where C is Q> => B is Q {}
+// Self-referential premise list mixing an associated type and the same head.
+given <T where T is P, T.X is Q, T is Q> => T is Q {}
+given <T where T is P, T.X is Q> => T is Q {}
+
+fun need<T where T is Q>(x: T) {}
+fun g(a: A) { need(a) }
