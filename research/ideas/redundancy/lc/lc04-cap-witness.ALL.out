@@ -1,0 +1,8 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=8393 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+counters.user:   index.fallback=21 index.unavailable=1454 loopcheck.pruned=1 solver.goalSteps=38 solver.systems=19 summon.calls=2 summon.depthExhausted=1 summon.layers=10 summon.matchOK=21 summon.matches=1511 summon.subgoals=22
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+parse     54.65 ms
+scope     11.86 ms
+type.stdlib    380.29 ms
+type.user    175.11 ms

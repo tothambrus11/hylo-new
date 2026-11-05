@@ -1,0 +1,40 @@
+// Penalties across nested scopes with value givens (byHead) and wildcard givens (generic param
+// typed implicit parameters), plus ambiguities within one group.
+trait P { fun f() -> Int }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun use<T is P>(x: T) -> Int { x.f() }
+
+given A is P { fun f() -> Int { 0 } }
+
+fun outer<T where let t: T, let a: A>() {
+  given let a2 = A()
+  check(summon[A])
+  check(summon[T])
+  if true {
+    given A is P { fun f() -> Int { 1 } }
+    given let b = Box<A>()
+    check(summon[A])
+    check(summon[Box<A>])
+    check(summon[P<A>])
+    let x = use(A())
+    if true {
+      given let a3 = A()
+      given let t2: T = summon[T]
+      check(summon[A])
+      check(summon[T])
+    }
+  }
+  check(summon[P<A>])
+}
+
+fun amb<where let a: A, let b: A>() {
+  check(summon[A])
+}
+
+fun wild<T, U where let t: T, let u: U, let a: A>() {
+  check(summon[A])
+  check(summon[T])
+  check(summon[Box<T>])
+}

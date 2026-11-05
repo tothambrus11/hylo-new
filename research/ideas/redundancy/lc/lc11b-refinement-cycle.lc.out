@@ -1,0 +1,9 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=4 loopcheck.pruned=4 solver.goalSteps=52 solver.systems=19 summon.calls=5 summon.layers=24 summon.matchOK=44 summon.matches=2793 summon.subgoals=42
+diagnostics: 2
+   /home/user/hylo-new/research/review/loopcheck/lc11b-refinement-cycle.hylo:8.1-6: error: no given instance of 'P<B<T>>' in this scope
+   /home/user/hylo-new/research/review/loopcheck/lc11b-refinement-cycle.hylo:9.1-6: error: no given instance of 'P<A>' in this scope
+parse    108.08 ms
+scope     55.58 ms
+type.stdlib   2093.14 ms
+type.user    233.67 ms

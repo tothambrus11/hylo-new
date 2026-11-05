@@ -1,0 +1,20 @@
+//! Subsumption bug through truncation (default depth k = 3, no higher-kinded types): the premise
+//! `W<T> is Q` matched against the truncated fact Q(W(S(⊤))) binds T := S(⊤), moving ⊤ up to depth
+//! 2 in the head R(T, U) = R(S(⊤), S(⊤)), which R(v, v) "subsumes". The query
+//! R(S(Box(A)), S(Crate(B))) (truncated: R(S(Box(⊤)), S(Crate(⊤)))) is then wrongly refuted.
+trait Q {}
+trait R<B> {}
+struct W<T> {}
+struct S<T> {}
+struct Box<T> {}
+struct Crate<T> {}
+struct A {}
+struct B {}
+given W<S<Box<A>>> is Q {}
+given W<S<Crate<B>>> is Q {}
+given <T> => T is R<T> {}
+given <T, U where W<T> is Q, W<U> is Q> => T is R<U> {}
+fun need<where S<Box<A>> is R<S<Crate<B>>>>() {}
+public fun main() {
+  need()
+}

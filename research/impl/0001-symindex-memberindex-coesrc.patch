@@ -1,0 +1,243 @@
+From eb313690d54af544bba68731923dc775fe6925b4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 18:43:41 +0000
+Subject: [PATCH] Typer: add symindex, memberindex and coesrc experiments;
+ default absDepth to 2
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Program.swift             |  29 ++++++
+ Sources/FrontEnd/Typer/Typer.swift         | 100 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  13 ++-
+ 3 files changed, 139 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/FrontEnd/Program.swift b/Sources/FrontEnd/Program.swift
+index b800bae..f7a6043 100644
+--- a/Sources/FrontEnd/Program.swift
++++ b/Sources/FrontEnd/Program.swift
+@@ -2002,6 +2002,10 @@ extension Program {
+   ///
+   /// This method must be called before type checking the standard library.
+   internal mutating func initializeStandardLibraryCaches() {
++    if TyperExperiments.symindex {
++      initializeStandardLibraryCachesInOnePass()
++      return
++    }
+     for n in Program.StandardLibraryEntity.allCases {
+       guard
+         let a = identity(module: Module.standardLibraryName),
+@@ -2017,6 +2021,31 @@ extension Program {
+     }
+   }
+ 
++  /// Fills `program.standardLibraryDeclarations` with a single scan of the standard library.
++  ///
++  /// The result is the same as one `select(from:_:)` scan per entity: nodes are visited in the
++  /// same order and matched with the same predicate (`symbol(annotating:)`).
++  private mutating func initializeStandardLibraryCachesInOnePass() {
++    var table: [String: [AnySyntaxIdentity]] = [:]
++    if let a = identity(module: Module.standardLibraryName) {
++      for n in modules.values[a].syntax {
++        if let s = symbol(annotating: n) { table[s, default: []].append(n) }
++      }
++    }
++    for n in Program.StandardLibraryEntity.allCases {
++      guard
++        let b = table[n.rawValue]?.uniqueElement,
++        let d = castToDeclaration(b)
++      else {
++        precondition(
++          allowPartialStandardLibrary,
++          "missing or corrupt standard library; missing \(n.rawValue)")
++        continue
++      }
++      standardLibraryDeclarations[n] = d
++    }
++  }
++
+ }
+ 
+ extension Program {
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 1321a74..b0a4c7d 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -78,6 +78,15 @@ public struct Typer {
+     /// The cache of `Typer.extensions(visibleFrom:)`.
+     fileprivate var scopeToExtensions: [ScopeIdentity: [ExtensionDeclaration.ID]]
+ 
++    /// The cache of `Typer.extensions(named:visibleFrom:)` for nested scopes.
++    fileprivate var scopeToExtensionsByName: [ScopeIdentity: [String: [ExtensionDeclaration.ID]]] = [:]
++
++    /// The cache of `Typer.extensions(named:visibleFrom:)` for top-level scopes.
++    fileprivate var sourceToExtensionsByName: [Int: [String: [ExtensionDeclaration.ID]]] = [:]
++
++    /// The cache of `Typer.traits(named:visibleFrom:)`.
++    fileprivate var scopeToTraitsByName: [ScopeIdentity: [String: [TraitDeclaration.ID]]] = [:]
++
+     /// The cache of `Typer.declarations(lexicallyIn:)`.
+     fileprivate var scopeToLookupTable: [ScopeIdentity: LookupTable]
+ 
+@@ -111,6 +120,9 @@ public struct Typer {
+     /// The cache of `Typer.standardLibraryType(_:)`.
+     fileprivate var standardLibraryEntityToType: [Program.StandardLibraryEntity: AnyTypeIdentity]
+ 
++    /// The givens known not to be usable to derive a coercion, whatever the queried types.
++    fileprivate var notCoercionSources: Set<Given> = []
++
+     /// The cache of `Typer.canDeriveCoercion(_:applying:)`.
+     fileprivate var canDeriveCoercion: [Given: [TypePair: UInt8]]
+ 
+@@ -4272,6 +4284,12 @@ public struct Typer {
+       sources = Array(givens(visibleFrom: scopeOfUse).joined())
+     }
+     for g in chain(environment.givens, sources)  {
++      // Experiment: skip givens whose head can never form a coercion. `canDeriveCoercion` would
++      // return `0b00` for them, which does not change `result`.
++      if TyperExperiments.coesrc && cache.notCoercionSources.contains(g) {
++        TyperCounters.bump("coesrc.skipped")
++        continue
++      }
+       result |= canDeriveCoercion(p, applying: g)
+       if result == 0b11 {
+         if memoizable && !hasImplicitOnStack() {
+@@ -4333,6 +4351,10 @@ public struct Typer {
+     if memoizable {
+       cache.canDeriveCoercion[g, default: [:]][p] = 0b00
+     }
++    // This classification only depends on `t`; record it if `t` is final.
++    if TyperExperiments.coesrc && !hasImplicitOnStack() && !t.properties.contains(.hasError) {
++      cache.notCoercionSources.insert(g)
++    }
+     return 0b00
+   }
+ 
+@@ -4666,6 +4688,11 @@ public struct Typer {
+     _ n: Name, memberInExtensionOf q: AnyTypeIdentity, visibleFrom scopeOfUse: ScopeIdentity,
+     statically selectionIsStatic: Bool
+   ) -> [NameResolutionCandidate] {
++    if TyperExperiments.memberindex {
++      let es = extensions(named: n.identifier, visibleFrom: scopeOfUse)
++      return resolve(
++        n, declaredIn: es, applyingTo: q, in: scopeOfUse, statically: selectionIsStatic)
++    }
+     let es = extensions(visibleFrom: scopeOfUse)
+     return resolve(n, declaredIn: es, applyingTo: q, in: scopeOfUse, statically: selectionIsStatic)
+   }
+@@ -4821,7 +4848,12 @@ public struct Typer {
+     _ name: Name, memberOfTraitVisibleFrom scopeOfUse: ScopeIdentity
+   ) -> [(concept: TraitDeclaration.ID, members: [DeclarationIdentity])] {
+     var result: [(concept: TraitDeclaration.ID, members: [DeclarationIdentity])] = []
+-    for d in traits(visibleFrom: scopeOfUse) {
++    // Experiment: only visit the traits declaring a member whose identifier is that of `name`.
++    // The other traits have an empty lookup table entry and contribute nothing.
++    let candidates = TyperExperiments.memberindex
++      ? (traits(named: name.identifier, visibleFrom: scopeOfUse))
++      : traits(visibleFrom: scopeOfUse)
++    for d in candidates {
+       let ms = lookup(name, lexicallyIn: .init(node: d)).filter(resolvableWithQualification(_:))
+       if !ms.isEmpty {
+         result.append((concept: d, members: ms))
+@@ -4899,6 +4931,72 @@ public struct Typer {
+     }
+   }
+ 
++  /// Returns the extensions that are visible from `scopeOfUse` and that lexically declare a
++  /// member with identifier `n`, in the order of `extensions(visibleFrom: scopeOfUse)`.
++  private mutating func extensions(
++    named n: String, visibleFrom scopeOfUse: ScopeIdentity
++  ) -> [ExtensionDeclaration.ID] {
++    extensionsByName(visibleFrom: scopeOfUse)[n] ?? []
++  }
++
++  /// Returns the extensions visible from `scopeOfUse` indexed by the identifiers they declare.
++  private mutating func extensionsByName(
++    visibleFrom scopeOfUse: ScopeIdentity
++  ) -> [String: [ExtensionDeclaration.ID]] {
++    if let m = cache.scopeToExtensionsByName[scopeOfUse] {
++      return m
++    } else if let p = program.parent(containing: scopeOfUse) {
++      var m = extensionsByName(visibleFrom: p)
++      for e in program.declarations(of: ExtensionDeclaration.self, lexicallyIn: scopeOfUse) {
++        for k in declarations(lexicallyIn: .init(node: e)).keys { m[k, default: []].append(e) }
++      }
++      cache.scopeToExtensionsByName[scopeOfUse] = m
++      return m
++    } else if let m = cache.sourceToExtensionsByName[scopeOfUse.file.offset] {
++      return m
++    } else {
++      var m: [String: [ExtensionDeclaration.ID]] = [:]
++      for e in extensions(visibleAtTopLevelOf: scopeOfUse.file) {
++        for k in declarations(lexicallyIn: .init(node: e)).keys { m[k, default: []].append(e) }
++      }
++      cache.sourceToExtensionsByName[scopeOfUse.file.offset] = m
++      return m
++    }
++  }
++
++  /// Returns the traits visible from `scopeOfUse` that lexically declare a member with
++  /// identifier `n`, in the order of `traits(visibleFrom: scopeOfUse)`.
++  private mutating func traits(
++    named n: String, visibleFrom scopeOfUse: ScopeIdentity
++  ) -> [TraitDeclaration.ID] {
++    traitsByName(visibleFrom: scopeOfUse)[n] ?? []
++  }
++
++  /// Returns the traits visible from `scopeOfUse` indexed by the identifiers they declare.
++  private mutating func traitsByName(
++    visibleFrom scopeOfUse: ScopeIdentity
++  ) -> [String: [TraitDeclaration.ID]] {
++    if let m = cache.scopeToTraitsByName[scopeOfUse] {
++      return m
++    } else if let p = program.parent(containing: scopeOfUse) {
++      // Mirrors `traits(visibleFrom:)`: the traits of `p` followed by those declared here.
++      var m = traitsByName(visibleFrom: p)
++      let ds = program.declarations(lexicallyIn: scopeOfUse)
++      for d in program.collect(TraitDeclaration.self, in: ds) {
++        for k in declarations(lexicallyIn: .init(node: d)).keys { m[k, default: []].append(d) }
++      }
++      cache.scopeToTraitsByName[scopeOfUse] = m
++      return m
++    } else {
++      var m: [String: [TraitDeclaration.ID]] = [:]
++      for d in traits(visibleFrom: scopeOfUse) {
++        for k in declarations(lexicallyIn: .init(node: d)).keys { m[k, default: []].append(d) }
++      }
++      cache.scopeToTraitsByName[scopeOfUse] = m
++      return m
++    }
++  }
++
+   /// Returns the extensions that are visible from `scopeOfUse`.
+   private mutating func extensions(
+     visibleFrom scopeOfUse: ScopeIdentity
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 94be01f..d66b939 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -61,10 +61,19 @@ public enum TyperExperiments {
+   /// Refute queries using an abstract least model of the givens.
+   nonisolated(unsafe) public static var absmodel: Bool = enabled.contains("absmodel")
+ 
++  /// Index visible extensions and traits by the identifiers of the members they declare.
++  nonisolated(unsafe) public static var memberindex: Bool = enabled.contains("memberindex")
++
++  /// Remember which givens can never be used to derive a coercion.
++  nonisolated(unsafe) public static var coesrc: Bool = enabled.contains("coesrc")
++
++  /// Build the standard library's symbol table in a single pass over its syntax.
++  nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
++
+   /// The truncation depth of the abstract model.
+   nonisolated(unsafe) public static var absDepth: Int = {
+-    guard let p = getenv("HYLO_TC_ABSDEPTH") else { return 3 }
+-    return Int(String(cString: p)) ?? 3
++    guard let p = getenv("HYLO_TC_ABSDEPTH") else { return 2 }
++    return Int(String(cString: p)) ?? 2
+   }()
+ 
+ }
+-- 
+2.43.0
+

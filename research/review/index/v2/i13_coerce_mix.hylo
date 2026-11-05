@@ -1,0 +1,36 @@
+// Coercion sources in outer scopes (index falls back) mixed with inner local givens, and
+// associated-type equalities.
+trait P { type X }
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given Void is P { type X = Void }
+given A is Q {}
+fun check<T>(x: T) {}
+fun g<V where V is Q>() {}
+fun h<V where V is P>() {}
+
+fun f1<T, U where T == U, T is Q>() {
+  g<U>()
+  if true {
+    given Box<A> is Q {}
+    g<Box<A>>()
+    g<U>()
+  }
+}
+
+fun f2<T where T is P, T.X == Void>(x: T.X) {
+  check<Void>(x)
+  h<T>()
+  g<A>()
+}
+
+fun f3<T where T == Box<A>>() {
+  given Box<A> is Q {}
+  g<T>()
+  g<Box<A>>()
+}
+
+fun main() {
+  f2<Void>(x: ())
+}

@@ -1,0 +1,14 @@
+[absmodel] 12/14 identical
+  MISMATCH research/review/absmodel/t01-occurs-cycle.hylo
+      baseline=ok config=crash
+  MISMATCH research/review/absmodel/t03-subsume-hk-k2.hylo
+      --- baseline
+      +++ absmodel
+      @@ -16761 +16761 @@
+      -0:60 : [Void]() let -> Void
+      +0:60 : W<Z, Y> ==> [Void]() let -> Void
+      @@ -16765,2 +16764,0 @@
+      -0:64 -> need
+      -0:64 : W<Z, Y> ==> [Void]() let -> Void
+      @@ -16770,0 +16769 @@
+      +diag /home/user/hylo-new/research/review/absmodel/t03-subsume-hk-k2.hylo:13.3-7: error: no coercion from 'W<Z, Y> ==> [Void]() let -> Void' to '[Void]() let -> Void'

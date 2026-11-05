@@ -1,0 +1,18 @@
+//! Tuples with ⊤ at shallow depth (nonlinear tuple heads vs truncated tuple facts).
+trait P {}
+trait D<B> {}
+struct A {}
+struct C {}
+struct S<T> {}
+given A is P {}
+given C is P {}
+given <T where T is P> => S<T> is P {}
+given <T> => T is D<T> {}
+given <T, U where {T, U} is P> => T is D<U> {}
+given <T is P, U is P> => {T, U} is P {}
+fun need<X, Y where X is D<Y>>() {}
+public fun main() {
+  need<S<S<A>>, S<S<C>>>()
+  need<{A, C}, {C, A}>()
+  need<S<A>, C>()
+}

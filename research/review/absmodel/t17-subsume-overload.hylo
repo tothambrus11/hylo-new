@@ -1,0 +1,18 @@
+//! Same root cause as t16, but the refuted goal is a subgoal (through `W`) and the failure is
+//! observed through a summon expression (elaboration of the witness).
+trait Q {}
+trait R<B> {}
+trait W {}
+struct S<T> {}
+struct Box<T> {}
+struct A {}
+struct B {}
+given S<S<A>> is Q {}
+given S<Box<B>> is Q {}
+given <T> => T is R<T> {}
+given <T, U where S<T> is Q, S<U> is Q> => T is R<U> {}
+given <X where S<A> is R<Box<X>>> => X is W {}
+fun use<X>(x: X) {}
+public fun main() {
+  use(summon[W<B>])
+}

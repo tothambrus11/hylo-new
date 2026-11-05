@@ -1,0 +1,21 @@
+// Evaluation-order hazard: f's coercion goes through `coerced` -> canDeriveCoercions, which in
+// the baseline stops at the where-clause equality (0b11) and forces no other given. With `index`,
+// givenIndex(visibleFrom:) forces the declared type of every visible given, in group order (h
+// first). In the baseline, `kg` then forces g first, by name.
+struct A { public memberwise init }
+struct B { public memberwise init }
+
+fun f<T, U where T == U>(x: T) {
+  let y: U = x
+}
+
+fun kg() {
+  let z = g
+}
+
+given let h = needA()
+given let g = needB()
+
+fun check<T>(x: T) {}
+fun needA<where let a: A>() -> B { B() }
+fun needB<where let b: B>() -> A { A() }

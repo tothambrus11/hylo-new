@@ -1,0 +1,8 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=16546 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+counters.user:   absmodel.built=1 absmodel.facts=65 absmodel.micros=6073 absmodel.work=656 coerced.slowPath=2 index.fallback=4 index.skipped=758 index.unavailable=209 loopcheck.pruned=3 solver.goalSteps=34 solver.systems=8 summon.calls=4 summon.layers=9 summon.matchOK=22 summon.matches=238 summon.subgoals=18
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc15-two-variables.hylo:15.34-38: error: no coercion from '<X, Y> P<M<X, Y>> ==> [Void](let X, let Y) let -> Void' to '[Void](let B, let A) let -> Void'
+parse    135.19 ms
+scope     16.13 ms
+type.stdlib    556.55 ms
+type.user     39.06 ms

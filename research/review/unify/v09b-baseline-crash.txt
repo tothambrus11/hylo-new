@@ -1,0 +1,45 @@
+Fatal error: failed to allocate 337411904 bytes of memory with alignment 8
+
+*** Signal 6: Backtracing from 0x7fc8fec9ec0c... done ***
+
+*** Program crashed: Aborted at 0x0000000000004341 ***
+
+Platform: x86_64 Linux (Ubuntu 24.04.5 LTS)
+
+Thread 0 "tc-bench.real":
+
+  0      0x00007fc8fec455eb sigsuspend + 75 in libc.so.6
+  1 [ra] 0x00007fc8ffec07a8 _dispatch_sigsuspend + 23 in libdispatch.so
+  2 [ra] 0x00007fc8ffebdc49 _dispatch_sig_thread + 8 in libdispatch.so
+  3 [ra] 0x00007fc8fec99420 __nptl_deallocate_tsd + 175 in libc.so.6
+  4 [ra] 0x00007fc8fec2a1d6 __libc_start_call_main + 133 in libc.so.6
+  5 [ra] 0x00007fc8fec2a28b __libc_start_main@GLIBC_2.2.5 + 138 in libc.so.6
+...
+
+Thread 1 "-qos.overcommit":
+
+  0      0x00007fc8fed2a2d2 epoll_wait + 82 in libc.so.6
+  1 [ra] 0x00007fc8ffec7557 _dispatch_event_loop_drain + 54 in libdispatch.so
+  2 [ra] 0x00007fc8ffebd012 _dispatch_mgr_invoke + 129 in libdispatch.so
+  3 [ra] 0x00007fc8ffebcf7d _dispatch_mgr_thread + 108 in libdispatch.so
+  4 [ra] 0x00007fc8ffec01b5 _dispatch_worker_thread + 676 in libdispatch.so
+  5 [ra] 0x00007fc8fec9cb84 start_thread + 899 in libc.so.6
+...
+
+Thread 2 "-qos.overcommit" crashed:
+
+  0                         0x00007fc8fec9ec0c pthread_kill@@GLIBC_2.34 + 284 in libc.so.6
+  1 [ra]                    0x00007fc8fec4527e gsignal + 29 in libc.so.6
+  2 [ra]                    0x00007fc8fec288ff abort + 222 in libc.so.6
+  3 [ra]                    0x00007fc90046ce7c swift::fatalErrorv(unsigned int, char const*, __va_list_tag*) + 139 in libswiftCore.so
+  4 [ra]                    0x00007fc90046cefb swift::fatalError(unsigned int, char const*, ...) + 122 in libswiftCore.so
+  5 [ra]                    0x00007fc90046d04e swift::swift_abortAllocationFailure(unsigned long, unsigned long) + 29 in libswiftCore.so
+  6 [ra]                    0x00007fc90046fd21 swift_slowAlloc + 96 in libswiftCore.so
+  7 [ra]                    0x00007fc900470037 swift_allocObject + 38 in libswiftCore.so
+  8 [ra] [system]           0x000055f16a53cc10 specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:) + 127 in tc-bench.real at //<compiler-generated>
+  9 [ra] [inlined] [system] 0x000055f16a6c50aa specialized Array.append<A>(contentsOf:) in tc-bench.real at //<compiler-generated>
+ 10 [ra]                    0x000055f16a6c50aa Typer.takeSummonResults(from:in:) + 809 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3853:33
+ 11 [ra]                    0x000055f16a691fa9 Typer.summon(_:in:) + 952 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3612:16
+ 12 [ra]                    0x000055f16a69208d Typer.summon(_:in:) + 1180 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3604:16
+ 13 [ra]                    0x000055f16a649521 closure #1 in Solver.diagnoseInvalidCoercion(_:) + 1936 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:272:25
+ 14 [ra]                

@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   solver.goalSteps=44 solver.systems=22 summon.calls=2 summon.layers=10 summon.matchOK=12052 summon.matches=440576 summon.subgoals=12050
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc07-ambiguity-witness.hylo:23.1-6: error: multiple given instance of 'T<SA>' in this scope
+parse     83.73 ms
+scope     16.53 ms
+type.stdlib   1551.22 ms
+type.user  78729.25 ms

@@ -1,0 +1,8 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=8170 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+counters.user:   absmodel.built=1 absmodel.facts=70 absmodel.micros=1876 absmodel.work=749 coerced.slowPath=1 index.skipped=37520 solver.goalSteps=40 solver.systems=19 summon.calls=2 summon.depthExhausted=1 summon.layers=20 summon.matchOK=560 summon.matches=3127 summon.subgoals=560
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc01-shared-lemma-cap.hylo:26.21-25: error: no coercion from 'T<SA> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     58.17 ms
+scope      8.62 ms
+type.stdlib    411.02 ms
+type.user     33.75 ms

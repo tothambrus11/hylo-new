@@ -1,0 +1,17 @@
+//! Goals derivable only because a sibling premise is assumed: the model ignores assumed givens.
+//! Every assumed given is later discharged, so this must stay identical.
+trait P {}
+trait Q {}
+trait R {}
+struct A {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => T is Q {}
+given <T where T is Q, T is P> => S<T> is R {}
+given <T where S<T> is R, T is Q> => T is R {}
+fun needR<T where T is R>() {}
+public fun main() {
+  needR<S<A>>()
+  needR<A>()
+  needR<S<S<A>>>()
+}

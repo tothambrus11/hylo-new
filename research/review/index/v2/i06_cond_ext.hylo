@@ -1,0 +1,34 @@
+// Conditional extensions and conditional conformances; resolution inside extension members.
+trait P { fun f() -> Int }
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+
+fun use<T is P>(x: T) -> Int { x.f() }
+fun check<T>(x: T) {}
+
+given A is P { fun f() -> Int { 1 } }
+given B is Q {}
+given <T where T is P> => Box<T> is P { fun f() -> Int { 2 } }
+given <T, U where T is P, U is Q> => Pair<T, U> is P { fun f() -> Int { 3 } }
+
+extension <T where T is P> Box<T> {
+  fun go() -> Int {
+    check(summon[P<T>])
+    check(summon[P<Box<T>>])
+    check(summon[P<Box<Box<T>>>])
+    return use(Pair<T, B>())
+  }
+}
+
+extension <T, U where T is Q> Pair<T, U> {
+  fun go2() -> Int { use(Pair<A, T>()) }
+}
+
+fun main() {
+  let x = Box<A>().go()
+  let y = Pair<B, A>().go2()
+  let z = Box<B>().go()
+}

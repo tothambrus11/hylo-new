@@ -1,0 +1,20 @@
+//! Goals only derivable through a coercion (equality in a where clause). The function scope has
+//! an equality given, so the model there must be inconclusive.
+trait P {}
+struct A {}
+struct B<T> {}
+given A is P {}
+given <T where T is P> => B<T> is P {}
+fun needP<T where T is P>() {}
+fun f<T, U where T == A, U == B<T>>() {
+  needP<T>()
+  needP<U>()
+  needP<B<U>>()
+}
+fun g<T where T == B<A>>() {
+  needP<B<T>>()
+}
+public fun main() {
+  f<A, B<A>>()
+  g<B<A>>()
+}

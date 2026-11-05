@@ -1,0 +1,36 @@
+// Alias heads: aliases of nominal types, generic aliases, chained aliases, alias of a trait.
+trait P { fun f() -> Int }
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+type XA = A
+type XB = Box<A>
+type XC = XB
+type Id<T> = T
+type BoxOf<T> = Box<T>
+type PP = P
+type T2 = {A, A}
+
+fun use<T is P>(x: T) -> Int { x.f() }
+fun check<T>(x: T) {}
+
+given XA is P { fun f() -> Int { 1 } }
+given XC is P { fun f() -> Int { 2 } }
+given BoxOf<Box<A>> is P { fun f() -> Int { 3 } }
+given Id<T2> is P { fun f() -> Int { 4 } }
+given Box<Box<Box<A>>> is PP { fun f() -> Int { 5 } }
+
+fun main() {
+  check(summon[P<A>])
+  check(summon[P<XA>])
+  check(summon[P<Id<A>>])
+  check(summon[P<Box<A>>])
+  check(summon[PP<XB>])
+  check(summon[P<BoxOf<A>>])
+  check(summon[P<Box<Box<A>>>])
+  check(summon[P<{A, A}>])
+  check(summon[P<Box<Box<Box<A>>>>])
+  check(summon[PP<Id<Box<Box<Box<A>>>>>])
+  let a = use(A())
+  let b = use(Box<A>())
+}

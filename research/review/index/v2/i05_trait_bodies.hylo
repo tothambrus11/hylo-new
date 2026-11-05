@@ -1,0 +1,32 @@
+// Resolution inside trait bodies (.recursive Self given and .nested givens) and refinements.
+trait P { fun f() -> Int }
+trait Q refines P { fun g() -> Int { self.f() } }
+trait R { given Void is P }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+
+fun use<T is P>(x: T) -> Int { x.f() }
+fun useQ<T is Q>(x: T) -> Int { x.g() }
+fun check<T>(x: T) {}
+
+given A is P { fun f() -> Int { 1 } }
+given A is Q {}
+given <T where T is P> => Box<T> is P { fun f() -> Int { 2 } }
+given <T where T is Q> => Box<T> is Q {}
+
+trait S refines Q {
+  fun h() -> Int {
+    check(summon[P<Self>])
+    check(summon[Q<Self>])
+    check(summon[P<Box<Self>>])
+    return useQ(Box<A>()) + use(Box<Box<A>>())
+  }
+}
+
+given <T where T is R> => T is S {}
+
+fun main() {
+  check(summon[P<Box<Box<A>>>])
+  check(summon[Q<Box<A>>])
+  let x = useQ(Box<Box<A>>())
+}

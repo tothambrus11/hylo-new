@@ -1,0 +1,12 @@
+[absmodel] 0/1 identical
+  MISMATCH research/review/absmodel/t23-subsume-trunc-k3.hylo
+      --- baseline
+      +++ absmodel
+      @@ -16793 +16793 @@
+      -0:79 : [Void]() let -> Void
+      +0:79 : R<S<Box<A>>, S<Crate<B>>> ==> [Void]() let -> Void
+      @@ -16798,2 +16797,0 @@
+      -0:83 -> need
+      -0:83 : R<S<Box<A>>, S<Crate<B>>> ==> [Void]() let -> Void
+      @@ -16800,0 +16799 @@
+      +diag /home/user/hylo-new/research/review/absmodel/t23-subsume-trunc-k3.hylo:19.3-7: error: no coercion from 'R<S<Box<A>>, S<Crate<B>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'

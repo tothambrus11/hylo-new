@@ -1,0 +1,115 @@
+Fatal error: failed to allocate 83886112 bytes of memory with alignment 8
+
+*** Signal 6: Backtracing from 0x7f87f9c9ec0c... done ***
+
+*** Program crashed: Aborted at 0x0000000000004a41 ***
+
+Platform: x86_64 Linux (Ubuntu 24.04.5 LTS)
+
+Thread 0 "tc-bench.real":
+
+  0      0x00007f87f9c455eb sigsuspend + 75 in libc.so.6
+  1 [ra] 0x00007f87fb98d7a8 _dispatch_sigsuspend + 23 in libdispatch.so
+  2 [ra] 0x00007f87fb98ac49 _dispatch_sig_thread + 8 in libdispatch.so
+  3 [ra] 0x00007f87f9c99420 __nptl_deallocate_tsd + 175 in libc.so.6
+  4 [ra] 0x00007f87f9c2a1d6 __libc_start_call_main + 133 in libc.so.6
+  5 [ra] 0x00007f87f9c2a28b __libc_start_main@GLIBC_2.2.5 + 138 in libc.so.6
+...
+
+Thread 1 "-qos.overcommit":
+
+  0      0x00007f87f9d2a2d2 epoll_wait + 82 in libc.so.6
+  1 [ra] 0x00007f87fb994557 _dispatch_event_loop_drain + 54 in libdispatch.so
+  2 [ra] 0x00007f87fb98a012 _dispatch_mgr_invoke + 129 in libdispatch.so
+  3 [ra] 0x00007f87fb989f7d _dispatch_mgr_thread + 108 in libdispatch.so
+  4 [ra] 0x00007f87fb98d1b5 _dispatch_worker_thread + 676 in libdispatch.so
+  5 [ra] 0x00007f87f9c9cb84 start_thread + 899 in libc.so.6
+...
+
+Thread 2 "-qos.overcommit" crashed:
+
+  0                         0x00007f87f9c9ec0c pthread_kill@@GLIBC_2.34 + 284 in libc.so.6
+  1 [ra]                    0x00007f87f9c4527e gsignal + 29 in libc.so.6
+  2 [ra]                    0x00007f87f9c288ff abort + 222 in libc.so.6
+  3 [ra]                    0x00007f87fb66ce7c swift::fatalErrorv(unsigned int, char const*, __va_list_tag*) + 139 in libswiftCore.so
+  4 [ra]                    0x00007f87fb66cefb swift::fatalError(unsigned int, char const*, ...) + 122 in libswiftCore.so
+  5 [ra]                    0x00007f87fb66d04e swift::swift_abortAllocationFailure(unsigned long, unsigned long) + 29 in libswiftCore.so
+  6 [ra]                    0x00007f87fb66fd21 swift_slowAlloc + 96 in libswiftCore.so
+  7 [ra]                    0x00007f87fb670037 swift_allocObject + 38 in libswiftCore.so
+  8 [ra] [thunk]            0x00007f87fb4eb467 _ContiguousArrayBuffer.init(_uninitializedCount:minimumCapacity:) + 102 in libswiftCore.so
+  9 [ra] [inlined] [system] 0x000055a59bfc474e specialized Array.init(repeating:count:) in tc-bench.real at //<compiler-generated>
+ 10 [ra] [thunk]            0x000055a59bfc474e StableDictionary.Header.init(count:capacity:end:) + 157 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:48:28
+ 11 [ra]                    0x000055a59bfc521b closure #1 in StableDictionary.reallocate(withCapacity:) + 250 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:341:15
+ 12 [ra] [thunk]            0x000055a59bfc7a01 partial apply for closure #1 in StableDictionary.reallocate(withCapacity:) + 16 in tc-bench.real at //<compiler-generated>
+ 13 [ra]                    0x00007f87fb581f5e static ManagedBuffer.create(minimumCapacity:makingHeaderWith:) + 125 in libswiftCore.so
+ 14 [ra]                    0x000055a59bfc4fea StableDictionary.reallocate(withCapacity:) + 105 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:339:32
+ 15 [ra]                    0x000055a59bfc84be StableDictionary.reserveCapacity(_:) + 109 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:326:5
+ 16 [ra]                    0x000055a59bfc4c85 StableDictionary.insert(key:value:at:) + 116 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:427:5
+ 17 [ra]                    0x000055a59bfc7c49 StableDictionary.assignValue(_:forKey:) + 88 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:256:7
+ 18 [ra]                    0x000055a59bedacbf specialized TypeStore.insert(_:) + 110 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:93:19
+ 19 [ra] [inlined] [system] 0x000055a59beda807 TypeStore.insert(_:) in tc-bench.real at //<compiler-generated>
+ 20 [ra]                    0x000055a59beda807 specialized TypeStore.demand(any:) + 358 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:87:14
+ 21 [ra] [inlined] [system] 0x000055a59becd46c specialized OrderedDictionary.mapValues<A>(_:) in tc-bench.real at //<compiler-generated>
+ 22 [ra] [inlined]          0x000055a59becd46c TypeArguments.mapValues(_:) in tc-bench.real at Sources/FrontEnd/Types/TypeArguments.swift:78:20
+ 23 [ra] [inlined]          0x000055a59becd46c TypeStore.map(_:_:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeApplication.swift:32:23
+ 24 [ra]                    0x000055a59becd46c TypeApplication.modified(in:by:) + 811 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeApplication.swift:32:48
+ 25 [ra] [thunk]            0x000055a59becc8e2 protocol witness for TypeTree.modified(in:by:) in conformance TypeApplication + 33 in tc-bench.real at //<compiler-generated>
+ 26 [ra] [inlined]          0x000055a59bdf4356 TypeStore.map(_:_:) in tc-bench.real at Sources/FrontEnd/Types/TypeStore.swift:825:21
+ 27 [ra] [inlined]          0x000055a59bdf4356 TypeStore.modified(_:by:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/Implication.swift:33:19
+ 28 [ra]                    0x000055a59bdf4356 Implication.modified(in:by:) + 933 in tc-bench.real at Sources/FrontEnd/Types/TypeStore.swift:757:14
+ 29 [ra] [thunk]            0x000055a59bdf3876 protocol witness for TypeTree.modified(in:by:) in conformance Implication + 21 in tc-bench.real at //<compiler-generated>
+ 30 [ra] [inlined]          0x000055a59bedc866 TypeStore.map(_:_:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:825:21
+ 31 [ra] [inlined]          0x000055a59bedc866 TypeStore.modified(_:by:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:939:17
+ 32 [ra]                    0x000055a59bedc866 TypeStore.substitute(_:in:) + 213 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:757:14
+ 33 [ra]                    0x000055a59bf1c908 Typer.formThread(matching:to:in:then:penalties:ancestors:) + 359 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3712:31
+ 34 [ra] [inlined]          0x000055a59bf1eb11 specialized Sequence.reduce<A>(into:_:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3679:17
+ 35 [ra] [inlined]          0x000055a59bf1eb11 Typer.summon(_:in:where:then:penalties:ancestors:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3676:28
+ 36 [ra]                    0x000055a59bf1eb11 Typer.threadContinuation(appending:to:in:) + 2704 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3807:9
+ 37 [ra]                    0x000055a59bf1defb Typer.match(_:in:) + 2234 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3766:14
+ 38 [ra]                    0x000055a59bf1af8c Typer.takeSummonResults(from:in:) + 523 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3851:16
+ 39 [ra]                    0x000055a59bee7fa9 Typer.summon(_:in:) + 952 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3612:16
+ 40 [ra]                    0x000055a59bee808d Typer.summon(_:in:) + 1180 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3604:16
+ 41 [ra]                    0x000055a59bef40bf Typer.check(_:) + 3150 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:574:24
+ 42 [ra]                    0x000055a59bf3c585 Typer.apply() + 324 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:43:53
+ 43 [ra]                    0x000055a59be88878 Program.assignTypes(_:loggingInferenceWhere:) + 199 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Program.swift:101:11
+ 44 [ra]                    0x000055a59c069d04 specialized static TypeCheckBench.main() + 1155 in tc-bench.real at /home/user/hylo-new/Sources/tc-bench/Entry.swift:66:9
+ 45 [async] [system]        0x000055a59c064a20 specialized thunk for @escaping @convention(thin) @async () -> () in tc-bench.real at //<compiler-generated>
+ 46 [async]                 0x00007f87fba435b0 completeTaskAndRelease(swift::AsyncContext*, swift::SwiftError*) in libswift_Concurrency.so
+...
+
+
+Registers:
+
+rax 0x0000000000000000  0
+rdx 0x0000000000004a47  19015
+rcx 0x00007f87f9c9ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+rbx 0x0000000000000006  6
+rsi 0x0000000000004a41  19009
+rdi 0x0000000000004a47  19015
+rbp 0x00007f87f51f88a0  c0 88 1f f5 87 7f 00 00 7e 52 c4 f9 87 7f 00 00  À··õ····~RÄù····
+rsp 0x00007f87f51f8860  00 00 00 00 00 00 00 00 00 34 0d bd e2 a0 d2 62  ·········4·½â Òb
+ r8 0x00007f87ec000090  60 67 15 62 87 7f 00 00 b0 4f 15 62 87 7f 00 00  `g·b····°O·b····
+ r9 0x0000000000000060  96
+r10 0x0000000000000008  8
+r11 0x0000000000000246  582
+r12 0x0000000000000006  6
+r13 0x000000000000004b  75
+r14 0x0000000000000016  22
+r15 0x00007f87f51f8a90  20 00 00 00 30 00 00 00 c0 8a 1f f5 87 7f 00 00   ···0···À··õ····
+rip 0x00007f87f9c9ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+
+rflags 0x0000000000000246  ZF PF
+
+cs 0x0033  fs 0x0000  gs 0x0000
+
+
+Images (15 omitted):
+
+0x000055a59bb4b000–0x000055a59c1c8440 c6e6f183ea9c020eb45e0d1bf454db532644dd8e tc-bench.real           /home/user/hylo-new/research/exp/bin/4587ce9e1a23/tc-bench.real
+0x00007f87f9c00000–0x00007f87f9db0039 a4a7992a8e66555c8141ab2a08a8465ff6e0ea65 libc.so.6               /usr/lib/x86_64-linux-gnu/libc.so.6
+0x00007f87fb200000–0x00007f87fb7d36e0 a08180475bea5e93a03086a2fa212f3c6e7c3938 libswiftCore.so         /opt/swift/usr/lib/swift/linux/libswiftCore.so
+0x00007f87fb958000–0x00007f87fb9a01e0 7dd91cd1a1cc565644073eb28bc62d21fa45266e libdispatch.so          /opt/swift/usr/lib/swift/linux/libdispatch.so
+0x00007f87fb9cd000–0x00007f87fba60588 d22c3d4d98ee76add0651087eefbcf5737338c47 libswift_Concurrency.so /opt/swift/usr/lib/swift/linux/libswift_Concurrency.so
+
+Backtrace took 1.94s
+

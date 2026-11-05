@@ -1,0 +1,49 @@
+trait P0 {}
+trait P1 {}
+trait P2 refines P1 {}
+trait P3 {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+type XA = A
+type XB = Box<A>
+type XC = XB
+type XP = Pair<A, B>
+given {A, A} is P3 {}
+given Pair<A, B> is P0 {}
+given {A, A} is P1 {}
+given <T, U where T == U> => Box<T> is P2 {}
+given <T, U where T == U> => Box<T> is P2 {}
+given A is P0 {}
+given <T where T is P2> => Box<T> is P0 {}
+given {A, A} is P2 {}
+given {B, A} is P2 {}
+fun need0<T is P0>() {}
+fun need1<T is P1>() {}
+fun need2<T is P2>() {}
+fun need3<T is P3>() {}
+fun check<T>(x: T) {}
+fun f0<where let a: A, A is P2>() {
+  if true {
+    need1<XA>()
+  }
+  need2<Box<Box<A>>>()
+  need0<Bool>()
+  need1<Box<XA>>()
+}
+fun f1<T is P3>() {
+  need3<T>()
+  need3<T>()
+}
+fun f2<T, U where T == U, T is P3>() {
+  need1<XA>()
+  need0<Bool>()
+  need2<Box<U>>()
+  need0<XP>()
+}
+fun f3<T, U where T == U, T is P0>() {
+  need1<XB>()
+  need0<T>()
+  need3<U>()
+}

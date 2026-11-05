@@ -1,0 +1,19 @@
+// Givens/premises whose head is a bare quantified parameter (`<T> T`): these are coercion
+// sources (canDeriveCoercion returns 0b11). Checks that index falls back.
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+
+given A is Q {}
+fun need<T is P>() {}
+
+fun f<where let w: <T> T>() {
+  need<A>()
+}
+
+given <where let w: <T> T> => Box<A> is P {}
+
+fun g() {
+  need<Box<A>>()
+}

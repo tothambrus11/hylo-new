@@ -1,0 +1,109 @@
+Fatal error: failed to allocate 402653240 bytes of memory with alignment 8
+
+*** Signal 6: Backtracing from 0x7f20df49ec0c... done ***
+
+*** Program crashed: Aborted at 0x0000000000005b68 ***
+
+Platform: x86_64 Linux (Ubuntu 24.04.5 LTS)
+
+Thread 0 "tc-bench.real":
+
+  0      0x00007f20df4455eb sigsuspend + 75 in libc.so.6
+  1 [ra] 0x00007f20e06b07a8 _dispatch_sigsuspend + 23 in libdispatch.so
+  2 [ra] 0x00007f20e06adc49 _dispatch_sig_thread + 8 in libdispatch.so
+  3 [ra] 0x00007f20df499420 __nptl_deallocate_tsd + 175 in libc.so.6
+  4 [ra] 0x00007f20df42a1d6 __libc_start_call_main + 133 in libc.so.6
+  5 [ra] 0x00007f20df42a28b __libc_start_main@GLIBC_2.2.5 + 138 in libc.so.6
+...
+
+Thread 1 "-qos.overcommit":
+
+  0      0x00007f20df52a2d2 epoll_wait + 82 in libc.so.6
+  1 [ra] 0x00007f20e06b7557 _dispatch_event_loop_drain + 54 in libdispatch.so
+  2 [ra] 0x00007f20e06ad012 _dispatch_mgr_invoke + 129 in libdispatch.so
+  3 [ra] 0x00007f20e06acf7d _dispatch_mgr_thread + 108 in libdispatch.so
+  4 [ra] 0x00007f20e06b01b5 _dispatch_worker_thread + 676 in libdispatch.so
+  5 [ra] 0x00007f20df49cb84 start_thread + 899 in libc.so.6
+...
+
+Thread 2 "-qos.overcommit" crashed:
+
+  0                         0x00007f20df49ec0c pthread_kill@@GLIBC_2.34 + 284 in libc.so.6
+  1 [ra]                    0x00007f20df44527e gsignal + 29 in libc.so.6
+  2 [ra]                    0x00007f20df4288ff abort + 222 in libc.so.6
+  3 [ra]                    0x00007f20e0c6ce7c swift::fatalErrorv(unsigned int, char const*, __va_list_tag*) + 139 in libswiftCore.so
+  4 [ra]                    0x00007f20e0c6cefb swift::fatalError(unsigned int, char const*, ...) + 122 in libswiftCore.so
+  5 [ra]                    0x00007f20e0c6d04e swift::swift_abortAllocationFailure(unsigned long, unsigned long) + 29 in libswiftCore.so
+  6 [ra]                    0x00007f20e0c6fd21 swift_slowAlloc + 96 in libswiftCore.so
+  7 [ra]                    0x00007f20e0c70037 swift_allocObject + 38 in libswiftCore.so
+  8 [ra]                    0x00007f20e0b81f4e static ManagedBuffer.create(minimumCapacity:makingHeaderWith:) + 109 in libswiftCore.so
+  9 [ra]                    0x000055e8e06c6fea StableDictionary.reallocate(withCapacity:) + 105 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:339:32
+ 10 [ra]                    0x000055e8e06ca4be StableDictionary.reserveCapacity(_:) + 109 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:326:5
+ 11 [ra]                    0x000055e8e06c6c85 StableDictionary.insert(key:value:at:) + 116 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:427:5
+ 12 [ra]                    0x000055e8e06c9c49 StableDictionary.assignValue(_:forKey:) + 88 in tc-bench.real at /home/user/hylo-new/Sources/StableCollections/StableDictionary.swift:256:7
+ 13 [ra]                    0x000055e8e05dccbf specialized TypeStore.insert(_:) + 110 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:93:19
+ 14 [ra] [inlined] [system] 0x000055e8e05dc807 TypeStore.insert(_:) in tc-bench.real at //<compiler-generated>
+ 15 [ra]                    0x000055e8e05dc807 specialized TypeStore.demand(any:) + 358 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:87:14
+ 16 [ra] [inlined] [system] 0x000055e8e05de884 TypeStore.map(_:_:) in tc-bench.real at //<compiler-generated>
+ 17 [ra] [inlined]          0x000055e8e05de884 TypeStore.modified(_:by:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:939:17
+ 18 [ra] [inlined]          0x000055e8e05de884 TypeStore.demand(any:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:757:14
+ 19 [ra]                    0x000055e8e05de884 TypeStore.substitute(_:in:) + 243 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Types/TypeStore.swift:826:12
+ 20 [ra]                    0x000055e8e061e908 Typer.formThread(matching:to:in:then:penalties:ancestors:) + 359 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3712:31
+ 21 [ra] [inlined]          0x000055e8e0620b11 specialized Sequence.reduce<A>(into:_:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3679:17
+ 22 [ra] [inlined]          0x000055e8e0620b11 Typer.summon(_:in:where:then:penalties:ancestors:) in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3676:28
+ 23 [ra]                    0x000055e8e0620b11 Typer.threadContinuation(appending:to:in:) + 2704 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3807:9
+ 24 [ra]                    0x000055e8e061fefb Typer.match(_:in:) + 2234 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3766:14
+ 25 [ra]                    0x000055e8e061cf8c Typer.takeSummonResults(from:in:) + 523 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3851:16
+ 26 [ra]                    0x000055e8e05e9fa9 Typer.summon(_:in:) + 952 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:3612:16
+ 27 [ra]                    0x000055e8e05a1521 closure #1 in Solver.diagnoseInvalidCoercion(_:) + 1936 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:272:25
+ 28 [ra]                    0x000055e8e05a295f specialized closure #3 in Solver.solve(call:) + 78 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:399:9
+ 29 [ra]                    0x000055e8e05a0b1a Solver.formSolution() + 841 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:717:9
+ 30 [ra]                    0x000055e8e059a8a6 Solver.solution(betterThanOrEqualTo:using:) + 1925 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:182:12
+ 31 [ra]                    0x000055e8e059a0bc Solver.solution(using:) + 635 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Solver.swift:91:12
+ 32 [ra]                    0x000055e8e0602ded specialized Typer.discharge<A>(_:relatedTo:) + 700 in tc-bench.real
+ 33 [ra]                    0x000055e8e05f9244 Typer.check(_:requiring:reason:) + 563 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:1122:5
+ 34 [ra]                    0x000055e8e05fde60 Typer.check(_:requiring:) + 639 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:1216:7
+ 35 [ra]                    0x000055e8e05f772f Typer.check(_:) + 750 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:645:5
+ 36 [ra]                    0x000055e8e063e585 Typer.apply() + 324 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Typer/Typer.swift:43:53
+ 37 [ra]                    0x000055e8e058a878 Program.assignTypes(_:loggingInferenceWhere:) + 199 in tc-bench.real at /home/user/hylo-new/Sources/FrontEnd/Program.swift:101:11
+ 38 [ra]                    0x000055e8e076bd04 specialized static TypeCheckBench.main() + 1155 in tc-bench.real at /home/user/hylo-new/Sources/tc-bench/Entry.swift:66:9
+ 39 [async] [system]        0x000055e8e0766a20 specialized thunk for @escaping @convention(thin) @async () -> () in tc-bench.real at //<compiler-generated>
+ 40 [async]                 0x00007f20e104d5b0 completeTaskAndRelease(swift::AsyncContext*, swift::SwiftError*) in libswift_Concurrency.so
+...
+
+
+Registers:
+
+rax 0x0000000000000000  0
+rdx 0x0000000000005b6f  23407
+rcx 0x00007f20df49ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+rbx 0x0000000000000006  6
+rsi 0x0000000000005b68  23400
+rdi 0x0000000000005b6f  23407
+rbp 0x00007f20da1f6f60  80 6f 1f da 20 7f 00 00 7e 52 44 df 20 7f 00 00  ·o·Ú ···~RDß ···
+rsp 0x00007f20da1f6f20  00 00 00 00 00 00 00 00 00 0a 11 6a f0 af 7f b6  ···········jð¯·¶
+ r8 0x00007f20c0000090  f0 6c 1b 65 20 7f 00 00 80 15 1b 65 20 7f 00 00  ðl·e ······e ···
+ r9 0x0000000000000060  96
+r10 0x0000000000000008  8
+r11 0x0000000000000246  582
+r12 0x0000000000000006  6
+r13 0x000000000000004c  76
+r14 0x0000000000000016  22
+r15 0x00007f20da1f7150  20 00 00 00 30 00 00 00 80 71 1f da 20 7f 00 00   ···0····q·Ú ···
+rip 0x00007f20df49ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+
+rflags 0x0000000000000246  ZF PF
+
+cs 0x0033  fs 0x0000  gs 0x0000
+
+
+Images (15 omitted):
+
+0x000055e8e024d000–0x000055e8e08ca440 c6e6f183ea9c020eb45e0d1bf454db532644dd8e tc-bench.real           /home/user/hylo-new/research/exp/bin/4587ce9e1a23/tc-bench.real
+0x00007f20df400000–0x00007f20df5b0039 a4a7992a8e66555c8141ab2a08a8465ff6e0ea65 libc.so.6               /usr/lib/x86_64-linux-gnu/libc.so.6
+0x00007f20e067b000–0x00007f20e06c31e0 7dd91cd1a1cc565644073eb28bc62d21fa45266e libdispatch.so          /opt/swift/usr/lib/swift/linux/libdispatch.so
+0x00007f20e0800000–0x00007f20e0dd36e0 a08180475bea5e93a03086a2fa212f3c6e7c3938 libswiftCore.so         /opt/swift/usr/lib/swift/linux/libswiftCore.so
+0x00007f20e0fd7000–0x00007f20e106a588 d22c3d4d98ee76add0651087eefbcf5737338c47 libswift_Concurrency.so /opt/swift/usr/lib/swift/linux/libswift_Concurrency.so
+
+Backtrace took 2.12s
+

@@ -1,0 +1,11 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=3 loopcheck.pruned=37 names.appliesCalls=8 solver.goalSteps=43 solver.systems=17 summon.calls=5 summon.depthExhausted=3 summon.layers=52 summon.matchOK=126 summon.matches=5987 summon.subgoals=126
+diagnostics: 4
+   /home/user/hylo-new/research/review/loopcheck/lc14-equality-context.hylo:10.1-6: error: no implementation of associated type requirement 'X'
+   /home/user/hylo-new/research/review/loopcheck/lc14-equality-context.hylo:10.16: error: expected declaration
+   /home/user/hylo-new/research/review/loopcheck/lc14-equality-context.hylo:15.49-54: error: no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let T¹) let -> Void'
+   /home/user/hylo-new/research/review/loopcheck/lc14-equality-context.hylo:17.1-6: error: no given instance of 'Q<A>' in this scope
+parse     71.89 ms
+scope      8.71 ms
+type.stdlib   1252.08 ms
+type.user    355.25 ms

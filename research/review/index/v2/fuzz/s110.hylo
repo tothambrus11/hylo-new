@@ -1,0 +1,49 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+type XA = A
+type XB = Box<A>
+type XC = XB
+type XP = Pair<A, B>
+given {B, A} is P2 {}
+given A is P2 {}
+given Box<B> is P2 {}
+given <T where T is P0> => Box<T> is P1 {}
+given <T where T == A> => T is P2 {}
+given A is P2 {}
+given <T> => Box<T> is P1 {}
+given <where Box<XA> is P1> => Box<B> is P1 {}
+given {B, B} is P2 {}
+fun need0<T is P0>() {}
+fun need1<T is P1>() {}
+fun need2<T is P2>() {}
+fun check<T>(x: T) {}
+fun f0<T is P1>() {
+  need0<T>()
+  if true {
+    check(summon[P0<T>])
+    given <where Pair<A, B> is P0> => XB is P2 {}
+    given Int is P1 {}
+    given <T> => Box<T> is P1 {}
+  }
+  need1<Pair<T, A>>()
+  need2<Box<T>>()
+}
+fun f1<where let a: A, Box<A> is P2>() {
+  check(summon[P0<Box<A>>])
+}
+fun f2() {
+  need0<Pair<A, B>>()
+  need0<B>()
+  if true {
+    given let la = A()
+    need0<XC>()
+  }
+  if true {
+    given {A, A} is P0 {}
+  }
+}

@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=2 solver.goalSteps=34 solver.systems=8 summon.calls=4 summon.layers=9 summon.matchOK=22 summon.matches=739 summon.subgoals=18
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc15-two-variables.hylo:15.34-38: error: no coercion from '<X, Y> P<M<X, Y>> ==> [Void](let X, let Y) let -> Void' to '[Void](let B, let A) let -> Void'
+parse    150.15 ms
+scope     26.15 ms
+type.stdlib   1393.08 ms
+type.user     66.86 ms

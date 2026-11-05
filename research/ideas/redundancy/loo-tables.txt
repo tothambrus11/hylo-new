@@ -1,0 +1,160 @@
+empty [stdlib]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base              699     41452       818      5679                                                                            7332                           316      9484               2701.7
+ALL               291      3541       266       227      8846       888        35       104      1399     14783                  32      7184       338       316     10622               1142.0
+-names            646     14079       765      5473     18800      1367        85       225      1399     14783                7216                 338       316     10622               1041.3
+-unify            291      3541       266       227      8846       888        35       104      1399     14783                  32      7184       338       316     10622               1097.5
+-index            291     11180       266       227                                     104      1399     14783                  32      7184       338       316     10622               1139.5
+-absmodel         327      4057       302       341     17756       888        35                                                32      7184       338       316     10622                933.2
+-solver           291      3541       266       227      8846       888        35       104      1399     14783                  32      7300                 316      9484                795.5
+-loopcheck        291      3541       266       227      8846       888        35       104      1399     14783                  32      7184       338       316     10622                870.2
+names             327     20052       302       341                                                                              32      7300                 316      9484               1467.0
+unify             699     41452       818      5679                                                                            7332                           316      9484               1900.7
+index             699     15051       818      5679     36081      1353        85                                              7332                           316      9484               1227.5
+absmodel          646     29955       765      5532                                     225      1399     14783                7332                           316      9484               1937.9
+solver            699     41393       818      5620                                                                            7216                 338       316     10622               2618.9
+loopcheck         699     41452       818      5679                                                                            7332                           316      9484               1754.0
+breadth80 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base               80    517680       160       160                                                                                                                   13280              96709.1
+ALL                80      6480       160       160    510960                                    6463       654                                                       13280                355.2
+-names             80      6480       160       160    510960                                    6463       654                                                       13280                399.8
+-unify             80      6480       160       160    510960                                    6463       654                                                       13280                346.1
+-index             80    517680       160       160                                              6463       654                                                       13280             254632.3
+-absmodel          80      6480       160       160    510960                                                                                                         13280                358.8
+-solver            80      6480       160       160    510960                                    6463       654                                                       13280                426.1
+-loopcheck         80      6480       160       160    510960                                    6463       654                                                       13280                434.0
+names              80    517680       160       160                                                                                                                   13280             257720.5
+unify              80    517680       160       160                                                                                                                   13280             258380.0
+index              80      6480       160       160    510960                                                                                                         13280                352.9
+absmodel           80    517680       160       160                                              6463       654                                                       13280             259181.6
+solver             80    517680       160       160                                                                                                                   13280             141483.4
+loopcheck          80    517680       160       160                                                                                                                   13280             137592.3
+chain8 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base                9       649        10        10                                                                                                                      30                 29.0
+ALL                 9        19        10        10       603                                      65       656                                                          30                  2.6
+-names              9        19        10        10       603                                      65       656                                                          30                  8.7
+-unify              9        19        10        10       603                                      65       656                                                          30                  3.8
+-index              9       649        10        10                                                65       656                                                          30                 18.7
+-absmodel           9        19        10        10       603                                                                                                            30                  2.1
+-solver             9        19        10        10       603                                      65       656                                                          30                  3.2
+-loopcheck          9        19        10        10       603                                      65       656                                                          30                  4.5
+names               9       649        10        10                                                                                                                      30                 20.8
+unify               9       649        10        10                                                                                                                      30                 29.0
+index               9        19        10        10       603                                                                                                            30                  5.1
+absmodel            9       649        10        10                                                65       656                                                          30                 19.6
+solver              9       649        10        10                                                                                                                      30                 25.1
+loopcheck           9       649        10        10                                                                                                                      30                 23.5
+chain9 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base               20      1369        20        20                                                                                                                      32         1       37.3
+ALL                20        39        20        20      1340                                      65       656                                                          32         1        7.2
+-names             20        39        20        20      1340                                      65       656                                                          32         1        6.6
+-unify             20        39        20        20      1340                                      65       656                                                          32         1        4.6
+-index             20      1369        20        20                                                65       656                                                          32         1       15.7
+-absmodel          20        39        20        20      1340                                                                                                            32         1        1.8
+-solver            20        39        20        20      1340                                      65       656                                                          32         1        5.6
+-loopcheck         20        39        20        20      1340                                      65       656                                                          32         1        3.2
+names              20      1369        20        20                                                                                                                      32         1       22.5
+unify              20      1369        20        20                                                                                                                      32         1       27.2
+index              20        39        20        20      1340                                                                                                            32         1        4.7
+absmodel           20      1369        20        20                                                65       656                                                          32         1       21.6
+solver             20      1369        20        20                                                                                                                      32         1       42.4
+loopcheck          20      1369        20        20                                                                                                                      32         1       49.1
+div-dead-20 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base              211     13700       210       210                                                                                                                     128        21      204.4
+ALL                21        20        20        20                                      21        63       654                                                         128                  3.8
+-names             21        20        20        20                                      21        63       654                                                         128                  8.4
+-unify             21        20        20        20                                      21        63       654                                                         128                  7.5
+-index             21        20        20        20                                      21        63       654                                                         128                  6.9
+-absmodel          63       104        62        62      2814                                                          21                                               128                  2.9
+-solver            21        20        20        20                                      21        63       654                                                         128                  5.5
+-loopcheck         21        20        20        20                                      21        63       654                                                         128                  6.4
+names             211     13700       210       210                                                                                                                     128        21      175.1
+unify             211     13700       210       210                                                                                                                     128        21      177.9
+index             211       400       210       210     14137                                                                                                           128        21       12.3
+absmodel           21        20        20        20                                      21        63       654                                                         128                 10.8
+solver            211     13700       210       210                                                                                                                     128        21      168.5
+loopcheck          63      3044        62        62                                                                    21                                               128                 59.9
+div-grow-20 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base              211     13700       210       210                                                                                                                     128        21      204.9
+ALL                21        20        20        20                                      21        64       655                                                         128                  4.3
+-names             21        20        20        20                                      21        64       655                                                         128                 11.7
+-unify             21        20        20        20                                      21        64       655                                                         128                  5.5
+-index             21        20        20        20                                      21        64       655                                                         128                 10.3
+-absmodel         211       400       210       210     14137                                                                                                           128        21       22.2
+-solver            21        20        20        20                                      21        64       655                                                         128                  4.1
+-loopcheck         21        20        20        20                                      21        64       655                                                         128                  3.5
+names             211     13700       210       210                                                                                                                     128        21      216.9
+unify             211     13700       210       210                                                                                                                     128        21      181.9
+index             211       400       210       210     14137                                                                                                           128        21       15.4
+absmodel           21        20        20        20                                      21        64       655                                                         128                 10.3
+solver            211     13700       210       210                                                                                                                     128        21      169.6
+loopcheck         211     13700       210       210                                                                                                                     128        21      171.1
+div-loop-20 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base              211     13700       210       210                                                                                                                     126        21      224.8
+ALL                21        20        20        20                                      21        64       655                                                         126                  6.2
+-names             21        20        20        20                                      21        64       655                                                         126                 11.7
+-unify             21        20        20        20                                      21        64       655                                                         126                  4.3
+-index             21        20        20        20                                      21        64       655                                                         126                  7.1
+-absmodel          42        62        41        41      1407                                                          21                                               126                  6.7
+-solver            21        20        20        20                                      21        64       655                                                         126                  6.9
+-loopcheck         21        20        20        20                                      21        64       655                                                         126                  3.8
+names             211     13700       210       210                                                                                                                     126        21      196.4
+unify             211     13700       210       210                                                                                                                     126        21      223.8
+index             211       400       210       210     14137                                                                                                           126        21       25.0
+absmodel           21        20        20        20                                      21        64       655                                                         126                 20.9
+solver            211     13700       210       210                                                                                                                     126        21      193.9
+loopcheck          42      1532        41        41                                                                    21                                               126                 55.7
+members-big [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base             4200   4262000      4000   3972200                                                                         4008000                                   11000              22347.3
+ALL               200                                                                   200        63       654                1000   4007000                         11000               1252.1
+-names           2200   3968000      2000   3968000                                    2200        63       654             4008000                                   11000              14377.4
+-unify            200                                                                   200        63       654                1000   4007000                         11000               1218.6
+-index            200                                                                   200        63       654                1000   4007000                         11000                935.3
+-absmodel         200      1200                 200     12200                                                                  1000   4007000                         11000               1830.2
+-solver           200                                                                   200        63       654                1000   4007000                         11000               2371.9
+-loopcheck        200                                                                   200        63       654                1000   4007000                         11000               2122.1
+names             200     14000                 200                                                                            1000   4007000                         11000               1575.8
+unify            4200   4262000      4000   3972200                                                                         4008000                                   11000              25395.7
+index            4200   4013200      4000   3972200    236200                                                               4008000                                   11000              20897.4
+absmodel         2200   3968000      2000   3968000                                    2200        63       654             4008000                                   11000              27402.3
+solver           4200   4262000      4000   3972200                                                                         4008000                                   11000              28421.0
+loopcheck        4200   4262000      4000   3972200                                                                         4008000                                   11000              28494.2
+ovl-8-8 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base            72272   5254169     72256    267401                                                                          144512                         36128    384715              79733.3
+ALL                16       112                 112                                      16        63       654                            32        64                 435                 10.9
+-names             24       144         8       144                                      24        63       654                  32                  64                 435                 15.0
+-unify             16       112                 112                                      16        63       654                            32        64                 435                  5.6
+-index             16       112                 112                                      16        63       654                            32        64                 435                 18.0
+-absmodel          16       208                 128       976                                                                              32        64                 435                  6.0
+-solver            16     50617               50617                                      16        63       654                        144512               36128    384715               3913.0
+-loopcheck         16       112                 112                                      16        63       654                            32        64                 435                  8.7
+names              16     51737               50633                                                                                    144512               36128    384715               3792.4
+unify           72272   5254169     72256    267401                                                                          144512                         36128    384715              71859.0
+index           72272    990041     72256    267401   4047312                                                                144512                         36128    384715              16023.5
+absmodel        36144    195129     36128    195129                                   36144        63       654              144512                         36128    384715               6412.4
+solver             32      2384        16       176                                                                              32                  64                 435                 74.3
+loopcheck       72272   5254169     72256    267401                                                                          144512                         36128    384715              81354.3
+ovr-3-10 [user]
+cfg          subgoals   matches   matchOK    layers   skipped unavailab  fallback   refuted     facts      work    pruned appliesCa skippedEx    probes     forks goalSteps depthExha         ms
+base               12     76634         6     75806                                                                              12                         88572    468008               5673.2
+ALL                 6        20                  20                                       6        63       654                            12        30                 214                  6.9
+-names              9        32         3        32                                       9        63       654                  12                  30                 214                 10.7
+-unify              6        20                  20                                       6        63       654                            12        30                 214                  5.4
+-index              6        20                  20                                       6        63       654                            12        30                 214                 11.7
+-absmodel           6        56                  26       366                                                                              12        30                 214                  3.5
+-solver             6     75782               75782                                       6        63       654                            12               88572    468008               3649.8
+-loopcheck          6        20                  20                                       6        63       654                            12        30                 214                  5.0
+names               6     76202               75788                                                                                        12               88572    468008               4996.1
+unify              12     76634         6     75806                                                                              12                         88572    468008               5170.3
+index              12     75896         6     75806       702                                                                    12                         88572    468008               4519.6
+absmodel            9     75794         3     75794                                       9        63       654                  12                         88572    468008               3761.0
+solver             12       872         6        44                                                                              12                  30                 214                 44.2
+loopcheck          12     76634         6     75806                                                                              12                         88572    468008               4356.6

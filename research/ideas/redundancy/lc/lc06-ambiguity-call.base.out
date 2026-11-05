@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=1 solver.goalSteps=42 solver.systems=20 summon.calls=1 summon.layers=19 summon.matchOK=7447 summon.matches=257549 summon.subgoals=7442
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc06-ambiguity-call.hylo:25.3-7: error: no coercion from 'T<SA> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse    128.27 ms
+scope     18.27 ms
+type.stdlib   2020.16 ms
+type.user  13265.71 ms

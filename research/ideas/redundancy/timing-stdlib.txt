@@ -1,0 +1,15 @@
+1 ALL 477.10
+1 nounify 461.11
+1 nolc 481.83
+1 noabs 473.08
+1 nosolver 432.85
+2 ALL 472.29
+2 nounify 408.11
+2 nolc 389.90
+2 noabs 455.45
+2 nosolver 400.51
+3 ALL 388.95
+3 nounify 393.78
+3 nolc 343.71
+3 noabs 387.40
+3 nosolver 353.97

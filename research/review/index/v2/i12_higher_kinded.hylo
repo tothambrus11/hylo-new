@@ -1,0 +1,23 @@
+// Higher-kinded heads: TypeApplication whose abstraction is a generic parameter (nominalHead nil)
+// on both the query side and the given side.
+trait P {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+
+given <T> => Box<T> is P {}
+given A is P {}
+
+fun f<F :: * -> *, U where F<U> is P, let w: F<A>>() {
+  check(summon[P<F<U>>])
+  check(summon[F<A>])
+  check(summon[P<Box<U>>])
+  check(summon[P<A>])
+  check(summon[Box<A>])
+}
+
+fun g<F :: * -> *>(x: F<A>) {}
+
+fun main() {
+  f<Box, A>()
+}

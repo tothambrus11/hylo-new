@@ -1,0 +1,9 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=16420 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 index.fallback=35 index.skipped=8846 index.unavailable=888 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=3541 summon.subgoals=291
+counters.user:   absmodel.built=2 absmodel.facts=143 absmodel.micros=1916 absmodel.refuted=3 absmodel.work=1347 coerced.slowPath=4 index.fallback=10 index.skipped=1811 index.unavailable=735 loopcheck.pruned=4 solver.goalSteps=52 solver.systems=19 summon.calls=5 summon.layers=24 summon.matchOK=44 summon.matches=824 summon.subgoals=42
+diagnostics: 2
+   /home/user/hylo-new/research/review/loopcheck/lc11b-refinement-cycle.hylo:8.1-6: error: no given instance of 'P<B<T>>' in this scope
+   /home/user/hylo-new/research/review/loopcheck/lc11b-refinement-cycle.hylo:9.1-6: error: no given instance of 'P<A>' in this scope
+parse     90.00 ms
+scope     12.72 ms
+type.stdlib    634.50 ms
+type.user    143.95 ms

@@ -1,0 +1,7 @@
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=16940 absmodel.refuted=104 absmodel.work=14783 coerced.slowPath=54 names.appliesCalls=32 names.skippedExtensions=7184 solver.forks=316 solver.goalSteps=10622 solver.overloads=158 solver.probedChoices=338 solver.probes=338 solver.prunedChoices=0 solver.refreshScans=3052 solver.systems=798 summon.cacheHits=1206 summon.calls=3071 summon.layers=227 summon.matchOK=266 summon.matches=11180 summon.subgoals=291
+counters.user:   
+diagnostics: 0
+parse    122.74 ms
+scope     13.99 ms
+type.stdlib   1139.51 ms
+type.user     14.81 ms

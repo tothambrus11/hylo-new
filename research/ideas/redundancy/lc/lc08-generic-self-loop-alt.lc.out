@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=1 loopcheck.pruned=49 solver.goalSteps=48 solver.systems=17 summon.calls=2 summon.depthExhausted=1 summon.layers=14 summon.matchOK=100 summon.matches=3441 summon.subgoals=100
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc08-generic-self-loop-alt.hylo:16.1-6: error: no given instance of 'P<B>' in this scope
+parse    140.59 ms
+scope     12.78 ms
+type.stdlib   1577.11 ms
+type.user    143.08 ms

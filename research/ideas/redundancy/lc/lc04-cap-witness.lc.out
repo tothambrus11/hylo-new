@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   loopcheck.pruned=1 solver.goalSteps=38 solver.systems=19 summon.calls=2 summon.depthExhausted=1 summon.layers=10 summon.matchOK=21 summon.matches=1511 summon.subgoals=22
+diagnostics: 1
+   /home/user/hylo-new/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+parse     81.81 ms
+scope     34.15 ms
+type.stdlib   1205.83 ms
+type.user    247.00 ms

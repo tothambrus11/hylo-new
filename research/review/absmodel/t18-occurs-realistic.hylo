@@ -1,0 +1,16 @@
+//! Missing occurs check: bottom-up evaluation unifies the premise `T is Eq<List<T>>`
+//! (Eq(T, List(T))) with the fact Eq(U, U) from the reflexive given, binding T := List(T).
+//! Applying the substitution to the head then recurses forever (stack overflow / SIGSEGV).
+//! The program never asks for `Ord` at all; any implicit resolution in the module crashes.
+trait Eq<Other> {}
+trait Ord {}
+trait Show {}
+struct List<T> {}
+struct Int2 {}
+given <U> => U is Eq<U> {}
+given <T where T is Eq<List<T>>> => T is Ord {}
+given Int2 is Show {}
+fun show<T where T is Show>() {}
+public fun main() {
+  show<Int2>()
+}

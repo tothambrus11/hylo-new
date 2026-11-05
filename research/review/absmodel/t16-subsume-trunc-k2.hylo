@@ -1,0 +1,18 @@
+//! Subsumption bug at k = 2 without higher-kinded heads: the premise `S<T> is Q` matched against
+//! the truncated fact Q(S(⊤)) binds T to ⊤ although T is S<A> / Box<B> concretely. The derived
+//! fact R(⊤,⊤) is dropped because R(v,v) (from `<T> T is R<T>`) "subsumes" it, so the query
+//! R(S(A), Box(B)) (truncated: R(S(⊤), Box(⊤))) is wrongly refuted.
+trait Q {}
+trait R<B> {}
+struct S<T> {}
+struct Box<T> {}
+struct A {}
+struct B {}
+given S<S<A>> is Q {}
+given S<Box<B>> is Q {}
+given <T> => T is R<T> {}
+given <T, U where S<T> is Q, S<U> is Q> => T is R<U> {}
+fun need<where S<A> is R<Box<B>>>() {}
+public fun main() {
+  need()
+}
