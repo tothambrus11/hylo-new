@@ -1,0 +1,5 @@
+trait P {}
+trait Q1 refines P {}
+trait Q2 refines Q1 {}
+fun use<T>(x: T) {}
+fun f<T is Q2>() { use(summon[P<T>]) }
