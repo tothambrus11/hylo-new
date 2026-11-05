@@ -1,0 +1,11 @@
+struct S<T> {}
+type SI = S<Int>
+extension SI { fun only() -> Int { 1 } }
+extension S { fun gen() -> Int { 2 } }
+extension <T> S<T> { fun gen2() -> Int { 3 } }
+fun use(x: S<Int>, y: S<Bool>) {
+  let _ = x.only()
+  let _ = y.only()
+  let _ = x.gen()
+  let _ = y.gen2()
+}

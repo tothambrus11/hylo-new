@@ -1,0 +1,36 @@
+[solver] 0/2 identical
+  MISMATCH research/review/solver/s11_where_eq_if.hylo
+      --- baseline
+      +++ solver
+      @@ -16710 +16710 @@
+      -0:29 : let U
+      +0:29 : let T
+      @@ -16712 +16712 @@
+      -0:30 : U
+      +0:30 : T
+      @@ -16718 +16718 @@
+      -0:34 : U
+      +0:34 : T
+      @@ -16720,3 +16720,3 @@
+      -0:36 : U
+      -0:38 : U
+      -0:39 : U
+      +0:36 : T
+      +0:38 : T
+      +0:39 : T
+      @@ -16740,7 +16740,6 @@
+      -0:52 -> f(_:)
+      -0:52 : <V> [Void](let V) let -> V
+      -0:53 -> x
+      -0:53 : T
+      -0:54 -> f(_:)
+      -0:54 : <V> [Void](let V) let -> V
+  MISMATCH research/review/solver/s12_where_eq_as.hylo
+      --- baseline
+      +++ solver
+      @@ -16729 +16729 @@
+      -0:40 : U
+      +0:40 : T
+      @@ -16757 +16757 @@
+      -diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: no conversion from 'U' to 'T'
+      +diag /home/hylo/hylo-tc/research/review/solver/s12_where_eq_as.hylo:6.11-15: error: type 'U' is not compatible with 'T'

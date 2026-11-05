@@ -1,0 +1,6 @@
+// Tuple cons-lists through the stdlib givens, at depth 2 the tail is truncated.
+fun need<T where T is Copyable>() {}
+public fun main() {
+  need<{Bool, Float32}>()
+  need<{Bool, {Float32, Void}}>()
+}

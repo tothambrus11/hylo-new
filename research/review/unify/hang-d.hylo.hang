@@ -1,0 +1,5 @@
+//! stage:typing no-std
+struct A {}
+struct B {}
+fun f1<T, U where T == U>() {}
+public fun main() { f1<A, B>() }

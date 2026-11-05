@@ -1,0 +1,19 @@
+[loopcheck] 0/2 identical
+  MISMATCH research/review/loopcheck/lc06-ambiguity-call.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16697 +16697 @@
+      -0:107 : T<SA> ==> [Void]() let -> Void
+      +0:107 : [Void]() let -> Void
+      @@ -16701,0 +16702,2 @@
+      +0:110 -> need
+      +0:110 : T<SA> ==> [Void]() let -> Void
+      @@ -16839 +16840,0 @@
+      -diag /home/hylo/hylo-tc/research/review/loopcheck/lc06-ambiguity-call.hylo:25.3-7: error: no coercion from 'T<SA> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  MISMATCH research/review/loopcheck/lc07-ambiguity-witness.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16716,0 +16717 @@
+      +0:119 witness.c5 = $<L15.1>($<L14.1>)($<L16.1>($<L13.1>($<L12.1>($<L11.1>))))($<L17.1>($<L13.1>($<L12.1>($<L11.1>))))
+      @@ -16857 +16857,0 @@
+      -diag /home/hylo/hylo-tc/research/review/loopcheck/lc07-ambiguity-witness.hylo:23.1-6: error: multiple given instance of 'T<SA>' in this scope

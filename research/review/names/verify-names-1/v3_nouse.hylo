@@ -1,0 +1,7 @@
+struct A { struct Inner {} }
+struct C { type Foo = Bool }
+
+fun early(i: C.Foo) {}
+
+extension A.Inner.Foo { type Inner = Bool }
+extension A.Inner { type Foo = Int }

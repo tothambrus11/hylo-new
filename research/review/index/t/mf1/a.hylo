@@ -1,0 +1,3 @@
+public trait P { fun t() -> Int }
+public struct A { public memberwise init }
+given wa: A is P { fun t() -> Int { 1 } }

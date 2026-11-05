@@ -1,0 +1,27 @@
+== div-loop-20 []
+counters.user:   coerced.slowPath=20 solver.goalSteps=126 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.depthExhausted=21 summon.layers=210 summon.matchOK=210 summon.matches=13700 summon.subgoals=211
+diagnostics: 20
+== div-loop-20 [absmodel]
+counters.user:   absmodel.built=1 absmodel.facts=64 absmodel.micros=2224 absmodel.refuted=21 absmodel.work=655 coerced.slowPath=20 solver.goalSteps=126 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.layers=20 summon.matchOK=20 summon.matches=20 summon.subgoals=21
+diagnostics: 20
+== div-loop-20 [loopcheck]
+counters.user:   coerced.slowPath=20 loopcheck.pruned=21 solver.goalSteps=126 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.layers=41 summon.matchOK=41 summon.matches=1532 summon.subgoals=42
+diagnostics: 20
+== div-grow-20 []
+counters.user:   coerced.slowPath=20 solver.goalSteps=128 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.depthExhausted=21 summon.layers=210 summon.matchOK=210 summon.matches=13700 summon.subgoals=211
+diagnostics: 20
+== div-grow-20 [absmodel]
+counters.user:   absmodel.built=1 absmodel.facts=64 absmodel.micros=3983 absmodel.refuted=21 absmodel.work=655 coerced.slowPath=20 solver.goalSteps=128 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.layers=20 summon.matchOK=20 summon.matches=20 summon.subgoals=21
+diagnostics: 20
+== div-grow-20 [loopcheck]
+counters.user:   coerced.slowPath=20 solver.goalSteps=128 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.depthExhausted=21 summon.layers=210 summon.matchOK=210 summon.matches=13700 summon.subgoals=211
+diagnostics: 20
+== div-dead-20 []
+counters.user:   coerced.slowPath=20 solver.goalSteps=128 solver.systems=44 summon.cacheHits=19 summon.calls=21 summon.depthExhausted=21 summon.layers=210 summon.matchOK=210 summon.matches=13700 summon.subgoals=211
+diagnostics: 20
+== div-dead-20 [absmodel]
+counters.user:   absmodel.built=1 absmodel.facts=63 absmodel.micros=1279 absmodel.refuted=21 absmodel.work=654 coerced.slowPath=20 solver.goalSteps=128 solver.systems=44 summon.cacheHits=19 summon.calls=21 summon.layers=20 summon.matchOK=20 summon.matches=20 summon.subgoals=21
+diagnostics: 20
+== div-dead-20 [loopcheck]
+counters.user:   coerced.slowPath=20 loopcheck.pruned=21 solver.goalSteps=128 solver.systems=44 summon.cacheHits=19 summon.calls=21 summon.layers=62 summon.matchOK=62 summon.matches=3044 summon.subgoals=63
+diagnostics: 20

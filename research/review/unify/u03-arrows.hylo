@@ -1,0 +1,26 @@
+//! stage:typing no-std
+// Arrows: effects (let/inout/sink/set), labels, environments, nested arrows.
+fun check<T>(x: T) {}
+fun apply<T, U>(f: [](let T) -> U, x: T) -> U { f(x) }
+fun applyS<T, U>(f: [](sink T) -> U, x: sink T) -> U { f(x) }
+
+fun k(a: let Void) -> Void { a }
+fun l(x a: let Void) -> Void { a }
+fun m(a: sink Void) -> Void { a }
+fun n(a: inout Void) {}
+
+fun main() {
+  let x0 = apply(k, ())
+  let x1 = applyS(m, ())
+  let x2 = apply(m, ())
+  let x3 = applyS(k, ())
+  check<[](let Void) -> Void>(k)
+  check<[](sink Void) -> Void>(k)
+  check<[](x: let Void) -> Void>(l)
+  check<[](y: let Void) -> Void>(l)
+  check<[](inout Void) -> Void>(n)
+  check<[](let Void) -> Void>(n)
+  let f: [](let [](let Void) -> Void) -> Void = fun[](g) { g(()) }
+  let g: [](let [](sink Void) -> Void) -> Void = f
+  let h = fun[](a) { a } as [](set Void) -> Void
+}

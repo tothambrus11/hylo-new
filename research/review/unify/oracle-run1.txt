@@ -1,0 +1,10 @@
+[unify] 21/22 identical
+  MISMATCH research/review/unify/u04-assoc.hylo
+      baseline=timeout config=ok
+[index,names,unify] 21/22 identical
+  MISMATCH research/review/unify/u04-assoc.hylo
+      baseline=timeout config=ok
+[absmodel,index,loopcheck,names,unify] 21/22 identical
+  MISMATCH research/review/unify/u04-assoc.hylo
+      baseline=timeout config=ok
+exit=1

@@ -1,0 +1,8 @@
+// `as` with an overloaded callee inside a generic context with an equality where clause.
+fun f<V>(x: V) -> V { x }
+fun f(x: Bool) -> Bool { x }
+fun g(x: Bool) -> Bool { x }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = f(y) as T
+  let q = (f(y), x)
+}

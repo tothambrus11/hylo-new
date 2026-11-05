@@ -1,0 +1,21 @@
+//! stage:typing no-std
+type A = {Void, Void}
+type B = A
+type C = B
+type F = [](let Void) -> Void
+fun check<T>(x: T) {}
+fun takeA(x: sink A) -> C { x }
+fun gen<T>(x: T) -> {T, T} { Builtin.trap() }
+fun takeF(f: F) {}
+public fun main() {
+  let x: C = ((), ())
+  check<A>(x)
+  check<B>(takeA(x))
+  let y = gen(x)
+  check<{A, B}>(y)
+  check<{C, {Void, Void}}>(y)
+  takeF(fun[](a: Void) { a })
+  // mismatch through alias
+  check<{Void, Void, Void}>(x)
+  let z: C = ()
+}

@@ -1,0 +1,124 @@
+warning: 'bigint': /home/hylo/hylo-tc/research/ideas/redundancy/hylo/.build/checkouts/BigInt/Package.swift:18:19: warning: 'v4' is deprecated: watchOS 9.0 is the oldest supported version [#DeprecatedDeclaration]
+16 |         .iOS(.v12),
+17 |         .tvOS(.v12),
+18 |         .watchOS(.v4),
+   |                   `- warning: 'v4' is deprecated: watchOS 9.0 is the oldest supported version [#DeprecatedDeclaration]
+19 |         .macCatalyst(.v13),
+20 |         .visionOS(.v1),
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+Updating https://github.com/apple/swift-syntax
+Updating https://github.com/apple/swift-algorithms.git
+Updating https://github.com/apple/swift-argument-parser.git
+Updating https://github.com/kyouko-taiga/Archivist.git
+Updating https://github.com/apple/swift-collections.git
+Updating https://github.com/attaswift/BigInt.git
+Updating https://github.com/swiftlang/swift-subprocess.git
+Updated https://github.com/kyouko-taiga/Archivist.git (0.55s)
+Updated https://github.com/attaswift/BigInt.git (0.61s)
+Updated https://github.com/swiftlang/swift-subprocess.git (0.61s)
+Updated https://github.com/apple/swift-argument-parser.git (0.62s)
+Updated https://github.com/apple/swift-collections.git (0.83s)
+Updated https://github.com/apple/swift-algorithms.git (0.86s)
+Computing version for https://github.com/swiftlang/swift-subprocess.git
+Updating https://github.com/apple/swift-numerics.git
+Updating https://github.com/apple/swift-system
+Updated https://github.com/apple/swift-syntax (1.48s)
+Computed https://github.com/swiftlang/swift-subprocess.git at 1.0.0 (1.49s)
+Updated https://github.com/apple/swift-system (0.46s)
+Computing version for https://github.com/apple/swift-collections.git
+Updated https://github.com/apple/swift-numerics.git (0.47s)
+Computed https://github.com/apple/swift-collections.git at 1.2.0 (1.24s)
+Computing version for https://github.com/apple/swift-argument-parser.git
+Computed https://github.com/apple/swift-argument-parser.git at 1.8.2 (0.57s)
+Computing version for https://github.com/apple/swift-algorithms.git
+Computed https://github.com/apple/swift-algorithms.git at 1.2.1 (0.61s)
+Computing version for https://github.com/kyouko-taiga/Archivist.git
+Computed https://github.com/kyouko-taiga/Archivist.git at 1.0.0 (0.55s)
+Computing version for https://github.com/attaswift/BigInt.git
+warning: 'bigint': /Package.swift:18:19: warning: 'v4' is deprecated: watchOS 9.0 is the oldest supported version [#DeprecatedDeclaration]
+16 |         .iOS(.v12),
+17 |         .tvOS(.v12),
+18 |         .watchOS(.v4),
+   |                   `- warning: 'v4' is deprecated: watchOS 9.0 is the oldest supported version [#DeprecatedDeclaration]
+19 |         .macCatalyst(.v13),
+20 |         .visionOS(.v1),
+
+[#DeprecatedDeclaration]: <https://docs.swift.org/compiler/documentation/diagnostics/deprecated-declaration>
+Computed https://github.com/attaswift/BigInt.git at 6.0.1 (0.52s)
+Computed https://github.com/swiftlang/swift-subprocess.git at 1.0.0 (0.00s)
+Computed https://github.com/apple/swift-collections.git at 1.2.0 (0.00s)
+Computed https://github.com/apple/swift-argument-parser.git at 1.8.2 (0.00s)
+Computed https://github.com/apple/swift-algorithms.git at 1.2.1 (0.00s)
+Computed https://github.com/kyouko-taiga/Archivist.git at 1.0.0 (0.00s)
+Computed https://github.com/attaswift/BigInt.git at 6.0.1 (0.00s)
+Computing version for https://github.com/apple/swift-system
+Computed https://github.com/apple/swift-system at 1.8.1 (0.60s)
+Computing version for https://github.com/apple/swift-numerics.git
+Computed https://github.com/apple/swift-numerics.git at 1.0.3 (0.64s)
+Computing version for https://github.com/apple/swift-syntax
+Computed https://github.com/apple/swift-syntax at 603.0.2 (0.75s)
+Building for production...
+[Computing dependencies]
+[Provisioning 4 / 58]
+[Provisioning 54 / 58]
+[Constructing description]
+[Pre-planning 1 / 1412]
+[Planning 253 / 1412]
+[Planning 1076 / 1412]
+[Planning deferred tasks]
+[Constructing 32 / 2973]
+[Constructing 1533 / 2973]
+[Starting]
+[6 / 527]
+[64 / 527] SwiftSyntax603
+[167 / 527] StableCollections
+[223 / 527] CSystem
+[273 / 533] SwiftSyntax510
+[280 / 540] _NumericsShims
+[304 / 542] SwiftSyntax602
+[317 / 543] SwiftSyntax600
+[326 / 545]
+[331 / 548]
+[337 / 551] CSystem
+[338 / 551] RealModule
+[345 / 552] Algorithms
+[346 / 553] InternalCollectionsUtilities
+[354 / 556]
+[361 / 561] HashTreeCollections
+[362 / 562] HashTreeCollections
+[363 / 562] HashTreeCollections
+[364 / 563] DequeModule
+[365 / 563] HeapModule
+[377 / 563] HashTreeCollections
+[381 / 565] BitCollections
+[381 / 565] OrderedCollections
+[387 / 565] HeapModule
+[389 / 565] DequeModule
+[390 / 566] ArgumentParser
+[392 / 567]
+[397 / 567]
+[397 / 567] BigInt
+[402 / 567] BigInt
+[402 / 567] SystemPackage
+[408 / 568] Subprocess
+[414 / 569] HashTreeCollections
+[415 / 569] HashTreeCollections
+[415 / 569] BitCollections
+[420 / 569] _RopeModule
+[432 / 571] Collections
+[436 / 573]
+[444 / 575] HostUtilities
+[449 / 575] Utilities
+[457 / 577] StableCollections
+[462 / 577] ArgumentParser
+[470 / 579] hc-generate-stdlib-product
+[473 / 579] hc-generate-stdlib-product
+[481 / 581] StandardLibrary
+[486 / 581] SwiftSyntax
+[488 / 581] SwiftSyntax
+[491 / 581]
+[494 / 584] SwiftDiagnostics
+[500 / 587] SwiftSyntax
+[500 / 587] SwiftBasicFormat
+[505 / 587] SwiftDiagnostics

@@ -1,0 +1,24 @@
+//! stage:typing no-std
+// Metatypes, metatypes of generic params, metatypes of applications and of aliases.
+struct A<T> { public memberwise init }
+struct B {}
+type AB = A<B>
+fun use<T>(x: T) {}
+fun check<T>(x: T) {}
+fun mt<T>(x: Metatype<T>) -> T { Builtin.trap() }
+
+struct S {
+  fun f() { use(Self) }
+}
+
+fun main() {
+  use(A<B>)
+  check<Metatype<A<B>>>(A<B>)
+  check<Metatype<AB>>(A<B>)
+  check<Metatype<B>>(A<B>)
+  let x = mt(AB)
+  check<A<B>>(x)
+  let y = mt(B)
+  check<AB>(y)
+  check<Metatype<Metatype<B>>>(Metatype<B>)
+}

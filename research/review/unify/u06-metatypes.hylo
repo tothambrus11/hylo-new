@@ -1,0 +1,20 @@
+//! stage:typing no-std
+struct S { public memberwise init }
+struct T2 { public memberwise init }
+struct G<X> { public memberwise init }
+fun check<T>(x: T) {}
+fun meta<T>(x: T) -> Metatype<T> { Builtin.trap() }
+fun use<T>(x: T) {}
+public fun main() {
+  use(S)
+  use(G<S>)
+  check<Metatype<S>>(S)
+  check<Metatype<G<S>>>(G<S>)
+  check<Metatype<T2>>(S)
+  check<Metatype<G<T2>>>(G<S>)
+  let m = meta(S())
+  check<Metatype<S>>(m)
+  let p: Builtin.i32 = Builtin.zeroinitializer_i64()
+  let q: Builtin.IntegerLiteral = Builtin.trap()
+  let r: Builtin.FloatingPointLiteral = q
+}

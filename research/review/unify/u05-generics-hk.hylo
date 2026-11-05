@@ -1,0 +1,19 @@
+//! stage:typing no-std
+struct A<T> { public let x: T; public memberwise init }
+struct B<T> { public let x: T; public memberwise init }
+fun f<T :: * -> *, U>() -> T<U> { Builtin.trap() }
+fun g<T :: * -> *, U>(x: T<U>) -> T<A<U>> { Builtin.trap() }
+fun h<T, U>(x: T, y: U) -> {T, U} { Builtin.trap() }
+fun check<T>(x: T) {}
+public fun main() {
+  let x = f<A, Void>()
+  check<A<Void>>(x)
+  let y = g(A(x: ()))
+  check<A<A<Void>>>(y)
+  let z = g(B(x: A(x: ())))
+  check<B<A<A<Void>>>>(z)
+  check<A<Void>>(B(x: ()))
+  check<A<B<Void>>>(A(x: A(x: ())))
+  let w = h(x, y)
+  check<{A<Void>, A<A<Void>>}>(w)
+}

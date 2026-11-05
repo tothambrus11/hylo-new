@@ -1,0 +1,18 @@
+trait P { type X }
+trait Q {}
+struct S<T> {}
+struct A {}
+struct B {}
+given A is P { type X = B }
+given B is Q {}
+given <T where T is P, T.X is Q> => S<T> is Q {}
+given <T where T is P> => S<T> is P { type X = T.X }
+fun needQ<T where T is Q>() {}
+fun use<T where T is P, T.X is Q>() {}
+public fun main() {
+  needQ<S<A>>()
+  needQ<S<S<A>>>()
+  use<A>()
+  use<S<A>>()
+  needQ<S<B>>()
+}

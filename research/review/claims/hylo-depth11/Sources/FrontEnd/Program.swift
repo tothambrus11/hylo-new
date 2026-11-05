@@ -1,0 +1,2225 @@
+import Archivist
+import OrderedCollections
+import Utilities
+
+/// A Hylo program.
+///
+/// - Invariant: The FileName of source files in `self` are unique.
+public struct Program: Sendable {
+
+  /// The modules loaded in this program.
+  public private(set) var modules = OrderedDictionary<Module.Name, Module>()
+
+  /// The types in the program.
+  ///
+  /// Updates to this property **must** be monotonic, lest identities of types stored in other
+  /// parts of the program might be invalidated.
+  public var types = TypeStore()
+
+  /// The memoization caches of type inference and name resolution.
+  ///
+  /// This table is used by `Typer` to persist its state throughout the compilation pipeline.
+  internal var typingCache: [Module.ID: Typer.Memos] = [:]
+
+  /// The cache of `standardLibraryDeclaration(_:)`.
+  ///
+  /// This table is initialized either by `Typer.apply` before the standard library is type checked
+  /// or by `self.load(module:from:)` after the standard library has been deserialized.
+  private var standardLibraryDeclarations: [StandardLibraryEntity: DeclarationIdentity] = [:]
+
+  /// `true` iff the program is allowed to have an only partially loaded standard library.
+  ///
+  /// If set, this flag signals that the program is used in a context where the standard library
+  /// may not be fully available, such as during testing with minimal standard library. In this
+  /// case, the absence of some standard library declarations won't be treated as an error.
+  private var allowPartialStandardLibrary: Bool = false
+
+  /// Creates an empty program, only for the purpose of testing iff `isForTesting` is `true`.
+  public init(forTesting isForTesting: Bool = false) {
+    self.allowPartialStandardLibrary = isForTesting
+  }
+
+  /// `true` if the program has errors.
+  public var containsError: Bool {
+    modules.values.contains(where: \.containsError)
+  }
+
+  /// The diagnostics of the issues in the program.
+  public var diagnostics: some Collection<Diagnostic> {
+    modules.values.map(\.diagnostics).joined()
+  }
+
+  /// Returns the identities of the modules in `self`.
+  public var moduleIdentities: Range<Module.ID> {
+    modules.values.indices
+  }
+
+  /// Returns `true` iff the module containing the the standard library is present.
+  public var containsStandardLibrary: Bool {
+    if let i = identity(module: Module.standardLibraryName) {
+      return !self[i].sources.isEmpty
+    } else {
+      return false
+    }
+  }
+
+  /// Returns the identity of the module with the given `name`.
+  public mutating func demandModule(_ name: Module.Name) -> Module.ID {
+    if let m = modules.index(forKey: name) {
+      return m
+    } else {
+      let m = modules.count
+      modules[name] = Module(name: name, identity: m)
+      return m
+    }
+  }
+
+  /// Returns the identity of the module named `name`, if it exists in the program.
+  public func identity(module name: Module.Name) -> Module.ID? {
+    modules.index(forKey: name)
+  }
+
+  /// Computes the scoping relationships in `m`.
+  public mutating func assignScopes(_ m: Module.ID) async {
+    await Scoper().visit(m, of: &self)
+  }
+
+  /// Re-compute the scoping relationships of `n`'s immediate children.
+  public mutating func reassignScopes<T: SyntaxIdentity>(childrenOf n: T) {
+    for c in children(n) {
+      self[c.file].syntaxToParent[c.offset] = n.offset
+    }
+  }
+
+  /// Assigns types to the syntax trees of `m`.
+  public mutating func assignTypes(
+    _ m: Module.ID,
+    loggingInferenceWhere isLoggingEnabled: ((AnySyntaxIdentity, Program) -> Bool)?
+  ) {
+    types.reserveCapacity(max(types.underestimatedCount << 1, 10000))
+    var typer = Typer(typing: m, of: consume self, loggingInferenceWhere: isLoggingEnabled)
+    typer.apply()
+    self = typer.release()
+  }
+
+  /// Lowers the contents of `m` to IR.
+  public mutating func lower(_ m: Module.ID) {
+    // Generate raw IR from the syntax tree.
+    var emitter = IREmitter(insertingIn: m, of: consume self)
+    emitter.incorporateTopLevelDeclarations()
+    emitter.implementSynthesizedFunctions()
+    self = emitter.release()
+  }
+
+  /// Applies mandatory verification and transformation passes on the IR of `m`.
+  ///
+  /// This method applies the checks and transformation necessary to turn *raw* IR produced by the
+  /// emitter into *refined* IR. Functions that successfully go through mandatory passes can be
+  /// considered well-formed and ready to be interpreted or compiled.
+  ///
+  /// If a pass fails, an error diagnostic is reported and the definition of the function in which
+  /// the failure occurred is removed from the program.
+  public mutating func applyTransformationPasses(_ m: Module.ID) {
+    withTyper(typing: m) { (typer) in
+      // Temporarily move all functions to a local work list. Those that fail a mandatory pass
+      // won't make it back.
+      var work: [(id: IRFunction.ID, function: IRFunction)] = []
+      let end = modify(&typer.program[m].ir) { (ir) in
+        for i in ir.functions.values.indices where ir[i].isDefined {
+          work.append((i, ir[i].move()))
+        }
+        return ir.functions.values.endIndex
+      }
+
+      // Apply mandatory intra-procedural passes.
+      for i in work.indices {
+        // Make sure there are no silent errors.
+        defer { assert(work[i].function.isDefined || typer.program[m].containsError) }
+
+        // Dead code elimination and constant folding are performed early to reduce the amount of
+        // work fed to more expensive passes downstream. One exception is made for control-flow to
+        // limit the scope of non-local updates made during lifetime normalization.
+
+        work[i].function.foldRedundantInstructions()
+        work[i].function.removeCodeAfterNeverReturningCalls()
+        work[i].function.removeUnreachableBlocks()
+        work[i].function.removedUnusedDefinitions()
+        // reifyBundles
+        // reifyAccesses
+        work[i].function.closeOpenEndedRegions()
+
+        // The following passes may fail.
+        if !work[i].function.checkYieldCoherence(using: &typer) { continue }
+        if !work[i].function.normalizeLifetimes(emittingInto: m, using: &typer) { continue }
+        if !work[i].function.upholdExclusivity(emittingInto: m, using: &typer) { continue }
+        if !work[i].function.upholdInliningRequirements(in: m, using: &typer) { continue }
+
+        // The following passes cannot fail.
+        work[i].function.simplifyControlFlow()
+        work[i].function.depolymorphize(emittingInto: m, using: &typer)
+        work[i].function.existentializeIfExposed(emittingInto: m, using: &typer)
+
+        // No error occurred; move the function back.
+        typer.program[m].ir[work[i].id].take(definition: work[i].function)
+      }
+
+      // Don't go any further if an error occurred.
+      if typer.program[m].containsError { return }
+
+      // New functions may have been introduced during the previous passes. Those that have been
+      // declared during depolymorphization must be defined in the current module unless they are
+      // behind a resilience boundary. Since this process may result in further new declarations,
+      // we must compute a fixed point on the number of functions.
+
+      var window = typer.program[m].ir.functions.values.indices[end...]
+      while !window.isEmpty {
+        // Look for functions that must be defined in the current module.
+        for i in window {
+          let module = typer.program[m]
+          guard
+            case .existentialized(let a) = module.ir[i].name,
+            case .some(let poly) = module.ir.functions.index(forKey: a),
+            module.ir[poly].isDefined && !module.ir[i].isDefined
+          else { continue }
+
+          typer.program.withEmitter(insertingIn: m) { (emitter) in
+            emitter.existentialize(module.ir[poly], into: i)
+          }
+        }
+
+        // New functions are those that are stored after the end of the current window.
+        window = typer.program[m].ir.functions.values.indices[window.endIndex...]
+      }
+
+      // Apply mandatory inlining.
+      for i in typer.program[m].ir.functions.values.indices {
+        // Nothing to do if the function has no definition.
+        if !typer.program[m].ir[i].isDefined { continue }
+
+        var f = typer.program[m].ir[i].move()
+        var c = IRFunction.InliningContext()
+        f.inlineSimpleCallees(emittingInto: m, using: &typer, in: &c)
+        typer.program[m].ir[i].take(definition: f)
+      }
+    }
+  }
+
+  /// Returns the result of calling `action` on a typer configured with `module`.
+  public mutating func withTyper<T>(
+    typing m: Module.ID, _ action: (inout Typer) -> T
+  ) -> T {
+    var typer = Typer(typing: m, of: consume self, loggingInferenceWhere: nil)
+    defer { self = typer.release() }
+    return action(&typer)
+  }
+
+  internal mutating func withEmitter<T>(
+    insertingIn m: Module.ID, _ action: (inout IREmitter) -> T
+  ) -> T {
+    var emitter = IREmitter(insertingIn: m, of: consume self)
+    defer { self = emitter.release() }
+    return action(&emitter)
+  }
+
+  /// Projects the module identified by `m`.
+  public subscript(m: Module.ID) -> Module {
+    get { modules.values[m] }
+    _modify { yield &modules.values[m] }
+  }
+
+  /// Projects the source file identified by `f`.
+  internal subscript(f: SourceFile.ID) -> Module.SourceContainer {
+    get { modules.values[f.module][f] }
+    _modify { yield &modules.values[f.module][f] }
+  }
+
+  /// Projects the node identified by `n`.
+  public subscript<T: SyntaxIdentity>(n: T) -> any Syntax {
+    get { modules.values[n.module][n] }
+  }
+
+  /// Projects the node identified by `n`.
+  public subscript<T: Syntax>(n: T.ID) -> T {
+    modules.values[n.module][n]
+  }
+
+  /// Returns the nodes that are immediate children of `n`.
+  public func children<T: SyntaxIdentity>(_ n: T) -> [AnySyntaxIdentity] {
+    var enumerator = ChildrenEnumerator(parent: n.erased)
+    visit(n, calling: &enumerator)
+    return enumerator.children
+  }
+
+  /// Returns the value at `p` on the type identified by `n` if that type is an instance of `T`.
+  /// Otherwise, returns `nil`.
+  public func read<T: Syntax, U>(_ n: AnySyntaxIdentity, _ p: KeyPath<T, U>) -> U? {
+    if let t = self[n] as? T {
+      return t[keyPath: p]
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns the elements in `ns` that identify nodes of type `T`.
+  public func collect<S: Sequence, T: Syntax>(
+    _ t: T.Type, in ns: S
+  ) -> (some Collection<ConcreteSyntaxIdentity<T>>) where S.Element: SyntaxIdentity {
+    ns.lazy.compactMap({ (n) in cast(n, to: t) })
+  }
+
+  /// Returns the top level declarations of `m` that are of type `T`.
+  public func collectTopLevel<T: Syntax>(
+    _ t: T.Type, of m: Module.ID
+  ) -> (some Sequence<ConcreteSyntaxIdentity<T>>) {
+    collect(t, in: self[m].topLevelDeclarations)
+  }
+
+  /// Returns a textual representation of `item` using the given configuration.
+  public func show<T: Showable>(
+    _ item: T, configuration: TreePrinter.Configuration = .default
+  ) -> String {
+    var printer = TreePrinter(program: self, configuration: configuration)
+    return printer.show(item)
+  }
+
+  /// Returns a textual representation of `items` using the given configuration and separating each
+  /// element by `separator`.
+  public func show<T: Sequence>(
+    _ items: T, configuration: TreePrinter.Configuration = .default,
+    separatedBy separator: String = ", "
+  ) -> String where T.Element: Showable {
+    var printer = TreePrinter(program: self, configuration: configuration)
+    return printer.show(items, separatedBy: separator)
+  }
+
+  /// Returns the tag of `n`.
+  public func tag<T: SyntaxIdentity>(of n: T) -> SyntaxTag {
+    modules.values[n.module].tag(of: n)
+  }
+
+  /// `true` iff `f` has gone through scoping.
+  public func isScoped(_ f: SourceFile.ID) -> Bool {
+    self[f].syntaxToParent.count == self[f].syntax.count
+  }
+
+  /// Returns `true` iff `s` contains the innermost scope that strictly contains `n`.
+  public func isContained<T: SyntaxIdentity>(_ n: T, in s: ScopeIdentity) -> Bool {
+    // If `s` is a file, just look if `n` is in that file too.
+    guard let q = s.node else { return n.file == s.file }
+
+    // Otherwise, walk the scope hierarchy.
+    var next = parent(containing: n)
+    while let p = next.node {
+      if p == q { return true }
+      next = parent(containing: p)
+    }
+    return false
+  }
+
+  /// Returns `true` iff `n` denotes a declaration.
+  public func isDeclaration<T: SyntaxIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is any Declaration.Type
+  }
+
+  /// Returns `true` iff `n` denotes a type declaration.
+  public func isTypeDeclaration<T: SyntaxIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is any TypeDeclaration.Type
+  }
+
+  /// Returns `true` iff `n` denotes an extension or conformance declaration.
+  public func isTypeExtendingDeclaration<T: SyntaxIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is any TypeExtendingDeclaration.Type
+  }
+
+  /// Returns `true` iff `n` introduces a name that can be overloaded.
+  public func isOverloadable<T: SyntaxIdentity>(_ n: T) -> Bool {
+    switch tag(of: n) {
+    case FunctionDeclaration.self:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` denotes a scope.
+  public func isScope<T: SyntaxIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is any Scope.Type
+  }
+
+  /// Returns `true` iff `n` is a trait requirement.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func isRequirement<T: SyntaxIdentity>(_ n: T) -> Bool {
+    traitRequiring(n) != nil
+  }
+
+  /// Returns `true` iff `n` is a function requirement in a trait.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func isFunctionRequirement<T: SyntaxIdentity>(_ n: T) -> Bool {
+    switch tag(of: n) {
+    case FunctionDeclaration.self, VariantDeclaration.self:
+      return isRequirement(n)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` introduces entities in the implicit context.
+  public func isImplicit<T: SyntaxIdentity>(_ n: T) -> Bool {
+    switch tag(of: n) {
+    case BindingDeclaration.self:
+      return self[castUnchecked(n, to: BindingDeclaration.self)].isImplicit
+    case ConformanceDeclaration.self:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` declares a member entity in an type extension.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func isExtensionMember<T: SyntaxIdentity>(_ n: T) -> Bool {
+    extensionContaining(n) != nil
+  }
+
+  /// Returns `true` iff `n` declares a non-static member entity.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func isMember<T: SyntaxIdentity>(_ n: T) -> Bool {
+    guard let m = parent(containing: n).node else { return false }
+
+    switch tag(of: n) {
+    case VariantDeclaration.self:
+      return isMember(m)
+    default:
+      return !isStatic(n) && (isTypeDeclaration(m) || isTypeExtendingDeclaration(m))
+    }
+  }
+
+  /// Returns `true` iff `n` declares a non-static member function or function bundle.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func isMemberFunction<T: SyntaxIdentity>(_ n: T) -> Bool {
+    switch tag(of: n) {
+    case FunctionBundleDeclaration.self:
+      return isMember(n)
+    case FunctionDeclaration.self:
+      return isMember(n)
+    case VariantDeclaration.self:
+      return isMember(n)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` declares a memberwise initializer.
+  public func isMemberwiseInitializer<T: SyntaxIdentity>(_ n: T) -> Bool {
+    if let d = cast(n, to: FunctionDeclaration.self) {
+      return self[d].isMemberwiseInitializer
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` declares a static member entity.
+  public func isStatic<T: SyntaxIdentity>(_ n: T) -> Bool {
+    // Note: the following relies on the fact that non-member declarations can't be `static`, which
+    // is an invariant of syntactically well-formed ASTs.
+    switch tag(of: n) {
+    case BindingDeclaration.self:
+      return self[castUnchecked(n, to: BindingDeclaration.self)].is(.static)
+    case EnumCaseDeclaration.self:
+      return true
+    case FunctionBundleDeclaration.self:
+      return self[castUnchecked(n, to: FunctionBundleDeclaration.self)].is(.static)
+    case FunctionDeclaration.self:
+      return self[castUnchecked(n, to: FunctionDeclaration.self)].is(.static)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` is defined in the context of a function.
+  public func isLocal<T: SyntaxIdentity>(_ n: T) -> Bool {
+    var s = parent(containing: n)
+    while let p = s.node {
+      switch tag(of: p) {
+      case FunctionDeclaration.self, VariantDeclaration.self:
+        return true
+      case _ where isTypeDeclaration(n) || isTypeExtendingDeclaration(n):
+        return false
+      default:
+         s = parent(containing: p)
+      }
+    }
+
+    // Top-level functions aren't local.
+    return false
+  }
+
+  /// Returns `true` iff `n` defines a symbol that is captured if referred to.
+  public func isCapturable<T: SyntaxIdentity>(_ n: T) -> Bool {
+    switch tag(of: n) {
+    case ExtensionDeclaration.self:
+      return false
+    default:
+      return !isTypeDeclaration(n) && isLocal(n)
+    }
+  }
+
+  /// Returns `true` iff `n` has an external implementation.
+  public func isExtern(_ n: FunctionDeclaration.ID) -> Bool {
+    annotation("extern", appliedTo: n) != nil
+  }
+
+  /// Returns `true` iff `n` is implemented by a C function using the indirect calling convention.
+  public func isExternCIndirect(_ n: FunctionDeclaration.ID) -> Bool {
+    annotation("extern_c_indirect", appliedTo: n) != nil
+  }
+
+  /// Returns `true` if the contents of `d` is visible in all modules.
+  ///
+  /// The result is `true` if `d` is annotated with `@exposed` or `d` and all the scopes enclosing
+  /// it are public. Note that the scope of an extension is always public.
+  public func isExposed<T: ModifiableDeclaration>(_ d: T.ID) -> Bool {
+    // Is `d` explicitly exposed?
+    if (annotation("exposed", appliedTo: d) != nil) { return true }
+
+    // Otherwise, `d` and its enclosing scopes must be public.
+    if !self[d].is(.public) { return false }
+    var p = parent(containing: d)
+    while let a = p.node, isPublicScope(a) {
+      p = parent(containing: a)
+    }
+    return p.isFile
+  }
+
+  /// Returns `true` iff `n` delineates a public scope.
+  public func isPublicScope<T: SyntaxIdentity>(_ n: T) -> Bool {
+    if tag(of: n) == ExtensionDeclaration.self {
+      return true
+    } else if let d = self[n] as? (any ModifiableDeclaration), d.is(.public) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `d` declares symbols that will not appear in the ABI of `m`.
+  public func isPrivate(_ d: DeclarationIdentity, in m: Module.ID) -> Bool {
+    switch tag(of: d) {
+    case BindingDeclaration.self:
+      return isPrivate(castUnchecked(d, to: BindingDeclaration.self), in: m)
+    case ConformanceDeclaration.self:
+      return isPrivate(castUnchecked(d, to: ConformanceDeclaration.self), in: m)
+    case EnumDeclaration.self:
+      return isPrivate(castUnchecked(d, to: EnumDeclaration.self), in: m)
+    case FunctionDeclaration.self:
+      return isPrivate(castUnchecked(d, to: FunctionDeclaration.self), in: m)
+    case FunctionBundleDeclaration.self:
+      return isPrivate(castUnchecked(d, to: FunctionBundleDeclaration.self), in: m)
+    case VariantDeclaration.self:
+      return isPrivate(parent(containing: d, as: FunctionBundleDeclaration.self)!, in: m)
+    case StructDeclaration.self:
+      return isPrivate(castUnchecked(d, to: StructDeclaration.self), in: m)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `d` declares symbols that will not appear in the ABI of `m`.
+  public func isPrivate<T: ModifiableDeclaration>(_ d: T.ID, in m: Module.ID) -> Bool {
+    (d.module == m) && !isExposed(d)
+  }
+
+  /// Returns `true` iff `f` will not appear in the ABI of `m`.
+  public func isPrivate(_ f: IRFunction.Name, in m: Module.ID) -> Bool {
+    switch f {
+    case .lowered(let d):
+      return isPrivate(d, in: m)
+    case .initializer(let d):
+      return isPrivate(d, in: m)
+    case .synthesized(let d, _):
+      return isPrivate(d, in: m)
+    case .implementation(_, let d, _):
+      return isPrivate(d, in: m)
+    case .existentialized(let g):
+      return isPrivate(g, in: m)
+    case .typeWitnessConstructor, .applied, .slide, .plateau:
+      return true
+    }
+  }
+
+  /// Returns `true` iff `n` is the "main" function of an executable module.
+  ///
+  /// The entry of a module is the first user-function being applied when that module is executed.
+  /// It must be a top-level public function named `main` accepting no argument and returning
+  /// either `Void` or `Int32`.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public mutating func isModuleEntry(_ n: FunctionDeclaration.ID) -> Bool {
+    if parent(containing: n).isFile && (name(of: n)?.identifier == "main") {
+      let t = type(assignedTo: n)
+      if let a = types[t] as? Arrow, a.inputs.isEmpty {
+        let o = types.dealiased(a.output)
+        return o == .void || o == standardLibraryType(.int32)
+      }
+    }
+    return false
+  }
+
+  /// Returns `true` iff `m` is an executable module whose "main" function is `f`.
+  ///
+  /// The entry of a module is the first user-function being applied when that module is executed.
+  /// It must be a top-level public function named `main` accepting no argument and returning
+  /// either `Void` or `Int32`.
+  ///
+  /// - Requires: `m` is typed.
+  public mutating func isEntry(_ f: IRFunction.ID, of m: Module.ID) -> Bool {
+    let n = self[m].ir.functions.keys[f]
+    if case .lowered(let d) = n, let m = cast(d, to: FunctionDeclaration.self) {
+      return isModuleEntry(m)
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` denotes an expression.
+  public func isExpression<T: SyntaxIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is any Expression.Type
+  }
+
+  /// Returns `true` iff `n` is the expression of a value marked for mutation.
+  public func isMarkedForMutation(_ n: ExpressionIdentity) -> Bool {
+    var q = n
+    while true {
+      if tag(of: q) == InoutExpression.self {
+        return true
+      } else if let x = cast(q, to: NameExpression.self), let y = self[x].qualification {
+        q = y
+      } else if let x = cast(q, to: TupleMember.self) {
+        q = self[x].parent
+      } else if let x = cast(q, to: Call.self), self[x].style == .bracketed {
+        q = self[x].callee
+      } else {
+        return false
+      }
+    }
+  }
+
+  /// Returns `true` iff `n` is modifying its callee and/or one of its arguments in place.
+  public func isMutating(_ n: Call.ID) -> Bool {
+    isMarkedForMutation(self[n].callee)
+      || self[n].arguments.contains(where: { (a) in isMarkedForMutation(a.value) })
+  }
+
+  /// Returns `true` iff `n` is a name expression of the form  `.new` or `q.new`, where `q` is any
+  /// arbitrary qualification.
+  public func isConstructorReference(_ n: NameExpression.ID) -> Bool {
+    if let m = cast(n, to: NameExpression.self) {
+      return self[m].name.value.identifier == "new"
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` is the application of a memberwise initializer.
+  public func isMemberwiseInitialization(_ n: Call.ID) -> Bool {
+    if
+      let f = cast(self[n].callee, to: New.self),
+      case .some(.direct(let d)) = declaration(maybeReferredToBy: self[f].target)
+    {
+      return isMemberwiseInitializer(d)
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `w` denotes a synthetic conformance that does not involve any user code.
+  ///
+  /// The result is a conservative overapproximation which does not take arguments to conditional
+  /// conformances into consideration. As a consequence, a witness of type `P<T> => P<U>` will not
+  /// be considered transitively synthetic even if `P<T>` results from a transitively conformance.
+  ///
+  /// Simplifying the use of transitively synthetic conformances in general requires inlining.
+  public func isTransitivelySyntheticConformance(_ w: WitnessExpression) -> Bool {
+    switch w.value {
+    case .reference(let d):
+      return isTransitivelySyntheticConformance(d)
+    case .termApplication(let a, _), .typeApplication(let a, _):
+      return isTransitivelySyntheticConformance(a)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff `r` denotes a synthetic conformance that does not involve any user code.
+  private func isTransitivelySyntheticConformance(_ d: DeclarationIdentity) -> Bool {
+    guard
+      let x0 = cast(d, to: ConformanceDeclaration.self),
+      let x1 = self[x0.module].implementations(definedBy: x0)
+    else {
+      // If the typer calls this method while the declaration referred to by `r` in on stack, we
+      // can assume that it is checking a conformance defined for a self-referential type. Since
+      // such types require some form of indirection, we can also assume that the conformance is
+      // not transitively synthetic.
+      return false
+    }
+
+    return x1.isTransitivelySynthetic
+  }
+
+  /// Returns `true` iff instances of `t` can always be assumed initialized in `s`.
+  public mutating func isTriviallyInitializable(
+    _ t: AnyTypeIdentity, in s: ScopeIdentity
+  ) -> Bool {
+    let u = types.dealiased(t)
+    switch types.tag(of: u) {
+    case Struct.self:
+      return isTriviallyInitializable(types.castUnchecked(u, to: Struct.self), in: s)
+    case Tuple.self:
+      return isTriviallyInitializable(types.castUnchecked(u, to: Tuple.self), in: s)
+    case TypeApplication.self:
+      return isTriviallyInitializable(types.castUnchecked(u, to: TypeApplication.self), in: s)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` iff instances of `t` can always be assumed initialized in `s`.
+  public mutating func isTriviallyInitializable(
+    _ t: Struct.ID, in s: ScopeIdentity
+  ) -> Bool {
+    let d = types[t].declaration
+    return isLayoutVisible(d, in: s) && storedProperties(of: d).isEmpty
+  }
+
+  /// Returns `true` iff instances of `t` can always be assumed initialized in `s`.
+  public mutating func isTriviallyInitializable(
+    _ t: Tuple.ID, in s: ScopeIdentity
+  ) -> Bool {
+    let ms = types.members(of: t)
+    return ms.types.isEmpty && !ms.isOpenEnded
+  }
+
+  /// Returns `true` iff instances of `t` can always be assumed initialized in `s`.
+  public mutating func isTriviallyInitializable(
+    _ t: TypeApplication.ID, in s: ScopeIdentity
+  ) -> Bool {
+    isTriviallyInitializable(types[t].abstraction, in: s)
+  }
+
+  /// If resilience is enabled in the module containing `d`, returns `true` if `d` is in the same
+  /// module as `scopeOfUse` or if `d` is annotated with `@frozen`; otherwise, returns `true`.
+  public func isLayoutVisible(_ d: StructDeclaration.ID, in scopeOfUse: ScopeIdentity) -> Bool {
+    true
+  }
+
+  /// Returns `n` if it identifies a node of type `U`; otherwise, returns `nil`.
+  public func cast<T: SyntaxIdentity, U: Syntax>(_ n: T, to: U.Type) -> U.ID? {
+    if tag(of: n) == .init(U.self) {
+      return .init(uncheckedFrom: n.erased)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `n` assuming it identifies a node of type `U`.
+  public func castUnchecked<T: SyntaxIdentity, U: Syntax>(_ n: T, to: U.Type = U.self) -> U.ID {
+    assert(tag(of: n) == .init(U.self))
+    return .init(uncheckedFrom: n.erased)
+  }
+
+  /// Returns `n` if it identifies a declaration; otherwise, returns `nil`.
+  public func castToDeclaration<T: SyntaxIdentity>(_ n: T) -> DeclarationIdentity? {
+    if isDeclaration(n) {
+      return .init(uncheckedFrom: n.erased)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `n` if it identifies an expression; otherwise, returns `nil`.
+  public func castToExpression<T: SyntaxIdentity>(_ n: T) -> ExpressionIdentity? {
+    if isExpression(n) {
+      return .init(uncheckedFrom: n.erased)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `n` if it identifies a scope; otherwise, returns `nil`.
+  public func castToScope<T: SyntaxIdentity>(_ n: T) -> ScopeIdentity? {
+    if isScope(n) {
+      return .init(uncheckedFrom: n.erased)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `n` if it identifies a node of type `U`; otherwise, returns `nil`.
+  public func flatCast<T: SyntaxIdentity, U: Syntax>(_ n: T?, to: U.Type) -> U.ID? {
+    n.flatMap({ (m) in cast(m, to: U.self) })
+  }
+
+  /// Returns `w` if it is the desugared form of a conformance type. Otherwise, returns `nil`.
+  public func seenAsConformanceTypeExpression(_ w: StaticCall.ID) -> ConformanceTypeSugar? {
+    Utilities.read(self[w], { (tree) in tree.arguments.isEmpty ? nil : .init(tree) })
+  }
+
+  /// Returns the built-in entity referred to by `n` iff it denotes the a built-in constructor for
+  /// converting scalar literals.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public func asBuiltinScalarLiteralConversion(_ n: ExpressionIdentity) -> StandardLibraryEntity? {
+    guard
+      containsStandardLibrary,
+      let f = cast(n, to: New.self),
+      case .inherited(let w, let m, true) = declaration(referredToBy: self[f].target),
+      case .reference(let d) = w.value
+    else { return nil }
+
+    // Is the witness defined in the standard library?
+    if parent(containing: d).module != identity(module: Module.standardLibraryName) {
+      return nil
+    }
+
+    switch m {
+    case standardLibraryDeclaration(.expressibleByIntegerLiteralInit):
+      return .expressibleByIntegerLiteralInit
+    case standardLibraryDeclaration(.expressibleByFloatingPointLiteralInit):
+      return .expressibleByFloatingPointLiteralInit
+    default:
+      return nil
+    }
+  }
+
+  /// If `n` refers to an enum case without an associated value, returns the declaration of that
+  /// case; otherwise, returns `nil`.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public func asConstantCase(_ n: NameExpression.ID) -> EnumCaseDeclaration.ID? {
+    guard
+      case .direct(let d) = declaration(referredToBy: n),
+      let c = cast(d, to: EnumCaseDeclaration.self)
+    else { return nil }
+
+    return self[c].parameters.isEmpty ? c : nil
+  }
+
+  /// Returns the built-in function referred to by `n`, if any.
+  public func asBuiltinFunction(_ n: ExpressionIdentity) -> BuiltinFunction? {
+    if let e = cast(n, to: NameExpression.self) {
+      if case .builtin(.function(let f)) = declaration(referredToBy: e) { return f }
+    }
+    return nil
+  }
+
+  /// Returns the innermost scope that strictly contains `n`.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func parent(containing s: ScopeIdentity) -> ScopeIdentity? {
+    s.node.map(parent(containing:))
+  }
+
+  /// Returns the innermost scope that strictly contains `n`.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func parent<T: SyntaxIdentity>(containing n: T) -> ScopeIdentity {
+    assert(isScoped(n.file), "unscoped module")
+    let p = self[n.file].syntaxToParent[n.offset]
+    if p >= 0 {
+      return .init(uncheckedFrom: .init(file: n.file, offset: p))
+    } else {
+      return .init(file: n.file)
+    }
+  }
+
+  /// Returns the innermost scope that contains `n` iff it is an instance of `U`. Otherwise,
+  /// returns `nil`.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func parent<T: SyntaxIdentity, U: Syntax>(containing n: T, as: U.Type) -> U.ID? {
+    if let m = parent(containing: n).node {
+      return cast(m, to: U.self)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns (`lhs`, `rhs`, `common`) where `common` is the deepest common scope containing both
+  /// `m` and `n`, and `lhs` (respectively `rhs`) are scopes containing `m` (respectively `n`) and
+  /// its ancestors up to `common`.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func commonAncestry<T: SyntaxIdentity, U: SyntaxIdentity>(
+    _ m: T, _ n: U
+  ) -> ([ScopeIdentity], [ScopeIdentity], ScopeIdentity?) {
+    var lhs = Array(scopes(from: parent(containing: m)))
+    var rhs = Array(scopes(from: parent(containing: n)))
+
+    var l = lhs[...]
+    var r = rhs[...]
+    while l.count > r.count { l.removeFirst() }
+    while r.count > l.count { r.removeFirst() }
+    while !l.isEmpty && (l.first != r.first) {
+      l.removeFirst()
+      r.removeFirst()
+    }
+
+    let lca = lhs[l.startIndex...].first
+    lhs.removeLast(l.count)
+    rhs.removeLast(r.count)
+    return (lhs, rhs, lca)
+  }
+
+  /// Returns the type assigned to `n`.
+  ///
+  /// You cannot make strong assumptions about the exact shape of the returned type because it may
+  /// contain aliases. Use `dealiasedType(assignedTo:assuming:)` to obtain the type assigned to a
+  /// node assuming it must have a specific shape.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public func type<T: SyntaxIdentity>(assignedTo n: T) -> AnyTypeIdentity {
+    self[n.module].type(assignedTo: n) ?? unreachable("untyped node at \(self[n].site)")
+  }
+
+  /// Returns the type assigned to `n`, if any.
+  ///
+  /// You cannot make strong assumptions about the exact shape of the returned type because it may
+  /// contain aliases. Use `dealiasedType(assignedTo:assuming:)` to obtain the type assigned to a
+  /// node assuming it must have a specific shape.
+  public func type<T: SyntaxIdentity>(maybeAssignedTo n: T) -> AnyTypeIdentity? {
+    self[n.module].type(assignedTo: n)
+  }
+
+  /// Returns the type assigned to `n`, dealiased.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public mutating func dealiasedType<T: SyntaxIdentity>(assignedTo n: T) -> AnyTypeIdentity {
+    let t = type(assignedTo: n)
+    return types.dealiased(t)
+  }
+
+  /// Returns the type assigned to `n`, dealiased, assuming it is an instance of `T`.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public mutating func dealiasedType<T: SyntaxIdentity, U: TypeTree>(
+    assignedTo n: T, assuming: U.Type
+  ) -> U.ID {
+    let t = type(assignedTo: n)
+    let u = types.dealiased(t)
+    if let v = types.cast(u, to: U.self) {
+      return v
+    } else {
+      unreachable("expected node of type '\(U.self)'; found '\(types.tag(of: u))'")
+    }
+  }
+
+  /// Returns the declaration referred to by `n`.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public func declaration(referredToBy n: NameExpression.ID) -> DeclarationReference {
+    self[n.module].declaration(referredToBy: n) ?? unreachable("untyped node at \(self[n].site)")
+  }
+
+  /// Returns the declaration referred to by `n` iff the module containing `n` is typed; otherwise,
+  /// returns `nil`.
+  public func declaration(maybeReferredToBy n: NameExpression.ID) -> DeclarationReference? {
+    self[n.module].declaration(referredToBy: n)
+  }
+
+  /// Returns `true` iff `n` contains a reference to `d`.
+  ///
+  /// - Requires: The module containing `n` is typed.
+  public func occurs<T: SyntaxIdentity>(referenceTo d: DeclarationIdentity, in n: T) -> Bool {
+    var work: [AnySyntaxIdentity] = [n.erased]
+    while let w = work.popLast() {
+      if let e = cast(w, to: NameExpression.self), declaration(referredToBy: e).target == d {
+        return true
+      }
+      work.append(contentsOf: children(w))
+    }
+    return false
+  }
+
+  /// Returns the associated type and member requirements of `t`.
+  public func requirements(of t: Trait.ID) -> TraitRequirements {
+    let concept = types[t].declaration
+    var ts: [AssociatedTypeDeclaration.ID] = []
+    var cs: [ConformanceDeclaration.ID] = []
+    var ms: [DeclarationIdentity] = .init(minimumCapacity: self[concept].members.count)
+
+    for m in self[concept].members {
+      switch tag(of: m) {
+      case AssociatedTypeDeclaration.self:
+        ts.append(castUnchecked(m))
+      case ConformanceDeclaration.self:
+        cs.append(castUnchecked(m))
+      case FunctionDeclaration.self:
+        ms.append(m)
+      case FunctionBundleDeclaration.self:
+        let b = castUnchecked(m, to: FunctionBundleDeclaration.self)
+        ms.append(contentsOf: self[b].variants.map(DeclarationIdentity.init(_:)))
+      default:
+        unexpected(m)
+      }
+    }
+
+    return .init(types: ts, conformances: cs, members: ms)
+  }
+
+  /// Returns the witness table defined by `d`.
+  ///
+  /// - Requires: The module containing `d` is typed.
+  public func implementations(definedBy d: ConformanceDeclaration.ID) -> WitnessTable {
+    self[d.module].implementations(definedBy: d) ?? unreachable("untyped node at \(self[d].site)")
+  }
+
+  /// If `witness` expresses the application of some closed and concrete conformance declaration,
+  /// returns that conformance along with its implementation of `requirement`.
+  ///
+  /// `requirement` is the declaration of a requirement of the trait whose conformance is being
+  /// witnessed by the value computed by `witness`. The result is non-`nil` iff `witness` is an
+  /// application of a concrete conformance declaration that does not capture any local binding.
+  ///
+  /// - Requires: The module containing `d` is typed.
+  public func implementation(
+    of requirement: DeclarationIdentity, in witness: WitnessExpression
+  ) -> (ConformanceDeclaration.ID, DeclarationReference)? {
+    if let d = witness.declaration, let c = cast(d, to: ConformanceDeclaration.self) {
+      return implementations(definedBy: c).member(implementing: requirement).map({ (m) in (c, m) })
+    } else {
+      return nil
+    }
+  }
+
+  /// If `n` is a requirement, returns the traits that introduces it. Otherwise, returns `nil`.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func traitRequiring<T: SyntaxIdentity>(_ n: T) -> TraitDeclaration.ID? {
+    switch tag(of: n) {
+    case AssociatedTypeDeclaration.self:
+      return parent(containing: n, as: TraitDeclaration.self)
+    case ConformanceDeclaration.self:
+      return parent(containing: n, as: TraitDeclaration.self)
+    case FunctionDeclaration.self:
+      return parent(containing: n, as: TraitDeclaration.self)
+    case VariantDeclaration.self:
+      return parent(containing: parent(containing: n).node!, as: TraitDeclaration.self)
+    default:
+      return nil
+    }
+  }
+
+  /// If `n` declares a member entity in an extension, returns the that declaration. Otherwise,
+  /// returns `nil`.
+  ///
+  /// - Requires: The module containing `n` is scoped.
+  public func extensionContaining<T: SyntaxIdentity>(_ n: T) -> ExtensionDeclaration.ID? {
+    switch tag(of: n) {
+    case VariantDeclaration.self:
+      return parent(containing: parent(containing: n).node!, as: ExtensionDeclaration.self)
+    default:
+      return parent(containing: n, as: ExtensionDeclaration.self)
+    }
+  }
+
+  /// Returns the innermost member declaration containing `s` that does not contain any type scope
+  /// containing `s`, or `nil` if no such declaration exists.
+  public func innermostMemberScope(from s: ScopeIdentity) -> ScopeIdentity? {
+    var next: Optional = s
+    while let n = next, let d = n.node {
+      if isMember(d) {
+        return n
+      } else if isStatic(d) || isTypeDeclaration(d) || isTypeExtendingDeclaration(d) {
+        return nil
+      } else {
+        next = parent(containing: n)
+      }
+    }
+    return nil
+  }
+
+  /// Returns a sequence containing `s` and its ancestors, from inner to outer.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func scopes(from s: ScopeIdentity) -> some Sequence<ScopeIdentity> {
+    var next: Optional = s
+    return AnyIterator {
+      if let n = next {
+        next = n.node.map(parent(containing:))
+        return n
+      } else {
+        return nil
+      }
+    }
+  }
+
+  /// Returns `true` iff `m` is considered to occur before `n` in diagnostics.
+  ///
+  /// If `m` and `n` are in the same file, they are ordered by the start of their source span. If
+  /// they in different source files belonging to the same module, they are ordered by the names of
+  /// these files. Otherwise, they are in ordered by the names of their containing modules.
+  public func occurInOrder<T: SyntaxIdentity, U: SyntaxIdentity>(
+    _ m: T, _ n: U
+  ) -> Bool {
+    if m.erased == n.erased {
+      return false
+    } else if m.file == n.file {
+      let l = self[m].site.start
+      let r = self[n].site.start
+      return (l != r) ? (l < r) : (m.erased.bits < n.erased.bits)
+    } else if m.module == n.module {
+      return self[m.file].source.name.lexicographicallyPrecedes(self[n.file].source.name)
+    } else {
+      return self[m.module].name.lexicographicallyPrecedes(self[n.module].name)
+    }
+  }
+
+  /// Returns `true` iff `m` and `n` are in the same file.
+  public func inSameFile<T: SyntaxIdentity, U: SyntaxIdentity>(_ m: T, _ n: U) -> Bool {
+    (m.module == n.module) && (m.file == n.file)
+  }
+
+  /// Returns `true` iff `m` and `n` are in the same file.
+  public func inSameFile<T: SyntaxIdentity>(_ m: T, _ n: ScopeIdentity) -> Bool {
+    (m.module == n.module) && (m.file == n.file)
+  }
+
+  /// Returns `true` iff `m` and `n` are in the same file.
+  public func inSameFile(_ m: ScopeIdentity, _ n: ScopeIdentity) -> Bool {
+    (m.module == n.module) && (m.file == n.file)
+  }
+
+  public func depth<T: SyntaxIdentity>(_ n: T) -> Int {
+    scopes(from: parent(containing: n)).count(where: { _ in true })
+  }
+
+  /// Returns whether `m` or `n` is lexically closer to `s`.
+  ///
+  /// The result is:
+  /// - `.ascending` iff `m` is considered closer to `s` than `n`;
+  /// - `.descending` iff `m` is considered father from `s` than `n`;
+  /// - `.equal` otherwise.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func compareLexicalDistances<T: SyntaxIdentity, U: SyntaxIdentity>(
+    _ m: T, _ n: U, relativeTo s: ScopeIdentity
+  ) -> StrictOrdering {
+    // Are `m` and `n` the same tree.
+    if m == n { return .equal }
+
+    // Are `m` and `n` in separate files?
+    if !inSameFile(m, n) {
+      if inSameFile(m, s) {
+        return .ascending
+      } else if inSameFile(n, s) {
+        return .descending
+      } else {
+        return .init(between: depth(m), and: depth(n))
+      }
+    }
+
+    // `m` and `n` are in the same file and `lca` is their deepest common scope.
+    let (xs, ys, lca) = commonAncestry(m, n)
+
+    // Are `m`/`n` and `s` in separate files?
+    if !inSameFile(lca!, s) {
+      return .init(between: xs.count, and: ys.count)
+    }
+
+    // Are `m` and `n` contained in `s`?
+    if scopes(from: lca!).contains(s) {
+      return .init(between: xs.count, and: ys.count)
+    }
+
+    // Is `m` contained in `s`.
+    if let i = xs.firstIndex(of: s) {
+      return .init(between: i, and: (xs.count - i) + ys.count)
+    }
+
+    // Is `n` contained in `s`.
+    if let i = ys.firstIndex(of: s) {
+      return .init(between: (ys.count - i) + xs.count, and: i)
+    }
+
+    // `s` is nested in the innermost scope containing either `m` or `n`, or it does not share a
+    // common ancestor with neither `m` nor `n`.
+    let p = castToScope(m) ?? parent(containing: m)
+    let q = castToScope(n) ?? parent(containing: n)
+    var origin = s
+    while let o = origin.node {
+      if origin == p { return .ascending }
+      if origin == q { return .descending }
+      origin = parent(containing: o)
+    }
+    return .init(between: xs.count, and: ys.count)
+  }
+
+  /// Returns the declarations directly contained in `s`.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func declarations(lexicallyIn s: ScopeIdentity) -> [DeclarationIdentity] {
+    if let n = s.node {
+      return self[n.file].scopeToDeclarations[n.offset] ?? preconditionFailure("unscoped module")
+    } else {
+      return self[s.file].topLevelDeclarations
+    }
+  }
+
+  /// Returns the declarations directly contained in `s` that identify nodes of type `T`.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func declarations<T: Declaration>(
+    of t: T.Type, lexicallyIn s: ScopeIdentity
+  ) -> some Collection<ConcreteSyntaxIdentity<T>> {
+    collect(t, in: declarations(lexicallyIn: s))
+  }
+
+  /// Returns the declarations of the stored properties of `d`.
+  ///
+  /// The declarations are returned in the order of their occurrence in `d`. This order does not
+  /// necessarily matches the layout of the struct after code generation.
+  public func storedProperties(of d: StructDeclaration.ID) -> [VariableDeclaration.ID] {
+    var result: [VariableDeclaration.ID] = []
+    forEachStoredProperty(of: d, do: { (v, _) in result.append(v) })
+    return result
+  }
+
+  /// If `d` declares a stored property of a type whose layout is visible in `scopeOfUse`, returns
+  /// that property's index; otherwise, returns `nil`.
+  ///
+  /// The index of a stored property is used in instances of `IndexPath` to represent the location
+  /// of a part relative to the location of a whole. For example, if `S` is a struct with two
+  /// stored properties `x` and `y`, declared in that order, the index of `y` is 1.
+  ///
+  /// If resilience is enabled in the module containing `d`, the layout of the type declared by `d`
+  /// is visible if `d` is the same module as `scopeOfUse` or if `d` is annotated with `@frozen`.
+  /// Layouts are always visible when resilience is disabled.
+  public mutating func storedPropertyIndex(
+    of d: DeclarationIdentity, in scopeOfUse: ScopeIdentity
+  ) -> Int? {
+    guard
+      let v = cast(d, to: VariableDeclaration.self),
+      let p = parent(containing: v, as: StructDeclaration.self),
+      isLayoutVisible(p, in: scopeOfUse)
+    else { return nil }
+    return storedProperties(of: p).firstIndex(of: v)
+  }
+
+  /// Returns the binding declaration that contains `d`, if any.
+  ///
+  /// - Requires: The module containing `s` is scoped.
+  public func bindingDeclaration(containing d: VariableDeclaration.ID) -> BindingDeclaration.ID? {
+    assert(isScoped(d.file), "unscoped module")
+    return self[d.file].variableToBinding[d.offset]
+  }
+
+  /// Returns the declaration of the base type of `t` iff that is a struct or enum.
+  public func declaration(whereStructOrEnum t: AnyTypeIdentity) -> DeclarationIdentity? {
+    guard let d = declaration(of: t) else { return nil }
+    switch tag(of: d) {
+    case StructDeclaration.self, EnumDeclaration.self:
+      return d
+    default:
+      return nil
+    }
+  }
+
+  /// Returns the declaration of the base type of `t`, if any.
+  public func declaration(of t: AnyTypeIdentity) -> DeclarationIdentity? {
+    switch types.tag(of: t) {
+    case AssociatedType.self:
+      return .init(types[types.castUnchecked(t, to: AssociatedType.self)].declaration)
+    case Enum.self:
+      return .init(types[types.castUnchecked(t, to: Enum.self)].declaration)
+    case GenericParameter.self:
+      return declaration(of: types.castUnchecked(t, to: GenericParameter.self))
+    case Struct.self:
+      return .init(types[types.castUnchecked(t, to: Struct.self)].declaration)
+    case Trait.self:
+      return .init(types[types.castUnchecked(t, to: Trait.self)].declaration)
+    case TypeAlias.self:
+      return declaration(of: types[types.castUnchecked(t, to: TypeAlias.self)].aliasee)
+    case TypeApplication.self:
+      return declaration(of: types[types.castUnchecked(t, to: TypeApplication.self)].abstraction)
+    default:
+      return nil
+    }
+  }
+
+  /// Returns the declaration of the type of which `t` is an instance, if any.
+  public func declaration(of t: GenericParameter.ID) -> DeclarationIdentity? {
+    types[t].declaration.map(DeclarationIdentity.init(_:))
+  }
+
+  /// Returns the types of stored parts of `t` iff its layout is visible from `module`.
+  public mutating func storage(
+    of t: AnyTypeIdentity, visibleFrom module: Module.ID
+  ) -> [AnyTypeIdentity]? {
+    // TODO: Resilience
+    withTyper(typing: module, { (typer) in typer.storage(of: t) })
+  }
+
+  /// Returns the types of the fields of `t` iff its layout is visible from `module`.
+  public mutating func fields(
+    of t: AnyTypeIdentity, visibleFrom module: Module.ID
+  ) -> [AnyTypeIdentity]? {
+    // TODO: Resilience
+    withTyper(typing: module, { (typer) in typer.fields(of: t) })
+  }
+
+  /// Returns the names introduced by `d`.
+  public func names(introducedBy d: BindingDeclaration.ID) -> [Name] {
+    var result: [Name] = []
+    forEachVariable(introducedBy: self[self[d].pattern].pattern) { (v, _) in
+      result.append(.init(identifier: self[v].identifier.value))
+    }
+    return result
+  }
+
+  /// Returns a string describing the entity declared by `d`.
+  public func debugName(of d: DeclarationIdentity) -> String {
+    var result = [unqualifiedDebugName(of: d)]
+    for s in scopes(from: self.parent(containing: d)) {
+      if let n = s.node.flatMap(castToDeclaration(_:)) {
+        result.append(unqualifiedDebugName(of: n))
+      }
+    }
+    return result.reversed().joined(separator: ".")
+  }
+
+  /// Returns a string describing the entity declared by `d`, sans qualification.
+  public func unqualifiedDebugName(of d: DeclarationIdentity) -> String {
+    if let b = cast(d, to: BindingDeclaration.self) {
+      return names(introducedBy: b).uniqueElement?.description ?? tag(of: d).description
+    } else {
+      return nameOrTag(of: d)
+    }
+  }
+
+  /// Returns the name of the unique entity declared by `d` or a description of `d`'s tag if it
+  /// declares zero or more than one named entity.
+  public func nameOrTag(of d: DeclarationIdentity) -> String {
+    if let n = name(of: d) {
+      return n.description
+    } else {
+      let s = self[d].site
+      let (l, o) = s.start.lineAndOffset
+      return "$<\(tag(of: d)) at \(s.source.baseName):\(l + 1).\(o + 1)>"
+    }
+  }
+
+  /// Returns the name of the unique entity declared by `d`, or `nil` if `d` declares zero or more
+  /// than one named entity.
+  ///
+  /// - Requires: The module containing `d` is scoped.
+  public func name(of d: DeclarationIdentity) -> Name? {
+    switch tag(of: d) {
+    case AssociatedTypeDeclaration.self:
+      return name(of: castUnchecked(d, to: AssociatedTypeDeclaration.self))
+    case ConformanceDeclaration.self:
+      return name(of: castUnchecked(d, to: ConformanceDeclaration.self))
+    case EnumCaseDeclaration.self:
+      return name(of: castUnchecked(d, to: EnumCaseDeclaration.self))
+    case EnumDeclaration.self:
+      return name(of: castUnchecked(d, to: EnumDeclaration.self))
+    case FunctionBundleDeclaration.self:
+      return name(of: castUnchecked(d, to: FunctionBundleDeclaration.self))
+    case FunctionDeclaration.self:
+      return name(of: castUnchecked(d, to: FunctionDeclaration.self))
+    case GenericParameterDeclaration.self:
+      return name(of: castUnchecked(d, to: GenericParameterDeclaration.self))
+    case ParameterDeclaration.self:
+      return name(of: castUnchecked(d, to: ParameterDeclaration.self))
+    case StructDeclaration.self:
+      return name(of: castUnchecked(d, to: StructDeclaration.self))
+    case TraitDeclaration.self:
+      return name(of: castUnchecked(d, to: TraitDeclaration.self))
+    case TypeAliasDeclaration.self:
+      return name(of: castUnchecked(d, to: TypeAliasDeclaration.self))
+    case VariableDeclaration.self:
+      return name(of: castUnchecked(d, to: VariableDeclaration.self))
+    case VariantDeclaration.self:
+      return name(of: castUnchecked(d, to: VariantDeclaration.self))
+    default:
+      return nil
+    }
+  }
+
+  /// Returns the name of `d`.
+  public func name<T: TypeDeclaration>(of d: T.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d`, if any.
+  public func name(of d: ConformanceDeclaration.ID) -> Name? {
+    self[d].identifier.map({ (n) in Name(identifier: n.value) })
+  }
+
+  /// Returns the name of `d`.
+  public func name(of d: EnumCaseDeclaration.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d`.
+  public func name(of d: FunctionBundleDeclaration.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d` or `nil` if `d` declares a lambda.
+  public func name(of d: FunctionDeclaration.ID) -> Name? {
+    switch self[d].identifier.value {
+    case _ where self[d].introducer.value == .memberwiseinit:
+      let s = parent(containing: d, as: StructDeclaration.self)!
+      var labels: [String?] = []
+      forEachStoredProperty(of: s, do: { (v, _) in labels.append(self[v].identifier.value) })
+      return Name(identifier: "init", labels: .init(labels))
+
+    case .simple(let x):
+      let labels = self[d].parameters.map({ (p) in self[p].label?.value })
+      if let (l, ls) = labels.headAndTail, l == "self" {
+        return Name(identifier: x, labels: .init(ls))
+      } else {
+        return Name(identifier: x, labels: .init(labels))
+      }
+
+    case .operator(let n, let x):
+      return Name(identifier: x, notation: n)
+
+    case .lambda:
+      return nil
+    }
+  }
+
+  /// Returns the name of `d`.
+  public func name(of d: GenericParameterDeclaration.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d`.
+  public func name(of d: ParameterDeclaration.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d`.
+  public func name(of d: VariableDeclaration.ID) -> Name {
+    Name(identifier: self[d].identifier.value)
+  }
+
+  /// Returns the name of `d`.
+  ///
+  /// - Requires: The module containing `d` is scoped.
+  public func name(of d: VariantDeclaration.ID) -> Name {
+    let n = parent(containing: d).node.flatMap(castToDeclaration(_:)).flatMap(name(of:))!
+    return .init(identifier: n.identifier, labels: n.labels, introducer: self[d].effect.value)
+  }
+
+  /// Returns the name of `d` after compilation iff it has an external implementation.
+  public func externName(of d: DeclarationIdentity) -> String? {
+    annotation("extern", appliedTo: d).flatMap { (a) in
+      if case .some(.string(let n)) = a.arguments.first?.value {
+        return n
+      } else {
+        return nil
+      }
+    }
+  }
+
+  /// Returns the name of the C implementation of `d` iff it declares a function annotated with
+  /// `@extern_c_indirect`.
+  public func externCName(of d: DeclarationIdentity) -> String? {
+    annotation("extern_c_indirect", appliedTo: d).flatMap { (a) in
+      if case .some(.string(let n)) = a.arguments.first?.value {
+        return n
+      } else {
+        return nil
+      }
+    }
+  }
+
+  /// Returns the name of the C implementation of the function named by `f` iff that function's
+  /// declaration is annotated with `@extern_c_indirect`.
+  public func externCName(of f: IRFunction.Name) -> String? {
+    if case .lowered(let d) = f {
+      return externCName(of: d)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns the symbol associated with `n`, if any.
+  ///
+  /// A syntax tree has an associated symbol if it is annotated with `@_symbol(s)` in sources,
+  /// where `s` is a string argument.
+  public func symbol<T: SyntaxIdentity>(annotating n: T) -> String? {
+    annotation("_symbol", appliedTo: n)
+      .flatMap({ (e) in e.arguments.uniqueElement })
+      .flatMap({ (e) in e.value.string })
+  }
+
+  /// Returns the left-most tree in the qualification of `e` iff `e` expresses a name.
+  public func rootQualification(of e: ExpressionIdentity) -> ExpressionIdentity? {
+    // The outermost expression may be a constructor.
+    var root = cast(e, to: New.self).map({ self[$0].qualification }) ?? e
+
+    while true {
+      switch tag(of: root) {
+      case NameExpression.self:
+        // Select `q` in `q.n`.
+        let n = castUnchecked(root, to: NameExpression.self)
+        if let q = self[n].qualification { root = q } else { return root }
+
+      case Call.self:
+        // Select `q` in `q(...)`.
+        let n = castUnchecked(root, to: Call.self)
+        root = self[n].callee
+
+      case StaticCall.self:
+        // Select `q` in `q<...>`.
+        let n = castUnchecked(root, to: StaticCall.self)
+        root = self[n].callee
+
+      default:
+        return root
+      }
+    }
+  }
+
+  /// Returns the left-most tree in the qualification of `e` iff it is implicit.
+  public func implicitQualification(of e: ExpressionIdentity) -> ImplicitQualification.ID? {
+    if let q = rootQualification(of: e) {
+      return cast(q, to: ImplicitQualification.self)
+    } else {
+      return nil
+    }
+  }
+
+  /// If `b`, which is the body of a routine, contains exactly one return statement, return that
+  /// statement. Otherwise, returns `nil`.
+  public func singleReturn(of b: [StatementIdentity]) -> Return.ID? {
+    b.uniqueElement.flatMap({ (s) in cast(s, to: Return.self) })
+  }
+
+  /// If `b` contains exactly one statement that is an expression, returns that expression.
+  /// Otherwise, returns `nil`.
+  public func singleExpression(of b: [StatementIdentity]) -> ExpressionIdentity? {
+    if let s = b.uniqueElement, self[s.file].isSingleExpressionBodied(s.erased) {
+      return castToExpression(s)
+    } else {
+      return nil
+    }
+  }
+
+  /// If `b` contains exactly one statement that is an expression, returns that expression.
+  /// Otherwise, returns `nil`.
+  public func singleExpression(of b: Block.ID) -> ExpressionIdentity? {
+    singleExpression(of: self[b].statements)
+  }
+
+  /// Returns `b` if it is an if-expression or `singleExpression(of: b)` if it is a block.
+  public func singleExpression(of b: If.ElseIdentity) -> ExpressionIdentity? {
+    if let e = cast(b, to: If.self) {
+      return .init(e)
+    } else if let s = cast(b, to: Block.self) {
+      return singleExpression(of: s)
+    } else {
+      unexpected(b)
+    }
+  }
+
+  // Returns the branches of `e` if both are single-expression bodied.
+  public func branches(
+    of e: If.ID
+  ) -> (onSuccess: ExpressionIdentity, onFailure: ExpressionIdentity)? {
+    guard
+      let a = singleExpression(of: self[e].success),
+      let b = singleExpression(of: self[e].failure)
+    else { return nil }
+    return (a, b)
+  }
+
+  /// Returns the adjunct conformances of `d`, if any.
+  public func adjuncts(of d: DeclarationIdentity) -> [ConformanceDeclaration.ID]? {
+    switch tag(of: d) {
+    case EnumDeclaration.self:
+      return self[castUnchecked(d, to: EnumDeclaration.self)].conformances
+    case StructDeclaration.self:
+      return self[castUnchecked(d, to: StructDeclaration.self)].conformances
+    default:
+      return nil
+    }
+  }
+
+  /// Calls `action` for each stored property declaration in `d`.
+  ///
+  /// `action` accepts a variable declaration and a path identifying its abstract position in a
+  /// record value having the type declared by `d`.
+  public func forEachStoredProperty(
+    of d: StructDeclaration.ID,
+    do action: (VariableDeclaration.ID, IndexPath) -> Void
+  ) {
+    var i = 0
+    for m in collect(BindingDeclaration.self, in: self[d].members) where !isStatic(m) {
+      forEachVariable(introducedBy: self[self[m].pattern].pattern) { (v, _) in
+        action(v, [i])
+        i += 1
+      }
+    }
+  }
+
+  /// Calls `action` for each variable declaration introduced by `d`.
+  ///
+  /// `action` accepts a variable declaration and a path relative to `root`, which identities the
+  /// abstract position of the declaration in the record value having the same type as `d`.
+  public func forEachVariable(
+    introducedBy d: BindingDeclaration.ID,
+    relativeTo root: IndexPath = [],
+    do action: (VariableDeclaration.ID, IndexPath) -> Void
+  ) {
+    forEachVariable(introducedBy: self[self[d].pattern].pattern, relativeTo: root, do: action)
+  }
+
+  /// Calls `action` for each variable declaration introduced in `p`.
+  ///
+  /// `action` accepts a variable declaration and a path relative to `root`, which identities the
+  /// abstract position of the declaration in the record value having the same type as `p`.
+  public func forEachVariable(
+    introducedBy p: PatternIdentity,
+    relativeTo path: IndexPath = [],
+    do action: (VariableDeclaration.ID, IndexPath) -> Void
+  ) {
+    switch tag(of: p) {
+    case BindingPattern.self:
+      let q = castUnchecked(p, to: BindingPattern.self)
+      forEachVariable(introducedBy: self[q].pattern, relativeTo: path, do: action)
+
+    case TuplePattern.self:
+      let q = castUnchecked(p, to: TuplePattern.self)
+      for (i, e) in self[q].elements.enumerated() {
+        forEachVariable(introducedBy: e, relativeTo: path.appending(i), do: action)
+      }
+
+    case VariableDeclaration.self:
+      action(castUnchecked(p), path)
+
+    default:
+      assert(isExpression(p))
+    }
+  }
+
+  /// Returns the declaration of the implicit symbol introduced by `d`.
+  public func implicit(
+    introducedBy d: BindingDeclaration.ID
+  ) -> (introducer: BindingPattern.Introducer, declaration: VariableDeclaration.ID) {
+    assert(self[d].isImplicit)
+    let p = self[d].pattern
+    let v = castUnchecked(self[p].pattern, to: VariableDeclaration.self)
+    return (self[p].introducer.value, v)
+  }
+
+  /// Returns the declaration of the variant with effect `k` in the bundle `d`, or `nil` if `d`
+  /// does not declare a bundle or `d` does not contain such a variant.
+  public func variant(_ k: AccessEffect, of d: DeclarationIdentity) -> VariantDeclaration.ID? {
+    if let b = cast(d, to: FunctionBundleDeclaration.self) {
+      return variant(k, of: b)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns the declaration of the variant with effect `k` in the bundle `d`, if any.
+  public func variant(
+    _ k: AccessEffect, of d: FunctionBundleDeclaration.ID
+  ) -> VariantDeclaration.ID? {
+    self[d].variants.first(where: { (v) in self[v].effect.value == k })
+  }
+
+  /// Returns the call effects of variants declared in `d`.
+  public func effects(_ d: FunctionBundleDeclaration.ID) -> AccessEffectSet {
+    var s = AccessEffectSet()
+    for v in self[d].variants {
+      s.insert(self[v].effect.value)
+    }
+    return s
+  }
+
+  /// Returns the annotations applied to `n`.
+  public func annotations<T: SyntaxIdentity>(_ n: T) -> [Annotation] {
+    if let m = self[n] as? any Annotatable {
+      return m.annotations
+    } else {
+      return []
+    }
+  }
+
+  /// Returns the annotation named `k` that is applied to `n`, if any.
+  public func annotation<T: SyntaxIdentity>(_ k: String, appliedTo n: T) -> Annotation? {
+    annotations(n).first(where: { (a) in a.identifier.value == k })
+  }
+
+  /// Returns the modifiers applied to `d`.
+  public func modifiers(_ d: DeclarationIdentity) -> [Parsed<DeclarationModifier>] {
+    if let m = self[d] as? any ModifiableDeclaration {
+      return m.modifiers
+    } else {
+      return []
+    }
+  }
+
+  /// Returns `true` iff `d` needs a user-defined a definition.
+  ///
+  /// A declaration requires a definition unless it is a trait requirement, an external function,
+  /// or a memberwise initializer.
+  public func requiresDefinition(_ d: DeclarationIdentity) -> Bool {
+    switch tag(of: d) {
+    case FunctionDeclaration.self:
+      let f = castUnchecked(d, to: FunctionDeclaration.self)
+      return !isRequirement(f) && !isExtern(f) && !isExternCIndirect(f)
+        && !self[f].isMemberwiseInitializer
+    default:
+      return !isRequirement(d)
+    }
+  }
+
+  /// Returns the definition of `f` iff such definition is visible from `m`.
+  ///
+  /// The result is the identity of the first definition of `f` found by inspecting `m` and then
+  /// its dependencies, in an arbitrary order. The method assumes all possible definitions of `f`
+  /// to be equivalent, which corresponds to LLVM's `linkonce` linkage type.
+  ///
+  /// - Requires: `f` is declared (possibly without a definition) in `m`.
+  public func definition(
+    of f: IRFunction.Name, visibleFrom m: Module.ID
+  ) -> (Module.ID, IRFunction.ID)? {
+    guard let i = self[m].ir.identity(function: f) else { return nil }
+
+    // Is `f` defined in `m`?
+    if self[m].ir[i].isDefined {
+      return (m, i)
+    }
+
+    // Is `f` defined in a dependency?
+    for d in self[m].dependencies {
+      guard let n = self.identity(module: d) else { continue }
+      if let j = self[n].ir.identity(function: f), self[n].ir[j].isDefined {
+        return (n, j)
+      }
+    }
+
+    // No definition available.
+    return nil
+  }
+
+  /// Reports that `n` was not expected in the current execution path and exits the program.
+  public func unexpected<T: SyntaxIdentity>(
+    _ n: T, file: StaticString = #file, line: UInt = #line
+  ) -> Never {
+    unreachable("unexpected node '\(tag(of: n))' at \(self[n].site)", file: file, line: line)
+  }
+
+  /// Reports that `t` was not expected in the current execution path and exits the program.
+  public func unexpected(
+    _ t: AnyTypeIdentity, file: StaticString = #file, line: UInt = #line
+  ) -> Never {
+    unreachable("unexpected type '\(show(t))'", file: file, line: line)
+  }
+
+  /// Returns a source span suitable to emit a diagnostic related to `n` as a whole.
+  public func spanForDiagnostic<T: SyntaxIdentity>(about n: T) -> SourceSpan {
+    switch tag(of: n) {
+    case AssociatedTypeDeclaration.self:
+      return self[castUnchecked(n, to: AssociatedTypeDeclaration.self)].identifier.site
+    case BindingDeclaration.self:
+      return self[self[castUnchecked(n, to: BindingDeclaration.self)].pattern].introducer.site
+    case ConformanceDeclaration.self:
+      return spanForDiagnostic(about: castUnchecked(n, to: ConformanceDeclaration.self))
+    case ExtensionDeclaration.self:
+      return self[castUnchecked(n, to: ExtensionDeclaration.self)].introducer.site
+    case FunctionDeclaration.self:
+      return self[castUnchecked(n, to: FunctionDeclaration.self)].identifier.site
+    case If.self:
+      return self[castUnchecked(n, to: If.self)].introducer.site
+    case ImportDeclaration.self:
+      return self[castUnchecked(n, to: ImportDeclaration.self)].identifier.site
+    case ParameterDeclaration.self:
+      return self[castUnchecked(n, to: ParameterDeclaration.self)].identifier.site
+    case StructDeclaration.self:
+      return self[castUnchecked(n, to: StructDeclaration.self)].identifier.site
+    case TraitDeclaration.self:
+      return self[castUnchecked(n, to: TraitDeclaration.self)].identifier.site
+    case TypeAliasDeclaration.self:
+      return self[castUnchecked(n, to: TypeAliasDeclaration.self)].identifier.site
+
+    case PatternMatch.self:
+      return self[castUnchecked(n, to: PatternMatch.self)].introducer.site
+    case PatternMatchCase.self:
+      return self[castUnchecked(n, to: PatternMatchCase.self)].introducer.site
+
+    case Return.self:
+      return spanForDiagnostic(about: castUnchecked(n, to: Return.self))
+    case While.self:
+      return self[castUnchecked(n, to: While.self)].introducer.site
+    case Yield.self:
+      return spanForDiagnostic(about: castUnchecked(n, to: Yield.self))
+
+    default:
+      return self[n].site
+    }
+  }
+
+  /// Returns a source span suitable to emit a diagnostic related to `n` as a whole.
+  public func spanForDiagnostic(about n: ConformanceDeclaration.ID) -> SourceSpan {
+    if self[n].isAdjunct {
+      return spanForDiagnostic(about: self[n].witness)
+    } else {
+      return self[n].introducer.site
+    }
+  }
+
+  /// Returns a source span suitable to emit a diagnostic related to `n` as a whole.
+  public func spanForDiagnostic(about n: Return.ID) -> SourceSpan {
+    if let i = self[n].introducer {
+      return .empty(at: i.site.start)
+    } else if let e = self[n].value {
+      return spanForDiagnostic(about: e)
+    } else {
+      return self[n].site
+    }
+  }
+
+  /// Returns a source span suitable to emit a diagnostic related to `n` as a whole.
+  public func spanForDiagnostic(about n: Yield.ID) -> SourceSpan {
+    if let i = self[n].introducer {
+      return .empty(at: i.site.start)
+    } else {
+      return spanForDiagnostic(about: self[n].value)
+    }
+  }
+
+  /// Returns `message` with placeholders replaced by their corresponding values in `arguments`.
+  ///
+  /// Use this method to generate strings containing one or several elements whose description is
+  /// computed by one of `show(_:)`'s overloads.
+  ///
+  /// ```swift
+  /// let t = AnyTypeIdentity.void
+  /// let s = program.format("'%T' is a type", [t])
+  /// assert(s == "'Void' is a type")
+  /// ```
+  ///
+  /// Each element to show is represented by a placeholder, which is a string starting with "%". The
+  /// i-th placeholder occurring in `message` (except `%%`) must have a corresponding value at the
+  /// i-th position of `arguments`.
+  ///
+  /// Valid placeholders are:
+  /// - `%S`: The textual description of an arbitrary value.
+  /// - `%T`: A type.
+  /// - `%%`: The percent sign; does not consume any argument.
+  public func format(
+    _ message: String, _ arguments: [Any], file: StaticString = #file, line: UInt = #line
+  ) -> String {
+    var printer = TreePrinter(program: self)
+    var output = ""
+    var s = message[...]
+    var a = arguments[...]
+    while let head = s.popFirst() {
+      if head == "%" {
+        output.append(next(&s, &a))
+      } else {
+        output.append(head)
+      }
+    }
+    return output
+
+    /// Replaces the placeholder at the start of `prefix` with its corresponding representation,
+    /// taking values from `arguments`.
+    func next(_ prefix: inout Substring, _ arguments: inout ArraySlice<Any>) -> String {
+      switch prefix.popFirst() {
+      case "S":
+        return String(describing: arguments.popFirst() ?? expected("item"))
+
+      case "T" where prefix.removeFirst(if: "*"):
+        let ts = (arguments.popFirst() as? [AnyTypeIdentity]) ?? expected("array of types")
+        return "\(printer.show(ts))"
+
+      case "T":
+        return printer.show((arguments.popFirst() as? AnyTypeIdentity) ?? expected("type"))
+
+      case "%":
+        return "%"
+
+      case let c:
+        let s = c.map(String.init(_:)) ?? ""
+        fatalError("invalid placeholder '%\(s)' in message: \(message)", file: file, line: line)
+      }
+    }
+
+    /// Reports that an argument of type `s` was expected and exits the program.
+    func expected(_ s: String) -> Never {
+      fatalError("expected \(s)", file: file, line: line)
+    }
+  }
+
+}
+
+extension Program {
+
+  /// The value identifying an entity from the standard library.
+  public enum StandardLibraryEntity: String, CaseIterable, Hashable, Sendable {
+
+    /// `Hylo.Bool`.
+    case bool = "Bool"
+
+    /// `Hylo.Int`.
+    case int = "Int"
+
+    /// `Hylo.UInt`.
+    case uint = "UInt"
+
+    /// `Hylo.Int8`.
+    case int8 = "Int8"
+
+    /// `Hylo.UInt8`.
+    case uint8 = "UInt8"
+
+    /// `Hylo.Int16`.
+    case int16 = "Int16"
+
+    /// `Hylo.UInt16`.
+    case uint16 = "UInt16"
+
+    /// `Hylo.Int32`.
+    case int32 = "Int32"
+
+    /// `Hylo.UInt32`.
+    case uint32 = "UInt32"
+
+    /// `Hylo.Int64`.
+    case int64 = "Int64"
+
+    /// `Hylo.UInt64`.
+    case uint64 = "UInt64"
+
+    /// `Hylo.Float32`.
+    case float32 = "Float32"
+
+    /// `Hylo.Float64`.
+    case float64 = "Float64"
+
+    /// `Hylo.Deinitializable`.
+    case deinitializable = "Deinitializable"
+
+    /// `Hylo.Deinitializable.deinit`.
+    case deinitializableDeinit = "Deinitializable.deinit(:)"
+
+    /// `Hylo.Equatable`.
+    case equatable = "Equatable"
+
+    /// `Hylo.Copyable`
+    case copyable = "Copyable"
+
+    /// `Hylo.Movable`.
+    case movable = "Movable"
+
+    /// `Hylo.Movable.take_value(from:)`
+    case movableTakeValue = "Movable.take_value(from:)"
+
+    /// `Hylo.ExpressibleByIntegerLiteral`.
+    case expressibleByIntegerLiteral = "ExpressibleByIntegerLiteral"
+
+    /// `Hylo.ExpressibleByIntegerLiteral.init(integer_literal:)`.
+    case expressibleByIntegerLiteralInit = "ExpressibleByIntegerLiteral.init(integer_literal:)"
+
+    /// `Hylo.ExpressibleByFloatingPointLiteral`.
+    case expressibleByFloatingPointLiteral = "ExpressibleByFloatingPointLiteral"
+
+    /// `Hylo.ExpressibleByFloatingPointLiteral.init(floating_point_literal:)`.
+    case expressibleByFloatingPointLiteralInit =
+      "ExpressibleByFloatingPointLiteral.init(floating_point_literal:)"
+
+    /// `Hylo.__initialize_record_offsets(offsets:aggregating:count:)`.
+    case initializeRecordOffsets = "initialize_record_offsets(offsets:aggregating:count:)"
+
+    /// All standard library integer types.
+    static let allIntegerTypes: [StandardLibraryEntity] = [
+      .int, .uint,
+      .int8, .uint8,
+      .int16, .uint16,
+      .int32, .uint32,
+      .int64, .uint64,
+    ]
+
+    /// All standard library floating point types.
+    static let allFloatingPointTypes: [StandardLibraryEntity] = [.float32, .float64]
+
+  }
+
+  /// Returns the type of a term witnessing that `t` conforms to the core trait `p`.
+  ///
+  /// The module containing the standard library must have been loaded and type checked.
+  public mutating func typeOfWitness(
+    of t: AnyTypeIdentity, is p: StandardLibraryEntity
+  ) -> AnyTypeIdentity {
+    let f = types.cast(standardLibraryType(p), to: UniversalType.self)!
+    return types.application(of: f, to: [t])
+  }
+
+  /// Returns the type of the given standard library entity.
+  ///
+  /// The module containing the standard library must have been loaded and type checked.
+  public mutating func standardLibraryType(_ n: StandardLibraryEntity) -> AnyTypeIdentity {
+    let d = standardLibraryDeclaration(n)
+    let t = dealiasedType(assignedTo: d, assuming: Metatype.self)
+    return types[t].inhabitant
+  }
+
+  /// Returns the declaration of the given standard library entity.
+  ///
+  /// The source files of the standard library must have been loaded but the module many not
+  /// necessarily be type checked already.
+  public func standardLibraryDeclaration(
+    _ n: StandardLibraryEntity
+  ) -> DeclarationIdentity {
+    standardLibraryDeclarations[n]
+      ?? fatalError("corrupt standard library: '\(n.rawValue)' is missing")
+  }
+
+  /// Returns the declaration of the given standard library assuming it is represented by `T`.
+  ///
+  /// The source files of the standard library must have been loaded but the module many not
+  /// necessarily be type checked already.
+  public func standardLibraryDeclaration<T: Declaration>(
+    _ n: StandardLibraryEntity, as: T.Type
+  ) -> T.ID {
+    castUnchecked(standardLibraryDeclaration(n), to: T.self)
+  }
+
+  /// Fills `program.standardLibraryDeclarations`.
+  ///
+  /// This method must be called before type checking the standard library.
+  internal mutating func initializeStandardLibraryCaches() {
+    for n in Program.StandardLibraryEntity.allCases {
+      guard
+        let a = identity(module: Module.standardLibraryName),
+        let b = select(from: a, .symbol(n.rawValue)).uniqueElement,
+        let d = castToDeclaration(b)
+      else {
+        precondition(
+          allowPartialStandardLibrary,
+          "missing or corrupt standard library; missing \(n.rawValue)")
+        continue
+      }
+      standardLibraryDeclarations[n] = d
+    }
+  }
+
+}
+
+extension Program {
+
+  /// The type of a table mapping module names to their identity in a program.
+  internal typealias ModuleIdentityMap = [Module.Name: Module.ID]
+
+  /// Serializes `m` to `archive`.
+  public func write<A>(module m: Module.ID, to archive: inout WriteableArchive<A>) throws {
+    // Configure the serialization context.
+    let c = Module.SerializationContext(
+      identities: .init(uniqueKeysWithValues: modules.values.map({ (m) in (m.name, m.identity) })),
+      types: types)
+
+    // Serialize the module.
+    var ctx: Any = c
+    try self[m].write(to: &archive, in: &ctx)
+  }
+
+  /// Serializes `m`.
+  public func archive(module m: Module.ID) throws -> BinaryBuffer {
+    var w = WriteableArchive(BinaryBuffer())
+    try write(module: m, to: &w)
+    return w.finalize()
+  }
+
+  /// Loads the module with the given `name` from `archive`.
+  ///
+  /// - Note: `self` is not modified if an exception is thrown.
+  /// - Requires: `name` is the name of the module stored in `archive`.
+  @discardableResult
+  public mutating func load<A>(
+    module name: Module.Name, from archive: inout ReadableArchive<A>
+  ) throws -> (loaded: Bool, identity: Module.ID) {
+    // Nothing to do if the module is already loaded.
+    if let m = identity(module: name) { return (false, m) }
+
+    // Reserve an identity for the new module.
+    let m = modules.count
+    var c = Module.SerializationContext(identities: [name: m], types: .init())
+    types.reserveCapacity(max(types.underestimatedCount << 1, 10000))
+
+    // Configure the serialization context.
+    swap(&c.types, &types)
+    defer { swap(&c.types, &types) }
+    for n in modules.values {
+      c.identities[n.name] = n.identity
+    }
+
+    // Deserialize the module.
+    let instance = try c.withWrapped({ (ctx) in try archive.read(Module.self, in: &ctx) })
+    precondition(name == instance.name)
+    modules[name] = instance
+
+    // Initialize the standard library cache if necessary.
+    if name == Module.standardLibraryName {
+      initializeStandardLibraryCaches()
+    }
+
+    return (true, m)
+  }
+
+  /// Loads the module named `moduleName`, reading its contents from `archive`.
+  ///
+  /// - Note: `self` is not modified if an exception is thrown.
+  /// - Requires: `moduleName` is the name of the module stored in `archive`.
+  @discardableResult
+  public mutating func load(
+    module moduleName: Module.Name, from archive: BinaryBuffer
+  ) throws -> (loaded: Bool, identity: Module.ID) {
+    var r = ReadableArchive(archive)
+    return try load(module: moduleName, from: &r)
+  }
+
+}
+
+extension Program {
+
+  public func select(_ filter: SyntaxFilter) -> some Collection<AnySyntaxIdentity> {
+    moduleIdentities.map({ (m) in select(from: m, filter) }).joined()
+  }
+
+  public func select(
+    from m: Module.ID, _ filter: SyntaxFilter
+  ) -> some Collection<AnySyntaxIdentity> {
+    modules.values[m].syntax.filter({ (n) in filter(n, in: self) })
+  }
+
+}
+
+/// A selector identifying nodes in a syntax tree.
+public indirect enum SyntaxFilter {
+
+  /// Matches any node.
+  case all
+
+  /// Matches any node satisfying both filters.
+  case and(SyntaxFilter, SyntaxFilter)
+
+  /// Matches any node declaring a single entity with the given name.
+  case name(Name)
+
+  /// Matches any node annotated with the given symbol.
+  case symbol(String)
+
+  /// Matches any node with the given tag.
+  case tag(any Syntax.Type)
+
+  /// Matches any node satisfying the given predicate.
+  case satisfies((AnySyntaxIdentity) -> Bool)
+
+  /// Returns `true` if the node `n` of program `p` satisfies `self`.
+  public func callAsFunction(_ n: AnySyntaxIdentity, in p: Program) -> Bool {
+    switch self {
+    case .all:
+      return true
+    case .and(let l, let r):
+      return l(n, in: p) && r(n, in: p)
+    case .name(let x):
+      return p.castToDeclaration(n).map({ (d) in p.name(of: d) == x }) ?? false
+    case .symbol(let x):
+      return p.symbol(annotating: n) == x
+    case .tag(let k):
+      return p.tag(of: n) == k
+    case .satisfies(let p):
+      return p(n)
+    }
+  }
+
+}
+
+/// The scopes preceding the deepest common ancestor of two syntax trees.
+public struct CommonAncestry {
+
+  /// An array with all the scopes containing the left tree.
+  fileprivate let leftAndShared: [ScopeIdentity]
+
+  /// The position of the deepest common ancestor of the two trees.
+  fileprivate let deepestCommonAncestor: Int
+
+  /// The scopes containing the right tree up to `shared`.
+  public let right: [ScopeIdentity]
+
+  /// The scopes containing the left tree up to `shared`.
+  public var left: ArraySlice<ScopeIdentity> {
+    leftAndShared[..<deepestCommonAncestor]
+  }
+
+  /// The deepest common ancestor of the two trees, if any.
+  public var shared: ArraySlice<ScopeIdentity> {
+    leftAndShared[deepestCommonAncestor...]
+  }
+
+}
+
+/// A syntax visitor that enumerates the immediate children of a node.
+fileprivate struct ChildrenEnumerator: SyntaxVisitor {
+
+  /// The node whose children are being enumerated.
+  fileprivate var parent: AnySyntaxIdentity
+
+  /// The children collected by the calls to `willEnter(_:in:)`.
+  fileprivate var children: [AnySyntaxIdentity] = []
+
+  fileprivate mutating func willEnter(_ n: AnySyntaxIdentity, in program: Program) -> Bool {
+    if n != parent { children.append(n) }
+    return n == parent
+  }
+
+}
+
+
+extension Program {
+
+  /// Returns the identity of a contained source file named `f`, if any.
+  public func sourceFile(named f: FileName) -> SourceFile.ID? {
+    modules.values.indices.firstNonNil { (m) in
+      self[m].sourceFile(named: f)
+    }
+  }
+
+  /// Returns the source file identified by `f`.
+  public subscript(sourceFile f: SourceFile.ID) -> SourceFile {
+    self[f].source
+  }
+
+  /// Returns the diagnostics in source file `f`.
+  public func diagnostics(in f: SourceFile.ID) -> DiagnosticSet {
+    self[f].diagnostics
+  }
+
+  /// Returns the top-level declarations in source file `f`.
+  public func topLevelDeclarations(in f: SourceFile.ID) -> some Sequence<DeclarationIdentity> {
+    self[f].topLevelDeclarations
+  }
+
+  /// Returns the givens whose definitions are visible from `scopeOfUse`.
+  ///
+  /// - Requires: `m` has been type checked.
+  public mutating func givens(in m: Module.ID, visibleFrom scopeOfUse: ScopeIdentity) -> [Given] {
+    withTyper(typing: m, { (t) in
+      t.givens(visibleFrom: scopeOfUse).flatMap({ $0 })
+    })
+  }
+
+}

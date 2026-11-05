@@ -1,0 +1,10 @@
+// A pure loop under a constructor: absmodel at k=2 cannot refute (P<S<_>> is a fact), the loop
+// check can.
+trait P {}
+struct S<T> {}
+struct Yb {}
+struct Xi {}
+given S<Xi> is P {}
+given <T where S<T> is P> => S<T> is P {}
+fun need<where S<Yb> is P>() {}
+public fun main() { need() }

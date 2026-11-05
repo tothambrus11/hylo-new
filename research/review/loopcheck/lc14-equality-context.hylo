@@ -1,0 +1,17 @@
+trait P { type X }
+trait Q {}
+trait R refines Q {}
+struct A {}
+struct B {}
+
+given B is Q {}
+given <T where T is P, T.X is Q> => T is Q {}
+given <T where T is Q, T is Q> => T is Q {}
+given A is P { typealias X = B }
+
+fun needQ<T where T is Q>(x: T) {}
+
+fun f<T, U where T == U, U is Q>(x: T) { needQ(x) }
+fun g<T where T is P, T.X == A, A is Q>(x: T) { needQ(x) }
+fun h(x: A) { needQ(x) }
+given A is R {}

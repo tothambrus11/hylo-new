@@ -1,0 +1,3 @@
+trait P { fun f() -> Int }
+struct A { public memberwise init }
+given A is P { fun f() -> Int { 1 } }

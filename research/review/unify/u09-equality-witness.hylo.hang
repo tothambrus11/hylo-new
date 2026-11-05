@@ -1,0 +1,14 @@
+//! stage:typing no-std
+fun f0<T>() { f1<T, T>() }
+fun f1<T, U where T == U>() { f1<U, T>() }
+fun f2<T, U, V where T == U, U == V>() { f1<T, V>() }
+fun f3<T, U where T == {U, U}>(x: T) -> {U, U} { x }
+fun f4<T, U where {T, Void} == {Void, U}>(x: T) -> U { x }
+fun f5<T, U>() { f1<T, U>() }
+fun check<X>(x: X) {}
+public fun main() {
+  f0<Void>()
+  f1<{Void}, {Void}>()
+  f1<Void, {Void}>()
+  check<{Void, Void}>(f3<{Void, Void}, Void>(((), ())))
+}

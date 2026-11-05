@@ -1,0 +1,1310 @@
+import StableCollections
+import Utilities
+
+/// A collection of types.
+public struct TypeStore: Sendable {
+
+  /// The index of a type in a store.
+  public typealias Index = Int
+
+  /// A policy for substituting variables during reification.
+  public enum SubstitutionPolicy {
+
+    /// Free variables are substituted by errors.
+    case substitutedByError
+
+    /// Free variables are kept.
+    case kept
+
+  }
+
+  /// The types contained in this store.
+  private var types: StableSet<AnyTypeTree>
+
+  /// The identifier of the next fresh variable.
+  private var nextFreshIdentifier: Int
+
+  /// The identity of a proper generic type parameter.
+  private var alpha: GenericParameter.ID
+
+  /// Creates an empty instance.
+  public init() {
+    self.types = []
+    self.nextFreshIdentifier = 0
+    self.alpha = .init(uncheckedFrom: .error)
+    self.alpha = demand(GenericParameter.nth(0, .proper))
+  }
+
+  /// Returns a number less than the number of types created with this store.
+  public var underestimatedCount: Int {
+    types.count
+  }
+
+  /// Reserves enough space to store `minimumCapacity` types without allocating new storage.
+  public mutating func reserveCapacity(_ minimumCapacity: Int) {
+    self.types.reserveCapacity(minimumCapacity)
+  }
+
+  /// Returns the identity of a fresh type variable.
+  public mutating func fresh() -> TypeVariable.ID {
+    defer { nextFreshIdentifier += 1 }
+    return .init(uncheckedFrom: AnyTypeIdentity(variable: nextFreshIdentifier))
+  }
+
+  /// Returns the body of `f` with each parameter substituted with its corresponding argument.
+  public mutating func application(
+    of f: UniversalType.ID, to arguments: TypeArguments
+  ) -> AnyTypeIdentity {
+    let t = substitute(arguments, in: self[f].head)
+    let p = self[f].parameters.filter({ (p) in !arguments.parameters.contains(p) })
+    return introduce(parameters: p, into: t)
+  }
+
+  /// Returns the body of `f` with each parameter substituted with its corresponding argument.
+  public mutating func application(
+    of f: UniversalType.ID, to arguments: [AnyTypeIdentity]
+  ) -> AnyTypeIdentity {
+    application(of: f, to: .init(mapping: self[f].parameters, to: arguments))
+  }
+
+  /// Inserts `t` in `self` it isn't already present and returns the identity of an equal tree.
+  public mutating func demand<T: TypeTree>(_ t: T) -> T.ID {
+    .init(uncheckedFrom: demand(any: t))
+  }
+
+  /// Inserts `t` in `self` it isn't already present and returns the identity of an equal tree.
+  internal mutating func demand(any t: any TypeTree) -> AnyTypeIdentity {
+    switch t {
+    case is ErrorType:
+      return AnyTypeIdentity.error
+    case let u as Tuple where u == .empty:
+      return AnyTypeIdentity.void
+    case let u as UniversalType where isNever(u):
+      return AnyTypeIdentity.never
+    case let u as TypeVariable:
+      return AnyTypeIdentity(variable: u.identifier)
+    default:
+      return insert(t)
+    }
+  }
+
+  /// Inserts `t` in `self` and returns its identity, assuming `t` is not present in `self`.
+  private mutating func insert(_ t: any TypeTree) -> AnyTypeIdentity {
+    let i = types.insert(.init(t)).position
+
+    // 8 bits are reserved for the properties.
+    assert(UInt64(i) < (UInt64(1) << 55), "too many types")
+    return .init(offset: i, properties: t.properties)
+  }
+
+  /// Returns the unique type corresponding to the given signature, creating it if necessary.
+  internal mutating func demand(_ s: IRFunction.Signature) -> AnyTypeIdentity {
+    let t = demand(s.head()).erased
+    return introduce(parameters: s.typeParameters, into: t)
+  }
+
+  /// Returns the tag of `n`.
+  public func tag<T: TypeIdentity>(of n: T) -> TypeTag {
+    .init(type(of: self[n]))
+  }
+
+  /// Returns `true` iff `n` identifies a machine type.
+  public func isBuiltin<T: TypeIdentity>(_ n: T) -> Bool {
+    tag(of: n).value is MachineType.Type
+  }
+
+  /// Returns `true` iff `n` identifies a generic type parameter.
+  public func isParameter<T: TypeIdentity>(_ n: T) -> Bool {
+    tag(of: n) == GenericParameter.self
+  }
+
+  /// Returns `true` iff `n` identifies the type of an equality witness.
+  public func isEquality<T: TypeIdentity>(_ n: T) -> Bool {
+    tag(of: n) == EqualityWitness.self
+  }
+
+  /// Returns `true` iff `n` identifies a metatype whose inhabitant satisfies `predicate`.
+  public func isMetatype<T: TypeIdentity>(
+    _ n: T, of predicate: (AnyTypeIdentity) -> Bool
+  ) -> Bool {
+    if let m = self[n] as? Metatype {
+      return predicate(m.inhabitant)
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` is the type of an entity callable with the given style.
+  public func isCallable<T: TypeIdentity>(_ n: T, _ style: Call.Style) -> Bool {
+    if let w = seenAsTermAbstraction(n) {
+      return self[w].style == style
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` is the type of an entity callable with the given style and labels.
+  public func isCallable<T: TypeIdentity, S: Collection<String?>>(
+    _ n: T, _ style: Call.Style, withLabels labels: S
+  ) -> Bool {
+    if let w = seenAsTermAbstraction(n) {
+      return (self[w].style == style) && self[w].labelsCompatible(with: labels)
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `n` is possibly the type of a bound member function.
+  public func isLikeBoundMember<T: TypeIdentity>(_ n: T) -> Bool {
+    if let f = seenAsTermAbstraction(n) {
+      return tag(of: self[f].environment) == RemoteType.self
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` iff `u` is a representation of `Hylo.Never`.
+  public func isNever(_ u: UniversalType) -> Bool {
+    (u.head == alpha) && (u.parameters.uniqueElement == alpha)
+  }
+
+  /// Returns `true` iff `n` is a universal type or an implication.
+  public func hasContext<T: TypeIdentity>(_ n: T) -> Bool {
+    (tag(of: n) == UniversalType.self) || (tag(of: n) == Implication.self)
+  }
+
+  /// Returns `n` sans context clause.
+  public func head<T: TypeIdentity>(_ n: T) -> AnyTypeIdentity {
+    var h = n.erased
+    while true {
+      switch self[h] {
+      case let t as UniversalType:
+        h = t.head
+      case let t as Implication:
+        h = t.head
+      default:
+        return h
+      }
+    }
+  }
+
+  /// Returns the head and context clause of `n`.
+  public func contextAndHead(
+    _ n: AnyTypeIdentity
+  ) -> (context: ContextClause, head: AnyTypeIdentity) {
+    var p: [GenericParameter.ID] = []
+    var u: [AnyTypeIdentity] = []
+    var h = n
+
+    while true {
+      switch self[h] {
+      case let t as UniversalType:
+        p.append(contentsOf: t.parameters)
+        h = t.head
+      case let t as Implication:
+        u.append(contentsOf: t.usings)
+        h = t.head
+      default:
+        return (.init(parameters: p, usings: u), h)
+      }
+    }
+  }
+
+  /// Returns the implicit parameters and head of `n` opened for unification.
+  public mutating func open(
+    _ n: AnyTypeIdentity
+  ) -> (usings: [AnyTypeIdentity], head: AnyTypeIdentity) {
+    var u: [AnyTypeIdentity] = []
+    var h = n
+
+    while true {
+      switch self[h] {
+      case let t as UniversalType:
+        h = open(t.parameters, in: t.head)
+      case let t as Implication:
+        u.append(contentsOf: t.usings)
+        h = t.head
+      default:
+        return (u, h)
+      }
+    }
+  }
+
+  /// Returns `n` with each occurrence the parameters in `ps` substituted with a fresh variable.
+  public mutating func open(
+    _ ps: [GenericParameter.ID], in n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    let a = open(ps)
+    return substitute(a, in: n)
+  }
+
+  /// Returns a table mapping each parameter in `ps` to a fresh unification variable.
+  public mutating func open(_ ps: [GenericParameter.ID]) -> TypeArguments {
+    .init(mapping: ps, to: { _ in fresh().erased })
+  }
+
+  /// Returns `n` as the head of a universal type and/or implication introducing `c`.
+  public mutating func introduce(
+    _ c: ContextClause, into n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    let t = introduce(usings: c.usings, into: n)
+    let u = introduce(parameters: c.parameters, into: t)
+    return u
+  }
+
+  /// Returns `n` as the head of an implication having `lhs` on the left-hand side.
+  public mutating func introduce(
+    usings lhs: [AnyTypeIdentity], into n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    lhs.isEmpty ? n : demand(Implication(context: lhs, head: n)).erased
+  }
+
+  /// Returns `n` as the head of a universal type introducing `ps`.
+  ///
+  /// The result is `n` if `ps` is empty. Otherwise, it is a universal type binding the free
+  /// occurrences of type parameters in `n` that are also contained in `ps`.
+  public mutating func introduce<S: Collection<GenericParameter.ID>>(
+    parameters ps: S, into n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    if ps.isEmpty {
+      return n
+    } else {
+      return demand(UniversalType(parameters: Array(ps), head: n)).erased
+    }
+  }
+
+  /// Returns `n` without its first requirement.
+  public mutating func dropFirstRequirement(_ n: Implication.ID) -> AnyTypeIdentity {
+    let i = self[n]
+    if i.usings.count == 1 {
+      return i.head
+    } else {
+      return demand(Implication(context: .init(i.usings.dropFirst()), head: i.head)).erased
+    }
+  }
+
+  /// Returns the type parameters of `p`.
+  public mutating func parameters(of p: GenericParameter.ID) -> [GenericParameter.ID] {
+    var k = self[p].kind
+    var p: [GenericParameter.ID] = []
+    while let (a, b) = k.arrow {
+      p.append(demand(GenericParameter.nth(p.count, a)))
+      k = b
+    }
+    return p
+  }
+
+  /// Returns the parameters that occur free in `n`.
+  public mutating func parameters(freeIn n: AnyTypeIdentity) -> SortedSet<GenericParameter.ID> {
+    // Trivial if `n` contains no generic type paramerer.
+    if !n[.hasGenericParameter] { return [] }
+
+    var result: SortedSet<GenericParameter.ID> = []
+    _ = self.map(n) { (s, t) in
+      if let u = s.cast(t, to: UniversalType.self) {
+        result.formUnion(s.parameters(freeIn: s[u].head).subtracting(s[u].parameters))
+        return .stepOver(t)
+      } else if let p = s.cast(t, to: GenericParameter.self) {
+        result.insert(p)
+        return .stepOver(t)
+      } else if t[.hasGenericParameter] {
+        return .stepInto(t)
+      } else {
+        return .stepOver(t)
+      }
+    }
+
+    return result
+  }
+
+  /// Returns `n` as the head of a universal type introducing `ps`, which is the set of the type
+  /// parameters occurring free in `n`.
+  ///
+  /// - Requires: `ps` is not empty and contains exactly the parameters occurring free in `n`.
+  public mutating func constructor<S: Sequence<GenericParameter.ID>>(
+    binding ps: S, in n: AnyTypeIdentity
+  ) -> UniversalType.ID {
+    // Rename the parameters occurring free in `n` to avoid creating different constructors for
+    // alpha-equivalent types.
+    var ts: TypeArguments = [:]
+    for (i, p) in ps.enumerated() {
+      ts[p] = demand(any: GenericParameter.nth(i, self[p].kind))
+    }
+    assert(!ts.isEmpty)
+
+    let renamed = substitute(ts, in: n)
+    let qs = ps.map { (p) -> GenericParameter.ID in
+      ts[p].flatMap({ (q) in castUnchecked(q) }) ?? p
+    }
+
+    let result = introduce(parameters: qs, into: renamed)
+    return castUnchecked(result)
+  }
+
+  /// Returns the canonical representation of a tuple containing the given elements.
+  ///
+  /// The result is `.void` if `elements` is empty. Otherwise, it is an instance of `Tuple`.
+  public mutating func tuple<S: Sequence>(
+    of elements: S
+  ) -> AnyTypeIdentity where S.Element: TypeIdentity{
+    var result = demand(Tuple.empty)
+    for e in elements.reversed() {
+      result = demand(Tuple.cons(head: e.erased, tail: result.erased))
+    }
+    return result.erased
+  }
+
+  /// Returns the canonical representation of a tuple of `count` instances of `element`.
+  ///
+  /// The result of `buffer(t, count: n)` is the same as the result of calling `tuple(of:)` with a
+  /// sequence `n` identical types. The result is `.void` if `count` is equal to 0. Otherwise, it
+  /// is an instance of `Tuple`.
+  public mutating func buffer(_ element: AnyTypeIdentity, count: Int) -> AnyTypeIdentity {
+    if count == 0 {
+      return .void
+    } else {
+      var result = demand(Tuple.empty)
+      for _ in 0 ..< count {
+        result = demand(Tuple.cons(head: element, tail: result.erased))
+      }
+      return result.erased
+    }
+  }
+
+  /// Returns `(types, isOpenEnded)` where `types` contains the members of `t` and `isOpenEnded` is
+  /// `true` iff `t` is open-ended.
+  ///
+  /// A tuple is open-ended if it is of the form `.cons(A, B)` where `B` is not a tuple or `B` is
+  /// an open-ended tuple.
+  public func members(of t: Tuple.ID) -> (types: [AnyTypeIdentity], isOpenEnded: Bool) {
+    var result: [AnyTypeIdentity] = []
+
+    var s = t
+    while case .cons(let a, let b) = self[s] {
+      result.append(a)
+      if let u = cast(b, to: Tuple.self) {
+        s = u
+      } else {
+        return (result.appending(b), isOpenEnded: true)
+      }
+    }
+
+    assert(self[s] == .empty)
+    return (result, isOpenEnded: false)
+  }
+
+  /// Returns the `i`-th member of `t`, if any.
+  public func member(_ i: consuming Int, of t: Tuple.ID) -> AnyTypeIdentity? {
+    var s = t
+    while case .cons(let a, let b) = self[s] {
+      if i == 0 {
+        return a
+      } else if let u = cast(b, to: Tuple.self) {
+        i -= 1
+        s = u
+      } else {
+        return nil
+      }
+    }
+    return nil
+  }
+
+  /// Assuming `a` identifies the (possibly polymorphic) type of a callable abstraction with an
+  /// environment `e`, returns a copy of `a` where `e` is taken as first parameter if `e` is
+  /// non-empty or `a` unchanged otherwise.
+  ///
+  /// For example, if `a` is of the form `[let T]() let -> U`, the result is `[](let T) let -> U`.
+  public mutating func lifted<T: TypeIdentity>(_ a: T) -> AnyTypeIdentity {
+    switch tag(of: a) {
+    case Arrow.self:
+      return lifted(castUnchecked(a, to: Arrow.self)).erased
+    case Bundle.self:
+      return lifted(castUnchecked(a, to: Bundle.self)).erased
+    case Implication.self:
+      return lifted(castUnchecked(a, to: Implication.self)).erased
+    case UniversalType.self:
+      return lifted(castUnchecked(a, to: UniversalType.self)).erased
+    default:
+      preconditionFailure("not a callable abstraction")
+    }
+  }
+
+  /// Implements `lifted(_:)` for arrows.
+  public mutating func lifted(_ a: Arrow.ID) -> Arrow.ID {
+    let e = dealiased(self[a].environment)
+    let p: Parameter
+
+    if let r = self[e] as? RemoteType {
+      p = Parameter(access: r.access, type: r.projectee)
+    } else if e != .void {
+      p = Parameter(access: self[a].effect, type: e)
+    } else {
+      return a
+    }
+
+    let i = Array(p, prependedTo: self[a].inputs)
+    return demand(Arrow(effect: self[a].effect, inputs: i, output: self[a].output))
+  }
+
+  /// Implements `lifted(_:)` for bundles.
+  public mutating func lifted(_ a: Bundle.ID) -> Bundle.ID {
+    let s = lifted(self[a].shape)
+    return demand(Bundle(shape: s, variants: self[a].variants))
+  }
+
+  /// Implements `lifted(_:)` for implications.
+  public mutating func lifted(_ a: Implication.ID) -> Implication.ID {
+    let h = lifted(self[a].head)
+    return demand(Implication(context: self[a].usings, head: h))
+  }
+
+  /// Implements `lifted(_:)` for universal types.
+  public mutating func lifted(_ a: UniversalType.ID) -> UniversalType.ID {
+    let b = lifted(self[a].head)
+    return demand(UniversalType(parameters: self[a].parameters, head: b))
+  }
+
+  /// Returns the type of a pointer to a free-function implementing `a`'s interface.
+  public mutating func pointer(to a: Arrow.ID) -> FunctionPointer.ID {
+    let e = dealiased(self[a].environment)
+    let o = dealiased(self[a].output)
+    var i: [AnyTypeIdentity] = (e == .void) ? [] : [e]
+    i.append(contentsOf: self[a].inputs.map({ (e) in dealiased(e.type) }))
+    return demand(FunctionPointer(inputs: i, output: o))
+  }
+
+  /// Returns `n` if it identifies a tree of type `U`; otherwise, returns `nil`.
+  public func cast<T: TypeIdentity, U: TypeTree>(_ n: T, to: U.Type) -> U.ID? {
+    if type(of: self[n]) == U.self {
+      return .init(uncheckedFrom: n.erased)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `n` assuming it identifies a tree of type `U`.
+  public func castUnchecked<T: TypeIdentity, U: TypeTree>(_ n: T, to: U.Type = U.self) -> U.ID {
+    assert(type(of: self[n]) == U.self)
+    return .init(uncheckedFrom: n.erased)
+  }
+
+  /// Returns the shape of the term abstraction that `n` identifies, if any.
+  ///
+  /// The result is non-`nil` iff `n` sans context identifies either an arrow or a bundle. For
+  /// example, if `n` has the form `<T, E> [E]() auto -> T { let, inout }` (i.e., a polymorphic
+  /// bundle), the result is `[E]() auto -> T`.
+  public func seenAsTermAbstraction<T: TypeIdentity>(_ n: T) -> Arrow.ID? {
+    let h = head(n)
+    switch tag(of: h) {
+    case Arrow.self:
+      return .init(uncheckedFrom: h)
+    case Bundle.self:
+      return seenAsTermAbstraction(self[Bundle.ID(uncheckedFrom: h)].shape)
+    default:
+      return nil
+    }
+  }
+
+  /// Returns `(P, [A...])` iff `n` has the form `P<A...>`.
+  public func seenAsTraitApplication<T: TypeIdentity>(
+    _ n: T
+  ) -> (concept: Trait.ID, arguments: TypeArguments)? {
+    if let t = cast(n, to: TypeApplication.self) {
+      return seenAsTraitApplication(t)
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `(P, [A...])` iff `n` has the form `P<A...>`.
+  public func seenAsTraitApplication(
+    _ n: TypeApplication.ID
+  ) -> (concept: Trait.ID, arguments: TypeArguments)? {
+    if let u = cast(self[n].abstraction, to: Trait.self), !self[n].arguments.isEmpty {
+      return (concept: u, arguments: self[n].arguments)
+    } else {
+      return nil
+    }
+  }
+
+  /// If `n` is a type application or an alias thereof, returns its abstraction and arguments,
+  /// otherwise, returns `n` along with an empty set of type parameter assignments.
+  public func seenAsBaseTypeApplication<T: TypeIdentity>(
+    _ n: T
+  ) -> (base: AnyTypeIdentity, arguments: TypeArguments) {
+    var base = n.erased
+    var arguments = TypeArguments()
+    while true {
+      if let t = cast(base, to: TypeApplication.self) {
+        base = self[t].abstraction
+        arguments = self[t].arguments.mapValues { (u) in
+          cast(u, to: GenericParameter.self).flatMap({ (p) in arguments[p] }) ?? u
+        }
+      } else if let t = cast(base, to: TypeAlias.self) {
+        base = self[t].aliasee
+      } else {
+        return (base, arguments)
+      }
+    }
+  }
+
+  /// Returns `[Void](A...) -> T)` iff `n` has the form `[Void](self: set T, A...) -> Void`.
+  public mutating func asConstructor(_ n: AnyTypeIdentity) -> AnyTypeIdentity? {
+    let (c, h) = contextAndHead(n.erased)
+    guard
+      let f = self[h] as? Arrow,
+      let s = f.inputs.first,
+      (f.environment == .void) && (f.output == .void) && (s.access == .set) && (s.label == "self")
+    else { return nil }
+
+    let adapted = Arrow(
+      inputs: Array(f.inputs[1...]),
+      output: s.type)
+
+    let t = demand(adapted).erased
+    return introduce(c, into: t).erased
+  }
+
+  /// Returns `[k1 T](A...) k2 -> B` iff `n` has the form `[Void](self: k1 T, A...) k2 -> B`.
+  public mutating func asBoundMemberFunction(_ n: AnyTypeIdentity) -> AnyTypeIdentity? {
+    let (c, h) = contextAndHead(n.erased)
+
+    // `n` identifies a function?
+    if let a = cast(h, to: Arrow.self) {
+      if let adapted = asBoundMemberFunction(a) {
+        return introduce(c, into: adapted.erased)
+      } else {
+        return nil
+      }
+    }
+
+    // `n` identifies a function bundle?
+    else if let b = cast(h, to: Bundle.self) {
+      if let a = cast(self[b].shape, to: Arrow.self), let shape = asBoundMemberFunction(a) {
+        let adapted = demand(Bundle(shape: shape, variants: self[b].variants))
+        return introduce(c, into: adapted.erased)
+      } else {
+        return nil
+      }
+    }
+
+    // `n` is not a member function.
+    else {
+      return nil
+    }
+  }
+
+  /// Returns `[k1 T](A...) k2 -> B` iff `n` has the form `[Void](self: k1 T, A...) k2 -> B`.
+  private mutating func asBoundMemberFunction(_ n: Arrow.ID) -> Arrow.ID? {
+    let f = self[n]
+    guard let s = f.inputs.first, (f.environment == .void) && (s.label == "self") else {
+      return nil
+    }
+
+    let capture = demand(RemoteType(projectee: s.type, access: s.access)).erased
+    let adapted = Arrow(
+      style: f.style,
+      effect: f.effect,
+      environment: capture,
+      inputs: Array(f.inputs[1...]),
+      output: f.output)
+
+    return demand(adapted)
+  }
+
+  /// Returns the type of the result of applying an instance of `callable`, with a mutable callee
+  /// and/or arguments iff `isAppliedMutably` is `true`.
+  public mutating func resultOfApplying(
+    _ callable: AnyTypeIdentity, mutably isAppliedMutably: Bool
+  ) -> AnyTypeIdentity? {
+    switch self[callable] {
+    case let t as Arrow:
+      return t.output
+
+    case let t as Bundle:
+      // Are we looking for the result of applying a non-mutating variant of a function bundle?
+      if !isAppliedMutably, let u = cast(t.shape, to: Arrow.self) {
+        if let k = t.variants.intersection(.functional).first {
+          let adapted = variant(k, of: u)
+          return self[adapted].output
+        } else {
+          return nil
+        }
+      }
+
+      // Otherwise, the result is the same as that of the underlying shape.
+      else if !t.variants.intersection(.inplace).isEmpty {
+        return resultOfApplying(t.shape.erased, mutably: isAppliedMutably)
+      } else {
+        return nil
+      }
+
+    default:
+      return nil
+    }
+  }
+
+  /// Returns the type of the variant `k` of a bundle of type `n`.
+  ///
+  /// The result is `n` in which `k` is substituted for each top-level occurrence of `auto` effect.
+  /// Moreover, if `n` is the type of a function bundle (as opposed to a subscript bundle) and `k`
+  /// is `let` or `sink`, then the right-hand side of `n` is a tuple whose first component is the
+  /// original return type along and other components are the types of the values modified by an
+  /// application of the variant.
+  ///
+  /// For example, given a type `[auto A](y: auto B) auto -> C`, this method returns
+  /// - `[let A](y: let B) let -> {A, B, C}` with `k == .let`; and
+  /// - `[set A](y: set B) set -> C` with `k == .set`.
+  ///
+  /// - Requires: `n` is the type of a function bundle.
+  public mutating func variant(_ k: AccessEffect, of n: Arrow.ID) -> Arrow.ID {
+    assert(k != .auto, "invalid variant effect")
+    assert(self[n].effect == .auto, "not a bundle")
+
+    /// The types of the adapted inputs.
+    var inputs: [Parameter] = []
+    /// The type of the adapted environment.
+    var environment: AnyTypeIdentity = .void
+    /// The types of the values that appear in the return type of a non-mutating variant.
+    var updates: [AnyTypeIdentity] = []
+    /// `true` iff the return type of the result should include modified values.
+    let returnTypeIncludesUpdates = (self[n].style == .parenthesized) && k.isNonMutating
+
+    if let t = self[self[n].environment] as? RemoteType, t.access == .auto {
+      environment = demand(RemoteType(projectee: t.projectee, access: k)).erased
+      if returnTypeIncludesUpdates { updates.append(t.projectee) }
+    } else {
+      environment = self[n].environment
+    }
+
+    for p in self[n].inputs {
+      if p.access == .auto {
+        inputs.append(.init(label: p.label, access: k, type: p.type, defaultValue: p.defaultValue))
+        if returnTypeIncludesUpdates { updates.append(p.type) }
+      } else {
+        inputs.append(p)
+      }
+    }
+
+    let output = if returnTypeIncludesUpdates {
+      tuple(of: updates.appending(self[n].output)).erased
+    } else {
+      self[n].output
+    }
+
+    let result = Arrow(
+      style: self[n].style, effect: k, environment: environment, inputs: inputs, output: output)
+    return demand(result)
+  }
+
+  /// Returns the value at `p` on the type identified by `n` if that type is an instance of `T`.
+  /// Otherwise, returns `nil`.
+  public func select<T: TypeTree, U>(_ n: AnyTypeIdentity, _ p: KeyPath<T, U>) -> U? {
+    if let t = self[n] as? T {
+      return t[keyPath: p]
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns the value at `p` on the type identified by `n` if that type is an instance of `T` and
+  /// the value at `p` identifies an instance of `U`. Otherwise, returns `nil`.
+  public func select<T: TypeTree, U: TypeTree>(
+    _ n: AnyTypeIdentity, _ p: KeyPath<T, AnyTypeIdentity>, as: U.Type
+  ) -> U.ID? {
+    if let child = select(n, p) {
+      return cast(child, to: U.self)
+    } else {
+      return nil
+    }
+  }
+
+  /// Projects the type identified by `n`.
+  public subscript<T: TypeIdentity>(n: T) -> any TypeTree {
+    self[n.erased]
+  }
+
+  /// Projects the type identified by `n`.
+  public subscript<T: TypeTree>(n: T.ID) -> T {
+    self[n.erased] as! T
+  }
+
+  /// Projects the type identified by `n`.
+  internal subscript(n: AnyTypeIdentity) -> any TypeTree {
+    get {
+      switch n {
+      case AnyTypeIdentity.error:
+        ErrorType()
+      case AnyTypeIdentity.void:
+        Tuple.empty
+      case AnyTypeIdentity.never:
+        UniversalType(parameters: [alpha], head: alpha.erased)
+      case _ where n.isVariable:
+        TypeVariable(identifier: Int(n.bits & ((1 << 54) - 1)))
+      default:
+        types[n.offset].wrapped
+      }
+    }
+  }
+
+  /// Returns `n` transformed by `transform(_:_:)`.
+  public mutating func map(
+    _ n: AnyTypeIdentity,
+    _ transform: (inout TypeStore, AnyTypeIdentity) -> TypeTransformAction
+  ) -> AnyTypeIdentity {
+    switch transform(&self, n) {
+    case .stepInto(let m):
+      return modified(m, by: transform)
+    case .stepOver(let m):
+      return m
+    }
+  }
+
+  /// Returns `r` transformed by `transform(_:_:)`.
+  public mutating func map(
+    _ r: DeclarationReference,
+    _ transform: (inout TypeStore, AnyTypeIdentity) -> TypeTransformAction
+  ) -> DeclarationReference {
+    switch r {
+    case .builtin, .direct, .member, .synthetic:
+      return r
+    case .inherited(let w, let d, let s):
+      return .inherited(self.map(w, transform), d, statically: s)
+    }
+  }
+
+  /// Returns `w` transformed by `transform(_:_:)`.
+  public mutating func map(
+    _ w: WitnessExpression,
+    _ transform: (inout TypeStore, AnyTypeIdentity) -> TypeTransformAction
+  ) -> WitnessExpression {
+    let t = self.map(w.type, transform)
+
+    switch w.value {
+    case .identity(let e):
+      return .init(value: .identity(e), type: t)
+
+    case .abstract:
+      return .init(value: .abstract, type: t)
+
+    case .synthetic:
+      return .init(value: .synthetic, type: t)
+
+    case .assumed(let i):
+      return .init(value: .assumed(i), type: t)
+
+    case .builtin(let e):
+      return .init(value: .builtin(e), type: t)
+
+    case .reference(let d):
+      return .init(value: .reference(d), type: t)
+
+    case .termApplication(let a, let b):
+      let u = self.map(a, transform)
+      let v = self.map(b, transform)
+      return .init(value: .termApplication(u, v), type: t)
+
+    case .typeApplication(let a, let b):
+      let u = self.map(a, transform)
+      let v = b.mapValues({ (n) in self.map(n, transform) })
+      return .init(value: .typeApplication(u, v), type: t)
+
+    case .nested(let a):
+      let u = self.map(a, transform)
+      return .init(value: .nested(u), type: t)
+    }
+  }
+
+  /// Returns `n` with its parts transformed by `transform(_:_:)`.
+  ///
+  /// This operation is endomorphic: the result is an instance with the same type as `n`.
+  public mutating func modified(
+    _ n: AnyTypeIdentity,
+    by transform: (inout TypeStore, AnyTypeIdentity) -> TypeTransformAction
+  ) -> AnyTypeIdentity {
+    let t = self[n].modified(in: &self, by: transform)
+    return demand(any: t)
+  }
+
+  /// Returns `n` without any type alias.
+  public mutating func dealiased(_ n: AnyTypeIdentity) -> AnyTypeIdentity {
+    self.map(n) { (s, t) in
+      var u = t
+      while u[.hasAliases] {
+        if let a = s[u] as? TypeAlias {
+          u = a.aliasee
+        } else if let a = s[u] as? TypeApplication, let f = s[a.abstraction] as? TypeAlias {
+          u = s.substitute(a.arguments, in: f.aliasee)
+        } else {
+          return .stepInto(u)
+        }
+      }
+      return .stepOver(u)
+    }
+  }
+
+  /// Returns `a` without any type alias.
+  public mutating func dealiased(_ a: TypeArguments) -> TypeArguments {
+    a.mapValues({ (t) in dealiased(t) })
+  }
+
+  /// Returns `n` with each open variable substituted by either its corresponding value in
+  /// `substitutions` or the application of `substitutionPolicy` if no such substitution exists.
+  public mutating func reify(
+    _ n: AnyTypeIdentity,
+    applying substitutions: SubstitutionTable,
+    withVariables substitutionPolicy: SubstitutionPolicy = .substitutedByError
+  ) -> AnyTypeIdentity {
+    // Nothing to do if there aren't any open type variable.
+    if !n[.hasVariable] { return n }
+
+    // Reduce type applications if the abstraction is a universal type.
+    var t = substitutions[n]
+    while let a = self[t] as? TypeApplication, let f = self[a.abstraction] as? UniversalType {
+      t = substitute(.init(mapping: f.parameters, to: a.arguments.values), in: f.head)
+    }
+
+    // Recurse if necessary.
+    if t.isVariable {
+      return (substitutionPolicy == .kept) ? t : .error
+    } else {
+      return self.modified(t) { (s, u) in
+        .stepOver(s.reify(u, applying: substitutions, withVariables: substitutionPolicy))
+      }
+    }
+  }
+
+  /// Returns `r` with its open variables reified by `substitutions` and `substitutionPolicy`.
+  public mutating func reify(
+    _ r: DeclarationReference,
+    applying substitutions: SubstitutionTable,
+    withVariables substitutionPolicy: SubstitutionPolicy
+  ) -> DeclarationReference {
+    self.map(r) { (s, t) in
+      .stepOver(s.reify(t, applying: substitutions, withVariables: substitutionPolicy))
+    }
+  }
+
+  /// Returns `w` with its open variables reified by `substitutions` and `substitutionPolicy`.
+  public mutating func reify(
+    _ w: WitnessExpression,
+    applying substitutions: SubstitutionTable,
+    withVariables substitutionPolicy: SubstitutionPolicy
+  ) -> WitnessExpression {
+    self.map(w) { (s, t) in
+      .stepOver(s.reify(t, applying: substitutions, withVariables: substitutionPolicy))
+    }
+  }
+
+  /// Returns `n` with the keys in `substitutions` substituted with their corresponding values,
+  /// ignoring bound parameters.
+  ///
+  /// Type parameters introduced by a type abstraction are not substituted. For example, the
+  /// substitution of `A` for `T` in `{T, <T> {T, B}}` yields `{A, <T> {T, B}}`.
+  ///
+  /// - Requires: The parameters occurring free in `substitutions` and in `in` are disjoint.
+  public mutating func substitute(
+    _ substitutions: [AnyTypeIdentity: AnyTypeIdentity], in n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    substituteImpl(substitutions, in: n)
+  }
+
+  /// Returns `n` with the keys in `substitutions` substituted with their corresponding values,
+  /// ignoring bound parameters.
+  ///
+  /// Type parameters introduced by a type abstraction are not substituted. For example, the
+  /// substitution of `A` for `T` in `{T, <T> {T, B}}` yields `{A, <T> {T, B}}`.
+  ///
+  /// - Requires: The parameters occurring free in `substitutions` and in `in` are disjoint.
+  public mutating func substitute(
+    _ substitutions: TypeArguments, in n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    substituteImpl(substitutions, in: n)
+  }
+
+  /// Returns `n` with the keys in `substitutions` substituted with their corresponding values,
+  /// ignoring bound parameters.
+  ///
+  /// Type parameters introduced by a type abstraction are not substituted. For example, the
+  /// substitution of `A` for `T` in `{T, <T> {T, B}}` yields `{A, <T> {T, B}}`.
+  ///
+  /// - Requires: The parameters occurring free in `substitutions` and in `in` are disjoint.
+  private mutating func substituteImpl<S: Substitution>(
+    _ substitutions: S, in n: AnyTypeIdentity
+  ) -> AnyTypeIdentity {
+    // Trivial if the substitution table is empty.
+    if substitutions.isEmpty { return n }
+
+    // Otherwise, walk down the tree, making sure to remove bound parameters.
+    return self.map(n) { (s, t) in
+      if let u = s[t] as? UniversalType {
+        let r = substitutions.removing(keys: u.parameters)
+        let h = s.substituteImpl(r, in: u.head)
+        return .stepOver(s.demand(UniversalType(parameters: u.parameters, head: h)).erased)
+      } else if let u = substitutions[t] {
+        return .stepOver(u)
+      } else {
+        return .stepInto(t)
+      }
+    }
+  }
+
+  /// Returns `n` with unification variables substituted with an error.
+  public mutating func substituteVariableForError(in n: AnyTypeIdentity) -> AnyTypeIdentity {
+    self.map(n) { (s, t) in
+      if t.isVariable {
+        return .stepOver(.error)
+      } else {
+        return t[.hasVariable] ? .stepInto(t) : .stepOver(t)
+      }
+    }
+  }
+
+  /// Returns a substitution table that makes `lhs` and `rhs` equal modulo substitution of their
+  /// open variables.
+  public func unifiable(_ lhs: AnyTypeIdentity, _ rhs: AnyTypeIdentity) -> SubstitutionTable? {
+    var s = SubstitutionTable()
+    if unifiable(lhs, rhs, extending: &s, handlingCoercionsWith: { (_, _) in false }) {
+      return s
+    } else {
+      return nil
+    }
+  }
+
+  /// Returns `true` if `lhs` and `rhs` can be made equal, recording substitutions of unification
+  /// variables in `ss` and calling `areCoercible` to resolve non-syntactically equalities.
+  public func unifiable(
+    _ lhs: AnyTypeIdentity, _ rhs: AnyTypeIdentity, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    let a = ss[lhs]
+    let b = ss[rhs]
+
+    // The two types are trivially equal?
+    if a == b {
+      return true
+    }
+
+    // There are type variables?
+    else if a.isVariable {
+      ss.assign(b, to: .init(uncheckedFrom: a))
+      return true
+    } else if b.isVariable {
+      ss.assign(a, to: .init(uncheckedFrom: b))
+      return true
+    }
+
+    /// There are aliases?
+    else if let t = self[a] as? TypeAlias {
+      return unifiable(t.aliasee, b, extending: &ss, handlingCoercionsWith: areCoercible)
+    } else if let u = self[b] as? TypeAlias {
+      return unifiable(a, u.aliasee, extending: &ss, handlingCoercionsWith: areCoercible)
+    }
+
+    // The two types have the same shape?
+    let result: Bool
+    if TyperExperiments.unify {
+      result = unifiableSameShape(a, b, extending: &ss, handlingCoercionsWith: areCoercible)
+      return result || areCoercible(a, b)
+    }
+    switch (self[a], self[b]) {
+    case (let t as Arrow, let u as Arrow):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (let t as AssociatedType, let u as AssociatedType):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (let t as Bundle, let u as Bundle):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as Enum, _ as Enum):
+      result = false
+    case (let t as EqualityWitness, let u as EqualityWitness):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as ErrorType, _ as ErrorType):
+      result = false
+    case (let t as FunctionPointer, let u as FunctionPointer):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as GenericParameter, _ as GenericParameter):
+      result = false
+    case (let t as Implication, let u as Implication):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as MachineType, _ as MachineType):
+      result = false
+    case (_ as Metakind, _ as Metakind):
+      result = false
+    case (let t as Metatype, let u as Metatype):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as Namespace, _ as Namespace):
+      result = false
+    case (_ as OpaqueType, _ as OpaqueType):
+      result = false
+    case (let t as RemoteType, let u as RemoteType):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as Struct, _ as Struct):
+      result = false
+    case (_ as Trait, _ as Trait):
+      result = false
+    case (let t as Tuple, let u as Tuple):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (let t as TypeApplication, let u as TypeApplication):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    case (_ as TypeWitness, _ as TypeWitness):
+      result = false
+    case (let t as UniversalType, let u as UniversalType):
+      result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+    default:
+      assert(tag(of: a) != tag(of: b))
+      result = false
+    }
+
+    return result || areCoercible(a, b)
+  }
+
+  /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
+  /// but compares type tags before projecting and casting each operand once.
+  private func unifiableSameShape(
+    _ a: AnyTypeIdentity, _ b: AnyTypeIdentity, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith h: CoercionHandler
+  ) -> Bool {
+    let x = self[a]
+    let y = self[b]
+    let tx = ObjectIdentifier(type(of: x))
+    if tx != ObjectIdentifier(type(of: y)) { return false }
+    switch x {
+    case let t as TypeApplication:
+      return unifiable(t, y as! TypeApplication, extending: &ss, handlingCoercionsWith: h)
+    case let t as Arrow:
+      return unifiable(t, y as! Arrow, extending: &ss, handlingCoercionsWith: h)
+    case let t as Tuple:
+      return unifiable(t, y as! Tuple, extending: &ss, handlingCoercionsWith: h)
+    case let t as EqualityWitness:
+      return unifiable(t, y as! EqualityWitness, extending: &ss, handlingCoercionsWith: h)
+    case let t as AssociatedType:
+      return unifiable(t, y as! AssociatedType, extending: &ss, handlingCoercionsWith: h)
+    case let t as Bundle:
+      return unifiable(t, y as! Bundle, extending: &ss, handlingCoercionsWith: h)
+    case let t as FunctionPointer:
+      return unifiable(t, y as! FunctionPointer, extending: &ss, handlingCoercionsWith: h)
+    case let t as Implication:
+      return unifiable(t, y as! Implication, extending: &ss, handlingCoercionsWith: h)
+    case let t as Metatype:
+      return unifiable(t, y as! Metatype, extending: &ss, handlingCoercionsWith: h)
+    case let t as RemoteType:
+      return unifiable(t, y as! RemoteType, extending: &ss, handlingCoercionsWith: h)
+    case let t as UniversalType:
+      return unifiable(t, y as! UniversalType, extending: &ss, handlingCoercionsWith: h)
+    default:
+      // Nominal and atomic types (structs, traits, parameters, ...) unify only if identical,
+      // which has been checked by the caller.
+      return false
+    }
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Arrow, _ rhs: Arrow, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    (lhs.effect == rhs.effect) && (lhs.style == rhs.style)
+      && lhs.labels.elementsEqual(rhs.labels)
+      && unifiable(
+        lhs.environment, rhs.environment, extending: &ss, handlingCoercionsWith: areCoercible)
+      && unifiable(
+        lhs.inputs, rhs.inputs, extending: &ss,
+        by: { (a, b, s) in unifiable(a, b, extending: &s, handlingCoercionsWith: areCoercible) })
+      && unifiable(
+        lhs.output, rhs.output, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: AssociatedType, _ rhs: AssociatedType, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    if lhs.declaration == rhs.declaration {
+      let a = lhs.qualification
+      let b = rhs.qualification
+      return ((a.value == .abstract) || (b.value == .abstract))
+        && unifiable(a.type, b.type, extending: &ss, handlingCoercionsWith: areCoercible)
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Bundle, _ rhs: Bundle, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    (lhs.variants == rhs.variants)
+      && unifiable(
+        lhs.shape.erased, rhs.shape.erased, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: EqualityWitness, _ rhs: EqualityWitness, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(lhs.lhs, rhs.lhs, extending: &ss, handlingCoercionsWith: areCoercible)
+      && unifiable(lhs.rhs, rhs.rhs, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: FunctionPointer, _ rhs: FunctionPointer, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(
+      lhs.inputs, rhs.inputs, extending: &ss,
+      by: { (a, b, s) in unifiable(a, b, extending: &s, handlingCoercionsWith: areCoercible) })
+    && unifiable(
+      lhs.output, rhs.output, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Implication, _ rhs: Implication, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(lhs.usings, rhs.usings, extending: &ss, handlingCoercionsWith: areCoercible)
+      && unifiable(lhs.head, rhs.head, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Metatype, _ rhs: Metatype, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(
+      lhs.inhabitant, rhs.inhabitant, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: RemoteType, _ rhs: RemoteType, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    (lhs.access == rhs.access)
+      && unifiable(
+        lhs.projectee, rhs.projectee, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Tuple, _ rhs: Tuple, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    switch (lhs, rhs) {
+    case (.cons(let la, let lb), .cons(let ra, let rb)):
+      return unifiable(la, ra, extending: &ss, handlingCoercionsWith: areCoercible)
+        && unifiable(lb, rb, extending: &ss, handlingCoercionsWith: areCoercible)
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: Parameter, _ rhs: Parameter, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    (lhs.label == rhs.label)
+      && (lhs.access == rhs.access)
+      && unifiable(lhs.type, rhs.type, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: TypeApplication, _ rhs: TypeApplication, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(
+      lhs.abstraction, rhs.abstraction, extending: &ss, handlingCoercionsWith: areCoercible)
+      && unifiable(
+        lhs.arguments.values, rhs.arguments.values, extending: &ss,
+        by: { (a, b, s) in unifiable(a, b, extending: &s, handlingCoercionsWith: areCoercible) })
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable(
+    _ lhs: UniversalType, _ rhs: UniversalType, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    lhs.parameters.elementsEqual(rhs.parameters)
+      && unifiable(lhs.head, rhs.head, extending: &ss, handlingCoercionsWith: areCoercible)
+  }
+
+  /// Returns `true` if the the pairwise elements of `lhs` and `rhs` are unifiable.
+  private func unifiable<T: Sequence<AnyTypeIdentity>>(
+    _ lhs: T, _ rhs: T, extending ss: inout SubstitutionTable,
+    handlingCoercionsWith areCoercible: CoercionHandler
+  ) -> Bool {
+    unifiable(lhs, rhs, extending: &ss) { (a, b, s) in
+      unifiable(a, b, extending: &s, handlingCoercionsWith: areCoercible)
+    }
+  }
+
+  /// Returns `true` if `lhs` and `rhs` are unifiable.
+  private func unifiable<T: Sequence>(
+    _ lhs: T, _ rhs: T, extending ss: inout SubstitutionTable,
+    by unify: (T.Element, T.Element, inout SubstitutionTable) -> Bool
+  ) -> Bool {
+    var i = lhs.makeIterator()
+    var j = rhs.makeIterator()
+    while let a = i.next() {
+      guard let b = j.next(), unify(a, b, &ss) else { return false }
+    }
+    return j.next() == nil
+  }
+
+}
+
+/// The result of a call to a closure passed to `TypeStore.transform(_:)`.
+public enum TypeTransformAction {
+
+  case stepInto(AnyTypeIdentity)
+
+  case stepOver(AnyTypeIdentity)
+
+}
+
+/// A closure returning `true` if its first argument can be coerced to the second.
+public typealias CoercionHandler = (
+  _ lhs: AnyTypeIdentity,
+  _ rhs: AnyTypeIdentity
+) -> Bool
+
+/// A type implementing a substitution table.
+private protocol Substitution {
+
+  /// `true` iff the table is empty.
+  var isEmpty: Bool { get }
+
+  /// Accesses the type assigned to `key`.
+  subscript(key: AnyTypeIdentity) -> AnyTypeIdentity? { get }
+
+  /// Returns a copy of `self` in which none of given keys are assigned.
+  func removing<S: Sequence<GenericParameter.ID>>(keys: S) -> Self
+
+}
+
+extension Dictionary<AnyTypeIdentity, AnyTypeIdentity>: Substitution {
+
+  func removing<S: Sequence<GenericParameter.ID>>(keys: S) -> Self {
+    let ks = SortedSet(keys.map(\.erased))
+    return filter({ (k, _) in !ks.contains(k) })
+  }
+
+}
+
+extension TypeArguments: Substitution {
+
+  subscript(key: AnyTypeIdentity) -> AnyTypeIdentity? {
+    // The unchecked cast is okay because the type of an identity is irrelevant to `Hashable`.
+    self[GenericParameter.ID(uncheckedFrom: key)]
+  }
+
+  func removing<S: Sequence<GenericParameter.ID>>(keys: S) -> Self {
+    filter({ (k, _) in !keys.contains(k) })
+  }
+
+}

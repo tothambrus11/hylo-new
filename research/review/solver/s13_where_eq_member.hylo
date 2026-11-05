@@ -1,0 +1,8 @@
+// Follow-up to s11: the join type chosen for `p` decides whether a member of `P` is visible.
+trait P { fun m() -> Self }
+fun f<V>(x: V) -> V { x }
+fun f(x: Bool) -> Bool { x }
+fun h<T is P, U where T == U>(x: T, y: U) {
+  let p = if true { f(y) } else { x }
+  let r = p.m()
+}

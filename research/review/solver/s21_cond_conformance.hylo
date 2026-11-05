@@ -1,0 +1,14 @@
+// Members inherited through a conditional conformance and an extension with a where clause.
+trait P { fun m() -> Self }
+struct Box<T> { public memberwise init }
+struct I { public memberwise init }
+given I is P { fun m() -> I { I() } }
+given <T where T is P> => Box<T> is P { fun m() -> Box<T> { Box() } }
+extension <T where T is P> Box<T> { fun m() -> I { I() } }
+fun take(x: Box<I>) {}
+public fun main() {
+  let b = Box<I>()
+  let x = b.m()
+  let y = b.m() as Box<I>
+  take(b.m())
+}

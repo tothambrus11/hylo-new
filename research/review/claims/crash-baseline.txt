@@ -1,0 +1,125 @@
+
+*** Signal 4: Backtracing from 0x602726457fc1... done ***
+
+*** Swift runtime failure: Unexpectedly found nil while unwrapping an Optional value ***
+
+Platform: x86_64 Linux (Ubuntu 26.04.1 LTS)
+
+Thread 7 "DispatchWorker" crashed:
+
+0 [inlined] [system] 0x0000602726457fc1 Swift runtime failure: Unexpectedly found nil while unwrapping an Optional value in tc-bench at //<compiler-generated>
+1                    0x0000602726457fc1 Typer.declaredType(of:) + 1185 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Typer/Typer.swift:1367:83
+2 [ra]               0x000060272645261f Typer.check(_:) + 30 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Typer/Typer.swift:593:9
+3 [ra] [inlined]     0x0000602726453c28 Typer.checkMember(_:) in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Typer/Typer.swift:836:7
+4 [ra]               0x0000602726453c28 Typer.check(_:) + 247 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Typer/Typer.swift:750:35
+5 [ra]               0x000060272654beb5 Typer.apply() + 324 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Typer/Typer.swift:43:53
+6 [ra]               0x0000602726519700 Program.assignTypes(_:loggingInferenceWhere:) + 191 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/FrontEnd/Program.swift:101:11
+7 [ra]               0x00006027260d9dd9 specialized static TypeCheckBench.main() + 1160 in tc-bench at /home/hylo/hylo-tc/hylo-new/Sources/tc-bench/Entry.swift:66:9
+8 [async] [system]   0x00006027260d45d0 specialized thunk for @escaping @convention(thin) @async () -> () in tc-bench at //<compiler-generated>
+9 [async]            0x000079dd25ddf140 completeTaskAndRelease(swift::AsyncContext*, swift::SwiftError*) in libswift_Concurrency.so
+
+Thread 0 "tc-bench":
+
+0      0x000079dd240a03e6 <unknown> in libc.so.6
+1 [ra] 0x000079dd24045f45 <unknown> in libc.so.6
+2 [ra] 0x000079dd2540d788 _dispatch_sigsuspend + 23 in libdispatch.so
+3 [ra] 0x000079dd2540ac59 _dispatch_sig_thread + 8 in libdispatch.so
+4 [ra] 0x000079dd240a0df2 <unknown> in libc.so.6
+5 [ra] 0x000079dd2402a60d <unknown> in libc.so.6
+6 [ra] 0x000079dd2402a718 <unknown> in libc.so.6
+
+Thread 1 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd240a06e7 <unknown> in libc.so.6
+2 [ra] 0x000079dd240ac4eb <unknown> in libc.so.6
+3 [ra] 0x000079dd25414d21 _dispatch_sema4_timedwait + 80 in libdispatch.so
+4 [ra] 0x000079dd2540da21 _dispatch_semaphore_wait_slow + 32 in libdispatch.so
+5 [ra] 0x000079dd2540d34e _dispatch_worker_thread + 1069 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+Thread 2 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd241378b5 <unknown> in libc.so.6
+2 [ra] 0x000079dd25414537 _dispatch_event_loop_drain + 54 in libdispatch.so
+3 [ra] 0x000079dd2540a022 _dispatch_mgr_invoke + 129 in libdispatch.so
+4 [ra] 0x000079dd25409f8d _dispatch_mgr_thread + 108 in libdispatch.so
+5 [ra] 0x000079dd2540d1b5 _dispatch_worker_thread + 660 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+Thread 3 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd240a06e7 <unknown> in libc.so.6
+2 [ra] 0x000079dd240ac4eb <unknown> in libc.so.6
+3 [ra] 0x000079dd25414d21 _dispatch_sema4_timedwait + 80 in libdispatch.so
+4 [ra] 0x000079dd2540da21 _dispatch_semaphore_wait_slow + 32 in libdispatch.so
+5 [ra] 0x000079dd2540d34e _dispatch_worker_thread + 1069 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+Thread 4 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd240a06e7 <unknown> in libc.so.6
+2 [ra] 0x000079dd240ac4eb <unknown> in libc.so.6
+3 [ra] 0x000079dd25414d21 _dispatch_sema4_timedwait + 80 in libdispatch.so
+4 [ra] 0x000079dd2540da21 _dispatch_semaphore_wait_slow + 32 in libdispatch.so
+5 [ra] 0x000079dd2540d34e _dispatch_worker_thread + 1069 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+Thread 5 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd240a06e7 <unknown> in libc.so.6
+2 [ra] 0x000079dd240ac4eb <unknown> in libc.so.6
+3 [ra] 0x000079dd25414d21 _dispatch_sema4_timedwait + 80 in libdispatch.so
+4 [ra] 0x000079dd2540da21 _dispatch_semaphore_wait_slow + 32 in libdispatch.so
+5 [ra] 0x000079dd2540d34e _dispatch_worker_thread + 1069 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+Thread 6 "DispatchWorker":
+
+0      0x000079dd240ac802 <unknown> in libc.so.6
+1 [ra] 0x000079dd240a06e7 <unknown> in libc.so.6
+2 [ra] 0x000079dd240ac4eb <unknown> in libc.so.6
+3 [ra] 0x000079dd25414d21 _dispatch_sema4_timedwait + 80 in libdispatch.so
+4 [ra] 0x000079dd2540da21 _dispatch_semaphore_wait_slow + 32 in libdispatch.so
+5 [ra] 0x000079dd2540d34e _dispatch_worker_thread + 1069 in libdispatch.so
+6 [ra] 0x000079dd240a3dfa <unknown> in libc.so.6
+
+
+Registers:
+
+rax 0x0000000000000000  0
+rdx 0x000079dd19ffa6c8  01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ················
+rcx 0x000060275ae8aca0  f0 fd d0 25 dd 79 00 00 03 00 00 00 00 00 00 00  ðýÐ%Ýy··········
+rbx 0x000079dd25d10101  d9 94 25 dd 79 00 00 50 d9 94 25 dd 79 00 00 60  Ù·%Ýy··PÙ·%Ýy··`
+rsi 0x0000000000000010  16
+rdi 0x0000000000000001  1
+rbp 0x000079dd19ff9d60  90 9e ff 19 dd 79 00 00 1f 26 45 26 27 60 00 00  ··ÿ·Ýy···&E&'`··
+rsp 0x000079dd19ff9af0  54 65 73 74 00 00 00 00 00 00 00 00 00 00 00 e4  Test···········ä
+ r8 0x0000000000000001  1
+ r9 0x000079dd25d0fe60  03 03 00 00 00 00 00 00 01 00 00 80 01 00 00 00  ················
+r10 0x000079dd25a6eaa0  55 48 89 e5 31 c0 5d c3 0f 1f 84 00 00 00 00 00  UH·å1À]Ã········
+r11 0x0000000000000000  0
+r12 0x0000000000000001  1
+r13 0x000079dd19ff9c40  00 00 00 00 00 00 00 00 10 35 c8 5a 27 60 00 00  ·········5ÈZ'`··
+r14 0x0000000000000068  104
+r15 0x0000000000000001  1
+rip 0x0000602726457fc1  0f 0b 66 66 66 66 2e 0f 1f 84 00 00 00 00 00 55  ··ffff.········U
+
+rflags 0x0000000000010246  ZF PF
+
+cs 0x0033  fs 0x0000  gs 0x0000
+
+
+Images (17 omitted):
+
+0x000060272605b000–0x0000602726561cbd da1f0076edce3ea60a674edd3f231585aed74382 tc-bench                /home/hylo/hylo-tc/research/exp/bin/15f1d9abd0da/tc-bench
+0x000079dd24000000–0x000079dd241bf7d9 066527e430a32768d82741e00b81eebb1a872294 libc.so.6               /usr/lib/x86_64-linux-gnu/libc.so.6
+0x000079dd253d8000–0x000079dd254201c0 b3c772526656604dfd09ced7f6cc1926d5863292 libdispatch.so          /home/hylo/.local/share/swiftly/toolchains/6.4.0/usr/lib/swift/linux/libdispatch.so
+0x000079dd25d68000–0x000079dd25dfc4f8 e364fb306542380d6f165db2b93742b18086ddca libswift_Concurrency.so /home/hylo/.local/share/swiftly/toolchains/6.4.0/usr/lib/swift/linux/libswift_Concurrency.so
+
+Backtrace took 1.09s
+

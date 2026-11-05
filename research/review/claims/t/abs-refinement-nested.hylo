@@ -1,0 +1,16 @@
+// Conformances derived through refinement and nested givens, in a generic context.
+trait P {}
+trait Q refines P {}
+trait R { given Xi is P }
+struct Xi {}
+struct A {}
+given A is P {}
+given A is Q {}
+fun need<T where T is P>() {}
+fun f<T where T is Q, T is R>() {
+  need<T>()
+  need<Xi>()
+}
+public fun main() {
+  need<A>()
+}

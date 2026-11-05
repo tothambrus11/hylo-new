@@ -1,0 +1,8 @@
+[loopcheck] 0/1 identical
+  MISMATCH research/review/loopcheck/lc04-cap-witness.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<ConformanceDeclaration at lc04-cap-witness:23.1>($<ConformanceDeclaration at lc04-cap-witness:14.1>($<ConformanceDeclaration at lc04-cap-witness:13.1>($<ConformanceDeclaration at lc04-cap-witness:12.1>($<ConformanceDeclaration at lc04-cap-witness:11.1>))))($<ConformanceDeclaration at lc04-cap-witness:17.1>($<ConformanceDeclaration at lc04-cap-witness:18.1>($<ConformanceDeclaration at lc04-cap-witness:14.1>($<ConformanceDeclaration at lc04-cap-witness:13.1>($<ConformanceDeclaration at lc04-cap-witness:12.1>($<ConformanceDeclaration at lc04-cap-witness:11.1>)))))($<ConformanceDeclaration at lc04-cap-witness:19.1>($<ConformanceDeclaration at lc04-cap-witness:14.1>($<ConformanceDeclaration at lc04-cap-witness:13.1>($<ConformanceDeclaration at lc04-cap-witness:12.1>($<ConformanceDeclaration at lc04-cap-witness:11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/hylo/hylo-tc/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope

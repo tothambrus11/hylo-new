@@ -1,0 +1,19 @@
+//! stage:lowering
+
+trait P {}
+extension <T is P> T {
+  public fun f() { self.f() }
+}
+
+given Void is P {}
+
+type Empty = Void
+
+extension Void {}
+extension Void { fun g() {} }
+
+fun h(w: Empty) { w.g() }
+
+public fun main() {
+  ().f()
+}

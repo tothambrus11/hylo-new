@@ -1,0 +1,15 @@
+struct A { public memberwise init }
+struct B<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<where let u: A>() { check<A>(u) }
+fun g<where let u: B<A>, let v: Void>() { check<B<A>>(u) }
+fun h<T where let u: B<T>>() { check<B<T>>(u) }
+public fun main() {
+  given A = A()
+  given B<A> = B<A>()
+  given Void = ()
+  f()
+  g()
+  h<A>()
+  h<Void>()
+}

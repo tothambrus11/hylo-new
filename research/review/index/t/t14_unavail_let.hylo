@@ -1,0 +1,5 @@
+trait P {}
+struct A { public memberwise init }
+given A is P {}
+fun need<T is P>(x: T) -> T { x }
+fun g() { let y = need(A()) }

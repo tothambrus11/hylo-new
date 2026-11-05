@@ -1,0 +1,7 @@
+struct A {}
+struct B {}
+extension A { type X = B }
+extension A.X { type V = Void }
+extension B.V { fun hello() {} }
+
+fun use() { ().hello() }

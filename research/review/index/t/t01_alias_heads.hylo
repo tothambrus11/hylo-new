@@ -1,0 +1,34 @@
+trait P {}
+trait Q {}
+struct A<T> { public memberwise init }
+struct S { public memberwise init }
+type X = A<Void>
+type Y = X
+type Z = S
+
+// Given whose conclusion is written through an alias.
+given Y is P {}
+// Given on an alias to a non-generic struct.
+given Z is Q {}
+
+fun need<T is P>() {}
+fun needQ<T is Q>() {}
+fun check<T>(x: T) {}
+
+fun main() {
+  need<A<Void>>()
+  need<X>()
+  need<Y>()
+  needQ<S>()
+  needQ<Z>()
+  check(summon[P<X>])
+  check(summon[P<A<Void>>])
+  check(summon[Q<Z>])
+}
+
+// Ambiguity across an alias and the aliasee in the same group.
+trait R {}
+given A<Void> is R {}
+given X is R {}
+fun needR<T is R>() {}
+fun amb() { needR<Y>() }

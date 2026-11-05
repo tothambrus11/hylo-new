@@ -1,0 +1,17 @@
+//! Subsumption treats ⊤ as a constant: R(S(⊤),S(⊤)) is dropped because R(S(v),S(v)) exists,
+//! although ⊤ stands for uncorrelated terms (needs k >= 3 so that ⊤ is lifted above depth k).
+trait P {}
+trait R<B> {}
+trait W<B> {}
+struct S<T> {}
+struct Q<T> {}
+struct Z {}
+given Q<S<Z>> is P {}
+given Q<S<S<Z>>> is P {}
+given <T> => S<T> is R<S<T>> {}
+given <A, B where Q<A> is P, Q<B> is P> => A is R<B> {}
+given <A, B where S<A> is R<S<B>>> => A is W<B> {}
+fun need<where Z is W<S<Z>>>() {}
+public fun main() {
+  need()
+}

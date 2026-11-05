@@ -1,0 +1,8 @@
+trait P {}
+trait Q refines P {}
+
+struct A { fun m() {} }
+
+extension <T where T is P> T { fun viaP() {} }
+
+given w2: A is Q {}

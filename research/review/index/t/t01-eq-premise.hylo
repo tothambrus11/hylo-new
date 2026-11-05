@@ -1,0 +1,31 @@
+// Givens whose premises contain equalities (where-clause ==) and whose head trait differs from
+// the goal's. The baseline forms threads for them that survive the first match step (the
+// equality premise makes canDeriveCoercions return true for the nested P/Q mismatch).
+
+trait P {}
+trait Q {}
+trait R {}
+
+struct A {}
+struct B {}
+struct Box<T> {}
+
+given <T, U where T == U> => Box<T> is P {}
+given <T where T == A> => T is R {}
+given A is Q {}
+
+fun needQ<W is Q>() {}
+fun needR<W is R>() {}
+fun needP<W is P>() {}
+
+fun ok() {
+  needQ<A>()
+  needR<A>()
+  needP<Box<A>>()
+}
+
+fun bad() {
+  needQ<B>()
+  needR<B>()
+  needQ<Box<A>>()
+}

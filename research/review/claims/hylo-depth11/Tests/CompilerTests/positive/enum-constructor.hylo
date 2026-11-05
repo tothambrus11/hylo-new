@@ -1,0 +1,14 @@
+//! stage:llvm
+
+enum E is Deinitializable {
+  case a
+  case b(x: Int)
+  case c(x: Bool)
+}
+
+fun use<T>(x: T) {}
+
+public fun main() {
+  let e : E = .a
+  use(e)
+}

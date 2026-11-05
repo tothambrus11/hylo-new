@@ -1,0 +1,19 @@
+trait P {}
+trait Q {}
+struct S<T> {}
+struct Z {}
+struct Y {}
+given Z is P {}
+given <T where T is Q> => S<T> is P {}
+given <T where T is P> => S<T> is Q {}
+fun needP<T where T is P>() {}
+fun needQ<T where T is Q>() {}
+public fun main() {
+  needQ<S<Z>>()
+  needP<S<S<Z>>>()
+  needQ<S<S<S<S<S<Z>>>>>>()
+  needP<S<S<S<S<S<S<Z>>>>>>>()
+  needP<S<Z>>()
+  needQ<S<S<Z>>>()
+  needP<S<S<S<S<Y>>>>>()
+}

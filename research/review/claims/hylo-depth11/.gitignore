@@ -1,0 +1,25 @@
+# Swift Package Manager
+/.build
+/.*-build
+/Packages
+*.profraw
+
+# IDEs
+/.vscode
+/.swiftpm
+/.vscode/launch.json
+/.idea
+
+# macOS
+.DS_Store
+
+# Generated tests
+Tests/CompilerTests/CompilerTests+GeneratedTests.swift
+
+# Observations during testing
+Tests/CompilerTests/**/*.observed
+Tests/CompilerTests/**/*.observed.exe
+StandardLibrary/**/*.observed
+
+# Local development
+/Playground

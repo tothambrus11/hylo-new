@@ -1,0 +1,12 @@
+// `P<U>` derived from `T == U` and `P<T>`: the model must be inconclusive here; the index must
+// fall back.
+trait P {}
+struct Xi {}
+fun g<V where V is P>() {}
+fun f<T, U where T == U, T is P>() {
+  g<U>()
+}
+fun h<U where U == Xi>() {
+  g<U>()
+}
+public fun main() {}

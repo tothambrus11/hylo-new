@@ -1,0 +1,35 @@
+trait P { fun tag() -> Int }
+struct A { public memberwise init }
+struct B<T> { public memberwise init }
+
+given A is P { fun tag() -> Int { 1 } }
+given <T> => B<T> is P { fun tag() -> Int { 2 } }
+
+fun need<T is P>(x: T) -> Int { x.tag() }
+
+fun f() -> Int {
+  // Inner-scope given shadows the outer one by penalty.
+  given A is P { fun tag() -> Int { 10 } }
+  return need(A())
+}
+
+fun g() -> Int {
+  given B<Int> is P { fun tag() -> Int { 20 } }
+  // B<Int>: the local non-generic one wins by penalty.
+  let a = need(B<Int>())
+  // B<Bool>: only the global generic one applies.
+  let b = need(B<Bool>())
+  if true {
+    given <T> => B<T> is P { fun tag() -> Int { 30 } }
+    // Now the inner generic one has lower penalty than the outer non-generic one.
+    let c = need(B<Int>())
+  }
+  return a
+}
+
+fun h() -> Int {
+  given A is P { fun tag() -> Int { 10 } }
+  given A is P { fun tag() -> Int { 11 } }
+  // Ambiguous.
+  return need(A())
+}

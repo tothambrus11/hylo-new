@@ -1,0 +1,39 @@
+internal import llvmc
+internal import llvmshims
+
+/// A global value in LLVM IR.
+///
+/// - See https://llvm.org/docs/LangRef.html#global-variables.
+public struct GlobalVariable: Global {
+
+  /// A handle to the LLVM object wrapped by this instance.
+  public let llvm: ValueRef
+
+  /// Creates an instance wrapping `handle`.
+  public init(temporarilyWrapping handle: ValueRef) {
+    self.llvm = handle
+  }
+
+  /// `true` if this value is constant.
+  ///
+  /// If this value is a global constant, its value is immutable throughout the runtime execution
+  /// of the program. Assigning a value into it leads to undefined behavior.
+  ///
+  /// - Note: This property should not be confused with `IRValue.isConstant`, which indicates
+  ///   whether a value is a constant user, as opposed to an instruction.
+  public var isGlobalConstant: Bool { LLVMIsGlobalConstant(llvm.raw) != 0 }
+
+  /// `true` iff this value is initialized externally.
+  public var isExternallyInitialized: Bool { LLVMIsExternallyInitialized(llvm.raw) != 0 }
+
+  /// The initial value of this global.
+  public var initializer: AnyValue.UnsafeReference? {
+    LLVMGetInitializer(llvm.raw).map(AnyValue.UnsafeReference.init(_:))
+  }
+
+  /// The address space of this global.
+  public var addressSpace: AddressSpace {
+    .init(SwiftyLLVMGetGlobalValueAddressSpace(llvm.raw))
+  }
+
+}

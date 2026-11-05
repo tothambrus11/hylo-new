@@ -1,0 +1,27 @@
+counters.stdlib: coerced.slowPath=54 index.fallback=85 index.skipped=36081 index.unavailable=1353 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=15051 summon.subgoals=699
+counters.user:   coerced.slowPath=20 index.skipped=14137 solver.goalSteps=128 solver.systems=43 summon.cacheHits=19 summon.calls=21 summon.depthExhausted=21 summon.layers=210 summon.matchOK=210 summon.matches=400 summon.subgoals=211
+diagnostics: 20
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:28.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:29.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:30.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:31.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:32.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:33.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:34.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:35.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:36.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:37.3-8: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:38.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:39.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:40.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:41.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:42.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:43.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:44.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:45.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:46.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/hylo/hylo-tc/research/workloads/div-grow-20.hylo:47.3-9: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     78.22 ms
+scope      8.91 ms
+type.stdlib    607.57 ms
+type.user     60.18 ms

@@ -1,0 +1,16 @@
+trait P {}
+struct A {}
+struct B {}
+struct C {}
+given A is P {}
+given B is P {}
+given Void is P {}
+given <T is P, U is P> => {T, ...U} is P {}
+fun need<T where T is P>() {}
+public fun main() {
+  need<{A, B}>()
+  need<{A, {B, A}, B, {A, {A, {B}}}}>()
+  need<{A, B, A, B, A, B, A}>()
+  need<{A, C}>()
+  need<{{{{C}}}}>()
+}

@@ -1,0 +1,9 @@
+== k=1
+counters.stdlib: absmodel.built=22 absmodel.facts=198 absmodel.micros=6218 absmodel.work=242 coerced.slowPath=54 names.appliesCalls=7332 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+type.stdlib   1146.22 ms
+== k=2
+counters.stdlib: absmodel.built=22 absmodel.facts=1399 absmodel.micros=10253 absmodel.refuted=225 absmodel.work=14783 coerced.slowPath=54 names.appliesCalls=7332 summon.cacheHits=1293 summon.calls=3158 summon.layers=5532 summon.matchOK=765 summon.matches=29955 summon.subgoals=646
+type.stdlib   1039.15 ms
+== k=3
+counters.stdlib: absmodel.built=22 absmodel.facts=14082 absmodel.micros=10129999 absmodel.refuted=224 absmodel.work=3768008 coerced.slowPath=54 names.appliesCalls=7332 summon.cacheHits=1293 summon.calls=3158 summon.layers=5530 summon.matchOK=760 summon.matches=29667 summon.subgoals=641
+type.stdlib  10931.50 ms

@@ -1,0 +1,2 @@
+fun need<where {Bool, Float32, Float64, Void, Bool} is Copyable>() {}
+public fun main() { need() }

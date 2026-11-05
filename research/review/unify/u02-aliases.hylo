@@ -1,0 +1,29 @@
+//! stage:typing no-std
+// Aliases vs aliasees at nested positions, chains, aliases of generic applications.
+struct A<T> { public memberwise init }
+type V = Void
+type W = V
+type P2 = {V, W}
+type AV = A<V>
+type AW = A<W>
+type F = [](let W) -> V
+
+fun check<T>(x: T) {}
+fun id<T>(x: sink T) -> T { x }
+fun pair<T>(x: sink T, y: sink T) -> {T, T} { (x, y) }
+
+fun main() {
+  let a: AV = A<Void>()
+  let b: AW = a
+  check<A<Void>>(b)
+  check<AW>(a)
+  let p: P2 = ((), ())
+  check<{Void, Void}>(p)
+  let q = pair(a, b)
+  check<{AV, A<W>}>(q)
+  let f: F = fun[](x) { x }
+  check<[](let Void) -> Void>(f)
+  let r = id(p)
+  check<{W, V}>(r)
+  let bad: A<{V}> = a
+}

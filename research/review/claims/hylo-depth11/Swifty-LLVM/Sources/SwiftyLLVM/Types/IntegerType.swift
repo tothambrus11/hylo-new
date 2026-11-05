@@ -1,0 +1,86 @@
+internal import llvmc
+
+/// An integer type in LLVM IR.
+///
+/// - See https://llvm.org/docs/LangRef.html#integer-type.
+public struct IntegerType: IRType, Hashable {
+
+  /// A handle to the LLVM object wrapped by this instance.
+  public let llvm: TypeRef
+
+  /// Returns an integer type with `bitWidth` in `module`.
+  public static func create(
+    _ bitWidth: Int, in module: inout Module
+  ) -> IntegerType.UnsafeReference {
+    create(bitWidth, in: .init(module.context))
+  }
+
+  /// Returns an integer type with `bitWidth` in `context`.
+  static func create(_ bitWidth: Int, in context: ContextRef) -> IntegerType.UnsafeReference {
+    .init(LLVMIntTypeInContext(context.raw, UInt32(bitWidth)))
+  }
+
+  /// Creates an instance wrapping `handle`.
+  public init(temporarilyWrapping handle: TypeRef) {
+    self.llvm = handle
+  }
+
+  /// The number of bits in the representation of the type's instances.
+  public var bitWidth: Int { Int(LLVMGetIntTypeWidth(llvm.raw)) }
+
+  /// Returns a constant whose LLVM IR type is `self` and whose value is `v`, truncating or
+  /// sign-extending if needed to fit `self.bitWidth`.
+  ///
+  /// - Requires: `v` must be representable in `self`.
+  public func callAsFunction(_ v: Int) -> IntegerConstant.UnsafeReference {
+    constant(v)
+  }
+
+  /// Returns an LLVM constant of `v`, having type `self`.
+  ///
+  /// - Requires: `v` is representable as `self` and the value fits in 64 bits.
+  public func constant<T: BinaryInteger>(_ v: T) -> IntegerConstant.UnsafeReference {
+    if v < 0 {
+      .init(LLVMConstInt(llvm.raw, UInt64(bitPattern: Int64(v)), 1))
+    } else {
+      .init(LLVMConstInt(llvm.raw, UInt64(v), 0))
+    }
+  }
+
+  /// Returns a constant of type `self`, with value parsed from `text` with `radix`.
+  ///
+  /// Zero is returned if `text` is not a valid integer value.
+  ///
+  /// - Requires: `radix` must be in the range `2...36`.
+  public func constant(
+    parsing text: String,
+    radix: Int = 10
+  ) -> IntegerConstant.UnsafeReference {
+    return text.withCString { (s) in
+      .init(LLVMConstIntOfStringAndSize(llvm.raw, s, UInt32(text.utf8.count), UInt8(radix))!)
+    }
+  }
+
+  /// Returns a constant whose LLVM IR type is `self` and whose value's binary presentation is
+  /// `words`, from least to most significant.
+  public func constant<Words: Collection<UInt64>>(words: Words) -> IntegerConstant.UnsafeReference {
+    let w = Array(words)
+    return .init(LLVMConstIntOfArbitraryPrecision(llvm.raw, UInt32(w.count), w))
+  }
+
+  /// The zero value of this type.
+  public var zero: IntegerConstant.UnsafeReference {
+    .init(LLVMConstNull(llvm.raw))
+  }
+
+}
+
+extension UnsafeReference<IntegerType> {
+
+  /// Creates an instance with `t`, failing iff `t` isn't an integer type.
+  public init?(_ t: AnyType.UnsafeReference) {
+    guard LLVMGetTypeKind(t.llvm.raw) == LLVMIntegerTypeKind else { return nil }
+    self.init(t.llvm)
+  }
+
+}

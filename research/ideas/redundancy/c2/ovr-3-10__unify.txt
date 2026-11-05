@@ -1,0 +1,7 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=75782 names.appliesCalls=12 solver.forks=88572 solver.goalSteps=468008 solver.overloads=29524 solver.systems=4 summon.calls=12 summon.layers=75806 summon.matchOK=6 summon.matches=76634 summon.subgoals=12
+diagnostics: 0
+parse     72.29 ms
+scope      7.12 ms
+type.stdlib   1021.94 ms
+type.user   5170.32 ms

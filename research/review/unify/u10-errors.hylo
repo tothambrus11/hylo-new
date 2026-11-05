@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// Error recovery: error types flowing through unification.
+struct A<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun pair<T>(x: T, y: T) -> {T, T} { Builtin.trap() }
+
+fun main() {
+  let x = undefined_name
+  let y: A<Undefined> = A<Void>()
+  check<A<Void>>(y)
+  let z = pair(x, y)
+  check<{A<Void>, A<Void>}>(z)
+  let w = pair(undefinedA, undefinedB)
+  let v: [](let Undef) -> Void = fun[](a) { a }
+  check<{Undef, Void}>(((), ()))
+}

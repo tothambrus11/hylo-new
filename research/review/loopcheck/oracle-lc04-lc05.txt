@@ -1,0 +1,42 @@
+[loopcheck] 0/2 identical
+  MISMATCH research/review/loopcheck/lc05-shared-lemma-penalty.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16693 +16693 @@
+      -0:103 witness.c5 = $<L24.1>($<L14.1>($<L13.1>($<L12.1>)))($<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>)))))
+      +0:103 witness.c5 = $<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>))))
+  MISMATCH research/review/loopcheck/lc04-cap-witness.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<L23.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))($<L17.1>($<L18.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>)))))($<L19.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/hylo/hylo-tc/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+[index,loopcheck] 0/2 identical
+  MISMATCH research/review/loopcheck/lc05-shared-lemma-penalty.hylo
+      --- baseline
+      +++ index,loopcheck
+      @@ -16693 +16693 @@
+      -0:103 witness.c5 = $<L24.1>($<L14.1>($<L13.1>($<L12.1>)))($<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>)))))
+      +0:103 witness.c5 = $<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>))))
+  MISMATCH research/review/loopcheck/lc04-cap-witness.hylo
+      --- baseline
+      +++ index,loopcheck
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<L23.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))($<L17.1>($<L18.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>)))))($<L19.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/hylo/hylo-tc/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope
+[absmodel,index,loopcheck,names,unify] 0/2 identical
+  MISMATCH research/review/loopcheck/lc05-shared-lemma-penalty.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16693 +16693 @@
+      -0:103 witness.c5 = $<L24.1>($<L14.1>($<L13.1>($<L12.1>)))($<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>)))))
+      +0:103 witness.c5 = $<L18.1>($<L15.1>)($<L19.1>($<L14.1>($<L13.1>($<L12.1>))))($<L20.1>($<L14.1>($<L13.1>($<L12.1>))))
+  MISMATCH research/review/loopcheck/lc04-cap-witness.hylo
+      --- baseline
+      +++ absmodel,index,loopcheck,names,unify
+      @@ -16692 +16691,0 @@
+      -0:103 witness.c98 = $<L23.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))($<L17.1>($<L18.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>)))))($<L19.1>($<L14.1>($<L13.1>($<L12.1>($<L11.1>))))))
+      @@ -16834,0 +16834 @@
+      +diag /home/hylo/hylo-tc/research/review/loopcheck/lc04-cap-witness.hylo:26.1-6: error: no given instance of 'T<SA>' in this scope

@@ -1,0 +1,30 @@
+trait P {}
+struct A { public memberwise init }
+
+given {A, A} is P {}
+given Void is P {}
+given A is P {}
+
+fun need<T is P>() {}
+fun check<T>(x: T) {}
+
+fun f<where let m: Metatype<A>, let t: {A, Int}, let fn: [](A) -> A>() {
+  check(summon[Metatype<A>])
+  check(summon[{A, Int}])
+  check(summon[[](A) -> A])
+  need<{A, A}>()
+  need<Void>()
+  need<{A, Int}>()
+}
+
+fun g<T where let x: T>() {
+  check(summon[T])
+}
+
+fun h() {
+  given A = A()
+  given {A, A} = (A(), A())
+  check(summon[{A, A}])
+  check(summon[A])
+  g<A>()
+}

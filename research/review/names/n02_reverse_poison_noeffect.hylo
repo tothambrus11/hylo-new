@@ -1,0 +1,18 @@
+struct A {
+  struct Inner {}
+  fun m() {}
+}
+
+fun early(a: A) { a.m() }
+
+fun early2(i: A.Inner.Foo) {}
+
+extension A.Inner.Foo {
+  type Inner = Bool
+}
+
+extension A.Inner {
+  type Foo = Int
+}
+
+fun use(x: Int.Inner) {}

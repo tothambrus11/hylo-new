@@ -1,0 +1,25 @@
+//! stage:typing
+// Remote types (let/inout/set projections) and bundles (subscripts with auto effects).
+subscript f(x: auto Void) auto -> Int {
+  let { yield 0 }
+  inout { yield &0 }
+}
+
+subscript g(x: Void): Int {
+  let { yield 0 }
+}
+
+fun modify(x: inout Int) {}
+fun read(x: let Int) {}
+fun takeSink(x: sink Int) {}
+
+public fun main() {
+  var s = ()
+  inout t = f[&s]
+  modify(&t)
+  let u = f[s]
+  read(u)
+  inout v = g[s]
+  modify(&v)
+  takeSink(f[s])
+}

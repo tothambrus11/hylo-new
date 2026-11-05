@@ -1,0 +1,14 @@
+// intro.md: f : forall T. P T => Q T ; g : forall T. P T => P T ; x : P Int.
+trait P {}
+trait Q {}
+struct I {}
+struct Bo {}
+given <T where T is P> => T is Q {}
+given <T where T is P> => T is P {}
+given I is P {}
+fun needQI<where I is Q>() {}
+fun needQB<where Bo is Q>() {}
+public fun main() {
+  needQI()
+  needQB()
+}

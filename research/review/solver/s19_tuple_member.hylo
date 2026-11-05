@@ -1,0 +1,11 @@
+// Tuple member and pattern binding on overloaded results.
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun f() -> {A, B} { (A(), B()) }
+fun f() -> {B} { (B(),) }
+fun use(x: B) {}
+public fun main() {
+  use(f().1)
+  let t = f().0 as B
+  let (p, q) = f()
+}

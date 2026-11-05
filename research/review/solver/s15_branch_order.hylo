@@ -1,0 +1,22 @@
+// Most-constrained-first changes the nesting order of branching, which changes which valid
+// combination wins when preferences of two overload sets disagree.
+//   S.a(): local ext (-> X)  >  local generic ext (-> Y)  >  type member (-> Z)
+//   S.b(): local ext (-> Y)  >  type member (-> X)
+// Valid combinations for k(S.a(), S.b()): (a->X, b->X) and (a->Y, b->Y).
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct Z { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> Z { Z() }
+  public static fun b() -> X { X() }
+}
+fun k<V>(x: V, y: V) {}
+fun main() {
+  extension S {
+    static fun a() -> X { X() }
+    static fun b() -> Y { Y() }
+  }
+  extension <T> T { static fun a() -> Y { Y() } }
+  k(S.a(), S.b())
+}

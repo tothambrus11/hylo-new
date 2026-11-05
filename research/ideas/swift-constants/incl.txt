@@ -1,0 +1,240 @@
+=== TypeStore.subscript.getter: 8.45% of 25472
+ callers:
+     1.37% Typer.canDeriveCoercion(_:applying:)
+     1.18% TypeStore.reify(_:applying:withVariables:)
+     0.90% TypeStore.unifiable(_:_:extending:handlingCoercionsWith:)
+     0.79% TypeStore.unifiableSameShape(_:_:extending:handlingCoercionsWith:)
+     0.73% Typer.resolve(_:nativeMemberOf:statically:)
+     0.62% closure #1 in Typer.filterInPlace(_:callable:withLabels:at:)
+     0.60% specialized TypeStore.seenAsTermAbstraction<A>(_:)
+     0.31% specialized closure #1 in TypeStore.substituteImpl<A>(_:in:)
+     0.25% Typer.evaluatePartialTypeAscription(_:in:)
+     0.18% Typer.resolve(_:in:)
+     0.17% Typer.contextOfSelf(in:)
+     0.13% Typer.resolve(_:memberOf:visibleFrom:)
+ callees:
+     8.10% StableSet.subscript.getter
+     0.22% <self>
+     0.06% outlined init with take of TypeTree
+     0.03% StableDictionary.subscript.getter
+     0.02% __swift_instantiateGenericMetadata
+     0.02% type metadata accessor for StableSet.Empty
+=== StableSet.subscript.getter: 12.63% of 25472
+ callers:
+     8.10% TypeStore.subscript.getter
+     2.36% TypeStore.contextAndHead(_:)
+     0.60% specialized TypeStore.head<A>(_:)
+     0.58% Typer.formThread(matching:to:in:then:penalties:ancestors:)
+     0.17% Typer.resolve(_:unqualifiedIn:)
+     0.14% Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+     0.13% TypeStore.resultOfApplying(_:mutably:)
+     0.11% specialized closure #1 in TypeStore.substituteImpl<A>(_:in:)
+     0.10% Typer.nominalHead(_:)
+     0.06% Typer.qualificationForSelection(on:)
+     0.05% specialized Typer.declaredTypes(of:defaultConvention:)
+     0.05% Implication.modified(in:by:)
+ callees:
+     9.57% StableDictionary.subscript.getter
+     2.25% __swift_instantiateGenericMetadata
+     0.20% <self>
+     0.17% __swift_memcpy40_8
+     0.12% swift_getGenericMetadata
+     0.10% swift_getTupleTypeMetadata2
+     0.08% _ZN5swift12metadataimpl14ValueWitnessesINS0_12AggregateBoxIJEEEE18initializeWithTakeEPNS_11OpaqueValueES6_PKNS_14TargetMetadataINS_9InProcessEEE
+     0.04% type metadata accessor for StableDictionary.Bucket
+     0.04% _init
+     0.04% closure #1 in StableDictionary.subscript.getter
+     0.02% _ZL25_swift_getGenericMetadataN5swift15MetadataRequestEPKPKvPKNS_27TargetTypeContextDescriptorINS_9InProcessEEE
+=== StableDictionary.subscript.getter: 9.65% of 25472
+ callers:
+     9.61% StableSet.subscript.getter
+     0.03% TypeStore.subscript.getter
+     0.01% TypeStore.contextAndHead(_:)
+     0.00% specialized closure #1 in TypeStore.substituteImpl<A>(_:in:)
+ callees:
+     4.23% __swift_instantiateGenericMetadata
+     2.85% swift_getTupleTypeMetadata2
+     1.03% <self>
+     0.81% initializeWithCopy for AnyTypeTree
+     0.13% _ZN5swift12metadataimpl14ValueWitnessesINS0_12AggregateBoxIJEEEE18initializeWithCopyEPNS_11OpaqueValueES6_PKNS_14TargetMetadataINS_9InProcessEEE
+     0.11% swift_getTupleTypeMetadata
+     0.10% swift_getGenericMetadata
+     0.05% _ZN5swift12metadataimpl20BufferValueWitnessesINS0_14ValueWitnessesINS0_9NativeBoxImLm8ELm8ELm8EEEEELb1ELm8ELm8ELNS0_12FixedPackingE1EE32initializeBuff
+     0.05% _init
+     0.05% __swift_memcpy40_8
+     0.04% initializeBufferWithCopyOfBuffer for TypeApplication
+     0.04% initializeBufferWithCopyOfBuffer for Arrow
+     0.04% _ZL25_swift_getGenericMetadataN5swift15MetadataRequestEPKPKvPKNS_27TargetTypeContextDescriptorINS_9InProcessEEE
+     0.02% __swift_memcpy2_1
+     0.02% __swift_memcpy13_8
+=== StableDictionary.lookup: 6.12% of 25472
+ callers:
+     6.10% StableDictionary.assignValue(_:forKey:)
+     0.01% specialized TypeStore.demand(any:)
+     0.01% specialized TypeStore.insert(_:)
+ callees:
+     3.59% protocol witness for static Equatable.== infix(_:_:) in conformance AnyTypeTree
+     0.69% <self>
+     0.67% protocol witness for Hashable.hashValue.getter in conformance AnyTypeTree
+     0.49% __swift_instantiateGenericMetadata
+     0.10% initializeWithCopy for AnyTypeTree
+     0.10% dispatch thunk of Hashable.hashValue.getter
+     0.04% dispatch thunk of static Equatable.== infix(_:_:)
+     0.03% Hasher.init(_seed:)
+     0.03% _init
+     0.03% _ZN5swift12metadataimpl20BufferValueWitnessesINS0_14ValueWitnessesINS0_9NativeBoxImLm8ELm8ELm8EEEEELb1ELm8ELm8ELNS0_12FixedPackingE1EE32initializeBuff
+     0.02% protocol witness for Hashable.hash(into:) in conformance MachineType
+     0.02% dispatch thunk of Hashable.hash(into:)
+     0.02% initializeBufferWithCopyOfBuffer for Arrow
+     0.02% __swift_destroy_boxed_opaque_existential_1
+     0.02% protocol witness for Hashable.hash(into:) in conformance Metatype
+=== TypeStore.demand: 11.44% of 25472
+ callers:
+     2.89% TypeStore.reify(_:applying:withVariables:)
+     1.95% Typer.typeOfModel(of:conformingTo:with:)
+     1.43% Typer.declaredType(of:)
+     0.64% Typer.resolve(predefined:unqualifiedIn:)
+     0.61% BuiltinFunction.type(uniquingTypesWith:)
+     0.53% Typer.inferredType(of:in:)
+     0.46% TypeStore.asBoundMemberFunction(_:)
+     0.44% Implication.modified(in:by:)
+     0.42% TypeApplication.modified(in:by:)
+     0.34% Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+     0.31% Arrow.modified(in:by:)
+     0.26% specialized Typer.declaredArrowType<A>(of:taking:)
+ callees:
+     4.86% specialized TypeStore.insert(_:)
+     3.60% StableDictionary.assignValue(_:forKey:)
+     1.60% swift_dynamicCast
+     0.33% StableSet.insert(_:)
+     0.18% <self>
+     0.16% _ZN5swift9RefCountsINS_13RefCountBitsTILNS_19RefCountInlinednessE1EEEE15doDecrementSlowILNS_13PerformDeinitE1EEEbS3_j
+     0.09% outlined init with copy of TypeTree
+     0.05% swift_retain
+     0.05% __swift_allocate_boxed_opaque_existential_1
+     0.05% __swift_destroy_boxed_opaque_existential_1
+     0.04% swift_allocObject
+     0.04% initializeBufferWithCopyOfBuffer for Arrow
+     0.04% outlined destroy of AnyTypeTree
+     0.03% swift_release
+     0.03% __swift_memcpy13_8
+=== Program.annotations: 12.22% of 25472
+ callers:
+    12.19% specialized Program.annotation<A>(_:appliedTo:)
+     0.02% specialized Program.symbol<A>(annotating:)
+     0.01% Typer.checkExternCIndirect(_:)
+ callees:
+     9.13% swift_dynamicCast
+     2.25% specialized Module.subscript.getter
+     0.33% <self>
+     0.31% _ZN5swift9RefCountsINS_13RefCountBitsTILNS_19RefCountInlinednessE1EEEE15doDecrementSlowILNS_13PerformDeinitE1EEEbS3_j
+     0.07% _ZN5swift12metadataimpl14ValueWitnessesINS0_20OpaqueExistentialBoxILj1EEEE7destroyEPNS_11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEE
+     0.04% _ZL7tryCastPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+     0.03% outlined init with copy of AnySyntax
+     0.02% specialized Program.subscript.getter
+     0.02% swift_release
+     0.01% swift_retain
+     0.00% __swift_project_boxed_opaque_existential_1
+     0.00% protocol witness for Annotatable.annotations.getter in conformance FunctionDeclaration
+     0.00% destroy for IntegerLiteral
+=== memberOfTraitVisibleFrom: 3.05% of 25472
+ callers:
+     3.04% Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+     0.01% Typer.resolve(_:memberOf:visibleFrom:)
+ callees:
+     1.05% outlined init with copy of Typer
+     1.01% outlined destroy of Typer
+     0.25% MutableCollection<>.compactMapInPlace(_:)
+     0.14% Typer.traits(visibleFrom:)
+     0.13% specialized __RawDictionaryStorage.find<A>(_:)
+     0.11% swift_release
+     0.11% swift_retain
+     0.09% <self>
+     0.03% _stringCompareWithSmolCheck(_:_:expecting:)
+     0.02% specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:)
+     0.02% initializeWithCopy for Typer
+     0.02% specialized Typer.extendLookupTable<A>(_:with:)
+     0.01% specialized __RawDictionaryStorage.find<A>(_:hashValue:)
+     0.01% specialized ContiguousArray._createNewBuffer(bufferIsUnique:minimumCapacity:growForAppend:)
+     0.01% dispatch thunk of Collection.count.getter
+=== Module.subscript.getter: 5.08% of 25472
+ callers:
+     2.25% specialized Program.annotations<A>(_:)
+     0.39% specialized Program.traverse<A>(_:calling:)
+     0.31% Program.name(of:)
+     0.31% Typer.inferredType(of:in:)
+     0.29% Typer.resolve(_:in:)
+     0.18% Typer.inferredType(calleeOf:in:)
+     0.15% Typer.declaredType(of:)
+     0.13% specialized Program.spanForDiagnostic<A>(about:)
+     0.12% Program.isConstructorReference(_:)
+     0.12% specialized Typer.declaredArrowType<A>(of:taking:)
+     0.12% Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+     0.11% Solver.solve(call:)
+ callees:
+     2.81% outlined init with copy of AnySyntax
+     1.67% swift_dynamicCast
+     0.40% <self>
+     0.09% initializeWithCopy for AnySyntax
+     0.06% specialized Program.subscript.getter
+     0.02% _ZN5swift12metadataimpl14ValueWitnessesINS0_20OpaqueExistentialBoxILj1EEEE7destroyEPNS_11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEE
+     0.01% _ZL7tryCastPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+     0.00% swift_release
+=== initializeStandardLibraryCaches: 13.74% of 25472
+ callers:
+    13.74% Typer.apply()
+ callees:
+    13.55% specialized Sequence.filter<A>(_:)
+     0.10% Module.syntax.getter
+     0.05% partial apply for closure #1 in closure #1 in Module.syntax.getter
+     0.02% specialized _NativeDictionary.setValue(_:forKey:isUnique:)
+     0.01% SyntaxFilter.callAsFunction(_:in:)
+     0.01% closure #1 in closure #1 in Module.syntax.getter
+     0.00% outlined init with copy of Module.SourceContainer?
+=== TypeTree.equals: 2.81% of 25472
+ callers:
+     2.80% protocol witness for static Equatable.== infix(_:_:) in conformance AnyTypeTree
+     0.02% closure #1 in StableDictionary.lookup(_:)
+ callees:
+     0.69% __swift_instantiateCanonicalPrespecializedGenericMetadata
+     0.69% swift_getTupleTypeMetadata2
+     0.29% swift_dynamicCast
+     0.22% <self>
+     0.16% swift_release
+     0.12% initializeWithCopy for ClosedRange<>.Index
+     0.08% initializeWithCopy for Arrow
+     0.05% initializeWithCopy for TypeApplication
+     0.04% outlined init with copy of TypeTree
+     0.04% protocol witness for static Equatable.== infix(_:_:) in conformance Arrow
+     0.04% specialized static ContiguousArray<A>.== infix(_:_:)
+     0.04% getEnumTagSinglePayload for Arrow
+     0.03% destroy for TypeApplication
+     0.03% swift_getCanonicalPrespecializedGenericMetadata
+     0.02% storeEnumTagSinglePayload for LiteralType
+=== contextAndHead: 3.58% of 25472
+ callers:
+     2.63% Typer.canDeriveCoercion(_:applying:)
+     0.23% Solver.solve(call:)
+     0.23% Typer.givenIndex(visibleFrom:)
+     0.18% Typer.qualificationForSelection(on:)
+     0.13% Typer.resolve(_:nativeMemberOf:statically:)
+     0.07% TypeStore.asConstructor(_:)
+     0.05% TypeStore.asBoundMemberFunction(_:)
+     0.03% Typer.abstractClause(of:)
+     0.01% Typer.resolve(_:memberOf:visibleFrom:)
+     0.01% Typer.check(_:)
+     0.00% Solver.solve(constructorConversion:)
+     0.00% Typer.apply()
+ callees:
+     2.36% StableSet.subscript.getter
+     0.87% swift_dynamicCast
+     0.15% <self>
+     0.06% swift_release
+     0.05% __swift_destroy_boxed_opaque_existential_1
+     0.05% specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:)
+     0.01% outlined init with take of TypeTree
+     0.01% __swift_instantiateGenericMetadata
+     0.01% StableDictionary.subscript.getter
+     0.00% type metadata accessor for StableSet.Empty
+     0.00% _ZL7tryCastPN5swift11OpaqueValueEPKNS_14TargetMetadataINS_9InProcessEEES1_S6_RS6_S7_bbb
+     0.00% 0xb61a0

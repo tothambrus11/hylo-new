@@ -1,0 +1,9 @@
+struct A { static fun mk() -> A { A() } memberwise init }
+extension A { static fun mk2() -> A { A() } fun inst() {} }
+extension Metatype { fun nothing() {} }
+fun use() {
+  let a = A.mk2()
+  let _ = A.inst
+  let _ = a.inst()
+  let _ = A.mk()
+}

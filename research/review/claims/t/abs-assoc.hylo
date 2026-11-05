@@ -1,0 +1,20 @@
+// Associated types become top in the model; a requirement on an associated type is a nested
+// given with an associated-type head.
+trait P {}
+trait Q {
+  type X
+  given X is P
+}
+struct Xi {}
+struct A {}
+given Xi is P {}
+given A is Q {
+  type X = Xi
+}
+fun need<T where T is P>() {}
+fun f<T where T is Q>() {
+  need<T.X>()
+}
+public fun main() {
+  need<A.X>()
+}

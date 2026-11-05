@@ -1,0 +1,16 @@
+trait P {}
+struct A {}
+
+given Undefined is P {}
+given <T where T is Nope> => T is P {}
+given A is Undefined2 {}
+
+fun need<T is P>() {}
+fun check<T>(x: T) {}
+
+fun main() {
+  need<A>()
+  need<Undefined3>()
+  check(summon[P<Undefined4>])
+  check(summon[Nope<A>])
+}

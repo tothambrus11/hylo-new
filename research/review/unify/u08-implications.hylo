@@ -1,0 +1,19 @@
+//! stage:typing no-std
+trait P { fun p() -> Self }
+trait Q { }
+struct S {}
+struct W<T> {}
+given S is P { fun p() -> S { S() } }
+given <T where T is P> W<T> is P { fun p() -> W<T> { W() } }
+given <T where T is P> W<T> is Q {}
+fun needP<T is P>(x: T) -> T { x.p() }
+fun needQ<T is Q>(x: T) {}
+fun check<T>(x: T) {}
+public fun main() {
+  check<S>(needP(S()))
+  check<W<S>>(needP(W<S>()))
+  check<W<W<S>>>(needP(W<W<S>>()))
+  needQ(W<W<S>>())
+  needQ(S())
+  needP(W<Void>())
+}

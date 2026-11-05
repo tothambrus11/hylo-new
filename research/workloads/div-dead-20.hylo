@@ -1,0 +1,48 @@
+trait P {}
+struct S<T> {}
+struct Yb {}
+struct Xi {}
+given <where Yb is P> => Xi is P {}
+given <where Xi is P> => Yb is P {}
+fun need0<where Yb is P>() {}
+fun need1<where Yb is P>() {}
+fun need2<where Yb is P>() {}
+fun need3<where Yb is P>() {}
+fun need4<where Yb is P>() {}
+fun need5<where Yb is P>() {}
+fun need6<where Yb is P>() {}
+fun need7<where Yb is P>() {}
+fun need8<where Yb is P>() {}
+fun need9<where Yb is P>() {}
+fun need10<where Yb is P>() {}
+fun need11<where Yb is P>() {}
+fun need12<where Yb is P>() {}
+fun need13<where Yb is P>() {}
+fun need14<where Yb is P>() {}
+fun need15<where Yb is P>() {}
+fun need16<where Yb is P>() {}
+fun need17<where Yb is P>() {}
+fun need18<where Yb is P>() {}
+fun need19<where Yb is P>() {}
+public fun main() {
+  need0()
+  need1()
+  need2()
+  need3()
+  need4()
+  need5()
+  need6()
+  need7()
+  need8()
+  need9()
+  need10()
+  need11()
+  need12()
+  need13()
+  need14()
+  need15()
+  need16()
+  need17()
+  need18()
+  need19()
+}

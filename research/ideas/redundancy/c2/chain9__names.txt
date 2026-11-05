@@ -1,0 +1,8 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=32 names.skippedExtensions=7300 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=341 summon.matchOK=302 summon.matches=20052 summon.subgoals=327
+counters.user:   coerced.slowPath=1 solver.goalSteps=32 solver.systems=5 summon.calls=2 summon.depthExhausted=1 summon.layers=20 summon.matchOK=20 summon.matches=1369 summon.subgoals=20
+diagnostics: 1
+   /home/hylo/hylo-tc/research/workloads/chain9.hylo:7.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     62.85 ms
+scope      7.27 ms
+type.stdlib    478.55 ms
+type.user     22.46 ms

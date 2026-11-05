@@ -1,0 +1,16 @@
+// Generic overload vs concrete overload; implicit/context parameters.
+trait P {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+given A is P {}
+fun f<T is P>(x: T) -> T { x }
+fun f(x: B) -> B { x }
+fun g<T>(x: T) -> T { x }
+fun g(x: A) -> A { x }
+public fun main() {
+  let a = f(A())
+  let b = f(B())
+  let c = g(A())
+  let d = g(B())
+  let e = g(A()) as A
+}

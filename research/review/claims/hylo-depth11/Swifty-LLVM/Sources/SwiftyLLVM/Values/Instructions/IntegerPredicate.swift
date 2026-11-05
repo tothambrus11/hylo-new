@@ -1,0 +1,76 @@
+internal import llvmc
+
+/// The predicate of an integer comparison.
+///
+/// - See https://llvm.org/docs/LangRef.html#icmp-instruction.
+public enum IntegerPredicate: String, Hashable, Sendable, CaseIterable {
+
+  /// Values are equal.
+  case eq
+
+  /// Values are not equal.
+  case ne
+
+  /// LHS is greater than RHS, by unsigned comparison.
+  case ugt
+
+  /// LHS is greater than or equal to RHS, by unsigned comparison.
+  case uge
+
+  /// LHS is less than RHS, by unsigned comparison.
+  case ult
+
+  /// LHS is less than or equal to RHS, by unsigned comparison.
+  case ule
+
+  /// LHS is less than RHS, by signed comparison.
+  case slt
+
+  /// LHS is greater than or equal to RHS, by signed comparison.
+  case sge
+
+  /// LHS is greater than RHS, by signed comparison.
+  case sgt
+
+  /// LHS is less than or equal to RHS, by signed comparison.
+  case sle
+
+  /// The LLVM identifier of the predicate.
+  internal var llvm: LLVMIntPredicate {
+    switch self {
+    case .eq:
+      LLVMIntEQ
+    case .ne:
+      LLVMIntNE
+    case .ugt:
+      LLVMIntUGT
+    case .uge:
+      LLVMIntUGE
+    case .ult:
+      LLVMIntULT
+    case .ule:
+      LLVMIntULE
+    case .sgt:
+      LLVMIntSGT
+    case .sge:
+      LLVMIntSGE
+    case .slt:
+      LLVMIntSLT
+    case .sle:
+      LLVMIntSLE
+    }
+  }
+
+}
+
+extension IntegerPredicate: LosslessStringConvertible {
+
+  /// Creates a predicate from its mnemonic.
+  public init?(_ description: String) {
+    self.init(rawValue: description)
+  }
+
+  /// The mnemonic of this predicate.
+  public var description: String { self.rawValue }
+
+}

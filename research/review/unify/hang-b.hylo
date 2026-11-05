@@ -1,0 +1,2 @@
+//! stage:typing no-std
+fun f4<T, U where {T, Void} == {Void, U}>(x: T) -> U { x }

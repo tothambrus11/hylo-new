@@ -1,0 +1,6 @@
+fun need<T is P>(x: T) -> Int { x.t() }
+fun f() -> Int { need(A()) }
+fun g() -> Int {
+  given wb: A is P { fun t() -> Int { 2 } }
+  return need(A())
+}

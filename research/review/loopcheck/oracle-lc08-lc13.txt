@@ -1,0 +1,27 @@
+[loopcheck] 4/6 identical
+  MISMATCH research/review/loopcheck/lc08-generic-self-loop-alt.hylo
+      baseline=timeout config=ok
+  MISMATCH research/review/loopcheck/lc12-generic-shared-lemma.hylo
+      --- baseline
+      +++ loopcheck
+      @@ -16765 +16765 @@
+      -0:149 witness.c5 = $<L20.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))($<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))))
+      +0:149 witness.c5 = $<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))
+[index,loopcheck] 4/6 identical
+  MISMATCH research/review/loopcheck/lc08-generic-self-loop-alt.hylo
+      baseline=timeout config=ok
+  MISMATCH research/review/loopcheck/lc12-generic-shared-lemma.hylo
+      --- baseline
+      +++ index,loopcheck
+      @@ -16765 +16765 @@
+      -0:149 witness.c5 = $<L20.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))($<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))))
+      +0:149 witness.c5 = $<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))
+[absmodel,loopcheck] 4/6 identical
+  MISMATCH research/review/loopcheck/lc08-generic-self-loop-alt.hylo
+      baseline=timeout config=ok
+  MISMATCH research/review/loopcheck/lc12-generic-shared-lemma.hylo
+      --- baseline
+      +++ absmodel,loopcheck
+      @@ -16765 +16765 @@
+      -0:149 witness.c5 = $<L20.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))($<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>)))))
+      +0:149 witness.c5 = $<L17.1><Z>($<L16.1>)($<L18.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))($<L19.1><Z>($<L15.1><Z>($<L14.1><Z>($<L13.1><Z>))))

@@ -1,0 +1,6 @@
+trait P { type E; fun get() -> E }
+struct A { memberwise init }
+given A is P { type E = Int; fun get() -> Int { 1 } }
+extension A { fun viaSelf() -> Self { Self() } fun viaE() -> A.E { self.get() } }
+extension <T is P> T { fun lift() -> T.E { self.get() } }
+fun use(a: A) { let _ = a.viaSelf(); let _ = a.viaE(); let _ = a.lift() }

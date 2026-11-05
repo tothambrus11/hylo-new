@@ -1,0 +1,3 @@
+negative/missing-initializer.hylo:6.11: error: binding declaration requires an initializer
+  let x: S
+          ^

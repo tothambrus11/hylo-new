@@ -1,0 +1,19 @@
+//! stage:typing no-std
+fun check<T>(x: T) {}
+fun id<T>(x: T) -> T { x }
+fun pair<T>(x: T) -> {T, T} { Builtin.trap() }
+fun never() -> Never { Builtin.trap() }
+fun twice<A>(f: [](let A) -> A, x: A) -> A { f(f(x)) }
+public fun main() {
+  let a = id(id(id(())))
+  check<Void>(a)
+  let b = pair(pair(()))
+  check<{{Void, Void}, {Void, Void}}>(b)
+  let c = twice(fun[](x: Void) { x }, ())
+  check<Void>(c)
+  let d = (fun[](x) { x })(((), ()))
+  check<{Void, Void}>(d)
+  let e: {Void, Void} = never()
+  check<Never>(never())
+  let f = twice(fun[](x) { pair(x) }, ())
+}

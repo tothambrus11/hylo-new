@@ -1,0 +1,16 @@
+// The model must dealias: the given is stated on an alias, the goal on the aliasee and vice versa.
+trait P {}
+struct Xi {}
+struct S<T> {}
+type Yb = Xi
+type L = S<Yb>
+given Yb is P {}
+given <T where T is P> => S<T> is P {}
+fun need1<where Xi is P>() {}
+fun need2<where S<Xi> is P>() {}
+fun need3<where L is P>() {}
+public fun main() {
+  need1()
+  need2()
+  need3()
+}

@@ -1,0 +1,210 @@
+######## members-big
+samples 2165/2422 under 'Typer.apply'
+
+== retain/release: 31.73% of considered (28.36% of all)
+   16.23%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    1.53%  Typer.lookup(_:memberOfTraitVisibleFrom:)  <=  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+    0.62%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.50%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.33%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.33%  Solver.solve(call:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.29%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+    0.29%  Typer.resolve(_:in:)  <=  Typer.inferredType(of:in:)
+
+== hashing: 21.48% of considered (19.20% of all)
+   15.48%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.78%  Typer.canDeriveCoercion(_:applying:)  <=  Typer.canDeriveCoercions(_:_:in:where:)
+    0.66%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.25%  Typer.declarations(lexicallyIn:)  <=  Typer.lookup(_:lexicallyIn:)
+    0.25%  Typer.notOnStack(_:)  <=  Typer.givens(visibleFrom:)
+    0.21%  specialized Module.type<A>(assignedTo:)  <=  Typer.declaredType(of:)
+    0.17%  TypeStore.reify(_:applying:withVariables:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.08%  StableDictionary.insert(key:value:at:)  <=  StableDictionary.assignValue(_:forKey:)
+
+== generic-in-binary: 10.58% of considered (9.45% of all)
+    2.68%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    2.02%  Typer.resolve(_:memberOf:visibleFrom:)  <=  Solver.solve(member:)
+    1.11%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.29%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.17%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.17%  specialized Module.setType<A>(_:for:)  <=  Typer.commit(_:to:)
+    0.12%  Typer.typeOfSelf(in:)  <=  Typer.typeOfSelf(in:)
+    0.08%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+
+== app-self: 10.48% of considered (9.37% of all)
+    3.26%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.17%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.12%  SyntaxFilter.callAsFunction(_:in:)  <=  Program.initializeStandardLibraryCaches()
+    0.12%  specialized OrderedSet._find(_:)  <=  Typer.lookup(_:lexicallyIn:)
+    0.12%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+    0.12%  specialized OrderedSet._reserveCapacity(_:persistent:)  <=  specialized OrderedDictionary.init<A>(uniqueKeysWithValues:)
+    0.12%  Program.isMarkedForMutation(_:)  <=  Solver.solve(call:)
+    0.08%  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+
+== cast/conformance: 7.58% of considered (6.77% of all)
+    2.93%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.37%  specialized TypeStore.demand(any:)  <=  TypeStore.reify(_:applying:withVariables:)
+    0.37%  specialized TypeStore.demand(any:)  <=  Typer.typeOfModel(of:conformingTo:with:)
+    0.29%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.25%  TypeStore.contextAndHead(_:)  <=  Typer.canDeriveCoercion(_:applying:)
+    0.12%  specialized TypeStore.head<A>(_:)  <=  specialized TypeStore.seenAsTermAbstraction<A>(_:)
+    0.12%  TypeStore.reify(_:applying:withVariables:)  <=  CallConstraint.update(_:)
+    0.12%  specialized TypeStore.demand(any:)  <=  TypeApplication.modified(in:by:)
+
+== generic-metadata: 5.68% of considered (5.08% of all)
+    1.53%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.78%  StableSet.subscript.getter  <=  TypeStore.subscript.getter
+    0.45%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.29%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.21%  StableSet.subscript.getter  <=  TypeStore.contextAndHead(_:)
+    0.21%  StableDictionary.ensureUnique()  <=  StableDictionary.assignValue(_:forKey:)
+    0.21%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.17%  StableSet.insert(_:)  <=  specialized TypeStore.demand(any:)
+
+== value-witness: 3.46% of considered (3.10% of all)
+    0.29%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.25%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.17%  specialized Module.subscript.getter  <=  specialized Program.annotations<A>(_:)
+    0.17%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+    0.12%  Solver.solve(call:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.12%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.12%  Typer.lookup(_:memberOfTraitVisibleFrom:)  <=  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+    0.08%  specialized TypeStore.insert(_:)  <=  specialized TypeStore.demand(any:)
+
+== alloc/libc: 3.37% of considered (3.01% of all)
+    0.95%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.17%  specialized Typer.discharge<A>(_:relatedTo:)  <=  Typer.check(_:requiring:reason:)
+    0.12%  Typer.canDeriveCoercions(_:_:in:where:)  <=  Typer.match(_:in:)
+    0.12%  specialized _copyCollectionToContiguousArray<A>(_:)  <=  TypeStore.dropFirstRequirement(_:)
+    0.12%  _copyCollectionToContiguousArray<A>(_:)  <=  Solver.solve(equality:)
+    0.12%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.08%  StableDictionary.insert(key:value:at:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.08%  Typer.lookup(_:unqualifiedIn:containedIn:)  <=  Typer.resolve(_:unqualifiedIn:)
+
+== other-runtime: 2.82% of considered (2.52% of all)
+    1.32%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.12%  Typer.resolve(_:memberOf:visibleFrom:)  <=  Solver.solve(member:)
+    0.08%  Typer.summon(_:in:)  <=  Typer.summon(_:in:)
+    0.08%  specialized OrderedDictionary.init<A>(uniqueKeysWithValues:)  <=  Typer.commit(_:to:)
+    0.08%  TypeStore.reify(_:applying:withVariables:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.08%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.04%  TypeStore.contextAndHead(_:)  <=  Typer.canDeriveCoercion(_:applying:)
+    0.04%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+
+== tuple-metadata: 2.40% of considered (2.15% of all)
+    1.73%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.21%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.08%  Solver.solve(equality:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.08%  Solver.solve(equality:)  <=  Solver.solve(overload:among:)
+    0.04%  Program.name(of:)  <=  Program.name(of:)
+
+== string: 0.42% of considered (0.37% of all)
+    0.17%  specialized Typer.resolve<A>(_:declaredIn:applyingTo:in:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.08%  specialized OrderedSet._find(_:)  <=  Typer.lookup(_:lexicallyIn:)
+    0.04%  specialized BuiltinFunction.init(_:uniquingTypesWith:)  <=  Typer.resolve(builtin:)
+    0.04%  integerTruncationTail(_:)  <=  specialized BuiltinFunction.init(_:uniquingTypesWith:)
+    0.04%  specialized MachineType.init<A>(_:)  <=  Typer.resolve(builtin:)
+######## breadth80
+samples 1355/1686 under 'Typer.apply'
+
+== retain/release: 24.06% of considered (19.34% of all)
+    1.19%  specialized go #1 (_:_:) in static AbstractResolutionModel.subsumes(_:_:)  <=  AbstractResolutionModel.insert(_:)
+    1.07%  Typer.lookup(_:memberOfTraitVisibleFrom:)  <=  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)
+    0.95%  AbstractResolutionModel.insert(_:)  <=  AbstractResolutionModel.saturate(from:)
+    0.71%  specialized Module.subscript.getter  <=  specialized Program.annotations<A>(_:)
+    0.71%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.71%  Typer.lookup(_:unqualifiedIn:containedIn:)  <=  Typer.resolve(_:unqualifiedIn:)
+    0.65%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.59%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+
+== generic-metadata: 17.79% of considered (14.29% of all)
+    4.92%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    1.66%  StableSet.subscript.getter  <=  TypeStore.subscript.getter
+    1.48%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.89%  StableDictionary.ensureUnique()  <=  StableDictionary.assignValue(_:forKey:)
+    0.71%  Solver.solve(equality:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.53%  StableDictionary.insert(key:value:at:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.47%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.47%  StableSet.subscript.getter  <=  TypeStore.contextAndHead(_:)
+
+== cast/conformance: 10.63% of considered (8.54% of all)
+    3.68%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.71%  TypeStore.unifiableSameShape(_:_:extending:handlingCoercionsWith:)  <=  TypeStore.unifiable(_:_:extending:handlingCoercionsWith:)
+    0.47%  specialized TypeStore.demand(any:)  <=  TypeStore.reify(_:applying:withVariables:)
+    0.47%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.36%  Solver.solution(betterThanOrEqualTo:using:)  <=  Solver.solution(using:)
+    0.30%  Typer.nominalHead(_:)  <=  Typer.givenIndex(visibleFrom:)
+    0.18%  specialized Module.subscript.getter  <=  Typer.inferredType(of:in:)
+    0.18%  Solver.solve(staticCall:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+
+== generic-in-binary: 10.55% of considered (8.48% of all)
+    1.54%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.47%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.42%  Solver.solve(equality:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.30%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.24%  StableDictionary.insert(key:value:at:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.24%  specialized Module.setType<A>(_:for:)  <=  Typer.commit(_:to:)
+    0.24%  StableSet.subscript.getter  <=  TypeStore.subscript.getter
+    0.24%  specialized append #1 (_:) in Typer.lookup(_:unqualifiedIn:containedIn:)  <=  Typer.lookup(_:unqualifiedIn:containedIn:)
+
+== app-self: 9.45% of considered (7.59% of all)
+    0.36%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.24%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.18%  Solver.solve(call:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.18%  specialized OrderedSet._reserveCapacity(_:persistent:)  <=  specialized OrderedDictionary.init<A>(uniqueKeysWithValues:)
+    0.18%  StableDictionary.Header.assign(position:in:forHash:)  <=  StableDictionary.reallocate(withCapacity:)
+    0.18%  specialized go #1 (_:_:) in static AbstractResolutionModel.subsumes(_:_:)  <=  AbstractResolutionModel.insert(_:)
+    0.12%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.12%  StableSet.subscript.getter  <=  TypeStore.subscript.getter
+
+== hashing: 7.01% of considered (5.63% of all)
+    0.83%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.59%  specialized Module.type<A>(assignedTo:)  <=  Typer.declaredType(of:)
+    0.59%  Typer.canDeriveCoercion(_:applying:)  <=  Typer.canDeriveCoercions(_:_:in:where:)
+    0.59%  Typer.declarations(lexicallyIn:)  <=  Typer.lookup(_:lexicallyIn:)
+    0.24%  Typer.notOnStack(_:)  <=  Typer.givens(visibleFrom:)
+    0.24%  Solver.solve(equality:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.24%  StableDictionary.insert(key:value:at:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.18%  specialized Module.type<A>(assignedTo:)  <=  Typer.inferredType(of:in:)
+
+== value-witness: 6.94% of considered (5.58% of all)
+    0.42%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+    0.42%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.24%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.24%  specialized Module.subscript.getter  <=  specialized Program.annotations<A>(_:)
+    0.24%  StableSet.subscript.getter  <=  TypeStore.subscript.getter
+    0.24%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.24%  specialized Module.subscript.getter  <=  Typer.declaredType(of:)
+    0.18%  specialized Typer.discharge<A>(_:relatedTo:)  <=  Typer.evaluateTypeAscription(_:)
+
+== tuple-metadata: 5.90% of considered (4.74% of all)
+    3.56%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.95%  TypeTree.equals(_:)  <=  StableDictionary.lookup(_:)
+    0.12%  Solver.solve(equality:)  <=  Solver.solution(betterThanOrEqualTo:using:)
+    0.12%  _copyCollectionToContiguousArray<A>(_:)  <=  Solver.solve(equality:)
+
+== alloc/libc: 4.94% of considered (3.97% of all)
+    0.18%  Typer.resolve(_:unqualifiedIn:)  <=  Typer.resolve(_:in:)
+    0.18%  specialized OrderedDictionary.subscript.setter  <=  Typer.resolve(_:in:)
+    0.18%  specialized Typer.discharge<A>(_:relatedTo:)  <=  Typer.evaluateTypeAscription(_:)
+    0.12%  TypeStore.abstraction(of:binding:variables:)  <=  TypeStore.abstraction(of:binding:variables:)
+    0.12%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+    0.12%  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)
+    0.12%  StableDictionary.subscript.getter  <=  StableSet.subscript.getter
+    0.12%  StableDictionary.lookup(_:)  <=  StableDictionary.assignValue(_:forKey:)
+
+== other-runtime: 2.21% of considered (1.78% of all)
+    0.12%  Typer.resolve(_:in:)  <=  Typer.inferredType(of:in:)
+    0.12%  specialized Solver.insert<A>(fresh:)  <=  specialized Solver.init(_:withLoggingEnabled:)
+    0.06%  specialized Program.annotations<A>(_:)  <=  specialized Program.annotation<A>(_:appliedTo:)
+    0.06%  Typer.declarations(lexicallyIn:)  <=  Typer.lookup(_:lexicallyIn:)
+    0.06%  Typer.formThread(matching:to:in:then:penalties:ancestors:)  <=  Typer.summon(_:in:where:then:penalties:ancestors:)
+    0.06%  Solver.matches(_:_:)  <=  Solver.solve(call:)
+    0.06%  Typer.refineLookupResults(_:matching:)  <=  Typer.resolve(_:nativeMemberOf:statically:)
+    0.06%  specialized OrderedDictionary.merge<A>(_:uniquingKeysWith:)  <=  Solver.solve(member:)
+
+== string: 0.52% of considered (0.42% of all)
+    0.18%  specialized BuiltinFunction.init(_:uniquingTypesWith:)  <=  Typer.resolve(builtin:)
+    0.12%  Typer.declaredType(of:)  <=  Typer.check(_:)
+    0.06%  specialized _HashTable.UnsafeHandle._find<A>(_:in:)  <=  specialized Typer.extendLookupTable<A>(_:with:)
+    0.06%  Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:)  <=  Typer.resolve(_:memberOf:visibleFrom:)

@@ -1,0 +1,20 @@
+//! no-std
+
+@  blah
+fun f() {}
+
+struct A {
+  @blah let x: Void
+  @blah type T = Void
+}
+
+trait P {
+  @blah type X
+}
+
+@blah extension Void {}
+
+@blah given Void is P {}
+
+@inline(foo) fun f0() {}
+@inline(never, 1) fun f1() {}

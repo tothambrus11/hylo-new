@@ -1,0 +1,11 @@
+// Generic overloads under `as` with type-parameter results (substitution order).
+struct A { public memberwise init }
+struct B<T> { public memberwise init }
+type X = B<A>
+fun f<T>(x: T) -> B<T> { B() }
+fun f(x: B<A>) -> X { x }
+public fun main() {
+  let a = f(A()) as B<A>
+  let b = f(B<A>()) as B<A>
+  let c = f(B<A>()) as X
+}

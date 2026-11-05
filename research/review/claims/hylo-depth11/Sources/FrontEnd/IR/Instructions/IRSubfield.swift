@@ -1,0 +1,84 @@
+import Archivist
+import Utilities
+
+/// Accesses a part identified by its logical index in a record.
+@Archivable
+public struct IRSubfield: IRPart {
+
+  /// The operands of the instruction.
+  public private(set) var operands: [IRValue]
+
+  /// The region of the code corresponding to this instruction.
+  public let anchor: Anchor
+
+  /// The logical position of the part in the record.
+  public let part: Int
+
+  /// The type of the subfield being accessed.
+  public let partType: AnyTypeIdentity
+
+  /// Creates an instance with the given properties.
+  public init(
+    whole: IRValue, wholeWitness: IRValue?, part: Int, partType: AnyTypeIdentity,
+    anchor: Anchor
+  ) {
+    self.operands = Array(whole, prependedTo: Array(unwrapping: wholeWitness))
+    self.anchor = anchor
+    self.part = part
+    self.partType = partType
+  }
+
+  /// Creates a copy of `other`, substituting its properties with `properties`.
+  public init(_ other: Self, substituting properties: IRSubstitutionTable) {
+    self.operands = other.operands.map({ (o) in properties[o] })
+    self.anchor = properties.anchor(other)
+    self.part = other.part
+    self.partType = other.partType
+  }
+
+  /// The place of the whole containing the subfield being accessed.
+  public var whole: IRValue {
+    operands[0]
+  }
+
+  /// A witness of the run-time type of the whole iff that type has been existentialized.
+  public var wholeWitness: IRValue? {
+    (operands.count > 1) ? operands[1] : nil
+  }
+
+  /// The type of the instruction's result.
+  public var type: IRType {
+    .place(partType)
+  }
+
+  /// `true`.
+  public var isExtendingOperandLifetimes: Bool {
+    true
+  }
+
+  /// Returns a copy of `self` reading member offsets from the given witness.
+  public func existentialized(readingOffsetsWith wholeWitness: IRValue) -> IRSubfield {
+    precondition(self.wholeWitness == nil, "instruction already existentialized")
+    var clone = self
+    clone.operands.append(wholeWitness)
+    return clone
+  }
+
+}
+
+extension IRSubfield: Showable {
+
+  /// Returns a textual representation of `self` using `printer`.
+  public func show(using printer: inout TreePrinter) -> String {
+    let w: String
+
+    if let t = wholeWitness {
+      w = "(\(printer.show(whole)) : \(printer.show(t)))"
+    } else {
+      w = printer.show(whole)
+    }
+
+    return "subfield \(w) at \(part) as \(printer.show(partType))"
+  }
+
+}

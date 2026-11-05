@@ -1,0 +1,25 @@
+//! no-std
+
+static trait P {
+
+  public type X
+
+}
+
+static struct A {
+
+  static type Z = A
+
+}
+
+public extension A {
+
+  public static public fun f0() {}
+
+  static public fun f0() {}
+
+}
+
+public fun main() {
+  indirect var x: Void
+}
