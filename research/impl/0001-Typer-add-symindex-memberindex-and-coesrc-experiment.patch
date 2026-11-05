@@ -1,7 +1,7 @@
 From eb313690d54af544bba68731923dc775fe6925b4 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 18:43:41 +0000
-Subject: [PATCH 1/5] Typer: add symindex, memberindex and coesrc experiments;
+Subject: [PATCH 1/6] Typer: add symindex, memberindex and coesrc experiments;
  default absDepth to 2
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

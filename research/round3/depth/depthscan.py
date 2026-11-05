@@ -4,8 +4,8 @@ usage: depthscan.py BINID OUT.jsonl [DEPTH ...]   (restartable: skips rows alrea
 import json, os, re, subprocess, sys
 from concurrent.futures import ThreadPoolExecutor
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(os.path.dirname(HERE))
-B = os.path.join(HERE, "..", "exp", "bin", sys.argv[1], "tc-bench")
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(HERE)))
+B = os.path.join(HERE, "..", "..", "exp", "bin", sys.argv[1], "tc-bench")
 OUT = sys.argv[2]
 DEPTHS = [int(d) for d in sys.argv[3:]] or [10, 12, 15, 20]
 T = os.path.join(REPO, "Tests", "CompilerTests")

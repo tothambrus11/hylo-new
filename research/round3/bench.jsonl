@@ -1,0 +1,10 @@
+{"config": "baseline", "workload": "stdlib", "ms": 1007.12}
+{"config": "symindex", "workload": "stdlib", "ms": 884.83}
+{"config": "coesrc", "workload": "stdlib", "ms": 814.36}
+{"config": "traitindex", "workload": "stdlib", "ms": 947.35}
+{"config": "memberskip", "workload": "stdlib", "ms": 599.19}
+{"config": "unify", "workload": "stdlib", "ms": 909.65}
+{"config": "index", "workload": "stdlib", "ms": 453.62}
+{"config": "absmodel", "workload": "stdlib", "ms": 786.82}
+{"config": "typevec", "workload": "stdlib", "ms": 806.19}
+{"config": "sound set", "workload": "stdlib", "ms": 234.61}

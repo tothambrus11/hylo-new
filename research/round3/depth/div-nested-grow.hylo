@@ -1,0 +1,10 @@
+// Growing divergence below depth k = 2: `S<T> is P` needs `S<S<T>> is P`. The depth-2 model
+// contains `P<S<T>>` (from `S<Xi> is P`), so it cannot refute `S<Yb> is P`.
+trait P {}
+struct S<T> {}
+struct Yb {}
+struct Xi {}
+given S<Xi> is P {}
+given <T where S<S<T>> is P> => S<T> is P {}
+fun need<where S<Yb> is P>() {}
+public fun main() { need() }

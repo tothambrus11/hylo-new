@@ -1,0 +1,9 @@
+// Like div-branch, but each given needs two premises: the search tree has fan-out 2 at every
+// premise and also must solve the premises in sequence.
+trait P {}
+struct S<T> {}
+struct R<T> {}
+struct Yb {}
+given <T where S<T> is P, R<T> is P> => T is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

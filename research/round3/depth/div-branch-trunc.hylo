@@ -1,0 +1,13 @@
+// Like div-branch, with a base fact deeper than the abstraction depth (k=2). Concretely `Yb is
+// P` is still underivable, but the truncated fact P(S(S(⊤))) lets the abstract model derive
+// P(⊤), so absmodel cannot refute the goal: the search is exponential in the depth cap again.
+trait P {}
+struct S<T> {}
+struct R<T> {}
+struct Xi {}
+struct Yb {}
+given <T where S<T> is P> => T is P {}
+given <T where R<T> is P> => T is P {}
+given S<S<Xi>> is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

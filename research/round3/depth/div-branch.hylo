@@ -1,0 +1,10 @@
+// Divergent resolution that branches: each step has two looping givens, so the number of
+// threads doubles per BFS layer and the cost of failing is exponential in the depth cap.
+trait P {}
+struct S<T> {}
+struct R<T> {}
+struct Yb {}
+given <T where S<T> is P> => T is P {}
+given <T where R<T> is P> => T is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }
