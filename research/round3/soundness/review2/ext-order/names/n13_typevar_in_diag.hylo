@@ -1,0 +1,15 @@
+struct A { fun m() {} }
+extension <T> T { fun anything() {} }
+
+fun f<T>() -> T { f() }
+fun g<T>(_ x: T) {}
+
+fun use(a: A) {
+  a.m()
+  let x = f()
+  let y = [].count
+  g(f())
+  let z = (fun(x) { x })
+  let w = a.anything
+  let v = f().m()
+}

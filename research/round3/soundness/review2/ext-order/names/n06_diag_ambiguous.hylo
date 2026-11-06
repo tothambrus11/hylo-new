@@ -1,0 +1,12 @@
+struct A { public memberwise init }
+
+extension A { fun f() -> Int { 1 } }
+extension A { fun f() -> Int { 2 } }
+extension A { fun g() {} }
+extension Bool { fun f() -> Int { 3 } }
+
+fun use(a: A) {
+  let x = a.f()
+  let y = a.h()
+  a.g()
+}

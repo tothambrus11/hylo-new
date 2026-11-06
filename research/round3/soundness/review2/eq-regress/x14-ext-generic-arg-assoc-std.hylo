@@ -1,0 +1,6 @@
+//! stage:typing
+struct Box<T> { public memberwise init }
+extension Box<Array<Int>.Element> {
+  fun Element() -> Int { 1 }
+}
+public fun main() {}

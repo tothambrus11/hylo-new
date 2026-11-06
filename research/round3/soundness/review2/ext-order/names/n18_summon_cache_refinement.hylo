@@ -1,0 +1,10 @@
+trait P {}
+trait Q refines P {}
+
+struct A { fun m() {} }
+
+extension <T where T is P> T { fun viaP() {} }
+
+fun early(a: A) { a.m() }
+
+given w2: A is Q {}

@@ -1,0 +1,10 @@
+//! no-std
+struct A { public memberwise init }
+struct B { public memberwise init }
+extension <T where T == A> {T, B} {
+  fun m() -> A { self.0 }
+}
+public fun main() {
+  let x = (A(), B())
+  let y: A = x.m()
+}

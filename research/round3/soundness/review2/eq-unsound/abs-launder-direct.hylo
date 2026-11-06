@@ -1,0 +1,6 @@
+//! no-std
+trait P { type X }
+fun check<T>(x: T) {}
+fun f0<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(x)
+}

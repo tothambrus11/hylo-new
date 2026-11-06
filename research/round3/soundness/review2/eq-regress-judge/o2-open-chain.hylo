@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P {}
+trait Q {}
+struct Box<X> {}
+given <T, U where U is Q, T == U> => Box<T> is P {}
+fun need<W where W is P>() {}
+fun f<A0, A1, A2 where A0 == A1, A1 == A2, A2 is Q>() { need<Box<A0>>() }

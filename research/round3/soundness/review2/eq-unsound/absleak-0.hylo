@@ -1,0 +1,9 @@
+//! no-std
+trait P {
+  type X
+  fun get() -> X
+}
+fun check<T>(x: T) {}
+fun f0<T where T is P>(t: T) {
+  check<T.X>(t.get())
+}

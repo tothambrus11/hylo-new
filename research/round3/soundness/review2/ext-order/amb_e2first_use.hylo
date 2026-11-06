@@ -1,0 +1,8 @@
+struct A { type Foo = Int }
+struct C { type Bar = A }
+
+extension C.Bar { type Foo = Bool }
+extension A.Foo { fun g() {} }
+
+fun h(x: Int) { x.g() }
+fun k(y: A.Foo) {}

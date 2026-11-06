@@ -1,0 +1,12 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+type X = A.Foo
+extension X { type Foo = A }
+extension A { fun m() -> X { m() } }
+fun use<T>(x: T) {}
+public fun main() {
+  let a = A()
+  use(a.m())
+  let b: X.Foo = a
+  use<A.Foo.Foo>(b)
+}

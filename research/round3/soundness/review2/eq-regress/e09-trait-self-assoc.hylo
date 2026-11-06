@@ -1,0 +1,8 @@
+//! stage:typing no-std
+fun check<T>(x: T) {}
+trait P {
+  type X
+  type Y
+  fun f<U where X == Y, Y == U>(x: X) { check<U>(x) }
+}
+fun g<T, U where T is P, T.X == T.Y, T.Y == U>(x: T.X) { check<U>(x) }

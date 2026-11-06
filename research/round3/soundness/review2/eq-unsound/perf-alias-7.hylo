@@ -1,0 +1,14 @@
+//! no-std
+struct A {}
+struct Box<T> {}
+type G1<Z> = Box<Box<Box<Box<Box<Z>>>>>
+type G2<Z> = G1<G1<Z>>
+type G3<Z> = G2<G2<Z>>
+type G4<Z> = G3<G3<Z>>
+type G5<Z> = G4<G4<Z>>
+type G6<Z> = G5<G5<Z>>
+type G7<Z> = G6<G6<Z>>
+fun need<X, Y where X == Y>() {}
+fun f<U where U == A>() {
+  need<G7<U>, G7<A>>()
+}

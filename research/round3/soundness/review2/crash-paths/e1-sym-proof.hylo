@@ -1,0 +1,5 @@
+//! stage:typing no-std
+fun need<X, Y where X == Y>() {}
+fun f<A, B where A == B>() {
+  need<B, A>()
+}

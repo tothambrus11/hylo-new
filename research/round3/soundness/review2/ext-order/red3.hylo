@@ -1,0 +1,9 @@
+trait P { type Y }
+trait Q { type O }
+struct T { public memberwise init }
+struct U { public memberwise init }
+given U is Q { type O = T }
+given U.O is P { type Y = Int }
+given T is P { type Y = Bool }
+fun need<A where A is P>() {}
+fun main2() { need<T>() }

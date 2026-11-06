@@ -1,0 +1,13 @@
+[names] 4/5 identical
+  MISMATCH research/review/names/verify-names-1/v3_nouse.hylo
+      --- baseline
+      +++ names
+      @@ -16689,2 +16689 @@
+      -0:13 -> Foo
+      -0:13 : Metatype<Foo>
+      +0:13 : #!
+      @@ -16694 +16693 @@
+      -0:16 : Foo
+      +0:16 : #!
+      @@ -16713,0 +16713 @@
+      +diag /home/hylo/hylo-tc/research/review/names/verify-names-1/v3_nouse.hylo:6.19-22: error: type 'Inner' has no static member 'Foo'

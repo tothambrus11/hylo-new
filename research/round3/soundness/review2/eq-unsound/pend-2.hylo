@@ -1,0 +1,11 @@
+//! no-std
+trait P {}
+struct A {}
+struct B {}
+struct C {}
+fun use<T>(x: T) {}
+fun f<V, W where V == W>() {
+  // Premise V == A is false; Box-like congruence through a pending premise.
+  given <where V == A, W == A> => C is P {}
+  use(summon[P<C>])
+}

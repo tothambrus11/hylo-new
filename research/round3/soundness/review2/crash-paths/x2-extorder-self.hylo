@@ -1,0 +1,8 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+extension A.Me { type Me = A }
+extension A { type Me = A.Me }
+trait P { type Q }
+given A.Me is P { type Q = A.Me.Me }
+fun need<T where T is P>() {}
+public fun main() { need<A>(); need<A.Me>() }

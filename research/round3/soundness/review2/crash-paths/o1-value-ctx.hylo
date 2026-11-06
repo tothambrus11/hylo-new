@@ -1,0 +1,11 @@
+//! stage:typing no-std
+trait P {}
+struct Box<T> {}
+given <X where let v: X> => Box<X> is P {}
+fun g<T where let u: T>() {}
+fun h<T where T is P>() {}
+public fun main() {
+  given Void = ()
+  g()
+  h<Box<Void>>()
+}

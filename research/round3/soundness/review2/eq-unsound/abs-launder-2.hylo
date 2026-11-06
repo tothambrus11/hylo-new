@@ -1,0 +1,11 @@
+//! no-std
+trait P {
+  type X
+  fun id(x: X) -> X
+}
+fun check<T>(x: T) {}
+// Same premises as negative/associated-type-inequality.hylo, where `check<V.X>(x)` with
+// `x: W.X` is rejected. Passing x through V's `id` should require x: V.X as well.
+fun f0<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.id(x))
+}

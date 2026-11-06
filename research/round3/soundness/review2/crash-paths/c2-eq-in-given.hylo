@@ -1,0 +1,11 @@
+//! stage:typing no-std
+trait P {}
+struct A {}
+struct B {}
+given <where A == B> => A is P {}
+fun h<T where T is P>() {}
+fun need<X, Y where X == Y>() {}
+public fun main() {
+  h<A>()
+  need<A, B>()
+}

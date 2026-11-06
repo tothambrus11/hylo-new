@@ -1,0 +1,14 @@
+trait P {}
+trait R {}
+struct G<T> {}
+given Int is P {}
+extension <T where T is P> G<T> { fun onlyP() -> T.self { T.self } }
+extension <T where T is R> G<T> { fun onlyR() {} }
+extension <T where T is P> G<T> { fun both() -> Int { 1 } }
+extension <T where T is R> G<T> { fun both() -> Bool { true } }
+fun use(g: G<Int>, h: G<Bool>) {
+  let _ = g.onlyP()
+  let _ = g.both()
+  let _ = h.onlyR()
+  let _ = h.both()
+}

@@ -1,0 +1,3 @@
+struct A { type Foo = A }
+extension A.Foo { type Foo = Int }
+fun k(y: A.Foo) {}

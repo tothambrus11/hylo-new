@@ -1,0 +1,13 @@
+//! stage:typing no-std
+struct List {
+  struct Node { public memberwise init }
+}
+type Node = List.Node
+extension Node {
+  type Node = List.Node
+  fun next() -> Node { Node() }
+}
+public fun main() {
+  let n = List.Node()
+  let m: List.Node = n.next()
+}

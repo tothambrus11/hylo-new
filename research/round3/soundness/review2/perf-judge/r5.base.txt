@@ -1,0 +1,2 @@
+Fatal error: failed to allocate 749797312 bytes of memory with alignment 8
+exit=-6 wall=37.5s maxrss=1711MB

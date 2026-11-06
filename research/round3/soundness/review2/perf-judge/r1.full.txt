@@ -1,0 +1,4 @@
+coerced.slowPath=4 eqsolve.proved=4 summon.matches=8 summon.subgoals=4
+diagnostics: 0
+type.user  14258.45 ms
+exit=0 wall=14.5s maxrss=30MB

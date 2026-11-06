@@ -1,0 +1,53 @@
+[names] 6/8 identical
+  MISMATCH research/review/names/verify-names-2/v06_member_of_ext_alias.hylo
+      --- baseline
+      +++ names
+      @@ -16685,2 +16685,2 @@
+      -0:10 : Metatype<let #!>
+      -0:11 : let #!
+      +0:10 : Metatype<let X>
+      +0:11 : let X
+      @@ -16688,2 +16688,2 @@
+      -0:13 : [Void](self: let #!) let -> Void
+      -0:14 : #!
+      +0:13 : [Void](self: let X) let -> Void
+      +0:14 : X
+      @@ -16696 +16696,2 @@
+      -0:19 : #!
+      +0:19 -> g
+      +0:19 : [let X]() let -> Void
+      @@ -16699 +16700 @@
+      -0:20 : #!
+      +0:20 : Void
+      @@ -16710 +16711 @@
+      -0:8 : #!
+      +0:8 : Metatype<X>
+      @@ -16712,3 +16713 @@
+      -0:9 : Metatype<#!>
+      -diag /home/hylo/hylo-tc/research/review/names/verify-names-2/v06_member_of_ext_alias.hylo:3.6-7: error: definition of 'X' refers to itself
+  MISMATCH research/review/names/verify-names-2/v08_two_aliases.hylo
+      --- baseline
+      +++ names
+      @@ -16689 +16689 @@
+      -0:12 : #!
+      +0:12 : Metatype<X>
+      @@ -16691,3 +16691,3 @@
+      -0:13 : Metatype<#!>
+      -0:14 : Metatype<let #!>
+      -0:15 : let #!
+      +0:13 : Metatype<X>
+      +0:14 : Metatype<let X>
+      +0:15 : let X
+      @@ -16695,2 +16695,2 @@
+      -0:17 : [Void](self: let #!) let -> Void
+      -0:18 : #!
+      +0:17 : [Void](self: let X) let -> Void
+      +0:18 : X
+      @@ -16719,2 +16719,3 @@
+      -0:33 : #!
+      -0:34 : #!
+      +0:33 -> g
+      +0:33 : [let X]() let -> Void
+      +0:34 : Void
+      @@ -16736,2 +16736,0 @@
+      -diag /home/hylo/hylo-tc/research/review/names/verify-names-2/v08_two_aliases.hylo:3.6-7: error: definition of 'X' refers to itself

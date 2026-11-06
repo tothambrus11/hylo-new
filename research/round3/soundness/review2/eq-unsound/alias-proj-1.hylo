@@ -1,0 +1,10 @@
+//! no-std
+trait P { type X }
+type Proj<T where T is P> = T.X
+fun check<T>(x: T) {}
+fun f<U, W where U == W, U is P, W is P>(x: Proj<U>) {
+  check<Proj<W>>(x)
+}
+fun g<U, W where U == W, U is P, W is P>(x: U.X) {
+  check<Proj<W>>(x)
+}

@@ -1,0 +1,4 @@
+absmodel.built=1 absmodel.facts=66 absmodel.micros=1630 absmodel.work=656 coerced.slowPath=1 index.skipped=209 summon.matches=5 summon.subgoals=3
+diagnostics: 0
+type.user  10867.75 ms
+exit=0 wall=11.1s maxrss=30MB

@@ -1,0 +1,10 @@
+//! no-std
+trait P {
+  type X
+  fun get() -> X
+}
+fun check<T>(x: T) {}
+fun f0<T, U where T == U, T is P, U is P>(t: T) {
+  // t.get() has type T.X (T's conformance); U.X is a different projection.
+  check<U.X>(t.get())
+}

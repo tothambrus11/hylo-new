@@ -1,0 +1,9 @@
+//! stage:typing no-std
+struct Box<T> { public memberwise init }
+fun mkbox<T>(x: T) -> Box<T> { mkbox(x) }
+public fun main() {
+  let f = fun[](a) {
+    var x = a
+    &x = mkbox(x)
+  }
+}

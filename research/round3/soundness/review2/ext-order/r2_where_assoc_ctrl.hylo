@@ -1,0 +1,5 @@
+trait P { type Element }
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.Element == Int> Box<T> {
+  type Elem = Int
+}

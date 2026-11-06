@@ -1,0 +1,15 @@
+trait P {}
+
+struct A {
+  struct Inner {}
+  fun m() {}
+}
+struct C { type Foo = Bool }
+
+fun early2(i: C.Foo) {}
+
+extension <T where T is P> T { type Inner = Bool }
+given A.Inner.Foo is P {}
+extension A.Inner { type Foo = Int }
+
+fun use(x: Int.Inner) {}

@@ -1,0 +1,11 @@
+//! no-std
+fun conv<A, B where A == B>(x: A) -> B { x }
+fun check<T>(x: T) {}
+trait P {
+  type X
+  // T and U are both equal to Self but carry their own conformances to P, so T.X and U.X
+  // are unrelated (negative/associated-type-inequality.hylo); X == X is a trivial fact.
+  fun f<T, U where T == Self, U == Self, T is P, U is P, X == X>(x: U.X) {
+    check<T.X>(conv<U.X, T.X>(x))
+  }
+}

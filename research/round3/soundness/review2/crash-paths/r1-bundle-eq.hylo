@@ -1,0 +1,9 @@
+//! stage:typing no-std
+fun bb<T>(x: auto T) auto -> Void {
+  let { () }
+  inout { () }
+}
+fun need<X, Y where X == Y>(x: X, y: Y) {}
+fun f<A, B where A == B>() {
+  need(bb<A>, bb<B>)
+}

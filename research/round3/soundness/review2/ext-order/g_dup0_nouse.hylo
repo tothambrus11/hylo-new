@@ -1,0 +1,4 @@
+trait P { type Y }
+struct T {}
+given T is P { type Y = T }
+given T is P { type Y = Int }

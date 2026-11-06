@@ -1,0 +1,13 @@
+//! stage:typing no-std
+struct Flag { public memberwise init }
+struct Box<T> { public memberwise init }
+extension Box {
+  type Element = Flag
+  fun first() -> Box.Element { Flag() }
+  fun second() -> Self.Element { Flag() }
+  fun third(other: Box<T>) -> Flag { other.first() }
+}
+public fun main() {
+  let b = Box<Flag>()
+  let f: Flag = b.third(other: b)
+}

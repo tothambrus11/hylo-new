@@ -1,0 +1,9 @@
+//! stage:typing no-std
+fun need<A, B where A == B>() {}
+struct Box<X> {}
+struct Pair<X, Y> {}
+fun f<T, U, V where T == U, Box<U> == V>() {
+  need<Pair<Box<T>, V>, Pair<V, Box<U>>>()
+  need<Metatype<T>, Metatype<U>>()
+  need<[](inout T) -> V, [](inout U) -> Box<T>>()
+}

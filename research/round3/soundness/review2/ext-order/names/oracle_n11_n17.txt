@@ -1,0 +1,58 @@
+[names] 4/7 identical
+  MISMATCH research/review/names/n11_poison_via_summon.hylo
+      --- baseline
+      +++ names
+      @@ -16726,2 +16726 @@
+      -0:38 -> Foo
+      -0:38 : Metatype<Foo>
+      +0:38 : #!
+      @@ -16731,2 +16730,2 @@
+      -0:40 : Metatype<P<Foo>>
+      -0:41 : P<Foo>
+      +0:40 : Metatype<P<#!>>
+      +0:41 : P<#!>
+      @@ -16744,3 +16743,2 @@
+      -0:48 -> Inner
+      -0:48 : Metatype<Inner>
+      -0:49 : Metatype<let Inner>
+      +0:48 : #!
+      +0:49 : Metatype<let #!>
+      @@ -16748 +16746 @@
+      -0:50 : let Inner
+      +0:50 : let #!
+      @@ -16750 +16748 @@
+      -0:52 : [Void](let Inner) let -> Void
+      +0:52 : [Void](let #!) let -> Void
+      @@ -16755,0 +16754,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n11_poison_via_summon.hylo:13.15-18: error: type 'Inner' has no static member 'Foo'
+  MISMATCH research/review/names/n12_poison_via_summon_noearly.hylo
+      --- baseline
+      +++ names
+      @@ -16715,2 +16715 @@
+      -0:30 -> Foo
+      -0:30 : Metatype<Foo>
+      +0:30 : #!
+      @@ -16719,2 +16718,2 @@
+      -0:32 : Metatype<P<Foo>>
+      -0:33 : P<Foo>
+      +0:32 : Metatype<P<#!>>
+      +0:33 : P<#!>
+      @@ -16733,4 +16732,3 @@
+      -0:40 -> Inner
+      -0:40 : Metatype<Inner>
+      -0:41 : Metatype<let Inner>
+      -0:42 : let Inner
+      +0:40 : #!
+      +0:41 : Metatype<let #!>
+      +0:42 : let #!
+      @@ -16738 +16736 @@
+      -0:44 : [Void](let Inner) let -> Void
+      +0:44 : [Void](let #!) let -> Void
+      @@ -16744,0 +16743,2 @@
+      +diag /home/hylo/hylo-tc/research/review/names/n12_poison_via_summon_noearly.hylo:12.15-18: error: type 'Inner' has no static member 'Foo'
+      +diag /home/hylo/hylo-tc/research/review/names/n12_poison_via_summon_noearly.hylo:15.16-21: error: type 'Int' has no static member 'Inner'
+  MISMATCH research/review/names/n17_alias_cycle_generic.hylo
+      --- baseline
+      +++ names
+      @@ -16742 +16741,0 @@
+      -diag /home/hylo/hylo-tc/research/review/names/n17_alias_cycle_generic.hylo:3.6-7: error: definition of 'X' refers to itself

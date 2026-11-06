@@ -1,0 +1,10 @@
+//! no-std
+struct A { public memberwise init }
+struct C {}
+struct Box<T> { public memberwise init }
+type B2 = Box
+fun check<T>(x: T) {}
+fun f() {
+  let b: B2<A> = Box<A>()
+  check<B2<C>>(b)
+}

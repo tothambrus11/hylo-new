@@ -1,0 +1,5 @@
+trait P { type Element; fun first() -> Element }
+struct Box<T> { public memberwise init }
+extension <T where T is P> Box<T> {
+  fun first(_ x: T) -> T.Element { x.first() }
+}

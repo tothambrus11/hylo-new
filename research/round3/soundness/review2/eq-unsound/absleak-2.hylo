@@ -1,0 +1,8 @@
+//! no-std
+trait P {
+  type X
+  fun get() -> X
+}
+fun f0<T, U where T == U, T is P, U is P>(t: T) {
+  let y: U.X = t.get()
+}

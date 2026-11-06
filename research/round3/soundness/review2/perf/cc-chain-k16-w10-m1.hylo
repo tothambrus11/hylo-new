@@ -1,0 +1,23 @@
+struct Box<T> {}
+fun need<A, B where A == B>() {}
+fun f<T, U, X1, Y1, X2, Y2, X3, Y3, X4, Y4, X5, Y5, X6, Y6, X7, Y7, X8, Y8, X9, Y9, X10, Y10, X11, Y11, X12, Y12, X13, Y13, X14, Y14, X15, Y15, X16, Y16 where
+  T == U,
+  X1 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<T>>>>>>>>>>, Y1 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<U>>>>>>>>>>,
+  X2 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X1>>>>>>>>>>, Y2 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y1>>>>>>>>>>,
+  X3 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X2>>>>>>>>>>, Y3 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y2>>>>>>>>>>,
+  X4 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X3>>>>>>>>>>, Y4 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y3>>>>>>>>>>,
+  X5 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X4>>>>>>>>>>, Y5 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y4>>>>>>>>>>,
+  X6 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X5>>>>>>>>>>, Y6 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y5>>>>>>>>>>,
+  X7 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X6>>>>>>>>>>, Y7 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y6>>>>>>>>>>,
+  X8 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X7>>>>>>>>>>, Y8 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y7>>>>>>>>>>,
+  X9 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X8>>>>>>>>>>, Y9 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y8>>>>>>>>>>,
+  X10 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X9>>>>>>>>>>, Y10 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y9>>>>>>>>>>,
+  X11 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X10>>>>>>>>>>, Y11 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y10>>>>>>>>>>,
+  X12 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X11>>>>>>>>>>, Y12 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y11>>>>>>>>>>,
+  X13 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X12>>>>>>>>>>, Y13 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y12>>>>>>>>>>,
+  X14 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X13>>>>>>>>>>, Y14 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y13>>>>>>>>>>,
+  X15 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X14>>>>>>>>>>, Y15 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y14>>>>>>>>>>,
+  X16 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X15>>>>>>>>>>, Y16 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y15>>>>>>>>>>
+>() {
+  need<X16, Y16>()
+}

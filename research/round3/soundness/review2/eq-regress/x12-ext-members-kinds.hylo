@@ -1,0 +1,15 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+extension A {
+  public init(other: A) { self = other }
+  public fun infix+ (x: A) -> A { A() }
+  public static fun make() -> A { A() }
+  public fun method(label x: A) -> A { x }
+}
+public fun main() {
+  let a = A()
+  let b = A(other: a)
+  let c = a + b
+  let e = A.make()
+  let f = a.method(label: e)
+}

@@ -1,0 +1,12 @@
+//! no-std
+struct Box<T> {}
+fun conv<A, B where A == B>(x: A) -> B { x }
+fun check<T>(x: T) {}
+trait P {
+  type X
+  // T and U are both equal to Self but carry their own conformances to P. The only other
+  // fact is the tautology Box<X> == Box<X>, which merely puts X in eqsolve's term graph.
+  fun f<T, U where T == Self, U == Self, T is P, U is P, Box<X> == Box<X>>(x: U.X) {
+    check<T.X>(conv<U.X, T.X>(x))
+  }
+}

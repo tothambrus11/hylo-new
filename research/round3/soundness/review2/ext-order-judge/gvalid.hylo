@@ -1,0 +1,7 @@
+trait P { type Y }
+struct T {}
+struct U {}
+given T is P { type Y = U }
+struct V {}
+given T.Y is P { type Y = V }
+fun k(z: T.Y) {}

@@ -1,0 +1,18 @@
+struct S {}
+extension S { type X1 = S }
+extension S.X1 { type X2 = S }
+extension S.X1.X2 { type X3 = S }
+extension S.X1.X2.X3 { type X4 = S }
+extension S.X1.X2.X3.X4 { type X5 = S }
+extension S.X1.X2.X3.X4.X5 { type X6 = S }
+extension S.X1.X2.X3.X4.X5.X6 { type X7 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7 { type X8 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8 { type X9 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9 { type X10 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10 { type X11 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11 { type X12 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11.X12 { type X13 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11.X12.X13 { type X14 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11.X12.X13.X14 { type X15 = S }
+extension S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11.X12.X13.X14.X15 { type X16 = S }
+fun f(x: S.X1.X2.X3.X4.X5.X6.X7.X8.X9.X10.X11.X12.X13.X14.X15.X16) {}

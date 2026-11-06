@@ -1,0 +1,4 @@
+absmodel.built=1 absmodel.facts=63 absmodel.micros=1606 absmodel.refuted=8 absmodel.work=654 coerced.slowPath=304569 summon.matches=304569 summon.subgoals=8
+diagnostics: 0
+type.user   8291.94 ms
+exit=0 wall=8.6s maxrss=30MB

@@ -1,0 +1,13 @@
+struct A { fun m() {} }
+
+fun use(a: A) {
+  a.m()
+  extension Undefined { fun z() {} }
+  extension A { fun k() {} }
+  a.k()
+}
+
+struct B {
+  extension Nope { fun q() {} }
+  fun n(a: A) { a.m() }
+}

@@ -1,0 +1,11 @@
+struct A {}
+extension A { fun f() -> Int { 1 } }
+extension A { fun f() -> Int { 2 } }
+extension A { fun g() {} }
+extension Void { fun f() -> Int { 3 } }
+fun use(a: A) {
+  let x = a.f()
+  let y = a.h()
+  let z = a.g(1)
+  let w = A.nope
+}

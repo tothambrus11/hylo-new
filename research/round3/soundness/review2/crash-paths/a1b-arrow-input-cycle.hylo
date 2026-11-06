@@ -1,0 +1,5 @@
+//! stage:typing no-std
+fun same<T>(x: T, y: [Void](let T) -> Void) {}
+public fun main() {
+  let f = fun[](a) { same(a, a) }
+}

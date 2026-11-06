@@ -1,0 +1,10 @@
+trait P { type Y }
+trait Q { type O }
+struct T { public memberwise init }
+struct U { public memberwise init }
+given T is P { type Y = U }
+given U is Q { type O = T }
+type Z = T.Y
+fun k(z: Z) {}
+fun k2(z: Z.O) {}
+fun main2() { k(U()); k2(T()) }

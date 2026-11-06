@@ -1,0 +1,9 @@
+trait Q {}
+trait R {}
+struct P<X, Y> {}
+struct Foo<X, Y> {}
+struct Bar {}
+given <A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12> => Foo<{A12, A11, A10, A9, A8, A7, A6, A5, A4, A3, A2, A1, A0}, {Bar, P<A12, A12>, P<A11, A11>, P<A10, A10>, P<A9, A9>, P<A8, A8>, P<A7, A7>, P<A6, A6>, P<A5, A5>, P<A4, A4>, P<A3, A3>, P<A2, A2>, P<A1, A1>}> is R {}
+given <Z where Foo<Z, Z> is R> => Bar is Q {}
+fun need<W where W is Q>() {}
+public fun main() { need<Bar>() }

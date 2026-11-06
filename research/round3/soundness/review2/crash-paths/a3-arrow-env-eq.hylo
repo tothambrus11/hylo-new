@@ -1,0 +1,10 @@
+//! stage:typing no-std
+struct A {}
+struct B {}
+fun need<X, Y where X == Y>(x: X, y: Y) {}
+fun f<E, F where E == F>(p: [E](let Void) -> Void, q: [F](let Void) -> Void) {
+  need(p, q)
+}
+fun h<E, F, G where E == F>(p: [E](let Void) -> Void, q: [G](let Void) -> Void) {
+  need(p, q)
+}
