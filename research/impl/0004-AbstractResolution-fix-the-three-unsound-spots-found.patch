@@ -1,7 +1,7 @@
 From 10c066963d31eea6f083af4e7504a8f96302cd38 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 20:03:46 +0000
-Subject: [PATCH 4/7] AbstractResolution: fix the three unsound spots found by
+Subject: [PATCH 4/8] AbstractResolution: fix the three unsound spots found by
  the review
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
