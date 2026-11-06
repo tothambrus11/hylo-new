@@ -1,0 +1,4 @@
+counters.user:   coerced.slowPath=1 eqrefute.refuted=2 names.appliesCalls=8 solver.goalSteps=12 solver.systems=4 summon.calls=4 summon.layers=16 summon.matchOK=8 summon.matches=514 summon.subgoals=9
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v5-generic.hylo:6.37-42: error: no coercion from '(P<U>, ((U::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     35.98 ms

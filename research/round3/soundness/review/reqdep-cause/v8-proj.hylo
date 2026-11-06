@@ -1,0 +1,5 @@
+trait P { type X }
+struct A {}
+struct B { public memberwise init }
+given A is P { type X = B }
+public fun main() { let y: A.X = B() }

@@ -1,0 +1,4 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun h<T, U where T == U>(x: T) -> U { x }
+fun f<A, B, D where A is P, B is P, D is P, A.X == B.X>(x: D.X) { let y: A.X = h<D.X, A.X>(x) }

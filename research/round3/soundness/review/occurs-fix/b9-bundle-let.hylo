@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// g : bundle of h<?T>; g(g) relates ?T to a Bundle containing ?T.
+struct B { public memberwise init }
+fun h<T>(x: auto T) auto -> B {
+  let { B() }
+  inout { B() }
+}
+public fun main() {
+  h<_>(h<_>)
+}

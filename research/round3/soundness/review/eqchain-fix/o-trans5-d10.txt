@@ -1,0 +1,102 @@
+Fatal error: failed to allocate 828440512 bytes of memory with alignment 8
+
+*** Signal 6: Backtracing from 0x7fb85f89ec0c... done ***
+
+*** Program crashed: Aborted at 0x0000000000001c3f ***
+
+Platform: x86_64 Linux (Ubuntu 24.04.5 LTS)
+
+Thread 0 "tc-bench.real":
+
+  0      0x00007fb85f8455eb sigsuspend + 75 in libc.so.6
+  1 [ra] 0x00007fb860c077a8 _dispatch_sigsuspend + 23 in libdispatch.so
+  2 [ra] 0x00007fb860c04c49 _dispatch_sig_thread + 8 in libdispatch.so
+  3 [ra] 0x00007fb85f899420 __nptl_deallocate_tsd + 175 in libc.so.6
+  4 [ra] 0x00007fb85f82a1d6 __libc_start_call_main + 133 in libc.so.6
+  5 [ra] 0x00007fb85f82a28b __libc_start_main@GLIBC_2.2.5 + 138 in libc.so.6
+...
+
+Thread 1 "-qos.overcommit":
+
+  0      0x00007fb85f92a2d2 epoll_wait + 82 in libc.so.6
+  1 [ra] 0x00007fb860c0e557 _dispatch_event_loop_drain + 54 in libdispatch.so
+  2 [ra] 0x00007fb860c04012 _dispatch_mgr_invoke + 129 in libdispatch.so
+  3 [ra] 0x00007fb860c03f7d _dispatch_mgr_thread + 108 in libdispatch.so
+  4 [ra] 0x00007fb860c071b5 _dispatch_worker_thread + 676 in libdispatch.so
+  5 [ra] 0x00007fb85f89cb84 start_thread + 899 in libc.so.6
+...
+
+Thread 2 "-qos.overcommit" crashed:
+
+  0                         0x00007fb85f89ec0c pthread_kill@@GLIBC_2.34 + 284 in libc.so.6
+  1 [ra]                    0x00007fb85f84527e gsignal + 29 in libc.so.6
+  2 [ra]                    0x00007fb85f8288ff abort + 222 in libc.so.6
+  3 [ra]                    0x00007fb86126ce7c swift::fatalErrorv(unsigned int, char const*, __va_list_tag*) + 139 in libswiftCore.so
+  4 [ra]                    0x00007fb86126cefb swift::fatalError(unsigned int, char const*, ...) + 122 in libswiftCore.so
+  5 [ra]                    0x00007fb86126d04e swift::swift_abortAllocationFailure(unsigned long, unsigned long) + 29 in libswiftCore.so
+  6 [ra]                    0x00007fb86126fd21 swift_slowAlloc + 96 in libswiftCore.so
+  7 [ra]                    0x00007fb861270037 swift_allocObject + 38 in libswiftCore.so
+  8 [ra] [system]           0x000055d36152ef80 specialized _ContiguousArrayBuffer._consumeAndCreateNew(bufferIsUnique:minimumCapacity:growForAppend:) + 127 in tc-bench.real at //<compiler-generated>
+  9 [ra] [inlined] [system] 0x000055d3616be34a specialized Array.append<A>(contentsOf:) in tc-bench.real at //<compiler-generated>
+ 10 [ra]                    0x000055d3616be34a Typer.takeSummonResults(from:in:) + 2489 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3973:33
+ 11 [ra]                    0x000055d3616893e9 Typer.summon(_:in:) + 984 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3692:16
+ 12 [ra]                    0x000055d3616cb92e Typer.resolve(_:inheritedMemberOf:visibleFrom:statically:) + 797 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:4921:16
+ 13 [ra]                    0x000055d36169227e Typer.resolve(_:memberOf:visibleFrom:) + 349 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:4768:19
+ 14 [ra]                    0x000055d3616b89c6 Typer.resolve(_:in:) + 4165 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:4544:22
+ 15 [ra]                    0x000055d3616b0794 Typer.inferredType(of:in:) + 1267 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:2586:15
+ 16 [ra] [inlined]          0x000055d3616b49bf closure #1 in Typer.evaluatePartialTypeAscription(_:in:) in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3414:7
+ 17 [ra]                    0x000055d3616b49bf Typer.evaluatePartialTypeAscription(_:in:) + 302 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:2114:14
+ 18 [ra]                    0x000055d3616a5401 Typer.evaluateTypeAscription(_:) + 128 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3404:18
+ 19 [ra]                    0x000055d3616b1c02 Typer.inferredType(of:in:) + 193 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:2686:13
+ 20 [ra] [inlined]          0x000055d3616b49bf closure #1 in Typer.evaluatePartialTypeAscription(_:in:) in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3414:7
+ 21 [ra]                    0x000055d3616b49bf Typer.evaluatePartialTypeAscription(_:in:) + 302 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:2114:14
+ 22 [ra]                    0x000055d3616a5401 Typer.evaluateTypeAscription(_:) + 128 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:3404:18
+ 23 [ra]                    0x000055d36169e806 Typer.declaredType(of:) + 421 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:1558:15
+ 24 [ra]                    0x000055d3616d9b84 specialized Typer.declaredTypes(of:defaultConvention:) + 51 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:1664:15
+ 25 [ra] [inlined] [system] 0x000055d36169c7b8 Typer.declaredTypes(of:defaultConvention:) in tc-bench.real at //<compiler-generated>
+ 26 [ra]                    0x000055d36169c7b8 Typer.declaredType(of:) + 2087 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:1501:16
+ 27 [ra]                    0x000055d361696caf Typer.check(_:) + 30 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:689:13
+ 28 [ra]                    0x000055d3616e4c25 Typer.apply() + 324 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift:56:53
+ 29 [ra]                    0x000055d3616275d0 Program.assignTypes(_:loggingInferenceWhere:) + 287 in tc-bench.real at /home/user/hylo-impl/Sources/FrontEnd/Program.swift:101:11
+ 30 [ra]                    0x000055d361813463 specialized static TypeCheckBench.main() + 1138 in tc-bench.real at /home/user/hylo-impl/Sources/tc-bench/Entry.swift:66:9
+ 31 [async] [system]        0x000055d36180e150 specialized thunk for @escaping @convention(thin) @async () -> () in tc-bench.real at //<compiler-generated>
+ 32 [async]                 0x00007fb8615e75b0 completeTaskAndRelease(swift::AsyncContext*, swift::SwiftError*) in libswift_Concurrency.so
+...
+
+
+Registers:
+
+rax 0x0000000000000000  0
+rdx 0x0000000000001c4b  7243
+rcx 0x00007fb85f89ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+rbx 0x0000000000000006  6
+rsi 0x0000000000001c3f  7231
+rdi 0x0000000000001c4b  7243
+rbp 0x00007fb8567f7950  70 79 7f 56 b8 7f 00 00 7e 52 84 5f b8 7f 00 00  py·V¸···~R·_¸···
+rsp 0x00007fb8567f7910  00 00 00 00 00 00 00 00 00 1e 09 0c 18 ab ce 5a  ·············«ÎZ
+ r8 0x000000000000004b  75
+ r9 0x0000000000000000  0
+r10 0x0000000000000008  8
+r11 0x0000000000000246  582
+r12 0x0000000000000006  6
+r13 0x000000000000004c  76
+r14 0x0000000000000016  22
+r15 0x00007fb8567f7b40  20 00 00 00 30 00 00 00 70 7b 7f 56 b8 7f 00 00   ···0···p{·V¸···
+rip 0x00007fb85f89ec0c  41 89 c6 41 f7 de 3d 00 f0 ff ff b8 00 00 00 00  A·ÆA÷Þ=·ðÿÿ¸····
+
+rflags 0x0000000000000246  ZF PF
+
+cs 0x0033  fs 0x0000  gs 0x0000
+
+
+Images (15 omitted):
+
+0x000055d3612e4000–0x000055d361974940 8ae6d77f597e3dccbd66c39a9c414236ff14ee5e tc-bench.real           /home/user/hylo-new/research/exp/bin/impl10-37a7007e33a0/tc-bench.real
+0x00007fb85f800000–0x00007fb85f9b0039 a4a7992a8e66555c8141ab2a08a8465ff6e0ea65 libc.so.6               /usr/lib/x86_64-linux-gnu/libc.so.6
+0x00007fb860bd2000–0x00007fb860c1a1e0 7dd91cd1a1cc565644073eb28bc62d21fa45266e libdispatch.so          /opt/swift/usr/lib/swift/linux/libdispatch.so
+0x00007fb860e00000–0x00007fb8613d36e0 a08180475bea5e93a03086a2fa212f3c6e7c3938 libswiftCore.so         /opt/swift/usr/lib/swift/linux/libswiftCore.so
+0x00007fb861571000–0x00007fb861604588 d22c3d4d98ee76add0651087eefbcf5737338c47 libswift_Concurrency.so /opt/swift/usr/lib/swift/linux/libswift_Concurrency.so
+
+Backtrace took 1.17s
+
+rc=134

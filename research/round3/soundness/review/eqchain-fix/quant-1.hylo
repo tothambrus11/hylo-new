@@ -1,0 +1,6 @@
+trait P { type X }
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<A, B where A == B, A is P>(x: Box<B.X>) {
+  check<Box<A.X>>(x)
+}

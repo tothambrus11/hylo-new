@@ -1,0 +1,7 @@
+trait P { type X }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+fun h<T where T is P>(x: T.X) {}
+fun k<T where T is P>() {}
+public fun main() { k<Box<B>>() }

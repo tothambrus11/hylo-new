@@ -1,0 +1,6 @@
+trait P { type X }
+struct A {}
+struct B { public memberwise init }
+given A is P { type X = B }
+fun f6<T where T is P>() -> T.X { f6<T>() }
+public fun main() { let y: B = f6<A>() }

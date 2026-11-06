@@ -1,0 +1,5 @@
+//! stage:typing no-std
+// Expression solver path: a lambda that applies its parameter to itself.
+public fun main() {
+  let f = fun[](a) { a(a) }
+}

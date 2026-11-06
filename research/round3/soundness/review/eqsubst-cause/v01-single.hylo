@@ -1,0 +1,3 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<A, B, D where A is P, B is P, D is P, A.X == B.X>(x: D.X) { check<A.X>(x) }

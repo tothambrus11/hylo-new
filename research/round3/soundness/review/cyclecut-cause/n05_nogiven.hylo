@@ -1,0 +1,8 @@
+struct A {
+  struct Inner {}
+}
+type X = A.Inner
+extension X {
+  fun req() {}
+}
+fun use(x: A.Inner) { x.req() }

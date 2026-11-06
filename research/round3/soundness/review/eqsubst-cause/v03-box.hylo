@@ -1,0 +1,4 @@
+trait P { type X }
+struct Box<T> {}
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A is P, B is P, C is P, D is P, A.X == B.X, C.X == D.X>(x: Box<D.X>) { check<Box<A.X>>(x) }

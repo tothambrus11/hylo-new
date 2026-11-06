@@ -21,10 +21,10 @@ Every technique sits behind a runtime flag: `HYLO_TC_EXPERIMENTS=a,b,…` (see `
 | `unify` | unification constant factor | sound in release builds, recommended | [unify.md](unify.md) |
 | `typevec` | type-store storage | sound, recommended | [typevec.md](typevec.md) |
 | `coercememo` | memo of coercion queries under assumptions | sound, **no measurable gain**, not recommended | [coercememo.md](coercememo.md) |
-| `occurs` | **fix**: occurs check in unification | semantic fix (crash → error), recommended | [../round3/soundness.md §4](../round3/soundness.md) |
-| `fixsubst` | **fix**: keep substitutions when `match` assumes coercions | semantic fix (rejects ill-typed programs); needs an equality procedure | [../round3/soundness.md §1–2](../round3/soundness.md) |
-| `eqrefute` | refute equality goals outside the equivalence classes | sound together with `fixsubst` | [../round3/soundness.md §1](../round3/soundness.md) |
-| `cyclecut` | **fix**: transactional evaluation across cycle cuts | semantic fix (partial; order dependence remains) | [../round3/soundness.md §5](../round3/soundness.md) |
+| `occurs` | **fix**: occurs check in unification | semantic fix (crash → error; also changes some inferred types and diagnostics); land before or with `fixsubst` | [../round3/soundness.md §4](../round3/soundness.md) |
+| `fixsubst` | **fix**: keep substitutions when `match` assumes coercions | semantic fix of the root cause; **requires `occurs`** (alone it adds SIGSEGVs) and an equality procedure | [../round3/soundness.md §1–2](../round3/soundness.md) |
+| `eqrefute` | refute equality goals outside the equivalence classes | **unsound as implemented** (rejects valid `v-abs-7.hylo`); do not land | [../round3/soundness.md §1](../round3/soundness.md) |
+| `cyclecut` | **fix**: transactional evaluation across cycle cuts | **unsound** (accepts an ambiguous program); do not land | [../round3/soundness.md §5](../round3/soundness.md) |
 | `names` | member lookup through extensions | **unsound**, retired | [names.md](names.md) |
 | `loopcheck` | implicit resolution: ancestor loop check | **unsound**, retired | [loopcheck.md](loopcheck.md) |
 | `solver` | overload resolution: deferred branching | **unsound**, needs a redesign | [solver.md](solver.md) |

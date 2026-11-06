@@ -1,0 +1,3 @@
+counters.user:   coerced.slowPath=1 names.appliesCalls=8 solver.goalSteps=12 solver.systems=4 summon.calls=2 summon.layers=22 summon.matchOK=4855 summon.matches=92203 summon.subgoals=4854
+diagnostics: 0
+type.user   1714.85 ms

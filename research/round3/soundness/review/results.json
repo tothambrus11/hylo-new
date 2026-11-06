@@ -1,0 +1,1088 @@
+[
+ {
+  "bug": "eqsubst",
+  "title": "\u00a71 Unrelated equalities make types interchangeable (fixsubst) and the eqrefute companion",
+  "reviews": [
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "The mechanism is right. Tracing the baseline confirms that Typer.match's coercion path drops the substitutions from its own unification. That lets ?e := A.X be re-bound to D.X by reflexivity, and I found no other path that drops substitutions. What is wrong is the description of which programs are affected. With a single equality in scope, a type that appears in no equality can be proved equal to a side of that equality whenever the equality goal comes from a call-site requirement or a given's premise. The 'two equalities / both types on a side' pattern only shows up when a value is passed as an argument, because coerced() checks the outer pair with canDeriveCoercions before searching.",
+    "issues": [
+     {
+      "title": "Affected-program description is wrong: a single equality is enough, and the other type need not appear in any equality",
+      "severity": "major",
+      "evidence": "I ran all of these on the impl10 binary at the default depth, with flags off. c01: `fun g<T, U where T == U>() {}  fun f<V, W, D where V == W>() { g<D, V>() }` is accepted with 0 diagnostics. Its trace (trace-c01.txt) shows the same derivation: transitivity<D, %e, V>, then the given V~W coerced to (%e ~ V) assuming W~V, then reflexivity rebinds %e := D, and the result is g<D, V>(transitivity<D,D,V>(refl<D>)(coercion($g))). c04: single equality A.X == B.X, and `g<D.X, A.X>()` is accepted. c06: `fun f<V where V == S>() { g<Q, S>() }` is accepted, where Q is an unrelated concrete struct. c07: single equality, and `let y: A.X = h<D.X, A.X>(x)` with x: D.X is accepted, which is a real value cast. c03: single equality V == W plus a local `given <X where X == V> => X is P`, and `need<D>()` is accepted. fixsubst (cap 7) rejects all of them, and fixsubst,eqrefute rejects c01, c06 and c07 in under 60 ms.",
+      "reproduced": true,
+      "correction": "Replace 'any type mentioned on a side of some equality ... once two equalities are in scope; types mentioned in no equality are still rejected' with the following. An equality goal L ~ R is wrongly proved whenever R is a side of some equality given whose other side is a different type. Reaching it takes a depth cap of at least 7. L can be any type, including one that appears in no equality, when the goal is an implicit requirement at a call site, a given's premise, or similar. When the goal comes from argument or annotation coercion (coerced()), its top-level canDeriveCoercions(root.type, goal) check also requires L to unify with a side of some equality given. Only then does a second equality become necessary. The repro header line 'with a single equality the program is correctly rejected' is true only for that coerced() path."
+     },
+     {
+      "title": "Why two equalities are needed in the repros is an artifact of coerced()'s top-level pre-filter, not part of the cause",
+      "severity": "minor",
+      "evidence": "Typer.swift coerced(): `if canDeriveCoercions(root.type, goal, in: scopeOfUse, where: .empty)` is applied to the closed pair (D.X, A.X) before resolution starts. Inside the bogus derivation, the only coercion that gets filtered is (B.X, A.X) (or (W, V)), and both of those are sides of the same given. v01 (single equality, argument passing) is rejected, but c04 (the same types, as a call-site requirement) is accepted.",
+      "reproduced": true,
+      "correction": "State this explicitly. Otherwise readers will assume single-equality code is safe, and the generated assocneg workloads cover only the argument-passing entry point."
+     },
+     {
+      "title": "The bogus derivation needs 7 resolution layers; at a depth cap of 6 or less the baseline rejects",
+      "severity": "info",
+      "evidence": "bug-assoc-eq-two-links.hylo baseline: HYLO_TC_MAXDEPTH=6 gives diagnostics 1 (summon.depthExhausted=1). At 7, 8 and 10 it gives diagnostics 0. The trace says 'resolve (A::P).X: 7 layers, 1 done'.",
+      "reproduced": true,
+      "correction": "Say that the wrong acceptance depends on the depth cap being at least 7. This matters when experiments use small caps."
+     },
+     {
+      "title": "Closed under type constructors: types mentioned in no equality but built from such types are also interchangeable",
+      "severity": "info",
+      "evidence": "v03: A.X == B.X and C.X == D.X; passing x: Box<D.X> to check<Box<A.X>> is accepted by the baseline (0 diagnostics). With fixsubst it is rejected (14 s). The match on Box<...> produces a part coercion (D.X, A.X).",
+      "reproduced": true,
+      "correction": "Add 'and any type built from them by congruence (e.g. Box<D.X> vs Box<A.X>)'."
+     },
+     {
+      "title": "Equalities do not have to involve associated types; with structured sides, the fixed configuration crashes instead of rejecting",
+      "severity": "minor",
+      "evidence": "v02: `fun f<A,B,C,D where A == B, C == D>(x: D) { check<A>(x) }` is accepted by the baseline. With fixsubst alone it runs out of memory ('failed to allocate 402653240 bytes'). With fixsubst,eqrefute it is rejected in 14 ms. v04: `A == Box<B>, C == D`, with x: D passed to A, is accepted by the baseline (0.8 s). With fixsubst AND with fixsubst,eqrefute it runs out of memory at the default cap. eqrefute gives up because one side is structured. c06 with fixsubst at cap 9 also runs out of memory.",
+      "reproduced": true,
+      "correction": "The fix section's cost claim ('155 s to reject eqbug-1') understates the consequences. Programs with plain generic-parameter equalities, or with a structured side such as Box<B>, exhaust memory under fixsubst, and the structured case also does so under fixsubst,eqrefute. So the recommended configuration turns some wrong acceptances into compiler crashes."
+     },
+     {
+      "title": "No second cause found among the other suspected paths",
+      "severity": "info",
+      "evidence": "I read the code. threadContinuation sets the environment to operand.substitutions, and operand always comes from the success path, which is env \u222a substitutions. applyContinuation unions both tables; on a conflict it overwrites, with only a debug assert, but fixsubst prevents conflicts from arising. formThread reifies under the environment. canDeriveCoercions is only a necessary-condition filter, called with the pre-unification environment, so it can cost completeness but cannot cause unsoundness. The coercememo key leaves out the substitutions, but coercememo is not in the baseline and is also only a filter. Pending premises used as candidates are discharged in LIFO order with dropLast, so I found no circularity. Empirically, every counterexample (c01, c03, c04, c06, c07, v03) is rejected under fixsubst at caps 7-10. c03 is rejected at cap 10 in 42 s.",
+      "reproduced": true,
+      "correction": "None needed for the claim of a single cause, but the write-up could list the paths that were checked."
+     }
+    ],
+    "what_held": [
+     "The trace of bug-assoc-eq-two-links.hylo matches the write-up's derivation exactly: transitivity<D.X, ?e, A.X>, then the given A.X~B.X coerced to (?e ~ A.X) assuming B.X~A.X (proved by symmetry), then reflexivity rebinds ?e := D.X.",
+     "The root cause is in Typer.match's coercion path: thread.environment.assuming(givens: gs) keeps the old substitutions and drops the ones the current unification produced, while the success path merges them with union.",
+     "Premise order (the last premise is discharged first) explains why ?e is bound by the given before reflexivity rebinds it.",
+     "Across the paths I checked by reading the code and testing every counterexample under fixsubst, I found no other path that drops substitutions (threadContinuation, applyContinuation, formThread, coerced, canDeriveCoercions memos, pending premises used as candidates).",
+     "Types that are unrelated, both not in any equality (c05) and on argument paths without equalities (v05, v06), are rejected by the baseline at caps 7-8; c05 runs out of memory at cap 10.",
+     "eqbug-5 / v07 (valid equalities) are accepted under both the baseline and fixsubst."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c01-single-eq-call.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c03-single-eq-given.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c04-single-assoc-call.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c06-single-eq-struct.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c07-single-assoc-arg.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c05-single-eq-both-unrelated.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/c02-no-eq-call.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/v01-single.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/v02-params.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/v03-box.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/v04-boxside.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/trace-base.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-cause/trace-c01.txt"
+    ]
+   },
+   {
+    "claim_verdict": "partially-wrong",
+    "summary": "The root cause and the `fixsubst` fix hold up. The baseline trace matches the write-up. `union` is safe because `formThread` reifies both sides first, and `fixsubst` rejected every ill-typed variant I tried (nested, three equalities, plain generic parameters). It accepted every valid program I tried that the baseline accepts. The `eqrefute` soundness claim is false: v-abs-7.hylo is a valid program that the baseline and `fixsubst` accept and `fixsubst,eqrefute` rejects. The write-up wrongly treats associated types as atoms that congruence cannot relate. An associated type with an abstract qualification (inside a trait) unifies through its qualification type, so resolution derives `(Self::P).X ~ U` from `T.X == U` and `T == Self`, while `eqrefute` refutes it.",
+    "issues": [
+     {
+      "title": "eqrefute rejects a valid program that the baseline and fixsubst accept (congruence through abstract-qualified associated types)",
+      "severity": "major",
+      "evidence": "Ran it. File v-abs-7.hylo:\n//! stage:typing no-std\nfun need<A, B where A == B>() {}\ntrait P {\n  type X\n  fun f<T, U where T == Self, T is P, T.X == U>() { need<X, U>() }\n}\nResults: baseline binary (4587ce9e1a23, default depth): diags=0. impl10 at depth 10: flags off diags=0, fixsubst diags=0, fixsubst,eqrefute diags=1 ('no coercion from ((Self::P).X ~ U) ==> ...'). With eqrefute the counters show eqrefute.refuted=2. The fixsubst trace shows a genuine derivation: 'goal ((Self::P).X ~ U) <- try $t : ((T::P).X ~ U); coerce ((T::P).X ~ U) to ((Self::P).X ~ U) assuming $1: (T ~ Self); goal (T ~ Self) <- try $g'. Mechanism: TypeStore.unifiable(AssociatedType, AssociatedType) unifies the qualification types when either qualification is `.abstract` (TypeStore.swift ~1164), so a coercion between equality witnesses can require T ~ Self, which is not an equality between the sides. equalityIsRefuted counts AssociatedType as an atom and compares atoms with unifiable(_,_), which uses no coercion handler. It therefore never merges (Self::P).X with (T::P).X even though T and Self are in the same class.",
+      "reproduced": true,
+      "correction": "Remove 'associated types' from the list of atoms in the write-up's soundness argument, or qualify it. The claim 'coercions of one equality witness into another ... require proving equalities between the sides, i.e. again within the closure' is false when a side is an associated type with an abstract qualification: the required premise relates the qualification types. Fix in code: in equalityIsRefuted, bail out (return false) if a goal side or a fact side is an AssociatedType with an `.abstract` qualification. Alternatively, close the union-find under congruence of qualification types: merge (Q1::P).X and (Q2::P).X when Q1 and Q2 are in the same class and the unifier would relate them. Add v-abs-7.hylo as a positive test. The 192 tests and the standard library do not cover this: the stdlib has no equality given at all (grep finds none), and only 4 positive tests use '=='."
+     },
+     {
+      "title": "eqrefute does not reify assumed givens, so most pending assumptions disable it, unlike the description",
+      "severity": "minor",
+      "evidence": "From the code, not run. equalityIsRefuted collects `environment.givens` through declaredType(of: g). For `.assumed(i, t)` that returns t unreified (the canDeriveCoercions comment confirms `declaredType(of: .assumed(_, t)) == t`). The traces show pending assumptions such as '$1: (%dpd ~ %dpe)' whose variables are bound in the environment. atom() returns nil for any side with a variable, and the loop then does `return false` for the whole query. The extra effect is that it bails out more often, so this does not make it unsound.",
+      "reproduced": false,
+      "correction": "Say that eqrefute gives up whenever an assumed given has a variable, even one already bound. Or reify assumed givens with environment.substitutions before the atom check, which would make the description ('including the assumed ones') accurate. Also note the code bails out on equality givens that have usings but no parameters, not only on 'quantified' equalities."
+     },
+     {
+      "title": "No evidence in the repository that fixsubst alone rejects eqbug-1..4 at the default depth",
+      "severity": "minor",
+      "evidence": "soundness/eqbug-results.txt records 'eqbug-N [fixsubst] diags= ms=TIMEOUT' for all four variants (run-eqbug.sh, timeout 600). The write-up says 'Rejects all four bug variants'. I ran HYLO_TC_MAXDEPTH=7: flags off accepts eqbug-1..4 (diags=0), fixsubst rejects them (diags=1, about 0.7-0.85 s each). At depth 6 the baseline already rejects eqbug-1, so the bug needs depth 7 or more.",
+      "reproduced": true,
+      "correction": "Say that the rejection with fixsubst alone was observed at depth cap 7 (or cite the 155 s depth-10 run with its output saved). At default depth fixsubst alone times out or is very slow, as the performance section says. Mention that the bug needs a depth of at least 7, which matters for anyone using small caps."
+     },
+     {
+      "title": "Union of substitution tables: conflicting bindings are only an assert, but they cannot occur",
+      "severity": "info",
+      "evidence": "From the code, not run. SubstitutionTable.union overwrites with `other`'s binding. It only asserts consistency, and the assert is disabled in release. match() unifies thread.witness.type with thread.queried into a fresh table. Every thread that reaches match comes from formThread, which reifies both witness and queried with environment.substitutions (Typer.swift 3790-3793), or from copy(matching:w,to:b), where the witness type equals queried. So no variable already bound in the environment can be rebound by the fresh unification. applyContinuation's union combines an extension of the elaboration's table, so it is consistent too.",
+      "reproduced": false,
+      "correction": "The write-up could add one sentence on why union is safe: both sides are reified first, so the two tables bind disjoint variables. A precondition assert in match(), or a reify there, would make that explicit."
+     }
+    ],
+    "what_held": [
+     "The root-cause description: Environment.assuming(givens:) keeps the old substitutions and drops the ones computed by the unification in match(). The impl10 trace of eqbug-1 with flags off at depth 7 matches the write-up's derivation exactly (transitivity with %dpe bound to A.X during one premise and to D.X through reflexivity in the other).",
+     "fixsubst rejects the ill-typed variants I built: eqbug-1..4, plain generic parameters (A == B, C == D; check<A>(x: D) and need<A, D>), three unrelated associated-type equalities, Box<D.X> passed as Box<A.X>, and the tuple {D.X, B.X} passed as {A.X, A.X}. The baseline accepts the eqbug and plain-parameter ones and fixsubst rejects them. The rest are rejected by every config at depth 7.",
+     "fixsubst and fixsubst,eqrefute accept every valid program I tried that the baseline accepts: associated-type-equality, conformance-via-equivalence, equality.hylo, coercion-derivability-cache (2.2 s in both configs), chains of length 2-3 with associated types, plain parameters and mixed directions at default depth, eqbug-5, aliases (type Q = S with T == Q, U == S), associated-type definitions (given S is P { type X = Bool }; T == S; need<T.X, Bool>), and congruence through abstract qualifications with value coercion (v-abs-2).",
+     "The bail-out conditions described for eqrefute appear in the code: open variables in the goal, a non-atom side in a fact, quantified or conditional equality givens, and a bare-variable head.",
+     "The union operation itself is appropriate: the tables bind disjoint variables because formThread reifies before matching."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/v-abs-7.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/v-abs-2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/tr-a7.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/run.sh",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/n-params-1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/n-params-2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqsubst-fix/n-three-1.hylo",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Types/TypeStore.swift"
+    ]
+   }
+  ],
+  "verdict": {
+   "cause_verdict": "confirmed-with-corrections",
+   "fix_verdict": "sound-but-insufficient",
+   "reasoning": "I re-ran every major issue on the frozen binaries, with at most 2 processes at a time and timeout 300. My runner is /home/user/hylo-new/research/round3/soundness/review/eqsubst-judge/run.sh.\n\nCAUSE. The mechanism is right. In Typer.match's coercion path, `thread.environment.assuming(givens: gs)` keeps the old substitutions and drops the ones the current unification computed (Typer.swift ~3874; the fixsubst branch follows it). The baseline trace of c01 shows the same bogus derivation as the write-up: transitivity<D, %e, V>, then the given V~W coerced to (%e ~ V) assuming W~V, then reflexivity rebinds %e := D. The write-up's description of which programs are affected is wrong, though.\n- Results with base = 4587ce9e1a23, default depth:\n  - c01 `g<D, V>()` with only V == W: 0 diagnostics.\n  - c04 `g<D.X, A.X>()` with only A.X == B.X: 0.\n  - c06 `g<Q, S>()` with only V == S, where Q is a concrete struct in no equality: 0.\n  - c07, a value cast `h<D.X, A.X>(x)` with a single equality: 0.\n  - c03, a given's premise `X == V` used to prove `D is P`: 0.\n  - v02, plain generic parameters A == B, C == D: 0.\n  - v03 `Box<D.X>` passed as `Box<A.X>`: 0.\n- fixsubst,eqrefute rejects c01, c04, c06, c07 and v02, at about 0.6-0.8 s each.\n- v01 (single equality, argument passing) is rejected by the baseline. That confirms that coerced()'s top-level `canDeriveCoercions(root.type, goal, ...)` pre-filter (Typer.swift 4357) is the only reason the repros need two equalities.\n- So \"types mentioned in no equality are still rejected\" and \"once two equalities are in scope\" are false in general.\n\nDepth claim. On impl10 with flags off, bug-assoc-eq-two-links and eqbug-1 are rejected at cap 6 and accepted at cap 7, so the bug needs a cap of at least 7. The baseline binary 4587ce9e1a23 ignores HYLO_TC_MAXDEPTH: there are no 'HYLO_TC_MAXDEPTH' strings in it, and it accepts at \"3\" and \"6\". So depth experiments must use impl10 with flags off.\n\nFIX, fixsubst. It holds. The union of the two tables is safe because formThread reifies both sides first (I accept that from reading the code). eqbug-1 and eqbug-3 are rejected at cap 7, in about 1.4 s each. eqbug-results.txt records TIMEOUT (600 s) for all four under fixsubst at the default cap, and the 155 s rejection the write-up quotes has no saved output. The claim that fixsubst alone \"rejects all four\" therefore has to be qualified.\n\nv02 under fixsubst alone, and v04 (`A == Box<B>, C == D`) under fixsubst,eqrefute, both abort at cap 10 with 'failed to allocate 402653240 bytes'. I checked why, and the reviewers did not: tc-bench is a wrapper script that sets `ulimit -v 2500000` (TCX_MEM_LIMIT_KB). This is exhaustion of a 2.5 GB harness cap, not an intrinsic compiler crash. It is still a resource blow-up instead of a fast rejection. v04 under fixsubst at cap 7 is rejected.\n\nFIX, eqrefute. Its soundness claim is refuted. v-abs-7.hylo is a valid program:\n```\ntrait P { type X; fun f<T, U where T == Self, T is P, T.X == U>() { need<X, U>() } }\n```\nIt gets 0 diagnostics under the baseline, impl with flags off, and fixsubst, and 1 under fixsubst,eqrefute. The fixsubst trace is a genuine derivation: goal ((Self::P).X ~ U) <- $t : ((T::P).X ~ U), coerced assuming (T ~ Self), proved by $g. The cause is TypeStore.unifiable(AssociatedType, AssociatedType) (~1164). When either qualification is `.abstract`, it unifies the qualification types, so two associated types are related through an equality of their qualifications. equalityIsRefuted treats AssociatedType as an atom and uses plain unifiable without a coercion handler, so it never merges (Self::P).X with (T::P).X. This is a wrong rejection of a valid program, not a wrong acceptance. eqrefute exists only as a refutation shortcut, so it must not refute derivable goals.\n\nThe minor eqrefute issue checks out in the code. declaredType(of: .assumed(_, t)) returns t unreified (Typer.swift ~1741). An assumed given whose variables are already bound therefore makes atom() return nil, and the whole check gives up. That is conservative, not unsound. The code also gives up on equality givens that have usings (conditional ones), not only on quantified ones.",
+   "confirmed_issues": [
+    {
+     "title": "Which programs are affected is misdescribed: a single equality is enough, and the other type need not appear in any equality",
+     "severity": "major",
+     "evidence": "Baseline 4587ce9e1a23, default depth: c01 (`fun g<T,U where T == U>() {}  fun f<V,W,D where V == W>() { g<D, V>() }`) gives 0 diagnostics. c04 (A.X == B.X; g<D.X, A.X>()) gives 0. c06 (V == S; g<Q, S>(), Q an unrelated struct) gives 0. c07 (single equality; h<D.X,A.X>(x) used as a value cast) gives 0. c03 (V == W plus `given <X where X == V> => X is P`; need<D>()) gives 0. v02 (A == B, C == D; check<A>(x: D)) gives 0. fixsubst,eqrefute rejects c01/c04/c06/c07/v02. The trace of c01 matches the write-up's derivation shape. v01 (single equality, argument passing) is rejected by the baseline because coerced() first checks canDeriveCoercions(root.type, goal) on the closed outer pair (Typer.swift 4357).",
+     "correction": "Replace 'Any type mentioned on a side of some equality ... once two equalities are in scope ... Types mentioned in no equality are still rejected' with the following. The baseline proves an equality goal L ~ R whenever R is a side of some equality in scope. L can be any type, including one in no equality or a concrete struct, when the goal is a call-site `where` requirement or a given's premise. Only when the goal comes from argument or annotation coercion (coerced()) does the top-level canDeriveCoercions pre-filter also require L to be a side of some equality. That is why the repros use two equalities. The repro comment 'with a single equality the program is correctly rejected' holds only for that path."
+    },
+    {
+     "title": "eqrefute rejects a valid program: associated types are not atoms when a qualification is abstract",
+     "severity": "major",
+     "evidence": "v-abs-7.hylo (trait P { type X; fun f<T, U where T == Self, T is P, T.X == U>() { need<X, U>() } }) gives diagnostics 0 under the baseline, impl with flags off, and fixsubst, and 1 under fixsubst,eqrefute. The fixsubst trace shows goal ((Self::P).X ~ U) <- $t : ((T::P).X ~ U), coerced assuming $1: (T ~ Self), proved by $g. TypeStore.unifiable(AssociatedType, AssociatedType) (~line 1164) unifies the qualification types when either is .abstract. equalityIsRefuted lists AssociatedType as an atom and compares atoms with unifiable(_:_:) without a coercion handler, so (Self::P).X and (T::P).X are never merged even though T and Self are.",
+     "correction": "The soundness argument's claim that 'coercions of one equality witness into another require proving equalities between the sides' is false for associated types: the premise can relate their qualification types. Either treat associated types with an abstract qualification as non-atoms (give up), or close the union-find under qualification congruence. Add v-abs-7 as a positive test, because the 192 tests do not cover it. Until then, fixsubst,eqrefute is not a safe recommendation."
+    },
+    {
+     "title": "fixsubst alone was not shown to reject eqbug-1..4 at the default cap; the bug needs a cap of at least 7",
+     "severity": "minor",
+     "evidence": "eqbug-results.txt records 'diags= ms=TIMEOUT' (600 s) for fixsubst on all four. impl10 with flags off: bug-assoc-eq-two-links and eqbug-1 are rejected at cap 6 and accepted at cap 7. impl10 fixsubst at cap 7 rejects eqbug-1 and eqbug-3 in about 1.4 s. The baseline binary 4587ce9e1a23 ignores HYLO_TC_MAXDEPTH (no such string in it; it accepts at '3').",
+     "correction": "Say that fixsubst alone was observed to reject eqbug-1..4 at cap 7. At cap 10 it takes minutes (one 155 s run, no saved output) or times out. Also say the bogus derivation needs 7 resolution layers, so caps of 6 or less hide the bug."
+    },
+    {
+     "title": "The fixed configurations can turn wrong acceptances into memory blow-ups instead of rejections",
+     "severity": "minor",
+     "evidence": "v02 (A == B, C == D, plain parameters) under fixsubst at cap 10, and v04 (A == Box<B>, C == D) under fixsubst,eqrefute at cap 10 (35 s), both abort with 'failed to allocate 402653240 bytes'. The baseline accepts both, wrongly. The tc-bench wrapper sets ulimit -v 2500000, so this means exceeding a 2.5 GB harness cap. v04 under fixsubst at cap 7 is rejected. fixsubst,eqrefute rejects v02 quickly.",
+     "correction": "In the performance paragraph, say that the cost is not only time: some ill-typed programs exceed a 2.5 GB memory cap at the default depth. With fixsubst alone this happens even for plain generic-parameter equalities. With fixsubst,eqrefute it happens when an equality has a structured side, because eqrefute gives up."
+    },
+    {
+     "title": "Congruence: types built from such types are interchangeable too",
+     "severity": "info",
+     "evidence": "v03 (A.X == B.X, C.X == D.X; x: Box<D.X> passed to check<Box<A.X>>): the baseline gives 0 diagnostics.",
+     "correction": "Add 'and types built from them, e.g. Box<D.X> as Box<A.X>'."
+    },
+    {
+     "title": "eqrefute's bail-out conditions are broader than described",
+     "severity": "minor",
+     "evidence": "declaredType(of: .assumed(_, t)) returns t unreified (Typer.swift ~1741). An assumed given that still mentions bound variables makes atom() return nil, and equalityIsRefuted returns false. The code also returns false for equality givens with usings, not only parameters.",
+     "correction": "Say that it also gives up on conditional equality givens and on assumed givens that contain variables, because they are not reified. This is conservative, not unsound."
+    }
+   ],
+   "rejected_issues": [
+    {
+     "title": "The fixed configuration 'crashes' (compiler crash) on structured-side equalities",
+     "why": "The abort comes from the tc-bench wrapper's `ulimit -v 2500000`: an allocation of about 400 MB fails under a 2.5 GB cap. It is a resource blow-up under the harness limit, not an intrinsic crash. I kept it, reworded as memory blow-up."
+    },
+    {
+     "title": "An exact characterization 'R is a side of an equality whose other side is a different type'",
+     "why": "The counterexamples confirm it in the observed form, but a single derivation shape cannot establish that it is exactly the necessary and sufficient condition (symmetry may also let either side serve). I reworded it as the observed condition and did not adopt it as an exact theorem."
+    },
+    {
+     "title": "The union of the tables can conflict",
+     "why": "The reviewer marked this info and did not run it. Both sides are reified by formThread before matching, so the tables bind disjoint variables. No correction is needed."
+    }
+   ],
+   "corrected_text": "## 1. Unrelated equalities make types interchangeable (unsound)\n\n**Repro.** `soundness/bug-assoc-eq-two-links.hylo` and the variants `soundness/eqbug-1..4.hylo`:\n```hylo\ntrait P { type X }\nfun check<T>(x: T) {}\nfun f<A, B, C, D where A is P, B is P, C is P, D is P, A.X == B.X, C.X == D.X>(x: D.X) {\n  check<A.X>(x)   // accepted, but nothing relates A.X and D.X\n}\n```\n\n**Which programs are affected.** The baseline proves an equality goal `L ~ R` whenever `R` is a side of some equality in scope.\n- `L` can be any type when the goal is a call-site `where` requirement or a given's premise. That includes a type mentioned in no equality, or a concrete struct. Examples, with one equality each:\n  - `fun f<V, W, D where V == W>() { g<D, V>() }`, where `g<T, U where T == U>`;\n  - `fun f<V where V == S>() { g<Q, S>() }`;\n  - `given <X where X == V> => X is P` proving `D is P`.\n- When the goal comes from coercing an argument or annotation, `coerced()` first checks `canDeriveCoercions` on the outer pair. That check also requires `L` to be a side of some equality. This is why the repro above needs a second equality (`C.X == D.X`), and why the repro's comment \"with a single equality the program is correctly rejected\" holds only for that path.\n- The sides can be generic parameters (`A == B, C == D`), associated types of unrelated traits (`D.Y`, eqbug-3), or nominal types.\n- Types built from them are also interchangeable, for example `Box<D.X>` passed as `Box<A.X>`.\n- The bogus derivation needs 7 resolution layers. At a depth cap of 6 or less, the program is rejected. When testing with small caps, use the impl binary with flags off: the frozen baseline binary ignores `HYLO_TC_MAXDEPTH`.\n\n**The derivation the baseline accepts** (from the `trace` tool):\n```\ngoal D.X ~ A.X  <- transitivity<T0 = D.X, T1 = ?e, T2 = A.X>\n  premise ?e ~ A.X  <- the given A.X ~ B.X, coerced: unify (A.X ~ B.X) with (?e ~ A.X)\n                        binds ?e := A.X, assumes B.X ~ A.X (proven by symmetry)\n  premise D.X ~ ?e  <- reflexivity   (?e := D.X !)\nresult: transitivity<D.X, D.X, A.X>(reflexivity<D.X>)(coercion($A.X~B.X))(x)\n```\nThe second premise is discharged last, because pending premises are discharged last-in, first-out.\n\n**Root cause.** `Typer.match` (Typer.swift, \"assume non-syntactic equalities between pairwise nested parts\"):\n- Unification of the witness's type with the goal records coercions for the parts that do not match.\n- If those coercions may be derivable, it continues with `thread.environment.assuming(givens: gs)`. That environment **keeps the old substitutions and drops the `substitutions` that this very unification computed**.\n- The success path (`coercions.isEmpty`) merges them correctly with `environment.substitutions.union(substitutions)`.\n\nSo a variable bound while proving one premise (`?e := A.X`) is free again when the next premise is proven, and can be bound to something else (`?e := D.X`).\n\nOther paths checked, none of which drops substitutions:\n- `threadContinuation`;\n- `applyContinuation`;\n- `formThread`, which reifies under the environment;\n- `canDeriveCoercions`, which is only a necessary-condition filter.\n\n**Fix (`fixsubst`).** Continue with `thread.environment.substitutions.union(substitutions)` in the coercion path as well.\n- **Why `union` is safe.** `formThread` reifies both the witness and the query before matching, so the two tables bind disjoint variables.\n- Identical on all 192 tests and on the standard library (same counters, no diagnostic).\n- Rejects eqbug-1..4 at depth cap 7, in about 1.4 s each. At the default cap of 10 it is very slow: one run took 155 s and others exceeded 600 s (`eqbug-results.txt`).\n- Rejects every other ill-typed variant tried: single equality, plain parameters, `Box<...>`, three equalities, and the generated `assocneg-N` workloads.\n- Still accepts the valid control eqbug-5 (`B.X` used as `A.X` with `A.X == B.X`).\n\n**Performance consequence.** With the bogus derivation gone, rejecting an ill-typed program means searching to the depth cap.\n- eqbug-1 takes 3.3M matches and 155 s on an idle machine, and more than 600 s under load.\n- Some ill-typed programs exceed the harness's 2.5 GB memory cap at the default depth instead of being rejected, for example `A == B, C == D` with `x: D` passed as `A`.\n\n**Companion `eqrefute`** (meant to be used only together with `fixsubst`) restores fast rejection.\n- **What it does.** Before searching for a closed equality goal `a ~ b` whose sides are atoms (generic parameters, associated types, or nominal types without arguments), it:\n  1. collects the ground equality givens in scope, including the assumed ones;\n  2. computes their equivalence classes with union-find, merging unifiable atoms;\n  3. refutes the goal when `a` and `b` are in different classes.\n- **When it gives up.**\n  - a given can derive equalities from its own parameters: a quantified equality, a conditional equality (one with usings), or a `<T> T` head;\n  - a fact has a structured side, where congruence could relate classes;\n  - an assumed given still mentions variables, because assumed givens are not reified;\n  - the goal has open variables.\n- **It is not sound as implemented.** It rejects a valid program that the baseline and `fixsubst` both accept:\n  ```hylo\n  fun need<A, B where A == B>() {}\n  trait P { type X; fun f<T, U where T == Self, T is P, T.X == U>() { need<X, U>() } }\n  ```\n  `fixsubst` derives `(Self::P).X ~ U` from `$t : (T::P).X ~ U` by a coercion that assumes `T ~ Self`. This works because unifying two associated types whose qualification is abstract unifies their qualification types (`TypeStore.unifiable(AssociatedType, AssociatedType)`).\n- **Where the soundness argument fails.** The argument said that coercions between equality witnesses only require equalities between the sides, so every derivable equality lies within the closure. That is false for associated types: the premise can relate their qualifications. `equalityIsRefuted` treats associated types as atoms and never merges `(Self::P).X` with `(T::P).X`.\n- **Required fix.** Give up when a side is an associated type with an abstract qualification, or close the union-find under qualification congruence. Add this program as a positive test, because the 192 tests do not cover it.\n- **Also not handled.** With a structured side (`A == Box<B>, C == D`), `eqrefute` gives up, and the program still exceeds the memory cap.\n\nResults:\n\n| Program | Baseline | `fixsubst,eqrefute` |\n|---|---|---|\n| eqbug-1..4 | accepted (wrong), \u22481.4 s | rejected, \u2248135 ms |\n| assocneg-3 | accepted (wrong), 1.3 s | rejected, 133 ms |\n| assocneg-8 | accepted (wrong), 4.4 s | rejected, 484 ms |\n| single-equality call-site variants (`g<D, V>()`, `g<Q, S>()`) | accepted (wrong) | rejected, < 1 s |\n| `A == Box<B>, C == D`, `x: D` as `A` | accepted (wrong) | exceeds the 2.5 GB memory cap |\n| eqbug-5 (valid) | accepted, 140 ms | accepted, 137 ms |\n| coercion-derivability-cache (valid) | accepted, 3.9 s | accepted, 3.9 s |\n| `T == Self, T.X == U` \u22a2 `X == U` (valid) | accepted | **rejected (wrong)** |"
+  }
+ },
+ {
+  "bug": "eqchain",
+  "title": "\u00a72 Equality chains need an equality procedure (genuine search exponential once fixsubst is on)",
+  "reviews": [
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "I tried to refute the claimed cause and could not. The baseline's proofs of valid equality chains are bogus. It finds them at a fixed size: 7 match layers for P<Tn> in trans-3, -4 and -5, and 7 for assoceq-4 and -5, whatever n is. Once fixsubst is on, the shortest genuine proof is the plain chain of coercions found by breadth-first search. It needs exactly 2n+2 layers for trans-n (n=2,3,4 give 6, 8, 10) and 2n+1 for assoceq-n (n=3,4 give 7, 9). Each layer explores about the same number of threads with and without fixsubst. So the slowdown is the search having to go deeper, not a fixsubst regression, and trans-5 (needs 12) and assoceq-5 (needs 11) are rejected only because they exceed the cap of 10. Three corrections: which links the chosen bogus proof skips; the \"depth\" cap actually bounds the total number of steps in a derivation, not its depth; and the genuine proofs use coerced matching of givens, not transitivity.",
+    "issues": [
+     {
+      "title": "The selected bogus trans-4 proof also uses T0~T1; only an unselected variant uses 'T2~T3 and T3~T4 alone'",
+      "severity": "minor",
+      "evidence": "Ran: HYLO_TC_EXPERIMENTS=trace impl10 tc-bench --count trans-4.hylo (baseline, no fixsubst). P<T4> resolves at 7 layers with 2 completed derivations, both shaped transitivity<T0, ?e, T4>. Premise ?e~T4 comes from the given T2~T3 coerced, assuming only T3~T4; the binding ?e:=T2 is dropped. Premise T0~?e is then closed EITHER by the given $p: T0~T1 OR by reflexivity. Only the reflexivity variant uses just T2~T3 and T3~T4. The minimal one (lower penalty, since the visible given comes before the built-ins) uses $p. I confirmed this on assoceq-5, where the minimal witness is printed in full: 'penalty 6: coercion<T0.X,T5.X>(transitivity<T0.X, T1.X, T5.X>($1j)(coercion($27)))(x)'. It uses T0~T1, T3~T4 and T4~T5 and skips T1~T2 and T2~T3. The elaborated term is ill-typed: it coerces T3.X~T4.X to T1.X~T5.X having assumed only T4.X~T5.X. A third baseline derivation for assoceq-5 'proves' T5.X~T0.X from T0.X~T1.X alone, using reflexivity plus a coerced given.",
+      "reproduced": true,
+      "correction": "Write: 'the baseline elaborates T0~T4 as transitivity<T0,T1,T4>(T0~T1)(coercion(T2~T3)), which skips T1~T2 (another derivation it finds uses only T2~T3 and T3~T4). Its bogus proofs have a fixed size of 7 layers whatever the chain length, which is why the baseline cost stays nearly flat.'"
+     },
+     {
+      "title": "The 'depth cap' bounds total derivation size, not tree depth; this is what makes trans-5 fail",
+      "severity": "minor",
+      "evidence": "Code: takeSummonResults counts one layer per match() call. threadContinuation discharges pending premises one after another within the same thread, so a thread's layer count is the total number of matches in the whole derivation. A coercion step costs 2 (the coerced match, then a re-match). Measured minimum layer at which a resolution first completes (BFS, so this is the exact minimal size), the same for baseline and fixsubst where genuine: trans-2 P<T2> 5 and call 6; trans-3 P 7, call 8; trans-4 P 9 (28 derivations), call 10 (cap 9 gives diagnostics 1, cap 10 gives 0, 639,692 matches, matching the write-up's 640k). assoceq-3 needs 7 (cap 6 gives diagnostics 1, cap 7 gives 0). assoceq-4 needs 9: fixsubst at cap 8 gives diagnostics 1 (313,806 matches); at cap 9 diagnostics 0 (1.41M matches, 27 s, 1.6 GB RSS). Genuine proof shape from the trace: P<Tn> <- P<T0> coerced (2), then (Ti~Tn) <- given (Ti~Ti+1) coerced, assuming (Ti+1~Tn), 2 per link, last link 1, plus 1 for the call. Total 2n+2 for trans-n and 2n+1 for assoceq-n (x-coercion 1, symmetry 1, chain 2n-1). Lower bound: every link must be used, each costs at least 1 match, and every link but one also needs either a transitivity node or a coercion re-match (+1). Neither bogus nor genuine proofs ever needed a balanced tree, because size, not height, is what is capped.",
+      "reproduced": true,
+      "correction": "State that the cap limits derivation size (number of match steps, with premises discharged sequentially). A chain of n needs 2n+2 steps for trans (12 for trans-5) and 2n+1 for assoceq (11 for assoceq-5). So with fixsubst, trans-5 and assoceq-5 are correctly rejected by the cap; this is not a fixsubst bug. The write-up's 'timeout' for assoceq-5 would end in rejection, not acceptance, under the default cap. trans-8 needs 18."
+     },
+     {
+      "title": "Genuine proofs are coerced matches of givens, not symmetry/transitivity search",
+      "severity": "info",
+      "evidence": "fixsubst trace for trans-4 (cap 10): goal (T0~T4) <- given T0~T1, coerced, assuming (T1~T4); (T1~T4) <- T1~T2 coerced; (T2~T4) <- T2~T3 coerced; (T3~T4) <- given. No transitivity node is used. assoceq adds one symmetry step because the goal direction is T3.X~T0.X. Transitivity and symmetry only widen the branching factor (transitivity matches any equality goal and introduces fresh variables).",
+      "reproduced": true,
+      "correction": "Say the genuine search is 'breadth-first search over all givens with coercion-based congruence, plus the symmetry/transitivity built-ins'. The shortest proof is a linear chain of coercions, so its length grows linearly with n, and the number of nodes searched grows exponentially in that length."
+     },
+     {
+      "title": "No fixsubst regression in the explored search space",
+      "severity": "info",
+      "evidence": "Same caps, baseline vs fixsubst, user match counts: trans-4 cap 6: 5,618 vs 5,618. trans-4 cap 7: 21,894 vs 21,821 (baseline finds 2 bogus proofs, fixsubst finds 0). trans-3 cap 8: 29,801 vs 29,655. assoceq-3 cap 7: 60,438 vs 59,664. fixsubst only removes the threads that relied on a dropped binding. The extra cost comes entirely from having to search more layers (roughly x4-5 per layer).",
+      "reproduced": true,
+      "correction": "None needed; the write-up could add this evidence."
+     },
+     {
+      "title": "Tooling caveat: trace runs out of memory on large searches",
+      "severity": "info",
+      "evidence": "Ran HYLO_TC_MAXDEPTH=9 HYLO_TC_EXPERIMENTS=fixsubst,trace on assoceq-4. It aborted with 'Fatal error: failed to allocate 217595712 bytes'. Every thread carries its own copy of the log. The same run without trace succeeded (1.6 GB peak).",
+      "reproduced": true,
+      "correction": "Note that trace is only usable with small caps or small n."
+     }
+    ],
+    "what_held": [
+     "The baseline's proofs of valid chains are bogus because of the binding dropped on the coercion path in Typer.match. Traces of trans-3, -4, -5 and assoceq-5 show transitivity<T0, ?e, Tn> where ?e is bound while coercing one premise and then rebound by T0~T1 or reflexivity in the other.",
+     "For trans-4 the baseline proof skips links: T1~T2 is never used, and P<T4> resolves at 7 layers. The genuine proof needs 9.",
+     "For trans-3 the genuine and bogus proofs have the same size (7). That explains why baseline and fixsubst cost the same there (29.8k vs 29.7k matches).",
+     "With fixsubst the cost grows exponentially with chain length: about 2.3k, 30k and 640k matches for trans-2, -3, -4. This is because the required size grows linearly (2n+2) and each layer multiplies the work by about 4-5.",
+     "With fixsubst, the rejection of trans-5 at the default cap is a cap effect (it needs 12 layers, the cap is 10). It is not a fixsubst bug: the pattern 2n+2 holds exactly for n=2,3,4.",
+     "The trans-4 fixsubst figure of 640k matches reproduces exactly (639,692)."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/base-trans4.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-trans3-d8-trace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-trans4-d10-fix.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-trans4-d9-fix.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-assoceq5-base.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-assoceq3-d7-fixsubst,trace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-assoceq4-d8-fix.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-assoceq4-d9-fix-notrace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-cause/out-trans5-base.txt",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift"
+    ]
+   },
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "The main claim of section 2 holds, and in two ways it understates the problem. fixsubst alone makes valid equality chains unusable. Chains of 5 or more links are rejected by the depth cap no matter how good the search is, because a genuine proof needs about 2 layers per link. Under the frozen binary's 2.5 GB limit, several of these valid programs crash the compiler with an out-of-memory abort rather than timing out. What the write-up says about the fix is too thin in four places:\n- the equality theory the engine actually needs is congruence plus injectivity of nominal type constructors, with associated types treated as opaque atoms keyed by their conformance witness;\n- the `canDeriveCoercions` pre-filter rejects congruence-derivable goals before any search runs, so it has to be replaced too;\n- eqrefute is a narrow special case, not \"the negative half\": a single unrelated structured equality in scope turns it off;\n- cheaper fixes inside the engine can remove the exponential cost but cannot remove the depth-cap cliff.",
+    "issues": [
+     {
+      "title": "Chains of 5+ links are rejected by the depth cap no matter how fast the search is; 'exponential in chain length' misplaces the cause of rejection",
+      "severity": "major",
+      "evidence": "Ran: run.sh impl10 fixsubst with HYLO_TC_MAXDEPTH=4..10. Smallest cap that accepts each program: trans-2 needs 6, trans-3 needs 8, trans-4 needs 10 (2n+2); transconf-2/3/4 need 6/8/10 (2n); assoceq-2 needs at most 5 and assoceq-3 needs 7 (2n+1). The trace of trans-4 shows why: each link costs one match layer ('coerce (T1~T2) to (T1~T4) assuming T2~T4') plus one discharge layer ('now prove $3'). So with the default cap of 10, trans-5 (needs 12), transconf-5 (12), assoceq-5 (11) and trans-8 (18) are rejected by construction. The baseline accepts trans-4, trans-5 and trans-8 at cap 8 regardless of length (its proofs are bogus and do not grow with the chain). Cost is exponential in the depth reached, about 4.4x per layer: trans-4 at cap 8/9/10 = 90k/392k/640k matches. trans-5 with fixsubst at cap 10 and the memory limit raised: 51 s, 2.2M matches, depthExhausted=2, 3 diagnostics.",
+      "reproduced": true,
+      "correction": "Say that a genuine proof needs about 2 layers per link, so with the default cap of 10, fixsubst rejects chains of 5 or more links outright: it is a completeness cliff, not only a slowdown. The exponential cost is base^(2n), and it also makes chains of 3 and 4 links slow (trans-4 takes 13-20 s). Any remedy that keeps proving equalities as same-thread search subgoals keeps the cliff. The procedure must answer an equality subgoal in a single step, or take equality subproofs out of the depth count."
+     },
+     {
+      "title": "With the frozen binary's memory cap, 'timeout' is in fact an out-of-memory crash",
+      "severity": "minor",
+      "evidence": "Ran: impl10 tc-bench (a wrapper that sets ulimit -v 2.5 GB) with fixsubst on trans-5, trans-8, assoceq-5 and openchain-5 (pick(a,b) across 5 equalities). All exit with rc=134 'Fatal error: failed to allocate 828440512 bytes' in Typer.takeSummonResults (Typer.swift:3973, Array.append of the BFS frontier). trans-8 and assoceq-5 both crash within 35 s wall. Only with TCX_MEM_LIMIT_KB=12000000 did trans-5 finish (51 s, rejected).",
+      "reproduced": true,
+      "correction": "Report that fixsubst alone turns these valid programs into compiler crashes under the standard memory limit, not just into rejections or timeouts, because the BFS frontier grows exponentially in memory as well. That strengthens the 'land together' recommendation."
+     },
+     {
+      "title": "eqrefute is a fragile special case, not 'the negative half': one unrelated structured equality in scope disables it",
+      "severity": "major",
+      "evidence": "Ran: eqbug1-struct.hylo is eqbug-1 with two unrelated parameters and the clause 'Box<Z> == W' added. fixsubst,eqrefute on the plain eqbug-1: rejected in 102 ms, refuted=1. On eqbug1-struct: rc=134 out-of-memory crash at 2.5 GB; with 10 GB, 108 s, 4.6M matches, refuted=0, 1 diagnostic. Baseline: accepts wrongly in 1 s. Cause in the code: equalityIsRefuted returns false as soon as any visible given has a non-atom side ('guard let l = atom(...) ... else { return false }'), or has a context or a bare-variable head.",
+      "reproduced": true,
+      "correction": "Describe eqrefute as the atom-only, all-or-nothing special case. It gives up for every goal in a scope that contains any structured, conditional or quantified equality, wherever that equality appears. A real negative half needs congruence closure over structured terms, so that unrelated facts do not disable it."
+     },
+     {
+      "title": "The theory is under-specified: the engine poses decomposed subgoals that need injectivity, which congruence closure does not provide",
+      "severity": "major",
+      "evidence": "Ran: decomp-2.hylo `fun f<A, B where Box<A> == Box<B>, Box<A> is P>() { need<Box<B>>() }` is rejected by the baseline, by fixsubst and by fixsubst,eqrefute ('no coercion ...'; the trace shows 'resolve P<Box<B>>: 1 layers, 0 done'). match unifies P<Box<A>> with P<Box<B>>, records the innermost mismatch (A, B) and asks for A ~ B. Congruence closure of {Box<A> = Box<B>} does not contain A = B; deriving it takes decomposition (injectivity of a nominal constructor). In contrast, decomp-1 (x: Box<A> passed as Box<B> under the same equality) is accepted. quant-4 (Box<A>==C, Box<B>==D, C==D, so A ~ B) is also rejected by all configurations.",
+      "reproduced": true,
+      "correction": "Specify the procedure as congruence closure plus decomposition/injectivity of nominal type constructors (and clash detection for refutation), or have match pose coercions at the outermost mismatching level. Otherwise the decomposed nested-part coercions that match produces are not decided by the closure."
+     },
+     {
+      "title": "The `canDeriveCoercions` pre-filter blocks congruence-derivable goals before any search, so the remedy must replace it too",
+      "severity": "major",
+      "evidence": "Ran: quant-2c.hylo `fun f<A, B, C where C == Box<A>, A == B>(x: C) { check<Box<B>>(x) }` is rejected by the baseline and by fixsubst with summon.matches=1 and no subgoals (also quant-2 with the facts written the other way round). canDeriveCoercion (Typer.swift around line 4476) requires each side of the queried pair to unify with a side of some equality given. Box<B> appears in no given, so the coercion is refused without search, although C = Box<A> = Box<B> follows by congruence. quant-2b (no A == B step) is accepted.",
+      "reproduced": true,
+      "correction": "Say that the equality procedure has to replace the 'may a coercion be derivable' test in canDeriveCoercions and coerced, not only the SLD search over the reflexivity, symmetry and transitivity givens. Otherwise valid congruence goals never reach it. Answering that test by class membership would also be cheaper."
+     },
+     {
+      "title": "Associated types must stay opaque, keyed by their conformance witness; naive congruence on T.X would be unsound",
+      "severity": "minor",
+      "evidence": "negative/associated-type-inequality.hylo requires that T == U, T is P, U is P does NOT give (T::P).X == (U::P).X. A congruence closure that treats T.X as a function X(T) would accept it. In practice name resolution already canonicalizes: in cong-1.hylo (T == U, T is P, V == U.X) the trace shows the fact as (V ~ (T::P).X), and cong-0/1/2 are accepted by all configurations.",
+      "reproduced": true,
+      "correction": "State that the function symbols for congruence are the nominal type constructors only. Associated types are atoms identified by their qualifying witness term, and any congruence on witnesses (for example coercion(T0::P)) must be defined explicitly."
+     },
+     {
+      "title": "Open goals: 'unify against class representatives' is imprecise and may change inferred substitutions",
+      "severity": "minor",
+      "evidence": "Not run as a separate test. From code reading: takeSummonResults keeps the minimal-penalty results of the first successful layer, and given equalities have a lower penalty group than the builtin reflexivity, symmetry and transitivity givens. So for ?x ~ T4 the current engine prefers ?x := T3 from a fact over ?x := T4 from reflexivity. Picking a union-find representative selects differently. A goal with structure and repeated variables (for example Pair<?x, ?x> ~ Pair<A, B> with A == B) is rigid E-unification modulo ground equations, which is NP-complete in general; it is not a single unification against a representative. open-1..4 (pick(a, d) across 1-3 equalities) are accepted by all configurations; openchain-4 takes 5.4 s with fixsubst and openchain-5 crashes out of memory.",
+      "reproduced": false,
+      "correction": "Say that open goals need unification followed by a closure check (unify syntactically, collect the mismatched pairs as closure queries), and that inferred substitutions, not only proof terms, may change. That is an observable semantic change to validate with the oracle."
+     },
+     {
+      "title": "Cheaper options inside the current engine: they can cut the cost but cannot fix the cliff, and the existing flags barely help",
+      "severity": "info",
+      "evidence": "Ran trans-4 with fixsubst at cap 10:\n- plain: 12.8 s, 639,692 matches;\n- +index: 639,692 matches (identical);\n- +absmodel: 639,692 (identical);\n- +eqrefute: 639,692 (identical; its goals have open middle variables or lie in one class);\n- +loopcheck: 6.3 s, 336,736;\n- all performance flags together: 5.6 s, 336,428.\nassoceq-4 with fixsubst,eqrefute: 27.8 s. 'Prefer given equalities' changes nothing: the trace of trans-4 shows 28 derivations, all completing at layer 10, and the penalty-0 winner is already the pure fact chain (no builtin given is used). BFS stops at the first layer that has any result, so preference only ranks results; it does not prune work. Dropping the builtin transitivity given (the winner never uses it, and coercing a fact x~y into a goal a~c, assuming x~a and y~c, is already transitivity with the middle fixed by the fact) plus memoizing closed equality subgoals would keep subgoals ground and the search polynomial. That is an untested hypothesis: building was not allowed. It still needs 2 layers per link, so the cap-10 cliff at 5 links remains.",
+      "reproduced": true,
+      "correction": "Add that the existing flags give at most a 2x improvement. A cheap interim option is a positive counterpart to eqrefute (a closed goal between atoms in one class is proved directly from the union-find path), and it needs no new machinery. Any search-based option must also exempt equality subproofs from the depth cap."
+     }
+    ],
+    "what_held": [
+     "Baseline proofs of valid chains do not scale with chain length (bogus): with the baseline, trans-4, trans-5 and trans-8 are all accepted at cap 8, and only trans-4 and later are fast.",
+     "With fixsubst, trans-3 costs the same as the baseline (29,655 vs 29,801 matches), and trans-4 jumps to 640k matches and 12.8 s (the write-up says 19.7 s; that is load variance).",
+     "trans-5 with fixsubst at cap 10 is rejected after exhausting the depth (51 s with memory raised, 2.2M matches; the write-up says 79 s).",
+     "fixsubst alone makes chains longer than 4 unusable: confirmed, and in fact understated (depth cliff and out-of-memory crashes).",
+     "A decision procedure, not search, is needed for completeness under the depth cap: confirmed, because every same-thread search proof costs 2 layers per link.",
+     "eqrefute rejects the negative chain workloads quickly when every equality in scope is atom-to-atom (eqbug-1: 102 ms; transneg-3/5/8 and assocneg-5 are fast).",
+     "The minimal derivation chosen for trans-4 is the plain chain of given facts, which matches the write-up's picture of what a correct proof should look like."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/run.sh",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/eqbug1-struct.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/decomp-1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/decomp-2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/quant-2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/quant-2c.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/quant-4.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/cong-1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/openchain-5.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/t-trans4.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/o-trans5-alone.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/eqchain-fix/o-trans5-big.txt",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift"
+    ]
+   }
+  ],
+  "verdict": {
+   "cause_verdict": "confirmed-with-corrections",
+   "fix_verdict": "sound-but-insufficient",
+   "reasoning": "I re-ran every major claim with the frozen impl10 binary, at most 2 processes at a time. My outputs are in /home/user/hylo-new/research/round3/soundness/review/eqchain-judge/.\n\nThe cause holds.\n- The baseline's proofs of valid chains are bogus. My baseline trace of trans-4 (base-trans4-trace.txt) shows P<T4> resolved at 7 layers with 2 derivations, both shaped transitivity<T0, ?e, T4>. Premise ?e~T4 comes from the given T2~T3, coerced, assuming T3~T4. Premise T0~?e is then closed either by $p (T0~T1) or by reflexivity. So T1~T2 is never used. \"From T2~T3 and T3~T4 alone\" is true of only one of the two derivations.\n- The baseline cost is nearly flat: 35k matches for trans-4, 41k for trans-5 at cap 10.\n- With fixsubst: trans-3 has 29,655 matches and needs cap 8 (cap 7 gives a diagnostic). trans-4 has 639,692 matches, 13.6 s, and needs cap 10 (cap 9: diagnostic, 392k matches). That fits a genuine proof costing 2 layers per link, because takeSummonResults advances every thread one match per layer and premises are discharged one after another. The cap therefore bounds the size of a derivation, not its depth.\n- Hence trans-5 (12 layers needed) and assoceq-5 (11) cannot succeed at cap 10, however fast the search is. The write-up says \"exponential\", which is true of the cost, but rejection is a hard cliff caused by the cap.\n- Under the binary's standard 2.5 GB limit, trans-5, trans-8 and assoceq-5 with fixsubst abort with rc=134 (out of memory) after about 35 s. They do not take \">120 s\"; the write-up's 79 s / rejected figure for trans-5 needs a raised memory limit.\n\nThe fix direction is right but under-specified. I confirmed:\n- (a) eqbug1-struct (eqbug-1 plus one unrelated `Box<Z> == W`): fixsubst,eqrefute runs out of memory (rc=134), whereas eqbug-1 alone is refuted in 70 ms. The cause is in equalityIsRefuted, which returns false as soon as any visible given has a non-atom side. So eqrefute is an all-or-nothing atom-only special case, not \"the negative half\" of a procedure.\n- (b) decomp-2 (needs A~B from Box<A>==Box<B>) and quant-4 are rejected by the baseline and every config. Congruence closure alone does not derive the decomposed subgoals that match poses; the procedure also needs injectivity/decomposition of nominal constructors.\n- (c) quant-2 and quant-2c are rejected after 1 match and no subgoals in all configs, while quant-2b is accepted. canDeriveCoercion asks that each side unify with a side of some equality given, so congruence-derivable goals are filtered out before any search runs. The procedure must replace that pre-filter too.\n- (d) negative/associated-type-inequality.hylo requires associated types to stay opaque, keyed by their conformance. So congruence must treat T.X as an atom, not as a function of T.\n- (e) Existing flags do not remove the blow-up: on trans-4, loopcheck gives 336,736 matches (about 2x fewer) and eqrefute leaves the count identical at 639,692.\n\nWhat I accepted with less evidence:\n- The open-goal concern is accepted on argument only. Matching structured goals with repeated variables modulo ground equations is rigid E-unification, so \"unify against class representatives\" is imprecise. I did not verify that inferred substitutions change, so that part is not included.\n- Which of the two baseline derivations is minimal is left unstated. Likewise which of the 28 genuine trans-4 derivations wins: the trace shows both transitivity-node and coerced-fact chains, all at 2 layers per link.",
+   "confirmed_issues": [
+    {
+     "title": "Rejection beyond 4 links is a depth-cap cliff (the cap bounds derivation size), not only exponential cost",
+     "severity": "major",
+     "evidence": "fixsubst: trans-3 needs cap 8 (cap 7: diags=1, 18,655 matches; cap 8: diags=0, 29,655). trans-4 needs cap 10 (cap 9: diags=1, 392,218; cap 10: diags=0, 639,692, 13.6 s). takeSummonResults advances every thread one match per layer and threadContinuation discharges premises one after another (trace: 'now prove $1 [pending: ...]'), so the cap bounds the number of match steps. The trace shows 2 steps per link: P<T4> at 9 layers, the call at 10. Baseline bogus proofs stay at about 7-8 layers whatever n is: trans-5 at cap 6 gives diags=3, at cap 7 diags=1.",
+     "correction": "State that a genuine proof costs about 2 steps per link (2n+2 for trans-n, 2n+1 for assoceq-n), and that the cap limits derivation size. So trans-5 and assoceq-5 are rejected by construction at the default cap of 10. Cost grows about 4-5x per step. Any remedy that keeps proving equalities as search subgoals within the same thread keeps this cliff."
+    },
+    {
+     "title": "Under the standard memory limit, longer chains crash with out-of-memory instead of timing out",
+     "severity": "minor",
+     "evidence": "impl10 wrapper (ulimit -v 2.5 GB), fixsubst at cap 10: trans-5, trans-8 and assoceq-5 all exit with rc=134 (allocation failure) after about 35 s wall.",
+     "correction": "Replace '79 s, rejected' and 'timeout (>120 s)' with: crashes with out-of-memory under the standard 2.5 GB limit. With the memory limit raised, trans-5 is rejected after exhausting the depth (51-79 s)."
+    },
+    {
+     "title": "eqrefute is an atom-only, all-or-nothing special case, not 'the negative half'",
+     "severity": "major",
+     "evidence": "eqbug1-plain with fixsubst,eqrefute: diags=1, 70 ms, refuted=1. eqbug1-struct (same program plus an unrelated 'Box<Z> == W'): rc=134, out-of-memory crash. The baseline wrongly accepts it (1.2 s). equalityIsRefuted returns false as soon as any visible given has a non-atom side, a context, or a bare-variable head.",
+     "correction": "Describe eqrefute as giving up for every goal in any scope that contains a structured, conditional or quantified equality, even an unrelated one. A real negative half needs closure over structured terms."
+    },
+    {
+     "title": "The procedure needs decomposition (injectivity of nominal constructors), not just congruence closure",
+     "severity": "major",
+     "evidence": "decomp-2 (Box<A> == Box<B>, Box<A> is P, needs P<Box<B>>) and quant-4 (Box<A>==C, Box<B>==D, C==D, A used as B) are rejected (diags=1) by the baseline and by fixsubst and fixsubst,eqrefute. decomp-1 (a value coerced from Box<A> to Box<B>) is accepted. match poses the innermost mismatched pair (A ~ B), which congruence closure of {Box<A> = Box<B>} does not contain.",
+     "correction": "Specify congruence closure plus decomposition/injectivity of nominal type constructors, with clash detection for refutation. Alternatively, have match pose coercions at the outermost mismatching level."
+    },
+    {
+     "title": "The canDeriveCoercions pre-filter rejects congruence-derivable goals before any search",
+     "severity": "major",
+     "evidence": "quant-2 and quant-2c (C == Box<A>, A == B, x: C used as Box<B>) are rejected in all configs with summon.matches=1 and no subgoals. quant-2b (no A == B step) is accepted. canDeriveCoercion (Typer.swift ~4477) requires each side of the pair to unify with a side of some equality given, and Box<B> occurs in none.",
+     "correction": "The equality procedure must also answer the 'may a coercion be derivable' test in canDeriveCoercions/coerced (for example by class membership), not only replace the search over the symmetry and transitivity givens."
+    },
+    {
+     "title": "Associated types must stay opaque atoms keyed by their conformance",
+     "severity": "minor",
+     "evidence": "negative/associated-type-inequality.hylo requires that T == U, T is P, U is P does not give T.X == U.X. Congruence on X(T) would accept it. cong-1 is accepted in all configs because name resolution already canonicalizes U.X to (T::P).X.",
+     "correction": "Function symbols for congruence are nominal type constructors only. Associated types are atoms identified by their qualifying witness."
+    },
+    {
+     "title": "'Unify the goal against class representatives' is imprecise for open goals",
+     "severity": "minor",
+     "evidence": "Argued, not run. An open goal with structure and repeated variables (e.g. Pair<?x, ?x> ~ Pair<A, B> with A == B) is rigid E-unification modulo ground equations, which is NP-complete in general. A single unification against a representative does not decide it.",
+     "correction": "Say: unify syntactically, collect the mismatched pairs as closure queries, and check them against the closure. Validate any change in inferred bindings with the oracle."
+    },
+    {
+     "title": "The baseline trans-4 'proof' has two variants; it skips T1~T2 in both",
+     "severity": "minor",
+     "evidence": "Baseline trace of trans-4: P<T4> at 7 layers, 2 done. transitivity<T0, ?e, T4>; ?e~T4 from T2~T3 coerced assuming T3~T4; T0~?e closed by $p (T0~T1) in one derivation and by reflexivity in the other.",
+     "correction": "Say T0 ~ T4 is 'proved' without T1 ~ T2: T2 ~ T3 is coerced into ?e ~ T4 (assuming T3 ~ T4), and the binding is then dropped so that T0 ~ ?e closes by reflexivity or by T0 ~ T1."
+    },
+    {
+     "title": "Existing performance flags do not fix it",
+     "severity": "info",
+     "evidence": "trans-4, fixsubst, cap 10: 639,692 matches. With loopcheck: 336,736 (5.7 s). With eqrefute: 639,692 (identical).",
+     "correction": "Mention that existing flags give at most about a 2x improvement and do not affect the cliff."
+    }
+   ],
+   "rejected_issues": [
+    {
+     "title": "Inferred substitutions for open goals would change (preferring ?x := T3 from a fact over reflexivity)",
+     "why": "Not reproduced by either reviewer. It is a plausible code-reading guess, but no program showed a change. Only the general imprecision of 'unify against class representatives' is kept."
+    },
+    {
+     "title": "The minimal baseline derivation is the one using T0~T1",
+     "why": "I did not confirm this for trans-4. The trace prints 2 done / 1 minimal with penalty 4 but not which one, so the corrected text names both variants without ranking them."
+    },
+    {
+     "title": "The genuine winner is purely coerced matches of givens / purely a fact chain",
+     "why": "The trans-4 fixsubst trace has 28 derivations, including transitivity-node chains. The two reviewers disagree about which wins, and neither claim is load-bearing. The corrected text says only that every genuine proof uses 2 steps per link."
+    },
+    {
+     "title": "Untested proposal: drop the built-in transitivity and memoize closed subgoals to make search polynomial",
+     "why": "Explicitly an untested hypothesis (no build allowed), so it is not included as a correction."
+    }
+   ],
+   "corrected_text": "## 2. Equality chains need an equality procedure, not search\n\nBug #1 also explains why valid equality chains were \"fast\". The baseline's proofs of them are bogus, with the right conclusion by luck. For `trans-4`, `T0 ~ T4` is \"proved\" without ever using `T1 ~ T2`: `transitivity<T0, ?e, T4>` proves `?e ~ T4` by coercing `T2 ~ T3` (assuming `T3 ~ T4`), and then, through the same dropped binding, closes `T0 ~ ?e` by reflexivity or by `T0 ~ T1`. These bogus proofs have a fixed size (about 7 match steps, 8 for the call) whatever the chain length, so the baseline cost stays nearly flat.\n\nWith `fixsubst`, every proof is genuine, and a genuine proof costs about **2 match steps per link**: 2n+2 for trans-n, 2n+1 for assoceq-n. The resolution \"depth\" cap bounds the **size** of a derivation, not its height: each BFS layer advances every thread by one match, and pending premises are discharged one after another. Each extra step multiplies the work by about 4-5:\n\n| Chain | Baseline (bogus proof) | `fixsubst` (genuine search) |\n|---|---|---|\n| trans-3 | 731 ms, 30k matches | 745 ms, 30k matches (needs cap 8) |\n| trans-4 | 918 ms, 35k matches | **13-20 s, 640k matches** (needs cap 10; cap 9 rejects) |\n| trans-5 | 1.2 s, 41k matches | needs 12 steps, so rejected by the default cap of 10. Under the standard 2.5 GB limit it **crashes out of memory** (about 35 s). With the limit raised: 51-79 s, rejected |\n| assoceq-5, trans-8 | 2.7 s / 1.9 s | need 11 and 18 steps. **Out-of-memory crash** after about 35 s |\n\nThe search space explored per layer is the same with and without `fixsubst` (for example trans-3 at cap 8: 29.8k vs 29.7k matches). The slowdown comes entirely from having to go deeper. The existing performance flags do not change this: on trans-4, `loopcheck` halves the matches (337k) and `eqrefute` leaves them unchanged (640k).\n\n**Conclusion.** `fixsubst` alone is correct but makes the equality fragment unusable:\n- chains of 3-4 links become slow;\n- chains of 5 or more links are rejected outright by the cap, or crash the compiler, however fast the search is.\n\nEqualities need a decision procedure that answers an equality subgoal in one step, instead of SLD search with built-in symmetry and transitivity givens. Requirements on that procedure:\n- **Theory.** Congruence closure over the equalities in scope, **plus decomposition (injectivity) of nominal type constructors**. `match` poses the innermost mismatched parts as subgoals. For example, `Box<A> == Box<B>, Box<A> is P` needs `A ~ B` to use `P<Box<B>>`, and congruence alone does not give that (`decomp-2`, `quant-4` are rejected today in every configuration). Clash detection between distinct constructors gives the negative answers.\n- **Atoms.** Associated types are opaque atoms identified by their qualifying conformance witness, not functions of their base type. `T == U` must not give `T.X == U.X` (`negative/associated-type-inequality.hylo`).\n- **Pre-filter.** It must also replace the \"may a coercion be derivable\" test in `canDeriveCoercions`/`coerced`. That test requires each side to unify with a side of some equality given, so it rejects congruence-derivable goals before any search: `C == Box<A>, A == B` with `x: C` used as `Box<B>` is rejected after 1 match (`quant-2`, `quant-2c`).\n- **Ground goals.** Union-find decides `a ~ b` and produces the proof term from the path.\n- **Open goals.** Unify syntactically, then check the mismatched pairs against the closure. In general this is rigid E-unification, not a single unification against a class representative, so validate any change in inferred bindings with the oracle.\n\nThis is a design change: the proof terms change, and equality subproofs no longer count toward the depth cap. It should land together with `fixsubst`. `eqrefute` above is only a narrow first step towards the negative half. It works only when **every** equality in scope is between atoms, and it gives up for all goals as soon as any structured, conditional or quantified equality is visible, even an unrelated one. For example, eqbug-1 plus an unrelated `Box<Z> == W` is no longer refuted, and with `fixsubst,eqrefute` it crashes out of memory (`review/eqchain-fix/eqbug1-struct.hylo`)."
+  }
+ },
+ {
+  "bug": "reqdep",
+  "title": "\u00a73 where T.X == B at a call site is never discharged (incompleteness + blow-up)",
+  "reviews": [
+   {
+    "claim_verdict": "partially-wrong",
+    "summary": "The repro is real: `f2<A>()` is rejected, and the immediate symptom is as described, since `(A::P).X ~ B` cannot be reduced to `B ~ B`. But the cause in \u00a73 is mislocated and too narrow. The qualification is not \"abstract\". It is a reference to the callee's own where-clause binding (`T is P`) with T replaced by A. The defect is in how a generic signature is instantiated, not in how a second requirement is summoned, so a call fails even when `T.X` appears only in a parameter or return type with no equality requirement. The order in which premises are discharged plays no part in the current failure, the sentence \"eqrefute does not apply\" is false as measured, and \"never discharged\" has exceptions.",
+    "issues": [
+     {
+      "title": "Defect is not specific to `where T.X == B` or to summoning the second requirement: any use of T.X in an instantiated signature fails",
+      "severity": "major",
+      "evidence": "Ran on both impl10-37a7007e33a0 and the baseline 4587ce9e1a23 (default cap and cap 5). v3-param.hylo has `fun f3<T where T is P>(x: T.X) {}` with `f3<A>(B())` and gives \"error: cannot pass value of type 'B' to parameter '(A::P).X'\". v7-ret.hylo has `fun f6<T where T is P>() -> T.X` with `let y: B = f6<A>()` and gives \"error: no coercion from '(A::P).X' to 'B'\". Both fail fast (about 18 ms) and no equality premise is involved. `let y: A.X = B()` (v8-proj) is accepted.",
+      "reproduced": true,
+      "correction": "Restate the cause like this. When a generic signature is instantiated, `f<A>` substitutes A for T but leaves each associated type's qualification witness pointing at the callee's own where-clause binding. Nothing maps that reference to the witness that resolution finds for P<A>. That affects the head (parameter and return types) as well as later premises. The proposed fix, \"substitute each witness into later requirements\", does not cover the head: in `coerced`/`formThread` the head is matched before any premise is discharged. Only the second alternative (normalize `(A::P).X` through a summoned P<A> conformance at instantiation) would fix v3 and v7. Either widen \u00a73's title and scope, or say explicitly that the equality case is one instance."
+     },
+     {
+      "title": "Wrong qualification: it is a reference to the callee's where-clause binding, not an abstract witness, and the printer hides the difference",
+      "severity": "major",
+      "evidence": "I read the code; this was not an execution. In Parser.swift, a where-clause `T is P` becomes `synthesizeUsingDeclaration`, a given binding. Summoning P<T> in f2's scope gives `expression(referringTo:)`, which is `.reference(implicit var of that binding)`. That is not a ConformanceDeclaration, so `typeOfImplementation(satisfying:in:)` (Typer.swift ~3352) takes the opaque branch and builds `AssociatedType(X, qualification: ref(using) : P<T>)`. Instantiation only substitutes types. `AssociatedType.show` prints `(\\(a.values[0])::\\(m)).X`, the trait arguments only, so qualifications with different witnesses print the same. Execution evidence: v5-generic.hylo has `fun h<U where U is P, U.X == B>() { f2<U>() }`. Under fixsubst,eqrefute it is rejected, with eqrefute.refuted=2, even though h's given `(U::P).X ~ B` is in scope. eqrefute merges unifiable atoms, so f2's `(U::P).X` and h's `(U::P).X` must be distinct types.",
+      "reproduced": true,
+      "correction": "Replace \"summoned with an abstract qualification A::P\" with \"the qualification is `ref(<callee's using binding>) : P<A>`, a free reference to the callee's context parameter that is out of scope at the call site\". Note that diagnostics and traces print these qualifications identically, so `(A::P).X` in an error message proves nothing about which witness it holds."
+     },
+     {
+      "title": "Order of discharge does not cause the current bug (it only matters for the fix)",
+      "severity": "minor",
+      "evidence": "Code: `formThread` assumes the premises in order (`assuming(given:)` appends), and `threadContinuation` pops `givens.last`. So in `(P<A>, (A::P).X ~ B) ==> ...` the equality ($1) is proven before P<A> ($0). But the type of $1 never mentions `.assumed(0)`: it mentions the callee's binding reference. Neither order would reduce it, and v3/v7 fail with no second premise at all.",
+      "reproduced": false,
+      "correction": "Say that the dependency is not represented at all: later premises and the head reference the callee's binding, not the earlier premise's placeholder. Discharging in reverse order is an additional obstacle for the proposed fix, which would need forward order or deferred normalization. It is not the cause."
+     },
+     {
+      "title": "\"`eqrefute` does not apply\" is false: it refutes the goal and removes the blow-up",
+      "severity": "major",
+      "evidence": "Ran `--count min.hylo` on impl10. At cap 5: no flags gives user summon.matches=7094, eqrefute gives 292. At default cap 10 under eqrefute (and under fixsubst,eqrefute): eqrefute.refuted=2, summon.matches=292, type.user 24-29 ms, and a clean \"no coercion\" error instead of running out of memory. Both sides are atoms (AssociatedType and Struct) in different classes, which is exactly the refutation condition. The write-up's own reason (\"unifiable with nothing in scope\") is the reason eqrefute does apply.",
+      "reproduced": true,
+      "correction": "Say that with `eqrefute` the blow-up disappears: rejection is immediate at any cap. The incompleteness remains, because eqrefute refutes a true equality that this procedure cannot derive."
+     },
+     {
+      "title": "\"Never discharged\" is overstated",
+      "severity": "minor",
+      "evidence": "v6-refl.hylo has `fun f5<T where T is P, T.X == T.X>()` with `f5<A>()` and gives diagnostics: 0 (reflexivity). In a generic caller (v5) the baseline with no flags, at default cap, accepts `f2<U>()` (diagnostics: 0, 1.6 s). The trace shows a penalty-17 derivation through symmetry and transitivity with an unbound middle variable %dj5, which is the bug #1 path. With fixsubst alone it runs out of memory (allocation failure in takeSummonResults). With fixsubst,eqrefute it is rejected.",
+      "reproduced": true,
+      "correction": "Say \"never discharged except by reflexivity or through the unsound bug #1 path\". Add the generic-caller case: the baseline accepts it only via #1; it is rejected once #1 is fixed, and fixsubst alone runs out of memory. So fixing #1 turns an accidental acceptance into a rejection or a blow-up."
+     },
+     {
+      "title": "Order of where-clauses: swapping it produces a different, earlier error",
+      "severity": "info",
+      "evidence": "v2-swapped.hylo has `fun f2<T where T.X == B, T is P>()` and gives \"error: type 'T' has no static member 'X'\" at the declaration, then the call fails with a premise `#!`. Name resolution of T.X only sees usings declared earlier.",
+      "reproduced": true,
+      "correction": "This could be mentioned as a separate limitation. It does not offer another way to discharge the requirement."
+     }
+    ],
+    "what_held": [
+     "The minimized repro is valid-looking Hylo and is rejected. Under trace, the call's type is `(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void`, and the P<A> premise is found as the given `A is P` (ConformanceDeclaration at min:4.1).",
+     "Associated-type projection on a concrete type works: `let y: A.X = B()` has 0 diagnostics.",
+     "Without eqrefute the equality goal makes the search explode with depth: 7094 user matches at cap 5 on impl10 with no flags, consistent with the reported growth.",
+     "The second alternative fix (normalize associated types with concrete qualifications through the conformance) points in the right direction, and it is the only one of the two proposed fixes that also covers parameter and return types.",
+     "No positive compiler test exercises a concrete call to a function whose signature mentions T.X (associated-type-equality.hylo only uses them inside the generic body), so the gap is untested rather than contradicted by an existing passing test."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/min.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v2-swapped.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v3-param.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v4-plaineq.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v5-generic.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v6-refl.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v7-ret.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v8-proj.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/v5-trace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-cause/t4.txt",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift"
+    ]
+   },
+   {
+    "claim_verdict": "partially-wrong",
+    "summary": "The symptom in \u00a73 reproduces, but the stated cause is too narrow and partly mislabelled, and the proposed remedy would not be enough. The real defect is broader: when a generic callee's signature is instantiated, the qualification of every associated-type projection is a reference to the callee's own `using` declaration, and nothing ever substitutes it. That breaks parameter types and abstract (generic) callers too, not just `where T.X == B` with a concrete T. Neither proposed fix covers all the failing cases. Separately, the claim that `eqrefute` does not apply is refuted: `eqrefute` refutes the goal and removes the blow-up.",
+    "issues": [
+     {
+      "title": "Scope too narrow: the defect is not specific to where-clause equalities; associated-type projections in parameter and result types fail too",
+      "severity": "major",
+      "evidence": "Ran on both binaries. t3-param.hylo: `fun h<T where T is P>(x: T.X) {}` with `h<A>(B())`, where `given A is P { type X = B }`. Baseline and impl both give 'error: cannot pass value of type 'B' to parameter '(A::P).X''. t6-ret.hylo (same h, returning T.X) gives 'no coercion from '(A::P).X' to 'B''. Neither program has an equality requirement.",
+      "reproduced": true,
+      "correction": "Restate the defect: when a generic signature is instantiated, a projection `T.X` keeps the qualification `.reference(<callee's using decl for T is P>)`. typeOfImplementation (the only routine that reduces a projection) runs only during name resolution, so `(A::P).X` is never reduced anywhere in the instantiated callee type: parameters, result, or later requirements. 'Substitute each witness into the later requirements' does not reach the parameter types in t3 and t6. The substitution has to apply to the whole instantiated callee type, and before the argument constraints are solved."
+     },
+     {
+      "title": "Fix is insufficient for generic (abstract) callers; the 'concrete qualification' alternative does nothing there",
+      "severity": "major",
+      "evidence": "t4-generic-caller.hylo: `fun f2<T where T is P, T.X == B>() {}` and `fun g<U where U is P, U.X == B>() { f2<U>() }`. t12: `fun h<T where T is P>(x: T.X) {}` and `fun g<U where U is P>(y: U.X) { h<U>(y) }` gives 'cannot pass value of type '(U::P).X' to parameter '(U::P).X'' on both binaries. TypeStore.unifiable(AssociatedType, AssociatedType) requires one qualification to be `.abstract`; here the two values are references to h's and g's using declarations, so they never unify.",
+      "reproduced": true,
+      "correction": "Drop 'with concrete T' from the title and the description. Make the primary fix the substitution of the callee's using-declaration references by the argument witnesses (dependent requirements), not normalization with concrete qualifications. The alternative fixes neither t4 nor t12. The substitution is also not a matter of order alone: Implication stores only the usings' types (introduce(types:usings:) maps each using to declaredType), so nothing links the using in position 0 to the declaration `$i` that the later qualification refers to. That link has to be added."
+     },
+     {
+      "title": "'eqrefute does not apply' is false: eqrefute refutes the goal and removes the blow-up",
+      "severity": "major",
+      "evidence": "Ran impl10 on t1.hylo (the minimal repro). With no flags: cap 5 gives 7094 matches, cap 7 gives 80224 matches / 1.3 s. With fixsubst alone at cap 10: 'Fatal error: failed to allocate'. With eqrefute alone at cap 10: 'eqrefute.refuted=2 summon.matches=292 diagnostics: 1', 29 ms. fixsubst,eqrefute is the same at caps 5, 7 and 10. equalityIsRefuted treats AssociatedType as an atom. '(A::P).X is unifiable with nothing in scope' is exactly the condition that makes it refute.",
+      "reproduced": true,
+      "correction": "Say that eqrefute turns the out-of-memory blow-up into a fast (still incorrect) rejection. Also warn that eqrefute currently refutes a TRUE equality ((A::P).X is B), because it does not normalize projections. Any normalization fix must run before equalityIsRefuted, or eqrefute keeps rejecting the program."
+     },
+     {
+      "title": "eqrefute (and fixsubst) reject a valid generic-caller program that the baseline accepts",
+      "severity": "major",
+      "evidence": "semtest --bin impl10-37a7007e33a0 --configs eqrefute on t4-generic-caller.hylo reports MISMATCH: '+diag ... error: no coercion from '(P<U>, ((U::P).X ~ B)) ==> [Void]() let -> Void' ...'. Baseline (no flags, cap 10) has 0 diagnostics but 90983 matches. Its trace shows the derivation trans<(U::P).X,(U::P).X,B>(refl)(sym(coerce($y))), where coerce($y) turns (U::P).X ~ B into (B ~ %dj4), which needs the dropped binding %dj4:=B (bug #1). fixsubst at cap 10 runs out of memory.",
+      "reproduced": true,
+      "correction": "Record in \u00a73, or in the eqrefute and fixsubst sections, that the baseline accepts this valid pattern only through bug #1's bogus proof. Landing fixsubst/eqrefute without the \u00a73 fix makes a generic function unable to call another generic function with an associated-type equality requirement. That reinforces Recommendation 2/3 ordering: the \u00a73 fix has to land with them."
+     },
+     {
+      "title": "Qualification mislabelled as 'abstract'",
+      "severity": "minor",
+      "evidence": "The trace shows 'resolve P<T>: ... penalty 0: $i' when T.X is resolved in the where clause. WitnessExpression.show prints `.abstract` as '$<abstract given>' and `.reference(d)` by the declaration's name. The qualification is therefore `.reference(<f2's using decl>)`, not `.abstract`. The pretty printer hides the difference: both `(U::P).X` shown in t4's trace print identically but do not unify.",
+      "reproduced": true,
+      "correction": "Write 'a qualification that refers to the callee's own (unbound) context parameter', not 'abstract qualification'. The distinction matters because unifiable(AssociatedType) treats `.abstract` as a wildcard, and these references are not."
+     },
+     {
+      "title": "Requirements are currently discharged last-first; the write-up does not say so",
+      "severity": "minor",
+      "evidence": "formThread pushes usings in order, and threadContinuation discharges `environment.givens.last` first. t4 trace: 'now prove $1: ((U::P).X ~ B) [pending: $0: P<U>]' ... and only at the end 'now prove $0: P<U> [pending: ]'.",
+      "reproduced": true,
+      "correction": "State that the equality is resolved BEFORE the conformance it depends on. 'Resolve in order' means reversing the LIFO discharge. A pending goal's type must then be rewritten when $0 is solved: today applyContinuation substitutes assumed givens only in result witnesses, never in the types of pending goals."
+     },
+     {
+      "title": "Normalizing through the found witness fails for generic and conditional conformances",
+      "severity": "major",
+      "evidence": "t13: `given <T> => Box<T> is P { type X = B }` with `let y: Box<B>.X = B()` gives 'expression does not denote a type'. t11 (X = T) behaves the same, and so does t7 (conditional `given <T is Q> => Box<T> is P`), on both binaries. t8 (f2<Box<B>>() with the conditional conformance) runs out of memory on the baseline. typeOfImplementation(satisfying:in:) only does `declaredType(of: implementation)` for the ConformanceDeclaration found through witness.declaration, without applying the witness's type arguments.",
+      "reproduced": true,
+      "correction": "The claim that `(A::P).X` becomes `(A::<given A is P>).X = B` holds only for non-generic conformances. Both remedies also need typeOfImplementation (and aliasesInConformance) fixed to instantiate the conformance's generic parameters from the witness (typeApplication/termApplication arguments). Without that, projections through `given <T> => Box<T> is P` stay unreduced, and are mis-typed even at name resolution."
+     },
+     {
+      "title": "Where-clause order: the difference is a declaration-site error, not a discharge-order effect",
+      "severity": "info",
+      "evidence": "t2-swapped: `fun f2<T where T.X == B, T is P>()` gives 't2-swapped.hylo:5.18-19: error: type 'T' has no static member 'X'', and the call type becomes '(#!, P<A>) ==> ...' (fast; same on the baseline). initializeContext hides later usings while it types earlier ones.",
+      "reproduced": true,
+      "correction": "If the write-up or the review cites order dependence, attribute it to left-to-right scoping of where clauses at the declaration. The call-site fix does not change it."
+     },
+     {
+      "title": "Coherence with multiple conformances: no divergence observed",
+      "severity": "info",
+      "evidence": "t9: outer `given A is P { type X = B }` and inner `given A is P { type X = C }` with `let y: A.X = C()` gives 0 diagnostics: the inner given wins by penalty. An independent re-summon of P<A> for normalization would pick the same witness in the same scope. I could not build a program where that summon and requirement 1 disagree without implementing the fix.",
+      "reproduced": false,
+      "correction": "Prefer the dependent-substitution fix on principle: it uses exactly the witness that was passed. Normalizing by re-summoning is coherent only when the summon is deterministic and runs in the same scope. That should be stated as an assumption."
+     }
+    ],
+    "what_held": [
+     "The minimal repro t1 is rejected; at cap 7 it takes 80k matches. The baseline at cap 10 runs out of memory (the baseline binary ignores HYLO_TC_MAXDEPTH, so it always runs at 10).",
+     "`let y: A.X = B()` works with a non-generic conformance (t5), so projection at name resolution is fine.",
+     "The goal printed is ((A::P).X ~ B) and it is not reduced to B ~ B; the second requirement does not use the witness found for P<A>.",
+     "No existing routine normalizes projections after instantiation: dealiased handles only TypeAlias, and reify only beta-reduces UniversalType applications. typeOfImplementation and aliasesInConformance fire only during member name resolution."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t1.trace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t2-swapped.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t3-param.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t4-generic-caller.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t4.trace.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t6-ret.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t7-cond-direct.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t8-cond-call.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t9-two-conf.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t11-generic-conf.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t12-assoc-in-body-generic.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/reqdep-fix/t13-generic-conf-const.hylo"
+    ]
+   }
+  ],
+  "verdict": {
+   "cause_verdict": "partially-wrong",
+   "fix_verdict": "sound-but-insufficient",
+   "reasoning": "I re-ran every major claim on both frozen binaries, with at most 2 processes and timeout 300, and read the cited code.\n\nSymptom: holds. min.hylo is rejected. At cap 5 with no flags on impl10 it takes 7094 user matches, and with fixsubst alone at cap 10 it runs out of memory, as the reviewers reported. The trace shows P<A> resolved to `$<ConformanceDeclaration at min:4.1>`, and the next goal is still `((A::P).X ~ B)`.\n\nCause: mislabelled and too narrow.\n(a) The qualification is not abstract. The trace of min.hylo shows `resolve P<T>: penalty 0: $i`, a reference to the callee's where-clause using. `$<abstract given>` is printed only for Self goals. typeOfImplementation (Typer.swift 3341-3364) builds an opaque AssociatedType whenever the witness is not a ConformanceDeclaration. `TypeStore.unifiable(AssociatedType, AssociatedType)` (TypeStore.swift 1165) unifies two projections only when one qualification is `.abstract`, so such a reference unifies with nothing else.\n(b) No equality requirement is needed. v3 (T.X as a parameter type) and v7 (T.X as a return type) fail on both binaries. t12 also fails on both: a generic caller passes `y: U.X` to `h<U>(x: T.X)` and gets \"cannot pass value of type '(U::P).X' to parameter '(U::P).X'\". So the defect is how a signature that mentions a projection is instantiated, not how a requirement is discharged.\n(c) \"eqrefute does not apply\" is false. With eqrefute, and with fixsubst,eqrefute, at cap 10: eqrefute.refuted=2, 292 matches, about 30 ms, a clean error. eqrefute refutes a true equality.\n(d) The generic-caller case regresses. The baseline accepts v5 (0 diagnostics, 92k matches, 1.7 s), and its trace runs through symmetry and transitivity with unbound middle variables (%dj4). This is the bug #1 path, and `$y` with the same printed type fails to match the goal directly. Under fixsubst,eqrefute it is rejected in 36 ms. This matters for Recommendation 2.\n(e) Reflexivity v6 is accepted (0 diagnostics), so \"never discharged\" is overstated, though only slightly.\n\nFix: right in spirit, since it uses the found witness. As written it is insufficient:\n- \"Substitute into later requirements\" misses the head (v3 and v7 have no later requirement).\n- \"Concrete qualifications\" misses generic callers (t12, v5).\n- `introduce(types:usings:)` (Typer.swift 1904) keeps only the declared types of the usings, so nothing yet maps a using declaration to its premise position.\n- Premises are discharged last-first: the t4 trace shows `$1` proven while `$0` is still pending.\n- Normalization must run before equalityIsRefuted, or eqrefute keeps rejecting.\n\nRejected or downgraded:\n- The generic/conditional-conformance issue. Its evidence (t13) does not isolate the cause. My j1 uses a non-generic `given Box<B> is P` and gets the same \"expression does not denote a type\", so the failure is in resolving `Box<B>.X` as a type expression, not in instantiating a witness. The code-reading part is plausible but was not observed: declaredType(of: implementation) does not apply the witness's type arguments. I kept it only as a caveat.\n- The coherence concern. Nothing was observed, so it stays info.\n- The swapped where-clause order. It is a separate declaration-site scoping limitation and is not part of \u00a73.\n\nAlso outside this section: table row 3 (\"with concrete `T`\") and Recommendation 3 should be reworded to match. The eqrefute/fixsubst recommendation should note the v5 regression.\n\nMy files: /home/user/hylo-new/research/round3/soundness/review/reqdep-judge/j1-box-nongeneric.hylo, j2-generic-conf-alias.hylo, min.trace.txt, v5-base.txt, v5-fe.txt.",
+   "confirmed_issues": [
+    {
+     "title": "Scope too narrow: any associated-type projection in an instantiated generic signature fails, not only `where T.X == B`",
+     "severity": "major",
+     "evidence": "Re-ran on impl10 and on the baseline 4587ce9e1a23, at cap 5. v3-param (`fun f3<T where T is P>(x: T.X)`, `f3<A>(B())`) gives \"cannot pass value of type 'B' to parameter '(A::P).X'\". v7-ret gives \"no coercion from '(A::P).X' to 'B'\". t12 (generic caller `fun g<U where U is P>(y: U.X) { h<U>(y) }`) gives \"cannot pass value of type '(U::P).X' to parameter '(U::P).X'\". All give the same result on both binaries, and none has an equality requirement.",
+     "correction": "Restate the defect as the instantiation of a callee signature: every projection T.X in it, whether in the head (parameters or result) or in a premise, keeps a qualification that refers to the callee's own where-clause binding. Drop \"with concrete T\". The equality requirement is one instance."
+    },
+    {
+     "title": "Qualification mislabelled as 'abstract'",
+     "severity": "major",
+     "evidence": "My trace of min.hylo shows `resolve P<T>: penalty 0: $i`, a reference to the using synthesized from `T is P`. `$<abstract given>` appears only for Self goals. In typeOfImplementation (Typer.swift ~3341), a witness that is not a ConformanceDeclaration gives an opaque `AssociatedType(X, qualification: witness)`. `TypeStore.unifiable(AssociatedType, AssociatedType)` (~1165) requires one qualification to be `.abstract`, so two references never unify. The printer shows only `(T::P).X`, so differently qualified projections print identically (see t12's message).",
+     "correction": "Say that the qualification is `ref(<callee's using for T is P>) : P<A>`, a reference to the callee's context parameter that is meaningless at the call site. Warn that printed `(A::P).X` does not reveal which witness it holds."
+    },
+    {
+     "title": "'eqrefute does not apply' is false",
+     "severity": "major",
+     "evidence": "impl10, min.hylo, cap 10. Under eqrefute and under fixsubst,eqrefute: eqrefute.refuted=2, summon.matches=292, type.user about 30 ms, error \"no coercion from '(P<A>, ((A::P).X ~ B)) ==> ...'\". With no flags at cap 5 it takes 7094 matches.",
+     "correction": "Say that eqrefute removes the blow-up (fast rejection at any cap) but refutes a true equality, because projections are not normalized. Any normalization must run before equalityIsRefuted."
+    },
+    {
+     "title": "Generic callers: the baseline accepts only via bug #1; fixsubst,eqrefute reject a valid program",
+     "severity": "major",
+     "evidence": "v5-generic (`fun h<U where U is P, U.X == B>() { f2<U>() }`). Baseline: diagnostics 0, 92203 user matches, 1.7 s. Its derivation (t4.trace) goes through trans/sym with unbound %dj4 and `coerce ((U::P).X ~ B) to (B ~ %dj4)`, and h's given `$y`, with an identically printed type, does not match the goal directly. impl10 fixsubst,eqrefute: \"no coercion from '(P<U>, ((U::P).X ~ B)) ==> ...'\", eqrefute.refuted=2, 36 ms.",
+     "correction": "Add the generic-caller case to \u00a73, and note that landing fixsubst/eqrefute without the \u00a73 fix turns this accidental acceptance into a rejection (or an out-of-memory failure with fixsubst alone)."
+    },
+    {
+     "title": "Proposed fix does not reach the head or generic callers, and needs a using-to-position link",
+     "severity": "major",
+     "evidence": "v3 and v7 have no later requirement, so substituting into later requirements cannot fix them. In the generic callers t12 and v5 the qualification type is P<U>, not concrete, so the normalization alternative as worded does not apply. `introduce(types:usings:)` (Typer.swift ~1904) stores only `declaredType(of: using)`, so an Implication has no record of which using declaration corresponds to premise $i.",
+     "correction": "State the fix as dependent requirements. Record which using each premise comes from, and when premise $i is solved with witness w, substitute w for references to that using throughout the instantiated callee type (head and remaining premises), before the head is matched against the argument and result constraints. Then reduce projections through w."
+    },
+    {
+     "title": "Premises are discharged last-first",
+     "severity": "minor",
+     "evidence": "t4 trace: `now prove $1: ((U::P).X ~ B) [pending: $0: P<U>]`, with $0 proven last (`threadContinuation` pops `givens.last`). The type of $1 refers to the callee's using, not to `.assumed(0)`, so order is not the cause of the current failure.",
+     "correction": "Say that the dependency is not represented at all, which is the cause. The reverse discharge order is an extra obstacle for the fix: it requires discharging in forward order, or rewriting pending goal types when an earlier premise is solved."
+    },
+    {
+     "title": "'Never discharged' is slightly overstated",
+     "severity": "minor",
+     "evidence": "v6-refl (`T.X == T.X`, `f5<A>()`): diagnostics 0 on both binaries. In the generic-caller case the baseline discharges it only via the bug #1 path.",
+     "correction": "Say \"never genuinely discharged (except trivially by reflexivity)\"."
+    }
+   ],
+   "rejected_issues": [
+    {
+     "title": "Normalizing through the found witness fails for generic/conditional conformances (t13, t11, t7)",
+     "why": "The evidence does not isolate the cause. My j1-box-nongeneric.hylo uses a non-generic `given Box<B> is P { type X = B }` with `let y: Box<B>.X = B()` and gets the same 'expression does not denote a type'. So the failure is in resolving the type expression `Box<B>.X`, not in instantiating a generic conformance's witness. The code-reading point (typeOfImplementation does declaredType(of: implementation) without applying the witness's type arguments) is plausible for `type X = T`, but it was not observed. I kept it as an unverified caveat, not a confirmed correction."
+    },
+    {
+     "title": "Coherence with multiple conformances",
+     "why": "Info only. No divergence was observed, and the reviewer could not build a case. It is reflected only implicitly by preferring the dependent-substitution fix, which uses exactly the witness that was passed."
+    },
+    {
+     "title": "Where-clause order (`T.X == B, T is P`) gives a different error",
+     "why": "Reproduced, but it is a separate declaration-site scoping limitation (a where clause only sees usings declared before it). It does not bear on \u00a73's cause or fix, so it is left out of the section."
+    }
+   ],
+   "corrected_text": "## 3. Associated-type projections in an instantiated generic signature are never reduced (incomplete, then explodes)\n\n**Repro.** `soundness/assoc-eq-call-incomplete.hylo`, minimized:\n```hylo\ntrait P { type X }\nstruct A {}\nstruct B { public memberwise init }\ngiven A is P { type X = B }\nfun f2<T where T is P, T.X == B>() {}\npublic fun main() { f2<A>() }     // valid, but rejected / runs out of memory\n```\n\n`let y: A.X = B()` works, so projection during name resolution is fine. The call `f2<A>()` needs the implicit arguments `(P<A>, ((A::P).X ~ B))`. `P<A>` is found (the given `A is P`), but the second goal stays `(A::P).X ~ B` and is never reduced to `B ~ B`.\n\n**The defect.** It lies in how a generic signature is instantiated, not in the equality requirement specifically:\n- Inside `f2`, `T.X` is resolved through the witness for `T is P`. That witness is a *reference to `f2`'s own where-clause binding* (`$i` in the trace), not the abstract witness. `typeOfImplementation` therefore builds an opaque `AssociatedType(X, qualification: ref(<f2's using>) : P<T>)`.\n- Instantiating `f2<A>` substitutes `A` for `T` in the types only, so the qualification is still `ref(<f2's using>) : P<A>`. That reference is meaningless at the call site.\n- `TypeStore.unifiable(AssociatedType, AssociatedType)` unifies two projections only when one qualification is `.abstract`, so this projection unifies with nothing else.\n- Nothing links the using declaration to the premise `$0` that witnesses it: `introduce(types:usings:)` stores only the usings' types. The witness found for `$0` is therefore never substituted anywhere.\n- The printer shows only `(A::P).X`, so projections with different qualifications print identically. An error message or trace showing `(A::P).X` does not reveal which witness it holds.\n\nThe equality requirement is one instance. The same failure, fast and on the baseline too, happens with no equality at all:\n- `fun f3<T where T is P>(x: T.X)` called as `f3<A>(B())`: \"cannot pass value of type 'B' to parameter '(A::P).X'\".\n- `fun f6<T where T is P>() -> T.X` with `let y: B = f6<A>()`: \"no coercion from '(A::P).X' to 'B'\".\n- A generic caller, `fun g<U where U is P>(y: U.X) { h<U>(y) }` with `h<T where T is P>(x: T.X)`: \"cannot pass value of type '(U::P).X' to parameter '(U::P).X'\".\n\nOnly reflexive requirements (`T.X == T.X`) are discharged.\n\n**The blow-up.** Without `eqrefute`, the resolver searches the equality built-ins until the cap:\n- caps 5\u20137: 7.3k \u2192 23k \u2192 82k matches, \"no coercion\" error;\n- default cap 10: runs out of memory, after more than 4.8 GB (review t08/t24), on the baseline and with `fixsubst` alone.\n\nWith `eqrefute`, the blow-up disappears: both sides are atoms in different classes, so the goal is refuted immediately (292 matches, about 30 ms, \"no coercion\" at any cap). The rejection is still wrong, because `eqrefute` refutes an equality that is true and that this procedure cannot derive.\n\n**Interaction with #1.** In a generic caller, `fun h<U where U is P, U.X == B>() { f2<U>() }`, the baseline *accepts* the call (0 diagnostics, 92k matches, 1.7 s). The only reason is a bogus derivation through symmetry and transitivity with an unbound middle variable, which is the bug #1 path. `h`'s own given, printed as the same `(U::P).X ~ B`, does not match the goal directly. Under `fixsubst,eqrefute` the call is rejected, and with `fixsubst` alone it runs out of memory. So landing `fixsubst`/`eqrefute` without this fix turns an accidental acceptance of a valid program into a rejection.\n\n**Fix (not implemented): dependent requirements.**\n- Record, for each premise of an instantiated signature, which using declaration it witnesses.\n- When premise `$i` is solved with witness `w`, substitute `w` for references to that using throughout the instantiated callee type, in the head (parameter and result types) as well as the remaining premises. Then reduce each projection whose qualification is now a conformance declaration: `(A::P).X` becomes `(A::<given A is P>).X = B`. In a generic caller, `w` is the caller's own binding, so `h<U>`'s `U.X` and `g`'s `U.X` become the same type.\n- This needs two changes:\n  - Premises are currently discharged last-first (`threadContinuation` pops `givens.last`), so the equality is attempted before the conformance it depends on. Discharge them in forward order, or rewrite pending goals' types when an earlier premise is solved.\n  - The head is matched before any premise is discharged, so the substitution must happen before argument and result constraints are solved, or those constraints must be re-checked afterwards.\n- The reduction must run before `equalityIsRefuted`, or `eqrefute` will keep refuting these goals.\n- Merely \"normalizing associated types with concrete qualifications through the conformance\" is not enough: it does not cover generic callers, whose qualification type is `P<U>`.\n- Unverified caveat: `typeOfImplementation` reads an implementation's declared type without applying a generic conformance's type arguments, so `type X = T` in `given <T> => Box<T> is P` may also need instantiation. Projections such as `Box<B>.X` currently fail earlier, at type-expression resolution, so this could not be tested."
+  }
+ },
+ {
+  "bug": "occurs",
+  "title": "\u00a74 Cyclic substitution crash and the occurs fix",
+  "reviews": [
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "I could not refute the stated cause. The baseline crashes with a stack overflow (SIGSEGV after about 222,000 frames) in recursive TypeStore.reify. The cyclic binding ?t := S<?t> is made by the variable case of TypeStore.unifiable inside Typer.match, which unifies the given's instantiated head P<?u,?u> with the queried premise P<?t,S<?t>>. SubstitutionTable.union/assign is not involved in this repro. A few details are imprecise: where the binding lives, where the crash fires, the binding order, and the claim that the occurs check covers every possible source of cycles.",
+    "issues": [
+     {
+      "title": "Crash site is the reify in Typer.match itself, right after the cyclic unification",
+      "severity": "minor",
+      "evidence": "Ran: gdb -batch -ex run -ex 'bt -45' --args 4587ce9e1a23/tc-bench.real cyclic-query-segfault.hylo. Outermost frames: Typer.check -> Solver.solve(coercion:) -> Typer.coerced (Typer.swift:4235) -> takeSummonResults (3851) -> Typer.match(_:in:) (Typer.swift:3762) -> TypeStore.reify(WitnessExpression) -> 222k frames of reify/TypeApplication.modified, ending in a SIGSEGV in swift_getTupleTypeMetadata. Line 3762 of origin/tc/research is `let w = program.types.reify(thread.witness, applying: s, withVariables: .kept)` in the `coercions.isEmpty` branch, with s = env.union(substitutions).",
+      "reproduced": true,
+      "correction": "Name the exact site. In Typer.match, unification of the witness type with the query succeeds with no coercions and produces the cycle. The reify of the witness a few lines later then recurses until the stack overflows (stack overflow -> SIGSEGV, exit 139). The binding is made in match's fresh local SubstitutionTable and then merged into the thread environment with union."
+     },
+     {
+      "title": "Binding order depends on which argument is the cyclic one; both orders still go through unifiable's variable case",
+      "severity": "info",
+      "evidence": "Code: in match, a = witness type P<?u,?u> and b = query P<?t,S<?t>>. unifiable(TypeApplication) unifies the abstraction, then the arguments left to right. Argument 1: a is a variable -> ?u := ?t. Argument 2: ss[?u] = ?t is a variable -> assign(S<?t>, to: ?t). This matches the write-up. I also ran variant-swapped.hylo (premise `S<T> is P<T>`): it gives ?u := S<?t> first, then via the `b.isVariable` case ?t := S<?t>. Baseline (impl binary, no flags): exit 139. With occurs: exit 0, 1 diagnostic ('no coercion').",
+      "reproduced": true,
+      "correction": "Optional: say that 'U' is the fresh variable ?u that instantiates the given, and that the cycle can come from either variable branch (a.isVariable or b.isVariable). The fix guards both."
+     },
+     {
+      "title": "union/assign can in principle create cycles that the occurs check does not see; unreachable here only because of a reification invariant",
+      "severity": "minor",
+      "evidence": "From the code, not reproduced. SubstitutionTable.union overwrites `result.types[t] = other[t]`, and its consistency assert is compiled out in release. With self {?a:?b} and other {?b:?a} it would produce a variable-variable cycle, which hangs in subscript rather than overflowing the stack. assign walks only variable chains. Solver.assume calls assign with no occurs check. The occurs function checks only the local table `ss`, not thread.environment.substitutions. In match, formThread/summon reify both a and b under the environment substitutions before unifying, so the local table binds only variables that the environment leaves unbound. The union therefore cannot close a cycle. The Solver's equality goals are re-reified by refresh() after each assume. I found no path that does produce such a cycle.",
+      "reproduced": false,
+      "correction": "The fix description should say that the occurs check relies on match's inputs being reified under the environment substitutions, which formThread does, and that union/assign stay unchecked. Something like: 'occurs prevents cycles created during unification; union and assign assume acyclic, reified inputs'. Do not imply that cycles are impossible everywhere. A cheap debug assert in union/assign would make the invariant explicit."
+     }
+    ],
+    "what_held": [
+     "Baseline 4587ce9e1a23 crashes on cyclic-query-segfault.hylo with exit 139 (SIGSEGV). impl10 with no flags also exits 139.",
+     "impl10 with HYLO_TC_EXPERIMENTS=occurs exits 0 with 1 diagnostic: \"no coercion from '<T> R<T> ==> ...'\" (type.user 13.8 ms).",
+     "The gdb backtrace shows TypeStore.reify recursing without bound (about 222k frames) through TypeApplication.modified, so the cycle is a type-application self-reference (?t := S<?t>), not a variable-variable cycle.",
+     "The occurs flag changes only the two variable cases of TypeStore.unifiable. Since it removes the crash, the cycle in this repro is created there, not by SubstitutionTable.union or assign.",
+     "The cycle comes from unifying the given's head P<?u,?u> with the premise P<?t,S<?t>>, which is reached through the implication premise of the second given. A swapped variant (S<T> is P<T>) shows the same mechanism through the other variable branch, and occurs fixes it as well."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-cause/gdb-base.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-cause/gdb-base-outer.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-cause/variant-swapped.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-cause/v-.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-cause/v-occurs.txt",
+     "/home/user/hylo-impl/Sources/FrontEnd/Types/TypeStore.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/SubstitutionTable.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift"
+    ]
+   },
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "The occurs fix does stop the \u00a74 repro from crashing. It also stops a whole family of baseline SIGSEGVs in ordinary expression inference, which the write-up never mentions. I could not build a program that still crashes with `occurs` on. But three statements in \u00a74 and the Recommendations are wrong or overstated. `occurs` changes typing results of programs that do not crash. `fixsubst` alone adds new crashes, so it depends on `occurs`. And \"fails to unify\" is not what `return false` does inside `Typer.match`. There are also gaps in `TypeStore.occurs` itself: `Bundle` is not traversed, and the `hasVariable` early exit inherits the blind spots of `TypeProperties` (Arrow environments, witness-expression type arguments). I could not reach any of these from source.",
+    "issues": [
+     {
+      "title": "'Land occurs: a crash fix with no visible change' is false: occurs changes typing results of programs that do not crash",
+      "severity": "major",
+      "evidence": "Ran it. c3-accept-change.hylo (given <U> => U is P3<U, M>; inside fun f<A where A is P, A.X == M>: given <T where T is P3<S<T>, A.X>> => Z is R; needR<Z>()). Baseline: exit 0, 'not enough context to infer a type'. occurs: 'no coercion from R<Z> ==> ...'. The semtest oracle reports MISMATCH for c3 and c1-cycle-plus-coercion.hylo; for c1 the inferred type of 0:55 and the binding of 0:58 (needR) differ too. In the baseline trace the derivation completes: 'coerce P3<%djm, %djm, M> to P3<%dj1, S<%dj1>, (A::P).X> assuming $2: (M ~ (A::P).X)'. That match would have bound ?t := S<?t>, but it also needed a coercion, so Typer.match (without fixsubst) dropped its substitutions, the cycle was never reified, and nothing crashed. The baseline therefore builds a witness for an underivable goal. occurs makes the inner unifiable return false, so P3<..> is recorded as a whole-type coercion equal to (a, b) and the match is rejected.",
+      "reproduced": true,
+      "correction": "Say that occurs is a semantic change beyond crashes. When a cycle appears in a match that also records coercions, the baseline silently drops the cycle and keeps a (bogus) derivation. occurs rejects that derivation, which changes the diagnostics and inferred types. The 192 tests just do not exercise this. Add c1/c3 to the regression set."
+     },
+     {
+      "title": "fixsubst alone introduces new SIGSEGVs: it depends on occurs",
+      "severity": "major",
+      "evidence": "Ran it. With HYLO_TC_EXPERIMENTS=fixsubst, c1-cycle-plus-coercion.hylo, c3-accept-change.hylo and c5-order2.hylo exit 139. With the baseline (no flags) and with 'occurs,fixsubst' they exit 0. Cause: fixsubst keeps `thread.environment.substitutions.union(substitutions)` on the coercion path of Typer.match, so the cyclic ?t := S<?t> that the baseline dropped is now kept and reified.",
+      "reproduced": true,
+      "correction": "The oracle lists 'fixsubst' alone as identical, and Recommendation 2 does not say fixsubst must not land without occurs. State that fixsubst requires occurs, or make occurs part of fixsubst."
+     },
+     {
+      "title": "The crash is much broader than implicit resolution: plain expression inference crashes the baseline; occurs covers it but the write-up never says so",
+      "severity": "minor",
+      "evidence": "Ran it. Baseline exits 139 on one-line lambdas such as `let f = fun[](a) { same(a, (a, a)) }` (s2-tuple), `same(a, mk(a))` (s3-generic), `first(a, a)` with first<T>(x: T, y: S<T>) (v3), `same(a, (h<_>, a))` (b10/b11), and `same(a, fun[]() { a })` (e2). With occurs each gives 1-2 diagnostics and exits 0. The path is Solver.solve(equality) -> TypeStore.unifiable(k.lhs, k.rhs) -> SubstitutionTable assign, not summon/match.",
+      "reproduced": true,
+      "correction": "In \u00a74, say that the defect is in the shared unifier and is reachable from ordinary generic calls in lambdas, with a 3-line repro. The 'Givens ... and a query needR()' framing suggests it needs implicit resolution. The diagnostics produced under occurs are poor ('cannot pass value of type #! to parameter S<#!>'); worth noting."
+     },
+     {
+      "title": "'binding a variable to a type that contains it fails to unify' is imprecise inside Typer.match",
+      "severity": "minor",
+      "evidence": "Code reading. Typer.match calls `_ = program.types.unifiable(a, b, extending: &substitutions) { coercions.append((x, y)); return true }` and ignores the Bool result. A nested occurs failure returns false to the enclosing compound case, which then calls `result || areCoercible(a, b)`. So the failure turns into a coercion obligation on the nearest enclosing compound pair, and sibling bindings made before the short-circuit are kept (and merged by fixsubst). Only at the top level (a or b itself a variable occurring in the other) is no coercion recorded. Then `coercions.isEmpty` holds and match takes the 'No coercion required' success path with the binding silently missing. The same path can come from Typer.coerced (slow path, formThread(matching: root, to: goal)) when the goal is a variable occurring in the lhs: Solver.solve(coercion) does not postpone `rhs.isVariable && !hasContext(lhs)`. I tried 7 solver variants (v1-v7, t1-t3) to get a fresh coercion S<?x> ~> ?x; all ended up as equalities and failed correctly, so the top-level case is unreached in my tests.",
+      "reproduced": false,
+      "correction": "Describe the semantics precisely: in the solver and plain unifiable callers it fails; in match it becomes a coercion at the enclosing level. Guard the top-level case explicitly: when occurs fails at the top, report the pair through the handler (call areCoercible(a, b)) instead of returning a bare false. Then match's `coercions.uniqueElement == (a, b)` check rejects the match, rather than relying on that case being unreachable."
+     },
+     {
+      "title": "TypeStore.occurs misses Bundle (falls to `default: return false`) although unifiable and reify both descend into Bundle.shape",
+      "severity": "minor",
+      "evidence": "Code reading: the occurs switch has cases for TypeApplication, Tuple, Metatype, EqualityWitness, AssociatedType, Arrow, Implication, UniversalType, RemoteType, FunctionPointer and TypeAlias, but no Bundle. Bundle.properties = shape.properties and Bundle.modified maps the shape, so a cycle ?a := Bundle(shape mentioning ?a) passes occurs and makes reify loop. I could not build one from source: bundle values cannot be passed as arguments ('cannot pass value of type #! to parameter [Void](auto #!) auto -> B { let, inout }'), and h<_>(h<_>) creates fresh variables (b2, b4, b6, b7, b9, b11).",
+      "reproduced": false,
+      "correction": "Add `case let x as Bundle: return o(x.shape.erased)`. The cheaper alternative is to derive the walk from the same child enumeration as `modified(in:by:)`, so it cannot drift from what reify traverses."
+     },
+     {
+      "title": "occurs' `!u[.hasVariable]` early exit inherits TypeProperties blind spots (Arrow.environment, AssociatedType witness-expression type arguments)",
+      "severity": "info",
+      "evidence": "Code reading. Arrow.properties = inputs/output only, so the environment is excluded. AssociatedType.properties = qualification.type.properties, but TypeStore.map(WitnessExpression) also maps `.typeApplication(_, args)` type arguments, so reify descends there whenever qualification.type has some variable. Consequently ?a := Arrow(env: {?a}, inputs: [], output: Void) passes occurs (hasVariable is false) and reify then recurses into the environment. The same holds for an associated type whose qualification.type has another variable while ?a appears only in the witness value's type arguments. Not reachable from lambdas in my tests: captures are typed separately (e1: 'not enough context'), and implicit captures use OpaqueType.environment (e3).",
+      "reproduced": false,
+      "correction": "Mention it as a latent hole, or make occurs ignore the hasVariable summary for Arrow environments and witness arguments (or fix Arrow.properties to include the environment)."
+     },
+     {
+      "title": "Union paths cannot create cycles only because formThread reifies; the argument for this should be written down",
+      "severity": "info",
+      "evidence": "Code reading. SubstitutionTable.union overwrites `result.types[t] = u` without an occurs check, with only a debug assert. It is acyclic in match/fixsubst because formThread reifies both the witness and the queried type under the environment's substitutions. The local table's keys are therefore unbound in the environment, and its values mention no environment key. Likewise, Solver goals are reified before solve. Both arguments rely on reify being complete, which the previous issue shows it is not for environments and witness arguments.",
+      "reproduced": false,
+      "correction": "State the invariant in the write-up and code: occurs runs under the local table only, and is sound because inputs are reified. Optionally, check in union under a debug flag."
+     },
+     {
+      "title": "Performance claim is untested but plausible; occurs is an unmemoized walk",
+      "severity": "info",
+      "evidence": "Ran it 5x on positive/associated-type-equality.hylo with no flags vs occurs: type.stdlib 483-625 ms vs 489-631 ms, within noise. occurs re-walks shared subterms through the substitution table without memoization, so it is exponential on DAG-shaped bindings. Reify has the same shape, so the asymptotic cost does not change. I could not build a DAG workload that the solver accepts far enough (dag8/12/14 fail early).",
+      "reproduced": true,
+      "correction": "Say the cost was not measurable on the test suite and that the walk is unmemoized."
+     }
+    ],
+    "what_held": [
+     "The repro cyclic-query-segfault.hylo segfaults (exit 139, 4/4 runs) on both the baseline and the impl binary with no flags, and is rejected with 'no coercion ...' under occurs and occurs,fixsubst (type.user about 14-19 ms).",
+     "Nested variants (n1: W<T> is P<W<S<T>>>; n2: two levels deep) crash the baseline and are rejected under occurs, with only 145 user matches and no search blow-up.",
+     "I could not build any program that still crashes with occurs on, through TypeApplication, Tuple, Arrow inputs/output, nested trait applications, fixsubst unions, or the expression solver.",
+     "Variable-to-variable chains cannot create a cycle: unifiable walks both sides to representatives first, and a == b is checked before the variable cases.",
+     "SubstitutionTable.union in match/fixsubst and threadContinuation did not produce a cycle in any experiment, consistent with the reification invariant.",
+     "No measurable compile-time cost on the test file I timed."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/c3-accept-change.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/c1-cycle-plus-coercion.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/c5-order2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/s2-tuple.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/s3-generic.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/v3.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/e2-env-capture-ctl.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/b11-bundle-tuple.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/n1-nested.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/e1-env-capture.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/b7-bundle-selfapp.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/occurs-fix/run.sh",
+     "/home/user/hylo-impl/Sources/FrontEnd/Types/TypeStore.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/SubstitutionTable.swift",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Solver.swift"
+    ]
+   }
+  ],
+  "verdict": {
+   "cause_verdict": "confirmed-with-corrections",
+   "fix_verdict": "sound-but-insufficient",
+   "reasoning": "I re-ran every repro I judged with both frozen binaries, at most 2 processes at a time, each under timeout 300. Outputs are in /home/user/hylo-new/research/round3/soundness/review/occurs-judge/ (runs1.txt, c3-trace-*.txt, s2-gdb.txt).\n\nCause. cyclic-query-segfault.hylo exits 139 on the baseline, on impl10 with no flags and on impl10 with fixsubst. With occurs and with occurs,fixsubst it exits 0 with 1 diagnostic, \"no coercion \u2026\". type.user was 44 ms and 14 ms (the write-up says 31 ms; same order). The cause reviewer's gdb backtrace gives the crash path Typer.coerced (4235) -> takeSummonResults (3851) -> Typer.match (3762) -> TypeStore.reify. I checked origin/tc/research: line 3762 is the reify of the witness in match's `coercions.isEmpty` branch, under `env.union(substitutions)`. The occurs flag changes only the two variable branches of TypeStore.unifiable (TypeStore.swift:1006-1012). So the stated mechanism (U := ?t, then ?t := S<?t>) holds. The cause is correct but narrow: it is the shared unifier, not just implicit resolution.\n\nExpression inference. s2-tuple.hylo (`same(a, (a, a))` inside a lambda) and s3-generic.hylo (`same(a, mk(a))`) also crash the baseline with exit 139, with no givens at all. My gdb trace of s2 ends in Typer.commit (Typer.swift:3041) -> TypeStore.reify, reached from check(BindingDeclaration), i.e. the expression solver path. With occurs both give 1 diagnostic and exit 0.\n\nFix. Three claims fail. First, \"no visible change\" is false. semtest (occurs vs baseline) reports MISMATCH on c1-cycle-plus-coercion.hylo and c3-accept-change.hylo: the inferred types of the call, the binding of needR and the diagnostic all differ. The baseline trace for c3 shows a completed (bogus) derivation, in which the match that would bind ?t := S<?t> also recorded the coercion (M ~ A.X). So match dropped its substitutions, and the residual ?t gave \"not enough context\". Under occurs that derivation is rejected with \"no coercion\". One correction to that reviewer: the baseline still rejects these programs, only with a different error. I found no accept/reject flip; c5-order1 even gives the same diagnostic in both configs. Second, fixsubst alone makes c1, c3 and c5-order2 crash (exit 139), while the baseline and occurs,fixsubst exit 0. So fixsubst depends on occurs, although the oracle lists fixsubst alone as identical on the 192 tests. Third, \"fails to unify\" is imprecise. Typer.match ignores unifiable's Bool result (Typer.swift:3842). A nested occurs failure therefore becomes a coercion obligation at the enclosing compound pair. A top-level failure with no coercion would take the matchOK path with the binding silently missing; no one has reached that case.\n\nI confirmed by code reading that TypeStore.occurs has no Bundle case, and that the `!u[.hasVariable]` early exit relies on TypeProperties, which leaves out Arrow.environment (Arrow.properties is inputs plus output). Both are latent and unreached. The union/assign invariant (inputs are reified before match, so the local table cannot close a cycle through union) is a correct observation about what the fix relies on; neither reviewer reproduced a counterexample.\n\nSeverity. I keep the \"no visible change\" issue as major because Recommendation 1 rests on it. I keep the fixsubst dependency as major because it is a new crash from a flag the write-up calls identical.",
+   "confirmed_issues": [
+    {
+     "title": "'Land occurs: a crash fix with no visible change' is false: occurs changes resolution results, inferred types and diagnostics on non-crashing programs",
+     "severity": "major",
+     "evidence": "semtest --bin impl10-37a7007e33a0 --configs occurs on c1-cycle-plus-coercion.hylo and c3-accept-change.hylo: MISMATCH on both (types of 0:55/0:58 differ; the needR binding disappears; diag 'not enough context to infer a type' -> 'no coercion from ...'). The baseline trace (c3-trace-base.txt) shows a completed derivation using 'coerce P3<%djm, %djm, M> to P3<%dj1, S<%dj1>, (A::P).X> assuming $2: (M ~ (A::P).X)': the cycle was dropped together with match's substitutions because a coercion was recorded. The baseline still reports an error, so no accept/reject flip was observed (c5-order1 gives the same diagnostic in both configs).",
+     "correction": "State that occurs is a semantic change beyond crashes. A match that would create a cycle and also records a coercion is silently accepted by the baseline with the cyclic binding dropped, which yields a bogus derivation and later a 'not enough context' error. occurs rejects that derivation, which changes inferred types and diagnostics. The 192 tests do not exercise this. Add c1/c3 to the regression set."
+    },
+    {
+     "title": "fixsubst alone introduces new SIGSEGVs; it requires occurs",
+     "severity": "major",
+     "evidence": "impl10 with HYLO_TC_EXPERIMENTS=fixsubst: c1-cycle-plus-coercion, c3-accept-change and c5-order2 exit 139. Baseline, impl10 with no flags, occurs, and occurs,fixsubst all exit 0. fixsubst keeps env.union(substitutions) on match's coercion path, so the cyclic binding the baseline dropped is now reified.",
+     "correction": "Say in \u00a74 (and in the Recommendations and the oracle note) that fixsubst must not be enabled without occurs. Alternatively, fold occurs into fixsubst."
+    },
+    {
+     "title": "The crash is in the shared unifier and is reachable from plain expression inference, not only implicit resolution",
+     "severity": "minor",
+     "evidence": "Baseline exits 139 on s2-tuple.hylo (`let f = fun[](a) { same(a, (a, a)) }`) and s3-generic.hylo (`same(a, mk(a))`). The gdb backtrace (s2-gdb.txt) ends in Typer.commit (Typer.swift:3041) -> TypeStore.reify, reached from check(BindingDeclaration). With occurs: exit 0, 1 diagnostic ('cannot pass value of type #! to parameter {#!, #!}' / 'S<#!>').",
+     "correction": "Present the defect as a missing occurs check in TypeStore.unifiable, used by both the expression solver and Typer.match. Add the 3-line lambda repro. Note that the resulting diagnostics are poor (#!)."
+    },
+    {
+     "title": "Crash site imprecise: the reify that overflows is in Typer.match right after the cyclic unification (resolution repro)",
+     "severity": "minor",
+     "evidence": "Cause reviewer's gdb backtrace: Typer.coerced (4235) -> takeSummonResults (3851) -> Typer.match (3762) -> about 222k reify/TypeApplication.modified frames -> SIGSEGV. origin/tc/research Typer.swift:3762 is `program.types.reify(thread.witness, applying: s, ...)` with s = env.union(substitutions), in the coercions.isEmpty branch.",
+     "correction": "Name the site: the cycle is made in match's local SubstitutionTable by unifiable's variable case. It is merged into the thread environment with union and then reified at Typer.match. The result is a stack overflow (SIGSEGV)."
+    },
+    {
+     "title": "'fails to unify' is imprecise inside Typer.match",
+     "severity": "minor",
+     "evidence": "Typer.swift:3842 ignores unifiable's Bool result. A nested occurs failure returns false to the enclosing compound case, which then records that pair as a coercion through the handler. A top-level failure that records no coercion would take the matchOK path with the binding missing. Not reached in any test.",
+     "correction": "Say that callers that check the result (the solver) fail. In match, the failure becomes a whole-pair coercion at the nearest enclosing compound type, which match then rejects. Guard the top-level case explicitly, for example by reporting (a, b) through the handler."
+    },
+    {
+     "title": "TypeStore.occurs has no Bundle case and inherits the blind spots of TypeProperties",
+     "severity": "info",
+     "evidence": "Code: occurs switch (TypeStore.swift:1089-1103) has no Bundle case, so a Bundle falls to `default: false`. Bundle.properties = shape.properties, and reify maps the shape. The `!u[.hasVariable]` early exit relies on Arrow.properties, which counts only inputs and output, not the environment. Neither reviewer reached these from source.",
+     "correction": "List them as latent holes. Add a Bundle case and do not use hasVariable to short-circuit Arrow environments, or derive the walk from the same child enumeration that reify uses."
+    },
+    {
+     "title": "occurs only checks the local table; union/assign stay unchecked and rely on reified inputs",
+     "severity": "info",
+     "evidence": "Code: occurs is evaluated under match's fresh local table. SubstitutionTable.union overwrites entries with no check, and its consistency assert is compiled out in release. Inputs to match are reified under the environment substitutions, so no cycle can close through union. No counterexample was found.",
+     "correction": "State the invariant: occurs prevents cycles created during unification, while union/assign assume acyclic, reified inputs. A debug assert in union would make it explicit."
+    }
+   ],
+   "rejected_issues": [
+    {
+     "title": "c3 shows an accept-to-reject change (implied by the file name 'accept-change' and by 'builds a witness for an underivable goal')",
+     "why": "The baseline does build a bogus derivation (trace confirmed), but it still reports an error on c1, c3 and c5 ('not enough context to infer a type'). Only the diagnostic and the inferred types change. I kept the issue but corrected its framing: no accept/reject flip was observed."
+    },
+    {
+     "title": "Performance claim needs correction",
+     "why": "Not a defect in the write-up. The reviewer's timings are within noise, and the 'walk of the bound type only when it has variables' description matches the code. Leaving out 'unmemoized' is not an error, so I made no change beyond keeping the cost line modest."
+    },
+    {
+     "title": "Binding order / which variable branch fires (info)",
+     "why": "The write-up's 'U := ?t, then ?t := S<?t>' is exactly what the cause reviewer derived for this repro. The swapped variant only shows the other branch, which the fix already guards. That is useful context, not a correction."
+    }
+   ],
+   "corrected_text": "## 4. Cyclic substitutions crash the compiler (no occurs check)\n\n**Cause.** `TypeStore.unifiable` has no occurs check. Its variable cases bind a variable to a type that contains that variable. Reifying the resulting cyclic substitution recurses until the stack overflows: SIGSEGV, exit 139. The unifier is shared, so two paths reach the crash:\n- implicit resolution, through `Typer.match`;\n- ordinary expression inference, through the solver and `Typer.commit`.\n\n**Repro, resolution.** `soundness/cyclic-query-segfault.hylo` (review t25). Givens `<U> U is P<U>` and `<T where T is P<S<T>>> T is R`, and a query `needR()` with an inferred `T`.\n- `Typer.match` unifies the given's instantiated head `P<?u, ?u>` with the premise `P<?t, S<?t>>`. This binds `?u := ?t`, then `?t := S<?t>`, in match's local substitution table.\n- No coercion is recorded, so match merges that table into the thread environment (`union`) and reifies the witness (Typer.swift:3762 on `tc/research`).\n- That reify recurses forever.\n\n**Repro, expression inference.** No givens are needed. Each of these crashes the baseline the same way (`review/occurs-fix/s2-tuple.hylo`, `s3-generic.hylo`):\n- `fun same<T>(x: T, y: T) {}` with `let f = fun[](a) { same(a, (a, a)) }`;\n- `same(a, mk(a))` with `mk<T>(x: T) -> S<T>`.\n\n**Fix (`occurs`).** An occurs check in both variable cases of `TypeStore.unifiable`: binding a variable to a type that contains it, under the current local table, makes `unifiable` return `false`.\n- Solver equalities then fail normally.\n- Inside `Typer.match` the Bool result is ignored. A nested failure becomes a coercion on the nearest enclosing compound pair, which match then rejects.\n- A top-level failure with no coercion would take match's success path with the binding missing. It is not reached in any test, but it should be guarded explicitly by reporting `(a, b)` as a coercion.\n\nResults:\n- t25 is rejected (\"no coercion \u2026\") in tens of ms. The lambda repros give \"cannot pass value of type `#!` \u2026\", a poor diagnostic but no crash.\n- No program was found that still crashes with `occurs` on.\n- Identical on all 192 tests.\n- Cost: a walk of the bound type, only when it has variables. No measurable difference on the test suite.\n\n**`occurs` is not invisible.** When a match would create a cycle *and* records a coercion, the baseline silently drops match's substitutions (including the cycle). It keeps a bogus derivation, then fails later with \"not enough context to infer a type\". `occurs` rejects that derivation instead (\"no coercion \u2026\"), which changes inferred types and diagnostics: semtest reports MISMATCH on `review/occurs-fix/c1-cycle-plus-coercion.hylo` and `c3-accept-change.hylo`. No accept/reject flip was observed. Add these to the regression set.\n\n**`fixsubst` depends on `occurs`.** `fixsubst` keeps match's substitutions on the coercion path, so the dropped cycle is now reified. With `fixsubst` alone, `c1`, `c3` and `c5-order2` crash (exit 139). With the baseline or with `occurs,fixsubst` they do not. `fixsubst` must never be enabled without `occurs`.\n\n**Limits.** `occurs` prevents cycles created during unification. `SubstitutionTable.union`/`assign` remain unchecked; they are safe only because the inputs to match and to the solver are reified under the environment substitutions first. Latent gaps in `TypeStore.occurs`, none reachable from source so far:\n- no `Bundle` case;\n- the `hasVariable` early exit does not see `Arrow.environment`.\n\n(Recommendation 1 should read: land `occurs` as a crash fix that also rejects some bogus derivations. Land it before, or together with, `fixsubst`.)"
+  }
+ },
+ {
+  "bug": "cyclecut",
+  "title": "\u00a75 Order-dependent memoization across cycle cuts and the transactional cyclecut fix",
+  "reviews": [
+   {
+    "claim_verdict": "confirmed-with-corrections",
+    "summary": "Both halves of the claimed mechanism check out against the baseline binary and the baseline source. A reference back to a declaration on the stack returns .error, and the enclosing extendee or conformance computation memoizes it (n01, n05). A lookup skips extensions that are on the stack without any diagnostic, and the result is memoized (n04 vs v2_swapped). The write-up still needs corrections in four places. (1) The skip path does more than reject valid programs: in one declaration order the baseline accepts a program that is ambiguous by the checker's own rules, and inside one program it resolves the same expression `A.Foo` in two different ways. cyclecut does not fix this, and cyclecutstack only flips which order is accepted. (2) n04 vs v2 comes only from the skip path. (3) n05 has two independent ways of going wrong. (4) The text leaves out the real reason the n01 cycle is spurious: member lookup works out the extendee of every visible extension.",
+    "issues": [
+     {
+      "title": "The skip path also makes the baseline accept a program that is ambiguous by its own rules, depending on order; the write-up frames #5 only as rejecting valid programs",
+      "severity": "major",
+      "evidence": "I ran these (files in my scratch directory). struct A { type Foo = Int }; struct C { type Bar = A }.\n- amb_e2first.hylo: `extension C.Bar { type Foo = Bool }` then `extension A.Foo { fun g() {} }`, then `fun h(x: Int) { x.g() }`. Baseline: diagnostics 0. cyclecut: diagnostics 0.\n- amb_e1first.hylo: the same two extensions in the other order. Baseline: 2 diagnostics, 'expression does not denote a type' at `A.Foo` and \"Int has no member 'g'\".\n- amb_direct.hylo (`extension A { type Foo = Bool }`) and amb_viaalias_direct.hylo (a plain use `fun k(y: A.Foo)`) are both rejected as ambiguous.\n- amb_e2first_use.hylo is amb_e2first plus `fun k(y: A.Foo) {}`. Baseline reports 1 diagnostic, at k only. So the `A.Foo` in E1's extendee was resolved as Int and memoized, while the identical `A.Foo` in k is ambiguous.\nWhy: when E1's extendee is evaluated with E2 on the stack, the loop `for e in extensions where !declarationsOnStack.contains(.init(e))` (baseline Typer.swift:4681) hides E2's competing `Foo`. That result is memoized via extendeeType's setType.\nWith cyclecut,cyclecutstack the outcome flips: amb_e2first 0\u21922 diagnostics, amb_e1first 2\u21920. One order is still accepted.",
+      "reproduced": true,
+      "correction": "Say that the skip path can also hide a competing candidate, so a lookup succeeds that should be ambiguous. The bug is then order-dependent acceptance of ill-formed programs, not only rejection of valid ones. Note that cyclecut does not touch this case, because no 'refers to itself' site fires. Note that cyclecutstack only moves the acceptance to the other order. Fix the table row for #5 ('order-dependent rejection of valid programs') to match."
+     },
+     {
+      "title": "n04 vs v2_swapped comes only from the skip path, not from 'refers to itself'; `early` plays no part",
+      "severity": "minor",
+      "evidence": "I ran these on the baseline.\n- v2_swapped gives 'Inner has no static member Foo' (7.19) and 'Int has no static member Inner'. There is no 'refers to itself' diagnostic, so no cycle-cut site fired.\n- v2_noearly.hylo (v2 without `early`) is still rejected with the same 2 errors. v1_noearly (n04 without `early`) is accepted.\n- So the difference is only the declaration order of E1 and E2, which is the order the extension loop visits them inside a single lookup. When E2 (`extension A.Inner`) is entered first, it is on the stack while E1's extendee `A.Inner.Foo` is evaluated. E2 is skipped, the lookup fails, and E1's extendee is memoized as .error.\n- cyclecut leaves v2 and v2_noearly at 2 diagnostics. cyclecut,cyclecutstack brings both to 0 and makes v1_noearly fail (0\u21922).",
+      "reproduced": true,
+      "correction": "Keep the two mechanisms apart in the examples. n01 and n05 go through the self-reference .error. n04/v2 goes only through the silent skip, which is why cyclecut (it counts only the four 'refers to itself' sites) cannot fix it. Replace 'Whichever lookup first forces an extendee' with 'whichever extension's extendee evaluation is entered first (it stays on the stack while the others are evaluated)'. Within one lookup that order is declaration order."
+     },
+     {
+      "title": "The n01 'cycle' is spurious because member lookup works out the extendee of every visible extension; the write-up does not say so",
+      "severity": "minor",
+      "evidence": "Code: resolve(_:memberOf:visibleFrom:) always appends resolve(n, memberInExtensionOf:...), even when a native member was found. That loop then calls applies(), which calls extendeeType(e) for every extension, even ones that declare no member named n. Program: in n01, evaluating `A.Foo` (the aliasee of X) forces the extendee of `extension X`. That extendee is `X`, which is on the stack, so the lookup reports 'definition of X refers to itself' and returns .error. extendeeType(ext X) memoizes the .error. Baseline dump n01_base.txt: `0:6 -> X : #!` while the alias keeps `Metatype<X>`. The on-stack declaration X itself is not poisoned; the poisoned memo belongs to the intermediate extension. Order check: v02 (extension before the alias) and v04 (the use comes first) are accepted by the baseline.",
+      "reproduced": true,
+      "correction": "State that the dependency X -> ext X exists only because lookup checks applicability for all extensions. Also say exactly which memo gets poisoned: the extendee of the extension, plus the types of its expressions and the diagnostic. X's own type is fine."
+     },
+     {
+      "title": "n05 has two independent ways of going wrong (extension extendee, and the given's conformance type)",
+      "severity": "minor",
+      "evidence": "I ran both on the baseline.\n- n05_nogiven.hylo (drops `given X is P`) still gives 'X refers to itself' and \"Inner has no member 'req'\".\n- n05_givenonly.hylo (drops `extension X`, puts req in the given) also gives both errors. The trace shows summons with goal head A/Inner during evaluation of the alias. They force declaredType of the conformance, which evaluates X while X is on the stack. The conformance type is memoized as .error, and summon P<Inner> later finds nothing.\n- cyclecut fixes both variants (0 diagnostics).",
+      "reproduced": true,
+      "correction": "Optionally state that n05 exercises both cut points, the extendee and the given's type. This supports the write-up's 'an extendee or a given's type'."
+     },
+     {
+      "title": "Which caches carry the poison: expression types and caches guarded only against givens on the stack",
+      "severity": "info",
+      "evidence": "In the baseline, scopeToSummoned, scopeToExtensionApplies, scopeToPotentialCoercions and canDeriveCoercion are guarded only by `!hasImplicitOnStack()` (givens), not by the extensions or aliases on the stack. scopeToGivenIndex and scopeToAbstractModel are guarded by declarationsOnStack.isEmpty. Per-node setType for name expressions (\u22483047) is unguarded.",
+      "reproduced": false,
+      "correction": "'Memoized permanently by the enclosing computation' is correct but vague. List the writes: declaration setType for the enclosing extendee, conformance, alias or binding; expression types; diagnostics; and the summon and applies caches when no given is on the stack."
+     }
+    ],
+    "what_held": [
+     "In the baseline, n01 gives 2 errors ('X refers to itself', 'Int has no member g'); cyclecut gives 0.",
+     "In the baseline, n05 gives 2 errors; cyclecut gives 0.",
+     "The baseline accepts n04 and rejects v2_swapped with 2 errors; cyclecut leaves v2 unchanged and cyclecut,cyclecutstack fixes it, as the write-up says.",
+     "A reference back to a declaration on the stack reports 'refers to itself' and returns .error, and in the baseline the enclosing computation memoizes it unconditionally (extendeeType, declaredType of a conformance, alias or binding).",
+     "Baseline lookups silently skip extensions on declarationsOnStack (Typer.swift:4681 in the baseline), with no diagnostic.",
+     "The order dependence is real: v02 and v04 (n01 reordered) are accepted; v1_noearly is accepted and v2_noearly rejected.",
+     "There are exactly four 'refers to itself' report sites, matching the four counted cut sites."
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/amb_e2first.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/amb_e1first.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/amb_e2first_use.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/amb_direct.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/amb_viaalias_direct.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/v2_noearly.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/n05_nogiven.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/n05_givenonly.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/n01_noext_member.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/n01_base.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/n01_cc.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-cause/Typer.base.swift"
+    ]
+   },
+   {
+    "claim_verdict": "partially-wrong",
+    "summary": "The \u00a75 counts reproduce exactly: n01, n05, v01, v06 and v08 go to 0, n17 goes from 3 to 2, and nothing in review/names/** gets worse. But the description of how the fix works is wrong in places. The global cycleCuts counter also counts cuts that a nested transaction has already handled, so outer transactions throw away givens and extensions that are fine. That leaves simple valid programs still rejected depending on declaration order, with no cycle diagnostic and a confusing error instead. One ill-formed (ambiguous) program is now accepted, a small program runs 14-75x slower, and the '192 identical' and 'no regressions' evidence is weaker than presented. The fix's internal bookkeeping (held diagnostics and the guarded memo writes) is dead code.",
+    "issues": [
+     {
+      "title": "Nested transactions abort because of cuts an inner transaction already handled, so simple valid programs stay order-dependent",
+      "severity": "major",
+      "evidence": "Ran. casc1.hylo: `struct A{..struct Inner{..}}; fun use(x: A.Inner) { x.h() }; type X = A.Inner; extension X { fun g() {} }; extension X { fun h() {} }`. Baseline: 2 errors ('no member h' and 'X refers to itself'). cyclecut: 1 error, `type 'Inner' has no member 'h'`, cyclecut.discarded=10. casc2.hylo is the same declarations with `use` last: cyclecut gives 0. casc3.hylo, with one extension and use first: 0. The given path does the same. g1.hylo is `fun need<T where T is P>(x: T)`, then `use(){need(A.Inner())}`, then `type X = A.Inner; extension X {fun req(){}}; given X is P {}`. cyclecut: 1 error, 'no coercion ...', discardedGivens=125. g2.hylo (use declared last) gives 0, and g3.hylo (no extension) gives 0. Code: in resolve(_:declaredIn:...) and declaredType(of: Given), the test is `if cycleCuts != cuts` on a counter that is never reset. A cut against X, which was pushed onto the stack inside the outer transaction and already rolled back by the inner extension transaction, still changes the delta seen by the outer transaction. The outer transaction then discards E1, or the given, even though its evaluation finished correctly.",
+      "reproduced": true,
+      "correction": "State that cyclecut leaves order dependence even for programs with no mutually dependent extendees, e.g. two extensions of an alias, or a conformance given through an alias, used before they are declared. In those cases it swaps the cycle error for an unexplained 'no member' or 'no coercion' error. Fix: make a transaction abort only for cuts against declarations that were already on the stack when it started (its base, not declarations pushed inside it), or absorb a cut once an inner transaction has rolled back for it."
+     },
+     {
+      "title": "'The real evaluation happens later' does not help the query that saw the rollback",
+      "severity": "major",
+      "evidence": "Ran. In g1.hylo and perf_gN.hylo the given is discarded (`.error`) while `use` is being checked. The given is evaluated correctly later, but `use` is never re-checked, so its 'no coercion' error stays. perf_g16 under cyclecut reports 16 'no coercion' errors and no cycle error. Baseline reports 17, including the cycle error.",
+      "reproduced": true,
+      "correction": "Say that the rollback decision ('not applicable for this query') is final for that query and for whatever the enclosing non-transactional computation memoizes from it (ascriptions, summon results, alias types). The fix moves the order dependence from 'spurious cycle error' to 'silently missing extension or given'. It does not remove it."
+     },
+     {
+      "title": "cyclecut accepts an ill-formed program the baseline rejects (no check that the skip was consistent)",
+      "severity": "major",
+      "evidence": "Ran. amb1.hylo: `struct A {}; extension A { type Me = A }; type X = A.Me; extension X { type Me = Int }; fun f(x: X) {}`. Baseline: 'definition of X refers to itself'. cyclecut: 0 diagnostics. X is resolved to A while `extension X` is skipped, but once X = A that extension does apply to A, so A.Me is ambiguous. amb2.hylo adds `fun g(y: A.Me)` and cyclecut then reports 'ambiguous use of Me' there, while X = A.Me is still accepted. amb0 confirms that two Me's in extensions of A are ambiguous. The baseline already accepts this in another order (amb3, extension first, 0 errors), so cyclecut spreads an existing unsound 'skip' interpretation to more orders rather than creating it.",
+      "reproduced": true,
+      "correction": "Do not call every removed error 'spurious'. cyclecut adopts the rule 'an extension whose extendee is in the current cycle does not apply'. Under that rule it accepts programs that have no consistent reading. A sound version needs a post-check that each skipped extension really does not apply to the receiver once its extendee is known, and an error or retry when it does."
+     },
+     {
+      "title": "The O(1) snapshot hides copy-on-write; rollbacks cost about 5-7 ms each, which makes a small program 75x slower",
+      "severity": "major",
+      "evidence": "Ran. Type-check time of the user module, baseline vs cyclecut. g1: 20.6 ms vs 1427-1712 ms (84 + 125 discards). g2: 25 vs 365 ms. casc1: 29 vs 78 ms. perf_g16 (16 uses before the alias, extension and given): 88 ms vs 6639 ms, with 324 discarded extension transactions and 500 discarded given transactions. Discarded work is never memoized, so every later query re-runs the transaction. Stdlib typing (empty.hylo, 6 runs each): baseline mean 600 ms, cyclecut mean 656 ms (about +9%). members-big: no measurable difference (12.5 s vs 11.1 s, noise), and no cut happened there.",
+      "reproduced": true,
+      "correction": "Report the cost. Copying the snapshot is O(1), but the first write inside each transaction copies the touched Program and Memos buffers, which include the stdlib types. Rolled-back transactions are then repeated on every query. Suggest memoizing the 'cut, not applicable here' verdict per (declaration, stack base), or doing the speculation in a cheaper scratch state."
+     },
+     {
+      "title": "Held-diagnostics machinery and per-declaration memo guards are dead code",
+      "severity": "minor",
+      "evidence": "Code read. grep in /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift finds `speculating` only at line 28 (declaration), at lines 1365, 1398, 1405, 1605, 1612 and 1835 (`if !(speculating > 0 && cycleCuts != cuts)`), and at line 5576 in report(). Nothing ever increments it. So heldDiagnostics is never filled and the guarded setType calls always run. Only the (program, cache) restore has any effect.",
+      "reproduced": true,
+      "correction": "Remove the dead code or describe it accurately. All the rollback guarantees rest on the snapshot restore. The fresh-variable counter (program.types.nextFreshIdentifier) is rolled back too. That is safe only because nothing created inside the transaction escapes it; this holds today and should be documented."
+     },
+     {
+      "title": "'Identical on 192 tests' and 'no regressions' are close to vacuous for this fix",
+      "severity": "minor",
+      "evidence": "Ran and read the code. Until the first cut, cyclecut runs exactly the baseline's code, and the baseline always reports a 'refers to itself' error at every cut site. So cyclecut can only change programs the baseline rejects with such an error. Only 2 of the tests report one (negative/cyclic-typealias, negative/cyclic-binding), and neither starts a cyclecut transaction that cuts: no cyclecut counters with --count. The names/** results reproduce exactly (names-counts.txt), but my new programs show cyclecut doing worse than the baseline in other ways: amb1 (accepts an ill-formed program), and g1, casc1 and perf_g16 (lose the cycle error, keep or introduce a misleading error, run 14-75x slower).",
+      "reproduced": true,
+      "correction": "Say that 'no regressions' is guaranteed by construction for programs the baseline accepts, and that the 192-test oracle does not exercise the transaction path. Replace the claim with targeted tests: use-before-declaration orders, ambiguity cases like amb1/amb2, and timings."
+     },
+     {
+      "title": "Remaining order dependence is not all down to a missing language decision",
+      "severity": "minor",
+      "evidence": "Ran. casc1 vs casc2 and g1 vs g2 are order-dependent under cyclecut, yet their extendees are not mutually dependent: only one alias, whose own lookup never needs either extension. They fail because of the global cut counter (issue 1), which an implementation fix can address. For t01 and v2_swapped the claim is plausible. Also, cyclecut,cyclecutstack additionally fixes t02 (2 to 0) and t09 (1 to 0), which the write-up does not list.",
+      "reproduced": true,
+      "correction": "Limit the 'needs a language decision' claim to truly mutually dependent extendees (t01, v2_swapped, n02-n04). Add the use-before-declaration class as an implementation defect. List t02 and t09 under cyclecutstack."
+     },
+     {
+      "title": "Rolling back a given to `.error` can leave a permanent coercion memo for that given (not demonstrated)",
+      "severity": "info",
+      "evidence": "Code read only, no program built. canDeriveCoercion (Typer.swift around line 4456) calls declaredType(of: g). With cyclecut that can return `.error` after a rollback. If no implicit is on the stack, it stores cache.canDeriveCoercion[g][p] = 0b00 under the Given key, and the entry outlives the given's later correct evaluation. This only matters for `<T> T`-style or equality givens, so I could not write a conformance-only repro.",
+      "reproduced": false,
+      "correction": "Do not memoize per-given results computed from a rolled-back `.error` type. For example, return a sentinel that the caches skip, or skip memoization when cycleCuts changed during the call."
+     }
+    ],
+    "what_held": [
+     "Diagnostic counts on review/names/** reproduce exactly: n01 2->0, n05 2->0, n17 3->2, v01 2->0, v06 2->0, v08 2->0; t01, v2_swapped and v6 unchanged; no program in names/** gets more errors (names-counts.txt)",
+     "cyclecut,cyclecutstack newly rejects n02, n03, n04, t03, v1, v3, v4 and v5, and fixes t01 and v2_swapped, as claimed",
+     "A true cycle is still reported: v05_true_cycle gives 1 error, and the negative cyclic tests are unchanged",
+     "Typer state outside (program, cache) stays balanced: declarationsOnStack is restored by defer, transactionBases is pushed and popped around the extendee call, and the never-reset cycleCuts is compared only as a delta. I found no crash or inconsistency from the rollback itself, only the over-counting in issue 1",
+     "No slowdown on members-big; no transaction cuts there"
+    ],
+    "files": [
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/names-counts.txt",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/casc1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/casc2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/casc3.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/g1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/g2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/g3.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/perf_g16.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/amb0.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/amb1.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/amb2.hylo",
+     "/home/user/hylo-new/research/round3/soundness/review/cyclecut-fix/amb3.hylo",
+     "/home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift"
+    ]
+   }
+  ],
+  "verdict": {
+   "cause_verdict": "confirmed-with-corrections",
+   "fix_verdict": "unsound",
+   "reasoning": "I re-ran every major issue from both reviews with the frozen binaries: baseline 4587ce9e1a23, and impl10-37a7007e33a0 with no flags, with cyclecut, and with cyclecut,cyclecutstack. I also read the cited code in /home/user/hylo-impl/Sources/FrontEnd/Typer/Typer.swift and in the baseline copy Typer.base.swift.\n\nThe cause holds, with corrections:\n- The self-reference .error is memoized. n01 baseline dump: `0:6 : #!`, and the alias X keeps Metatype<X>, so the poisoned memo is the extension's extendee, not X itself.\n- The silent skip in the baseline loop `for e in extensions where !declarationsOnStack.contains(.init(e))` (baseline Typer.swift:4681) is real.\n- The cycle in n01 is spurious because resolve(_:memberOf:) always adds extension candidates. To do that it works out the extendee of every visible extension, even when a native member exists (baseline Typer.swift:4601-4604).\n\nThe cause reviewer's major issue reproduces exactly:\n- amb_e2first: baseline 0 diagnostics, cyclecut 0, cyclecut,cyclecutstack 2.\n- amb_e1first: baseline 2, cyclecut 2, cyclecutstack 0.\n- amb_direct: 2 everywhere, so the checker's own rule says A.Foo is ambiguous.\n- amb_e2first_use: 1 diagnostic in the baseline, at k only. The same `A.Foo` is accepted in E1's extendee and rejected in k.\n\nSo the skip path also makes the checker accept ill-formed programs depending on order, not only reject valid ones. cyclecut leaves this alone, and cyclecutstack moves the acceptance to the other order.\n\nOther cause checks:\n- v2_noearly: baseline 2, cyclecut 2, cyclecutstack 0. This confirms n04/v2 comes from the skip path.\n- n05_nogiven and n05_givenonly: 2 diagnostics each in the baseline, 0 under cyclecut. Both cut points are exercised.\n\nFix review, all reproduced:\n- casc1: baseline 2, cyclecut 1 ('Inner has no member h', no cycle error, cyclecut.discarded=10). casc2, the reordered version, gives 0.\n- g1: cyclecut 1 'no coercion' error, discarded=84, discardedGivens=125. g2 gives 0.\n- amb1: baseline 1 ('X refers to itself'), cyclecut 0. amb2 gives 'ambiguous use of Me' at a direct use. amb0 gives 2 (ambiguous). amb3 gives 0 in the baseline.\n- perf_g16: user type-check 115 ms in the baseline vs 6908 ms under cyclecut. Errors: 17 in the baseline vs 16 under cyclecut, all 'no coercion', with no cycle error.\n- Stdlib in that run: 648 vs 718 ms.\n- grep confirms `speculating` is never incremented. Every `if !(speculating > 0 && cycleCuts != cuts)` guard is therefore always true, and heldDiagnostics is never filled.\n- The transaction sites (Typer.swift ~1719 for givens, ~4874 for extendees) compare deltas of a global counter that is never reset. An inner cut therefore aborts every enclosing transaction.\n- t02 and t09: 2 and 1 diagnostics under the baseline and under cyclecut, 0 under cyclecutstack. Neither is listed in the write-up.\n- The '192 identical' result is uninformative by construction. Until the first cut, cyclecut runs the baseline's code, and the baseline reports 'refers to itself' at every cut. So only programs the baseline rejects with that error can change.\n\nFix verdict: unsound. cyclecut accepts amb1, which has no consistent reading, while the baseline rejects it. The write-up claims both 'none regressed' and 'differs only where the baseline is wrong', and amb1 contradicts both. The unsound skip rule already existed in the baseline (amb3), but cyclecut extends it to more declaration orders.\n\nThe fix is also incomplete in three ways:\n- Order dependence remains for simple use-before-declaration programs, caused by the global cut counter.\n- The query that saw the rollback is never re-checked.\n- The cost is large (about 60x on perf_g16).\n\nOne judge refinement to the fix reviewer's proposed remedy: only aborting for cuts against declarations in the transaction's base would let the outer transaction memoize a result computed with an extension skipped. That is the amb1 risk. So the remedy has to be paired with the consistency post-check.\n\nRejected:\n- The canDeriveCoercion memo issue is code-read only and has no repro.\n- The cache-guard inventory was not reproduced. It is informational only.\n- The per-rollback cost of '5-7 ms': my measurement is about 8 ms average (6.8 s / 824 discards), and the copy-on-write explanation is plausible but not demonstrated. I keep 'several ms per rollback' and present the explanation as likely.\n- The +9% stdlib figure is noisy. I quote it with that caveat.",
+   "confirmed_issues": [
+    {
+     "title": "The skip path also accepts programs that are ambiguous by the checker's own rules, depending on declaration order",
+     "severity": "major",
+     "evidence": "I re-ran these.\n- amb_e2first (`extension C.Bar { type Foo = Bool }` before `extension A.Foo { fun g() {} }`, with C.Bar = A): 0 diagnostics in the baseline and under cyclecut.\n- amb_e1first, the other order: 2 diagnostics.\n- amb_direct: 2 diagnostics, so A.Foo is ambiguous.\n- amb_e2first_use: 1 diagnostic, at `fun k(y: A.Foo)` only. The identical expression in E1's extendee was resolved as Int and memoized.\n- cyclecut,cyclecutstack flips the outcome: e2first goes to 2, e1first to 0.",
+     "correction": "Describe #5 as order-dependent acceptance or rejection, not only rejection of valid programs. Say that cyclecut does not touch this case because no 'refers to itself' site fires, and that cyclecutstack moves the acceptance to the other order. Update the table row."
+    },
+    {
+     "title": "cyclecut accepts an ill-formed program that the baseline rejects; 'none regressed' and 'spurious errors removed' are overstated",
+     "severity": "major",
+     "evidence": "amb1 (`extension A { type Me = A }; type X = A.Me; extension X { type Me = Int }`): the baseline reports 'X refers to itself', cyclecut reports 0. If X = A, extension X applies to A and A.Me is ambiguous (amb0: 2 diagnostics; amb2: 'ambiguous use of Me'). If X = Int, A.Me = A, a contradiction. The baseline already accepts the reordered amb3, so cyclecut extends an existing unsound rule to more declaration orders.",
+     "correction": "State the rule cyclecut adopts: an extension whose extendee is in the current cycle does not apply to this query. Say that this rule accepts programs with no consistent reading. A sound version needs a post-check that each skipped extension really does not apply once its extendee is known."
+    },
+    {
+     "title": "The global cut counter makes outer transactions abort for inner cuts, so simple use-before-declaration programs stay order-dependent",
+     "severity": "major",
+     "evidence": "casc1 (use before `type X = A.Inner` and two `extension X`): baseline 2, cyclecut 1 ('Inner has no member h', no cycle diagnostic, discarded=10); casc2 (use last): 0. g1 (conformance given through the alias, used first): cyclecut 1 'no coercion' error (discarded=84, discardedGivens=125); g2: 0. Code: `let cuts = cycleCuts ... if cycleCuts != cuts` at the given site (~1719) and the extendee site (~4874), with a counter that is never reset.",
+     "correction": "Say that cyclecut leaves order dependence even when the extendees are not mutually dependent, and that it swaps the cycle error for an unexplained 'no member' or 'no coercion' error. A possible fix is to abort only for cuts against declarations in the transaction's base, combined with the consistency post-check (otherwise the outer transaction memoizes a result computed with an extension skipped)."
+    },
+    {
+     "title": "'The real evaluation happens later' does not help the query that saw the rollback",
+     "severity": "major",
+     "evidence": "g1 and perf_g16: the given is discarded while use is being checked, and use is never re-checked. perf_g16 under cyclecut gives 16 'no coercion' errors and no cycle error; the baseline gives 17.",
+     "correction": "Say that the rollback decision is final for the current query and for whatever its non-transactional caller memoizes. The order dependence moves from a spurious cycle error to a silently missing extension or given."
+    },
+    {
+     "title": "Rolled-back transactions are expensive and are repeated on every query",
+     "severity": "major",
+     "evidence": "perf_g16: user type-check 115 ms in the baseline vs 6908 ms under cyclecut. The reviewer measured g1 at 20.6 ms vs about 1.4-1.7 s and stdlib at about +9% (noisy). Discarded work is never memoized.",
+     "correction": "Report the cost. Copying the snapshot is O(1), but the transaction's writes probably trigger copy-on-write of the shared buffers, and each rolled-back transaction is repeated by every later query. Suggest memoizing the 'cut here' verdict per (declaration, stack base)."
+    },
+    {
+     "title": "n04 vs v2_swapped comes only from the silent skip",
+     "severity": "minor",
+     "evidence": "v2_noearly: baseline 2, cyclecut 2, cyclecutstack 0. v2 has no 'refers to itself' diagnostic.",
+     "correction": "Keep the two mechanisms apart: n01 and n05 go through the self-reference .error, while n04/v2 goes through the skip. The skip is not counted as a cut, which is why cyclecut cannot fix it. Replace 'whichever lookup first forces' with 'whichever extension's extendee evaluation is entered first, since it stays on the stack while the others are evaluated'."
+    },
+    {
+     "title": "The n01 cycle exists only because member lookup works out the extendee of every visible extension; the poisoned memo is the extension's extendee",
+     "severity": "minor",
+     "evidence": "resolve(_:memberOf:) always adds resolve(n, memberInExtensionOf:) (baseline 4601-4604). In the n01 baseline dump, `0:6 : #!` while the alias stays Metatype<X>.",
+     "correction": "Say both points in the mechanism paragraph."
+    },
+    {
+     "title": "n05 exercises both cut points",
+     "severity": "minor",
+     "evidence": "n05_nogiven and n05_givenonly: baseline 2 each, cyclecut 0 each.",
+     "correction": "Mention it."
+    },
+    {
+     "title": "The held-diagnostics machinery and the per-declaration memo guards are dead code",
+     "severity": "minor",
+     "evidence": "`speculating` is declared at line 28 and read at 1365, 1398, 1405, 1605, 1612, 1835 and 5576, but nothing ever increments it.",
+     "correction": "Say that only the (program, cache) snapshot restore has any effect, and remove the dead code or describe it accurately."
+    },
+    {
+     "title": "The 192-test oracle does not exercise cyclecut; cyclecutstack also fixes t02 and t09",
+     "severity": "minor",
+     "evidence": "Until the first cut, cyclecut runs the baseline's code, and the baseline reports at every cut. t02: 2/2/0 and t09: 1/1/0 (baseline/cyclecut/cyclecutstack).",
+     "correction": "Present 'identical on 192' as holding by construction. List t02 and t09 under cyclecutstack."
+    }
+   ],
+   "rejected_issues": [
+    {
+     "title": "Rolling back a given to .error can leave a permanent canDeriveCoercion memo",
+     "why": "This rests on reading the code only. The reviewer built no program and could not demonstrate it. It is not included as a correction."
+    },
+    {
+     "title": "Inventory of which caches carry the poison (guards on scopeToSummoned and similar)",
+     "why": "It is informational, was not reproduced, and is not needed for the corrected text. The text already lists the writes that were demonstrated (the extendee, expression types, the diagnostic)."
+    },
+    {
+     "title": "The exact figure of '5-7 ms per rollback' and the copy-on-write explanation",
+     "why": "The slowdown is confirmed, but my measurement is about 8 ms per discard on average, and the copy-on-write cause was not demonstrated. The text keeps the measured totals and presents the explanation as likely."
+    }
+   ],
+   "corrected_text": "## 5. Order-dependent memoization across cycle cuts\n\n**Mechanism** (review names-1/names-2). While a declaration `X` is being typed (`declarationsOnStack`), two things can go wrong.\n\n1. **Self-reference.** Evaluating something that refers back to `X` reports \"refers to itself\" and returns `.error`. The enclosing computation memoizes it permanently: the extendee of an extension, the type of a conformance, alias or binding, the types of its expressions, and the diagnostic.\n2. **Silent skip.** Lookups skip any extension that is on the stack, with no diagnostic (baseline Typer.swift:4681). The result of the lookup is memoized too.\n\nWhich extension's extendee evaluation is entered first decides the outcome. It stays on the stack while the others are evaluated, and within one lookup that order is declaration order.\n\nThe cycles are often spurious. Member lookup always works out the extendee of *every* visible extension, even when a native member exists and even for extensions that declare no member of that name.\n\nExamples:\n- `type X = A.Foo; extension X {\u2026}` reports a spurious cycle (n01), through the self-reference path. Evaluating `A.Foo` forces the extendee of `extension X`, which is `X`, on the stack. The memo that gets poisoned is that extendee (`#!`); `X` itself is fine. The reordered versions v02 and v04 are accepted.\n- n05 goes wrong in two independent ways: through the extension's extendee (n05_nogiven) and through the given's conformance type (n05_givenonly).\n- Swapping two extensions turns acceptance into rejection (n04 vs v2_swapped). This goes only through the silent skip: no \"refers to itself\" fires, and `early` plays no part.\n- **The skip can also hide a competing candidate**, so the checker accepts a program that is ambiguous by its own rules. Take `struct A { type Foo = Int }` and `struct C { type Bar = A }`.\n  - With `extension C.Bar { type Foo = Bool }` declared before `extension A.Foo { fun g() {} }`, the baseline accepts (amb_e2first).\n  - In the other order it rejects `A.Foo` as not denoting a type (amb_e1first). A direct `extension A { type Foo = Bool }` is rejected the same way.\n  - In one program, `A.Foo` in E1's extendee resolves to `Int`, while the same `A.Foo` in `fun k(y: A.Foo)` is rejected (amb_e2first_use).\n\nSo #5 is order-dependent **acceptance and rejection**, not only rejection of valid programs.\n\n**Fix attempt (`cyclecut`): transactional speculation.**\n- Member lookup needs an extension's extendee that is not yet memoized, or resolution needs a given's type that is not yet memoized. The typer:\n  1. snapshots `(program, cache)`. These are value types, so taking the snapshot is O(1);\n  2. evaluates;\n  3. if the global counter of cuts changed meanwhile, restores the snapshot and treats the extension or given as not applicable for this query. Only the four \"refers to itself\" sites count as cuts.\n- Only the snapshot restore has any effect. The `speculating`/`heldDiagnostics` machinery and the guarded `setType` calls are dead code, because `speculating` is never incremented.\n\nResults on the 47 programs of `review/names/**` (diagnostic counts, baseline \u2192 `cyclecut`):\n\n| Improved | Unchanged order-dependent |\n|---|---|\n| n01 2\u21920, n05 2\u21920, n17 3\u21922, v01 2\u21920, v06 2\u21920, v08 2\u21920 | t01, t02, t09, v2_swapped, v6_summon_swapped, n17 (one error left) |\n\nNo program in `names/**` gets more errors.\n\nIdentical on all 192 tests, but that holds **by construction**. Until the first cut, `cyclecut` runs the baseline's code, and the baseline reports \"refers to itself\" at every cut. So only programs the baseline rejects with that error can change, and the tests barely exercise the transaction path.\n\n**Limitations of `cyclecut`, found with targeted programs** (`review/cyclecut-fix/`):\n- **It accepts an ill-formed program the baseline rejects.**\n  - The program, amb1: `extension A { type Me = A }; type X = A.Me; extension X { type Me = Int }`.\n  - Under `cyclecut`, X resolves to A while `extension X` is skipped. Once X = A, that extension applies to A and `A.Me` is ambiguous (amb0, amb2), so the program has no consistent reading.\n  - The baseline already accepts the reordered amb3. `cyclecut` extends this unsound skip rule to more declaration orders.\n  - A sound version needs a post-check that every skipped extension really does not apply once its extendee is known.\n- **Order dependence remains even without mutually dependent extendees.**\n  - The cut counter is global and never reset, so a cut handled by an inner transaction also aborts every enclosing one.\n  - casc1 (a use before `type X = A.Inner` and two `extension X`) still fails, with `Inner has no member h` and no cycle diagnostic. Declaring the use last (casc2) gives 0.\n  - g1/g2 do the same with a conformance `given X is P`.\n- **The rolled-back decision is final for the current query.** The query that saw the rollback is never re-checked, so the order dependence becomes a silently missing extension or given, followed by a misleading 'no member' or 'no coercion' error.\n- **Cost.**\n  - Discarded transactions are not memoized, so every later query repeats them, and each one costs several milliseconds (probably copy-on-write of the shared buffers).\n  - perf_g16 (16 uses before the alias, extension and given): type-checking the user module takes 115 ms in the baseline and 6.9 s under `cyclecut` (824 discarded transactions). The stdlib is about 10% slower (noisy).\n  - The fix is to memoize the \"cut here\" verdict per (declaration, stack base).\n\n**A stronger variant (`cyclecut,cyclecutstack`)** also treats \"skipped an extension that was already being typed when the transaction started\" as a cut.\n- It fixes t01, t02, t09 and v2_swapped.\n- It newly rejects n02, n03, n04, t03, v1, v3, v4 and v5, which the baseline accepts.\n- On the ambiguity case it only moves the acceptance to the other order: amb_e2first goes 0\u21922 and amb_e1first 2\u21920.\n\nn02\u2013n04, t01 and v2_swapped have **genuinely mutually dependent extendees**: E2's extendee needs a member of E1, and E1's extendee lookup must decide whether E2 applies. Any local rule picks *some* evaluation order, so the outcome stays order-dependent. Removing the dependence requires a language decision:\n- (a) extendees are resolved in a pre-pass that does not consider extension members (simple, predictable, rejects some programs);\n- (b) a fixpoint over extendee bindings (accepts the most, costs iterations).\n\nThe use-before-declaration cases (casc1, g1) and the missing consistency check (amb1) are implementation defects, not part of that language question.\n\n`cyclecutstack` is kept only as a documented experiment.\n\n`cyclecut` composes with `memberskip`: same results, since `memberskip` never skips an extension whose extendee is unmemoized.\n\n(Summary table row for #5: \"Results computed across a cycle cut or a skipped extension are memoized, so outcomes depend on declaration order | order-dependent rejection of valid programs **and acceptance of ambiguous ones** | partial fix `cyclecut`: 6 programs improved, but one ill-formed program newly accepted and large slowdowns on use-before-declaration programs\".)"
+  }
+ }
+]

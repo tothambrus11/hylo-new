@@ -1,0 +1,3 @@
+struct Box<T> {}
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A == Box<B>, C == D>(x: D) { check<A>(x) }

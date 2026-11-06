@@ -1,0 +1,8 @@
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-cause/variant-swapped.hylo:11.3-8: error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+parse     28.45 ms
+scope      5.44 ms
+type.stdlib    623.69 ms
+type.user     16.97 ms

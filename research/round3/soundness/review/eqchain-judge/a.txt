@@ -1,0 +1,3 @@
+trans-4.hylo [none d=10] rc=0 diags=0 user_ms=583.92 matches=35232 subgoals=1893 refuted=
+trans-5.hylo [none d=10] rc=0 diags=0 user_ms=615.06 matches=41123 subgoals=2239 refuted=
+trans-4.hylo [fixsubst d=9] rc=0 diags=1 user_ms=8964.46 matches=392218 subgoals=22424 refuted=

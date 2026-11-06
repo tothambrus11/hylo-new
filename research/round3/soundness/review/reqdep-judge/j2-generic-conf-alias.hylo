@@ -1,0 +1,6 @@
+trait P { type X }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = B }
+typealias BB = Box<B>
+public fun main() { let y: BB.X = B() }

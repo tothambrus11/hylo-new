@@ -1,0 +1,4 @@
+struct A {}
+extension A { type Me = A }
+extension A { type Me = Int }
+fun g(y: A.Me) {}

@@ -1,0 +1,90 @@
+== 4587ce9e1a23 [] cyclic-query-segfault.hylo: exit 139
+== impl10-37a7007e33a0 [] cyclic-query-segfault.hylo: exit 139
+== impl10-37a7007e33a0 [fixsubst] cyclic-query-segfault.hylo: exit 139
+== impl10-37a7007e33a0 [occurs] cyclic-query-segfault.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/cyclic-query-segfault.hylo:11.3-8: error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     44.31 ms
+== impl10-37a7007e33a0 [occurs,fixsubst] cyclic-query-segfault.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/cyclic-query-segfault.hylo:11.3-8: error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     14.36 ms
+== 4587ce9e1a23 [] c1-cycle-plus-coercion.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c1-cycle-plus-coercion.hylo:12.3-8: error: not enough context to infer a type
+type.user     62.55 ms
+== impl10-37a7007e33a0 [] c1-cycle-plus-coercion.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c1-cycle-plus-coercion.hylo:12.3-8: error: not enough context to infer a type
+type.user     64.28 ms
+== impl10-37a7007e33a0 [fixsubst] c1-cycle-plus-coercion.hylo: exit 139
+== impl10-37a7007e33a0 [occurs] c1-cycle-plus-coercion.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c1-cycle-plus-coercion.hylo:12.3-8: error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     80.78 ms
+== impl10-37a7007e33a0 [occurs,fixsubst] c1-cycle-plus-coercion.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c1-cycle-plus-coercion.hylo:12.3-8: error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     47.05 ms
+== impl10-37a7007e33a0 [] c3-accept-change.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c3-accept-change.hylo:14.3-11: error: not enough context to infer a type
+type.user     64.52 ms
+== 4587ce9e1a23 [] c3-accept-change.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c3-accept-change.hylo:14.3-11: error: not enough context to infer a type
+type.user     56.58 ms
+== impl10-37a7007e33a0 [fixsubst] c3-accept-change.hylo: exit 139
+== impl10-37a7007e33a0 [occurs] c3-accept-change.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c3-accept-change.hylo:14.3-11: error: no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     94.66 ms
+== impl10-37a7007e33a0 [occurs,fixsubst] c3-accept-change.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c3-accept-change.hylo:14.3-11: error: no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     61.51 ms
+== 4587ce9e1a23 [] c5-order2.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c5-order2.hylo:16.3-11: error: not enough context to infer a type
+type.user     77.75 ms
+== impl10-37a7007e33a0 [] c5-order2.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c5-order2.hylo:16.3-11: error: not enough context to infer a type
+type.user    118.78 ms
+== impl10-37a7007e33a0 [occurs] c5-order2.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c5-order2.hylo:16.3-11: error: no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     53.14 ms
+== impl10-37a7007e33a0 [fixsubst] c5-order2.hylo: exit 139
+== impl10-37a7007e33a0 [occurs,fixsubst] c5-order2.hylo: exit 0
+counters.stdlib: 
+counters.user:   
+diagnostics: 1
+   /home/user/hylo-new/research/round3/soundness/review/occurs-fix/c5-order2.hylo:16.3-11: error: no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+type.user     67.11 ms

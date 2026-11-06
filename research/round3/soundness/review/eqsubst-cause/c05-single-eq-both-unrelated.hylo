@@ -1,0 +1,2 @@
+fun g<T, U where T == U>() {}
+fun f<V, W, D, E where V == W>() { g<D, E>() }

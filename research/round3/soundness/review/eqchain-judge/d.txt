@@ -1,0 +1,3 @@
+eqbug1-plain.hylo [fixsubst,eqrefute d=10] rc=0 diags=1 user_ms=69.59 matches=1376 subgoals=19 refuted=1
+eqbug1-struct.hylo [fixsubst,eqrefute d=10] rc=134 diags= user_ms= matches= subgoals= refuted=
+eqbug1-struct.hylo [none d=10] rc=0 diags=0 user_ms=1193.32 matches=59537 subgoals=3100 refuted=

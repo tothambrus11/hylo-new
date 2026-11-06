@@ -1,0 +1,8 @@
+trait P { type X }
+trait Q {}
+struct B { public memberwise init }
+given B is Q {}
+struct Box<T> { public memberwise init }
+given <T is Q> => Box<T> is P { type X = T }
+fun f2<T where T is P, T.X == B>() {}
+public fun main() { f2<Box<B>>() }

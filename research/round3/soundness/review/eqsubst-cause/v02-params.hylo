@@ -1,0 +1,2 @@
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A == B, C == D>(x: D) { check<A>(x) }

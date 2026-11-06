@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P { type X }
+given Void is P { type X = Void }
+fun need<A, B where A == B>() {}
+fun f0<T where T == Void>() {
+  need<T.X, Void>()
+}

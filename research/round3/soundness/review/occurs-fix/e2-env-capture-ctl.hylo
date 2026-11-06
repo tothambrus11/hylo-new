@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// Control: the same cycle through the output, which properties do count.
+fun same<T>(x: T, y: T) {}
+public fun main() {
+  let f = fun[](a) { same(a, fun[]() { a }) }
+}

@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// a : bundle of h<?T>; a(a) relates ?T to the type of a, which is a Bundle containing ?T.
+struct B { public memberwise init }
+fun same<T>(x: T, y: T) {}
+fun h<T>(x: auto T) auto -> B {
+  let { B() }
+  inout { B() }
+}
+public fun main() {
+  let f = fun[](a) { same(a, h<_>); a(a) }
+}

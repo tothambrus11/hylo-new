@@ -1,0 +1,10 @@
+counters.stdlib: coerced.slowPath=54 names.appliesCalls=7332 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=5679 summon.matchOK=818 summon.matches=41452 summon.subgoals=699
+counters.user:   coerced.slowPath=2 names.appliesCalls=8 solver.goalSteps=15 solver.systems=4 summon.cacheHits=1 summon.calls=3 summon.depthExhausted=2 summon.layers=34 summon.matchOK=132112 summon.matches=2224757 summon.subgoals=132113
+diagnostics: 3
+   /home/user/hylo-new/research/round3/soundness/review/eqchain-fix/trans-5.hylo:4.101-102: error: type 'T5' has no static member 'X'
+   /home/user/hylo-new/research/round3/soundness/review/eqchain-fix/trans-5.hylo:5.3-8: error: no coercion from 'P<T5> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   /home/user/hylo-new/research/round3/soundness/review/eqchain-fix/trans-5.hylo:6.15-16: error: cannot pass value of type '#!' to parameter '(T0::P).X'
+parse     32.63 ms
+scope      4.90 ms
+type.stdlib    606.14 ms
+type.user  51177.78 ms

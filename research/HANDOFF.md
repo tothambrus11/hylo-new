@@ -35,16 +35,17 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
-## Soundness investigation (after round 3)
+## Soundness investigation (after round 3, adversarially reviewed)
 
-`round3/soundness.md` investigates five baseline defects:
-1. An unsound equality derivation. Root cause: `match` drops substitutions in its coercion path. Fixes: `fixsubst` + `eqrefute`.
-2. Genuine equality search is exponential once (1) is fixed: valid chains of 5 are rejected. Needs congruence closure.
-3. `where T.X == B` requirements at call sites are never discharged; at the default cap this runs out of memory.
-4. A SIGSEGV on cyclic substitutions. Fix: `occurs`.
-5. Order-dependent memoization across cycle cuts. Partial fix: transactional `cyclecut`.
+`round3/soundness.md` covers five baseline defects. Each claimed cause and fix was attacked by two skeptics and a judge (`round3/soundness/review/`).
 
-Patch `impl/0007-*.patch`. All fixes are identical on the 192 tests. Repros are in `round3/soundness/`. `HYLO_TC_EXPERIMENTS=trace` prints resolution derivations.
+The confirmed corrections:
+- **#1, bogus equality derivations.** The root cause holds: `match` drops substitutions in its coercion path. But a single equality suffices at call sites, and `eqrefute` is **unsound**.
+- **#4, the `occurs` fix**, changes some results. It is required by `fixsubst`, which alone creates SIGSEGVs.
+- **#3** is wider than stated: projections in any instantiated generic signature fail.
+- **#5, `cyclecut`, is unsound**: it accepts an ambiguous program. Do not land it.
+
+Recommendation: land `occurs` and `fixsubst` together with a real equality procedure.
 
 ## Status after round 3 (2026-11-05)
 

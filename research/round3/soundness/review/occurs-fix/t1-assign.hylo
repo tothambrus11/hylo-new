@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Coercion S<?a> ~> ?a (assignment), then ?a := Void. Ill-typed: assigns S<Void> to a Void.
+struct S<T> { public memberwise init }
+fun mk<T>(x: T) -> S<T> { S<T>() }
+fun check<T>(x: T) {}
+public fun main() {
+  let f = fun[](a: inout _) { &a = mk(a); check<Void>(a) }
+}
