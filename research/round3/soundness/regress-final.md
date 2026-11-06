@@ -6,9 +6,9 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 
 | outcome | baseline | FIX | FULL |
 |---|---|---|---|
-| accept | 233 | 250 | 252 |
-| reject | 224 | 269 | 267 |
-| timeout | 42 | 1 | 1 |
+| accept | 233 | 246 | 248 |
+| reject | 223 | 273 | 271 |
+| timeout | 43 | 1 | 1 |
 | OOM | 0 | 0 | 0 |
 | crash | 21 | 0 | 0 |
 
@@ -108,6 +108,7 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 | review2/eq-unsound/absinst-1.hylo | accept | reject(1) | reject(1) | no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void' |
 | review2/eq-unsound/absleak-3.hylo | timeout | reject(1) | reject(1) | no coercion from '(T::P).X' to '(U::P).X' |
 | review2/eq-unsound/absleak-4.hylo | timeout | reject(1) | reject(1) | no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void' |
+| review2/eq-unsound/extwhere-2.hylo | timeout | reject(1) | reject(1) | no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<{B, B}>>) let -> |
 | review2/eq-unsound/nested-eq.hylo | timeout | reject(2) | reject(2) | expected 'is' |
 | review2/eq-unsound/pen-ref-3.hylo | reject(2) | accept | accept |  |
 | review2/eq-unsound/pend-1.hylo | timeout | reject(1) | reject(1) | no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yiel |
@@ -130,6 +131,7 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 | review2/ext-order/names/g2.hylo | reject(2) | accept | accept |  |
 | review2/ext-order/names/g4.hylo | reject(2) | accept | accept |  |
 | review2/ext-order/names/n01_alias_cycle.hylo | reject(2) | accept | accept |  |
+| review2/ext-order/names/n02_reverse_poison_noeffect.hylo | accept | reject(1) | reject(1) | circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affe |
 | review2/ext-order/names/n03_reverse_poison.hylo | accept | reject(3) | reject(3) | type 'Inner' has no static member 'Foo' |
 | review2/ext-order/names/n04_reverse_poison_min.hylo | accept | reject(3) | reject(3) | type 'Inner' has no static member 'Foo' |
 | review2/ext-order/names/n05_spurious_cycle_conformance.hylo | reject(2) | accept | accept |  |
@@ -137,7 +139,10 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 | review2/ext-order/names/n12_poison_via_summon_noearly.hylo | accept | reject(3) | reject(3) | type 'Inner' has no static member 'Foo' |
 | review2/ext-order/names/t01_ext_order.hylo | reject(2) | accept | accept |  |
 | review2/ext-order/names/t03_names_worse.hylo | accept | reject(3) | reject(3) | type 'B' has no static member 'V' |
+| review2/ext-order/names/verify-names-1/v1_noearly.hylo | accept | reject(1) | reject(1) | circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affe |
 | review2/ext-order/names/verify-names-1/v3_nouse.hylo | accept | reject(2) | reject(2) | type 'Inner' has no static member 'Foo' |
+| review2/ext-order/names/verify-names-1/v4_noC.hylo | accept | reject(1) | reject(1) | circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affe |
+| review2/ext-order/names/verify-names-1/v5_early_other.hylo | accept | reject(1) | reject(1) | circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affe |
 | review2/ext-order/names/verify-names-2/v06_member_of_ext_alias.hylo | reject(2) | accept | accept |  |
 | review2/ext-order/names/verify-names-2/v08_two_aliases.hylo | reject(2) | accept | accept |  |
 | review2/ext-order/pc1_selfapply_nouse.hylo | accept | reject(1) | reject(1) | circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affe |
@@ -168,16 +173,17 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 
 ## FIX/FULL runs over 2 s
 
-- review2/perf/div-eq-b3-0.hylo FIX: 3387 ms
-- review2/perf/div-eq-b3-1.hylo FIX: 3253 ms
-- review2/perf/div-eq-ovl-b3-0.hylo FIX: 3281 ms
-- review2/perf/div-eq-ovl-b3-1.hylo FIX: 3385 ms
-- review2/perf/div-trunc-b3.hylo FIX: 3392 ms
-- review2/perf/div-trunc-b3.hylo FULL: 5980 ms
-- review2/perf/div-trunc-b4.hylo FIX: 5739 ms
-- review2/perf/div-trunc-b4.hylo FULL: 5241 ms
-- review2/perf/occurs-dag-16.hylo FIX: 3032 ms
-- review2/perf/occurs-dag-18.hylo FIX: 11927 ms
-- review2/perf/ovl-ret-8.hylo FIX: 2462 ms
-- review2/perf/ovl-ret-9.hylo FIX: 10380 ms
-- review2/perf/ovl-ret-9.hylo FULL: 8960 ms
+- review2/perf/div-eq-b3-0.hylo FIX: 3329 ms
+- review2/perf/div-eq-b3-1.hylo FIX: 3361 ms
+- review2/perf/div-eq-ovl-b3-0.hylo FIX: 3291 ms
+- review2/perf/div-eq-ovl-b3-1.hylo FIX: 3556 ms
+- review2/perf/div-trunc-b3.hylo FIX: 3575 ms
+- review2/perf/div-trunc-b3.hylo FULL: 6105 ms
+- review2/perf/div-trunc-b4.hylo FIX: 5770 ms
+- review2/perf/div-trunc-b4.hylo FULL: 4893 ms
+- review2/perf/occurs-dag-16.hylo FIX: 3090 ms
+- review2/perf/occurs-dag-18.hylo FIX: 11555 ms
+- review2/perf/ovl-ret-8.hylo FIX: 2523 ms
+- review2/perf/ovl-ret-8.hylo FULL: 2095 ms
+- review2/perf/ovl-ret-9.hylo FIX: 10527 ms
+- review2/perf/ovl-ret-9.hylo FULL: 8667 ms

@@ -1426,3 +1426,135 @@
 {"file": "review2/perf/div-trunc-b3.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
 {"file": "review2/perf/div-trunc-b3.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 3575.08, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
 {"file": "review2/perf/div-trunc-b3.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 6104.92, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b4.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-trunc-b4.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 5770.4, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b4.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 4892.52, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d4.hylo", "config": "base", "rc": 0, "d": 1, "ms": 58.08, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 44.02, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 9.74, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d5.hylo", "config": "base", "rc": 0, "d": 1, "ms": 50.8, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d5.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 77.01, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b3-d5.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 8.83, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b4-d4.hylo", "config": "base", "rc": 0, "d": 1, "ms": 86.21, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b4-d4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 80.58, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-valid-b4-d4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 17.55, "errors": ["no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/extchain-16.hylo", "config": "base", "rc": 0, "d": 15, "ms": 62.67, "errors": ["type 'X1' has no static member 'X2'", "type 'X1' has no static member 'X2'", "type 'X1' has no static member 'X2'"]}
+{"file": "review2/perf/extchain-16.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.9, "errors": []}
+{"file": "review2/perf/extchain-16.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.12, "errors": []}
+{"file": "review2/perf/extchain-24.hylo", "config": "base", "rc": 0, "d": 23, "ms": 85.7, "errors": ["type 'X1' has no static member 'X2'", "type 'X1' has no static member 'X2'", "type 'X1' has no static member 'X2'"]}
+{"file": "review2/perf/extchain-24.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.28, "errors": []}
+{"file": "review2/perf/extchain-24.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.32, "errors": []}
+{"file": "review2/perf/extchain-8.hylo", "config": "base", "rc": 0, "d": 7, "ms": 39.27, "errors": ["type 'X2' has no static member 'X3'", "type 'X1' has no static member 'X2'", "type 'X1' has no static member 'X2'"]}
+{"file": "review2/perf/extchain-8.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.64, "errors": []}
+{"file": "review2/perf/extchain-8.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.53, "errors": []}
+{"file": "review2/perf/extsame-16.hylo", "config": "base", "rc": 0, "d": 15, "ms": 66.0, "errors": ["type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/extsame-16.hylo", "config": "FIX", "rc": 0, "d": 16, "ms": 8.51, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/extsame-16.hylo", "config": "FULL", "rc": 0, "d": 16, "ms": 2.3, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/extsame-8.hylo", "config": "base", "rc": 0, "d": 7, "ms": 42.11, "errors": ["type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/extsame-8.hylo", "config": "FIX", "rc": 0, "d": 8, "ms": 7.17, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/extsame-8.hylo", "config": "FULL", "rc": 0, "d": 8, "ms": 1.31, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'Y' has no static member 'Y'", "type 'Y' has no static member 'Y'"]}
+{"file": "review2/perf/occurs-dag-12.hylo", "config": "base", "rc": 0, "d": 0, "ms": 213.9, "errors": []}
+{"file": "review2/perf/occurs-dag-12.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 193.93, "errors": []}
+{"file": "review2/perf/occurs-dag-12.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.24, "errors": []}
+{"file": "review2/perf/occurs-dag-16.hylo", "config": "base", "rc": 0, "d": 0, "ms": 3059.6, "errors": []}
+{"file": "review2/perf/occurs-dag-16.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 3090.39, "errors": []}
+{"file": "review2/perf/occurs-dag-16.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.49, "errors": []}
+{"file": "review2/perf/occurs-dag-18.hylo", "config": "base", "rc": 0, "d": 0, "ms": 11427.1, "errors": []}
+{"file": "review2/perf/occurs-dag-18.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11555.28, "errors": []}
+{"file": "review2/perf/occurs-dag-18.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.63, "errors": []}
+{"file": "review2/perf/occurs-dag-8.hylo", "config": "base", "rc": 0, "d": 0, "ms": 29.92, "errors": []}
+{"file": "review2/perf/occurs-dag-8.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 22.3, "errors": []}
+{"file": "review2/perf/occurs-dag-8.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.87, "errors": []}
+{"file": "review2/perf/occurs-only-18.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.14, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-18.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.39, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-18.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.74, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-22.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.84, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-22.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 13.9, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-22.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.14, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-24.hylo", "config": "base", "rc": 0, "d": 1, "ms": 21.01, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-24.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 13.19, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-only-24.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.97, "errors": ["no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/occurs-valid-20.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.63, "errors": []}
+{"file": "review2/perf/occurs-valid-20.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.86, "errors": []}
+{"file": "review2/perf/occurs-valid-20.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.32, "errors": []}
+{"file": "review2/perf/occurs-valid-22.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.37, "errors": []}
+{"file": "review2/perf/occurs-valid-22.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.23, "errors": []}
+{"file": "review2/perf/occurs-valid-22.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.4, "errors": []}
+{"file": "review2/perf/occurs-valid-24.hylo", "config": "base", "rc": 0, "d": 0, "ms": 21.92, "errors": []}
+{"file": "review2/perf/occurs-valid-24.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.51, "errors": []}
+{"file": "review2/perf/occurs-valid-24.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.6, "errors": []}
+{"file": "review2/perf/open-neg-0.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/open-neg-0.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.61, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-neg-0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.79, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-neg-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/open-neg-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.17, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-neg-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.5, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-neg-2.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/open-neg-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.41, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-neg-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.64, "errors": ["no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"]}
+{"file": "review2/perf/open-pos-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 33.7, "errors": []}
+{"file": "review2/perf/open-pos-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.92, "errors": []}
+{"file": "review2/perf/open-pos-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.49, "errors": []}
+{"file": "review2/perf/open-pos-chain-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 92.51, "errors": []}
+{"file": "review2/perf/open-pos-chain-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.17, "errors": []}
+{"file": "review2/perf/open-pos-chain-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.5, "errors": []}
+{"file": "review2/perf/open-pos-chain-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 390.81, "errors": []}
+{"file": "review2/perf/open-pos-chain-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.86, "errors": []}
+{"file": "review2/perf/open-pos-chain-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.71, "errors": []}
+{"file": "review2/perf/open-pos-chain-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 509.83, "errors": []}
+{"file": "review2/perf/open-pos-chain-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.8, "errors": []}
+{"file": "review2/perf/open-pos-chain-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.72, "errors": []}
+{"file": "review2/perf/open-wide-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 41.32, "errors": []}
+{"file": "review2/perf/open-wide-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.61, "errors": []}
+{"file": "review2/perf/open-wide-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.45, "errors": []}
+{"file": "review2/perf/open-wide-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 119.74, "errors": []}
+{"file": "review2/perf/open-wide-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.16, "errors": []}
+{"file": "review2/perf/open-wide-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.86, "errors": []}
+{"file": "review2/perf/open-wide-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 3999.51, "errors": []}
+{"file": "review2/perf/open-wide-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 39.66, "errors": []}
+{"file": "review2/perf/open-wide-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 14.55, "errors": []}
+{"file": "review2/perf/open-wide-4.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/open-wide-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 517.41, "errors": []}
+{"file": "review2/perf/open-wide-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 209.34, "errors": []}
+{"file": "review2/perf/ovl-ret-12.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/ovl-ret-12.hylo", "config": "FIX", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/ovl-ret-12.hylo", "config": "FULL", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/ovl-ret-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 41.73, "errors": []}
+{"file": "review2/perf/ovl-ret-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 24.51, "errors": []}
+{"file": "review2/perf/ovl-ret-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8.92, "errors": []}
+{"file": "review2/perf/ovl-ret-8.hylo", "config": "base", "rc": 0, "d": 0, "ms": 2519.06, "errors": []}
+{"file": "review2/perf/ovl-ret-8.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 2522.97, "errors": []}
+{"file": "review2/perf/ovl-ret-8.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2095.46, "errors": []}
+{"file": "review2/perf/ovl-ret-9.hylo", "config": "base", "rc": 0, "d": 0, "ms": 10599.58, "errors": []}
+{"file": "review2/perf/ovl-ret-9.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10527.1, "errors": []}
+{"file": "review2/perf/ovl-ret-9.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8666.77, "errors": []}
+{"file": "review2/perf/pending-var-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 107.31, "errors": []}
+{"file": "review2/perf/pending-var-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 18.41, "errors": []}
+{"file": "review2/perf/pending-var-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8.86, "errors": []}
+{"file": "review2/perf/pending-var-3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 4398.88, "errors": ["no coercion from 'P<T0> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/pending-var-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 19.89, "errors": []}
+{"file": "review2/perf/pending-var-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 11.04, "errors": []}
+{"file": "review2/perf/pending-var-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 2440.68, "errors": []}
+{"file": "review2/perf/pending-var-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 21.84, "errors": []}
+{"file": "review2/perf/pending-var-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 11.41, "errors": []}
+{"file": "review2/perf/pending-var2-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 2745.07, "errors": []}
+{"file": "review2/perf/pending-var2-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.77, "errors": []}
+{"file": "review2/perf/pending-var2-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.76, "errors": []}
+{"file": "review2/perf/pending-var2-5.hylo", "config": "base", "rc": 0, "d": 0, "ms": 3978.18, "errors": []}
+{"file": "review2/perf/pending-var2-5.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.7, "errors": []}
+{"file": "review2/perf/pending-var2-5.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.37, "errors": []}
+{"file": "review2/perf/poison-a-3.hylo", "config": "base", "rc": 0, "d": 3, "ms": 353.86, "errors": ["declaration is not allowed here", "type 'Z1' has no static member 'infix=='", "type 'Z1' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-a-3.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 36.34, "errors": ["declaration is not allowed here", "type 'Z1' has no static member 'infix=='", "type 'Z1' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-a-3.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 24.26, "errors": ["declaration is not allowed here", "type 'Z1' has no static member 'infix=='", "type 'Z1' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-b-3.hylo", "config": "base", "rc": 0, "d": 2, "ms": 394.57, "errors": ["declaration is not allowed here", "type '(Self::R).X' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-b-3.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 29.67, "errors": ["declaration is not allowed here", "type '(Self::R).X' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-b-3.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 24.25, "errors": ["declaration is not allowed here", "type '(Self::R).X' has no static member 'infix=='"]}
+{"file": "review2/perf/poison-trans-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 43.07, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.79, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.5, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 273.06, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.43, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.44, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-4.hylo", "config": "base", "rc": 0, "d": 1, "ms": 326.77, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.14, "errors": ["expected 'is'"]}
+{"file": "review2/perf/poison-trans-4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.47, "errors": ["expected 'is'"]}

@@ -35,7 +35,7 @@ Every confirmed finding is fixed. Each fix is behind a flag, and each flag has a
 
 **Results** (binary `eq7-3bbd2b60cb89`).
 - **Oracle.** FIX and FULL are 216/216 identical to the baseline on the 192 tests and 24 workloads (`soundness/oracle-final-config.txt`).
-- **All 520 review programs** of both reviews (`soundness/regress-final.md`): REGRESS_SUMMARY
+- **All 520 review programs** of both reviews (`soundness/regress-final.md`): baseline 233 accepted / 223 rejected / 43 timeouts / 21 crashes; FIX 246 / 273 / 1 / 0; FULL 248 / 271 / 1 / 0. The one timeout is `perf/ovl-ret-12` (return-type overloads; the baseline times out too). 45 programs the baseline accepts are rejected. Each one was checked: 41 are bogus equality derivations, circular extensions or givens, and ambiguities. The other 4 are the mutual-extendee-cycle pattern of the limitation below (`names/n02`, `v1`, `v4_noC`, `v5`). FIX and FULL disagree only on the four `div-eq*-b3` programs, where FIX reaches the budget and FULL's `absmodel` decides.
 - **Speed** (`soundness/bench-final.md`):
   - stdlib: 735 → 444 ms (FIX) → 191 ms (FULL);
   - members-big: 15.3 s → 486 ms;
