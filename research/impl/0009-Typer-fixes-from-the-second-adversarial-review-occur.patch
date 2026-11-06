@@ -1,0 +1,773 @@
+From 60a94ec93ee3c1e6f3e4e7030c829d74d8cb7f02 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 6 Nov 2026 15:23:07 +0000
+Subject: [PATCH 09/11] Typer: fixes from the second adversarial review (occurs
+ root, arrowenv, eqsolve CC/bans/costs, eqmgu, extorder deferred check,
+ givencheck)
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 466 +++++++++++++++++----
+ Sources/FrontEnd/Typer/TyperCounters.swift |  15 +
+ Sources/FrontEnd/Types/Arrow.swift         |   6 +-
+ Sources/FrontEnd/Types/TypeStore.swift     |  48 ++-
+ 4 files changed, 429 insertions(+), 106 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 47a4247..73e5ade 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -20,6 +20,26 @@ public struct Typer {
+   /// Fix (`extorder`): the extensions for which a circular definition has been reported.
+   private var reportedCircularExtensions: Set<ExtensionDeclaration.ID> = []
+ 
++  /// For each extension whose extendee was being computed when a lookup skipped it, the types in
++  /// which the lookups were made, their scopes, and the names looked up (`extorder`).
++  private var pendingExtensionChecks:
++    [ExtensionDeclaration.ID: [(AnyTypeIdentity, ScopeIdentity, Name)]] = [:]
++
++  /// The where-clause usings being introduced by `initializeContext`, which are on the stack
++  /// because they are not visible yet rather than because their types are being computed.
++  private var contextUsingsOnStack: Set<DeclarationIdentity> = []
++
++  /// The givens skipped by implicit resolution because their types were being computed, with the
++  /// declaration whose type was being computed, the queried type and the scope of use
++  /// (`givencheck`).
++  private var pendingGivenChecks: [(Given, DeclarationIdentity, AnyTypeIdentity, ScopeIdentity)] = []
++
++  /// `true` iff `pendingGivenChecks` are being processed.
++  private var checkingPendingGivens = false
++
++  /// The declarations of givens reported as circular.
++  private var reportedCircularGivens: Set<DeclarationIdentity> = []
++
+   /// Fix (`cyclecut`): the number of cyclic references cut so far.
+   private var cycleCuts: Int = 0
+ 
+@@ -57,6 +77,7 @@ public struct Typer {
+       program.initializeStandardLibraryCaches()
+     }
+     for d in program[module].topLevelDeclarations { check(d) }
++    if TyperExperiments.givencheck { checkPendingGivens() }
+   }
+ 
+   /// Returns the resources held by this instance.
+@@ -1828,14 +1849,18 @@ public struct Typer {
+ 
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+-      defer { declarationsOnStack.remove(.init(d)) }
+-      let cuts = cycleCuts
++      let u: AnyTypeIdentity
++      do {
++        defer { declarationsOnStack.remove(.init(d)) }
++        let cuts = cycleCuts
+ 
+-      initializeContext(program[d].contextParameters)
+-      let t = ignoring(d, { (me) in me.evaluateTypeAscription(me.program[d].extendee) })
+-      let u = introduce(program[d].contextParameters, into: t)
++        initializeContext(program[d].contextParameters)
++        let t = ignoring(d, { (me) in me.evaluateTypeAscription(me.program[d].extendee) })
++        u = introduce(program[d].contextParameters, into: t)
+ 
+-      if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
++        if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
++      }
++      if TyperExperiments.extorder { checkPendingLookups(skipping: d, extendee: u) }
+       return u
+     }
+ 
+@@ -1860,6 +1885,8 @@ public struct Typer {
+     // two parameters `p` and `q` such that `q` occurs after `p`, resolution can't "see" `q` while
+     // it is computing the type of `p`.
+     declarationsOnStack.formUnion(parameters.usings)
++    let introduced = parameters.usings.filter({ (p) in contextUsingsOnStack.insert(p).inserted })
++    defer { for p in introduced { contextUsingsOnStack.remove(p) } }
+ 
+     for p in parameters.usings {
+       if let d = program.cast(p, to: BindingDeclaration.self) {
+@@ -1870,6 +1897,7 @@ public struct Typer {
+ 
+       let q = declarationsOnStack.remove(p)
+       assert(q != nil)
++      if introduced.contains(p) { contextUsingsOnStack.remove(p) }
+     }
+   }
+ 
+@@ -3732,21 +3760,32 @@ public struct Typer {
+         }
+       }
+     }
++    if TyperExperiments.givencheck {
++      if !declarationsOnStack.isEmpty { recordSkippedGivens(t, in: scopeOfUse, where: environment) }
++      if !pendingGivenChecks.isEmpty { checkPendingGivens() }
++    }
+     if TyperExperiments.eqsolve {
+       switch solveEquality(t, in: scopeOfUse, where: environment) {
+       case .notApplicable:
+         break
+       case .refuted:
+         return []
+-      case .proved(let w):
++      case .proved(let w, let cost):
+         let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
+         return [
+           formThread(
+-            matching: w, to: u, in: environment, then: continuation, penalties: penalties,
++            matching: w, to: u, in: environment, then: continuation,
++            penalties: penalties + (TyperExperiments.eqsolveCost ? cost : 0),
+             ancestors: ancestors)
+         ]
+       }
+     }
++    if TyperExperiments.eqmgu, let r = mostGeneralEqualityThread(
++      t, in: scopeOfUse, where: environment, then: continuation, penalties: penalties,
++      ancestors: ancestors)
++    {
++      return r
++    }
+     if TyperExperiments.eqrefute && equalityIsRefuted(t, in: scopeOfUse, where: environment) {
+       TyperCounters.bump("eqrefute.refuted")
+       return []
+@@ -3857,11 +3896,15 @@ public struct Typer {
+     // The witness has a simple type; attempt a match.
+     var substitutions = SubstitutionTable()
+     var coercions: [(AnyTypeIdentity, AnyTypeIdentity)] = []
+-    _ = program.types.unifiable(a, b, extending: &substitutions) { (x, y) in
++    let unified = program.types.unifiable(a, b, extending: &substitutions) { (x, y) in
+       coercions.append((x, y))
+       return true
+     }
+ 
++    // Fix (`occurs`): an occurs-check failure at the root is reported as a plain mismatch with
++    // no coercion recorded; it must not be taken as a successful match.
++    if TyperExperiments.occurs && !unified && coercions.isEmpty { return .next([]) }
++
+     // No coercion required?
+     if coercions.isEmpty {
+       let s = thread.environment.substitutions.union(substitutions)
+@@ -4871,7 +4914,7 @@ public struct Typer {
+         // `e` may affect since it declares `n`. That is a circular definition in any order of
+         // evaluation; report it rather than silently ignoring `e`.
+         if TyperExperiments.extorder && declaresName {
+-          reportCircularExtension(e, lookingUp: n)
++          pendingExtensionChecks[e, default: []].append((q, scopeOfUse, n))
+         }
+         // Skipping an extension whose extendee was already being computed when the current
+         // speculative evaluation started makes this lookup depend on the order of evaluation.
+@@ -5667,8 +5710,9 @@ public struct Typer {
+     /// The equality does not hold; implicit resolution must fail.
+     case refuted
+ 
+-    /// The equality holds, as witnessed by the given proof.
+-    case proved(WitnessExpression)
++    /// The equality holds, as witnessed by the given proof, whose derivation by search would
++    /// have been given the specified penalty.
++    case proved(WitnessExpression, cost: Int)
+ 
+   }
+ 
+@@ -5685,6 +5729,20 @@ public struct Typer {
+     /// `true` iff `proof` proves `target ~ source`.
+     let reversed: Bool
+ 
++    /// The penalty search adds when it uses this edge.
++    let cost: Int
++
++  }
++
++  /// The signature of a compound node in the congruence closure of `solveEquality`.
++  private struct EqualitySignature: Hashable {
++
++    /// The constructor of the node and the attributes of the node that are not children.
++    let shape: String
++
++    /// The representatives of the classes of the node's children.
++    let children: [Int]
++
+   }
+ 
+   /// Decides the equality `t` with a congruence closure of the equalities visible from
+@@ -5705,22 +5763,40 @@ public struct Typer {
+     if goal[.hasVariable] || goal[.hasError] { return .notApplicable }
+     guard let e = program.types.cast(goal, to: EqualityWitness.self) else { return .notApplicable }
+ 
+-    // Collect the ground equalities, giving up if a given may derive other equalities.
+-    var facts: [(AnyTypeIdentity, AnyTypeIdentity, WitnessExpression)] = []
+-    for g in chain(environment.givens.reversed(), givens(visibleFrom: scopeOfUse).joined()) {
+-      let w = expression(referringTo: g)
+-      if w.type[.hasError] { continue }
+-      let (c, h) = program.types.contextAndHead(w.type)
+-      if c.parameters.contains(where: { (p) in p.erased == h }) { return .notApplicable }
+-      guard let f = program.types.cast(h, to: EqualityWitness.self) else { continue }
+-      if !c.parameters.isEmpty || !c.usings.isEmpty || h[.hasVariable] { return .notApplicable }
+-      facts.append((program.types[f].lhs, program.types[f].rhs, w))
++    // Collect the ground equalities, giving up if a given may derive other equalities. The cost
++    // of a fact is the penalty search adds when it uses the fact (the offset of its group).
++    var facts: [(AnyTypeIdentity, AnyTypeIdentity, WitnessExpression, Int)] = []
++    var groups: [[Given]] = environment.givens.reversed().map({ (g) in [g] })
++    groups.append(contentsOf: givens(visibleFrom: scopeOfUse))
++    let builtinCost = groups.count
++    for (offset, gs) in groups.enumerated() {
++      for g in gs {
++        let w = expression(referringTo: g)
++        if w.type[.hasError] { continue }
++        let (c, h) = program.types.contextAndHead(w.type)
++        if c.parameters.contains(where: { (p) in p.erased == h }) { return .notApplicable }
++        guard let f = program.types.cast(h, to: EqualityWitness.self) else { continue }
++        if !c.parameters.isEmpty || !c.usings.isEmpty || h[.hasVariable] { return .notApplicable }
++        facts.append((program.types[f].lhs, program.types[f].rhs, w, offset))
++      }
+     }
+ 
+-    // Build the term graph.
++    // Reflexive goals are proved without building the closure.
++    let lhs = program.types.dealiased(program.types[e].lhs)
++    let rhs = program.types.dealiased(program.types[e].rhs)
++    if lhs == rhs {
++      TyperCounters.bump("eqsolve.proved")
++      return .proved(reflexivityWitness(lhs), cost: builtinCost)
++    }
++
++    // Build the term graph. Each node is a dealiased type; compound nodes have a shape and
++    // children. Concrete associated types are atoms; abstract ones are handled separately.
+     var nodes: [AnyTypeIdentity] = []
+     var index: [AnyTypeIdentity: Int] = [:]
+     var children: [[Int]] = []
++    var shapes: [String?] = []
++    var abstractProjections: [Int] = []
++    var concreteProjections: [AssociatedTypeDeclaration.ID: [Int]] = [:]
+     func node(_ x: AnyTypeIdentity) -> Int {
+       let y = program.types.dealiased(x)
+       if let i = index[y] { return i }
+@@ -5728,91 +5804,138 @@ public struct Typer {
+       nodes.append(y)
+       index[y] = i
+       children.append([])
++      shapes.append(nil)
+       var cs: [Int] = []
++      var shape: String? = nil
+       switch program.types[y] {
+       case let u as TypeApplication:
+         cs.append(node(u.abstraction))
+         for a in u.arguments.values { cs.append(node(a)) }
++        shape = "app"
+       case let u as Tuple:
+-        if case .cons(let h, let r) = u { cs = [node(h), node(r)] }
++        if case .cons(let h, let r) = u { cs = [node(h), node(r)]; shape = "cons" }
+       case let u as Metatype:
+-        cs = [node(u.inhabitant)]
++        cs = [node(u.inhabitant)]; shape = "meta"
+       case let u as EqualityWitness:
+-        cs = [node(u.lhs), node(u.rhs)]
++        cs = [node(u.lhs), node(u.rhs)]; shape = "eq"
+       case let u as Arrow:
+         cs = [node(u.environment)] + u.inputs.map({ (p) in node(p.type) }) + [node(u.output)]
++        shape = "arrow \(u.style) \(u.effect) " + u.inputs.map({ (p) in "\(p.label ?? "_"):\(p.access)" }).joined(separator: ",")
+       case let u as RemoteType:
+-        cs = [node(u.projectee)]
++        cs = [node(u.projectee)]; shape = "remote \(u.access)"
+       case let u as FunctionPointer:
+-        cs = u.inputs.map({ (x) in node(x) }) + [node(u.output)]
++        cs = u.inputs.map({ (x) in node(x) }) + [node(u.output)]; shape = "fp"
+       case let u as AssociatedType:
+         cs = [node(u.qualification.type)]
++        if u.qualification.value == .abstract {
++          shape = "abstract \(u.declaration)"
++          abstractProjections.append(i)
++        } else {
++          concreteProjections[u.declaration, default: []].append(i)
++        }
+       default:
+         break
+       }
+       children[i] = cs
++      shapes[i] = shape
+       return i
+     }
+-    let a = node(program.types[e].lhs)
+-    let b = node(program.types[e].rhs)
+-    var edges: [[EqualityEdge]] = []
++    let a = node(lhs)
++    let b = node(rhs)
++    let factNodes = facts.map({ (l, r, w, c) in (node(l), node(r), w, c) })
++
++    // Close under congruence, with a signature table and use lists (Nelson-Oppen). An abstract
++    // projection `(Self::P).X` is merged with the concrete projections `(T::w).X` whose
++    // qualifications are equal to its own only if they all fall in one class: otherwise it would
++    // equate projections through distinct witnesses, which `associated-type-inequality` forbids.
++    // A projection that has to be separated is banned and the closure is recomputed without it.
++    var banned = Set<Int>()
+     var parent: [Int] = []
+-    func grow() {
+-      while edges.count < nodes.count { edges.append([]); parent.append(parent.count) }
+-    }
++    var uses: [[Int]] = []
++    var edges: [[EqualityEdge]] = []
+     func find(_ x: Int) -> Int {
+       var x = x
+       while parent[x] != x { parent[x] = parent[parent[x]]; x = parent[x] }
+       return x
+     }
+-    for (l, r, w) in facts {
+-      let i = node(l)
+-      let j = node(r)
+-      grow()
+-      edges[i].append(.init(target: j, proof: w, reversed: false))
+-      edges[j].append(.init(target: i, proof: w, reversed: true))
+-      let (x, y) = (find(i), find(j))
+-      if x != y { parent[x] = y }
+-    }
+-    grow()
+-
+-    // Close under congruence.
+-    func congruent(_ i: Int, _ j: Int) -> Bool {
+-      let x = program.types[nodes[i]]
+-      let y = program.types[nodes[j]]
+-      if let u = x as? AssociatedType, let v = y as? AssociatedType {
+-        return (u.declaration == v.declaration)
+-          && ((u.qualification.value == .abstract) || (v.qualification.value == .abstract))
+-          && (find(children[i][0]) == find(children[j][0]))
+-      }
+-      if type(of: x) != type(of: y) || children[i].count != children[j].count { return false }
+-      if children[i].isEmpty { return false }
+-      switch (x, y) {
+-      case (let u as TypeApplication, let v as TypeApplication):
+-        if u.arguments.count != v.arguments.count { return false }
+-      case (let u as Arrow, let v as Arrow):
+-        if u.style != v.style || u.effect != v.effect { return false }
+-        if !u.inputs.elementsEqual(v.inputs, by: { (p, q) in p.label == q.label && p.access == q.access }) {
+-          return false
++    while true {
++      parent = Array(nodes.indices)
++      uses = Array(repeating: [], count: nodes.count)
++      edges = Array(repeating: [], count: nodes.count)
++      var table: [EqualitySignature: Int] = [:]
++      var pending: [(Int, Int)] = []
++
++      func signature(_ p: Int) -> EqualitySignature {
++        .init(shape: shapes[p]!, children: children[p].map(find))
++      }
++      func register(_ p: Int) {
++        let k = signature(p)
++        if let q = table[k] {
++          if find(q) != find(p) { pending.append((p, q)) }
++        } else {
++          table[k] = p
+         }
+-      case (let u as RemoteType, let v as RemoteType):
+-        if u.access != v.access { return false }
+-      default:
+-        break
+       }
+-      return zip(children[i], children[j]).allSatisfy({ (p, q) in find(p) == find(q) })
+-    }
+-    var changed = true
+-    while changed {
+-      changed = false
+-      for i in nodes.indices {
+-        for j in nodes.indices where j > i && find(i) != find(j) && congruent(i, j) {
+-          edges[i].append(.init(target: j, proof: nil, reversed: false))
+-          edges[j].append(.init(target: i, proof: nil, reversed: false))
+-          parent[find(i)] = find(j)
+-          changed = true
++      func union(_ x: Int, _ y: Int) {
++        var (i, j) = (find(x), find(y))
++        if i == j { return }
++        if uses[i].count > uses[j].count { swap(&i, &j) }
++        parent[i] = j
++        let moved = uses[i]
++        uses[i] = []
++        uses[j].append(contentsOf: moved)
++        for p in moved { register(p) }
++      }
++      func drain() {
++        while let (p, q) = pending.popLast() {
++          if find(p) == find(q) { continue }
++          edges[p].append(.init(target: q, proof: nil, reversed: false, cost: builtinCost))
++          edges[q].append(.init(target: p, proof: nil, reversed: false, cost: builtinCost))
++          union(p, q)
++        }
++      }
++
++      for p in nodes.indices where shapes[p] != nil {
++        for c in Set(children[p]) { uses[c].append(p) }
++      }
++      for p in nodes.indices where shapes[p] != nil { register(p) }
++      drain()
++      for (i, j, w, c) in factNodes {
++        edges[i].append(.init(target: j, proof: w, reversed: false, cost: c + builtinCost))
++        edges[j].append(.init(target: i, proof: w, reversed: true, cost: c + 2 * builtinCost))
++        union(i, j)
++        drain()
++      }
++
++      // Merge abstract projections with their unique concrete counterparts.
++      var allowed = Set<Int>()
++      var conflicts = Set<Int>()
++      var progress = true
++      while progress && conflicts.isEmpty {
++        progress = false
++        for x in abstractProjections where !banned.contains(x) {
++          let d = (program.types[nodes[x]] as! AssociatedType).declaration
++          let q = find(children[x][0])
++          let candidates = (concreteProjections[d] ?? []).filter({ (n) in find(children[n][0]) == q })
++          let classes = Set(candidates.map(find))
++          if allowed.contains(x) {
++            if classes.count > 1 { conflicts.insert(x) }
++            else if let n = candidates.first, find(n) != find(x) {
++              pending.append((x, n)); progress = true
++            }
++          } else if classes.count > 1 {
++            conflicts.insert(x)
++          } else if let n = candidates.first {
++            allowed.insert(x)
++            if find(n) != find(x) { pending.append((x, n)) }
++            progress = true
++          }
+         }
++        drain()
+       }
++      if conflicts.isEmpty { break }
++      TyperCounters.bump("eqsolve.banned", by: conflicts.count)
++      banned.formUnion(conflicts)
+     }
+ 
+     if find(a) != find(b) {
+@@ -5820,18 +5943,46 @@ public struct Typer {
+       return .refuted
+     }
+ 
+-    // Reconstruct a proof from a shortest path in the graph.
+-    var previous: [Int: (Int, EqualityEdge)] = [a: (a, .init(target: a, proof: nil, reversed: false))]
+-    var frontier = [a]
+-    while !frontier.isEmpty && previous[b] == nil {
+-      var next: [Int] = []
+-      for x in frontier {
+-        for d in edges[x] where previous[d.target] == nil {
++    // Reconstruct a proof from a cheapest path (Dijkstra with a binary heap).
++    var distance = Array(repeating: Int.max, count: nodes.count)
++    var previous: [Int: (Int, EqualityEdge)] = [:]
++    var heap: [(Int, Int)] = [(0, a)]
++    distance[a] = 0
++    func less(_ l: (Int, Int), _ r: (Int, Int)) -> Bool { (l.0, l.1) < (r.0, r.1) }
++    func push(_ e: (Int, Int)) {
++      heap.append(e)
++      var i = heap.count - 1
++      while i > 0, less(heap[i], heap[(i - 1) / 2]) { heap.swapAt(i, (i - 1) / 2); i = (i - 1) / 2 }
++    }
++    func pop() -> (Int, Int) {
++      let top = heap[0]
++      let last = heap.removeLast()
++      if !heap.isEmpty {
++        heap[0] = last
++        var i = 0
++        while true {
++          let (l, r) = (2 * i + 1, 2 * i + 2)
++          var m = i
++          if l < heap.count && less(heap[l], heap[m]) { m = l }
++          if r < heap.count && less(heap[r], heap[m]) { m = r }
++          if m == i { break }
++          heap.swapAt(i, m); i = m
++        }
++      }
++      return top
++    }
++    while !heap.isEmpty {
++      let (dx, x) = pop()
++      if dx > distance[x] { continue }
++      if x == b { break }
++      for d in edges[x] {
++        let n = dx + d.cost
++        if n < distance[d.target] {
++          distance[d.target] = n
+           previous[d.target] = (x, d)
+-          next.append(d.target)
++          push((n, d.target))
+         }
+       }
+-      frontier = next
+     }
+     var path: [(Int, Int, EqualityEdge)] = []
+     var x = b
+@@ -5842,13 +5993,47 @@ public struct Typer {
+     }
+     path.reverse()
+ 
+-    var proof = reflexivityWitness(nodes[a])
++    var proof: WitnessExpression? = nil
+     for (p, q, d) in path {
+       let step = equalityStep(from: nodes[p], to: nodes[q], via: d)
+-      proof = transitivityWitness(nodes[a], nodes[p], nodes[q], proof, step)
++      proof = proof.map({ (w) in transitivityWitness(nodes[a], nodes[p], nodes[q], w, step) }) ?? step
+     }
+     TyperCounters.bump("eqsolve.proved")
+-    return .proved(proof)
++    return .proved(proof!, cost: distance[b] - builtinCost)
++  }
++
++  /// Returns the single resolution thread solving an open equality `?v ~ x` or `x ~ ?v`, where
++  /// `?v` is a unification variable that does not occur in `x`, by reflexivity, or `nil` if `t`
++  /// does not have that form.
++  ///
++  /// Binding `?v` to `x` is the most general solution: any other solution assigns `?v` to a type
++  /// equal to `x`, and the goals that remain are closed under equality (coercions transport them
++  /// along proved equalities), so the other solutions add nothing but ambiguity.
++  private mutating func mostGeneralEqualityThread(
++    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment,
++    then continuation: [ResolutionThread.ContinuationItem],
++    penalties: Int, ancestors: [AnyTypeIdentity]
++  ) -> [ResolutionThread]? {
++    let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++    guard u[.hasVariable], let e = program.types.cast(u, to: EqualityWitness.self) else {
++      return nil
++    }
++    let (l, r) = (program.types[e].lhs, program.types[e].rhs)
++    let s = environment.substitutions
++    if l.isVariable && !program.types.occurs(l, in: r, under: s) {
++    } else if r.isVariable && !program.types.occurs(r, in: l, under: s) {
++    } else {
++      return nil
++    }
++    TyperCounters.bump("eqmgu.solved")
++    let builtinCost = environment.givens.count + givens(visibleFrom: scopeOfUse).count
++    let w = expression(referringTo: .coercion(.reflexivity))
++    return [
++      formThread(
++        matching: w, to: u, in: environment, then: continuation,
++        penalties: penalties + builtinCost, ancestors: ancestors)
++    ]
+   }
+ 
+   /// Returns a proof of `x ~ y` from an edge of the equality graph.
+@@ -5856,7 +6041,7 @@ public struct Typer {
+     from x: AnyTypeIdentity, to y: AnyTypeIdentity, via d: EqualityEdge
+   ) -> WitnessExpression {
+     if let w = d.proof {
+-      return d.reversed ? symmetryWitness(y, x, w) : w
++      return d.reversed ? symmetryWitness(x, y, w) : w
+     } else {
+       // A congruence: coerce `x ~ x` to `x ~ y`, assuming the equalities of the parts, as `match`
+       // does when it assumes equalities between mismatching parts.
+@@ -5978,6 +6163,105 @@ public struct Typer {
+     return find(a) != find(b)
+   }
+ 
++  /// Returns `true` if a value of type `t` (the type of a given or the extendee of an extension,
++  /// whose parameters are opened and whose context is ignored) may match `q` in `scopeOfUse`.
++  ///
++  /// The test over-approximates the match judgement of implicit resolution: the heads must unify
++  /// up to coercions that `canDeriveCoercions` does not rule out.
++  private mutating func mayMatch(
++    _ t: AnyTypeIdentity, _ q: AnyTypeIdentity, in scopeOfUse: ScopeIdentity
++  ) -> Bool {
++    if t[.hasError] || q[.hasError] { return false }
++    var x = t
++    while let u = program.types[x] as? UniversalType {
++      let a = TypeArguments(mapping: u.parameters, to: { _ in fresh().erased })
++      x = program.types.substitute(a, in: u.head)
++    }
++    let h = program.types.contextAndHead(x).head
++    let k = program.types.contextAndHead(q).head
++    var s = SubstitutionTable()
++    var coercions: [(AnyTypeIdentity, AnyTypeIdentity)] = []
++    let unified = program.types.unifiable(h, k, extending: &s) { (a, b) in
++      coercions.append((a, b))
++      return true
++    }
++    if !unified && coercions.isEmpty { return false }
++    for (a, b) in coercions {
++      let (a1, b1) = (
++        program.types.reify(a, applying: s, withVariables: .kept),
++        program.types.reify(b, applying: s, withVariables: .kept))
++      if !canDeriveCoercions(a1, b1, in: scopeOfUse, where: .empty) { return false }
++    }
++    return true
++  }
++
++  /// Reports the lookups that skipped `e` while its extendee was being computed and that `e` may
++  /// have affected, now that its extendee is known to be `extendee` (`extorder`).
++  ///
++  /// The verdict only depends on memoized extendees, so it is independent of the order in which
++  /// declarations are checked: if `e` cannot apply to the type in which a lookup was made, the
++  /// lookup was exact; otherwise its result depends on itself.
++  private mutating func checkPendingLookups(
++    skipping e: ExtensionDeclaration.ID, extendee: AnyTypeIdentity
++  ) {
++    guard let ls = pendingExtensionChecks.removeValue(forKey: e) else { return }
++    for (q, s, n) in ls where mayMatch(extendee, q, in: s) {
++      reportCircularExtension(e, lookingUp: n)
++      return
++    }
++  }
++
++  /// Records the givens that implicit resolution of `t` in `scopeOfUse` skips because the types
++  /// of their declarations are being computed (`givencheck`).
++  private mutating func recordSkippedGivens(
++    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment
++  ) {
++    func skipped(_ g: Given) -> DeclarationIdentity? {
++      switch g {
++      case .user(let d):
++        return declarationsOnStack.contains(d) && !contextUsingsOnStack.contains(d) ? d : nil
++      case .nested(_, let h):
++        return skipped(h)
++      default:
++        return nil
++      }
++    }
++    let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++    var gs: [Given] = []
++    for s in program.scopes(from: scopeOfUse) { gs.append(contentsOf: givens(lexicallyIn: s)) }
++    for f in program[scopeOfUse.module].sourceFileIdentities where f != scopeOfUse.file {
++      gs.append(contentsOf: givens(lexicallyIn: .init(file: f)))
++    }
++    for g in gs {
++      if let d = skipped(g) { pendingGivenChecks.append((g, d, u, scopeOfUse)) }
++    }
++  }
++
++  /// Checks the givens skipped by implicit resolution whose types are now known, reporting those
++  /// that would have been candidates for the resolution that skipped them (`givencheck`).
++  ///
++  /// Such a given has a type that depends on a resolution it may affect, so the program has no
++  /// reading independent of the order in which declarations are checked.
++  private mutating func checkPendingGivens() {
++    if checkingPendingGivens { return }
++    checkingPendingGivens = true
++    defer { checkingPendingGivens = false }
++    var remaining: [(Given, DeclarationIdentity, AnyTypeIdentity, ScopeIdentity)] = []
++    while let (g, d, q, s) = pendingGivenChecks.popLast() {
++      if declarationsOnStack.contains(d) { remaining.append((g, d, q, s)); continue }
++      if reportedCircularGivens.contains(d) { continue }
++      let w = expression(referringTo: g)
++      if mayMatch(w.type, q, in: s) {
++        reportedCircularGivens.insert(d)
++        TyperCounters.bump("givencheck.reported")
++        let m = "circular given: the type of this given depends on an implicit resolution of '\(program.show(q))' that it may satisfy"
++        report(.init(.error, m, at: program.spanForDiagnostic(about: d)))
++      }
++    }
++    pendingGivenChecks = remaining
++  }
++
+   /// Reports that the extendee of `e` depends on a lookup of `n`, which `e` may affect.
+   private mutating func reportCircularExtension(_ e: ExtensionDeclaration.ID, lookingUp n: Name) {
+     if !reportedCircularExtensions.insert(e).inserted { return }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index bac0976..d850a83 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -110,6 +110,21 @@ public enum TyperExperiments {
+   /// that depends on an extension whose extendee is being computed.
+   nonisolated(unsafe) public static var extorder: Bool = enabled.contains("extorder")
+ 
++  /// SEMANTIC FIX: the environment of an arrow contributes to its type properties.
++  /// Variant of `eqsolve`: proofs found by the decision procedure carry the penalty search would
++  /// have given them (on by default with `eqsolve`; `eqsolvefree` turns it off).
++  nonisolated(unsafe) public static var eqsolveCost: Bool = !enabled.contains("eqsolvefree")
++
++  nonisolated(unsafe) public static var arrowenv: Bool = enabled.contains("arrowenv")
++
++  /// SEMANTIC FIX: an open equality goal `?v ~ X` (?v not in X) is solved only by its most
++  /// general unifier `?v := X` (meant to be used with `eqsolve`).
++  nonisolated(unsafe) public static var eqmgu: Bool = enabled.contains("eqmgu")
++
++  /// SEMANTIC FIX: a given skipped because its type is being computed is checked afterwards; if
++  /// it would have been a candidate, the program is rejected (circular given).
++  nonisolated(unsafe) public static var givencheck: Bool = enabled.contains("givencheck")
++
+   /// Build the standard library's symbol table in a single pass over its syntax.
+   nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
+ 
+diff --git a/Sources/FrontEnd/Types/Arrow.swift b/Sources/FrontEnd/Types/Arrow.swift
+index 5dceb01..266aeb1 100644
+--- a/Sources/FrontEnd/Types/Arrow.swift
++++ b/Sources/FrontEnd/Types/Arrow.swift
+@@ -52,7 +52,11 @@ public struct Arrow: TypeTree {
+ 
+   /// Properties about `self`.
+   public var properties: TypeProperties {
+-    inputs.reduce(output.properties, { (a, i) in a.union(i.type.properties) })
++    // Fix (`arrowenv`): the environment is part of the type; leaving it out hides variables in
++    // it from `hasVariable` (the occurs check, reification, and the summon memo rely on it).
++    let o = TyperExperiments.arrowenv
++      ? output.properties.union(environment.properties) : output.properties
++    return inputs.reduce(o, { (a, i) in a.union(i.type.properties) })
+   }
+ 
+   /// The labels associated with each input.
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index fb0bac2..eca8b06 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1079,29 +1079,49 @@ public struct TypeStore: Sendable {
+   }
+ 
+   /// Returns `true` iff the type variable `v` occurs in `t` once `ss` is applied.
++  ///
++  /// Substitutions often form DAGs (a variable bound to a term mentioning other bound variables
++  /// several times), so terms already found free of `v` are remembered; the walk is linear in the
++  /// size of the DAG.
+   internal func occurs(
+     _ v: AnyTypeIdentity, in t: AnyTypeIdentity, under ss: SubstitutionTable
++  ) -> Bool {
++    var clean = Set<AnyTypeIdentity>()
++    return occurs(v, in: t, under: ss, clean: &clean)
++  }
++
++  private func occurs(
++    _ v: AnyTypeIdentity, in t: AnyTypeIdentity, under ss: SubstitutionTable,
++    clean: inout Set<AnyTypeIdentity>
+   ) -> Bool {
+     let u = ss[t]
+     if u.isVariable { return u == v }
+-    if !u[.hasVariable] { return false }
+-    let o: (AnyTypeIdentity) -> Bool = { (x) in self.occurs(v, in: x, under: ss) }
++    if !u[.hasVariable] || clean.contains(u) { return false }
++    var found = false
++    func o(_ x: AnyTypeIdentity) -> Bool {
++      if !found { found = occurs(v, in: x, under: ss, clean: &clean) }
++      return found
++    }
+     switch self[u] {
+-    case let x as TypeApplication: return o(x.abstraction) || x.arguments.values.contains(where: o)
++    case let x as TypeApplication:
++      _ = o(x.abstraction); for a in x.arguments.values { _ = o(a) }
+     case let x as Tuple:
+-      if case .cons(let h, let r) = x { return o(h) || o(r) } else { return false }
+-    case let x as Metatype: return o(x.inhabitant)
+-    case let x as EqualityWitness: return o(x.lhs) || o(x.rhs)
+-    case let x as AssociatedType: return o(x.qualification.type)
++      if case .cons(let h, let r) = x { _ = o(h); _ = o(r) }
++    case let x as Metatype: _ = o(x.inhabitant)
++    case let x as EqualityWitness: _ = o(x.lhs); _ = o(x.rhs)
++    case let x as AssociatedType: _ = o(x.qualification.type)
+     case let x as Arrow:
+-      return o(x.environment) || o(x.output) || x.inputs.contains(where: { (p) in o(p.type) })
+-    case let x as Implication: return o(x.head) || x.usings.contains(where: o)
+-    case let x as UniversalType: return o(x.head)
+-    case let x as RemoteType: return o(x.projectee)
+-    case let x as FunctionPointer: return o(x.output) || x.inputs.contains(where: o)
+-    case let x as TypeAlias: return o(x.aliasee)
+-    default: return false
++      _ = o(x.environment); _ = o(x.output); for p in x.inputs { _ = o(p.type) }
++    case let x as Bundle: _ = o(x.shape.erased)
++    case let x as Implication: _ = o(x.head); for g in x.usings { _ = o(g) }
++    case let x as UniversalType: _ = o(x.head)
++    case let x as RemoteType: _ = o(x.projectee)
++    case let x as FunctionPointer: _ = o(x.output); for i in x.inputs { _ = o(i) }
++    case let x as TypeAlias: _ = o(x.aliasee)
++    default: break
+     }
++    if !found { clean.insert(u) }
++    return found
+   }
+ 
+   /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
+-- 
+2.43.0
+

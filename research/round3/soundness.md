@@ -1,8 +1,60 @@
-# Baseline soundness bugs: investigation (round 3), after adversarial review
+# Baseline soundness bugs: investigation (round 3), two adversarial reviews, final configuration
 
 Five defects in the baseline type checker were investigated. Each one exists in `tc/research` with all flags off. The first version of this document was then attacked by an adversarial review workflow (run `wf_45540cb8-a9c`): for each bug, one skeptic on the claimed cause, one on the fix, and a judge who re-ran every major or critical issue. The sections below are the judges' corrected texts. They include only confirmed corrections.
 - Raw reports: `soundness/review/results.json`.
 - The reviewers' programs and outputs: `soundness/review/<bug>-<cause|fix|judge>/`.
+
+## Final configuration (after the second adversarial review)
+
+The fixes recommended below were implemented as flags: `occurs`, `fixsubst`, `eqsolve` (equality decision procedure) and `extorder` (order-independent extension lookup). A second adversarial workflow then attacked that configuration (run `wf_4c841151-3f9`, `soundness/review2/`). It had five lenses, each followed by a judge: equality unsoundness, regressions, extension order, crash paths, and performance.
+
+Every confirmed finding is fixed. Each fix is behind a flag, and each flag has a document in `../techniques/`.
+
+| Finding (review2) | Severity | Fix |
+|---|---|---|
+| An occurs failure at the root of `match` was taken as a success, so a `Void` value was accepted as a proof of `Box<Void>` (`crash-paths/o4`, `o2`) | critical | `match` treats it as a mismatch (`occurs`) |
+| Abstract-projection congruence closed transitively: `T == Self, U == Self` gave `T.X == U.X` for two witnesses (`eq-unsound/abs-trans-2/3/5`; the baseline accepts 2 and 3 too) | major | `eqsolve` merges an abstract projection only with a *unique* concrete class; otherwise it bans it and recomputes |
+| `eqsolve` built symmetry steps with swapped arguments, giving ill-typed proof terms (`e1-sym-proof`) | major | argument order fixed |
+| Cubic closure rebuilt for every goal: 45 s for a 14-line program (`perf-alias-7`, `p3`, `cc-refl`, `p02`) | major | signature-table congruence closure (`O(n log n)`), reflexive fast path: 4–80 ms |
+| `eqsolve` proofs carried no penalty, so valid programs became ambiguous and witness choice changed (`e04`, `e05`, `e06`) | minor | proofs get the penalty search would give them (Dijkstra over group offsets) |
+| An inferred argument fixed only by an equality chain became ambiguous (`o2b-call-infer`, `o2-open-chain`) | major | `eqmgu`: `?v ~ X` gets only its most general unifier |
+| Open equality goals searched without bound: 3-line programs ran out of memory in every configuration (`open-wide-4`, `open-neg-0`) | major | `eqmgu`: 0.2–0.5 s and 3–10 ms |
+| The first `extorder` rejected valid lookups that the extension can never affect (`x01`, `x03`, `x06`, `x09`, `x10b`, `r1_*`, `r2_where_assoc`, `al2`) | major | deferred check on final extendees, over whole cycle groups (`extorder`) |
+| A conditional extension `where T.Element == Flag` was rejected: its projection goes through the callee's using, which is not discharged yet (bug #3) | major | `eqsolve` resolves the premise ahead of time if the resolution is unique |
+| A given skipped while its own type is computed: an inconsistent program was accepted, and the result depended on order (`gz1`/`gz3`, `ge1`/`ge2`, `gx1`; baseline bug) | major | `givencheck`: post-check of skipped givens on final types |
+| Arrow environments invisible to `hasVariable`: SIGSEGV through method environments (`b1d`, `a1`), an open goal treated as closed (`a4`) | major | `arrowenv` |
+| No `Bundle` case in the occurs check: SIGSEGV (`b1-bundle-cycle`) | major | added; the walk now covers every kind |
+| Occurs check exponential on DAG substitutions: 10.9 s (`occurs-valid-24`) | major | memo of clean subterms: 4 ms |
+| A single ground equality turned `absmodel` off: out of memory (`div-eq-ovl-b3-1`, baseline too) | major | `absquotient`: 4 ms |
+| Branching divergence that the model cannot refute ran out of memory (`div-trunc-b3/b4`, baseline too) | minor | `budget`: reported as "implicit resolution is too complex" in 3–6 s |
+| Reification exponential on DAG bindings (`occurs-dag-16/18`, baseline too) | — | `reifymemo`: 9 s down to 4 ms |
+
+**Final configuration.**
+- **FIX** (semantic fixes only): `occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget`.
+- **FULL**: FIX plus `symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo`.
+
+**Results** (binary `eq7-3bbd2b60cb89`).
+- **Oracle.** FIX and FULL are 216/216 identical to the baseline on the 192 tests and 24 workloads (`soundness/oracle-final-config.txt`).
+- **All 520 review programs** of both reviews (`soundness/regress-final.md`): REGRESS_SUMMARY
+- **Speed** (`soundness/bench-final.md`):
+  - stdlib: 735 → 444 ms (FIX) → 191 ms (FULL);
+  - members-big: 15.3 s → 486 ms;
+  - breadth40: 4.9 s → 55 ms;
+  - div-branch: 1.6 s → 2 ms;
+  - trans-8: 1.2 s → 4 ms;
+  - assoceq-8: 3.6 s → 116 ms;
+  - ovl-4-8: 4.7 s → 182 ms;
+  - x10b: 1.8 s → 17 ms;
+  - open-wide-4, p02-cc-big and div-eq-ovl-b3-1 ran out of memory under the baseline and now take 202, 63 and 4 ms.
+
+**Known remaining limitations.**
+- **Extension cycles.** `extorder` rejects mutual extendee cycles in which a member may affect a lookup of another, even when a unique reading exists (`final/v4_noC`-style). The baseline accepts these, but only through order-dependent memoization.
+- **Return-type overloads** stay exponential in the number of arguments (`perf/ovl-ret-9`: 8 s under FULL, the same as the baseline). The fix is a sound redesign of `solver`.
+- **The budget.** `budget` rejects a resolution whose frontier exceeds 100,000 threads. Under FIX alone (without `absmodel`), that includes valid programs FULL accepts (`div-eq-ovl-b3-0/1`). This is the one place where FIX and FULL disagree, and both reject or accept soundly.
+- **Equality goals with open variables** other than a bare variable (`Box<?v> ~ C`) are still searched.
+- **Projections through other premise forms.** A projection through a premise that is not a direct `.assumed` or callee using (for example, a projection through a coerced witness) is not resolved ahead of time. It falls back to the old behaviour (bug #3).
+
+---
 
 ## Review verdicts
 

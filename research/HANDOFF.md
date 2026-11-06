@@ -35,6 +35,24 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
+## Status: sound configuration (2026-11-06)
+
+**Read `round3/soundness.md` § "Final configuration" first.**
+
+- **Patches.** `impl/0001`–`0011` on `tc/research`. The worktree used was `/home/user/hylo-impl`, branch `tc/impl-wip`.
+- **Final binary.** `eq7-3bbd2b60cb89`, frozen with `tcx.py freeze`.
+- **FIX** = `occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget`: semantic fixes only.
+- **FULL** = FIX + `symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo`.
+- **Oracle.** Both are 216/216 identical to the baseline on the corpus.
+- **Review programs.** Every program of both adversarial reviews (520) is re-run in `round3/soundness/regress-final.md`. FIX/FULL have no crash and no out-of-memory, where the baseline has 21 crashes and 42 timeouts. Every changed verdict is a baseline unsoundness, a crash, or a timeout that is now decided. The one exception is the deliberate rejection of mutual extendee cycles (`techniques/extorder.md`, Limitation).
+- **Speed.** `round3/soundness/bench-final.md`. For example: stdlib 4×, members-big 32×, breadth40 89×, trans-8 330×, assoceq-8 31×, ovl-4-8 26×.
+- **Technique docs.** One per new flag in `techniques/`: `eqsolve`, `eqmgu`, `extorder`, `givencheck`, `occurs` (+`arrowenv`), `absquotient`, `budget`, `reifymemo`. The `techniques/README.md` table has their status.
+- **Remaining work**, in priority order:
+  1. A sound `solver` for return-type overloads (`ovl-ret-*` stays exponential).
+  2. Accepting mutual extendee cycles that have a unique reading, which needs a fixpoint with rollback.
+  3. Reducing projections through all premise forms (bug #3 generally).
+  4. A model that refutes branching divergence (`div-trunc`), so that `budget` is never reached.
+
 ## Soundness investigation (after round 3, adversarially reviewed)
 
 `round3/soundness.md` covers five baseline defects. Each claimed cause and fix was attacked by two skeptics and a judge (`round3/soundness/review/`).

@@ -1,0 +1,159 @@
+From 552603376a8b9085ce4817aaacfe6c303338f613 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 6 Nov 2026 16:37:12 +0000
+Subject: [PATCH 11/11] Typer: extorder checks whole cycle groups of extendee
+ computations
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift | 90 +++++++++++++++++++++++-------
+ 1 file changed, 70 insertions(+), 20 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 4036b96..152b0d3 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -20,10 +20,15 @@ public struct Typer {
+   /// Fix (`extorder`): the extensions for which a circular definition has been reported.
+   private var reportedCircularExtensions: Set<ExtensionDeclaration.ID> = []
+ 
+-  /// For each extension whose extendee was being computed when a lookup skipped it, the types in
+-  /// which the lookups were made, their scopes, and the names looked up (`extorder`).
+-  private var pendingExtensionChecks:
+-    [ExtensionDeclaration.ID: [(AnyTypeIdentity, ScopeIdentity, Name)]] = [:]
++  /// The extensions whose extendees are being computed, innermost last, with the member lookups
++  /// made while each one is innermost and the cycle group it belongs to, if any (`extorder`).
++  private var extensionFrames: [ExtensionFrame] = []
++
++  /// For each cycle group whose members are no longer all on the stack, its members and lookups.
++  private var cycleGroups: [Int: (members: [ExtensionDeclaration.ID], lookups: [(AnyTypeIdentity, ScopeIdentity, Name)])] = [:]
++
++  /// The next identifier of a cycle group.
++  private var nextCycleGroup = 0
+ 
+   /// The declarations on the stack because they are deliberately hidden from implicit resolution
+   /// rather than because their types are being computed: where-clause usings being introduced by
+@@ -1861,6 +1866,7 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       let u: AnyTypeIdentity
++      if TyperExperiments.extorder { extensionFrames.append(.init(declaration: d)) }
+       do {
+         defer { declarationsOnStack.remove(.init(d)) }
+         let cuts = cycleCuts
+@@ -1871,7 +1877,7 @@ public struct Typer {
+ 
+         if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+       }
+-      if TyperExperiments.extorder { checkPendingLookups(skipping: d, extendee: u) }
++      if TyperExperiments.extorder { popExtensionFrame() }
+       return u
+     }
+ 
+@@ -5029,6 +5035,9 @@ public struct Typer {
+     statically selectionIsStatic: Bool
+   ) -> [NameResolutionCandidate] {
+     var candidates: [NameResolutionCandidate] = []
++    if TyperExperiments.extorder && !extensionFrames.isEmpty {
++      extensionFrames[extensionFrames.count - 1].lookups.append((q, scopeOfUse, n))
++    }
+     let qs = TyperExperiments.memberskip ? headShape(of: q) : nil
+     var settled: Bool? = nil
+     for e in extensions {
+@@ -5041,9 +5050,7 @@ public struct Typer {
+         // Fix (`extorder`): the extendee of `e` is being computed and depends on this lookup, which
+         // `e` may affect since it declares `n`. That is a circular definition in any order of
+         // evaluation; report it rather than silently ignoring `e`.
+-        if TyperExperiments.extorder && declaresName {
+-          pendingExtensionChecks[e, default: []].append((q, scopeOfUse, n))
+-        }
++        if TyperExperiments.extorder && declaresName { noteExtensionCycle(through: e) }
+         // Skipping an extension whose extendee was already being computed when the current
+         // speculative evaluation started makes this lookup depend on the order of evaluation.
+         if TyperExperiments.cyclecutStack, let b = transactionBases.last, b.contains(.init(e)) {
+@@ -5862,6 +5869,20 @@ public struct Typer {
+ 
+   }
+ 
++  /// An extension whose extendee is being computed (`extorder`).
++  private struct ExtensionFrame {
++
++    /// The extension.
++    let declaration: ExtensionDeclaration.ID
++
++    /// The member lookups made while this frame is innermost.
++    var lookups: [(AnyTypeIdentity, ScopeIdentity, Name)] = []
++
++    /// The cycle group of the frame, if it is on a cycle of extendee computations.
++    var group: Int? = nil
++
++  }
++
+   /// The signature of a compound node in the congruence closure of `solveEquality`.
+   private struct EqualitySignature: Hashable {
+ 
+@@ -6384,19 +6405,48 @@ public struct Typer {
+     return true
+   }
+ 
+-  /// Reports the lookups that skipped `e` while its extendee was being computed and that `e` may
+-  /// have affected, now that its extendee is known to be `extendee` (`extorder`).
++  /// Records that a lookup reached `e` while its extendee is being computed, which closes a cycle
++  /// of extendee computations: `e` and the extensions entered after it form a cycle group.
++  private mutating func noteExtensionCycle(through e: ExtensionDeclaration.ID) {
++    guard let i = extensionFrames.lastIndex(where: { (f) in f.declaration == e }) else { return }
++    let gs = Set(extensionFrames[i...].compactMap(\.group))
++    let g: Int
++    if let h = gs.min() { g = h } else { nextCycleGroup += 1; g = nextCycleGroup }
++    for k in extensionFrames.indices where k >= i || (extensionFrames[k].group.map(gs.contains) ?? false) {
++      extensionFrames[k].group = g
++    }
++    for h in gs where h != g {
++      if let x = cycleGroups.removeValue(forKey: h) {
++        cycleGroups[g, default: ([], [])].members.append(contentsOf: x.members)
++        cycleGroups[g, default: ([], [])].lookups.append(contentsOf: x.lookups)
++      }
++    }
++  }
++
++  /// Pops the innermost extension frame; if it is the last frame of its cycle group on the stack,
++  /// checks the group (`extorder`).
+   ///
+-  /// The verdict only depends on memoized extendees, so it is independent of the order in which
+-  /// declarations are checked: if `e` cannot apply to the type in which a lookup was made, the
+-  /// lookup was exact; otherwise its result depends on itself.
+-  private mutating func checkPendingLookups(
+-    skipping e: ExtensionDeclaration.ID, extendee: AnyTypeIdentity
+-  ) {
+-    guard let ls = pendingExtensionChecks.removeValue(forKey: e) else { return }
+-    for (q, s, n) in ls where mayMatch(extendee, q, in: s) {
+-      reportCircularExtension(e, lookingUp: n)
+-      return
++  /// The extendees of a cycle group depend on each other through member lookups. The group is
++  /// circular if one of these lookups may be affected by a member of the group that declares the
++  /// name looked up: whichever member is evaluated first, that lookup is made while the other's
++  /// extendee is unknown. The test uses the final extendees only, so its verdict does not depend on
++  /// the order in which the members were entered; otherwise the skips were exact.
++  private mutating func popExtensionFrame() {
++    let f = extensionFrames.removeLast()
++    guard let g = f.group else { return }
++    cycleGroups[g, default: ([], [])].members.append(f.declaration)
++    cycleGroups[g, default: ([], [])].lookups.append(contentsOf: f.lookups)
++    if extensionFrames.contains(where: { (x) in x.group == g }) { return }
++    let (members, lookups) = cycleGroups.removeValue(forKey: g)!
++    TyperCounters.bump("extorder.cycles")
++    var seen = Set<ExtensionDeclaration.ID>()
++    for m in members where seen.insert(m).inserted {
++      let u = extendeeType(m)
++      let names = declarations(lexicallyIn: .init(node: m))
++      for (q, s, n) in lookups where names[n.identifier] != nil && mayMatch(u, q, in: s) {
++        reportCircularExtension(m, lookingUp: n)
++        break
++      }
+     }
+   }
+ 
+-- 
+2.43.0
+

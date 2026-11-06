@@ -1,7 +1,7 @@
 From e391e61c0f83e0bf96b417a06d741415fdc1403e Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 19:24:54 +0000
-Subject: [PATCH 3/8] Typer: make memberskip skip when applies only reads
+Subject: [PATCH 03/11] Typer: make memberskip skip when applies only reads
  memoized types
 
 An extension that does not declare the looked-up name is skipped iff its
