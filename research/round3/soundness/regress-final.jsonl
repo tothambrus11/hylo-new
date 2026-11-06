@@ -265,3 +265,1164 @@
 {"file": "review/eqsubst-cause/c01-single-eq-call.hylo", "config": "base", "rc": 0, "d": 0, "ms": 368.76, "errors": []}
 {"file": "review/eqsubst-cause/c01-single-eq-call.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.0, "errors": ["no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
 {"file": "review/eqsubst-cause/c01-single-eq-call.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.07, "errors": ["no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c02-no-eq-call.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/eqsubst-cause/c02-no-eq-call.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.1, "errors": ["no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c02-no-eq-call.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.98, "errors": ["no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c03-single-eq-given.hylo", "config": "base", "rc": 0, "d": 0, "ms": 397.73, "errors": []}
+{"file": "review/eqsubst-cause/c03-single-eq-given.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.52, "errors": ["no coercion from 'P<D> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c03-single-eq-given.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.33, "errors": ["no coercion from 'P<D> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c04-single-assoc-call.hylo", "config": "base", "rc": 0, "d": 0, "ms": 437.74, "errors": []}
+{"file": "review/eqsubst-cause/c04-single-assoc-call.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 28.1, "errors": ["no coercion from '((D::P).X ~ (A::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c04-single-assoc-call.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 15.52, "errors": ["no coercion from '((D::P).X ~ (A::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c05-single-eq-both-unrelated.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/eqsubst-cause/c05-single-eq-both-unrelated.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.03, "errors": ["no coercion from '(D ~ E) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c05-single-eq-both-unrelated.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.12, "errors": ["no coercion from '(D ~ E) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c06-single-eq-struct.hylo", "config": "base", "rc": 0, "d": 0, "ms": 412.87, "errors": []}
+{"file": "review/eqsubst-cause/c06-single-eq-struct.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.97, "errors": ["no coercion from '(Q ~ S) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c06-single-eq-struct.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.01, "errors": ["no coercion from '(Q ~ S) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-cause/c07-single-assoc-arg.hylo", "config": "base", "rc": 0, "d": 0, "ms": 452.8, "errors": []}
+{"file": "review/eqsubst-cause/c07-single-assoc-arg.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 21.45, "errors": ["no coercion from '((D::P).X ~ (A::P).X) ==> [Void](let (D::P).X) let -> (A::P).X' to '[Void](let (D::P).X) let -> (A::P).X'"]}
+{"file": "review/eqsubst-cause/c07-single-assoc-arg.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 17.13, "errors": ["no coercion from '((D::P).X ~ (A::P).X) ==> [Void](let (D::P).X) let -> (A::P).X' to '[Void](let (D::P).X) let -> (A::P).X'"]}
+{"file": "review/eqsubst-cause/v01-single.hylo", "config": "base", "rc": 0, "d": 1, "ms": 59.52, "errors": ["cannot pass value of type '(D::P).X' to parameter '(A::P).X'"]}
+{"file": "review/eqsubst-cause/v01-single.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 20.14, "errors": ["cannot pass value of type '(D::P).X' to parameter '(A::P).X'"]}
+{"file": "review/eqsubst-cause/v01-single.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 15.69, "errors": ["cannot pass value of type '(D::P).X' to parameter '(A::P).X'"]}
+{"file": "review/eqsubst-cause/v02-params.hylo", "config": "base", "rc": 0, "d": 0, "ms": 856.34, "errors": []}
+{"file": "review/eqsubst-cause/v02-params.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.72, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v02-params.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.73, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v03-box.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1123.91, "errors": []}
+{"file": "review/eqsubst-cause/v03-box.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 53.92, "errors": ["cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'"]}
+{"file": "review/eqsubst-cause/v03-box.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 28.26, "errors": ["cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'"]}
+{"file": "review/eqsubst-cause/v04-boxside.hylo", "config": "base", "rc": 0, "d": 0, "ms": 832.43, "errors": []}
+{"file": "review/eqsubst-cause/v04-boxside.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.76, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v04-boxside.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.83, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v05-single-struct.hylo", "config": "base", "rc": 0, "d": 1, "ms": 14.86, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v05-single-struct.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.39, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v05-single-struct.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.9, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v06-onesided.hylo", "config": "base", "rc": 0, "d": 1, "ms": 15.87, "errors": ["cannot pass value of type 'E' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v06-onesided.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.84, "errors": ["cannot pass value of type 'E' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v06-onesided.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.67, "errors": ["cannot pass value of type 'E' to parameter 'A'"]}
+{"file": "review/eqsubst-cause/v07-samegiven.hylo", "config": "base", "rc": 0, "d": 0, "ms": 37.11, "errors": []}
+{"file": "review/eqsubst-cause/v07-samegiven.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.4, "errors": []}
+{"file": "review/eqsubst-cause/v07-samegiven.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.67, "errors": []}
+{"file": "review/eqsubst-fix/n-nested-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1050.04, "errors": []}
+{"file": "review/eqsubst-fix/n-nested-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 33.62, "errors": ["cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'"]}
+{"file": "review/eqsubst-fix/n-nested-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 28.25, "errors": ["cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'"]}
+{"file": "review/eqsubst-fix/n-params-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1041.09, "errors": []}
+{"file": "review/eqsubst-fix/n-params-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.9, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-fix/n-params-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.93, "errors": ["cannot pass value of type 'D' to parameter 'A'"]}
+{"file": "review/eqsubst-fix/n-params-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 898.02, "errors": []}
+{"file": "review/eqsubst-fix/n-params-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.26, "errors": ["no coercion from '(A ~ D) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/n-params-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.25, "errors": ["no coercion from '(A ~ D) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/n-params-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 845.74, "errors": []}
+{"file": "review/eqsubst-fix/n-params-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.92, "errors": ["cannot pass value of type 'Box<D>' to parameter 'Box<A>'"]}
+{"file": "review/eqsubst-fix/n-params-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.0, "errors": ["cannot pass value of type 'Box<D>' to parameter 'Box<A>'"]}
+{"file": "review/eqsubst-fix/n-three-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1312.35, "errors": []}
+{"file": "review/eqsubst-fix/n-three-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 51.57, "errors": ["cannot pass value of type '(F::P).X' to parameter '(A::P).X'"]}
+{"file": "review/eqsubst-fix/n-three-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 42.38, "errors": ["cannot pass value of type '(F::P).X' to parameter '(A::P).X'"]}
+{"file": "review/eqsubst-fix/n-tuple-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/eqsubst-fix/n-tuple-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 34.5, "errors": ["cannot pass value of type '{(D::P).X, (B::P).X}' to parameter '{(A::P).X, (A::P).X}'"]}
+{"file": "review/eqsubst-fix/n-tuple-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 28.4, "errors": ["cannot pass value of type '{(D::P).X, (B::P).X}' to parameter '{(A::P).X, (A::P).X}'"]}
+{"file": "review/eqsubst-fix/v-abs-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 86.28, "errors": ["no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-abs-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.69, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.7, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.76, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.74, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.91, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 80.43, "errors": ["no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-abs-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.97, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.45, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-4.hylo", "config": "base", "rc": 0, "d": 1, "ms": 1150.46, "errors": ["no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-abs-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.18, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.55, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-5.hylo", "config": "base", "rc": 0, "d": 1, "ms": 33.15, "errors": ["cannot pass value of type '(Self::P).X' to parameter 'U'"]}
+{"file": "review/eqsubst-fix/v-abs-5.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.06, "errors": ["cannot pass value of type '(Self::P).X' to parameter 'U'"]}
+{"file": "review/eqsubst-fix/v-abs-5.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.68, "errors": ["cannot pass value of type '(Self::P).X' to parameter 'U'"]}
+{"file": "review/eqsubst-fix/v-abs-6.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.4, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-abs-6.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 13.26, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-abs-6.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.5, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-abs-7.hylo", "config": "base", "rc": 0, "d": 0, "ms": 43.01, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-7.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.92, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-7.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.17, "errors": []}
+{"file": "review/eqsubst-fix/v-abs-8.hylo", "config": "base", "rc": 0, "d": 2, "ms": 33.8, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'"]}
+{"file": "review/eqsubst-fix/v-abs-8.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 12.66, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'"]}
+{"file": "review/eqsubst-fix/v-abs-8.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 9.1, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'"]}
+{"file": "review/eqsubst-fix/v-abs-9.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.94, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-abs-9.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.71, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-abs-9.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.59, "errors": ["cannot pass value of type 'U' to parameter '(Self::P).X'"]}
+{"file": "review/eqsubst-fix/v-alias-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 16.01, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.83, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.84, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 60.08, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.03, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.22, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1115.16, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.01, "errors": []}
+{"file": "review/eqsubst-fix/v-alias-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.88, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 58.11, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.98, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.86, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 59.07, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.03, "errors": []}
+{"file": "review/eqsubst-fix/v-chain-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.92, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1363.72, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 46.27, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 39.87, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-mixed.hylo", "config": "base", "rc": 0, "d": 0, "ms": 239.37, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-mixed.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.63, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-mixed.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.74, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-par.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1126.8, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-par.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.69, "errors": []}
+{"file": "review/eqsubst-fix/v-chain3-par.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.8, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.55, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-congr-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.64, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-congr-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 39.56, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review/eqsubst-fix/v-congr-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.17, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review/eqsubst-fix/v-congr-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.29, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review/eqsubst-fix/v-congr-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 27.35, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.43, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.88, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.38, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.07, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.1, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-5.hylo", "config": "base", "rc": 0, "d": 0, "ms": 61.53, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-5.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 19.95, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-5.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 14.55, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-6.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.54, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-6.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.17, "errors": []}
+{"file": "review/eqsubst-fix/v-congr-6.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.35, "errors": []}
+{"file": "review/eqsubst-fix/v-def-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 27.9, "errors": []}
+{"file": "review/eqsubst-fix/v-def-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.95, "errors": []}
+{"file": "review/eqsubst-fix/v-def-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.0, "errors": []}
+{"file": "review/eqsubst-fix/v-def-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 66.35, "errors": []}
+{"file": "review/eqsubst-fix/v-def-2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.73, "errors": []}
+{"file": "review/eqsubst-fix/v-def-2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.09, "errors": []}
+{"file": "review/eqsubst-fix/v-def-3.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/eqsubst-fix/v-def-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.18, "errors": ["no coercion from '((T::P).X ~ Bool) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-def-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.69, "errors": ["no coercion from '((T::P).X ~ Bool) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/eqsubst-fix/v-def-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 44.57, "errors": []}
+{"file": "review/eqsubst-fix/v-def-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 16.08, "errors": []}
+{"file": "review/eqsubst-fix/v-def-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 10.53, "errors": []}
+{"file": "review/occurs-cause/variant-swapped.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-cause/variant-swapped.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.22, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-cause/variant-swapped.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.79, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/b1-arrow.hylo", "config": "base", "rc": 0, "d": 3, "ms": 21.5, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b1-arrow.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 9.94, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b1-arrow.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.35, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b10-arrow-let.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/b10-arrow-let.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.03, "errors": ["cannot pass value of type '#!' to parameter '{[Void](let #!) let -> B, #!}'"]}
+{"file": "review/occurs-fix/b10-arrow-let.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.0, "errors": ["cannot pass value of type '#!' to parameter '{[Void](let #!) let -> B, #!}'"]}
+{"file": "review/occurs-fix/b11-bundle-tuple.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/b11-bundle-tuple.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.25, "errors": ["no coercion from 'B' to '{T, B}'", "cannot pass value of type '#!' to parameter '{[Void](auto #!) auto -> B { let, inout }, #!}'"]}
+{"file": "review/occurs-fix/b11-bundle-tuple.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.25, "errors": ["no coercion from 'B' to '{T, B}'", "cannot pass value of type '#!' to parameter '{[Void](auto #!) auto -> B { let, inout }, #!}'"]}
+{"file": "review/occurs-fix/b2-bundle.hylo", "config": "base", "rc": 0, "d": 4, "ms": 22.67, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b2-bundle.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 12.16, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b2-bundle.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 3.16, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b3-bundle-direct.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.13, "errors": ["no coercion from 'B' to '{T, B}'", "cannot pass value of type '<T> [Void](auto T) auto -> B { let, inout }' to parameter '#!'"]}
+{"file": "review/occurs-fix/b3-bundle-direct.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.29, "errors": ["no coercion from 'B' to '{T, B}'", "cannot pass value of type '<T> [Void](auto T) auto -> B { let, inout }' to parameter '#!'"]}
+{"file": "review/occurs-fix/b3-bundle-direct.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.74, "errors": ["no coercion from 'B' to '{T, B}'", "cannot pass value of type '<T> [Void](auto T) auto -> B { let, inout }' to parameter '#!'"]}
+{"file": "review/occurs-fix/b4-bundle-inst.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.69, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type"]}
+{"file": "review/occurs-fix/b4-bundle-inst.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.34, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type"]}
+{"file": "review/occurs-fix/b4-bundle-inst.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 4.47, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type"]}
+{"file": "review/occurs-fix/b5-arrow-inst.hylo", "config": "base", "rc": 0, "d": 3, "ms": 22.87, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b5-arrow-inst.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 17.8, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b5-arrow-inst.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.3, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/b6-bundle-inst2.hylo", "config": "base", "rc": 0, "d": 4, "ms": 26.04, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'"]}
+{"file": "review/occurs-fix/b6-bundle-inst2.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 11.07, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'"]}
+{"file": "review/occurs-fix/b6-bundle-inst2.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 3.25, "errors": ["no coercion from 'B' to '{T, B}'", "not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'"]}
+{"file": "review/occurs-fix/b7-bundle-selfapp.hylo", "config": "base", "rc": 0, "d": 3, "ms": 23.19, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'", "no coercion from 'B' to '{T, B}'"]}
+{"file": "review/occurs-fix/b7-bundle-selfapp.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 10.41, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'", "no coercion from 'B' to '{T, B}'"]}
+{"file": "review/occurs-fix/b7-bundle-selfapp.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.2, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](auto #!) auto -> B { let, inout }'", "no coercion from 'B' to '{T, B}'"]}
+{"file": "review/occurs-fix/b8-arrow-selfapp.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.96, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'"]}
+{"file": "review/occurs-fix/b8-arrow-selfapp.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 9.87, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'"]}
+{"file": "review/occurs-fix/b8-arrow-selfapp.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.8, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter '[Void](let #!) let -> B'"]}
+{"file": "review/occurs-fix/b9-bundle-let.hylo", "config": "base", "rc": 0, "d": 2, "ms": 22.49, "errors": ["no coercion from 'B' to '{T, B}'", "no coercion from '{[Void](auto #!) auto -> B { let, inout }, B}' to 'Void'"]}
+{"file": "review/occurs-fix/b9-bundle-let.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.16, "errors": ["no coercion from 'B' to '{T, B}'", "no coercion from '{[Void](auto #!) auto -> B { let, inout }, B}' to 'Void'"]}
+{"file": "review/occurs-fix/b9-bundle-let.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.79, "errors": ["no coercion from 'B' to '{T, B}'", "no coercion from '{[Void](auto #!) auto -> B { let, inout }, B}' to 'Void'"]}
+{"file": "review/occurs-fix/c1-cycle-plus-coercion.hylo", "config": "base", "rc": 0, "d": 1, "ms": 88.24, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c1-cycle-plus-coercion.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 26.56, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c1-cycle-plus-coercion.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 22.95, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c2-control.hylo", "config": "base", "rc": 0, "d": 1, "ms": 70.17, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c2-control.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 29.1, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c2-control.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 17.91, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c3-accept-change.hylo", "config": "base", "rc": 0, "d": 1, "ms": 74.75, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c3-accept-change.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 27.9, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c3-accept-change.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 20.09, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c4-control.hylo", "config": "base", "rc": 0, "d": 1, "ms": 79.07, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c4-control.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 26.49, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c4-control.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 26.38, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c5-order1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 77.36, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c5-order1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 32.6, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c5-order1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 19.01, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c5-order2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 83.48, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/c5-order2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 30.74, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/c5-order2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 19.13, "errors": ["no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/dag12.hylo", "config": "base", "rc": 0, "d": 14, "ms": 16.07, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag12.hylo", "config": "FIX", "rc": 0, "d": 14, "ms": 7.44, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag12.hylo", "config": "FULL", "rc": 0, "d": 14, "ms": 2.5, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag14.hylo", "config": "base", "rc": 0, "d": 16, "ms": 16.14, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag14.hylo", "config": "FIX", "rc": 0, "d": 16, "ms": 8.27, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag14.hylo", "config": "FULL", "rc": 0, "d": 16, "ms": 2.49, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag8.hylo", "config": "base", "rc": 0, "d": 10, "ms": 15.75, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag8.hylo", "config": "FIX", "rc": 0, "d": 10, "ms": 9.47, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/dag8.hylo", "config": "FULL", "rc": 0, "d": 10, "ms": 1.82, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review/occurs-fix/e1-env-capture.hylo", "config": "base", "rc": 0, "d": 1, "ms": 14.33, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/e1-env-capture.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.66, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let [{#!}]() let -> Void, let [{#!}]() let -> Void) let -> Void'", "not enough context to infer a type"]}
+{"file": "review/occurs-fix/e1-env-capture.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.19, "errors": ["no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let [{#!}]() let -> Void, let [{#!}]() let -> Void) let -> Void'", "not enough context to infer a type"]}
+{"file": "review/occurs-fix/e2-env-capture-ctl.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/e2-env-capture-ctl.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.83, "errors": ["cannot pass value of type '#!' to parameter '[Void]() let -> #!'", "illegal implicit capture"]}
+{"file": "review/occurs-fix/e2-env-capture-ctl.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.29, "errors": ["cannot pass value of type '#!' to parameter '[Void]() let -> #!'", "illegal implicit capture"]}
+{"file": "review/occurs-fix/e3-env-implicit.hylo", "config": "base", "rc": 0, "d": 0, "ms": 14.85, "errors": []}
+{"file": "review/occurs-fix/e3-env-implicit.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.58, "errors": []}
+{"file": "review/occurs-fix/e3-env-implicit.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.71, "errors": []}
+{"file": "review/occurs-fix/n1-nested.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/n1-nested.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.31, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/n1-nested.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.41, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/n2-nested2.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/n2-nested2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.32, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/n2-nested2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.94, "errors": ["no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/occurs-fix/s1-selfapp.hylo", "config": "base", "rc": 0, "d": 1, "ms": 12.98, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/s1-selfapp.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 4.94, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/s1-selfapp.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.18, "errors": ["not enough context to infer a type"]}
+{"file": "review/occurs-fix/s2-tuple.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/s2-tuple.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.34, "errors": ["cannot pass value of type '#!' to parameter '{#!, #!}'"]}
+{"file": "review/occurs-fix/s2-tuple.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.6, "errors": ["cannot pass value of type '#!' to parameter '{#!, #!}'"]}
+{"file": "review/occurs-fix/s3-generic.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/s3-generic.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.04, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/s3-generic.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.49, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/s4-check.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/s4-check.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.74, "errors": ["cannot pass value of type 'S<#!>' to parameter 'S<S<#!>>'"]}
+{"file": "review/occurs-fix/s4-check.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.79, "errors": ["cannot pass value of type 'S<#!>' to parameter 'S<S<#!>>'"]}
+{"file": "review/occurs-fix/t1-assign.hylo", "config": "base", "rc": 0, "d": 3, "ms": 21.38, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'", "cannot pass value of type '#!' to parameter 'Void'"]}
+{"file": "review/occurs-fix/t1-assign.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 10.1, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'", "cannot pass value of type '#!' to parameter 'Void'"]}
+{"file": "review/occurs-fix/t1-assign.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.19, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'", "cannot pass value of type '#!' to parameter 'Void'"]}
+{"file": "review/occurs-fix/t2-assign-only.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.91, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/t2-assign-only.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 9.79, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/t2-assign-only.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.95, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/t3-assign-ctl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 19.65, "errors": ["no coercion from 'S<Void>' to 'Void'"]}
+{"file": "review/occurs-fix/t3-assign-ctl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.44, "errors": ["no coercion from 'S<Void>' to 'Void'"]}
+{"file": "review/occurs-fix/t3-assign-ctl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.4, "errors": ["no coercion from 'S<Void>' to 'Void'"]}
+{"file": "review/occurs-fix/v1.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/v1.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 9.82, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'", "cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/v1.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.67, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'", "cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/v2.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/v2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.97, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/v2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.69, "errors": ["cannot pass value of type '#!' to parameter 'S<#!>'"]}
+{"file": "review/occurs-fix/v3.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/v3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.76, "errors": ["cannot pass value of type 'S<#!>' to parameter '#!'"]}
+{"file": "review/occurs-fix/v3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.59, "errors": ["cannot pass value of type 'S<#!>' to parameter '#!'"]}
+{"file": "review/occurs-fix/v4.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review/occurs-fix/v4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.57, "errors": ["cannot pass value of type '#!' to parameter 'S<S<#!>>'"]}
+{"file": "review/occurs-fix/v4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.8, "errors": ["cannot pass value of type '#!' to parameter 'S<S<#!>>'"]}
+{"file": "review/occurs-fix/v5.hylo", "config": "base", "rc": 0, "d": 3, "ms": 21.78, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let S<T>) let -> Void' to '[Void](let #!, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/v5.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 10.42, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let S<T>) let -> Void' to '[Void](let #!, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/v5.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.09, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let S<T>) let -> Void' to '[Void](let #!, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let #!, let #!) let -> Void'"]}
+{"file": "review/occurs-fix/v6.hylo", "config": "base", "rc": 0, "d": 4, "ms": 20.57, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/v6.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 10.34, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/v6.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 3.51, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'", "no coercion from '<T> [Void](let T) let -> S<T>' to '[Void](let #!) let -> S<#!>'"]}
+{"file": "review/occurs-fix/v7.hylo", "config": "base", "rc": 0, "d": 4, "ms": 21.31, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter 'Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'"]}
+{"file": "review/occurs-fix/v7.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 10.55, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter 'Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'"]}
+{"file": "review/occurs-fix/v7.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 3.26, "errors": ["not enough context to infer a type", "cannot pass value of type '#!' to parameter 'Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let S<#!>, let S<#!>) let -> Void'"]}
+{"file": "review/reqdep-cause/min.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/reqdep-cause/min.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.2, "errors": ["no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-cause/min.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 9.16, "errors": ["no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-cause/v2-swapped.hylo", "config": "base", "rc": 0, "d": 2, "ms": 34.06, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-cause/v2-swapped.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 16.64, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-cause/v2-swapped.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 8.89, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-cause/v3-param.hylo", "config": "base", "rc": 0, "d": 1, "ms": 25.14, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-cause/v3-param.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.05, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-cause/v3-param.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.61, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-cause/v4-plaineq.hylo", "config": "base", "rc": 0, "d": 0, "ms": 15.04, "errors": []}
+{"file": "review/reqdep-cause/v4-plaineq.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.71, "errors": []}
+{"file": "review/reqdep-cause/v4-plaineq.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.64, "errors": []}
+{"file": "review/reqdep-cause/v5-generic.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1999.9, "errors": []}
+{"file": "review/reqdep-cause/v5-generic.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 20.27, "errors": []}
+{"file": "review/reqdep-cause/v5-generic.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 15.03, "errors": []}
+{"file": "review/reqdep-cause/v6-refl.hylo", "config": "base", "rc": 0, "d": 0, "ms": 51.98, "errors": []}
+{"file": "review/reqdep-cause/v6-refl.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 20.0, "errors": []}
+{"file": "review/reqdep-cause/v6-refl.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 13.53, "errors": []}
+{"file": "review/reqdep-cause/v7-ret.hylo", "config": "base", "rc": 0, "d": 1, "ms": 22.37, "errors": ["no coercion from '(A::P).X' to 'B'"]}
+{"file": "review/reqdep-cause/v7-ret.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.11, "errors": ["no coercion from '(A::P).X' to 'B'"]}
+{"file": "review/reqdep-cause/v7-ret.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.69, "errors": ["no coercion from '(A::P).X' to 'B'"]}
+{"file": "review/reqdep-cause/v8-proj.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.55, "errors": []}
+{"file": "review/reqdep-cause/v8-proj.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.23, "errors": []}
+{"file": "review/reqdep-cause/v8-proj.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.0, "errors": []}
+{"file": "review/reqdep-fix/t1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/reqdep-fix/t1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.0, "errors": ["no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 8.72, "errors": ["no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t10-wrongx.hylo", "config": "base", "rc": 0, "d": 1, "ms": 26.87, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t10-wrongx.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.82, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t10-wrongx.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.91, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t11-generic-conf.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.41, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t11-generic-conf.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 11.02, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t11-generic-conf.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.2, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t12-assoc-in-body-generic.hylo", "config": "base", "rc": 0, "d": 1, "ms": 23.67, "errors": ["cannot pass value of type '(U::P).X' to parameter '(U::P).X'"]}
+{"file": "review/reqdep-fix/t12-assoc-in-body-generic.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.52, "errors": ["cannot pass value of type '(U::P).X' to parameter '(U::P).X'"]}
+{"file": "review/reqdep-fix/t12-assoc-in-body-generic.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.81, "errors": ["cannot pass value of type '(U::P).X' to parameter '(U::P).X'"]}
+{"file": "review/reqdep-fix/t13-generic-conf-const.hylo", "config": "base", "rc": 0, "d": 2, "ms": 30.75, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t13-generic-conf-const.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 12.94, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t13-generic-conf-const.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.23, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t14-generic-conf-call.hylo", "config": "base", "rc": 0, "d": 0, "ms": 21.21, "errors": []}
+{"file": "review/reqdep-fix/t14-generic-conf-call.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.5, "errors": []}
+{"file": "review/reqdep-fix/t14-generic-conf-call.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.01, "errors": []}
+{"file": "review/reqdep-fix/t2-swapped.hylo", "config": "base", "rc": 0, "d": 2, "ms": 34.07, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t2-swapped.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 14.82, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t2-swapped.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 8.73, "errors": ["type 'T' has no static member 'X'", "no coercion from '(#!, P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t3-param.hylo", "config": "base", "rc": 0, "d": 1, "ms": 25.28, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t3-param.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.81, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t3-param.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.65, "errors": ["cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t4-generic-caller.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1909.18, "errors": []}
+{"file": "review/reqdep-fix/t4-generic-caller.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 19.78, "errors": []}
+{"file": "review/reqdep-fix/t4-generic-caller.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 15.15, "errors": []}
+{"file": "review/reqdep-fix/t5-concrete-x.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.32, "errors": []}
+{"file": "review/reqdep-fix/t5-concrete-x.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.94, "errors": []}
+{"file": "review/reqdep-fix/t5-concrete-x.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.97, "errors": []}
+{"file": "review/reqdep-fix/t6-ret.hylo", "config": "base", "rc": 0, "d": 2, "ms": 30.36, "errors": ["no coercion from '(A::P).X' to 'B'", "cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t6-ret.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 13.18, "errors": ["no coercion from '(A::P).X' to 'B'", "cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t6-ret.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.89, "errors": ["no coercion from '(A::P).X' to 'B'", "cannot pass value of type 'B' to parameter '(A::P).X'"]}
+{"file": "review/reqdep-fix/t7-cond-direct.hylo", "config": "base", "rc": 0, "d": 2, "ms": 26.63, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t7-cond-direct.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 20.08, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t7-cond-direct.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.81, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-fix/t8-cond-call.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review/reqdep-fix/t8-cond-call.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 21.56, "errors": ["no coercion from '(P<Box<B>>, ((Box<B>::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t8-cond-call.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 11.68, "errors": ["no coercion from '(P<Box<B>>, ((Box<B>::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review/reqdep-fix/t9-two-conf.hylo", "config": "base", "rc": 0, "d": 0, "ms": 27.47, "errors": []}
+{"file": "review/reqdep-fix/t9-two-conf.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.2, "errors": []}
+{"file": "review/reqdep-fix/t9-two-conf.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.13, "errors": []}
+{"file": "review/reqdep-judge/j1-box-nongeneric.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.04, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-judge/j1-box-nongeneric.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.86, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-judge/j1-box-nongeneric.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.1, "errors": ["expression does not denote a type", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-judge/j2-generic-conf-alias.hylo", "config": "base", "rc": 0, "d": 3, "ms": 20.21, "errors": ["expected declaration", "undefined symbol 'BB'", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-judge/j2-generic-conf-alias.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 9.46, "errors": ["expected declaration", "undefined symbol 'BB'", "no coercion from 'B' to '#!'"]}
+{"file": "review/reqdep-judge/j2-generic-conf-alias.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 2.67, "errors": ["expected declaration", "undefined symbol 'BB'", "no coercion from 'B' to '#!'"]}
+{"file": "review2/crash-paths-judge/a4-annot.hylo", "config": "base", "rc": 0, "d": 0, "ms": 14.57, "errors": []}
+{"file": "review2/crash-paths-judge/a4-annot.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.8, "errors": []}
+{"file": "review2/crash-paths-judge/a4-annot.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.78, "errors": []}
+{"file": "review2/crash-paths-judge/a4-explicit.hylo", "config": "base", "rc": 0, "d": 0, "ms": 14.19, "errors": []}
+{"file": "review2/crash-paths-judge/a4-explicit.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.1, "errors": []}
+{"file": "review2/crash-paths-judge/a4-explicit.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.68, "errors": []}
+{"file": "review2/crash-paths-judge/n1-nested-occurs.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths-judge/n1-nested-occurs.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 31.32, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths-judge/n1-nested-occurs.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 16.05, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/a1-arrow-env-cycle.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/a1-arrow-env-cycle.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.15, "errors": ["cannot pass value of type '[#!](let Void) let -> Void' to parameter '#!'"]}
+{"file": "review2/crash-paths/a1-arrow-env-cycle.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.03, "errors": ["cannot pass value of type '[#!](let Void) let -> Void' to parameter '#!'"]}
+{"file": "review2/crash-paths/a1b-arrow-input-cycle.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/a1b-arrow-input-cycle.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.14, "errors": ["cannot pass value of type '[Void](let #!) let -> Void' to parameter '#!'"]}
+{"file": "review2/crash-paths/a1b-arrow-input-cycle.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.88, "errors": ["cannot pass value of type '[Void](let #!) let -> Void' to parameter '#!'"]}
+{"file": "review2/crash-paths/a2-arrow-env-generic.hylo", "config": "base", "rc": 0, "d": 0, "ms": 13.98, "errors": []}
+{"file": "review2/crash-paths/a2-arrow-env-generic.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.42, "errors": []}
+{"file": "review2/crash-paths/a2-arrow-env-generic.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.54, "errors": []}
+{"file": "review2/crash-paths/a3-arrow-env-eq.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/a3-arrow-env-eq.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.99, "errors": ["no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [E](let Void) let -> Void, let [G](let Void) let -> Void) let -> Void'"]}
+{"file": "review2/crash-paths/a3-arrow-env-eq.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.86, "errors": ["no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [E](let Void) let -> Void, let [G](let Void) let -> Void) let -> Void'"]}
+{"file": "review2/crash-paths/a4-env-var-goal.hylo", "config": "base", "rc": 0, "d": 0, "ms": 14.85, "errors": []}
+{"file": "review2/crash-paths/a4-env-var-goal.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.77, "errors": []}
+{"file": "review2/crash-paths/a4-env-var-goal.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.02, "errors": []}
+{"file": "review2/crash-paths/a5-env-var-goal-ctrl.hylo", "config": "base", "rc": 0, "d": 0, "ms": 15.51, "errors": []}
+{"file": "review2/crash-paths/a5-env-var-goal-ctrl.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.69, "errors": []}
+{"file": "review2/crash-paths/a5-env-var-goal-ctrl.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.66, "errors": []}
+{"file": "review2/crash-paths/b1-bundle-cycle.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/b1-bundle-cycle.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.79, "errors": ["cannot pass value of type '#!' to parameter '[auto Box<#!>](auto #!) auto -> Void { let, inout }'", "no coercion from 'Void' to '{Box<T>, T, Void}'"]}
+{"file": "review2/crash-paths/b1-bundle-cycle.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.74, "errors": ["cannot pass value of type '#!' to parameter '[auto Box<#!>](auto #!) auto -> Void { let, inout }'", "no coercion from 'Void' to '{Box<T>, T, Void}'"]}
+{"file": "review2/crash-paths/b1c-method-cycle-ctrl.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/b1c-method-cycle-ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.41, "errors": ["cannot pass value of type '#!' to parameter '[let Box<#!>](let #!) let -> Void'"]}
+{"file": "review2/crash-paths/b1c-method-cycle-ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.69, "errors": ["cannot pass value of type '#!' to parameter '[let Box<#!>](let #!) let -> Void'"]}
+{"file": "review2/crash-paths/b1d-method-env-cycle.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/b1d-method-env-cycle.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.55, "errors": ["cannot pass value of type '#!' to parameter '[let Box<#!>]() let -> Void'"]}
+{"file": "review2/crash-paths/b1d-method-env-cycle.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.67, "errors": ["cannot pass value of type '#!' to parameter '[let Box<#!>]() let -> Void'"]}
+{"file": "review2/crash-paths/b2-bundle-cycle-free.hylo", "config": "base", "rc": 0, "d": 5, "ms": 15.46, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T, let T) let -> Void' to '[Void](let #!, let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review2/crash-paths/b2-bundle-cycle-free.hylo", "config": "FIX", "rc": 0, "d": 5, "ms": 12.49, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T, let T) let -> Void' to '[Void](let #!, let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review2/crash-paths/b2-bundle-cycle-free.hylo", "config": "FULL", "rc": 0, "d": 5, "ms": 1.89, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T, let T, let T) let -> Void' to '[Void](let #!, let #!, let #!) let -> Void'", "no coercion from '<T> [Void](let T, let T) let -> Void' to '[Void](let {#!, #!}, let {#!, #!}) let -> Void'"]}
+{"file": "review2/crash-paths/c1-empty-where.hylo", "config": "base", "rc": 0, "d": 2, "ms": 16.02, "errors": ["expected expression", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/c1-empty-where.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 8.53, "errors": ["expected expression", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/c1-empty-where.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.43, "errors": ["expected expression", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/c2-eq-in-given.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/c2-eq-in-given.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 8.17, "errors": ["no coercion from '(A ~ B) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/c2-eq-in-given.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.99, "errors": ["no coercion from '(A ~ B) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/e1-sym-proof.hylo", "config": "base", "rc": 0, "d": 0, "ms": 16.27, "errors": []}
+{"file": "review2/crash-paths/e1-sym-proof.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.47, "errors": []}
+{"file": "review2/crash-paths/e1-sym-proof.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.56, "errors": []}
+{"file": "review2/crash-paths/e2-abs-qual-distinct-conf.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.87, "errors": []}
+{"file": "review2/crash-paths/e2-abs-qual-distinct-conf.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.22, "errors": []}
+{"file": "review2/crash-paths/e2-abs-qual-distinct-conf.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.72, "errors": []}
+{"file": "review2/crash-paths/e3-abs-qual-ctrl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.08, "errors": ["no coercion from '(U::P).X' to '(T::P).X'"]}
+{"file": "review2/crash-paths/e3-abs-qual-ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.4, "errors": ["no coercion from '(U::P).X' to '(T::P).X'"]}
+{"file": "review2/crash-paths/e3-abs-qual-ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.38, "errors": ["no coercion from '(U::P).X' to '(T::P).X'"]}
+{"file": "review2/crash-paths/o1-value-ctx.hylo", "config": "base", "rc": 0, "d": 0, "ms": 36.45, "errors": []}
+{"file": "review2/crash-paths/o1-value-ctx.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 28.85, "errors": []}
+{"file": "review2/crash-paths/o1-value-ctx.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.76, "errors": []}
+{"file": "review2/crash-paths/o2-toplevel-occurs.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/o2-toplevel-occurs.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 15.08, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o2-toplevel-occurs.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.87, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o3-toplevel-occurs-ctrl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 34.4, "errors": ["no coercion from 'P<C<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o3-toplevel-occurs-ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 16.65, "errors": ["no coercion from 'P<C<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o3-toplevel-occurs-ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.48, "errors": ["no coercion from 'P<C<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o4-toplevel-occurs-full.hylo", "config": "base", "rc": -11, "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/o4-toplevel-occurs-full.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 22.75, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o4-toplevel-occurs-full.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 13.42, "errors": ["no coercion from '<T> P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/o5-assign-occurs.hylo", "config": "base", "rc": 0, "d": 2, "ms": 14.88, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o5-assign-occurs.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.11, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o5-assign-occurs.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.22, "errors": ["not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o6-return-occurs.hylo", "config": "base", "rc": 0, "d": 4, "ms": 13.87, "errors": ["not enough context to infer a type", "not enough context to infer a type", "no coercion from '#!' to 'Box<#!>'"]}
+{"file": "review2/crash-paths/o6-return-occurs.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 6.09, "errors": ["not enough context to infer a type", "not enough context to infer a type", "no coercion from '#!' to 'Box<#!>'"]}
+{"file": "review2/crash-paths/o6-return-occurs.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 1.08, "errors": ["not enough context to infer a type", "not enough context to infer a type", "no coercion from '#!' to 'Box<#!>'"]}
+{"file": "review2/crash-paths/o7-assign-occurs-bound.hylo", "config": "base", "rc": 0, "d": 3, "ms": 14.2, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o7-assign-occurs-bound.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.26, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o7-assign-occurs-bound.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 1.36, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o8-assign-ctrl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 13.35, "errors": ["no coercion from 'Box<A>' to 'A'"]}
+{"file": "review2/crash-paths/o8-assign-ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.26, "errors": ["no coercion from 'Box<A>' to 'A'"]}
+{"file": "review2/crash-paths/o8-assign-ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.98, "errors": ["no coercion from 'Box<A>' to 'A'"]}
+{"file": "review2/crash-paths/o9-assign-mk.hylo", "config": "base", "rc": 0, "d": 3, "ms": 14.48, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o9-assign-mk.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.41, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/o9-assign-mk.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 1.34, "errors": ["cannot pass value of type '#!' to parameter 'A'", "not enough context to infer a type", "no coercion from '<T> [Void](let T) let -> Box<T>' to '[Void](let #!) let -> Box<#!>'"]}
+{"file": "review2/crash-paths/p1-deep-100.hylo", "config": "base", "rc": 0, "d": 1, "ms": 27.49, "errors": ["not enough context to infer a type"]}
+{"file": "review2/crash-paths/p1-deep-100.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.92, "errors": []}
+{"file": "review2/crash-paths/p1-deep-100.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.98, "errors": []}
+{"file": "review2/crash-paths/p1-deep-25.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.54, "errors": ["not enough context to infer a type"]}
+{"file": "review2/crash-paths/p1-deep-25.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.49, "errors": []}
+{"file": "review2/crash-paths/p1-deep-25.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.46, "errors": []}
+{"file": "review2/crash-paths/p1-deep-50.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.62, "errors": ["not enough context to infer a type"]}
+{"file": "review2/crash-paths/p1-deep-50.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.3, "errors": []}
+{"file": "review2/crash-paths/p1-deep-50.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.28, "errors": []}
+{"file": "review2/crash-paths/p2-alias-deep.hylo", "config": "base", "rc": 0, "d": 1, "ms": 26.93, "errors": ["not enough context to infer a type"]}
+{"file": "review2/crash-paths/p2-alias-deep.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.72, "errors": []}
+{"file": "review2/crash-paths/p2-alias-deep.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.49, "errors": []}
+{"file": "review2/crash-paths/p3-alias-deep256.hylo", "config": "base", "rc": 0, "d": 1, "ms": 27.61, "errors": ["not enough context to infer a type"]}
+{"file": "review2/crash-paths/p3-alias-deep256.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.03, "errors": []}
+{"file": "review2/crash-paths/p3-alias-deep256.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.96, "errors": []}
+{"file": "review2/crash-paths/q1-open-eq.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1014.85, "errors": []}
+{"file": "review2/crash-paths/q1-open-eq.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.48, "errors": ["cannot pass value of type 'A' to parameter 'D'"]}
+{"file": "review2/crash-paths/q1-open-eq.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.66, "errors": ["cannot pass value of type 'A' to parameter 'D'"]}
+{"file": "review2/crash-paths/q2-open-eq-amb.hylo", "config": "base", "rc": 0, "d": 2, "ms": 19.46, "errors": ["no coercion from '<T, U> (T ~ U) ==> [Void](let T) let -> U' to '[Void](let A) let -> C'", "no coercion from '<T, U> (T ~ U) ==> [Void](let T) let -> U' to '[Void](let A) let -> A'"]}
+{"file": "review2/crash-paths/q2-open-eq-amb.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.36, "errors": []}
+{"file": "review2/crash-paths/q2-open-eq-amb.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.45, "errors": []}
+{"file": "review2/crash-paths/r1-bundle-eq.hylo", "config": "base", "rc": 0, "d": 2, "ms": 23.36, "errors": ["no coercion from 'Void' to '{T, Void}'", "not enough context to infer a type"]}
+{"file": "review2/crash-paths/r1-bundle-eq.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.36, "errors": ["no coercion from 'Void' to '{T, Void}'", "no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [Void](auto A) auto -> Void { let, inout }, let [Void](auto B) auto -> Void { let, inout }) let -> Void'"]}
+{"file": "review2/crash-paths/r1-bundle-eq.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.37, "errors": ["no coercion from 'Void' to '{T, Void}'", "no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [Void](auto A) auto -> Void { let, inout }, let [Void](auto B) auto -> Void { let, inout }) let -> Void'"]}
+{"file": "review2/crash-paths/r2-bundle-eq-neg.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/r2-bundle-eq-neg.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.25, "errors": ["no coercion from 'Void' to '{T, Void}'", "no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [Void](auto A) auto -> Void { let, inout }, let [Void](auto C) auto -> Void { let, inout }) let -> Void'"]}
+{"file": "review2/crash-paths/r2-bundle-eq-neg.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.47, "errors": ["no coercion from 'Void' to '{T, Void}'", "no coercion from '<X, Y> (X ~ Y) ==> [Void](let X, let Y) let -> Void' to '[Void](let [Void](auto A) auto -> Void { let, inout }, let [Void](auto C) auto -> Void { let, inout }) let -> Void'"]}
+{"file": "review2/crash-paths/r3-arrow-eq.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/crash-paths/r3-arrow-eq.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 7.24, "errors": ["no coercion from '([Void](x: let A) let -> Void ~ [Void](y: let B) let -> Void) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from '([Void](inout A) let -> Void ~ [Void](let B) let -> Void) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/r3-arrow-eq.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.19, "errors": ["no coercion from '([Void](x: let A) let -> Void ~ [Void](y: let B) let -> Void) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from '([Void](inout A) let -> Void ~ [Void](let B) let -> Void) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/x1-extorder-after.hylo", "config": "base", "rc": 0, "d": 6, "ms": 24.27, "errors": ["no coercion from 'A' to '#!'", "type 'A' has no static member 'Foo'", "type 'A' has no static member 'Foo'"]}
+{"file": "review2/crash-paths/x1-extorder-after.hylo", "config": "FIX", "rc": 0, "d": 6, "ms": 11.18, "errors": ["no coercion from 'A' to '#!'", "type 'A' has no static member 'Foo'", "type 'A' has no static member 'Foo'"]}
+{"file": "review2/crash-paths/x1-extorder-after.hylo", "config": "FULL", "rc": 0, "d": 6, "ms": 2.5, "errors": ["no coercion from 'A' to '#!'", "type 'A' has no static member 'Foo'", "type 'A' has no static member 'Foo'"]}
+{"file": "review2/crash-paths/x2-extorder-self.hylo", "config": "base", "rc": 0, "d": 4, "ms": 34.44, "errors": ["definition of 'Me' refers to itself", "no implementation of associated type requirement 'Q'", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/x2-extorder-self.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 9.29, "errors": ["definition of 'Me' refers to itself", "no implementation of associated type requirement 'Q'", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/crash-paths/x2-extorder-self.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 2.9, "errors": ["definition of 'Me' refers to itself", "no implementation of associated type requirement 'Q'", "no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress-judge/e04-penalty-scope.hylo", "config": "base", "rc": 0, "d": 0, "ms": 31.14, "errors": []}
+{"file": "review2/eq-regress-judge/e04-penalty-scope.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.33, "errors": []}
+{"file": "review2/eq-regress-judge/e04-penalty-scope.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.46, "errors": []}
+{"file": "review2/eq-regress-judge/e05-penalty-scope2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.73, "errors": []}
+{"file": "review2/eq-regress-judge/e05-penalty-scope2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.02, "errors": []}
+{"file": "review2/eq-regress-judge/e05-penalty-scope2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.49, "errors": []}
+{"file": "review2/eq-regress-judge/e06-elab-change.hylo", "config": "base", "rc": 0, "d": 0, "ms": 34.98, "errors": []}
+{"file": "review2/eq-regress-judge/e06-elab-change.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.82, "errors": []}
+{"file": "review2/eq-regress-judge/e06-elab-change.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.0, "errors": []}
+{"file": "review2/eq-regress-judge/o2-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 100.0, "errors": []}
+{"file": "review2/eq-regress-judge/o2-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.55, "errors": []}
+{"file": "review2/eq-regress-judge/o2-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.12, "errors": []}
+{"file": "review2/eq-regress-judge/o2b-call-infer.hylo", "config": "base", "rc": 0, "d": 0, "ms": 92.31, "errors": []}
+{"file": "review2/eq-regress-judge/o2b-call-infer.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.32, "errors": []}
+{"file": "review2/eq-regress-judge/o2b-call-infer.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.52, "errors": []}
+{"file": "review2/eq-regress-judge/o2d-order.hylo", "config": "base", "rc": 0, "d": 0, "ms": 47.48, "errors": []}
+{"file": "review2/eq-regress-judge/o2d-order.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.47, "errors": []}
+{"file": "review2/eq-regress-judge/o2d-order.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.14, "errors": []}
+{"file": "review2/eq-regress-judge/p01-cc-big.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress-judge/p01-cc-big.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 41.67, "errors": []}
+{"file": "review2/eq-regress-judge/p01-cc-big.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 31.93, "errors": []}
+{"file": "review2/eq-regress-judge/p02-cc-big.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress-judge/p02-cc-big.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 80.55, "errors": []}
+{"file": "review2/eq-regress-judge/p02-cc-big.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 82.26, "errors": []}
+{"file": "review2/eq-regress-judge/x01-ext-arg-member.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.74, "errors": []}
+{"file": "review2/eq-regress-judge/x01-ext-arg-member.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.09, "errors": []}
+{"file": "review2/eq-regress-judge/x01-ext-arg-member.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.93, "errors": []}
+{"file": "review2/eq-regress-judge/x03-ext-nested-struct.hylo", "config": "base", "rc": 0, "d": 0, "ms": 32.05, "errors": []}
+{"file": "review2/eq-regress-judge/x03-ext-nested-struct.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.48, "errors": []}
+{"file": "review2/eq-regress-judge/x03-ext-nested-struct.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.33, "errors": []}
+{"file": "review2/eq-regress-judge/x06-nested-ext-no-alias.hylo", "config": "base", "rc": 0, "d": 0, "ms": 26.04, "errors": []}
+{"file": "review2/eq-regress-judge/x06-nested-ext-no-alias.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.98, "errors": []}
+{"file": "review2/eq-regress-judge/x06-nested-ext-no-alias.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.77, "errors": []}
+{"file": "review2/eq-regress-judge/x09-ext-generic-where-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 21.49, "errors": []}
+{"file": "review2/eq-regress-judge/x09-ext-generic-where-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.65, "errors": []}
+{"file": "review2/eq-regress-judge/x09-ext-generic-where-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.46, "errors": []}
+{"file": "review2/eq-regress-judge/x10b-ext-where-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1840.13, "errors": []}
+{"file": "review2/eq-regress-judge/x10b-ext-where-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 24.46, "errors": []}
+{"file": "review2/eq-regress-judge/x10b-ext-where-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 19.41, "errors": []}
+{"file": "review2/eq-regress/a01-self-trait.hylo", "config": "base", "rc": 0, "d": 0, "ms": 38.44, "errors": []}
+{"file": "review2/eq-regress/a01-self-trait.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.56, "errors": []}
+{"file": "review2/eq-regress/a01-self-trait.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8.09, "errors": []}
+{"file": "review2/eq-regress/a02-conformance-def.hylo", "config": "base", "rc": 0, "d": 0, "ms": 32.18, "errors": []}
+{"file": "review2/eq-regress/a02-conformance-def.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.07, "errors": []}
+{"file": "review2/eq-regress/a02-conformance-def.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.77, "errors": []}
+{"file": "review2/eq-regress/a03-generic-given-body.hylo", "config": "base", "rc": 0, "d": 1, "ms": 33.97, "errors": ["no coercion from 'P<V> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/a03-generic-given-body.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.11, "errors": ["no coercion from 'P<V> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/a03-generic-given-body.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.48, "errors": ["no coercion from 'P<V> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/a04-cond-given.hylo", "config": "base", "rc": 0, "d": 0, "ms": 37.22, "errors": []}
+{"file": "review2/eq-regress/a04-cond-given.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.28, "errors": []}
+{"file": "review2/eq-regress/a04-cond-given.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.11, "errors": []}
+{"file": "review2/eq-regress/a05-quantified.hylo", "config": "base", "rc": 0, "d": 1, "ms": 184.69, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-regress/a05-quantified.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.1, "errors": []}
+{"file": "review2/eq-regress/a05-quantified.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.67, "errors": []}
+{"file": "review2/eq-regress/a06-tuple-arrow.hylo", "config": "base", "rc": 0, "d": 1, "ms": 158.05, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-regress/a06-tuple-arrow.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.31, "errors": []}
+{"file": "review2/eq-regress/a06-tuple-arrow.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.29, "errors": []}
+{"file": "review2/eq-regress/a07-open.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.92, "errors": []}
+{"file": "review2/eq-regress/a07-open.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.97, "errors": []}
+{"file": "review2/eq-regress/a07-open.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.74, "errors": []}
+{"file": "review2/eq-regress/a08-assoc-generic.hylo", "config": "base", "rc": 0, "d": 0, "ms": 117.16, "errors": []}
+{"file": "review2/eq-regress/a08-assoc-generic.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 16.61, "errors": []}
+{"file": "review2/eq-regress/a08-assoc-generic.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 17.94, "errors": []}
+{"file": "review2/eq-regress/a09-conf-via-eq.hylo", "config": "base", "rc": 0, "d": 0, "ms": 124.8, "errors": []}
+{"file": "review2/eq-regress/a09-conf-via-eq.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 17.64, "errors": []}
+{"file": "review2/eq-regress/a09-conf-via-eq.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8.26, "errors": []}
+{"file": "review2/eq-regress/e01-orient-amb.hylo", "config": "base", "rc": 0, "d": 0, "ms": 31.41, "errors": []}
+{"file": "review2/eq-regress/e01-orient-amb.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.49, "errors": []}
+{"file": "review2/eq-regress/e01-orient-amb.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.48, "errors": []}
+{"file": "review2/eq-regress/e01b-both-direct.hylo", "config": "base", "rc": 0, "d": 1, "ms": 36.22, "errors": ["no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e01b-both-direct.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 13.59, "errors": ["no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e01b-both-direct.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.47, "errors": ["no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e02-penalty.hylo", "config": "base", "rc": 0, "d": 0, "ms": 37.58, "errors": []}
+{"file": "review2/eq-regress/e02-penalty.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.22, "errors": []}
+{"file": "review2/eq-regress/e02-penalty.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.86, "errors": []}
+{"file": "review2/eq-regress/e03-penalty2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 32.59, "errors": []}
+{"file": "review2/eq-regress/e03-penalty2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.62, "errors": []}
+{"file": "review2/eq-regress/e03-penalty2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.64, "errors": []}
+{"file": "review2/eq-regress/e04-penalty-scope.hylo", "config": "base", "rc": 0, "d": 0, "ms": 31.19, "errors": []}
+{"file": "review2/eq-regress/e04-penalty-scope.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.15, "errors": []}
+{"file": "review2/eq-regress/e04-penalty-scope.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.43, "errors": []}
+{"file": "review2/eq-regress/e05-penalty-scope2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.4, "errors": []}
+{"file": "review2/eq-regress/e05-penalty-scope2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.64, "errors": []}
+{"file": "review2/eq-regress/e05-penalty-scope2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.56, "errors": []}
+{"file": "review2/eq-regress/e06-elab-change.hylo", "config": "base", "rc": 0, "d": 0, "ms": 41.27, "errors": []}
+{"file": "review2/eq-regress/e06-elab-change.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 16.44, "errors": []}
+{"file": "review2/eq-regress/e06-elab-change.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.4, "errors": []}
+{"file": "review2/eq-regress/e07-refine.hylo", "config": "base", "rc": 0, "d": 6, "ms": 96.93, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'", "no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e07-refine.hylo", "config": "FIX", "rc": 0, "d": 6, "ms": 39.8, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'", "no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e07-refine.hylo", "config": "FULL", "rc": 0, "d": 6, "ms": 35.84, "errors": ["no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "undefined symbol 'X'", "no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-regress/e08-shapes.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress/e08-shapes.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.56, "errors": []}
+{"file": "review2/eq-regress/e08-shapes.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.7, "errors": []}
+{"file": "review2/eq-regress/e09-trait-self-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 98.45, "errors": []}
+{"file": "review2/eq-regress/e09-trait-self-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 26.13, "errors": []}
+{"file": "review2/eq-regress/e09-trait-self-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 21.3, "errors": []}
+{"file": "review2/eq-regress/o1-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 36.22, "errors": []}
+{"file": "review2/eq-regress/o1-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.11, "errors": []}
+{"file": "review2/eq-regress/o1-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.83, "errors": []}
+{"file": "review2/eq-regress/o2-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 99.57, "errors": []}
+{"file": "review2/eq-regress/o2-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.63, "errors": []}
+{"file": "review2/eq-regress/o2-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.04, "errors": []}
+{"file": "review2/eq-regress/o2b-call-infer.hylo", "config": "base", "rc": 0, "d": 0, "ms": 94.97, "errors": []}
+{"file": "review2/eq-regress/o2b-call-infer.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.08, "errors": []}
+{"file": "review2/eq-regress/o2b-call-infer.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.87, "errors": []}
+{"file": "review2/eq-regress/o2c-call-explicit.hylo", "config": "base", "rc": 0, "d": 0, "ms": 83.69, "errors": []}
+{"file": "review2/eq-regress/o2c-call-explicit.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.3, "errors": []}
+{"file": "review2/eq-regress/o2c-call-explicit.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.48, "errors": []}
+{"file": "review2/eq-regress/o2d-order.hylo", "config": "base", "rc": 0, "d": 0, "ms": 45.17, "errors": []}
+{"file": "review2/eq-regress/o2d-order.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.34, "errors": []}
+{"file": "review2/eq-regress/o2d-order.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.26, "errors": []}
+{"file": "review2/eq-regress/o3-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 416.4, "errors": []}
+{"file": "review2/eq-regress/o3-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.58, "errors": []}
+{"file": "review2/eq-regress/o3-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.06, "errors": []}
+{"file": "review2/eq-regress/o4-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 494.05, "errors": []}
+{"file": "review2/eq-regress/o4-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.1, "errors": []}
+{"file": "review2/eq-regress/o4-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.24, "errors": []}
+{"file": "review2/eq-regress/o5-open-chain.hylo", "config": "base", "rc": 0, "d": 0, "ms": 616.94, "errors": []}
+{"file": "review2/eq-regress/o5-open-chain.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.46, "errors": []}
+{"file": "review2/eq-regress/o5-open-chain.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.19, "errors": []}
+{"file": "review2/eq-regress/p01-cc-big.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress/p01-cc-big.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 40.33, "errors": []}
+{"file": "review2/eq-regress/p01-cc-big.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 30.63, "errors": []}
+{"file": "review2/eq-regress/p02-cc-big.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress/p02-cc-big.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 82.75, "errors": []}
+{"file": "review2/eq-regress/p02-cc-big.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 64.06, "errors": []}
+{"file": "review2/eq-regress/x01-ext-arg-member.hylo", "config": "base", "rc": 0, "d": 0, "ms": 26.52, "errors": []}
+{"file": "review2/eq-regress/x01-ext-arg-member.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.48, "errors": []}
+{"file": "review2/eq-regress/x01-ext-arg-member.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.95, "errors": []}
+{"file": "review2/eq-regress/x02-ext-nested.hylo", "config": "base", "rc": 0, "d": 0, "ms": 28.44, "errors": []}
+{"file": "review2/eq-regress/x02-ext-nested.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.38, "errors": []}
+{"file": "review2/eq-regress/x02-ext-nested.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.55, "errors": []}
+{"file": "review2/eq-regress/x03-ext-nested-struct.hylo", "config": "base", "rc": 0, "d": 0, "ms": 32.52, "errors": []}
+{"file": "review2/eq-regress/x03-ext-nested-struct.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.7, "errors": []}
+{"file": "review2/eq-regress/x03-ext-nested-struct.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.36, "errors": []}
+{"file": "review2/eq-regress/x04-generic-ext-where.hylo", "config": "base", "rc": 0, "d": 2, "ms": 28.23, "errors": ["expression does not denote a type", "type 'A' has no static member 'init'"]}
+{"file": "review2/eq-regress/x04-generic-ext-where.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 12.62, "errors": ["expression does not denote a type", "type 'A' has no static member 'init'"]}
+{"file": "review2/eq-regress/x04-generic-ext-where.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 4.21, "errors": ["expression does not denote a type", "type 'A' has no static member 'init'"]}
+{"file": "review2/eq-regress/x05-alias-ext.hylo", "config": "base", "rc": 0, "d": 0, "ms": 31.63, "errors": []}
+{"file": "review2/eq-regress/x05-alias-ext.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.5, "errors": []}
+{"file": "review2/eq-regress/x05-alias-ext.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.53, "errors": []}
+{"file": "review2/eq-regress/x06-nested-ext-no-alias.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.57, "errors": []}
+{"file": "review2/eq-regress/x06-nested-ext-no-alias.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.18, "errors": []}
+{"file": "review2/eq-regress/x06-nested-ext-no-alias.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.79, "errors": []}
+{"file": "review2/eq-regress/x07-given-arg-member.hylo", "config": "base", "rc": 0, "d": 0, "ms": 39.62, "errors": []}
+{"file": "review2/eq-regress/x07-given-arg-member.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 17.19, "errors": []}
+{"file": "review2/eq-regress/x07-given-arg-member.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 9.33, "errors": []}
+{"file": "review2/eq-regress/x08-ext-arg-member-reordered.hylo", "config": "base", "rc": 0, "d": 0, "ms": 26.63, "errors": []}
+{"file": "review2/eq-regress/x08-ext-arg-member-reordered.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.55, "errors": []}
+{"file": "review2/eq-regress/x08-ext-arg-member-reordered.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.95, "errors": []}
+{"file": "review2/eq-regress/x09-ext-generic-where-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.76, "errors": []}
+{"file": "review2/eq-regress/x09-ext-generic-where-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.23, "errors": []}
+{"file": "review2/eq-regress/x09-ext-generic-where-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.4, "errors": []}
+{"file": "review2/eq-regress/x10-ext-where-assoc.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-regress/x10-ext-where-assoc.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 20.09, "errors": ["type 'Box<Bag>' has no member 'first'"]}
+{"file": "review2/eq-regress/x10-ext-where-assoc.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 12.93, "errors": ["type 'Box<Bag>' has no member 'first'"]}
+{"file": "review2/eq-regress/x10b-ext-where-assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1899.03, "errors": []}
+{"file": "review2/eq-regress/x10b-ext-where-assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 23.92, "errors": []}
+{"file": "review2/eq-regress/x10b-ext-where-assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 18.3, "errors": []}
+{"file": "review2/eq-regress/x11-ext-forward.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.24, "errors": []}
+{"file": "review2/eq-regress/x11-ext-forward.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.2, "errors": []}
+{"file": "review2/eq-regress/x11-ext-forward.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.4, "errors": []}
+{"file": "review2/eq-regress/x12-ext-members-kinds.hylo", "config": "base", "rc": 0, "d": 2, "ms": 29.76, "errors": ["no candidate matches the argument list", "cannot pass value of type '#!' to parameter 'A'"]}
+{"file": "review2/eq-regress/x12-ext-members-kinds.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 12.45, "errors": ["no candidate matches the argument list", "cannot pass value of type '#!' to parameter 'A'"]}
+{"file": "review2/eq-regress/x12-ext-members-kinds.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 3.59, "errors": ["no candidate matches the argument list", "cannot pass value of type '#!' to parameter 'A'"]}
+{"file": "review2/eq-regress/x13-ext-body-lookup.hylo", "config": "base", "rc": 0, "d": 3, "ms": 30.7, "errors": ["incompatible labels: found '(other:)', expected '(_:)'", "undefined symbol 'T'", "type 'Box<#!>' has no member 'first'"]}
+{"file": "review2/eq-regress/x13-ext-body-lookup.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 15.77, "errors": ["incompatible labels: found '(other:)', expected '(_:)'", "undefined symbol 'T'", "type 'Box<#!>' has no member 'first'"]}
+{"file": "review2/eq-regress/x13-ext-body-lookup.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.9, "errors": ["incompatible labels: found '(other:)', expected '(_:)'", "undefined symbol 'T'", "type 'Box<#!>' has no member 'first'"]}
+{"file": "review2/eq-regress/x14-ext-generic-arg-assoc-std.hylo", "config": "base", "rc": 0, "d": 1, "ms": 18.95, "errors": ["undefined symbol 'Array'"]}
+{"file": "review2/eq-regress/x14-ext-generic-arg-assoc-std.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.31, "errors": ["undefined symbol 'Array'"]}
+{"file": "review2/eq-regress/x14-ext-generic-arg-assoc-std.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.29, "errors": ["undefined symbol 'Array'"]}
+{"file": "review2/eq-unsound-judge/mirror-0.hylo", "config": "base", "rc": 0, "d": 0, "ms": 24.63, "errors": []}
+{"file": "review2/eq-unsound-judge/mirror-0.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.48, "errors": []}
+{"file": "review2/eq-unsound-judge/mirror-0.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.1, "errors": []}
+{"file": "review2/eq-unsound-judge/mirror-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 56.4, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound-judge/mirror-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 30.3, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound-judge/mirror-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 16.62, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound-judge/mirror-2.hylo", "config": "base", "rc": 0, "d": 2, "ms": 58.8, "errors": ["no given instance of 'Q1<W>' in this scope", "no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound-judge/mirror-2.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 32.73, "errors": ["no given instance of 'Q1<W>' in this scope", "no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound-judge/mirror-2.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 18.13, "errors": ["no given instance of 'Q1<W>' in this scope", "no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/abs-launder-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.22, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.15, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.11, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 28.69, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.09, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.78, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-direct.hylo", "config": "base", "rc": 0, "d": 1, "ms": 23.99, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-direct.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.99, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder-direct.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.97, "errors": ["cannot pass value of type '(W::P).X' to parameter '(V::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder.hylo", "config": "base", "rc": 0, "d": 1, "ms": 40.57, "errors": ["cannot pass value of type '(W::P).X' to parameter '(W::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.54, "errors": ["cannot pass value of type '(W::P).X' to parameter '(W::P).X'"]}
+{"file": "review2/eq-unsound/abs-launder.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.18, "errors": ["cannot pass value of type '(W::P).X' to parameter '(W::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-0.hylo", "config": "base", "rc": 0, "d": 1, "ms": 23.49, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-0.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.84, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.14, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.11, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.58, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.44, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 610.71, "errors": []}
+{"file": "review2/eq-unsound/abs-trans-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.58, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/abs-trans-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.44, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/abs-trans-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 657.9, "errors": []}
+{"file": "review2/eq-unsound/abs-trans-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.1, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.82, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-4.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/abs-trans-4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 15.88, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.02, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-5.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/abs-trans-5.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.81, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/abs-trans-5.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 7.13, "errors": ["no coercion from '((U::P).X ~ (T::P).X) ==> [Void](let (U::P).X) let -> (T::P).X' to '[Void](let (U::P).X) let -> (T::P).X'"]}
+{"file": "review2/eq-unsound/absinst-0.hylo", "config": "base", "rc": 0, "d": 0, "ms": 481.28, "errors": []}
+{"file": "review2/eq-unsound/absinst-0.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.39, "errors": ["no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'"]}
+{"file": "review2/eq-unsound/absinst-0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 7.91, "errors": ["no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'"]}
+{"file": "review2/eq-unsound/absinst-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1663.03, "errors": []}
+{"file": "review2/eq-unsound/absinst-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 13.75, "errors": ["no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'"]}
+{"file": "review2/eq-unsound/absinst-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 8.34, "errors": ["no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'"]}
+{"file": "review2/eq-unsound/absinst-ok.hylo", "config": "base", "rc": 0, "d": 0, "ms": 38.56, "errors": []}
+{"file": "review2/eq-unsound/absinst-ok.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.11, "errors": []}
+{"file": "review2/eq-unsound/absinst-ok.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.84, "errors": []}
+{"file": "review2/eq-unsound/absleak-0.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.83, "errors": []}
+{"file": "review2/eq-unsound/absleak-0.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.12, "errors": []}
+{"file": "review2/eq-unsound/absleak-0.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.37, "errors": []}
+{"file": "review2/eq-unsound/absleak-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 23.48, "errors": ["cannot pass value of type '(T::P).X' to parameter '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.38, "errors": ["cannot pass value of type '(T::P).X' to parameter '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.2, "errors": ["cannot pass value of type '(T::P).X' to parameter '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 26.28, "errors": ["no coercion from '(T::P).X' to '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.25, "errors": ["no coercion from '(T::P).X' to '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.52, "errors": ["no coercion from '(T::P).X' to '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-3.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/absleak-3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 32.27, "errors": ["no coercion from '(T::P).X' to '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 28.68, "errors": ["no coercion from '(T::P).X' to '(U::P).X'"]}
+{"file": "review2/eq-unsound/absleak-4.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/absleak-4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 33.4, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/absleak-4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 26.66, "errors": ["no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/alias-hk-1.hylo", "config": "base", "rc": 0, "d": 2, "ms": 21.48, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-hk-1.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.72, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-hk-1.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.71, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-hk-2.hylo", "config": "base", "rc": 0, "d": 2, "ms": 23.51, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-hk-2.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 9.52, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-hk-2.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.92, "errors": ["'B2' takes no compile-time arguments", "'B2' takes no compile-time arguments"]}
+{"file": "review2/eq-unsound/alias-proj-1.hylo", "config": "base", "rc": 0, "d": 3, "ms": 25.46, "errors": ["where clause is not allowed here", "type 'T' has no static member 'X'", "cannot pass value of type '(U::P).X' to parameter '#!'"]}
+{"file": "review2/eq-unsound/alias-proj-1.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 8.49, "errors": ["where clause is not allowed here", "type 'T' has no static member 'X'", "cannot pass value of type '(U::P).X' to parameter '#!'"]}
+{"file": "review2/eq-unsound/alias-proj-1.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.91, "errors": ["where clause is not allowed here", "type 'T' has no static member 'X'", "cannot pass value of type '(U::P).X' to parameter '#!'"]}
+{"file": "review2/eq-unsound/ate-f1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.59, "errors": []}
+{"file": "review2/eq-unsound/ate-f1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.89, "errors": []}
+{"file": "review2/eq-unsound/ate-f1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.04, "errors": []}
+{"file": "review2/eq-unsound/ate.hylo", "config": "base", "rc": 0, "d": 0, "ms": 65.02, "errors": []}
+{"file": "review2/eq-unsound/ate.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.68, "errors": []}
+{"file": "review2/eq-unsound/ate.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 19.71, "errors": []}
+{"file": "review2/eq-unsound/ati.hylo", "config": "base", "rc": 0, "d": 1, "ms": 23.2, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/ati.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.9, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/ati.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.18, "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "review2/eq-unsound/dump-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 164.51, "errors": []}
+{"file": "review2/eq-unsound/dump-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.85, "errors": []}
+{"file": "review2/eq-unsound/dump-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.83, "errors": []}
+{"file": "review2/eq-unsound/extwhere-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 22366.87, "errors": ["type '{B, B}' has no member 'm'"]}
+{"file": "review2/eq-unsound/extwhere-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.99, "errors": ["type '{B, B}' has no member 'm'"]}
+{"file": "review2/eq-unsound/extwhere-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.79, "errors": ["type '{B, B}' has no member 'm'"]}
+{"file": "review2/eq-unsound/extwhere-1ok.hylo", "config": "base", "rc": 0, "d": 0, "ms": 47.55, "errors": []}
+{"file": "review2/eq-unsound/extwhere-1ok.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.2, "errors": []}
+{"file": "review2/eq-unsound/extwhere-1ok.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.01, "errors": []}
+{"file": "review2/eq-unsound/extwhere-2.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/extwhere-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 12.13, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<{B, B}>>) let -> yield P<{B, B}>'"]}
+{"file": "review2/eq-unsound/extwhere-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.05, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<{B, B}>>) let -> yield P<{B, B}>'"]}
+{"file": "review2/eq-unsound/extwhere-3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 17.15, "errors": []}
+{"file": "review2/eq-unsound/extwhere-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.67, "errors": []}
+{"file": "review2/eq-unsound/extwhere-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.43, "errors": []}
+{"file": "review2/eq-unsound/nested-eq.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/nested-eq.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.89, "errors": ["expected 'is'", "no coercion from '(A ~ B) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/nested-eq.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.96, "errors": ["expected 'is'", "no coercion from '(A ~ B) ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/eq-unsound/pen-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 19.68, "errors": ["cannot pass value of type '(W::P).X' to parameter 'A'"]}
+{"file": "review2/eq-unsound/pen-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.95, "errors": ["cannot pass value of type '(W::P).X' to parameter 'A'"]}
+{"file": "review2/eq-unsound/pen-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.92, "errors": ["cannot pass value of type '(W::P).X' to parameter 'A'"]}
+{"file": "review2/eq-unsound/pen-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.63, "errors": ["no coercion from 'A' to '(W::P).X'"]}
+{"file": "review2/eq-unsound/pen-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.27, "errors": ["no coercion from 'A' to '(W::P).X'"]}
+{"file": "review2/eq-unsound/pen-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.44, "errors": ["no coercion from 'A' to '(W::P).X'"]}
+{"file": "review2/eq-unsound/pen-ref-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 45.36, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 19.35, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 7.01, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 45.23, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 21.15, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.49, "errors": ["no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-3.hylo", "config": "base", "rc": 0, "d": 2, "ms": 51.3, "errors": ["expression does not denote a type", "no coercion from 'A' to '#!'"]}
+{"file": "review2/eq-unsound/pen-ref-3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 23.29, "errors": []}
+{"file": "review2/eq-unsound/pen-ref-3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.85, "errors": []}
+{"file": "review2/eq-unsound/pen-ref-4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 53.85, "errors": []}
+{"file": "review2/eq-unsound/pen-ref-4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 23.31, "errors": []}
+{"file": "review2/eq-unsound/pen-ref-4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.85, "errors": []}
+{"file": "review2/eq-unsound/pend-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/pend-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.73, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yield P<C>'"]}
+{"file": "review2/eq-unsound/pend-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.15, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yield P<C>'"]}
+{"file": "review2/eq-unsound/pend-2.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/eq-unsound/pend-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.32, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yield P<C>'"]}
+{"file": "review2/eq-unsound/pend-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.66, "errors": ["no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yield P<C>'"]}
+{"file": "review2/eq-unsound/perf-alias-7.hylo", "config": "base", "rc": 0, "d": 1, "ms": 29.74, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-unsound/perf-alias-7.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.75, "errors": []}
+{"file": "review2/eq-unsound/perf-alias-7.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.94, "errors": []}
+{"file": "review2/eq-unsound/perf-alias.hylo", "config": "base", "rc": 0, "d": 1, "ms": 25.95, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-unsound/perf-alias.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.48, "errors": []}
+{"file": "review2/eq-unsound/perf-alias.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.01, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-100.hylo", "config": "base", "rc": 0, "d": 1, "ms": 27.12, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-unsound/perf-deep-100.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.39, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-100.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.2, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-200.hylo", "config": "base", "rc": 0, "d": 1, "ms": 30.08, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-unsound/perf-deep-200.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.2, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-200.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.4, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-50.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.6, "errors": ["not enough context to infer a type"]}
+{"file": "review2/eq-unsound/perf-deep-50.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.69, "errors": []}
+{"file": "review2/eq-unsound/perf-deep-50.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.59, "errors": []}
+{"file": "review2/eq-unsound/structwhere-1.hylo", "config": "base", "rc": 0, "d": 3, "ms": 41.69, "errors": ["incompatible labels: found '(x:)', expected '(_:)'", "where clause is not allowed here", "no coercion from 'T' to 'A'"]}
+{"file": "review2/eq-unsound/structwhere-1.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 19.6, "errors": ["incompatible labels: found '(x:)', expected '(_:)'", "where clause is not allowed here", "no coercion from 'T' to 'A'"]}
+{"file": "review2/eq-unsound/structwhere-1.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 3.58, "errors": ["incompatible labels: found '(x:)', expected '(_:)'", "where clause is not allowed here", "no coercion from 'T' to 'A'"]}
+{"file": "review2/eq-unsound/structwhere-2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.96, "errors": ["where clause is not allowed here"]}
+{"file": "review2/eq-unsound/structwhere-2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.38, "errors": ["where clause is not allowed here"]}
+{"file": "review2/eq-unsound/structwhere-2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.76, "errors": ["where clause is not allowed here"]}
+{"file": "review2/eq-unsound/v-abs-7.hylo", "config": "base", "rc": 0, "d": 0, "ms": 42.0, "errors": []}
+{"file": "review2/eq-unsound/v-abs-7.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.48, "errors": []}
+{"file": "review2/eq-unsound/v-abs-7.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.47, "errors": []}
+{"file": "review2/ext-order-judge/gvalid.hylo", "config": "base", "rc": 0, "d": 0, "ms": 35.85, "errors": []}
+{"file": "review2/ext-order-judge/gvalid.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.54, "errors": []}
+{"file": "review2/ext-order-judge/gvalid.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 8.96, "errors": []}
+{"file": "review2/ext-order-judge/gx1_swap.hylo", "config": "base", "rc": 0, "d": 0, "ms": 46.39, "errors": []}
+{"file": "review2/ext-order-judge/gx1_swap.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.43, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy"]}
+{"file": "review2/ext-order-judge/gx1_swap.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.23, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy"]}
+{"file": "review2/ext-order-judge/r2_bare.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.18, "errors": []}
+{"file": "review2/ext-order-judge/r2_bare.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 11.16, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Element', which this extension may affect"]}
+{"file": "review2/ext-order-judge/r2_bare.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 6.1, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Element', which this extension may affect"]}
+{"file": "review2/ext-order/al1.hylo", "config": "base", "rc": 0, "d": 2, "ms": 21.39, "errors": ["definition of 'X' refers to itself", "type 'X' has no static member 'Me'"]}
+{"file": "review2/ext-order/al1.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.73, "errors": ["definition of 'X' refers to itself", "type 'X' has no static member 'Me'"]}
+{"file": "review2/ext-order/al1.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.66, "errors": ["definition of 'X' refers to itself", "type 'X' has no static member 'Me'"]}
+{"file": "review2/ext-order/al2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 21.02, "errors": []}
+{"file": "review2/ext-order/al2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.58, "errors": []}
+{"file": "review2/ext-order/al2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.51, "errors": []}
+{"file": "review2/ext-order/al3.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.66, "errors": ["type 'X' has no static member 'Me'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/al3.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.99, "errors": ["type 'X' has no static member 'Me'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/al3.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.72, "errors": ["type 'X' has no static member 'Me'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb0.hylo", "config": "base", "rc": 0, "d": 2, "ms": 28.03, "errors": ["ambiguous use of 'Me'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb0.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.13, "errors": ["ambiguous use of 'Me'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb0.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.38, "errors": ["ambiguous use of 'Me'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 17.95, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.09, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.3, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 30.74, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.24, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.35, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 17.98, "errors": []}
+{"file": "review2/ext-order/amb3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.5, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Me', which this extension may affect"]}
+{"file": "review2/ext-order/amb3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.36, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Me', which this extension may affect"]}
+{"file": "review2/ext-order/amb4.hylo", "config": "base", "rc": 0, "d": 2, "ms": 18.91, "errors": ["ambiguous use of 'Me'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb4.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.51, "errors": ["ambiguous use of 'Me'", "expression does not denote a type", "circular extension: the extendee of this extension depends on a lookup of 'Me', which this extension may affect"]}
+{"file": "review2/ext-order/amb4.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.42, "errors": ["ambiguous use of 'Me'", "expression does not denote a type", "circular extension: the extendee of this extension depends on a lookup of 'Me', which this extension may affect"]}
+{"file": "review2/ext-order/amb5.hylo", "config": "base", "rc": 0, "d": 1, "ms": 17.37, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb5.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.25, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb5.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.32, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/amb_direct.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.73, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_direct.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 7.46, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_direct.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.65, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e1first.hylo", "config": "base", "rc": 0, "d": 2, "ms": 23.52, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e1first.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 6.07, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e1first.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.65, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e2first.hylo", "config": "base", "rc": 0, "d": 0, "ms": 22.3, "errors": []}
+{"file": "review2/ext-order/amb_e2first.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.69, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e2first.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.69, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/amb_e2first_use.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.35, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/amb_e2first_use.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.22, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb_e2first_use.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.74, "errors": ["expression does not denote a type", "type 'Int' has no member 'g'", "expression does not denote a type"]}
+{"file": "review2/ext-order/amb_viaalias_direct.hylo", "config": "base", "rc": 0, "d": 1, "ms": 19.32, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/amb_viaalias_direct.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.29, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/amb_viaalias_direct.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.34, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/g_dup0.hylo", "config": "base", "rc": 0, "d": 1, "ms": 16.21, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup0.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.29, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.55, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup0_nouse.hylo", "config": "base", "rc": 0, "d": 0, "ms": 22.45, "errors": []}
+{"file": "review2/ext-order/g_dup0_nouse.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.18, "errors": []}
+{"file": "review2/ext-order/g_dup0_nouse.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.38, "errors": []}
+{"file": "review2/ext-order/g_dup1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.64, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup1.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 13.87, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy", "no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup1.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 8.03, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy", "no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.73, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup2.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 14.41, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy", "no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup2.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 7.69, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy", "no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.55, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/g_dup3.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 14.27, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/g_dup3.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 7.61, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/ge1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 56.13, "errors": []}
+{"file": "review2/ext-order/ge1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 16.07, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/ge1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 10.42, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/ge2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 31.9, "errors": ["type 'U' has no static member 'Foo'"]}
+{"file": "review2/ext-order/ge2.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 8.5, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'U' has no static member 'Foo'"]}
+{"file": "review2/ext-order/ge2.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.66, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'U' has no static member 'Foo'"]}
+{"file": "review2/ext-order/ge3.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.99, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/ge3.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 7.33, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/ge3.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.48, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/gx1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 45.35, "errors": []}
+{"file": "review2/ext-order/gx1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 10.88, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy"]}
+{"file": "review2/ext-order/gx1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 5.17, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy"]}
+{"file": "review2/ext-order/gx1_ctrl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.11, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/gx1_ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.26, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/gx1_ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.23, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/gx1_use.hylo", "config": "base", "rc": 0, "d": 1, "ms": 54.29, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/gx1_use.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 12.57, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy", "expression does not denote a type"]}
+{"file": "review2/ext-order/gx1_use.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 7.1, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<A>' that it may satisfy", "expression does not denote a type"]}
+{"file": "review2/ext-order/gz0.hylo", "config": "base", "rc": 0, "d": 2, "ms": 22.77, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/gz0.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 7.02, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/gz0.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 1.3, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/gz1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 47.7, "errors": []}
+{"file": "review2/ext-order/gz1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 16.5, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 10.73, "errors": ["circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz1b.hylo", "config": "base", "rc": 0, "d": 2, "ms": 58.97, "errors": ["ambiguous use of 'Y'", "expression does not denote a type"]}
+{"file": "review2/ext-order/gz1b.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 26.23, "errors": ["ambiguous use of 'Y'", "expression does not denote a type", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz1b.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 13.11, "errors": ["ambiguous use of 'Y'", "expression does not denote a type", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz1c.hylo", "config": "base", "rc": 0, "d": 1, "ms": 56.57, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/gz1c.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 23.28, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz1c.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 13.4, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "circular given: the type of this given depends on an implicit resolution of 'P<T>' that it may satisfy"]}
+{"file": "review2/ext-order/gz2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 21.11, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.34, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.38, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 19.71, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 7.39, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.37, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz4.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.76, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz4.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 8.16, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/gz4.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 1.37, "errors": ["definition of 'Z' refers to itself"]}
+{"file": "review2/ext-order/names/casc1.hylo", "config": "base", "rc": 0, "d": 2, "ms": 22.06, "errors": ["type 'Inner' has no member 'h'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/casc1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.53, "errors": []}
+{"file": "review2/ext-order/names/casc1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.45, "errors": []}
+{"file": "review2/ext-order/names/casc2.hylo", "config": "base", "rc": 0, "d": 2, "ms": 22.84, "errors": ["definition of 'X' refers to itself", "type 'Inner' has no member 'h'"]}
+{"file": "review2/ext-order/names/casc2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.93, "errors": []}
+{"file": "review2/ext-order/names/casc2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.49, "errors": []}
+{"file": "review2/ext-order/names/casc3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 21.25, "errors": []}
+{"file": "review2/ext-order/names/casc3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.24, "errors": []}
+{"file": "review2/ext-order/names/casc3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.43, "errors": []}
+{"file": "review2/ext-order/names/g1.hylo", "config": "base", "rc": 0, "d": 2, "ms": 28.86, "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Inner) let -> Void'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/g1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.92, "errors": []}
+{"file": "review2/ext-order/names/g1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.4, "errors": []}
+{"file": "review2/ext-order/names/g2.hylo", "config": "base", "rc": 0, "d": 2, "ms": 28.64, "errors": ["definition of 'X' refers to itself", "no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Inner) let -> Void'"]}
+{"file": "review2/ext-order/names/g2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.24, "errors": []}
+{"file": "review2/ext-order/names/g2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.61, "errors": []}
+{"file": "review2/ext-order/names/g3.hylo", "config": "base", "rc": 0, "d": 0, "ms": 34.84, "errors": []}
+{"file": "review2/ext-order/names/g3.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.77, "errors": []}
+{"file": "review2/ext-order/names/g3.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.31, "errors": []}
+{"file": "review2/ext-order/names/g4.hylo", "config": "base", "rc": 0, "d": 2, "ms": 28.65, "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Inner) let -> Void'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/g4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.52, "errors": []}
+{"file": "review2/ext-order/names/g4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.5, "errors": []}
+{"file": "review2/ext-order/names/n01_alias_cycle.hylo", "config": "base", "rc": 0, "d": 2, "ms": 19.73, "errors": ["type 'Int' has no member 'g'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/n01_alias_cycle.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.32, "errors": []}
+{"file": "review2/ext-order/names/n01_alias_cycle.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.41, "errors": []}
+{"file": "review2/ext-order/names/n02_reverse_poison_noeffect.hylo", "config": "base", "rc": 0, "d": 0, "ms": 28.18, "errors": []}
+{"file": "review2/ext-order/names/n02_reverse_poison_noeffect.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.48, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/n02_reverse_poison_noeffect.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.71, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/n03_reverse_poison.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.36, "errors": []}
+{"file": "review2/ext-order/names/n03_reverse_poison.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 5.73, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n03_reverse_poison.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.87, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n04_reverse_poison_min.hylo", "config": "base", "rc": 0, "d": 0, "ms": 26.75, "errors": []}
+{"file": "review2/ext-order/names/n04_reverse_poison_min.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.23, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n04_reverse_poison_min.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.75, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n05_spurious_cycle_conformance.hylo", "config": "base", "rc": 0, "d": 2, "ms": 26.09, "errors": ["type 'Inner' has no member 'req'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/n05_spurious_cycle_conformance.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.11, "errors": []}
+{"file": "review2/ext-order/names/n05_spurious_cycle_conformance.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.25, "errors": []}
+{"file": "review2/ext-order/names/n06_diag_ambiguous.hylo", "config": "base", "rc": 0, "d": 2, "ms": 25.08, "errors": ["type 'A' has no member 'h'", "ambiguous use of 'f'"]}
+{"file": "review2/ext-order/names/n06_diag_ambiguous.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 10.6, "errors": ["type 'A' has no member 'h'", "ambiguous use of 'f'"]}
+{"file": "review2/ext-order/names/n06_diag_ambiguous.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.9, "errors": ["type 'A' has no member 'h'", "ambiguous use of 'f'"]}
+{"file": "review2/ext-order/names/n07_bad_extendee.hylo", "config": "base", "rc": 0, "d": 2, "ms": 21.16, "errors": ["undefined symbol 'Undefined'", "type 'A' has no static member 'Nope'"]}
+{"file": "review2/ext-order/names/n07_bad_extendee.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.67, "errors": ["undefined symbol 'Undefined'", "type 'A' has no static member 'Nope'"]}
+{"file": "review2/ext-order/names/n07_bad_extendee.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.67, "errors": ["undefined symbol 'Undefined'", "type 'A' has no static member 'Nope'"]}
+{"file": "review2/ext-order/names/n08_conditional_ext.hylo", "config": "base", "rc": 0, "d": 1, "ms": 70.4, "errors": ["type 'Box<J>' has no member 'onlyP'"]}
+{"file": "review2/ext-order/names/n08_conditional_ext.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 26.72, "errors": ["type 'Box<J>' has no member 'onlyP'"]}
+{"file": "review2/ext-order/names/n08_conditional_ext.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 8.98, "errors": ["type 'Box<J>' has no member 'onlyP'"]}
+{"file": "review2/ext-order/names/n09_kinds.hylo", "config": "base", "rc": 0, "d": 7, "ms": 47.12, "errors": ["no candidate matches the argument list", "no candidate matches the argument list", "incompatible labels: found '(_:)', expected '(i:)'"]}
+{"file": "review2/ext-order/names/n09_kinds.hylo", "config": "FIX", "rc": 0, "d": 7, "ms": 17.66, "errors": ["no candidate matches the argument list", "no candidate matches the argument list", "incompatible labels: found '(_:)', expected '(i:)'"]}
+{"file": "review2/ext-order/names/n09_kinds.hylo", "config": "FULL", "rc": 0, "d": 7, "ms": 4.99, "errors": ["no candidate matches the argument list", "no candidate matches the argument list", "incompatible labels: found '(_:)', expected '(i:)'"]}
+{"file": "review2/ext-order/names/n10_trait_ext.hylo", "config": "base", "rc": 0, "d": 8, "ms": 23.6, "errors": ["no implementation of associated type requirement 'X'", "expression does not denote a type", "no coercion from 'Bool' to '#!'"]}
+{"file": "review2/ext-order/names/n10_trait_ext.hylo", "config": "FIX", "rc": 0, "d": 8, "ms": 7.5, "errors": ["no implementation of associated type requirement 'X'", "expression does not denote a type", "no coercion from 'Bool' to '#!'"]}
+{"file": "review2/ext-order/names/n10_trait_ext.hylo", "config": "FULL", "rc": 0, "d": 8, "ms": 1.77, "errors": ["no implementation of associated type requirement 'X'", "expression does not denote a type", "no coercion from 'Bool' to '#!'"]}
+{"file": "review2/ext-order/names/n11_poison_via_summon.hylo", "config": "base", "rc": 0, "d": 0, "ms": 73.99, "errors": []}
+{"file": "review2/ext-order/names/n11_poison_via_summon.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 13.32, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n11_poison_via_summon.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 8.46, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n12_poison_via_summon_noearly.hylo", "config": "base", "rc": 0, "d": 0, "ms": 73.51, "errors": []}
+{"file": "review2/ext-order/names/n12_poison_via_summon_noearly.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 13.23, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n12_poison_via_summon_noearly.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 8.28, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/n13_typevar_in_diag.hylo", "config": "base", "rc": 0, "d": 7, "ms": 19.27, "errors": ["consecutive statements on the same line must be separated by ';'", "expected '('", "expected declaration"]}
+{"file": "review2/ext-order/names/n13_typevar_in_diag.hylo", "config": "FIX", "rc": 0, "d": 7, "ms": 6.27, "errors": ["consecutive statements on the same line must be separated by ';'", "expected '('", "expected declaration"]}
+{"file": "review2/ext-order/names/n13_typevar_in_diag.hylo", "config": "FULL", "rc": 0, "d": 7, "ms": 1.03, "errors": ["consecutive statements on the same line must be separated by ';'", "expected '('", "expected declaration"]}
+{"file": "review2/ext-order/names/n14_typevar_in_diag2.hylo", "config": "base", "rc": 0, "d": 5, "ms": 23.27, "errors": ["no coercion from '{#!, Bool}' to 'Int'", "incompatible labels: found '(_:_:)', expected '(x:y:)'", "not enough context to infer a type"]}
+{"file": "review2/ext-order/names/n14_typevar_in_diag2.hylo", "config": "FIX", "rc": 0, "d": 5, "ms": 7.11, "errors": ["no coercion from '{#!, Bool}' to 'Int'", "incompatible labels: found '(_:_:)', expected '(x:y:)'", "not enough context to infer a type"]}
+{"file": "review2/ext-order/names/n14_typevar_in_diag2.hylo", "config": "FULL", "rc": 0, "d": 5, "ms": 1.72, "errors": ["no coercion from '{#!, Bool}' to 'Int'", "incompatible labels: found '(_:_:)', expected '(x:y:)'", "not enough context to infer a type"]}
+{"file": "review2/ext-order/names/n15_local_extension.hylo", "config": "base", "rc": 0, "d": 3, "ms": 20.71, "errors": ["undefined symbol 'Nope'", "declaration is not allowed here", "undefined symbol 'Undefined'"]}
+{"file": "review2/ext-order/names/n15_local_extension.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.23, "errors": ["undefined symbol 'Nope'", "declaration is not allowed here", "undefined symbol 'Undefined'"]}
+{"file": "review2/ext-order/names/n15_local_extension.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.61, "errors": ["undefined symbol 'Nope'", "declaration is not allowed here", "undefined symbol 'Undefined'"]}
+{"file": "review2/ext-order/names/n16_cycle_via_where.hylo", "config": "base", "rc": 0, "d": 2, "ms": 49.61, "errors": ["type 'Inner' has no member 'f'", "type 'T' has no static member 'Assoc'"]}
+{"file": "review2/ext-order/names/n16_cycle_via_where.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 7.07, "errors": ["type 'Inner' has no member 'f'", "type 'T' has no static member 'Assoc'"]}
+{"file": "review2/ext-order/names/n16_cycle_via_where.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 2.46, "errors": ["type 'Inner' has no member 'f'", "type 'T' has no static member 'Assoc'"]}
+{"file": "review2/ext-order/names/n17_alias_cycle_generic.hylo", "config": "base", "rc": 0, "d": 3, "ms": 22.09, "errors": ["expression does not denote a type", "definition of 'X' refers to itself", "expression does not denote a type"]}
+{"file": "review2/ext-order/names/n17_alias_cycle_generic.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.56, "errors": ["expression does not denote a type", "expression does not denote a type"]}
+{"file": "review2/ext-order/names/n17_alias_cycle_generic.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.61, "errors": ["expression does not denote a type", "expression does not denote a type"]}
+{"file": "review2/ext-order/names/n18_summon_cache_refinement.hylo", "config": "base", "rc": 0, "d": 1, "ms": 22.31, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/n18_summon_cache_refinement.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 19.31, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/n18_summon_cache_refinement.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 10.35, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/n19_summon_cache_refinement_ctrl.hylo", "config": "base", "rc": 0, "d": 1, "ms": 24.8, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/n19_summon_cache_refinement_ctrl.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 15.96, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/n19_summon_cache_refinement_ctrl.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 10.52, "errors": ["no given instance of 'P<A>' in this scope"]}
+{"file": "review2/ext-order/names/t01_ext_order.hylo", "config": "base", "rc": 0, "d": 2, "ms": 26.57, "errors": ["type 'B' has no static member 'V'", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t01_ext_order.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.31, "errors": []}
+{"file": "review2/ext-order/names/t01_ext_order.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.39, "errors": []}
+{"file": "review2/ext-order/names/t02_names_worse.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.39, "errors": ["type 'B' has no static member 'V'", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t02_names_worse.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 5.49, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'V', which this extension may affect", "type 'B' has no static member 'V'", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t02_names_worse.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.66, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'V', which this extension may affect", "type 'B' has no static member 'V'", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t03_names_worse.hylo", "config": "base", "rc": 0, "d": 0, "ms": 22.66, "errors": []}
+{"file": "review2/ext-order/names/t03_names_worse.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 6.04, "errors": ["type 'B' has no static member 'V'", "circular extension: the extendee of this extension depends on a lookup of 'V', which this extension may affect", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t03_names_worse.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.79, "errors": ["type 'B' has no static member 'V'", "circular extension: the extendee of this extension depends on a lookup of 'V', which this extension may affect", "type 'Void' has no member 'hello'"]}
+{"file": "review2/ext-order/names/t04_init_ops_subscript.hylo", "config": "base", "rc": 0, "d": 9, "ms": 46.49, "errors": ["no candidate matches the argument list", "ambiguous use of 'infix+'", "cannot pass value of type '#!' to parameter 'S'"]}
+{"file": "review2/ext-order/names/t04_init_ops_subscript.hylo", "config": "FIX", "rc": 0, "d": 9, "ms": 19.55, "errors": ["no candidate matches the argument list", "ambiguous use of 'infix+'", "cannot pass value of type '#!' to parameter 'S'"]}
+{"file": "review2/ext-order/names/t04_init_ops_subscript.hylo", "config": "FULL", "rc": 0, "d": 9, "ms": 6.67, "errors": ["no candidate matches the argument list", "ambiguous use of 'infix+'", "cannot pass value of type '#!' to parameter 'S'"]}
+{"file": "review2/ext-order/names/t05_conf_in_ext.hylo", "config": "base", "rc": 0, "d": 1, "ms": 46.41, "errors": ["unused value of type 'Int'"]}
+{"file": "review2/ext-order/names/t05_conf_in_ext.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 17.9, "errors": ["unused value of type 'Int'"]}
+{"file": "review2/ext-order/names/t05_conf_in_ext.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.27, "errors": ["unused value of type 'Int'"]}
+{"file": "review2/ext-order/names/t06_ambiguous_notfound.hylo", "config": "base", "rc": 0, "d": 4, "ms": 26.65, "errors": ["type 'A' has no static member 'nope'", "ambiguous use of 'f'", "type 'A' has no member 'h'"]}
+{"file": "review2/ext-order/names/t06_ambiguous_notfound.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 10.06, "errors": ["type 'A' has no static member 'nope'", "ambiguous use of 'f'", "type 'A' has no member 'h'"]}
+{"file": "review2/ext-order/names/t06_ambiguous_notfound.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 3.09, "errors": ["type 'A' has no static member 'nope'", "ambiguous use of 'f'", "type 'A' has no member 'h'"]}
+{"file": "review2/ext-order/names/t07_conditional_ext.hylo", "config": "base", "rc": 0, "d": 4, "ms": 58.82, "errors": ["type 'G<Bool>' has no member 'onlyR'", "type 'G<Bool>' has no member 'both'", "type 'T' has no static member 'self'"]}
+{"file": "review2/ext-order/names/t07_conditional_ext.hylo", "config": "FIX", "rc": 0, "d": 4, "ms": 21.11, "errors": ["type 'G<Bool>' has no member 'onlyR'", "type 'G<Bool>' has no member 'both'", "type 'T' has no static member 'self'"]}
+{"file": "review2/ext-order/names/t07_conditional_ext.hylo", "config": "FULL", "rc": 0, "d": 4, "ms": 7.8, "errors": ["type 'G<Bool>' has no member 'onlyR'", "type 'G<Bool>' has no member 'both'", "type 'T' has no static member 'self'"]}
+{"file": "review2/ext-order/names/t08_local_ext.hylo", "config": "base", "rc": 0, "d": 0, "ms": 27.47, "errors": []}
+{"file": "review2/ext-order/names/t08_local_ext.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.9, "errors": []}
+{"file": "review2/ext-order/names/t08_local_ext.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.81, "errors": []}
+{"file": "review2/ext-order/names/t09_cycle_extendee.hylo", "config": "base", "rc": 0, "d": 1, "ms": 20.28, "errors": ["type 'A' has no static member 'Y'"]}
+{"file": "review2/ext-order/names/t09_cycle_extendee.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.49, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'A' has no static member 'Y'"]}
+{"file": "review2/ext-order/names/t09_cycle_extendee.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.58, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect", "type 'A' has no static member 'Y'"]}
+{"file": "review2/ext-order/names/t10_alias_extendee.hylo", "config": "base", "rc": 0, "d": 1, "ms": 29.76, "errors": ["type 'S<Bool>' has no member 'only'"]}
+{"file": "review2/ext-order/names/t10_alias_extendee.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 9.93, "errors": ["type 'S<Bool>' has no member 'only'"]}
+{"file": "review2/ext-order/names/t10_alias_extendee.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.29, "errors": ["type 'S<Bool>' has no member 'only'"]}
+{"file": "review2/ext-order/names/t11_static_meta.hylo", "config": "base", "rc": 0, "d": 0, "ms": 26.31, "errors": []}
+{"file": "review2/ext-order/names/t11_static_meta.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.31, "errors": []}
+{"file": "review2/ext-order/names/t11_static_meta.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.3, "errors": []}
+{"file": "review2/ext-order/names/t12_self_ext.hylo", "config": "base", "rc": 0, "d": 0, "ms": 38.88, "errors": []}
+{"file": "review2/ext-order/names/t12_self_ext.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.4, "errors": []}
+{"file": "review2/ext-order/names/t12_self_ext.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.79, "errors": []}
+{"file": "review2/ext-order/names/verify-names-1/v1_noearly.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.14, "errors": []}
+{"file": "review2/ext-order/names/verify-names-1/v1_noearly.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.99, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v1_noearly.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.61, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v2_swapped.hylo", "config": "base", "rc": 0, "d": 2, "ms": 26.3, "errors": ["type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/verify-names-1/v2_swapped.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 5.55, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/verify-names-1/v2_swapped.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.76, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/verify-names-1/v3_nouse.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.86, "errors": []}
+{"file": "review2/ext-order/names/verify-names-1/v3_nouse.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.82, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v3_nouse.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.65, "errors": ["type 'Inner' has no static member 'Foo'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v4_noC.hylo", "config": "base", "rc": 0, "d": 0, "ms": 23.42, "errors": []}
+{"file": "review2/ext-order/names/verify-names-1/v4_noC.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.9, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v4_noC.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.65, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v5_early_other.hylo", "config": "base", "rc": 0, "d": 0, "ms": 28.67, "errors": []}
+{"file": "review2/ext-order/names/verify-names-1/v5_early_other.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.8, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v5_early_other.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.64, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v6_summon_swapped.hylo", "config": "base", "rc": 0, "d": 2, "ms": 55.44, "errors": ["type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'"]}
+{"file": "review2/ext-order/names/verify-names-1/v6_summon_swapped.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 13.24, "errors": ["type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-1/v6_summon_swapped.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 8.05, "errors": ["type 'Inner' has no static member 'Foo'", "type 'Int' has no static member 'Inner'", "circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/names/verify-names-2/v01_ext_declares_foo.hylo", "config": "base", "rc": 0, "d": 2, "ms": 19.52, "errors": ["type 'Int' has no member 'g'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v01_ext_declares_foo.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.58, "errors": ["type 'Int' has no member 'g'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v01_ext_declares_foo.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.69, "errors": ["type 'Int' has no member 'g'", "definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v02_ext_before_alias.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.5, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v02_ext_before_alias.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.58, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v02_ext_before_alias.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.57, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v03_direct_control.hylo", "config": "base", "rc": 0, "d": 0, "ms": 16.09, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v03_direct_control.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.68, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v03_direct_control.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.37, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v04_use_before.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.31, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v04_use_before.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.36, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v04_use_before.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.41, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v05_true_cycle.hylo", "config": "base", "rc": 0, "d": 1, "ms": 17.62, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v05_true_cycle.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.68, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v05_true_cycle.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.44, "errors": ["definition of 'X' refers to itself"]}
+{"file": "review2/ext-order/names/verify-names-2/v06_member_of_ext_alias.hylo", "config": "base", "rc": 0, "d": 2, "ms": 20.02, "errors": ["definition of 'X' refers to itself", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/names/verify-names-2/v06_member_of_ext_alias.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.47, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v06_member_of_ext_alias.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.4, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v07_ext_of_alias_member.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.27, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v07_ext_of_alias_member.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.5, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v07_ext_of_alias_member.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.68, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v08_two_aliases.hylo", "config": "base", "rc": 0, "d": 2, "ms": 24.16, "errors": ["definition of 'X' refers to itself", "type 'Int' has no member 'g'"]}
+{"file": "review2/ext-order/names/verify-names-2/v08_two_aliases.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.15, "errors": []}
+{"file": "review2/ext-order/names/verify-names-2/v08_two_aliases.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.68, "errors": []}
+{"file": "review2/ext-order/pc1_selfapply.hylo", "config": "base", "rc": 0, "d": 1, "ms": 19.27, "errors": ["expression does not denote a type"]}
+{"file": "review2/ext-order/pc1_selfapply.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 5.34, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "expression does not denote a type"]}
+{"file": "review2/ext-order/pc1_selfapply.hylo", "config": "FULL", "rc": 0, "d": 2, "ms": 0.37, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect", "expression does not denote a type"]}
+{"file": "review2/ext-order/pc1_selfapply_nouse.hylo", "config": "base", "rc": 0, "d": 0, "ms": 17.22, "errors": []}
+{"file": "review2/ext-order/pc1_selfapply_nouse.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 6.22, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/pc1_selfapply_nouse.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.41, "errors": ["circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"]}
+{"file": "review2/ext-order/r1_alias.hylo", "config": "base", "rc": 0, "d": 1, "ms": 17.58, "errors": ["type 'B' has no static member 'Foo'"]}
+{"file": "review2/ext-order/r1_alias.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 5.41, "errors": ["type 'B' has no static member 'Foo'"]}
+{"file": "review2/ext-order/r1_alias.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 0.64, "errors": ["type 'B' has no static member 'Foo'"]}
+{"file": "review2/ext-order/r1_nested.hylo", "config": "base", "rc": 0, "d": 0, "ms": 22.14, "errors": []}
+{"file": "review2/ext-order/r1_nested.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 9.41, "errors": []}
+{"file": "review2/ext-order/r1_nested.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.49, "errors": []}
+{"file": "review2/ext-order/r1_selfname.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.45, "errors": []}
+{"file": "review2/ext-order/r1_selfname.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.84, "errors": []}
+{"file": "review2/ext-order/r1_selfname.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.51, "errors": []}
+{"file": "review2/ext-order/r1_selfname_fun.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.85, "errors": []}
+{"file": "review2/ext-order/r1_selfname_fun.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 5.42, "errors": []}
+{"file": "review2/ext-order/r1_selfname_fun.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 0.61, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.64, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.05, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.15, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_ctrl.hylo", "config": "base", "rc": 0, "d": 0, "ms": 32.16, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_ctrl.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.82, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_ctrl.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.88, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_fun.hylo", "config": "base", "rc": 0, "d": 0, "ms": 20.36, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_fun.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.35, "errors": []}
+{"file": "review2/ext-order/r2_where_assoc_fun.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.39, "errors": []}
+{"file": "review2/ext-order/r2_where_trait.hylo", "config": "base", "rc": 0, "d": 3, "ms": 19.15, "errors": ["expected '{'", "undefined symbol 'T'", "expected declaration"]}
+{"file": "review2/ext-order/r2_where_trait.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 5.24, "errors": ["expected '{'", "undefined symbol 'T'", "expected declaration"]}
+{"file": "review2/ext-order/r2_where_trait.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 0.33, "errors": ["expected '{'", "undefined symbol 'T'", "expected declaration"]}
+{"file": "review2/ext-order/red1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 30.08, "errors": []}
+{"file": "review2/ext-order/red1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.65, "errors": []}
+{"file": "review2/ext-order/red1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.85, "errors": []}
+{"file": "review2/ext-order/red2.hylo", "config": "base", "rc": 0, "d": 0, "ms": 67.41, "errors": []}
+{"file": "review2/ext-order/red2.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 17.52, "errors": []}
+{"file": "review2/ext-order/red2.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.66, "errors": []}
+{"file": "review2/ext-order/red3.hylo", "config": "base", "rc": 0, "d": 1, "ms": 32.54, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/red3.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 14.57, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/ext-order/red3.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 7.77, "errors": ["no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/cc-chain-k16-w10-m1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-chain-k16-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 14.45, "errors": []}
+{"file": "review2/perf/cc-chain-k16-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.05, "errors": []}
+{"file": "review2/perf/cc-chain-k16-w10-m8.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-chain-k16-w10-m8.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 21.54, "errors": []}
+{"file": "review2/perf/cc-chain-k16-w10-m8.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 14.9, "errors": []}
+{"file": "review2/perf/cc-chain-k24-w10-m1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-chain-k24-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 16.41, "errors": []}
+{"file": "review2/perf/cc-chain-k24-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 10.66, "errors": []}
+{"file": "review2/perf/cc-chain-k4-w10-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 3716.7, "errors": []}
+{"file": "review2/perf/cc-chain-k4-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 11.57, "errors": []}
+{"file": "review2/perf/cc-chain-k4-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.39, "errors": []}
+{"file": "review2/perf/cc-chain-k8-w10-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 11493.09, "errors": []}
+{"file": "review2/perf/cc-chain-k8-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.16, "errors": []}
+{"file": "review2/perf/cc-chain-k8-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.81, "errors": []}
+{"file": "review2/perf/cc-deep-10-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1097.04, "errors": []}
+{"file": "review2/perf/cc-deep-10-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.04, "errors": []}
+{"file": "review2/perf/cc-deep-10-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.15, "errors": []}
+{"file": "review2/perf/cc-deep-20-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1130.08, "errors": []}
+{"file": "review2/perf/cc-deep-20-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 6.55, "errors": []}
+{"file": "review2/perf/cc-deep-20-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.49, "errors": []}
+{"file": "review2/perf/cc-deep-40-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1141.18, "errors": []}
+{"file": "review2/perf/cc-deep-40-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.26, "errors": []}
+{"file": "review2/perf/cc-deep-40-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 2.32, "errors": []}
+{"file": "review2/perf/cc-deep-40-m10.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-deep-40-m10.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.63, "errors": []}
+{"file": "review2/perf/cc-deep-40-m10.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.24, "errors": []}
+{"file": "review2/perf/cc-deep-40-m30.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-deep-40-m30.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 36.76, "errors": []}
+{"file": "review2/perf/cc-deep-40-m30.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 24.63, "errors": []}
+{"file": "review2/perf/cc-deep-60-m30.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/cc-deep-60-m30.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 37.62, "errors": []}
+{"file": "review2/perf/cc-deep-60-m30.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 26.42, "errors": []}
+{"file": "review2/perf/cc-deep-80-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1125.65, "errors": []}
+{"file": "review2/perf/cc-deep-80-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.46, "errors": []}
+{"file": "review2/perf/cc-deep-80-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.51, "errors": []}
+{"file": "review2/perf/cc-goals-m10.hylo", "config": "base", "rc": 0, "d": 10, "ms": 106.94, "errors": ["not enough context to infer a type", "not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "review2/perf/cc-goals-m10.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 10.92, "errors": []}
+{"file": "review2/perf/cc-goals-m10.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.82, "errors": []}
+{"file": "review2/perf/cc-goals-m20.hylo", "config": "base", "rc": 0, "d": 20, "ms": 219.31, "errors": ["not enough context to infer a type", "not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "review2/perf/cc-goals-m20.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 24.72, "errors": []}
+{"file": "review2/perf/cc-goals-m20.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 12.45, "errors": []}
+{"file": "review2/perf/cc-goals-m30.hylo", "config": "base", "rc": 0, "d": 30, "ms": 314.29, "errors": ["not enough context to infer a type", "not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "review2/perf/cc-goals-m30.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 31.49, "errors": []}
+{"file": "review2/perf/cc-goals-m30.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 20.24, "errors": []}
+{"file": "review2/perf/cc-goals-m36.hylo", "config": "base", "rc": 0, "d": 36, "ms": 424.33, "errors": ["not enough context to infer a type", "not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "review2/perf/cc-goals-m36.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 38.49, "errors": []}
+{"file": "review2/perf/cc-goals-m36.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 26.84, "errors": []}
+{"file": "review2/perf/cc-refl-k12-w10-m8.hylo", "config": "base", "rc": 0, "d": 0, "ms": 67.28, "errors": []}
+{"file": "review2/perf/cc-refl-k12-w10-m8.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 15.1, "errors": []}
+{"file": "review2/perf/cc-refl-k12-w10-m8.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.28, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 25.27, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 12.04, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 6.55, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m4.hylo", "config": "base", "rc": 0, "d": 0, "ms": 51.9, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m4.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 13.46, "errors": []}
+{"file": "review2/perf/cc-refl-k16-w10-m4.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 7.48, "errors": []}
+{"file": "review2/perf/cc-refl-k4-w10-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 18.12, "errors": []}
+{"file": "review2/perf/cc-refl-k4-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 7.08, "errors": []}
+{"file": "review2/perf/cc-refl-k4-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 1.99, "errors": []}
+{"file": "review2/perf/cc-refl-k8-w10-m1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 19.29, "errors": []}
+{"file": "review2/perf/cc-refl-k8-w10-m1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 8.68, "errors": []}
+{"file": "review2/perf/cc-refl-k8-w10-m1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.69, "errors": []}
+{"file": "review2/perf/div-eq-b2-0.hylo", "config": "base", "rc": 0, "d": 1, "ms": 1616.15, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b2-0.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 1842.65, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b2-0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.68, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b2-1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 1638.62, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b2-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 1736.22, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b2-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.46, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b3-0.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-eq-b3-0.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 3329.08, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations"]}
+{"file": "review2/perf/div-eq-b3-0.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 2.79, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-b3-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-eq-b3-1.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 3360.56, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations"]}
+{"file": "review2/perf/div-eq-b3-1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 4.42, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-eq-ovl-b2-0.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1650.03, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b2-0.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 1692.5, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b2-0.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.06, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b2-1.hylo", "config": "base", "rc": 0, "d": 0, "ms": 1732.81, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b2-1.hylo", "config": "FIX", "rc": 0, "d": 0, "ms": 1792.99, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b2-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 4.87, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b3-0.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b3-0.hylo", "config": "FIX", "rc": 0, "d": 2, "ms": 3291.18, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations"]}
+{"file": "review2/perf/div-eq-ovl-b3-0.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 3.23, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b3-1.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-eq-ovl-b3-1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 3556.46, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations"]}
+{"file": "review2/perf/div-eq-ovl-b3-1.hylo", "config": "FULL", "rc": 0, "d": 0, "ms": 5.19, "errors": []}
+{"file": "review2/perf/div-trunc-b1.hylo", "config": "base", "rc": 0, "d": 1, "ms": 38.5, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b1.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 20.97, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b1.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 3.62, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b2.hylo", "config": "base", "rc": 0, "d": 1, "ms": 1744.59, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b2.hylo", "config": "FIX", "rc": 0, "d": 1, "ms": 1784.75, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b2.hylo", "config": "FULL", "rc": 0, "d": 1, "ms": 246.04, "errors": ["no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b3.hylo", "config": "base", "rc": "timeout", "d": null, "ms": null, "errors": []}
+{"file": "review2/perf/div-trunc-b3.hylo", "config": "FIX", "rc": 0, "d": 3, "ms": 3575.08, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "review2/perf/div-trunc-b3.hylo", "config": "FULL", "rc": 0, "d": 3, "ms": 6104.92, "errors": ["implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations", "no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
