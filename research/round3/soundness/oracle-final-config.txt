@@ -1,0 +1,2 @@
+[arrowenv,budget,eqmgu,eqsolve,extorder,fixsubst,givencheck,occurs] 216/216 identical
+[absmodel,absquotient,arrowenv,budget,coesrc,eqmgu,eqsolve,extorder,fixsubst,givencheck,index,memberskip,occurs,reifymemo,symindex,traitindex,typevec,unify] 216/216 identical

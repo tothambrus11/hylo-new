@@ -21,10 +21,17 @@ Every technique sits behind a runtime flag: `HYLO_TC_EXPERIMENTS=a,b,…` (see `
 | `unify` | unification constant factor | sound in release builds, recommended | [unify.md](unify.md) |
 | `typevec` | type-store storage | sound, recommended | [typevec.md](typevec.md) |
 | `coercememo` | memo of coercion queries under assumptions | sound, **no measurable gain**, not recommended | [coercememo.md](coercememo.md) |
-| `occurs` | **fix**: occurs check in unification | semantic fix (crash → error; also changes some inferred types and diagnostics); land before or with `fixsubst` | [../round3/soundness.md §4](../round3/soundness.md) |
-| `fixsubst` | **fix**: keep substitutions when `match` assumes coercions | semantic fix of the root cause; **requires `occurs`** (alone it adds SIGSEGVs) and an equality procedure | [../round3/soundness.md §1–2](../round3/soundness.md) |
-| `eqrefute` | refute equality goals outside the equivalence classes | **unsound as implemented** (rejects valid `v-abs-7.hylo`); do not land | [../round3/soundness.md §1](../round3/soundness.md) |
-| `cyclecut` | **fix**: transactional evaluation across cycle cuts | **unsound** (accepts an ambiguous program); do not land | [../round3/soundness.md §5](../round3/soundness.md) |
+| `occurs`, `arrowenv` | **fix**: occurs check in unification (now DAG-linear, root case fixed, arrow environments visible) | semantic fix, final configuration | [occurs.md](occurs.md) |
+| `fixsubst` | **fix**: keep substitutions when `match` assumes coercions | semantic fix of bug #1's root cause; requires `occurs` and `eqsolve` | [../round3/soundness.md §1–2](../round3/soundness.md) |
+| `eqsolve` | **fix**: decide closed equality goals by congruence closure (with abstract-projection bans, premise projections and search-equivalent costs) | semantic fix + speed-up, final configuration | [eqsolve.md](eqsolve.md) |
+| `eqmgu` | **fix**: solve `?v ~ X` by its most general unifier | semantic fix + speed-up, final configuration | [eqmgu.md](eqmgu.md) |
+| `extorder` | **fix**: order-independent extension lookup (deferred circularity check) | semantic fix, final configuration (replaces `cyclecut`) | [extorder.md](extorder.md) |
+| `givencheck` | **fix**: givens skipped while their type is computed are checked afterwards | semantic fix, final configuration | [givencheck.md](givencheck.md) |
+| `budget` | **fix**: abandon and report runaway resolutions instead of exhausting memory | semantic fix, final configuration | [budget.md](budget.md) |
+| `absquotient` | `absmodel` stays conclusive under ground equalities | sound, recommended (FULL) | [absquotient.md](absquotient.md) |
+| `reifymemo` | reify each subterm once | sound, recommended (FULL) | [reifymemo.md](reifymemo.md) |
+| `eqrefute` | refute equality goals outside the equivalence classes | **unsound as implemented**; superseded by `eqsolve` | [../round3/soundness.md §1](../round3/soundness.md) |
+| `cyclecut` | transactional evaluation across cycle cuts | **unsound**; superseded by `extorder` | [../round3/soundness.md §5](../round3/soundness.md) |
 | `names` | member lookup through extensions | **unsound**, retired | [names.md](names.md) |
 | `loopcheck` | implicit resolution: ancestor loop check | **unsound**, retired | [loopcheck.md](loopcheck.md) |
 | `solver` | overload resolution: deferred branching | **unsound**, needs a redesign | [solver.md](solver.md) |
@@ -35,6 +42,13 @@ Every technique sits behind a runtime flag: `HYLO_TC_EXPERIMENTS=a,b,…` (see `
 - the topic's review programs (`research/review/<topic>/`).
 
 **Measurements.** "Speed" numbers are user-typing times in ms, best of `--repeat 3`, pinned to one core. They are single runs on a 4-core cloud VM, so treat differences under about 10% as noise. Raw numbers: `research/round3/bench.md`.
+
+## Final configuration
+
+- **FIX** (semantic fixes only): `occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget`.
+- **FULL**: FIX plus `symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo`.
+
+Both are 216/216 identical to the baseline on the corpus (`../round3/soundness/oracle-final-config.txt`). Every program of both adversarial reviews is re-run in `../round3/soundness/regress-final.md`, and the timings are in `../round3/soundness/bench-final.md`. The write-up is `../round3/soundness.md`, section "Final configuration".
 
 ## All sound flags together
 

@@ -1,0 +1,807 @@
+{
+  "summary": "Try to break the final sound configuration of the Hylo type checker (soundness, regressions, order dependence, crashes, performance)",
+  "agentCount": 10,
+  "logs": [],
+  "result": [
+    {
+      "lens": "eq-unsound",
+      "attack": {
+        "findings": [
+          {
+            "title": "eqsolve takes the transitive closure of the 'abstract qualification' congruence, so T == Self, U == Self makes T.X == U.X for two distinct conformances. A tautological fact (Box<X> == Box<X>) is enough to trigger it; baseline and occurs,fixsubst reject",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/abs-trans-5.hylo",
+            "evidence": "Program (in trait P { type X ... }):\n  fun f<T, U where T == Self, U == Self, T is P, U is P, Box<X> == Box<X>>(x: U.X) { check<T.X>(conv<U.X, T.X>(x)) }\n  with conv<A, B where A == B>(x: A) -> B { x }\nrun.sh abs-trans-5.hylo:\n  [BASE] rc=134 Fatal error: failed to allocate 10272 bytes (OOM, not accepted)\n  [FIX]  rc=0 diagnostics: 0, type.user 13 ms\n  [FULL] rc=0 diagnostics: 0, type.user 5.5 ms\n  HYLO_TC_EXPERIMENTS=occurs,fixsubst: Fatal error: failed to allocate (OOM inside Solver.diagnoseInvalidCoercion, i.e. it was on its way to rejecting)\nThe same program without the tautology (abs-trans-4.hylo): FIX and FULL give 1 diagnostic, \"no coercion from '((U::P).X ~ (T::P).X) ==> ...'\". So adding the always-true fact Box<X> == Box<X> changes acceptance. A sound procedure cannot behave like that.\nThe FIX trace of the inherited variant abs-trans-3.hylo (fact X == X) shows the proof eqsolve builds: $<builtin coercion><(U::P).X, (Self::P).X, (T::P).X>( coercion(refl (U::P).X) )( coercion(refl (Self::P).X) ). That is, (U::P).X ~ (Self::P).X ~ (T::P).X, made of two unjustified congruence steps through the abstract (Self::P).X.\nInherited variants:\n  abs-trans-2.hylo: need<T.X, U.X>() with fact X == X. BASE, occurs,fixsubst, FIX and FULL all give 0 diagnostics. The occurs,fixsubst trace unifies the fact $14 : (Self::P).X ~ (Self::P).X with the goal and assumes Self ~ T and Self ~ U.\n  abs-trans-3.hylo: value conversion U.X -> T.X with fact X == X. BASE 0 (553 ms), FIX 0, FULL 0.\nControls that held: ati.hylo (negative/associated-type-inequality.hylo) gives 1 diagnostic in every configuration. abs-trans-0/1.hylo (coercion path) are rejected by the canDeriveCoercions pre-filter.",
+            "analysis": "solveEquality treats two AssociatedType nodes as congruent when their declarations match, at least one qualification is .abstract, and their qualification types are in the same class. The rule is copied from TypeStore.unifiable(AssociatedType, AssociatedType). For unification it is a binary, non-transitive check. eqsolve applies it inside a union-find, so the classes become transitive:\n- (T::P).X is congruent to (Self::P).X through P<T> ~ P<Self>.\n- (Self::P).X is congruent to (U::P).X through P<Self> ~ P<U>.\n- So (T::P).X and (U::P).X are merged, although both have concrete (where-clause) qualifications that are not abstract.\nThis is exactly the conclusion that negative/associated-type-inequality.hylo forbids: T and U are equal but have distinct conformances.\nThe abstract node only has to occur somewhere in the term graph, and node() also adds the children of fact sides. So the trivially true fact Box<X> == Box<X> is enough. The unification-based search can never reach this, because it would need a fact that unifies with the goal; that is why baseline and fixsubst do not accept abs-trans-5.\nThe deeper problem is the rule itself, which is why abs-trans-2/3 are accepted in every configuration. If v-abs-7 (X == T.X from T == Self, T is P) is valid, then T.X == X == U.X follows by transitivity, contradicting associated-type-inequality. The two rules are inconsistent. soundness.md labels v-abs-7 'valid', but by the negative test's rule it is ill-typed: Self's abstract conformance and T's where-clause conformance are distinct witnesses. Note that the abstract qualification never leaks to callers: member references replace it (abs-launder-2/3 rejected), and bug #3 blocks the paths through T.X in callee signatures (abs-launder.hylo). So the hole is in trait bodies, but there it accepts value conversions between unrelated projections.",
+            "suggested_fix": "Treat (Self::P).X as an atom keyed by Self's abstract conformance, like every other projection: it is equal to (T::c).X only through a fact, or when c is the abstract witness itself (or a coercion of it). Drop the abstract case from congruent() and from TypeStore.unifiable(AssociatedType, AssociatedType), and turn v-abs-7.hylo into a negative test alongside associated-type-inequality. If v-abs-7 must stay valid, the abstract rule cannot be closed transitively: eqsolve must never merge two classes that each contain a non-abstract projection of the same declaration with different witnesses through an abstract node. Add abs-trans-2/3/5 as negative tests either way."
+          },
+          {
+            "title": "eqsolve's congruence closure is cubic (all-pairs sweeps, one sweep per nesting level, rebuilt for every goal): 14-line program takes 45 s (FIX) / 28.5 s (FULL)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/perf-alias-7.hylo",
+            "evidence": "perf-alias-7.hylo (14 lines): type G1<Z> = Box<Box<Box<Box<Box<Z>>>>>; type G2<Z> = G1<G1<Z>> ... G7<Z> = G6<G6<Z>>; fun f<U where U == A>() { need<G7<U>, G7<A>>() }\n  [BASE] 1 diagnostic ('not enough context to infer a type'), 30 ms\n  [FIX]  0 diagnostics, type.user 44915 ms\n  [FULL] 0 diagnostics, type.user 28542 ms\nperf-alias.hylo (G6, 13 lines): FIX 5655 ms, FULL 3607 ms.\nScaling with literal nesting depth (perf-deep-D.hylo, 6 lines, need<Box^D<U>, Box^D<V>>() under U == V):\n  D=50: FIX 179 ms\n  D=100: FIX 1397 ms, FULL 893 ms\n  D=200: FIX 10939 ms, FULL 7167 ms\nThat is about 8x per doubling, i.e. cubic.",
+            "analysis": "node() gives a parent a smaller index than its children, because it appends the parent before recursing. The closure loop is `while changed { for i { for j > i where find(i) != find(j) && congruent(i, j) } }`. Each sweep can therefore only propagate a merge one level up, so a depth-D term needs D sweeps of O(n^2) congruent() calls, each of which projects and casts two types from the TypeStore. That is O(D * n^2) = O(D^3) per goal. Nothing is memoized across goals: every closed equality subgoal rebuilds the graph and the closure from all visible facts. Generic aliases make the blow-up cheap to write, because dealiased() expands G7<U> into a 320-deep term, while unification never expands them.",
+            "suggested_fix": "Use a standard congruence closure (Downey-Sethi-Tarjan / Nelson-Oppen): a signature table keyed by (constructor, child representatives) plus use-lists and a pending-merge worklist, which is O(n log n). Hash-cons the dealiased terms so that shared subterms are only visited once. Memoize the closed graph per (scope, assumed-fact list), the way canDeriveCoercions memoizes its query."
+          },
+          {
+            "title": "Equality proofs by eqsolve add no depth and no penalty, which changes which conformance resolution selects; programs the baseline rejects are now accepted with a different witness",
+            "kind": "other",
+            "severity": "info",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/pen-ref-2.hylo",
+            "evidence": "pen-ref-n.hylo: trait P { type X }; Q1 refines P; ... Qn refines Q(n-1); fun f<V, W where W == V, W is Qn>() { given V is P { type X = A }; let z: W.X = A() }\n  n=1: BASE 1, FIX 1, FULL 1\n  n=2: BASE 1, FIX 0, FULL 0\n  n=3: BASE 2, FIX 0, FULL 0\n  n=4: BASE 0, FIX 0, FULL 0\nTrace of n=2:\n  occurs,fixsubst: 'resolve P<W>: 3 layers, 1 done', and the chosen witness is the refinement path (penalty 2).\n  occurs,fixsubst,eqsolve: 'resolve P<W>: 3 layers, 2 done, 1 minimal', and the chosen witness is 'penalty 0: $<builtin coercion>($<ConformanceDeclaration at pen-ref-2:7.3>)', the local given coerced through W == V.",
+            "analysis": "Under search, a derivation of V ~ W costs several BFS layers, and penalties for the facts and built-in symmetry/transitivity givens. Under eqsolve it costs one formThread/match step and adds no penalty. takeSummonResults stops at the first layer that has a result and then ranks by penalty. So candidates that need an equality now finish earlier and cheaper, and the selected conformance (here, which X W.X denotes) changes relative to the baseline. That is consistent with 'lexically closer wins', but it is an elaboration change, not result-preserving, and it moves the threshold at which the two candidates tie. I found no case where it accepts an ill-typed program by itself.",
+            "suggested_fix": "Decide and document how the size of an equality proof counts toward the 'smallest derivation' order (for example, the number of facts used, plus the penalty of the scope of the farthest fact). Add pen-ref-1..4 to the regression set so the selection rule is pinned."
+          }
+        ],
+        "held": [
+          "Pending premises used as facts: pend-1.hylo (given <where A == B, B == A> => C is P) and pend-2.hylo (local given with premises V == A, W == A under V == W) are rejected by FIX/FULL. The premise-discharge order is well-founded: the premise being discharged is always popped before it is proven.",
+          "Conformance where-clause equalities: extwhere-2.hylo (summon P<{B,B}> with given <T where T == A> => {T,B} is P) is rejected and extwhere-3.hylo (the valid {A,B}) is accepted under FIX/FULL. The baseline takes 28 s on extwhere-2.",
+          "Extension where-clause equalities: extwhere-1.hylo (member of extension <T where T == A> {T, B} used on {B,B}) is rejected and extwhere-1ok.hylo is accepted. The baseline takes 22 s on extwhere-1.",
+          "Abstract qualification leaking to callers: absinst-0/1.hylo (trait requirement f<where X == Bool> called on v: V with only W.X == Bool, with or without V == W) are rejected by FIX/FULL. The baseline accepts both, through the bug #1 path. abs-launder-2/3.hylo (Self.X-typed requirement used to launder W.X into V.X) are rejected in every configuration, because member references replace the abstract qualification.",
+          "Laundering through a trait method with T.X in its signature (abs-launder.hylo) is blocked by bug #3 (\"cannot pass value of type '(W::P).X' to parameter '(W::P).X'\").",
+          "Non-abstract projections: absleak-1..4.hylo (T == U with two conformances, plus tautologies T.X == T.X and U.X == U.X to pass the pre-filter) are rejected by FIX/FULL. The baseline exhausts memory on absleak-3/4.",
+          "associated-type-inequality.hylo and associated-type-equality.hylo behave as the tests expect under FIX/FULL. In associated-type-equality f1, eqsolve proves T ~ U and U.X resolves through the coerced witness.",
+          "Aliases: dump-1.hylo (U == Al, Box<V> == W, V == U ⊢ Box<A> == W) is accepted, and the proof (transitivity through the fact and a congruence) is correct. Generic aliases (dealiased only by eqsolve) introduced no false merges. A non-generic alias of a generic type (type B2 = Box; B2<A>) is rejected at name resolution, and so are where-clauses on aliases and structs, so no projection alias can be formed.",
+          "Value givens and other heads: the givens that search could use for an equality goal are the same set eqsolve uses. Value givens of generic-parameter type cannot match an equality, and nested equality givens (trait R { given A == B }) do not parse.",
+          "The congruent() side conditions (Arrow style/effect/labels/access, RemoteType access, TypeApplication arity, ordered TypeArguments) match unification, and all other types are atoms. The proof reconstruction always finds a path, because edges and unions are added together. No crashes were found."
+        ]
+      },
+      "verdict": {
+        "confirmed": [
+          {
+            "title": "eqsolve closes the non-transitive 'abstract qualification' unification rule transitively: T == Self, U == Self yields T.X == U.X for two distinct where-clause conformances; whether it does depends on whether an irrelevant term such as X happens to appear in the term graph",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/abs-trans-5.hylo (control: abs-trans-4.hylo; inherited variants: abs-trans-2.hylo, abs-trans-3.hylo)",
+            "evidence": "I re-ran these with eq2-e965a058dfd0/tc-bench and timeout 120.\n\nabs-trans-5 (trait P { type X; fun f<T, U where T == Self, U == Self, T is P, U is P, Box<X> == Box<X>>(x: U.X) { check<T.X>(conv<U.X, T.X>(x)) } }):\n- BASE: rc=134, OOM. The baseline does not accept it.\n- FIX: 0 diagnostics, 13 ms.\n- FULL: 0 diagnostics, 5.5 ms.\n\nabs-trans-4 is the same program without the tautology:\n- FIX and FULL: 1 diagnostic, \"no coercion from '((U::P).X ~ (T::P).X) ==> ...'\".\n- BASE: OOM.\n\nThe FIX trace shows the elaborated witness: conv<U.X, T.X>($<builtin coercion><(U::P).X, (Self::P).X, (T::P).X>( coercion(refl (U::P).X) )( coercion(refl (Self::P).X) )). That is the chain (U::P).X ~ (Self::P).X ~ (T::P).X, made of two abstract-congruence steps.\n\nabs-trans-2 (need<T.X, U.X>() with fact X == X) and abs-trans-3 (value conversion with fact X == X) give 0 diagnostics under FIX and FULL. They also give 0 under BASE (1.9 s). The BASE trace proof is 'need<T.X, U.X>($<builtin coercion>($14))', where $14 : (Self::P).X ~ (Self::P).X is coerced to T.X ~ U.X by assuming Self ~ T and Self ~ U. So the baseline already reaches the forbidden conclusion when a fact mentions X, and FIX extends it to any graph that merely contains X.\n\nControls:\n- ati.hylo (negative/associated-type-inequality): 1 diagnostic under FIX and FULL.\n- v-abs-7.hylo: 0 diagnostics under FIX and FULL.\n\nThe conclusion T.X == U.X, with T == U and two distinct where-clause conformances, is exactly what associated-type-inequality.hylo forbids. In addition, adding the always-true fact Box<X> == Box<X> flips rejection into acceptance, so the decision is not a function of the theory.",
+            "root_cause": "Typer.swift solveEquality, congruent() (around line 5780) copies the rule of TypeStore.unifiable(AssociatedType, AssociatedType) (TypeStore.swift around line 1164). Under that rule, two projections of the same declaration are equal when one qualification is .abstract and the qualification types are equal.\n\nIn unification this is a binary, wildcard-like check. Inside the union-find it becomes transitive. (T::$i).X merges with (Self::abstract).X through T ~ Self, and (Self::abstract).X merges with (U::$p).X through U ~ Self. So two non-abstract projections with distinct witnesses land in one class.\n\nThe node() function also adds the subterms of every fact, so any fact that mentions X is enough to put the abstract node in the graph. Search needs a fact that unifies with the goal, which is why abs-trans-4 and abs-trans-5 differ.\n\nThe underlying rule pair (v-abs-7 valid together with built-in transitivity) is inconsistent with associated-type-inequality. That part is pre-existing: the baseline accepts abs-trans-2/3. eqsolve makes it reachable from trivial facts and cheap. This conflict is not documented in soundness.md, which only lists v-abs-7 as valid.",
+            "fix": "Option A (cleanest; it is a language decision): an abstract projection (Self::abstract).X is equal only to itself, or to a projection whose witness is the abstract witness or a coercion of it.\n- Remove the '.abstract ||' disjunct from congruent() and from TypeStore.unifiable(AssociatedType, AssociatedType).\n- Move v-abs-7.hylo to the negative tests next to associated-type-inequality.hylo.\n- First run the 192 tests to check that no requirement-signature check relies on the wildcard. Member references already replace the abstract qualification, so they should not.\n\nOption B (keeps v-abs-7 valid and stays order-independent): admit an abstract congruence only when the witness is unique up to the closure. In solveEquality, keep a set `banned: Set<Int>` of abstract nodes and loop:\n\n```swift\nrepeat {\n  reset parent/edges to the fact unions only\n  run the closure, where congruent(i, j) returns false for the abstract case\n    if the abstract side is in banned\n  var newlyBanned = false\n  for each abstract AssociatedType node a with declaration D, qualification child q:\n    let ws = Set(nodes.indices.filter { n in\n      n is a non-abstract AssociatedType of D && find(children[n][0]) == find(q)\n    }.map(find))\n    if ws.count > 1 && !banned.contains(a) { banned.insert(a); newlyBanned = true }\n} while newlyBanned\n```\n\nBans only grow, so the loop terminates and the result is independent of order.\n\nWith either option:\n- abs-trans-2/3/4/5 are rejected; the concrete projections T.X and U.X stay apart.\n- v-abs-7 is accepted under option B, because only one concrete projection exists.\n- Add abs-trans-2/3/5 as negative tests.\n\nThe search path, match with fixsubst coercions (the baseline proof of abs-trans-2), needs the same guard. That guard only matters for goals with variables, since eqsolve decides closed equality goals."
+          },
+          {
+            "title": "eqsolve's congruence closure is cubic in term depth and is rebuilt for every closed equality goal: a 14-line program with generic aliases takes about 45 s (FIX) and 28 s (FULL)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/perf-alias-7.hylo (also perf-deep-100.hylo and perf-deep-200.hylo)",
+            "evidence": "I re-ran these.\n\nperf-alias-7.hylo (14 lines; G7<U> dealiases to Box^320<U>; need<G7<U>, G7<A>>() under U == A):\n- FIX: 0 diagnostics, type.user 44763 ms.\n- BASE: 1 diagnostic ('not enough context to infer a type'), 30.7 ms.\n- The attacker measured FULL at 28.5 s.\n\nperf-deep-100.hylo (6 lines, literal Box^100 under U == V):\n- FULL: 0 diagnostics, 881 ms. This matches the attacker's 893 ms.\n- The attacker measured D=200 at 10.9 s (FIX) and 7.2 s (FULL), about 8x per doubling.\n\nThe result itself is correct: the program is valid, and the baseline's rejection was incompleteness. Only the time is the problem.",
+            "root_cause": "Typer.swift solveEquality, closure loop:\n\n```swift\nwhile changed { for i in nodes.indices { for j in nodes.indices where j > i && find(i) != find(j) && congruent(i, j) { ... } } }\n```\n\nnode() appends a parent before recursing into its children, so parents have smaller indices than children. One sweep therefore propagates a merge only one level upward. A depth-D term needs D sweeps of O(n^2) congruent() calls, and each call does TypeStore subscripts and existential casts. That is O(D*n^2), about O(D^3) for nested terms.\n\nNothing is cached. Every closed equality subgoal re-collects the facts, rebuilds the graph (dealiasing generic aliases to exponential depth relative to the source) and recloses it.",
+            "fix": "Replace the all-pairs fixpoint with a standard congruence closure (Downey-Sethi-Tarjan / Nelson-Oppen):\n- Keep `useList: [[Int]]`, the parents of each class representative.\n- Keep a signature table `[Signature: Int]`, where Signature = (constructor kind plus its non-child attributes: TypeApplication arity, Arrow style/effect/labels/access, RemoteType access, AssociatedType declaration, ...) together with the find() of the children.\n- Keep a pending worklist of pairs to merge.\n- On union(x, y): for each parent p in the smaller class's use list, recompute its signature. If the table already holds q with an equal signature and find(q) != find(p), push (p, q) with a congruence edge. Then concatenate the use lists.\n\nThis is O(n log n) and removes the per-level sweeps. Even a minimal patch, iterating i and j in descending index order so that children are processed before parents, removes the factor D in the common case.\n\nAlso:\n- Memoize the closed graph per (scopeOfUse, environment.givens) so that the subgoals of one resolution reuse it.\n- Hash-cons dealiased(x) so that shared alias expansions are visited once.\n\nIf finding 1's option B is adopted, its abstract-node check must also run per merge rather than as an all-pairs pass."
+          }
+        ],
+        "rejected": [
+          {
+            "title": "Equality proofs by eqsolve add no depth and no penalty, which changes which conformance resolution selects (pen-ref-n.hylo)",
+            "why": "It reproduces, but it is not a defect by the task's definitions.\n\nResults (diagnostics, BASE / FIX / FULL):\n- pen-ref-1: 1 / 1 / 1.\n- pen-ref-2: 1 / 0 / 0.\n- pen-ref-3: 2 / 0 / 0.\n- pen-ref-4: 0 / 0 / 0.\n\nBoth candidates for P<W> are legitimate witnesses: the where-clause refinement path, and the local given coerced through the fact W == V. The FIX trace reports '2 done, 1 minimal', so there is no tie and no ambiguity is hidden. The selected witness has the right type. The baseline already shows the same threshold behaviour, just at n=4.\n\nSo the configuration accepts more programs through a valid derivation. That is not unsoundness, not a regression and not order dependence.\n\nI also tried the mirror case to see whether FIX would now reject something the baseline accepts. In mirror-0/1/2.hylo in /home/user/hylo-new/research/round3/soundness/review2/eq-unsound-judge/, the where-clause conformance V is P is reached through W == V, and the competitor is a local given of a refining trait. All configurations agreed on acceptance (0 / 1 / 2 diagnostics for n = 0 / 1 / 2). For n=2 the message differs ('(V::P).X' instead of '#!'), but the outcome is the same, so I found no regression.\n\nIt is worth a design note: how equality proofs count toward the 'smallest derivation' order should be pinned in documentation and tests. It also contradicts the claim of dump-identity outside the test corpus."
+          }
+        ]
+      }
+    },
+    {
+      "lens": "eq-regress",
+      "attack": {
+        "findings": [
+          {
+            "title": "eqsolve + fixsubst make an inferred generic argument ambiguous when it is fixed only by an equality chain (valid call rejected)",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress/o2b-call-infer.hylo",
+            "evidence": "Program:\n  trait Q {}\n  fun pick<T, U where U is Q, T == U>(x: T) {}\n  fun f<A0, A1, A2 where A0 == A1, A1 == A2, A2 is Q>(x: A0) { pick(x) }\nResults (r.sh, eq2-e965a058dfd0): baseline 0 diagnostics (94 ms); FIX 1 diagnostic, 'no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void''; FULL the same.\nBaseline trace (legitimate derivation, no coercion step and no dropped binding): open goal A0 ~ ?u <- transitivity<A0, ?m, ?u>; ?m ~ ?u <- $w : A1 ~ A2; A0 ~ A1 <- $q; Q<A2> <- $12. Result 'resolve [Void](let A0) ...: 5 layers, 1 done, 1 minimal  penalty 6: pick<A0, A2>($12)(transitivity<A0,A1,A2>($q)($w))'.\nFIX trace: '5 layers, 4 done, 4 minimal'; two results at penalty 1: 'pick<A0, A1>(coercion($12))($q)' and 'pick<A0, A2>($12)(coercion($w))', plus U := A0 at penalty 3 and penalty 5. The two penalty-1 results tie, so the call is ambiguous.\nSame defect through a conditional given: o2-open-chain.hylo (given <T, U where U is Q, T == U> => Box<T> is P, need<Box<A0>>()): baseline accepts (134 ms), FIX and FULL reject. o3 and o4 behave the same (baseline 400 and 530 ms). o1 (a single link) is accepted by all three. Swapping the where-clause order to 'T == U, U is Q' (o2d-order.hylo) is accepted by FIX: FIX's acceptance depends on the order of the requirements, the baseline's does not. semtest flags o2b and x10b as MISMATCH.",
+            "analysis": "The premises are discharged last-first, so the open equality A0 ~ ?u is solved before Q<?u>. eqsolve does not apply to open goals, so the search runs with fixsubst. That search now produces several bindings in the same layer: ?u := A1 (fact), ?u := A2 (the fact A1 ~ A2 by coercion; fixsubst keeps ?u := A2, then eqsolve proves A1 ~ A0 in one step at penalty 0), and ?u := A0 (reflexivity). Each then reaches Q<?u> by coercing the single conformance A2 is Q, and eqsolve proves that equality in one step at penalty 0 too. In the baseline the coercion paths needed symmetry/transitivity steps, so they finished later than the direct derivation and only one result survived. All the competing results use the same conformance and pick U among types that are equal in the theory, so the ambiguity is spurious. Two side notes: Sequence.minimalElements (Utilities/Sequence+Extensions.swift) keeps later non-minimal elements once two leaves tie, which is why '4 minimal' is printed with penalties 1,1,3,5. That bug is pre-existing, but eqsolve hits it more often.",
+            "suggested_fix": "For an open equality goal whose one side is a bare unification variable, return only the most general solution (bind the variable to the other side, i.e. reflexivity) instead of searching. Every other solution is equal to it modulo the closure, and later goals such as Q<A0> are discharged through coercion plus eqsolve. More generally, treat results whose witnesses differ only by types equal under the congruence closure as one result. Fix minimalElements so that it keeps only the minimal elements. Add o2b, o2 and o2d as positive tests."
+          },
+          {
+            "title": "extorder reports a false 'circular extension' on a conditional extension whose where clause mentions an associated type with the same name as one of its members",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress/x10b-ext-where-assoc.hylo",
+            "evidence": "Program:\n  trait Collection { type Element }\n  struct Box<T> { public memberwise init }\n  struct Flag { public memberwise init }\n  extension <T where T is Collection, T.Element == Flag> Box<T> {\n    type Element = Flag\n    fun first() -> Element { Flag() }\n  }\n  fun g<T where T is Collection, T.Element == Flag>(b: Box<T>) { let f: Flag = b.first() }\nbaseline: 0 diagnostics (1957 ms). FIX: 2 diagnostics, 'circular extension: the extendee of this extension depends on a lookup of 'Element', which this extension may affect' at 5.1-10 and 'type 'Box<T>' has no member 'first''. FULL: the same.\nOther valid programs with the same pattern that the baseline accepts with 0 diagnostics and FIX/FULL reject with 1 'circular extension' error:\n- x01-ext-arg-member.hylo: 'extension Wrapper<List.Element> { type Element = List.Element; fun first() -> Element {...} }' plus a use. semtest MISMATCH.\n- x08 (the same program, declarations reordered): rejected in both orders.\n- x09-ext-generic-where-assoc.hylo: 'extension <C is Collection> Wrapper<C.Element> { type Element = C.Element }'.\n- x03-ext-nested-struct.hylo: 'struct List { struct Node {} }; extension List.Node { type Node = List.Node; fun next() -> Node {...} }'.\n- x05-alias-ext.hylo: the same through 'type Node = List.Node; extension Node { type Node = ... }'.\n- x06-nested-ext-no-alias.hylo: 'extension List.Node { fun Node() {} }'.\n- x02-ext-nested.hylo: 'struct A { type Foo = B }; extension A.Foo { type Foo = A }'.",
+            "analysis": "In resolve(_:declaredIn:...), extorder reports a circular extension whenever the lookup of a name n meets an extension that declares n and is on declarationsOnStack. This holds whatever type the lookup is in and whether or not that extension could apply to it. While E's extendee is computed, its where clause or extendee path looks up 'Element' in a rigid generic parameter T, or in an unrelated nominal type (List, A). E declares 'Element', so the error fires. Yet E (extending Box<T>, Wrapper<...> or List.Node) can never apply to T or List. Even under the 'apply if consistent' reading, the only consistent answer is that E does not apply. Both language options proposed in soundness.md accept these programs: (a) a pre-pass for extendees that ignores extension members, and (b) a fixpoint. The baseline's silent skip gives the right answer here. The pattern is ordinary code: a conditional extension constrained on T.Element that defines its own Element, or a nested type extended with a same-named alias.",
+            "suggested_fix": "Report a circular extension only when e could apply to the type being looked up, judged without e's extendee: compare the head constructor of e's extendee syntax, or its nominal root after resolving only non-extension members, with the queried type. Never report it for lookups in a generic parameter or associated type unless e is a blanket extension ('extension <T ...> T'). Alternatively, resolve extendees in a pre-pass that ignores extension members, option (a), and keep the error for genuinely mutual cases such as n02-n04. Add x10b, x01, x03 and x09 as positive tests."
+          },
+          {
+            "title": "eqsolve proofs carry no penalty, which breaks the scope-based preference between derivations (valid program rejected as ambiguous)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress/e04-penalty-scope.hylo",
+            "evidence": "Program:\n  trait P {}\n  fun g<V where V is P>() {}\n  fun f<A, B where B == A>() {\n    fun h<C where C == A, B is P, C is P>() { g<A>() }\n  }\nbaseline: 0 diagnostics. Its trace shows 'resolve [Void]() let -> Void: 4 layers, 2 done, 1 minimal  penalty 0: g<A>(coercion($y))'. Both derivations (P<C> with the inner fact C ~ A, and P<B> with the outer fact B ~ A) are found, and the penalty rule chooses the one whose equality comes from the closer scope.\nFIX and FULL: 1 diagnostic, 'no coercion from 'P<A> ==> [Void]() let -> Void' ...'. The FIX trace shows 'resolve P<A>: 3 layers, 2 done, 2 minimal  penalty 0 / penalty 0'. semtest MISMATCH.\ne05-penalty-scope2.hylo (the facts in the other nesting) behaves the same: baseline '2 done, 1 minimal, penalty 1', FIX '2 minimal'.\nRelated: e01-orient-amb.hylo ('B == A, A == C' with B is P, C is P, g<A>()) is accepted by the baseline and rejected by FIX. That case is only an orientation artifact, because the baseline itself rejects the symmetric e01b ('B == A, C == A'), so FIX is consistent there.",
+            "analysis": "In summon, eqsolve's .proved branch calls formThread(... penalties: penalties) and adds no group offset for the facts used. The search adds 'penalties + grouping.offset' for every given it uses, including the equality facts and the built-ins. Two derivations that the baseline separates by the scope distance of the equality fact therefore tie under FIX. They also finish in the same layer, because eqsolve takes one step.",
+            "suggested_fix": "Give the eqsolve proof a penalty computed from the facts it uses: the group offset of each fact edge in givens(visibleFrom:) order, plus the assumed givens' offsets. Choose the path by a minimum-cost search (Dijkstra over the edge offsets) rather than BFS. That way closer equalities keep winning as they did with the search."
+          },
+          {
+            "title": "eqsolve silently changes the selected conformance witness (different elaboration, not visible in --dump)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress/e06-elab-change.hylo",
+            "evidence": "Program: f<A, B where B == A>, with nested scopes. In k: 'given A is R'. In h: 'given B is P', 'given <where A is Q> => A is P', 'given <where A is R> => A is Q', and the call g<A>().\nAll configurations: 0 diagnostics, and semtest reports the dumps as identical.\nTrace, baseline: 'resolve [Void]() let -> Void: 4 layers, 2 done, 1 minimal  penalty 1: g<A>($<Conf 11.7>($<Conf 12.7>($<Conf 8.5>)))', which uses the conditional chain through A is R.\nTrace, FIX: '4 layers, 2 done, 1 minimal  penalty 0: g<A>($<builtin coercion>($<Conf 10.7>))', which uses B is P transported along B == A.",
+            "analysis": "This has the same cause as the penalty finding. The derivation through the outer-scope equality fact cost the baseline 2 (its conformance offset 0 plus the fact's offset 2) against 1 for the chain. Under eqsolve it costs 0, so FIX picks a different conformance witness. That conformance has different implementations, so runtime behaviour can change without any diagnostic. The --dump oracle cannot see the change, because it records only expression types and name references, not witnesses. The claim that FIX is dump-identical therefore does not cover the choice of witness.",
+            "suggested_fix": "The penalty fix above. Also extend the oracle to dump the elaborated implicit arguments (the witness expressions), so that a change of selection is caught."
+          },
+          {
+            "title": "eqsolve congruence closure is cubic and is rebuilt for every equality goal: 34-line program takes 10 s (FIX) / 5.6 s (FULL)",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress/p02-cc-big.hylo",
+            "evidence": "Generated program, 34 lines and 19 KB. It has 32 generic parameters, 31 where-clause equalities between rotations of a 32-element tuple, and 30 calls need<{T0..T31}, {rotation i}>().\nFIX: 0 diagnostics, type.user 10037 ms. FULL: 0 diagnostics, 5569 ms. The baseline runs out of memory (rc=134).\nThe smaller p01-cc-big.hylo (n=24, 20 calls, 10 KB) takes 2.3 s under FIX and 1.3 s under FULL; the baseline also runs out of memory.",
+            "analysis": "For every closed equality goal, solveEquality rebuilds the term graph from all the visible facts. It then closes it with a naive fixpoint ('while changed { for i, j in nodes ... congruent(i, j) }'), which costs O(passes · n²) TypeStore projections. Nothing is memoized per scope or set of givens. Every equality subgoal that a conformance search raises pays the full cost again. It is still far better than the baseline, which runs out of memory, but it exceeds the 5 s budget on a short (if wide) program.",
+            "suggested_fix": "Use a standard congruence closure: a signature table or use-lists with a pending queue, O(n log n). Memoize the closed union-find per (scope, assumed equality givens), since facts that are not assumed depend only on the scope. Only the goal's nodes then need to be added for each query."
+          }
+        ],
+        "held": [
+          "All the programs and dumps are under /home/user/hylo-new/research/round3/soundness/review2/eq-regress/. r.sh runs base/FIX/FULL; d.sh compares the user-module dumps.",
+          "eqsolve, things derivable from conformance definitions: a02-conformance-def.hylo (given A is P { type X = B }, T == A with x: T.X used as B, A.X used as T) gives 0 diagnostics in all three configurations with identical dumps.",
+          "eqsolve, Self and associated types in traits: a01-self-trait.hylo (T == Self, Self.X == U), e09-trait-self-assoc.hylo (X == Y, Y == U inside a trait, and T.X == T.Y, T.Y == U), and v-abs-7.hylo all give 0 diagnostics in all three configurations.",
+          "eqsolve, refinement (e07, trait P refines Q): the refined trait's associated types are not found by name lookup in any configuration (the same 6 diagnostics everywhere), so this is not a regression.",
+          "eqsolve, generic and conditional givens: a04-cond-given.hylo (given <where T == U> => Box<T> is P in a body) gives 0 everywhere. a03-generic-given-body.hylo gives the same 1 error everywhere (known issue 393). a09-conf-via-eq.hylo (conformance via equality and via a conditional given, chains of 2) gives 0 everywhere.",
+          "eqsolve, quantified given with a chain (a05) and structural shapes: tuples, arrows, metatypes and inout arrows (a06, e08). The baseline fails ('not enough context') or runs out of memory, while FIX accepts. These are improvements, not regressions.",
+          "Open goals and fixsubst: a07-open.hylo (need2(x) with B inferred, with and without annotation, Box<T>) behaves the same everywhere. o1-open-chain.hylo (one link), o2c (explicit pick<A0, A2>) and o2d (reversed requirement order) are accepted everywhere.",
+          "e02 and e03 (body givens with an equality fact) are accepted everywhere.",
+          "Every closed-equality reasoning case I tried that the baseline accepted, FIX/FULL also accepted. The only eqsolve-related rejections come from penalty/layer ties and open goals (findings above). I found no closed ground equality that the search proves and the congruence closure cannot: TypeStore.unifiable's only extra structural cases are Bundle, Implication and UniversalType, and I found no way to write them in source.",
+          "extorder on ordinary extensions: x11 (extension <T is Collection> Box<T> { type Element = T.Element }), x07 (a given conformance declaring Element for Wrapper<List.Element>: conformances are not affected) and x13/x12 (lookups in extension bodies; methods, operators and static members in extensions) behave identically in all configurations.",
+          "occurs: no false occurs-check rejection found. Every case it touched also failed, or was fixed, in the same way in the baseline.",
+          "The FIX and FULL results matched on every program tried, both in diagnostics and in --dump of the user module."
+        ]
+      },
+      "verdict": {
+        "confirmed": [
+          {
+            "title": "eqsolve makes an inferred generic argument fixed only by an equality chain ambiguous, so a valid call is rejected",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/o2b-call-infer.hylo (also o2-open-chain.hylo; o2d-order.hylo shows the dependence on requirement order)",
+            "evidence": "Program: `trait Q {}; fun pick<T, U where U is Q, T == U>(x: T) {}; fun f<A0, A1, A2 where A0 == A1, A1 == A2, A2 is Q>(x: A0) { pick(x) }`.\nResults (judge run, eq2-e965a058dfd0):\n- baseline: 0 diagnostics.\n- FIX: 1 diagnostic, 'no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void''.\n- FULL: the same as FIX.\no2-open-chain (a conditional given `<T, U where U is Q, T == U> => Box<T> is P`, with `need<Box<A0>>()`): baseline 0, FIX 1, FULL 1.\no2d (the same with the requirements written `T == U, U is Q`): 0 diagnostics in all configurations.\nBisection over flags:\n- `occurs,fixsubst`: 0 diagnostics, '5 layers, 1 done, 1 minimal'.\n- `occurs,fixsubst,eqsolve`: 1 diagnostic.\n- `occurs,eqsolve`: 1 diagnostic.\nThe trigger is therefore eqsolve, not fixsubst.\nBaseline trace: the only result is the legitimate 'penalty 6: pick<A0, A2>($12)($<builtin coercion><A0, A1, A2>($q)($w))', a transitivity proof of A0 ~ A2 together with Q<A2>.\nFIX trace: '5 layers, 4 done, 4 minimal'. Two results tie at penalty 1, 'pick<A0, A1>($<builtin coercion>($12))($q)' and 'pick<A0, A2>($12)($<builtin coercion>($w))'. Both use the same conformance $12 and differ only in U (A1 vs A2, which are equal in the theory) and in equality proofs.",
+            "root_cause": "The open goal `A0 ~ ?u` has a variable, so solveEquality returns .notApplicable and the search runs. Matching the facts $q and $w, and reflexivity, yields several bindings of ?u in the same layer. The remaining coercion subgoals of each alternative are then closed equalities: `Q<A2> ~ Q<A1>`, and `(A1~A2) ~ (A0~A2)`. summon's eqsolve branch (Typer.swift ~3735) proves each of them in a single formThread step with the caller's `penalties` unchanged. All alternatives therefore finish in the same BFS layer as the direct derivation and at no greater cost. Before eqsolve, these coercion paths needed extra symmetry and transitivity layers, so they never reached `done` in the layer where the direct derivation stopped (takeSummonResults stops at the first layer that has a result). takeSummonResults treats more than one minimal result as ambiguous, although the results are the same elaboration: equality proofs carry no runtime content, and the type arguments are equal under the congruence closure. Which result wins depends on the order in which the premises are discharged (last first), which is why o2d is accepted.\nSide note (pre-existing, cosmetic): Sequence.minimalElements (Sources/Utilities/Sequence+Extensions.swift:18) appends a non-minimal x once `leaves` holds two or more tied elements, because it only drops x when `leaves` has a unique element. That explains '4 minimal' with penalties 1, 1, 3 and 5. It does not change whether a call is accepted.",
+            "fix": "Make the ambiguity check treat results as one when they are equal modulo equality. In takeSummonResults, after minimalElements, when `result.count > 1` and eqsolve is on:\n1. Normalize each SummonResult witness by replacing every subterm whose type is an EqualityWitness, and every `$<builtin coercion>` wrapper, with a placeholder.\n2. Map every type argument to the representative of its class in the congruence closure of the scope's facts. Refactor solveEquality so that its union-find (the same closure) can be returned and queried.\n3. Keep one result per normalized key, preferring the one with the fewest proof steps.\nA cheaper partial fix, in summon before the search: when eqsolve is on and the reified goal is `?v ~ X` or `X ~ ?v` with ?v a bare unification variable that does not occur in X, return only the reflexivity thread (bind ?v := X). That is the most general solution. Later goals that mention ?v are still discharged through coercion plus eqsolve or the search, which fixsubst keeps sound.\nAlso fix minimalElements:\n`if leaves.contains(where: { compare($0, x) == .ascending }) { continue }; leaves.removeAll(where: { compare(x, $0) == .ascending }); leaves.append(x)`.\nAdd o2b, o2 and o2d as positive tests."
+          },
+          {
+            "title": "extorder reports a false 'circular extension' when the lookup is in a type the extension can never extend (conditional extension on T.Element, nested-type extension with a same-named member)",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/x10b-ext-where-assoc.hylo (also x01-ext-arg-member, x03-ext-nested-struct, x06-nested-ext-no-alias, x09-ext-generic-where-assoc in the same dir)",
+            "evidence": "Judge runs, diagnostics as baseline / FIX / FULL:\n- x10b, `extension <T where T is Collection, T.Element == Flag> Box<T> { type Element = Flag; fun first() -> Element {...} }` plus a use: 0 / 2 / 2. The errors are 'circular extension: the extendee of this extension depends on a lookup of 'Element'...' and 'type 'Box<T>' has no member 'first''.\n- x01, `extension Wrapper<List.Element> { type Element = List.Element ... }`: 0 / 1 / 1.\n- x03, `extension List.Node { type Node = List.Node; fun next() -> Node }`: 0 / 1 / 1.\n- x06, `extension List.Node { fun Node() {} }`: 0 / 1 / 1.\n- x09, `extension <C is Collection> Wrapper<C.Element> { type Element = C.Element }`: 0 / 1 / 1.\nThis behaviour is not documented anywhere as a known limitation of extorder. soundness.md predates extorder, and its options (a) a pre-pass ignoring extension members and (b) a fixpoint both accept these programs.",
+            "root_cause": "resolve(_:declaredIn:applyingTo:in:statically:) (diff hunk at Typer.swift ~4858) calls reportCircularExtension(e, lookingUp: n) whenever a lookup of n meets an extension e that declares n and is on declarationsOnStack. It never asks whether e could apply to the queried type q. While e's extendee is being computed, its where clause or extendee path looks up n in q. q is e's own rigid parameter T or C, or an unrelated nominal (List). The only self-consistent reading is that e does not apply to q: if it did, its extendee would equal q, which contradicts the extendee it actually resolves to (Box<T>, Wrapper<Bool>, the nested struct List.Node). The 'circular in any order of evaluation' argument in the code comment holds only when e's eventual extendee may apply to q.",
+            "fix": "Replace the eager report with skip-then-verify.\n1. When `declarationsOnStack.contains(.init(e)) && declaresName`, skip e as the baseline does, and record `pendingExtensionChecks[e, default: []].append(q)`.\n2. In extendeeType(e), right after the extendee is computed and memoized (when e leaves declarationsOnStack), take the recorded queried types. For each q, test whether e may apply to q given the now-known extendee. A conservative test is enough: unify headShape(of: extendee) with headShape(of: q), treat e's own generic parameters as open variables, and ignore the where clause.\n3. Call reportCircularExtension(e, lookingUp: n) only if one of them may apply.\nThis accepts x01, x03, x06, x09 and x10b. It keeps the error for genuinely mutual cases (n02–n04, amb1), where e's extendee does apply to the type looked up. It also adds the post-check that soundness.md said was missing from cyclecut, so the memoized skip is sound. Blanket extensions (`extension <T> T`) always 'may apply' and therefore still report. Add x10b, x01, x03, x06 and x09 as positive tests."
+          },
+          {
+            "title": "eqsolve proofs carry no penalty, so the scope-based preference among derivations is lost (valid program rejected as ambiguous)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/e04-penalty-scope.hylo (also e05-penalty-scope2.hylo)",
+            "evidence": "e04: `fun f<A, B where B == A>() { fun h<C where C == A, B is P, C is P>() { g<A>() } }`.\nDiagnostics:\n- baseline: 0. Trace: 'resolve [Void]() let -> Void: 4 layers, 2 done, 1 minimal  penalty 0: g<A>($<builtin coercion>($y))'.\n- `occurs,fixsubst`: also 0, with the same single result.\n- FIX: 1 diagnostic, 'no coercion from 'P<A> ==> [Void]() let -> Void''. Trace: 'resolve P<A>: 3 layers, 2 done, 2 minimal  penalty 0: ($s) / penalty 0: ($y)'.\n- FULL: the same as FIX.\ne05: baseline 0 ('2 done, 1 minimal, penalty 1'); FIX and FULL 1 diagnostic ('2 minimal', both at penalty 1).\nThe baseline's result is a legitimate derivation: the inner conformance coerced along the inner fact. The facts are oriented the same way (X == A), so this is not the orientation artifact of e01.",
+            "root_cause": "summon's `.proved(let w)` branch (Typer.swift ~3741) returns `formThread(... penalties: penalties ...)` without adding anything. The search, in contrast, adds `grouping.offset` for every given it uses: equality facts at their scope's group offset, and symmetry or transitivity at the built-in group's offset. solveEquality's BFS reconstruction also ignores the facts' groups. Two derivations that differ only in the scope of the equality fact used therefore get equal penalties, and with eqsolve they also complete in the same layer.",
+            "fix": "Have solveEquality return `.proved(w, cost)`, and pass `penalties: penalties + cost` to formThread.\n- Weights: give each fact edge a weight equal to its group offset, computed exactly as summon computes it (assumed givens at offsets 0..k-1, then `givens(visibleFrom:)` groups at their enumerated offsets). Add the built-in group's offset for each reversed edge (symmetry) and each composition beyond the first edge (transitivity). Give a congruence edge the cost of its children's proofs, or 0 as an approximation.\n- Path: replace the BFS reconstruction with Dijkstra over these weights.\nThis restores the baseline ranking for e04, e05 and e06 whenever the search would have found the proof within the depth cap."
+          },
+          {
+            "title": "eqsolve silently changes the selected conformance witness (elaboration changes with no visible diagnostic or dump difference)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/e06-elab-change.hylo",
+            "evidence": "All configurations report 0 diagnostics.\n- baseline and `occurs,fixsubst`: 'penalty 1: g<A>($<Conf 11.7>($<Conf 12.7>($<Conf 8.5>)))', the conditional chain through A is R.\n- FIX: 'penalty 0: g<A>($<builtin coercion>($<Conf 10.7>))', which uses `given B is P` transported along the outer fact B == A.\nThe chosen conformance differs, so method implementations, and with them runtime behaviour, can differ. The --dump oracle records only expression types and name references, so it cannot see this. 'Dump-identical' therefore does not establish that the elaboration is preserved.",
+            "root_cause": "The same as the penalty finding. The baseline costed the B == A route at 2 (conformance offset plus outer fact offset), against 1 for the conditional chain. Under eqsolve the equality proof costs 0, so the transported conformance wins.",
+            "fix": "Apply the penalty fix above (cost-weighted eqsolve proofs). Also extend tc-bench --dump to print each call's elaborated implicit arguments (the SummonResult witness of every implicit application), so that a change in witness selection appears as a semtest MISMATCH."
+          },
+          {
+            "title": "eqsolve rebuilds a quadratic-per-pass congruence closure for every closed equality goal: a 34-line program takes 10 s under FIX and 5.5 s under FULL",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/p02-cc-big.hylo (smaller: p01-cc-big.hylo)",
+            "evidence": "The program has 34 lines (19 KB): 32 generic parameters, 31 where-clause equalities between rotations of a 32-element tuple, and 30 calls `need<...>()`.\nJudge runs:\n- FIX: 0 diagnostics, type.user 10148 ms. User-module counters: eqsolve.proved=30, summon.subgoals=30, summon.matches=60. All the time is in 30 solveEquality calls, about 330 ms each.\n- FULL: 0 diagnostics, 5473 ms.\nThe attacker reports that the baseline runs out of memory on this program, so FIX is still a large improvement. It nonetheless exceeds the 5 s budget for a program under 40 lines.",
+            "root_cause": "solveEquality (Typer.swift ~5700):\n- It rebuilds the term graph from every visible fact on each call. With tuples as cons cells there are about 2,000 nodes.\n- It closes the graph with `while changed { for i in nodes { for j in nodes where j > i ... congruent(i, j) } }`. That is O(passes × n²) congruent() calls, and each one does existential `program.types[...]` lookups.\n- Nothing is memoized per scope, although facts that are not assumed depend only on scopeOfUse.",
+            "fix": "Implement a standard congruence closure:\n- Hash every non-leaf node by its signature (kind, attributes, find(children)) in a dictionary.\n- On a union, re-canonicalize only the parents in the merged class's use-list, through a pending queue.\n- Total cost: O(n log n).\nMemoize the closed structure (nodes, index, parent, edges) per (scopeOfUse, ids of assumed equality givens) in the Typer cache. For each query, only add the goal's lhs and rhs, plus the congruences their new nodes create."
+          }
+        ],
+        "rejected": [
+          {
+            "title": "Side note: Sequence.minimalElements keeps non-minimal elements after a tie, and eqsolve triggers this more often (reported as part of finding 1)",
+            "why": "I confirmed it in code (Sequence+Extensions.swift:18–43), but it predates the fixes and is cosmetic. Once two results tie, the result is already ambiguous, and a later strictly smaller element still resets `leaves`. Accept and reject decisions therefore do not change; only the trace and diagnostic lists show the extra elements. I recorded the fix under finding 1 rather than as a separate regression."
+          },
+          {
+            "title": "e01-orient-amb (mentioned as related)",
+            "why": "The attacker already notes that the baseline also rejects the symmetric e01b, so the baseline's acceptance of e01 is an orientation artifact. FIX's behaviour there is consistent, so this is not a regression."
+          }
+        ]
+      }
+    },
+    {
+      "lens": "ext-order",
+      "attack": {
+        "findings": [
+          {
+            "title": "A given whose type is being computed is silently skipped, so FIX accepts an ambiguous program and the result depends on declaration order (alias memoized through the skip)",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/gz1.hylo",
+            "evidence": "gz1.hylo:\n  trait P { type Y }\n  trait Q { type O }\n  struct T {}\n  struct U {}\n  given T is P { type Y = U }\n  given U is Q { type O = T }\n  given Z.O is P { type Y = Int }   // Z.O = U.O = T, so this is a second 'T is P'\n  type Z = T.Y\n  fun k(z: Z) {}\nrun.sh output (baseline / FIX / FULL): 0 / 0 / 0 diagnostics. The original baseline 4587ce9e1a23 also gives 0.\ngz3.hylo is gz1 with lines 7 and 8 swapped (alias before the given): 1 diagnostic in all three configurations, 'definition of 'Z' refers to itself'.\nControls showing that the program is ambiguous by the checker's own rules:\n- red2.hylo: 'given U.O is P' counts as 'T is P'; need<T>() is accepted.\n- red3.hylo: that given plus 'given T is P' makes need<T>() fail (ambiguous).\n- gz0.hylo: two 'T is P' givens make 'type Z = T.Y' fail with 'ambiguous use of Y'.\n- gz1b.hylo is gz1 plus 'fun k3(y: T.Y)' and 'k(U())'. FIX accepts 'type Z = T.Y' as U and k(U()), but in the same program rejects 'y: T.Y' with 'ambiguous use of Y' / 'expression does not denote a type' (2 diagnostics, all configurations).\n- gz1c.hylo: need<T>() in the same program is rejected (no coercion, i.e. ambiguous).",
+            "analysis": "This is the remaining silent skip, lens (3).\n1. The checker computes the declared type of G1 ('given Z.O is P'), which evaluates the alias Z = T.Y.\n2. That evaluation looks up Y on T through the trait P, so it calls summon(P<T>).\n3. givens(visibleFrom:) filters G1 out with notOnStack, so only G2 ('T is P { Y = U }') is found, and Z := U.\n4. The summon result itself is not memoized (hasImplicitOnStack guards it). The alias type Z is memoized as U, permanently.\n5. G1's type then becomes P<(U::Q).O>, and summon treats that as P<T>. So T has two conformances to P, and T.Y is ambiguous. Z = U is therefore not a consistent reading: the program has no consistent reading and should be rejected.\n\nIn the other order (gz3), Z is evaluated first and the self-reference is detected, so the program is rejected. Swapping two adjacent top-level declarations changes acceptance.\n\nextorder replaced the silent skip of on-stack extensions with an error, but the identical silent skip of on-stack givens (notOnStack in givens(visibleFrom:)) is untouched. Every value memoized during that window that is not a summon result can be wrong: alias types, extendees, declared types.",
+            "suggested_fix": "Do the same for givens as for extensions. When summon (or applies) would consider a user given that is on declarationsOnStack, and that given's head could unify with the query, report a 'circular conformance' error instead of filtering it out silently.\n- Keep the silent filter only for the intended case: the later usings of the same where clause, which initializeContext puts on the stack on purpose.\n- A cheaper alternative: record that a skip happened, and do not memoize any alias, extendee or declared type computed while a skip of a possibly matching given was recorded.\n- Add gz1/gz3 as an order-independence test pair."
+          },
+          {
+            "title": "An extension's extendee can depend on an on-stack given; FIX accepts an ill-formed extension and acceptance flips when two declarations are swapped",
+            "kind": "order-dependence",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/ge1.hylo",
+            "evidence": "ge1.hylo:\n  trait P { type Y }\n  trait Q { type O }\n  struct T {}\n  struct U { public memberwise init }\n  given T is P { type Y = U }\n  given U is Q { type O = T }\n  given U.Foo.O is P { type Y = Int }   // = T is P once Foo is known\n  extension T.Y { type Foo = U }\n  fun k(z: U) {}\nResults: baseline 0, FIX 0, FULL 0 diagnostics. The original baseline 4587ce9e1a23 also gives 0.\nge2.hylo is the same program with lines 7 and 8 (the given and the extension) swapped:\n- baseline: 1 diagnostic ('type U has no static member Foo');\n- FIX and FULL: 2 diagnostics, 'circular extension: the extendee of this extension depends on a lookup of 'Foo'...' and 'type U has no static member Foo'.\nControl ge3.hylo (two explicit 'T is P' givens plus 'extension T.Y'): 'ambiguous use of Y' in all configurations.",
+            "analysis": "This breaks extorder's order-independence claim directly.\n\nge1 order:\n1. G1's type needs U.Foo.\n2. Looking up Foo finds the extension E, which declares Foo and is not on the stack, so E's extendee T.Y is computed.\n3. That computation needs summon(P<T>), with G1 on the stack. G1 is skipped silently.\n4. E's extendee is memoized as U.\n5. G1 then turns out to be a second 'T is P', so T.Y is ambiguous: E's extendee is ill-formed, and no consistent reading exists.\n\nge2 order:\n1. E's extendee is computed first.\n2. The summon needs G1's type, which looks up Foo with E on the stack.\n3. extorder reports a circular extension.\n\nThe extorder check covers only the case where the extension is on the stack. When the cycle passes through a given on the stack, it is invisible.",
+            "suggested_fix": "Same fix as for the given skip: treat an on-stack given that may match the query as a cycle (report it), or invalidate memoized extendees computed while such a skip happened. Then ge1 and ge2 are both rejected. Add both as a pair to the regression set."
+          },
+          {
+            "title": "An extension whose applicability goes through an on-stack given: FIX accepts a 5-line program whose given head is ambiguous under the final reading",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/gx1.hylo",
+            "evidence": "gx1.hylo:\n  trait P {}\n  struct I { type Back = A }\n  struct A { type Inner = I }\n  extension <T where T is P> T { type Inner = Bool }\n  given A.Inner.Back is P {}\nResults: baseline 0, FIX 0, FULL 0 diagnostics. The original baseline also gives 0.\ngx1_use.hylo is the same plus 'fun use(x: A.Inner) {}': 1 diagnostic, 'expression does not denote a type' at A.Inner. That is the very expression the given's head contains.\ngx1_ctrl.hylo (with 'given A is P' written directly): the same rejection.",
+            "analysis": "1. While the checker computes the given's type, the lookup of Inner on A considers the generic extension, which declares Inner. That calls applies(E, A), which needs summon(P<A>).\n2. The only candidate is the given being typed. It is skipped silently, so E is deemed not to apply and A.Inner = I.\n3. Then I.Back = A, so the given is 'A is P'.\n4. Under the final set of givens, E does apply to A, so A.Inner is ambiguous: native I versus the extension's Bool. The head of the given is ill-formed.\n\nextorder does not see this, because the cycle goes extension applicability → summon → on-stack given, not extension-on-stack. It is the generic-extension form of the same silent-skip hole.",
+            "suggested_fix": "Report a circular dependency when applies()/summon needs a given that is on the stack and whose head may unify with the query (for example, the abstract head shape matches). Do not filter it silently."
+          },
+          {
+            "title": "'circular extension' rejects valid programs where an extension declares a member with the same name as one its own extendee or where clause looks up",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/r2_where_assoc.hylo",
+            "evidence": "r2_where_assoc.hylo:\n  trait P { type Element }\n  struct Box<T> { public memberwise init }\n  extension <T where T is P, T.Element == Int> Box<T> { type Element = Int }\nResult: baseline 0 diagnostics. FIX and FULL: 1 diagnostic, 'circular extension: the extendee of this extension depends on a lookup of 'Element', which this extension may affect'. The original baseline gives 0. The control r2_where_assoc_ctrl.hylo (member renamed to Elem) gives 0 everywhere.\n\nOther valid programs rejected the same way (baseline 0, FIX and FULL 1 'circular extension'):\n- r1_nested.hylo: 'struct Outer { struct Index {} }; extension Outer.Index { type Index = Int }; fun k(y: Outer.Index.Index) {}'\n- r1_selfname.hylo: 'struct A { type Foo = B }; extension A.Foo { type Foo = Int }'\n- r1_selfname_fun.hylo: 'extension A.Inner { fun Inner() {} }'\n- names/verify-names-1/v4_noC.hylo\n- al2.hylo: 'extension X { type Me = Int }; extension A { type Me = B }; type X = A.Me'. al1 and al3, which are reorderings of al2, are rejected by FIX too, with 'X refers to itself'. So the rejection is order-independent, but it rejects a program that has a unique consistent reading.\n\nCounter-example showing why a check is still needed: pc1_selfapply_nouse.hylo, 'struct A { type Foo = A }; extension A.Foo { type Foo = Int }', is genuinely inconsistent. The extension would then apply to A and make A.Foo ambiguous. The baseline accepts it (unsound) and FIX rightly rejects it.",
+            "analysis": "In resolve(_:declaredIn:applyingTo:in:statically:), any lookup of n that meets an extension e which is on declarationsOnStack and declares n is reported as circular. That includes lookups made while computing e's own extendee or its where clause.\n\nIn r2, the lookup is 'T.Element' on the extension's own rigid parameter T. In r1_nested, it is 'Index' on Outer. In both cases e cannot apply to the qualifier: e extends Box<T> or Outer.Index, not T or Outer. So every reading is consistent, and the baseline's acceptance (skipping e) was legitimate.\n\nThe pattern is realistic. A constrained extension of a wrapper that defines a member with the same name as an associated type its where clause mentions is common (Element, Index). So is 'extension Outer.Index { type Index }'. The 192 tests and the stdlib do not contain it: I checked that no 'circular extension' is emitted on positive/negative under FULL.",
+            "suggested_fix": "Replace the eager error with exclusion plus a post-check.\n1. While e's extendee is being computed, skip e in lookups, and record the (qualifier type, name) pairs for which e was skipped.\n2. Once e's extendee is memoized, check applies(e, qualifier) for each recorded pair.\n3. Report 'circular extension' only if e applies to one of them.\n\nThis is order-independent, because the check uses only memoized extendees. It accepts r1_*, r2_where_assoc, v4 and al2, and it still rejects pc1_selfapply_nouse, amb1 and amb3. Lookups on rigid generic parameters of e itself can be excluded without any check."
+          }
+        ],
+        "held": [
+          "In programs made only of extensions and aliases (no givens), I found no order dependence under FIX. amb1 and amb3 (and amb4/amb5) are all rejected. al1, al2 and al3 are all rejected. v2_swapped and t01 are reorderings with mutually dependent extendees, and both are rejected or accepted consistently. Every remaining extension skip now reports an error, and alias self-reference reports 'refers to itself'.",
+          "FIX does not accept any of the ambiguous extension-only programs: amb_direct, amb_e1first, amb_e2first (FIX now rejects it; the baseline accepted it), amb_e2first_use, amb_viaalias_direct, amb0, amb2, pc1_selfapply.",
+          "Skipping extensions that do not declare n is semantically safe in everything I tried: nested types, aliases, members found through traits, generic extensions with where clauses (r2_where_assoc_fun, r2_where_assoc_ctrl accepted). t04_init_ops_subscript gives the same counts as the baseline.",
+          "On the 52-program names corpus (names-counts.txt), FIX removes all the old order-dependent rejections: casc1, casc2, g1, g2, g4, n01, n05, t01, v06, v08 go from 2 errors to 0. The only newly rejected programs are the mutually dependent or self-name extendee cases: n02-n04, n11, n12, t03, v1, v3-v5. Of these, v4 (self-name) is a regression; see the finding.",
+          "Two conformances with an on-stack dependency but a direct use (g_dup1-3, gz1c, gx1_use, gz1b's 'T.Y'): ambiguity is detected in every order. The summon memo and the extension-applies memo are correctly guarded by hasImplicitOnStack. Only memos that are not summon results (alias types, extendees) leak.",
+          "No 'circular extension' diagnostic appears on any of the 192 positive/negative tests under FULL. The only crash is the known illegal-enum-case.",
+          "FULL gives the same results as FIX on every program above. All runs take under 70 ms of type.user time, so there is no performance issue in this lens.",
+          "speculating is never incremented, so held diagnostics cannot hide a circular-extension report."
+        ]
+      },
+      "verdict": {
+        "confirmed": [
+          {
+            "title": "A given whose type is being computed is skipped without a diagnostic, and alias types computed meanwhile are memoized: FIX accepts gz1, which has no consistent reading, and rejects its reordering gz3",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/gz1.hylo (reordering: gz3.hylo)",
+            "evidence": "Re-run with timeout 120. gz1 gives diagnostics 0 in the baseline, FIX, FULL and the original 4587ce9e1a23. gz3 (lines 7 and 8 swapped) gives 1, 'definition of 'Z' refers to itself', in all four. The controls behave as the attacker says. gz0 gives 'ambiguous use of Y'. red3 and gz1c give 'no coercion' (an ambiguous P<T>). gz1b's 'y: T.Y' is rejected while 'type Z = T.Y' is accepted in the same program. The trace of FIX on gz1 (/home/user/hylo-new/research/round3/soundness/review2/ext-order-judge/gz1.trace) shows 'resolve P<T>: 1 layers, 1 done, 1 minimal / penalty 0: ConformanceDeclaration at gz1:5.1': the given 'Z.O is P' at line 7 never appears as a candidate. It was filtered out while its own type was being computed.\nWhy there is no consistent reading: if Z.O = T, T has two P conformances, so T.Y and therefore Z are ill-defined. If Z.O != T, then Z = T.Y = U and Z.O = U.O = T, a contradiction. So the program must be rejected in every order.",
+            "root_cause": "givens(visibleFrom:) (Typer.swift around lines 4284-4298, and the local givens at around line 4125) silently drops every user given on declarationsOnStack, through notOnStack (around line 5648). While G1's declared type is computed, the alias Z = T.Y needs summon(P<T>), and G1 is not offered. The summon result itself is not memoized, because of the hasImplicitOnStack guard. But the alias type Z := U is memoized by declaredType(of: TypeAliasDeclaration), and so is G1's type, P<U.O> ~ P<T>. Nothing re-checks the skipped given afterwards. extorder turned the analogous silent skip of on-stack extensions into an error (reportCircularExtension) but left this one alone. The same hole exists in the baseline, so it is not a FIX regression, but FIX's soundness and order-independence claims do not hold.",
+            "fix": "Turn the skip into an exclusion plus a post-check, mirroring extorder.\n(1) Keep where-clause usings that initializeContext puts on the stack in a separate set (contextUsingsOnStack). Skipping those is the intended scoping rule, and they stay filtered with no record.\n(2) In summon(...) (or in givens(visibleFrom:) with the query passed in), when a .user(d) given is filtered because d is on declarationsOnStack for a declared-type computation, record pendingGivenChecks[d].append((query, scopeOfUse)). Do the same for .nested givens whose root is on the stack.\n(3) In declaredType(of: ConformanceDeclaration / binding given), after the type is memoized and d is popped, re-run summon(query, in: scope) for each recorded query, or at least test whether d's now-memoized conformance matches the query with the same matching summon uses. If d is among the candidates, report 'circular conformance: the type of this given depends on a resolution of <query> that it may affect' at d, once per d.\nThis is order-independent, because the verdict uses only the final memoized types. It must still accept /home/user/hylo-new/research/round3/soundness/review2/ext-order-judge/gvalid.hylo ('given T.Y is P' where T.Y needs P<T>; the given is skipped, but its final type P<U> does not match P<T>). Both FIX and the baseline accept gvalid today. A naive 'same trait, so report' rule would wrongly reject it. Add gz1/gz3 as a regression pair."
+          },
+          {
+            "title": "The same on-stack-given skip lets an extension's extendee be memoized from a lookup that ignored the given: FIX accepts ge1 and rejects ge2 (two declarations swapped)",
+            "kind": "order-dependence",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/ge1.hylo (reordering: ge2.hylo)",
+            "evidence": "Re-run. ge1 gives 0 in the baseline, FIX, FULL and the original. ge2 (given and extension swapped) gives 1 in the baseline ('type U has no static member Foo'). FIX and FULL give 2: 'circular extension: ... lookup of 'Foo'' plus the same error. Control ge3 (two explicit T is P givens and 'extension T.Y') gives 'ambiguous use of Y' everywhere. In ge1, E's extendee T.Y is computed while G1 ('U.Foo.O is P', which is T is P) is on the stack, so it is memoized as U. Under the final set of givens, T.Y is ambiguous. So ge1 has no consistent reading, and FIX's rejection of ge2 is the right verdict. The defect is that ge1 is accepted, so the extorder order-independence claim fails.",
+            "root_cause": "The same root cause as the gz1 finding. notOnStack silently filters G1 out of summon(P<T>), which runs while computing the extendee of extension T.Y. That extendee is memoized permanently. extorder only detects cycles whose on-stack node is an extension, not cycles that pass through an on-stack given.",
+            "fix": "The same exclusion plus post-check as for gz1. Record (G1, P<T>) when G1 is skipped. After G1's type (P<U.O> ~ P<T>) is memoized, re-summon P<T>. G1 matches, so report a circular conformance, and ge1 is rejected like ge2. Add ge1/ge2 as a pair to the regression set."
+          },
+          {
+            "title": "An on-stack given is also skipped inside an extension-applicability check: FIX accepts gx1, whose given head is ambiguous under the final set of givens",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/gx1.hylo",
+            "evidence": "Re-run. gx1 gives 0 in the baseline, FIX, FULL and the original. My reordering (/home/user/hylo-new/research/round3/soundness/review2/ext-order-judge/gx1_swap.hylo, given before the extension) also gives 0 in the baseline and FIX. gx1_use (adds 'fun use(x: A.Inner)') and gx1_ctrl (a direct 'given A is P') give 1 everywhere, 'expression does not denote a type' at A.Inner. That is the same expression as the given's head.\nWhy there is no consistent reading: if A is not P, then A.Inner = I and I.Back = A, so the given asserts A is P. If A is P, A.Inner is ambiguous (native I versus the extension's Bool), so the head is ill-formed.",
+            "root_cause": "The same root cause again. While the given's type is computed, the lookup of Inner on A calls applies(E, A), which needs summon(P<A>), and the only candidate, the given on the stack, is filtered by notOnStack. E is then deemed not to apply, and the given's type is memoized from that lookup. This is the generic-extension form of the hole. It is accepted in both orders, so it is unsoundness rather than order dependence.",
+            "fix": "The same post-check. The skip during applies(E, A) records (given, P<A>). Once the given's type P<A> is memoized, re-summon P<A>. The given matches, so report a circular conformance."
+          },
+          {
+            "title": "extorder reports 'circular extension' for lookups that the extension cannot affect (the qualifier can never be its extendee), so valid programs the baseline accepted are rejected",
+            "kind": "regression",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/ext-order/r2_where_assoc.hylo (also r1_nested, r1_selfname, r1_selfname_fun, al2, names/verify-names-1/v4_noC)",
+            "evidence": "Re-run. For r2_where_assoc, r1_nested, r1_selfname, r1_selfname_fun, al2 and v4_noC: the baseline and the original 4587ce9e1a23 give 0, while FIX and FULL give 1, 'circular extension: the extendee of this extension depends on a lookup of '<n>', which this extension may affect'. r2_where_assoc_ctrl (the member renamed) gives 0 everywhere.\nThese programs have a unique consistent reading:\n- r2: E extends Box<T>, and the lookup is T.Element on E's own rigid parameter T, which E (an extension of Box<_>) cannot apply to.\n- r1_selfname: A.Foo = B, and E extends B, not A.\n- r1_nested: E extends Outer.Index, and the lookup is on Outer.\nNothing documents this over-rejection: soundness.md only discusses cyclecut/cyclecutstack, and oracle-sound-config.txt reports only the 216 identical files. Controls where the rejection is right: pc1_selfapply_nouse (E's extendee resolves to A itself) is rejected by FIX and wrongly accepted by the baseline. My /home/user/hylo-new/research/round3/soundness/review2/ext-order-judge/r2_bare.hylo ('extension <T where T is P, T.Element == Int> T { type Element = Int }', where E extends T itself) is also rightly rejected by FIX.",
+            "root_cause": "In resolve(_:declaredIn:applyingTo:in:statically:) (Typer.swift around lines 4864-4876), if TyperExperiments.extorder && declaresName, any extension that is on declarationsOnStack and declares n triggers reportCircularExtension(e, lookingUp: n) eagerly, whatever the qualifier q. The cycle is only real if e ends up applying to q. When e's final extendee cannot match q, skipping e was exact, and the baseline's acceptance was legitimate.",
+            "fix": "Replace the eager report with exclusion plus a deferred check.\n(1) In the on-stack branch, skip e and append (q, scopeOfUse, n) to pendingExtensionChecks[e]. Keep reportCircularExtension unused at this point.\n(2) At the end of the extendee computation for e (where e leaves declarationsOnStack, around line 5642, after the extendee and where clause are memoized), run applies(e, to: q, in: scopeOfUse) for each recorded triple. If it holds, call reportCircularExtension(e, lookingUp: n), then clear the entry.\nThe verdict uses only memoized extendees, so it stays order-independent. It accepts r1_*, r2_where_assoc, al2 and v4_noC, and still rejects pc1_selfapply_nouse, r2_bare, amb1/amb3 and ge2.\nAn optional shortcut is to skip the check when q is a rigid generic parameter introduced by e itself. That is valid only when e's extendee is not a bare generic parameter: r2_bare shows the shortcut would be unsound for 'extension <T ...> T'.\nWhen q contains open type variables, treat unifiability as 'applies', to stay conservative."
+          }
+        ],
+        "rejected": []
+      }
+    },
+    {
+      "lens": "crash-paths",
+      "attack": {
+        "findings": [
+          {
+            "title": "Top-level occurs-check failure in Typer.match is taken as a successful match, so a Void value is accepted as a proof of Box<Void>",
+            "kind": "unsound",
+            "severity": "critical",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/o4-toplevel-occurs-full.hylo",
+            "evidence": "o4 (and o2-toplevel-occurs.hylo):\n  trait P {}; struct Box<T>{public memberwise init}; struct C<T> {}; struct Bool2 {}\n  given <X where let v: X, let w: Box<X>> => C<X> is P {}\n  given Box<Bool2> = Box<Bool2>()\n  fun h<T where T is P>() {}\n  public fun main() { given Void = (); h() }\nThere is no Box<Void> value in scope, so h() must be rejected. Control o3-toplevel-occurs-ctrl.hylo (h<C<Void>>() written explicitly) is rejected in every configuration: 'no coercion from P<C<Void>> ==> ...'.\nbaseline (eq2 with no flags): o2 and o4 exit 139 (SIGSEGV, the cyclic substitution).\nFIX: o2 'diagnostics: 0', o4 'diagnostics: 0'.\nFULL: o4 'diagnostics: 0'. o2 'diagnostics: 1' (no coercion), because absmodel refutes it; FIX+absmodel alone also rejects. So this is also a FIX/FULL difference: cmp.sh shows a dump DIFF only for o2, and semtest reports MISMATCH (baseline=crash, config=ok) for o2 and o4 under both FIX and FULL.\nTrace (FIX, and FULL on o4):\n  goal Box<%6px> <- try $<assumed given 1> : %6px\n  solved with $<assumed given 1>; now prove $1: %6px\n  penalty 1: h<C<Void>>($<ConformanceDeclaration at o2:5.1><Void>($x)($x))\nThe value $x : Void is passed for the premise 'let w: Box<Void>'. The elaborated witness is ill-typed. 'occurs' alone (no other flags) also accepts o2.",
+            "analysis": "In match(), the result of `program.types.unifiable(a, b, extending:&substitutions){...}` is discarded (`_ =`). With `occurs`, unifying a variable with a term that contains it returns false from the variable case without calling the coercion handler. When that happens at the root (a = ?x, b = Box<?x>), `coercions` stays empty. match therefore takes the success path: it unions the local substitutions (which lack the binding) and continues the thread as if the witness had the queried type. soundness.md section 4 flagged this as 'not reached in any test, should be guarded'; it is reachable from source.\nHow to reach it: a value context parameter ('let v: X') in a given's implication becomes an assumed given whose type is a bare variable ?x. Pending premises stay in environment.givens while later premises are proven (discharge is last-first), so $1 : ?x is a candidate witness for the premise Box<?x>. The query h() leaves ?x open, so unify(?x, Box<?x>) fails the occurs check at the top level. Later $1 : ?x is solved by 'given Void = ()', binding ?x := Void and giving Box<Void> := $x.\nThe expression-inference path coerced() -> formThread -> match has the same hole, but I could not reach it. The solver postpones coercions with a variable lhs and turns them into equalities (o5-o9 are rejected).",
+            "suggested_fix": "In match, keep the Bool returned by unifiable. If it is false and `coercions` is empty, return `.next([])`, or record (a, b) as a coercion, which the existing uniqueElement==(a,b) check then rejects. Better: have the variable cases of unifiable call areCoercible(a, b) on an occurs failure, as other mismatches do, so that no caller can mistake the failure for success. Add o2/o4 as negative tests."
+          },
+          {
+            "title": "occurs check is blind to Arrow.environment (hasVariable early exit), so cycles through a method or closure environment still SIGSEGV",
+            "kind": "crash",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/b1d-method-env-cycle.hylo",
+            "evidence": "b1d:\n  struct Box<T> { fun n() -> Void { () } }\n  fun mkbox<T>(x: T) -> Box<T> { mkbox(x) }\n  fun same<T>(x: T, y: T) {}\n  public fun main() { let f = fun[](a) { same(a, mkbox(a).n) } }\nbaseline: exit=139. FIX: exit=139. FULL: exit=139.\na1-arrow-env-cycle.hylo ('fun same<T>(x: T, y: [T](let Void) -> Void)' with same(a, a) in a lambda): exit 139 in base, FIX and FULL.\nControls with the variable in an input instead of the environment are caught under FIX and give 1 diagnostic ('cannot pass value of type ... #!'):\n- a1b-arrow-input-cycle.hylo ('y: [Void](let T) -> Void');\n- b1c-method-cycle-ctrl.hylo ('fun n(x: T)').\ngdb (FIX, a1): unbounded recursion in TypeStore.reify(_:applying:withVariables:) -> TypeStore.subscript -> StableSet, i.e. stack overflow on a cyclic substitution.",
+            "analysis": "`Arrow.properties` is computed from the inputs and the output only, and leaves out `environment`. TypeStore.occurs starts with `if !u[.hasVariable] { return false }`. The Arrow case of occurs does visit `x.environment`, but it is never reached when the variable occurs only in the environment. Unification binds ?a := [let Box<?a>]() -> Void (the type of a method reference on mkbox(a)), and reification then recurses forever. soundness.md section 4 listed this gap as 'none reachable from source so far'. It is reachable with an ordinary method reference.",
+            "suggested_fix": "Include environment.properties in Arrow.properties. This also fixes the eqsolve regression, the reify skip and the summon-cache key below. Alternatively, drop the hasVariable early exit for Arrow in occurs, but the properties fix is the real one. Add a1 and b1d as regression tests."
+          },
+          {
+            "title": "occurs has no Bundle case, so a cycle through a method-bundle reference still SIGSEGVs",
+            "kind": "crash",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/b1-bundle-cycle.hylo",
+            "evidence": "b1:\n  struct Box<T> { fun m(x: auto T) auto -> Void { let { () } inout { () } } }\n  fun mkbox<T>(x: T) -> Box<T> { mkbox(x) }\n  fun same<T>(x: T, y: T) {}\n  public fun main() { let f = fun[](a) { same(a, mkbox(a).m) } }\nbaseline exit=139, FIX exit=139, FULL exit=139.\nControl b1c, the same program with a plain method 'fun n(x: T)' (an Arrow, with ?a in an input), under FIX: 1 diagnostic, no crash.",
+            "analysis": "TypeStore.occurs switches on the type tree and falls into `default: return false` for Bundle. Here the variable occurs in an input of the bundle's shape, so it is not the environment issue. Unifying ?a with the bundle type of mkbox(a).m binds ?a to a term that contains ?a, and reification overflows the stack. The second gap listed in soundness.md section 4 is therefore also reachable.",
+            "suggested_fix": "Add `case let x as Bundle: return o(x.shape.erased)` to occurs. Better, make occurs generic over TypeTree children, for example through `modified(in:by:)` or a children accessor, so that new type kinds cannot be missed."
+          },
+          {
+            "title": "eqsolve builds ill-typed proofs for every fact edge it traverses in reverse (symmetry applied with swapped arguments)",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/e1-sym-proof.hylo",
+            "evidence": "e1:\n  fun need<X, Y where X == Y>() {}\n  fun f<A, B where A == B>() { need<B, A>() }\nThe trace of the resolved implicit argument:\n  baseline: need<B, A>($<builtin coercion><A, B>($f)), i.e. symmetry<A,B>($f : A~B) : B~A, which is well-typed.\n  FIX: need<B, A>($<builtin coercion><B, B, A>($<builtin coercion><B>)($<builtin coercion><B, A>($f))), i.e. transitivity<B,B,A>(refl<B>)(symmetry<B,A>($f)).\nsymmetry<B,A> has type (B~A) ==> (A~B). It is applied to $f : A~B, so the argument type is wrong, and its result A~B is passed where transitivity<B,B,A> expects B~A.\nsemtest reports e1 as identical to the baseline: the dump contains no implicit-argument elaborations, so the 'dump-identical' claim does not cover proof terms.",
+            "analysis": "equalityStep(from x, to y, via d): for a reversed edge, d.proof proves y ~ x. The code calls `symmetryWitness(y, x, w)`. symmetryWitness(_ y, _ x, w) builds `builtinWitness(.symmetry, [x, y])`, which has type (x~y) ==> (y~x). The function therefore expects w : x~y and returns y~x, while w : y~x and x~y is needed. The outer type of the whole proof is right, because the transitivity instantiation fixes it. So resolution succeeds and only the elaborated term is wrong. The accept/reject decision is not affected, but this meets the 'elaboration contains a proof whose type does not match' criterion, and any later stage that type-checks or lowers equality proofs sees an inconsistent term.",
+            "suggested_fix": "In equalityStep use `d.reversed ? symmetryWitness(x, y, w) : w`, or rename the parameters of symmetryWitness so that the call reads naturally. Add a debug assertion in solveEquality that re-checks every applied() argument type against the implication's first requirement (types equal up to dealiasing). Add the elaborated implicit arguments of calls to SemanticDump, so that the oracle can see proof terms."
+          },
+          {
+            "title": "eqsolve congruence closure is cubic: a 10-line program takes 23 s (FIX) / 15 s (FULL)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/p3-alias-deep256.hylo",
+            "evidence": "p3:\n  struct Box<T> {}\n  type D1<T> = Box<Box<Box<Box<T>>>>\n  type D2<T> = D1<D1<D1<D1<T>>>>\n  type D3<T> = D2<D2<D2<D2<T>>>>\n  type D4<T> = D3<D3<D3<D3<T>>>>\n  fun need<X, Y where X == Y>() {}\n  fun f<A, B where A == B>() { need<D4<A>, D4<B>>() }\nFIX: type.user 22831 ms, wall 23.4 s. FULL: 14619 ms. Both accept.\np2 (depth 128): FIX 2848 ms.\np1-deep-N (written-out Box nesting): N=25 29 ms, N=50 175 ms, N=100 1348 ms. That is about 8x per doubling, i.e. cubic.\nbaseline: about 26 ms for all of them. The baseline rejects with 'not enough context', so it is not a valid comparison of correct results, but the cost is new.",
+            "analysis": "solveEquality rebuilds the whole term graph for each closed equality subgoal and closes it with `while changed { for i in nodes { for j in nodes where j > i ... congruent(i,j) } }`. node() appends a parent before its children, so the outer constructors get lower indices. Each pass then merges only one more level of a nested pair: the inner pair becomes congruent only after the pass has already visited the outer pairs. A depth-d goal therefore needs d passes of O(n^2) congruent() calls, each doing two existential type-store projections: O(d·n^2) = O(n^3). Generic aliases make n exponential in the number of source lines. Nothing is cached across subgoals.",
+            "suggested_fix": "Use a standard congruence closure: a signature table plus use-lists (Nelson-Oppen or Downey-Sethi-Tarjan, O(n log n)). Or at least process candidate pairs bottom-up and re-examine only the parents of merged classes. Memoize the closure per (scope, assumed-equality set), since facts rarely change between subgoals. Bound the term size or fall back to notApplicable above a limit."
+          },
+          {
+            "title": "Arrow environments are invisible to hasVariable, so eqsolve treats an open goal as closed and refutes it (valid program rejected; baseline accepted)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/a4-env-var-goal.hylo",
+            "evidence": "a4:\n  fun need<X, Y where X == Y>(x: X, y: Y) {}\n  fun mk<E>() -> [E](let Void) -> Void { mk() }\n  fun f<E>(p: [E](let Void) -> Void) { need(p, mk()) }\nbaseline: diagnostics 0. FIX and FULL: 1 diagnostic, \"no coercion from '<X, Y> (X ~ Y) ==> ...' to '[Void](let [E](let Void) let -> Void, let [%6pv](let Void) let -> Void) let -> Void'\".\nControl a5, with the variable in an input instead of the environment: accepted in all 3 configurations.\nsemtest reports MISMATCH for a4 under FIX and FULL.\nThe baseline's own dump of need is '[Void](let [E]..., let [%dfl](let Void) let -> Void)'. Its acceptance therefore leaves an unresolved type variable in the elaboration, for the same root cause.",
+            "analysis": "Arrow.properties leaves out environment.properties. solveEquality checks `goal[.hasVariable]` to decide that a goal is closed. The goal [E](...) ~ [?e](...) passes that check, ?e becomes an opaque leaf node, and the goal is refuted. The search would have bound ?e := E by reflexivity. The same blind spot makes reify skip such arrows, and lets summon() memoize a goal that contains variables (`!t[.hasVariable]`). The 'h[.hasVariable]' check on facts is equally blind.",
+            "suggested_fix": "Fix Arrow.properties to include the environment (the same fix as the crash finding). Until then, make solveEquality walk the goal itself to look for variables, instead of trusting the property bit."
+          },
+          {
+            "title": "Congruence of abstract-qualified associated types identifies Self.X with U.X for a distinct conformance 'U is P' (contradicts negative/associated-type-inequality.hylo)",
+            "kind": "unsound",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/e2-abs-qual-distinct-conf.hylo",
+            "evidence": "e2:\n  trait P { type X; fun f<U where U is P, U == Self>(x: U.X) -> X { x } }\nbaseline, FIX and FULL: diagnostics 0.\nThe same situation outside a trait, e3 'fun g<T, U where T is P, U is P, U == T>(x: U.X) -> T.X { x }', is rejected in all three: \"no coercion from '(U::P).X' to '(T::P).X'\".",
+            "analysis": "solveEquality's congruent() reproduces TypeStore.unifiable(AssociatedType, AssociatedType): two projections of the same declaration are equal when one qualification is .abstract and the qualification types are equal. Inside trait P, Self's conformance is the abstract one, and U's is the function's own using 'U is P', a distinct conformance. By the rule of the negative test ('T == U with distinct conformances does NOT make T.X == U.X'), e2 should be rejected. This behavior is pre-existing (baseline unifier) and eqsolve deliberately encodes it, to keep v-abs-7 accepted. It is reported because eqsolve now makes this rule part of the decision procedure: the review treated v-abs-7 as valid, while the existing negative test implies it is not.",
+            "suggested_fix": "Decide the language rule explicitly. If conformances are not coherent, treat the abstract qualification as its own atom keyed by the conformance. Then both e2 and v-abs-7 are rejected, unless a rule links Self's abstract conformance to the using. Add e2 or v-abs-7 as a test in whichever direction is chosen."
+          }
+        ],
+        "held": [
+          "FIX vs FULL: normalized dumps identical on all 199 programs under research/round3/soundness/review/** and on all of my programs except o2 (cmp-review.txt, cmp.sh). All exit 0 under both on review/**.",
+          "Lens 1, open equality goals: q1-open-eq.hylo, g<T,U where T==U>(x:T)->U with check<D>(g(a)) and A==B, C==D. Baseline accepts (bogus); FIX/FULL reject correctly ('cannot pass B to D'). f2 (check<B>) is accepted. The open goal [Void](let A) -> ?r binds ?r := B through the given, a legitimate binding. I found no way to rebind a variable across premises under fixsubst; threadContinuation, applyContinuation and the eqsolve .proved path keep the substitutions.",
+          "q2-open-eq-amb.hylo: with A==B, A==C, check<A>(g(a)) is rejected in ALL configurations, baseline included. Two equally penalized given candidates bind ?r := B or C, which is ambiguous. This is incompleteness (open goals pick bindings by search), not a regression.",
+          "Expression-inference route to the top-level occurs hole (coerced() -> match with lhs Box<?a>, rhs ?a): assignment, return and argument variants o5-o9 are all rejected with no acceptance. The solver postpones coercions whose lhs is a variable and turns them into equalities, and variables do not cross statements.",
+          "eqsolve congruence over Arrow/Tuple (r3-arrow-eq.hylo): [A](let B)->A == [B](let A)->B and {A,B} == {B,A} are accepted. Different parameter access (inout vs let) and different labels (x: vs y:) are refuted correctly. The baseline runs out of memory on r3 and on a3.",
+          "a3-arrow-env-eq.hylo: an arrow with environment E == F is accepted, while E vs an unrelated G is rejected. The baseline OOMs at 58 s.",
+          "Bundle equality goals (r1/r2): no crash, both rejected. Bundles are leaves in eqsolve, so their congruence is incomplete, but the baseline does not accept them either.",
+          "c1 (empty 'where' in given and fun) and c2 (given <where A == B> => A is P, need<A,B>()): no crash, sensible rejections under FIX/FULL. The baseline OOMs on c2 at 78 s.",
+          "extorder followed by uses of the poisoned names (x1-extorder-after.hylo, x2-extorder-self.hylo): no crash, same diagnostics in FIX and FULL. x2 adds the 'circular extension' error.",
+          "e3: T==U with distinct usings T is P, U is P does not make U.X == T.X; correctly rejected in all configurations.",
+          "a1b / b1c: an occurs cycle through Arrow inputs is caught under FIX (diagnostic instead of the baseline's SIGSEGV).",
+          "absmodel ignores environment.givens (assumed premises) when refuting. I found no legitimate derivation it prunes: assumed premises must themselves be derived from the same visible givens. It diverges only on the unsound o2 derivation, which FULL rejects."
+        ]
+      },
+      "verdict": {
+        "confirmed": [
+          {
+            "title": "Top-level occurs-check failure in Typer.match is treated as a successful match, so a Void value is accepted as a proof of Box<Void>",
+            "kind": "unsound",
+            "severity": "critical",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/o4-toplevel-occurs-full.hylo (also o2-toplevel-occurs.hylo)",
+            "evidence": "Re-run with eq2-e965a058dfd0. o4: baseline exit 139 (SIGSEGV), and the original baseline 4587ce9e1a23 also gives 139 on o2. FIX: 'diagnostics: 0'. FULL: 'diagnostics: 0'. o2: FIX gives 'diagnostics: 0'; FULL gives 1 diagnostic, because absmodel prunes the derivation. Control o3 (h<C<Void>>() written explicitly) is rejected in all 3 configurations with 'no coercion from P<C<Void>> ==> ...'. FIX trace on o4: 'goal Box<%6r4> <- try $<assumed given 1> : %6r4' / 'solved with $<assumed given 1>; now prove $1: %6r4' / 'goal %6r4 <- try $1c : Void', final 'penalty 1: h<C<Void>>($<ConformanceDeclaration at o4:6.1><Void>($1c)($1c))'. The value $1c : Void is passed for the premise 'let w: Box<Void>', so the elaborated witness is ill-typed and an ill-typed program is accepted. Nested variant /home/user/hylo-new/research/round3/soundness/review2/crash-paths-judge/n1-nested-occurs.hylo, where the occurs failure is inside Two<One<..>>: FIX and FULL reject it correctly. The hole is only at the root.",
+            "root_cause": "Typer.swift:3860 match() discards the Bool of `program.types.unifiable(a, b, extending:&substitutions){...}`. With `occurs`, the variable branches of TypeStore.unifiable (TypeStore.swift ~1005-1012) return false on an occurs failure without calling the coercion handler. At an inner level the parent's `result || areCoercible(a, b)` records the mismatch as a coercion. At the root (a = ?x, b = Box<?x>) nothing is recorded, `coercions.isEmpty` holds, and match takes the success branch. That branch unions substitutions that lack the binding and continues the thread as if the witness had the queried type. The value premise `let v: X` supplies the bare-variable witness $1 : ?x, which stays in environment.givens while the later premise Box<?x> is discharged.",
+            "fix": "In Typer.match: `let unified = program.types.unifiable(a, b, extending: &substitutions) { ... }` then `if !unified && coercions.isEmpty { return .next([]) }`, placed before the `if coercions.isEmpty` success branch. Alternative, more robust: in TypeStore.unifiable, make an occurs failure in the variable branches `return areCoercible(a, b)` instead of `return false`, so that every caller sees the mismatch. match's existing `coercions.uniqueElement == (a, b)` check then rejects the root case. match is the only caller that discards the result (all other callers use the Optional-returning overload). Add o2 and o4 as negative tests."
+          },
+          {
+            "title": "occurs check is blind to Arrow.environment (Arrow.properties omits it), so a cycle through a method or closure environment still SIGSEGVs",
+            "kind": "crash",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/b1d-method-env-cycle.hylo (also a1-arrow-env-cycle.hylo)",
+            "evidence": "Re-run: b1d gives exit=139 under baseline, FIX and FULL. a1 gives exit=139 under baseline, FIX and FULL. Control b1c, with the variable in an input ('fun n(x: T)'), gives exit 0 and 1 diagnostic ('cannot pass value of type '#!' ...') under FIX and FULL. Both programs are ill-typed and under 10 lines, and they crash the compiler instead of producing a diagnostic.",
+            "root_cause": "Arrow.properties (Sources/FrontEnd/Types/Arrow.swift:54-56) is `inputs.reduce(output.properties, ...)` and leaves out `environment.properties`. TypeStore.occurs (TypeStore.swift:1082) starts with `if !u[.hasVariable] { return false }`, so its Arrow case, which does visit x.environment, is never reached when the variable occurs only in the environment. Unification then binds ?a := [let Box<?a>]() -> Void (the type of the method reference mkbox(a).n), and reify recurses forever on the cyclic substitution.",
+            "fix": "In Arrow.swift: `public var properties: TypeProperties { inputs.reduce(output.properties.union(environment.properties), { (a, i) in a.union(i.type.properties) }) }`. This also fixes the eqsolve closed-goal regression, the reify skip and the summon-memo key (`!t[.hasVariable]`) below. Because hasVariable/hasError/etc. of arrows change globally, re-run the 192 tests and 24 workloads oracle afterwards. Add a1 and b1d as negative tests."
+          },
+          {
+            "title": "TypeStore.occurs has no Bundle case, so a cycle through a method-bundle reference still SIGSEGVs",
+            "kind": "crash",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/b1-bundle-cycle.hylo",
+            "evidence": "Re-run: exit=139 under baseline, FIX and FULL. The same program with a plain method (b1c) is caught under FIX (1 diagnostic).",
+            "root_cause": "In TypeStore.occurs, the switch has no `Bundle` case and falls into `default: return false`. Bundle.properties = shape.properties, so the hasVariable early exit passes, here because the input `x: auto T` contains ?a. The bundle is then still reported as variable-free. Unification binds ?a to a Bundle that contains ?a, and reification overflows the stack. The Arrow.properties fix alone does not cover this: the environment is reached only through the shape, which occurs never visits for a Bundle.",
+            "fix": "Add `case let x as Bundle: return o(x.shape.erased)` to TypeStore.occurs. Better, write occurs generically over children so that new type kinds cannot be missed, for example by using `modified(in:by:)`-style child traversal or a `children` accessor on TypeTree. Add b1 as a negative test."
+          },
+          {
+            "title": "eqsolve builds ill-typed proofs for every fact edge it traverses in reverse (symmetry instantiated with swapped arguments)",
+            "kind": "unsound",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/e1-sym-proof.hylo",
+            "evidence": "Re-run with trace. Baseline: 'penalty 2: need<B, A>($<builtin coercion><A, B>($f))', i.e. symmetry<A,B>($f : A~B) : B~A, which is well-typed. FIX: 'penalty 0: need<B, A>($<builtin coercion><B, B, A>($<builtin coercion><B>)($<builtin coercion><B, A>($f)))'. symmetry<B,A> has type (B~A) ==> (A~B) (Typer.swift:1752-1759: <T0,T1> T0~T1 ==> T1~T0), but it is applied to $f : A~B, and its result A~B is passed where transitivity<B,B,A> expects B~A. The accept/reject decision is unchanged, but the elaborated proof term is ill-typed, which matches the definition. The dump oracle cannot see it because implicit arguments are not dumped.",
+            "root_cause": "Typer.swift:5772-5773 adds the reverse fact edge j->i with proof w : nodes[i] ~ nodes[j] and reversed: true. equalityStep(from x, to y, via d) (5855-5859), for a reversed edge, has w : y ~ x and needs x ~ y. It calls `symmetryWitness(y, x, w)`, which builds `builtinWitness(.symmetry, [x, y])` of type (x~y) ==> (y~x). That is the wrong instantiation: it expects x~y and yields y~x. The `applied` helper computes the result type by dropFirstRequirement, so no check catches the argument mismatch.",
+            "fix": "Typer.swift:5859: `return d.reversed ? symmetryWitness(x, y, w) : w`. symmetryWitness(_ y:, _ x:, w: x~y) returns y~x, so passing (x, y) with w : y~x yields x~y. Also add a debug assertion in `applied(_:to:)` that `x.type` equals the implication's first requirement (up to aliases). Add the elaborated implicit arguments to SemanticDump so that the oracle covers proof terms."
+          },
+          {
+            "title": "eqsolve congruence closure is cubic: a 10-line program takes 22.7 s (FIX) / 14.6 s (FULL)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/p3-alias-deep256.hylo",
+            "evidence": "Re-run p3: FIX 'diagnostics: 0, type.user 22689 ms'. FULL 'diagnostics: 0, type.user 14634 ms'. Baseline: 29 ms, rejecting with 'not enough context to infer a type'. Scaling under FIX: p1-deep-25 30.9 ms, p1-deep-50 176 ms, p1-deep-100 1447 ms (about 8x per doubling, so cubic). p2 (depth 128) 2987 ms. One more alias level would go far beyond 120 s.",
+            "root_cause": "In solveEquality (Typer.swift ~5795-5816), the closure loop is `while changed { for i in nodes { for j in nodes where j > i && find(i) != find(j) && congruent(i, j) {...} } }`. Each pass is O(n^2) congruent() calls, each doing type-store projections. node() numbers parents before children, so a pass merges only one more level of a nested pair, and d nesting levels need d passes: O(d*n^2) = O(n^3). The graph is rebuilt from scratch for every closed equality subgoal, and generic aliases make n large relative to the source size.",
+            "fix": "Replace the fixpoint loop with standard congruence closure (Downey-Sethi-Tarjan / Nelson-Oppen): a signature table keyed by (constructor tag, find(children)), plus use-lists. On each union, re-canonicalise only the parents of the merged class's members, processed through a worklist; this is O(n log n). Cheaper interim fix: iterate pairs bottom-up (children before parents, i.e. reverse node order) so that one pass suffices for pure nesting, and hash nodes by signature instead of comparing all pairs. Also memoize the closed graph per (scope, set of fact givens), and give up (notApplicable) above a node-count cap."
+          },
+          {
+            "title": "Arrow environments are invisible to hasVariable, so eqsolve treats an open goal as closed and refutes it (valid program rejected; baseline accepted)",
+            "kind": "regression",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/crash-paths/a4-env-var-goal.hylo",
+            "evidence": "Re-run: baseline 'diagnostics: 0'. FIX and FULL: 1 diagnostic, \"no coercion from '<X, Y> (X ~ Y) ==> ...' to '[Void](let [E](let Void) let -> Void, let [%6pv](let Void) let -> Void) let -> Void'\". The program is valid with ?e := E. With an explicit type argument (/home/user/hylo-new/research/round3/soundness/review2/crash-paths-judge/a4-explicit.hylo, mk<E>()) or an annotated let (a4-annot.hylo), FIX accepts. Control a5, with the variable in an input, is accepted everywhere. The baseline's acceptance is only partly legitimate: its dump leaves free variables (0:34 need : [...] [%dfl](let Void) ...), and even FIX's dump of the accepted a4-annot keeps '0:41 : [Void]() let -> [%6pv](let Void) let -> Void'. This is the same root cause and also leaves unreified variables in accepted elaborations.",
+            "root_cause": "Arrow.properties omits environment.properties, so `goal[.hasVariable]` is false for [E](..) ~ [?e](..). solveEquality then treats the goal as closed, makes ?e an opaque leaf and refutes it, while search would have bound ?e := E by reflexivity. The same blind bit makes reify skip such arrows (free variables in elaborations) and lets summon memoize goals that contain variables.",
+            "fix": "The same fix as the environment-cycle crash: include environment.properties in Arrow.properties. As defence in depth until then, solveEquality could determine closedness by walking the goal itself instead of trusting `[.hasVariable]`."
+          }
+        ],
+        "rejected": [
+          {
+            "title": "Congruence of abstract-qualified associated types identifies Self.X with U.X for a distinct conformance 'U is P' (e2)",
+            "why": "It reproduces: e2 is accepted by baseline, FIX and FULL, and e3 is rejected by all three. But this is not a defect of the configuration under test. The rule comes from upstream TypeStore.unifiable(AssociatedType, AssociatedType) (TypeStore.swift:1164-1175): projections of the same declaration unify when one qualification is .abstract and the qualification types unify. It is identical in the baseline, and soundness.md records it as the intended rule: v-abs-7 is listed as valid, and eqrefute was declared unsound for rejecting it. negative/associated-type-inequality.hylo covers only two non-abstract usings (the e3 situation), which every configuration rejects. Whether Self's abstract conformance should be coherent with a separate using is an open language-design question (worth a note to upstream). It is not an unsoundness or regression introduced by FIX or FULL."
+          }
+        ]
+      }
+    },
+    {
+      "lens": "perf",
+      "attack": {
+        "findings": [
+          {
+            "title": "eqsolve recomputes a cubic congruence closure of every equality in scope for each equality goal, even trivially reflexive ones: 26-line valid program takes 52 ms on the baseline and 14.5 s under FULL",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/cc-refl-k16-w10-m4.hylo",
+            "evidence": "Runner: /home/user/hylo-new/research/round3/soundness/review2/perf/run.py <base|fix|full> file (python wrapper: timeout, --count, wall time, maxrss). The family has where-clauses T == U, X1 == Box^10<T>, Y1 == Box^10<U>, ..., Xk == Box^10<X(k-1)>, Yk == Box^10<Y(k-1)>, and m reflexive goals need<Box^j<T>, Box^j<T>>().\ncc-refl-k16-w10-m4 (26 lines): base 52.6 ms; FULL 14467 ms (counters: eqsolve.proved=8 summon.matches=16, so all the time is inside solveEquality).\ncc-refl-k12-w10-m8 (26 lines): base 68 ms (summon.matches=768); FULL 12283 ms (eqsolve.proved=8, summon.matches=16).\nScaling in k at m=1, FULL: k4 60 ms, k8 448 ms, k16 3667 ms. That is about 8x per doubling, so cubic. Base stays at 17-35 ms. The cost is linear in the number of distinct goals.\nWith non-reflexive goals (cc-chain-kK-w10-m1, need<Xk, Yk>): k24 (31 lines) takes 12.3 s under FULL and 19.5 s under FIX; base runs out of memory after 35 s (bogus-derivation search). cc-chain-k16-w10-m8 (30 lines): FULL 31.2 s; base out of memory.\nDeep facts plus distinct goals: cc-deep-60-m30 (34 lines) takes 11.4 s under FULL.",
+            "analysis": "solveEquality (Typer.swift, eqsolve) is called from summon for every closed equality goal. It rebuilds the whole term graph from all equality givens in scope, then closes it with `while changed { for i in nodes { for j > i where find(i) != find(j) && congruent(i, j) ... } }`. node() assigns an index to a parent before its children, so parents have lower indices. A scan in index order therefore merges only one more level of nesting per round. A fact set of depth d with n nodes needs about d rounds of O(n^2) congruent() calls (each is a TypeStore lookup plus existential casts), which is O(n^3) per goal. Nothing is memoized across goals, although in one scope the facts are identical for every goal. Goals that the baseline proves in one reflexivity match (need<T, T>) pay the full closure. Only a fact set built from nested structured sides triggers this. Atom-only equalities are cheap.",
+            "suggested_fix": "(1) Fast path: if the dealiased sides are identical, return reflexivityWitness without building the graph. (2) Replace the pairwise fixpoint with a standard congruence closure (signature table plus use-lists, Downey-Sethi-Tarjan / Nelson-Oppen). That is O(n log n) and merges parents once their children merge. (3) Memoize the closed graph per (scope, assumed equality givens) and only add the goal's nodes incrementally, as cache.scopeToSummoned already does for results. (4) Add eqsolve.nodes and eqsolve.rounds counters so the cost is visible."
+          },
+          {
+            "title": "occurs check is exponential on DAG-shaped substitutions: 13-line valid program takes 20 ms on the baseline, 14 s under FIX and 10.7 s under FULL",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/occurs-valid-24.hylo",
+            "evidence": "Program: given <A0..A24> => Foo<{A24, A23, ..., A0}, {Bar, P<A24,A24>, ..., P<A1,A1>}, Baz> is R; given <Z where Foo<Z, Z, Bar> is R> => Bar is Q; given <where Bar is S> => Bar is Q; given Bar is S; need<Bar>(). It is valid through the second route. The first route builds the DAG and then fails on Baz vs Bar.\noccurs-valid-20: base 20 ms, FULL 698 ms. occurs-valid-22: base 20 ms, FULL 2669 ms. occurs-valid-24: base 20.4 ms, FIX 14072 ms, FULL 10734 ms. All accept (diagnostics: 0).\nIsolated: occurs-only-18 (the same without the valid route, rejected in every configuration): base 20 ms, flags 'occurs' alone 444 ms, FULL 346 ms. occurs-only-22: base 22 ms, FULL 5430 ms. occurs-only-24 (10 lines, one line of 559 columns): base 21 ms, FULL 21260 ms. That is 4x per +2, so 2^n.\nRelated pre-existing blowup on the success path: occurs-dag-18 (9 lines, valid) takes 13.4 s on base, 12.0 s with 'occurs', 11.7 s under FIX and 8.9 s under FULL. occurs-dag-16: base 3.1 s, FULL 2.1 s. reify is also unmemoized on the DAG.",
+            "analysis": "Unifying the premise Foo<?z, ?z, Bar> with the head works left to right. It first binds ?z to the tuple of variables. It then unifies that tuple with {Bar, P<?a24,?a24>, ...}, which binds ?a24 := Bar, ?a23 := P<?a24,?a24>, ?a22 := P<?a23,?a23>, and so on. That is a DAG in the local SubstitutionTable. TypeStore.occurs(v, in: t, under: ss) dereferences ss[t] and recurses into every child with no visited set. The `!u[.hasVariable]` early exit tests the syntactic type, which still has variables after they are bound. Each new binding therefore walks the whole shared DAG as a tree, 2^(n-k) nodes, for 2^n in total. The baseline has no occurs check, so on a failing candidate it never walks the DAG. That candidate is an alternative tried in the same BFS layer as the successful one, so a valid program pays the cost.",
+            "suggested_fix": "Make occurs linear: carry a set of variables (or type identities) already proven not to contain v during one check, or check only variable-to-variable edges with a visited set on the substitution graph. Memoize reify(…, applying:) per call on DAG-shaped tables as well, which fixes the pre-existing occurs-dag blowup. Add occurs-valid-N and occurs-dag-N to the perf regression set."
+          },
+          {
+            "title": "A single unrelated equality in scope turns off absmodel and the index: a 9-line valid overloaded call runs out of memory under FULL, but takes 3 ms without the equality",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-ovl-b3-1.hylo",
+            "evidence": "Program: three looping givens <T where Si<T> is P> => T is P; fun h<T where T is P>(x: T) {}; fun h(x: Yb) {}; fun f<A, B where A == B>() { h(Yb()) }. Valid: the second overload applies.\ndiv-eq-ovl-b3-1: base out of memory ('failed to allocate', exit -6) after 50.9 s; FIX out of memory after 53.3 s; FULL out of memory after 35.3 s (maxrss 1862 MB).\ndiv-eq-ovl-b3-0 (identical without 'where A == B'): FULL 3.17 ms, summon.matches=1, absmodel.refuted=4.\nb=2: div-eq-ovl-b2-1 takes 1086 ms under FULL (absmodel.inconclusive=1, index.fallback=3072, summon.matches=112129); div-eq-ovl-b2-0 takes 3.8 ms under FULL.\nThe same holds for the rejected div-eq-b3-1 (FULL out of memory after 35 s) against div-eq-b3-0 (FULL 2.7 ms).",
+            "analysis": "In AbstractResolution.add, any clause whose head is an equality sets isInconclusive. A ground where-clause given A ~ B is such a clause, so the model built for f's scope (and all its sub-scopes) refutes nothing. indexedSummon also falls back whenever ix.coercionSources is non-empty. Inside any generic function with an equality requirement, FULL therefore reverts to the baseline's exponential search on divergent givens (README §4: div-branch is exponential in the cap). The candidate h<T where T is P> is tried during overload resolution, so a valid program pays for the failing branch. The FULL configuration's protection against divergent search disappears exactly in the code that eqsolve was meant to serve.",
+            "suggested_fix": "Keep the model conclusive under ground equality givens. Over-approximate by quotienting with the eqsolve classes: abstract every type in a non-trivial class (and any type with an abstract-qualified associated type) to ⊤ or to the class representative before building clauses and queries. Do the same for indexedSummon, which can use the class representative as its key. Equality goals themselves stay unrefuted by the model, as today."
+          },
+          {
+            "title": "Open-variable equality goals are still searched with symmetry and transitivity: a 3-line valid program runs out of memory in every configuration, and a 3-line ill-typed one takes 24 s under FULL",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/open-wide-4.hylo",
+            "evidence": "open-wide-k: fun pick<T, U1..Uk where Ui is Q, T == Ui>(x: T) {}; fun f<A0 where A0 is Q>(x: A0) { pick(x) }. Valid with Ui := A0.\nk=1: base 33 ms, FULL 6 ms. k=2: base 133 ms, FULL 54 ms (3932 matches). k=3: base 3.8 s (154k matches), FULL 2.4 s (141693 matches, eqsolve.proved=389). k=4: base out of memory after 37.6 s, FIX out of memory after 38.5 s, FULL out of memory after 27.1 s.\nopen-neg-0 (3 lines, ill-typed: fun f<A0>(x: A0) { pick(x) } with a single U): base out of memory after 35 s; FIX 31.4 s (1268905 matches); FULL 24.0 s (1205345 matches, eqsolve.proved=6575, maxrss 1.6 GB). FULL by cap: cap 6 5.5k matches / 79 ms, cap 8 72k / 1.2 s, cap 10 1.2M / 24 s, about 16x per +2 on the cap. open-neg-1 (one equality A0 == A1 added): FULL out of memory after 29.5 s.",
+            "analysis": "Premises are discharged last-in, first-out, so A0 ~ ?u is attempted while ?u is still open. solveEquality returns notApplicable when the goal has variables. summon then tries every assumed given, every visible given (including the stdlib's) and reflexivity, symmetry and transitivity. transitivity<A0, ?e, ?u> creates further open equality goals at each layer. The branching is unbounded up to the depth cap, and absmodel cannot refute equalities (mayDerive returns true for the equality key). This is pre-existing: the baseline also runs out of memory. eqsolve does not cover it, though the design note in soundness.md §2 says open goals should be handled.",
+            "suggested_fix": "In solveEquality, handle open goals whose facts are all ground: (a) when one side is a bare variable, enumerate the members of the other side's congruence class, plus the side itself, as candidate bindings, giving one thread each with the path proof; (b) otherwise unify syntactically and check the residual pairs against the closure. Never fall back to transitivity search with open middle variables. At minimum, do not offer transitivity or symmetry for goals with an open side when no equality given is in scope. Discharging premises in forward order (also needed for bug #3) would bind U through 'U is Q' first in most of these programs."
+          },
+          {
+            "title": "Branching divergence that absmodel cannot refute (div-branch-trunc generalized): 14 lines take 11 s under FULL, and 16 lines run out of memory",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo",
+            "evidence": "div-trunc-bN: N pairs of (struct Si<T>; given <T where Si<T> is P> => T is P; given Si<Si<Xi>> is P) and need<where Yb is P>() (underivable).\nb1: FULL 3.5 ms (39 matches). b2: FULL 212 ms (6137 matches); base 1.7 s (112k matches). b3 (14 lines): FULL 11265 ms (236191 matches, index.skipped=7.9M, maxrss 587 MB); base out of memory after 53 s; FIX out of memory after 55.6 s. b4 (17 lines): FULL out of memory after 32 s; FIX out of memory after 45 s.",
+            "analysis": "The facts Si<Si<Xi>> is P truncate at k=2 to P(Si(Si(⊤))), so the model derives P(⊤) for every branch and prunes nothing. BFS then explores about b^(cap/2) distinct subgoals. This is the documented limitation of absmodel (README §4.3), but with b=3 it crosses 5 s and with b=4 it crashes under FULL. FULL is 5-50x better than base and FIX, yet still pathological.",
+            "suggested_fix": "As README §4.4 recommends: a global match budget per resolution (fail with a 'resolution too complex' diagnostic instead of running out of memory), and a per-thread height bound instead of the BFS step cap. Alternatively, make the model's truncation keep the exact ground facts so that P(⊤) is not derived from them (for example, k-depth with ground facts stored untruncated for refutation)."
+          },
+          {
+            "title": "Return-type overloads are exponential in the number of arguments under FULL (the solver flag that fixes it is not in the configuration): 10 lines take 8.8 s",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/ovl-ret-9.hylo",
+            "evidence": "ovl-ret-n: 4 structs Ai, 4 overloads fun h() -> Ai, fun g(x0: A0, x1: A1, ...) {} with n parameters, called as g(h(), ..., h()).\nFULL: n4 9 ms, n8 2008 ms, n9 8812 ms (solver.forks=349524, solver.goalSteps=1.8M, coerced.slowPath=304569, summon.matches=304569), n12 timed out after 100 s.\nbase: n8 2649 ms, n9 10937 ms, n12 timed out after 100 s.\nFULL+solver: n9 3.85 ms, n12 5.03 ms.",
+            "analysis": "Pre-existing solver behavior: each overloaded h() forks the system, and each fork's argument mismatch goes through coerced()'s slow path (one implicit resolution per fork), for 4^n. Nothing in FIX or FULL addresses it. The existing 'solver' flag does.",
+            "suggested_fix": "Add 'solver' to the performance configuration after checking with semtest, or make the solver prune overloads by the expected parameter type before forking."
+          }
+        ],
+        "held": [
+          "extorder with deep extension chains (extension S { type X1 = S }; extension S.X1 { type X2 = S }; ... k=8/16/24, extchain-*.hylo): FULL 0.5/1.2/2.5 ms with 0 diagnostics (the baseline reports k-1 spurious 'no static member' errors). Same-name chains (extsame-8/16): FULL fast, with only 'circular extension' diagnostics (semantics left to the ext-order reviewers).",
+          "Pending assumed equality with an open variable while a closed chain goal is solved (pending-var-2..4, pending-var2-3/5: given <X, U where U == X, X == Tn> => X is P inside f with a T0..Tn chain): FULL 8-19 ms (eqsolve.proved 2-4). Resolution finds a short sound derivation through the pending assumption and eqsolve after binding. The baseline takes 2.4-4.3 s and wrongly rejects n=3.",
+          "Goal-only nesting (cc-goals-mM: where X == Y, goals need<Box^k<X>, Box^k<Y>> for k<=36): FULL 432 ms at m=36. That is the O(m^4) trend, but small without big fact sets.",
+          "Atom-only equality sets are cheap for eqsolve (congruent() returns early on childless nodes).",
+          "Trying to disable eqsolve globally through a quantified or bare-variable equality given: 'trait R { given Z1 == Z2 }' is a parse error ('expected is'), and 'given let w: X == Z2' / 'given Z1 == Z2 = ...' inside a trait are rejected ('declaration is not allowed here'). I found no source form that produces a quantified-equality or <T> T given, so that notApplicable path was not reached from user code.",
+          "Valid branching programs with a deep solution (div-valid-b3/b4-d4/d5): FULL 8-16 ms. They report 1 diagnostic in both base and FULL (ambiguity), so they are not a perf issue.",
+          "open-pos-chain-2..4 (pick(x) with A0 == ... == An, An is Q): fast in all configurations (<0.5 s), but FIX/FULL reject while base accepts. This is the same as the eq-regress reviewer's o2b-call-infer.hylo, so it is not re-reported here.",
+          "Peak memory: every out-of-memory crash above fails at about 1.7-2.1 GB RSS ('Fatal error: failed to allocate N bytes'), although the cgroup allows 14 GB. Treat them as crashes in the sense of the task."
+        ]
+      },
+      "verdict": {
+        "confirmed": [
+          {
+            "title": "eqsolve recomputes an O(n^2 x depth) congruence closure for every closed equality goal, reflexive ones included (26-line valid program: base 52 ms, FULL 14.3 s, FIX 23.1 s)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/cc-refl-k16-w10-m4.hylo",
+            "evidence": "Re-run (runner copied to /home/user/hylo-new/research/round3/soundness/review2/perf-judge/run.py). base: diagnostics 0, type.user 51.88 ms, summon.matches=416. FULL: diagnostics 0, type.user 14258 ms, eqsolve.proved=4, summon.matches=8. FIX: diagnostics 0, type.user 23147 ms. A single reflexive goal (cc-refl-k16-w10-m1) takes 3648 ms under FULL with eqsolve.proved=1 and summon.matches=2. All the time is inside solveEquality.",
+            "root_cause": "Typer.swift solveEquality (about lines 5700-5850) rebuilds the term graph from every equality given on each call. It then closes it with `while changed { for i in nodes.indices { for j in nodes.indices where j > i && find(i) != find(j) && congruent(i, j) ... } }`. node() numbers a parent before its children, so one round merges only one more level of nesting. The cost is O(depth x n^2) congruent() calls per goal, each a TypeStore lookup plus casts. Nothing is reused across goals of the same scope. Even goals whose two sides are identical pay for the whole closure. The baseline proves them with one reflexivity match.",
+            "fix": "(1) After the fact-collection loop, so that the notApplicable exits stay as they are, add `if a == b { bump(\"eqsolve.proved\"); return .proved(reflexivityWitness(nodes[a])) }`, or test dealiased lhs == rhs before building the graph. The current code already returns exactly reflexivityWitness on an empty path, so the elaboration is unchanged. (2) Replace the pairwise fixpoint with a standard congruence closure: a signature table keyed by (constructor tag, attributes, find(child_1..k)) plus a use-list per class. When two classes merge, re-canonicalize only the parents in their use-lists and merge on signature collision. Associated types use the signature (decl, find(qualification type)) and are inserted only when the qualification is abstract. That is O(n log n). Record the congruence edges exactly as today, so path reconstruction is unchanged. (3) Cache the closed graph (nodes, parent, edges) keyed by (scopeOfUse, the reified environment.givens list). For a new goal, add only its two nodes and propagate through the use-lists. (4) Add eqsolve.nodes and eqsolve.rounds counters."
+          },
+          {
+            "title": "TypeStore.occurs walks DAG-shaped substitutions as trees, so it is exponential (13-line valid program: base 22 ms, FULL 10.9 s)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/occurs-valid-24.hylo",
+            "evidence": "Re-run. occurs-valid-24 base: diagnostics 0, 22.4 ms, 223 matches. FULL: diagnostics 0, 10868 ms, summon.matches=5. With the flag 'occurs' alone, occurs-only-22 takes 7105 ms (1 diagnostic, correctly rejected; the attacker reports base at 22 ms). Related pre-existing case occurs-dag-16: base 3054 ms, FULL 2354 ms. That cost is in reify, not occurs, and the baseline has it too.",
+            "root_cause": "TypeStore.swift occurs(_:in:under:) (about lines 1082-1105) is called from both variable cases of unifiable (lines 1008/1012) on every binding. It dereferences ss[t] and recurses into all children with no memo. `!u[.hasVariable]` tests the syntactic type, and that type still has variables after they are bound in ss. Unifying the premise with the head binds ?a23 := P<?a24,?a24>, ?a22 := P<?a23,?a23>, and so on, which is a shared DAG. Each check walks 2^k paths. The baseline has no occurs check, so it never pays this on the failing alternative, which sits in the same BFS layer as the successful one.",
+            "fix": "Make occurs linear for one call. Thread a `var clean: Set<AnyTypeIdentity>` through a private recursive helper. Return false right away for a type already in `clean`, and insert u after its children are found variable-free of v. ss is not mutated during the call, so this is exact. Optionally also skip a variable that has already been dereferenced. The cost becomes O(size of the DAG) per binding. Separately, memoize reify(_:applying:) by type identity within one call. That fixes the pre-existing occurs-dag blowup, which affects base and FULL alike. Add occurs-valid-N, occurs-only-N and occurs-dag-N to the perf regression set."
+          },
+          {
+            "title": "Open-variable equality goals are not handled by eqsolve and fall back to unbounded symmetry/transitivity search: 3-line valid program OOMs in every configuration; 3-line ill-typed program takes 24 s and 1.6 GB under FULL",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/open-wide-4.hylo",
+            "evidence": "Re-run. open-wide-4 (valid): FULL 'failed to allocate' exit -6 after 26.7 s (maxrss 1879 MB); FIX OOM after 37.9 s; base OOM after 37.5 s. open-neg-0 (ill-typed, a single 'T == U, U is Q'): FULL 24031 ms, 1 correct diagnostic, summon.matches=1205345, eqsolve.proved=6575, maxrss 1612 MB; base OOM after 34.9 s. This is pre-existing: the baseline is no better, and FIX/FULL are not worse.",
+            "root_cause": "threadContinuation discharges premises last-in, first-out, so `T ~ ?U` is posed while ?U is still open. solveEquality returns .notApplicable as soon as the reified goal has a variable (`if goal[.hasVariable] ... return .notApplicable`). summon then offers reflexivity, symmetry, transitivity<A0, ?e, ?U> and every visible equality given. Each transitivity step creates new open equality goals, so the branching is bounded only by the depth cap. absmodel never refutes equality goals. soundness.md section 2 requires the procedure to handle open goals, and the implementation does not.",
+            "fix": "In solveEquality, after collecting facts, handle open goals when every fact is ground. Minimal, complete case: if `facts` is empty, the only derivable equalities are syntactic identities modulo aliases and the abstract associated-type rule. Return a new case `.unify(SubstitutionTable)` holding the result of program.types.unifiable(lhs, rhs) under environment.substitutions, or .refuted when they do not unify. summon then forms exactly one thread that binds the variables and uses reflexivityWitness, and offers no symmetry or transitivity. General case with facts: if one side is a bare variable, return one candidate thread per node in the other side's class (path proof as for ground goals). Otherwise unify syntactically and check the residual pairs against the closure. Never return to transitivity search with an open middle variable. Validate inferred bindings and ambiguity with semtest, since this is rigid E-unification and can change which bindings are found. Discharging premises in forward order (needed for bug #3 anyway) would also bind U through 'U is Q' first in these programs."
+          },
+          {
+            "title": "Any ground equality given in scope makes absmodel inconclusive and disables the index, so divergent givens explode again: 9-line valid overloaded call OOMs under FULL (3 ms without the where-clause)",
+            "kind": "performance",
+            "severity": "major",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-ovl-b3-1.hylo",
+            "evidence": "Re-run. div-eq-ovl-b3-1 FULL: 'Fatal error: failed to allocate 411041712 bytes', exit -6 after 35.6 s, maxrss 1862 MB. div-eq-ovl-b3-0 (the same program without 'where A == B') FULL: diagnostics 0, 3.18 ms, absmodel.refuted=4, summon.matches=1. div-eq-ovl-b2-1 FULL: 1133 ms, absmodel.inconclusive=1, index.fallback=3072, summon.matches=112129. b2-0 FULL: 3.13 ms. This is pre-existing: the attacker reports that base and FIX also OOM, and FIX has no absmodel. It is a real performance hole in FULL's protection, triggered by the very feature (equality requirements) that eqsolve was built for.",
+            "root_cause": "AbstractResolution.swift add(_:) sets `isInconclusive = true` for any clause with an `.equality` head (lines 102-108). The where-clause given A ~ B of f is such a clause, so f's scope model (and every sub-scope model) refutes nothing. indexedSummon (Typer.swift line 4208) also returns nil whenever ix.coercionSources is non-empty. Under FULL, a generic function with any equality requirement therefore falls back to the baseline's exponential search on divergent givens, and overload resolution tries the failing candidate h<T where T is P>. (REPORT.md documents the inconclusive-on-equality rule; soundness.md does not.)",
+            "fix": "When eqsolve is on and every equality given in scope is ground (the same test solveEquality uses for its fact list), keep the model conclusive by quotienting. Compute the eqsolve closure classes once per scope. In abstraction(of:), map to ⊤ every type whose node lies in a class of size > 1, and every associated type with an abstract qualification whose qualification type is in such a class. Then add the clauses with the equality-headed clause dropped instead of marking the model inconclusive. Conformance facts and queries that could be related through coercion along A ~ B then both contain ⊤ at that position and still unify. That is a sound over-approximation, because without decomposition every derivable equality lies inside the closure. Keep `mayDerive` returning true for equality goals, and keep the inconclusive fallback when a quantified or conditional equality given is present. Do the same in indexedSummon: key on the class representative, or keep falling back only when the goal mentions a class member."
+          },
+          {
+            "title": "Branching divergence that absmodel cannot refute (div-branch-trunc generalized): 14-line ill-typed program takes 11.3 s under FULL; 17 lines OOM",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo",
+            "evidence": "Re-run. FULL: 1 correct diagnostic, 11345 ms, summon.matches=236191, index.skipped=7912499, maxrss 587 MB. FIX: OOM ('failed to allocate', exit -6) after 37.9 s. The attacker reports that base also OOMs and that b4 OOMs under FULL. This is pre-existing and the known absmodel limitation of README section 4.3 (div-branch-trunc). It is not caused by the fixes, but it meets the >5 s / crash criterion.",
+            "root_cause": "Depth-2 truncation turns the facts Si<Si<Xi>> is P into P(Si(Si(⊤))), and the looping clauses <T where Si<T> is P> => T is P then derive P(⊤), so the model cannot refute P(Yb). BFS with a size cap of 10 explores about b^(cap/2) distinct subgoals and has no memory or work budget. That ends in an allocation failure instead of a diagnostic.",
+            "fix": "Add a global per-resolution budget on summon.matches (or live threads) in summon/resolve. When it is exhausted, stop and report a 'implicit resolution too complex' diagnostic instead of growing the frontier until allocation fails. Separately, let the model refute these goals: store ground facts untruncated in an `exact` set, and derive truncated facts only from clause applications. Alternatively use a type-directed depth (k proportional to the maximum fact depth plus 1), so that Si<Si<Xi>> does not collapse to ⊤ before the loop."
+          },
+          {
+            "title": "Return-type overloads are exponential in the argument count under FIX and FULL (10-line valid program: FULL 8.3 s); the existing 'solver' flag that fixes it is not in the configuration",
+            "kind": "performance",
+            "severity": "minor",
+            "program": "/home/user/hylo-new/research/round3/soundness/review2/perf/ovl-ret-9.hylo",
+            "evidence": "Re-run. FULL: diagnostics 0, 8292 ms, coerced.slowPath=304569, summon.matches=304569. FIX: 11070 ms. base: 10375 ms. FULL+solver: 3.62 ms, coerced.slowPath=27, summon.matches=27, diagnostics 0. This is pre-existing and unrelated to the semantic fixes.",
+            "root_cause": "Each h() overload forks the constraint system (4^n forks). Each fork's argument mismatch goes through the slow path of coerced(), one implicit resolution per fork. Neither FIX nor FULL prunes overloads by the expected parameter type before forking.",
+            "fix": "Add 'solver' to FULL after a semtest run against the baseline on the 192 tests and 24 workloads. Or, in the solver, filter overload candidates by whether their result type unifies with the known parameter type (cheap syntactic check) before forking, and run coerced() only for candidates that survive."
+          }
+        ],
+        "rejected": [
+          {
+            "title": "(none rejected outright) Notes on scope of findings 3-6",
+            "why": "All six findings reproduced with the attacker's programs. Findings 3 to 6 (open goals, absmodel turned off by equalities, div-trunc, ovl-ret) were already present in the baseline, which is equally slow or runs out of memory. So they are not regressions caused by FIX or FULL. They still meet the PERFORMANCE definition (more than 5 s, or a crash, under FIX or FULL, in under 40 lines), and soundness.md does not list them as known limitations, so they stay confirmed. Only findings 1 (eqsolve) and 2 (occurs) are slowdowns that the fixes themselves introduced. Ancillary claim checked: occurs-dag-16 takes 3054 ms on base and 2354 ms under FULL. That cost is in reify and predates the fixes, so it is not an occurs regression. In the eqsolve fix, place the reflexive fast path after fact collection, so that programs with quantified equality givens still get notApplicable and the result stays identical."
+          }
+        ]
+      }
+    }
+  ],
+  "workflowProgress": [
+    {
+      "type": "workflow_phase",
+      "index": 1,
+      "title": "Attack"
+    },
+    {
+      "type": "workflow_phase",
+      "index": 2,
+      "title": "Verify"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 1,
+      "label": "attack:eq-unsound",
+      "phaseIndex": 1,
+      "phaseTitle": "Attack",
+      "agentId": "a3bfc27f0917cf431",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793973482073,
+      "queuedAt": 1793973482040,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793975089272,
+      "tokens": 216654,
+      "toolCalls": 67,
+      "durationMs": 1607198,
+      "resultPreview": "{\"findings\":[{\"title\":\"eqsolve takes the transitive closure of the 'abstract qualification' congruence, so T == Self, U == Self makes T.X == U.X for two distinct conformances. A tautological fact (Box<X> == Box<X>) is enough to trigger it; baseline and occurs,fixsubst reject\",\"kind\":\"unsound\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/eq-unsound/abs-trans-5…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 2,
+      "label": "attack:eq-regress",
+      "phaseIndex": 1,
+      "phaseTitle": "Attack",
+      "agentId": "a4ad6a3d232a71069",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793973482074,
+      "queuedAt": 1793973482040,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793974615728,
+      "tokens": 192027,
+      "toolCalls": 58,
+      "durationMs": 1132538,
+      "resultPreview": "{\"findings\":[{\"title\":\"eqsolve + fixsubst make an inferred generic argument ambiguous when it is fixed only by an equality chain (valid call rejected)\",\"kind\":\"regression\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/eq-regress/o2b-call-infer.hylo\",\"evidence\":\"Program:\\n  trait Q {}\\n  fun pick<T, U where U is Q, T == U>(x: T) {}\\n  fun f<A0, A1, A2 where A0 …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 3,
+      "label": "attack:ext-order",
+      "phaseIndex": 1,
+      "phaseTitle": "Attack",
+      "agentId": "a5c39f4b9a5dab276",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793974617973,
+      "queuedAt": 1793973482040,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793975310430,
+      "tokens": 163428,
+      "toolCalls": 45,
+      "durationMs": 692456,
+      "resultPreview": "{\"findings\":[{\"title\":\"A given whose type is being computed is silently skipped, so FIX accepts an ambiguous program and the result depends on declaration order (alias memoized through the skip)\",\"kind\":\"unsound\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/ext-order/gz1.hylo\",\"evidence\":\"gz1.hylo:\\n  trait P { type Y }\\n  trait Q { type O }\\n  struct T {}\\n …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 4,
+      "label": "attack:crash-paths",
+      "phaseIndex": 1,
+      "phaseTitle": "Attack",
+      "agentId": "abc04f3a7a7e8219e",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793975091352,
+      "queuedAt": 1793973482040,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793976417334,
+      "tokens": 223461,
+      "toolCalls": 75,
+      "durationMs": 1325982,
+      "resultPreview": "{\"findings\":[{\"title\":\"Top-level occurs-check failure in Typer.match is taken as a successful match, so a Void value is accepted as a proof of Box<Void>\",\"kind\":\"unsound\",\"severity\":\"critical\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/crash-paths/o4-toplevel-occurs-full.hylo\",\"evidence\":\"o4 (and o2-toplevel-occurs.hylo):\\n  trait P {}; struct Box<T>{public memberwise init}; …"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 5,
+      "label": "attack:perf",
+      "phaseIndex": 1,
+      "phaseTitle": "Attack",
+      "agentId": "a37331034a30c25d3",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793975312148,
+      "queuedAt": 1793973482040,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793977607983,
+      "tokens": 204684,
+      "toolCalls": 79,
+      "durationMs": 2295834,
+      "resultPreview": "{\"findings\":[{\"title\":\"eqsolve recomputes a cubic congruence closure of every equality in scope for each equality goal, even trivially reflexive ones: 26-line valid program takes 52 ms on the baseline and 14.5 s under FULL\",\"kind\":\"performance\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/perf/cc-refl-k16-w10-m4.hylo\",\"evidence\":\"Runner: /home/user/hylo-new/r…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 6,
+      "label": "judge:eq-regress",
+      "phaseIndex": 2,
+      "phaseTitle": "Verify",
+      "agentId": "aab5e1fbc34c509a7",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793976419451,
+      "queuedAt": 1793974618002,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793976754498,
+      "tokens": 115537,
+      "toolCalls": 24,
+      "durationMs": 335046,
+      "resultPreview": "{\"confirmed\":[{\"title\":\"eqsolve makes an inferred generic argument fixed only by an equality chain ambiguous, so a valid call is rejected\",\"kind\":\"regression\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/eq-regress-judge/o2b-call-infer.hylo (also o2-open-chain.hylo; o2d-order.hylo shows the dependence on requirement order)\",\"evidence\":\"Program: `trait Q {}; f…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 7,
+      "label": "judge:eq-unsound",
+      "phaseIndex": 2,
+      "phaseTitle": "Verify",
+      "agentId": "aa5175659439a2180",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793976756393,
+      "queuedAt": 1793975091378,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793977124545,
+      "tokens": 102092,
+      "toolCalls": 18,
+      "durationMs": 368150,
+      "resultPreview": "{\"confirmed\":[{\"title\":\"eqsolve closes the non-transitive 'abstract qualification' unification rule transitively: T == Self, U == Self yields T.X == U.X for two distinct where-clause conformances; whether it does depends on whether an irrelevant term such as X happens to appear in the term graph\",\"kind\":\"unsound\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/e…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 8,
+      "label": "judge:ext-order",
+      "phaseIndex": 2,
+      "phaseTitle": "Verify",
+      "agentId": "a5bff0c4504b91332",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793977127062,
+      "queuedAt": 1793975312171,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793977324744,
+      "tokens": 102883,
+      "toolCalls": 15,
+      "durationMs": 197681,
+      "resultPreview": "{\"confirmed\":[{\"title\":\"A given whose type is being computed is skipped without a diagnostic, and alias types computed meanwhile are memoized: FIX accepts gz1, which has no consistent reading, and rejects its reordering gz3\",\"kind\":\"unsound\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/ext-order/gz1.hylo (reordering: gz3.hylo)\",\"evidence\":\"Re-run with timeout…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 9,
+      "label": "judge:crash-paths",
+      "phaseIndex": 2,
+      "phaseTitle": "Verify",
+      "agentId": "a3e54fa6d40df1e2f",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793977326460,
+      "queuedAt": 1793976419479,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793977591529,
+      "tokens": 115042,
+      "toolCalls": 27,
+      "durationMs": 265069,
+      "resultPreview": "{\"confirmed\":[{\"title\":\"Top-level occurs-check failure in Typer.match is treated as a successful match, so a Void value is accepted as a proof of Box<Void>\",\"kind\":\"unsound\",\"severity\":\"critical\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/crash-paths/o4-toplevel-occurs-full.hylo (also o2-toplevel-occurs.hylo)\",\"evidence\":\"Re-run with eq2-e965a058dfd0. o4: baseline exit 139 (S…"
+    },
+    {
+      "type": "workflow_agent",
+      "index": 10,
+      "label": "judge:perf",
+      "phaseIndex": 2,
+      "phaseTitle": "Verify",
+      "agentId": "a106d6c631e9704e6",
+      "model": "claude-opus-5-5",
+      "state": "done",
+      "startedAt": 1793977609916,
+      "queuedAt": 1793977609913,
+      "attempt": 1,
+      "lastToolName": "StructuredOutput",
+      "promptPreview": "Context: the Hylo compiler's type checker (Swift). A \"sound configuration\" was built to fix known soundness bugs; your job is to BREAK it.\nRead first: /home/user/hylo-new/research/round3/soundness.md (the bugs, the adversarial review of the first fixes) and the code of the fixes:\n  git -C /home/user/hylo-impl log --oneline origin/tc/research..HEAD ; git -C /home/user/hylo-impl show HEAD -- Sources…",
+      "promptFramed": true,
+      "lastProgressAt": 1793978003914,
+      "tokens": 110090,
+      "toolCalls": 21,
+      "durationMs": 393998,
+      "resultPreview": "{\"confirmed\":[{\"title\":\"eqsolve recomputes an O(n^2 x depth) congruence closure for every closed equality goal, reflexive ones included (26-line valid program: base 52 ms, FULL 14.3 s, FIX 23.1 s)\",\"kind\":\"performance\",\"severity\":\"major\",\"program\":\"/home/user/hylo-new/research/round3/soundness/review2/perf/cc-refl-k16-w10-m4.hylo\",\"evidence\":\"Re-run (runner copied to /home/user/hylo-new/research/r…"
+    }
+  ],
+  "totalTokens": 1545898,
+  "totalToolCalls": 429
+}

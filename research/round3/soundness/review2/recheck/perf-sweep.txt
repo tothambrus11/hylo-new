@@ -1,0 +1,293 @@
+=== cc-chain-k16-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.40 ms 
+[FULL rc=0] diagnostics: 0 type.user      6.44 ms 
+=== cc-chain-k16-w10-m8.hylo
+[FIX rc=0] diagnostics: 0 type.user     22.59 ms 
+[FULL rc=0] diagnostics: 0 type.user     13.63 ms 
+=== cc-chain-k24-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user     15.97 ms 
+[FULL rc=0] diagnostics: 0 type.user      9.22 ms 
+=== cc-chain-k4-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user      7.73 ms 
+[FULL rc=0] diagnostics: 0 type.user      2.14 ms 
+=== cc-chain-k8-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user      9.45 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.76 ms 
+=== cc-deep-10-1.hylo
+[FIX rc=0] diagnostics: 0 type.user      6.08 ms 
+[FULL rc=0] diagnostics: 0 type.user      1.12 ms 
+=== cc-deep-20-1.hylo
+[FIX rc=0] diagnostics: 0 type.user      9.91 ms 
+[FULL rc=0] diagnostics: 0 type.user      1.52 ms 
+=== cc-deep-40-1.hylo
+[FIX rc=0] diagnostics: 0 type.user      7.17 ms 
+[FULL rc=0] diagnostics: 0 type.user      2.21 ms 
+=== cc-deep-40-m10.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.62 ms 
+[FULL rc=0] diagnostics: 0 type.user      6.24 ms 
+=== cc-deep-40-m30.hylo
+[FIX rc=0] diagnostics: 0 type.user     35.49 ms 
+[FULL rc=0] diagnostics: 0 type.user     23.89 ms 
+=== cc-deep-60-m30.hylo
+[FIX rc=0] diagnostics: 0 type.user     39.98 ms 
+[FULL rc=0] diagnostics: 0 type.user     26.16 ms 
+=== cc-deep-80-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user      8.54 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.04 ms 
+=== cc-goals-m10.hylo
+[FIX rc=0] diagnostics: 0 type.user     10.23 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.63 ms 
+=== cc-goals-m20.hylo
+[FIX rc=0] diagnostics: 0 type.user     18.88 ms 
+[FULL rc=0] diagnostics: 0 type.user      9.81 ms 
+=== cc-goals-m30.hylo
+[FIX rc=0] diagnostics: 0 type.user     33.95 ms 
+[FULL rc=0] diagnostics: 0 type.user     19.53 ms 
+=== cc-goals-m36.hylo
+[FIX rc=0] diagnostics: 0 type.user     42.92 ms 
+[FULL rc=0] diagnostics: 0 type.user     27.59 ms 
+=== cc-refl-k12-w10-m8.hylo
+[FIX rc=0] diagnostics: 0 type.user     15.44 ms 
+[FULL rc=0] diagnostics: 0 type.user      7.17 ms 
+=== cc-refl-k16-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user     11.94 ms 
+[FULL rc=0] diagnostics: 0 type.user      5.90 ms 
+=== cc-refl-k16-w10-m4.hylo
+[FIX rc=0] diagnostics: 0 type.user     13.55 ms 
+[FULL rc=0] diagnostics: 0 type.user      7.18 ms 
+=== cc-refl-k4-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user      7.76 ms 
+[FULL rc=0] diagnostics: 0 type.user      1.97 ms 
+=== cc-refl-k8-w10-m1.hylo
+[FIX rc=0] diagnostics: 0 type.user      8.95 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.26 ms 
+=== div-eq-b2-0.hylo
+[FIX rc=0] diagnostics: 1 type.user   1690.97 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b2-0.hylo:8.17-21: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      2.64 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b2-0.hylo:8.17-21: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-eq-b2-1.hylo
+[FIX rc=0] diagnostics: 1 type.user   1702.69 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b2-1.hylo:8.30-34: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      5.26 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b2-1.hylo:8.30-34: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-eq-b3-0.hylo
+[FIX rc=0] diagnostics: 3 type.user   3440.15 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-0.hylo:1.1-11:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-0.hylo:10.17-21: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      2.83 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-0.hylo:10.17-21: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-eq-b3-1.hylo
+[FIX rc=0] diagnostics: 2 type.user   3477.93 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-1.hylo:10.30-34: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-1.hylo:10.5-6: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+[FULL rc=0] diagnostics: 1 type.user      4.72 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-b3-1.hylo:10.30-34: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-eq-ovl-b2-0.hylo
+[FIX rc=0] diagnostics: 0 type.user   1694.98 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.17 ms 
+=== div-eq-ovl-b2-1.hylo
+[FIX rc=0] diagnostics: 0 type.user   1817.78 ms 
+[FULL rc=0] diagnostics: 0 type.user      5.24 ms 
+=== div-eq-ovl-b3-0.hylo
+[FIX rc=0] diagnostics: 2 type.user   3430.38 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-ovl-b3-0.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-ovl-b3-0.hylo:11.5-6: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+[FULL rc=0] diagnostics: 0 type.user      3.20 ms 
+=== div-eq-ovl-b3-1.hylo
+[FIX rc=0] diagnostics: 1 type.user   3409.09 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-eq-ovl-b3-1.hylo:11.5-6: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+[FULL rc=0] diagnostics: 0 type.user      7.20 ms 
+=== div-trunc-b1.hylo
+[FIX rc=0] diagnostics: 1 type.user     20.92 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b1.hylo:8.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      3.53 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b1.hylo:8.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-trunc-b2.hylo
+[FIX rc=0] diagnostics: 1 type.user   1797.78 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b2.hylo:11.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user    239.69 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b2.hylo:11.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-trunc-b3.hylo
+[FIX rc=0] diagnostics: 3 type.user   3374.67 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo:1.1-15:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo:14.12-16: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+[FULL rc=0] diagnostics: 3 type.user   5755.98 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo:1.1-15:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b3.hylo:14.12-16: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+=== div-trunc-b4.hylo
+[FIX rc=0] diagnostics: 3 type.user   5693.70 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b4.hylo:1.1-18:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b4.hylo:17.12-16: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+[FULL rc=0] diagnostics: 3 type.user   4933.72 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b4.hylo:1.1-18:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-trunc-b4.hylo:17.12-16: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+=== div-valid-b3-d4.hylo
+[FIX rc=0] diagnostics: 1 type.user     41.88 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b3-d4.hylo:14.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      8.34 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b3-d4.hylo:14.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-valid-b3-d5.hylo
+[FIX rc=0] diagnostics: 1 type.user     45.06 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b3-d5.hylo:14.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user     12.37 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b3-d5.hylo:14.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== div-valid-b4-d4.hylo
+[FIX rc=0] diagnostics: 1 type.user     78.31 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b4-d4.hylo:17.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user     16.36 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/div-valid-b4-d4.hylo:17.21-25: error: no coercion from 'P<Xi> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== extchain-16.hylo
+[FIX rc=0] diagnostics: 0 type.user      6.92 ms 
+[FULL rc=0] diagnostics: 0 type.user      1.20 ms 
+=== extchain-24.hylo
+[FIX rc=0] diagnostics: 0 type.user     15.09 ms 
+[FULL rc=0] diagnostics: 0 type.user      2.33 ms 
+=== extchain-8.hylo
+[FIX rc=0] diagnostics: 0 type.user      5.76 ms 
+[FULL rc=0] diagnostics: 0 type.user      0.49 ms 
+=== extsame-16.hylo
+[FIX rc=0] diagnostics: 16 type.user      7.94 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-16.hylo:19.1-10: error: circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-16.hylo:20.16-17: error: type 'Y' has no static member 'Y'
+[FULL rc=0] diagnostics: 16 type.user      2.29 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-16.hylo:19.1-10: error: circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-16.hylo:20.16-17: error: type 'Y' has no static member 'Y'
+=== extsame-8.hylo
+[FIX rc=0] diagnostics: 8 type.user      7.33 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-8.hylo:11.1-10: error: circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-8.hylo:12.16-17: error: type 'Y' has no static member 'Y'
+[FULL rc=0] diagnostics: 8 type.user      1.32 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-8.hylo:11.1-10: error: circular extension: the extendee of this extension depends on a lookup of 'Y', which this extension may affect
+       /home/user/hylo-new/research/round3/soundness/review2/perf/extsame-8.hylo:12.16-17: error: type 'Y' has no static member 'Y'
+=== occurs-dag-12.hylo
+[FIX rc=0] diagnostics: 0 type.user    188.83 ms 
+[FULL rc=0] diagnostics: 0 type.user    131.13 ms 
+=== occurs-dag-16.hylo
+[FIX rc=0] diagnostics: 0 type.user   3014.61 ms 
+[FULL rc=0] diagnostics: 0 type.user   2271.67 ms 
+=== occurs-dag-18.hylo
+[FIX rc=0] diagnostics: 0 type.user  11251.47 ms 
+[FULL rc=0] diagnostics: 0 type.user   8750.85 ms 
+=== occurs-dag-8.hylo
+[FIX rc=0] diagnostics: 0 type.user     20.64 ms 
+[FULL rc=0] diagnostics: 0 type.user     10.88 ms 
+=== occurs-only-18.hylo
+[FIX rc=0] diagnostics: 1 type.user     12.46 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-18.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      3.75 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-18.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== occurs-only-22.hylo
+[FIX rc=0] diagnostics: 1 type.user     12.76 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-22.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      3.88 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-22.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== occurs-only-24.hylo
+[FIX rc=0] diagnostics: 1 type.user     14.48 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-24.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      4.21 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/occurs-only-24.hylo:10.21-30: error: no coercion from 'Q<Bar> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+=== occurs-valid-20.hylo
+[FIX rc=0] diagnostics: 0 type.user     13.13 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.29 ms 
+=== occurs-valid-22.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.84 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.75 ms 
+=== occurs-valid-24.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.47 ms 
+[FULL rc=0] diagnostics: 0 type.user      3.43 ms 
+=== open-neg-0.hylo
+[FIX rc=0] diagnostics: 1 type.user      7.58 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-0.hylo:3.20-24: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      2.61 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-0.hylo:3.20-24: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+=== open-neg-1.hylo
+[FIX rc=0] diagnostics: 1 type.user     13.51 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-1.hylo:3.39-43: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      4.77 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-1.hylo:3.39-43: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+=== open-neg-2.hylo
+[FIX rc=0] diagnostics: 1 type.user     12.58 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-2.hylo:3.53-57: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+[FULL rc=0] diagnostics: 1 type.user      4.87 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/open-neg-2.hylo:3.53-57: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+=== open-pos-1.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.67 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.59 ms 
+=== open-pos-chain-2.hylo
+[FIX rc=0] diagnostics: 0 type.user     13.65 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.62 ms 
+=== open-pos-chain-3.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.29 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.72 ms 
+=== open-pos-chain-4.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.87 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.74 ms 
+=== open-wide-1.hylo
+[FIX rc=0] diagnostics: 0 type.user     11.72 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.26 ms 
+=== open-wide-2.hylo
+[FIX rc=0] diagnostics: 0 type.user     24.54 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.73 ms 
+=== open-wide-3.hylo
+[FIX rc=0] diagnostics: 0 type.user     40.18 ms 
+[FULL rc=0] diagnostics: 0 type.user     13.19 ms 
+=== open-wide-4.hylo
+[FIX rc=0] diagnostics: 0 type.user    493.59 ms 
+[FULL rc=0] diagnostics: 0 type.user    199.89 ms 
+=== ovl-ret-12.hylo
+[FIX rc=124] 
+[FULL rc=124] 
+=== ovl-ret-4.hylo
+[FIX rc=0] diagnostics: 0 type.user     24.00 ms 
+[FULL rc=0] diagnostics: 0 type.user      8.34 ms 
+=== ovl-ret-8.hylo
+[FIX rc=0] diagnostics: 0 type.user   2416.13 ms 
+[FULL rc=0] diagnostics: 0 type.user   1975.48 ms 
+=== ovl-ret-9.hylo
+[FIX rc=0] diagnostics: 0 type.user  10135.42 ms 
+[FULL rc=0] diagnostics: 0 type.user   8185.95 ms 
+=== pending-var-2.hylo
+[FIX rc=0] diagnostics: 0 type.user     18.41 ms 
+[FULL rc=0] diagnostics: 0 type.user      8.98 ms 
+=== pending-var-3.hylo
+[FIX rc=0] diagnostics: 0 type.user     19.20 ms 
+[FULL rc=0] diagnostics: 0 type.user     10.42 ms 
+=== pending-var-4.hylo
+[FIX rc=0] diagnostics: 0 type.user     21.87 ms 
+[FULL rc=0] diagnostics: 0 type.user     10.85 ms 
+=== pending-var2-3.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.51 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.83 ms 
+=== pending-var2-5.hylo
+[FIX rc=0] diagnostics: 0 type.user     12.64 ms 
+[FULL rc=0] diagnostics: 0 type.user      4.82 ms 
+=== poison-a-3.hylo
+[FIX rc=0] diagnostics: 3 type.user     36.44 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-a-3.hylo:3.11: error: declaration is not allowed here
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-a-3.hylo:3.20-22: error: type 'Z1' has no static member 'infix=='
+[FULL rc=0] diagnostics: 3 type.user     23.15 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-a-3.hylo:3.11: error: declaration is not allowed here
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-a-3.hylo:3.20-22: error: type 'Z1' has no static member 'infix=='
+=== poison-b-3.hylo
+[FIX rc=0] diagnostics: 2 type.user     32.33 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-b-3.hylo:3.25: error: declaration is not allowed here
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-b-3.hylo:3.34-36: error: type '(Self::R).X' has no static member 'infix=='
+[FULL rc=0] diagnostics: 2 type.user     23.23 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-b-3.hylo:3.25: error: declaration is not allowed here
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-b-3.hylo:3.34-36: error: type '(Self::R).X' has no static member 'infix=='
+=== poison-trans-2.hylo
+[FIX rc=0] diagnostics: 1 type.user     11.21 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-2.hylo:3.25: error: expected 'is'
+[FULL rc=0] diagnostics: 1 type.user      2.47 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-2.hylo:3.25: error: expected 'is'
+=== poison-trans-3.hylo
+[FIX rc=0] diagnostics: 1 type.user     11.09 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-3.hylo:3.25: error: expected 'is'
+[FULL rc=0] diagnostics: 1 type.user      2.53 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-3.hylo:3.25: error: expected 'is'
+=== poison-trans-4.hylo
+[FIX rc=0] diagnostics: 1 type.user     10.26 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-4.hylo:3.25: error: expected 'is'
+[FULL rc=0] diagnostics: 1 type.user      2.48 ms 
+       /home/user/hylo-new/research/round3/soundness/review2/perf/poison-trans-4.hylo:3.25: error: expected 'is'
