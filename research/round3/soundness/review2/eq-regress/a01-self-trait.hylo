@@ -1,0 +1,8 @@
+//! stage:typing no-std
+fun need<A, B where A == B>() {}
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun f<T where T == Self>(x: X) { need<T, Self>() }
+  fun g<T, U where T == Self, Self.X == U>(x: X) { need<U, X>() ; check<U>(x) }
+}

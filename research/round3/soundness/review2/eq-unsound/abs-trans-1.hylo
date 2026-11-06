@@ -1,0 +1,10 @@
+//! no-std
+fun check<T>(x: T) {}
+trait P {
+  type X
+  // T and U are both equal to Self but carry their own conformances to P, so
+  // (cf. negative/associated-type-inequality.hylo) T.X and U.X are unrelated.
+  fun f<T, U where T == Self, U == Self, T is P, U is P, X == X>(x: U.X) {
+    check<T.X>(x)
+  }
+}

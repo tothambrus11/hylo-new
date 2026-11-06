@@ -1,0 +1,14 @@
+//! stage:typing no-std
+trait P { type X }
+fun check<T>(x: T) {}
+fun need2<A, B where A == B>() {}
+fun f<T, U where T is P, T.X == U>(x: T.X, y: U) {
+  check<U>(x)
+  check<T.X>(y)
+  need2<T.X, U>()
+  need2<U, T.X>()
+}
+fun g<T, U, V where T is P, T.X == U, U == V>(x: T.X, y: V) {
+  check<V>(x)
+  check<T.X>(y)
+}
