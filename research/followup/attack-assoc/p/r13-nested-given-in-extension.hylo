@@ -1,0 +1,5 @@
+// abstractstrict: the nested given of r01 used in an extension of the conforming types. Valid.
+trait Q {}
+trait P { type X ; given X is Q }
+fun needQ<T where T is Q>() {}
+extension <T where T is P> T { fun g() { needQ<T.X>() } }

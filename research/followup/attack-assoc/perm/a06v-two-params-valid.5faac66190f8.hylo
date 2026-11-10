@@ -1,0 +1,13 @@
+fun ok4(x: S0) { check<P10.X>(x) }
+fun ok3(x: P01.X) { check<P11.X>(x) }
+fun ok2(x: P10.X) { check<S0>(x) }
+fun ok1(x: P01.X) { check<S1>(x) }
+type P11 = Pair<S1, S1>
+type P10 = Pair<S1, S0>
+type P01 = Pair<S0, S1>
+fun check<T>(x: T) {}
+given <T, U> => Pair<T, U> is P { type X = U }
+struct Pair<T, U> { public memberwise init }
+struct S1 { public memberwise init }
+struct S0 { public memberwise init }
+trait P { type X }

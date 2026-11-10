@@ -5,7 +5,10 @@ struct Foo<T> {}
 struct Bar<T> {}
 given A is P { type E = Int }
 type X = A.E
-given Foo<X> is Q { type F = Bool }
-type Y = Foo<X>.F
+type FX = Foo<X>
+given FX is Q { type F = Bool }
+type Y = FX.F
 given Bar<Y> is P { type E = A }
-fun g(y: Y) {}
+type Z = Bar<Y>
+type W = Z.E
+fun g(y: Y, w: W) {}

@@ -1,0 +1,29 @@
+trait P { type E }
+trait Q {}
+struct A {}
+given A is P { type E = Int }
+given A.E is Q {}
+struct W0<C> {}
+given <C where C is P, C.E is Q> => W0<C> is Q {}
+struct W1<C> {}
+given <C where C is P, C.E is Q> => W1<C> is Q {}
+struct W2<C> {}
+given <C where C is P, C.E is Q> => W2<C> is Q {}
+struct W3<C> {}
+given <C where C is P, C.E is Q> => W3<C> is Q {}
+struct W4<C> {}
+given <C where C is P, C.E is Q> => W4<C> is Q {}
+struct W5<C> {}
+given <C where C is P, C.E is Q> => W5<C> is Q {}
+struct W6<C> {}
+given <C where C is P, C.E is Q> => W6<C> is Q {}
+struct W7<C> {}
+given <C where C is P, C.E is Q> => W7<C> is Q {}
+struct W8<C> {}
+given <C where C is P, C.E is Q> => W8<C> is Q {}
+struct W9<C> {}
+given <C where C is P, C.E is Q> => W9<C> is Q {}
+struct W10<C> {}
+given <C where C is P, C.E is Q> => W10<C> is Q {}
+struct W11<C> {}
+given <C where C is P, C.E is Q> => W11<C> is Q {}

@@ -1,0 +1,9 @@
+// An extension of every type that conforms to `P`; the member is used in the subject of a given.
+trait P {}
+trait Q {}
+struct A {}
+given A is P {}
+extension <T where T is P> T { type M = Int }
+given A.M is Q {}
+fun need<T where T is Q>(x: T) {}
+fun use(x: Int) { need(x) }

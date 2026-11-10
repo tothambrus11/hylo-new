@@ -1,0 +1,12 @@
+struct A {}
+struct S0 {}
+struct S1 {}
+struct S2 {}
+struct S3 {}
+struct S4 {}
+extension A { type Me = A }
+extension A.Me { type Me = Int }
+extension A.Me { type M0 = S0 }
+extension A.M0 { type M1 = S1 }
+extension S0.M1 { type M2 = S2 }
+extension S1.M2 { type M3 = S3 }

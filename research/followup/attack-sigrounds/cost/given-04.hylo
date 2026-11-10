@@ -1,0 +1,15 @@
+trait P { type E }
+struct A {}
+struct Foo<T> {}
+given A is P { type E = A }
+type X0 = A.E
+type F0 = Foo<X0>
+given F0 is P { type E = F0 }
+type X1 = F0.E
+type F1 = Foo<X1>
+given F1 is P { type E = F1 }
+type X2 = F1.E
+type F2 = Foo<X2>
+given F2 is P { type E = F2 }
+type X3 = F2.E
+fun f(x: X3) {}

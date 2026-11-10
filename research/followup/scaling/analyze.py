@@ -369,8 +369,8 @@ def main():
                 for f_ in (fc, ft):
                     f_.update(kind="capped", law="capped by the resource bound (not fitted)")
             # Times below a few milliseconds are dominated by fixed costs and noise.
-            if ft.get("ymax", 0) < 50 and ft["kind"] not in ("none",):
-                ft["law"] = "below 50 ms throughout"
+            if ft.get("ymax", 0) < 200 and ft["kind"] not in ("none",):
+                ft["law"] = "below 200 ms throughout (not fitted)"
                 ft["kind"] = "small"
             # other counters
             names = sorted(k for k in {k for n, r in good for k in r["counters"]} - {counter, "absmodel.micros"} if not k.endswith(("skipped", "skippedExtensions", "refuted", "prunedChoices", "cacheHits")))
@@ -415,7 +415,7 @@ def main():
             short = lambda f: {"flat": "flat", "poly": (f"n^{f.get('exponent', 0):.0f} exact" if f.get("exact") else f"n^{f.get('exponent', 0):.1f}"),
                                "exp": f"{f.get('base', 0):.1f}^n", "few": "too few",
                                "undecided": "undecided" + {"exp": " (exp?)", "poly": " (poly?)"}.get(f.get("lean"), ""),
-                               "none": "–", "small": "<50 ms", "capped": "capped"}[f["kind"]]
+                               "none": "–", "small": "<0.2 s", "capped": "capped"}[f["kind"]]
             tail = ""
             if bad:
                 tail = " †" if bad[0]["status"] == "timeout" else " ‡"
@@ -447,6 +447,12 @@ def main():
             md.append("")
 
     head = ["## Summary: growth of the primary counter / of the time\n",
+            "Each cell gives the growth of the counter, then that of the time, in the size `n` of the "
+            "family. `n^k exact`: the counter is exactly a polynomial of degree `k` (given in the next "
+            "table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<0.2 s`: the time stays "
+            "too small to fit; `too few`: fewer than five points completed; `capped`: every point was "
+            "cut short by the resource bound; `undecided`: neither model fits clearly better "
+            "(`exp?`, `poly?`: what the last growth factors suggest).\n",
             "| Family | " + " | ".join(CONFIGS) + " |", "|---|" + "---|" * len(CONFIGS)]
     for s in summary:
         head.append("| " + " | ".join(s) + " |")
@@ -475,10 +481,23 @@ def main():
     body = "\n".join(head) + "\n## Tables per family\n\n" + legend + "\n" + "\n".join(md) + "\n"
     with open(os.path.join(HERE, "tables.md"), "w") as f:
         f.write(body)
+    # Which series were cut short by a timeout smaller than 120 s?
+    short = defaultdict(list)
+    for (fam, n, c), r in sorted(pts.items()):
+        cut = r["status"] == "timeout" or (r["status"] == "skipped" and "timeout" in r.get("why", ""))
+        if cut and r.get("timeout_s", 120) < 120 and fam in gen.FAMILIES:
+            short[c].append(fam)
+    if short:
+        note = ("The continuation was not completed for every series: the following ones end with a "
+                "20 s timeout (or with a prediction against 20 s) instead of 120 s, and the tables say "
+                "so point by point. " + "; ".join(
+                    f"**{c}**: " + ", ".join(f"`{x}`" for x in sorted(set(fs))) for c, fs in short.items()) + ".")
+    else:
+        note = "This was completed for every series, so every timeout in the tables is a 120 s timeout."
     hp = os.path.join(HERE, "README.head.md")
     if os.path.exists(hp):
         with open(os.path.join(HERE, "README.md"), "w") as f:
-            f.write(open(hp).read().rstrip("\n") + "\n\n" + body)
+            f.write(open(hp).read().rstrip("\n").replace("COMPLETION_NOTE", note) + "\n\n" + body)
     with open(os.path.join(HERE, "fits.json"), "w") as f:
         json.dump(fits, f, indent=1, default=float)
     print("\n".join(head))

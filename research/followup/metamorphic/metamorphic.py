@@ -5,7 +5,7 @@ usage:
   metamorphic.py baseline [--config C]             original and re-printed verdict of every program
   metamorphic.py run REL... [--config C] [--only SUBSTR] [--files LIST] [--force]
                                                    REL is r1..r8 or `all`
-  metamorphic.py attribute                         base and FIX on every program with a FULL violation
+  metamorphic.py attribute [FIX] [base]            FIX and base on the programs with a FULL violation
   metamorphic.py show FILE REL [VID]               prints the variants of a program
 
 Rows are appended to data/rows-<config>.jsonl (one row per variant) and the program-level
@@ -85,6 +85,8 @@ def run_one(path, r, config, base, o_rows):
     src = open(path).read()
     F, variants = variants_of(path, r, src)
     variants = variants[:budget(r, rel(path))]
+    if os.environ.get("MM_KINDS"):          # restrict a pass to some kinds of variants
+        variants = [v for v in variants if v.kind in os.environ["MM_KINDS"].split(",")]
     a = check(src, config)
     n = {"variants": 0, "verdict_changes": 0, "message_changes": 0, "invalid": 0}
     seen = set()
@@ -131,7 +133,7 @@ def cmd_run(rels, config, only=None, files=None, force=False):
                 o_done.write(json.dumps(row) + "\n"); o_done.flush()
 
 
-def cmd_attribute(all_variants=("r1",), per_group=8):
+def cmd_attribute(configs=("FIX", "base"), all_variants=("r1",), per_group=8):
     """Runs FIX and base on programs that show a violation under FULL. For relation 1, every
     permutation that was checked under FULL is run again. For the other relations, the original
     and the violating variants are run; violations are grouped by signature (as in
@@ -153,10 +155,11 @@ def cmd_attribute(all_variants=("r1",), per_group=8):
             sig = signature(row)
             used[sig] = used.get(sig, 0) + 1
             if used[sig] <= per_group: todo.setdefault((f, r), []).append(vid)
-    for config in ("FIX", "base"):
+    for config in configs:
         have = {(x["file"], x["rel"], x["vid"]) for x in load(os.path.join(DATA, "rows-%s.jsonl" % config))}
         with open(os.path.join(DATA, "rows-%s.jsonl" % config), "a") as o:
-            for (f, r), vids in sorted(todo.items()):
+            # Relation 1 last: it has the most variants per program.
+            for (f, r), vids in sorted(todo.items(), key=lambda kv: (kv[0][1] == "r1", kv[0])):
                 if all((f, r, v) in have for v in vids): continue
                 path = os.path.join(ROOT, f)
                 src = open(path).read()
@@ -195,7 +198,7 @@ def main():
         rels = sorted(RELATIONS) if args == ["all"] else args
         files = set(open(opt["--files"]).read().split()) if opt["--files"] else None
         cmd_run(rels, opt["--config"], opt["--only"], files, force)
-    elif cmd == "attribute": cmd_attribute()
+    elif cmd == "attribute": cmd_attribute(tuple(args) or ("FIX", "base"))
     elif cmd == "show": cmd_show(*args)
     else: sys.exit(__doc__)
 

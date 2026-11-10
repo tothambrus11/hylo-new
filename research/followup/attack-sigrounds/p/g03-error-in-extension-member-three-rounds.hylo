@@ -1,0 +1,8 @@
+// Ill-typed: the member alias `Bad` names an undeclared type. It is read during the rounds
+// (by the last given) and must be reported exactly once.
+trait Q {}
+struct A {}
+struct B {}
+extension A { type M = B }
+extension A.M { type Bad = Missing }
+given B.Bad is Q {}

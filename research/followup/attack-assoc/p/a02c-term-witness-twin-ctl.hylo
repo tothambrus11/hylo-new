@@ -1,0 +1,4 @@
+// Control of a02: the direct conversion of V.Y into W.Y, which the language rejects.
+trait Q { type Y }
+fun check<T>(x: T) {}
+fun f<V, W where V == W, V is Q, W is Q>(x: V.Y) { check<W.Y>(x) }

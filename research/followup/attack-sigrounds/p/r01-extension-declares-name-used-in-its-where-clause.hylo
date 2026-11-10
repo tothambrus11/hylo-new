@@ -1,0 +1,10 @@
+// The extension declares a member `X`; its own where clause selects `T.X` through the trait.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = Int }
+given Int is Q {}
+extension <T where T is P, T.X is Q> T { type X2 = Bool; fun x() {} }
+type K = A.X2
+fun need(x: Bool) {}
+fun f(x: K) { need(x) }

@@ -1,0 +1,12 @@
+// assocsubst + headsubst: Box<V>.X is (V::q).Y and Box<W>.X is (W::q).Y, where q is the premise
+// of the conformance declaration, not the witnesses given for V and W. Are they unified under V == W?
+// By negative/associated-type-inequality.hylo, V.Y and W.Y are different types here.
+trait Q { type Y }
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct Box<T> { public memberwise init }
+given <T where T is Q> => Box<T> is P { type X = T.Y
+  fun get() -> T.Y { self.get() }
+  fun put(x: T.Y) {} }
+fun f<V, W where V == W, V is Q, W is Q>(v: Box<V>, w: Box<W>) { w.put(v.get()) }

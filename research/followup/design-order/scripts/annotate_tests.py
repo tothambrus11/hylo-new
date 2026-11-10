@@ -51,6 +51,9 @@ for line in open(os.path.join(root, "tests", "MANIFEST.tsv")):
     while lines and lines[0].startswith("//!"): head.append(lines.pop(0))
     while lines and (lines[0].startswith("// ") or not lines[0].strip()): lines.pop(0)
     key = re.match(r"\d+b?", name).group(0)
+    # The headers of 06 and of the programs added by the review (06b, 23 and later) were written by
+    # hand and say more than this script knows: leave them alone.
+    if key == "06" or key not in REASON: continue
     comment = [f"// Expected after the change: {'accepted' if expected == 'accept' else 'rejected'}" +
                (", in every order of the top-level declarations." if results[name]["FULL"][1] > 1 else "."),
                f"// Reason: {REASON[key]}",

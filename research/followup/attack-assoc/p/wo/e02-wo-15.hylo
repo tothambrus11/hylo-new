@@ -1,0 +1,8 @@
+// e02 with the requirements and parameters permuted: <V, W where W == V, W is P, V is P>
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun f<V, W where W == V, W is P, V is P>(v: V, w: W) { v.two(w.one()) }

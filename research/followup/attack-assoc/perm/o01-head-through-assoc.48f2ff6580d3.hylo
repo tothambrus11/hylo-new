@@ -1,0 +1,13 @@
+fun ok(s: S0) { needQ<S0>()
+  s.hello() }
+fun needQ<T where T is Q>() {}
+extension BX { fun hello() {} }
+given BX is Q {}
+type BX = B0.X
+type B0 = Box<S0>
+given <T> => Box<T> is P { type X = T }
+struct Box<T> { public memberwise init }
+struct S1 { public memberwise init }
+struct S0 { public memberwise init }
+trait Q {}
+trait P { type X }

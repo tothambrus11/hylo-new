@@ -1,0 +1,4 @@
+// abstractstrict: a method of the trait returns the result of a generic function whose result is T.X. Valid.
+trait P { type X
+  fun m() -> X { pick(self) } }
+fun pick<T where T is P>(t: T) -> T.X { pick(t) }

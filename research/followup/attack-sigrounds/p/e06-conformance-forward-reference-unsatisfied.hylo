@@ -1,0 +1,12 @@
+// Ill-typed at the call: `Box<A> is R` needs `A.X is Q`, that is `Int is Q`, which nothing
+// provides. Control e06c provides `Int is Q`.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given Bool is Q {}
+given <T where T.X is Q, let u: P<T>> => Box<T> is R {}
+fun need<T where T is R>(x: T) {}
+public fun main() { need(Box<A>()) }

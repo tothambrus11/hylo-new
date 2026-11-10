@@ -1,0 +1,7 @@
+trait P {}
+trait Q { type O }
+struct T {}
+struct U {}
+given <X where X is P> => X is Q { type O = T }
+given U is P {}
+given U.O is P {}

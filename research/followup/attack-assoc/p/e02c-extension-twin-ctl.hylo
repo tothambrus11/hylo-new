@@ -1,0 +1,5 @@
+// Control of e02: the same flow through the requirements of the trait directly.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+fun f<V, W where V == W, V is P, W is P>(v: V, w: W) { v.put(w.get()) }

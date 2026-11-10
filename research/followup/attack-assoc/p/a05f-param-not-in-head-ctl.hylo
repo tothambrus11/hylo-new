@@ -1,0 +1,13 @@
+// Control of a05e: X is the parameter of the head; the second binding is rejected.
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.get() } }
+fun q(a: Box<S0>) {
+  let y: S1 = a.get()
+  let z: S0 = a.get()
+}

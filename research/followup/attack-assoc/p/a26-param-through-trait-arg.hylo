@@ -1,0 +1,15 @@
+// assocsubst: X is a parameter U that does not occur in the head and is determined by the
+// premise T is Into<U>. With S0 is Into<S1>, Box<S0>.X is S1 and get() returns an S1.
+// ok is valid; bad binds that S1 as an S0.
+trait Into<U> { fun into() -> U }
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given S0 is Into<S1> { fun into() -> S1 { S1() } }
+given <T, U where T is Into<U>> => Box<T> is P { type X = U
+  fun get() -> U { self.t.into() } }
+fun ok(a: Box<S0>) { let y: S1 = a.get() }
+fun bad(a: Box<S0>) { let z: S0 = a.get() }

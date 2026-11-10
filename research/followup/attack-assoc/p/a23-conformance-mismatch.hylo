@@ -1,0 +1,14 @@
+// assocsubst: an implementation whose type does not match the requirement once X is known. Invalid (2 conformances).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct Box<T> { public var t: T
+  public memberwise init }
+struct Bag<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> Box<T> { self }
+  fun put(x: T) {} }
+given <T> => Bag<T> is P { type X = Bag<T>
+  fun get() -> Bag<T> { self }
+  fun put(x: T) {} }

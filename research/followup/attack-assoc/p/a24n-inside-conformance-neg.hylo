@@ -1,0 +1,12 @@
+// assocsubst: as a24, invalid: Box<Box<T>>.X is Box<T>, not T (2 errors expected).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t }
+  fun put(x: T) {
+    let b = Box<Box<T>>(t: self)
+    b.put(x)
+    let c: T = b.get() } }

@@ -1,7 +1,7 @@
 """Re-runs, with the default 2.5 GB memory cap and a 120 s timeout, the mutants that aborted under the
 1 GB cap used for most of the main run. Appends to recheck.jsonl (restartable).
 
-Usage: python3 recheck.py [config ...]     (default: min5)
+Usage: python3 recheck.py [--only MUTANT-ID] [config ...]     (default: min5)
 """
 import json, os, sys
 import tc, run
@@ -9,7 +9,10 @@ import tc, run
 OUT = os.path.join(tc.HERE, "recheck.jsonl")
 
 def main():
-    cfgs = sys.argv[1:] or ["min5"]
+    a = sys.argv[1:]
+    only = None
+    if a and a[0] == "--only": only = a[1]; a = a[2:]
+    cfgs = a or ["min5"]
     os.environ.pop("TCX_MEM_LIMIT_KB", None)
     last = {}
     for ln in open(run.RESULTS):
@@ -22,6 +25,7 @@ def main():
     mutants = {m["id"]: m for m in run.load_mutants()}
     with open(OUT, "a") as out:
         for mid in ids:
+            if only and mid != only: continue
             m = mutants[mid]
             try:
                 prog, part = run.materialize(m)

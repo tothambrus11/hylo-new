@@ -1,0 +1,8 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: As 30, with the member `Me = Self` selected by the extension's own extendee.
+// Currently: base accepts it in 3 of 6 orders; FULL rejects it in all 6 orders tried.
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds+selfcheck) it is rejected in all 6 orders with the same diagnostics.
+struct A {}
+extension A { type Me = A }
+extension A.Me { fun g() {} }
+extension A.Me { type Me = Self }

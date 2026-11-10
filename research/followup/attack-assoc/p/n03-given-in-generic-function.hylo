@@ -1,0 +1,18 @@
+// assocsubst: a conformance declared inside a generic function; its associated type is the parameter of the function.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct G<T> { public var t: T
+  public memberwise init }
+fun check<T>(x: T) {}
+fun f<T>(a: G<T>, b: G<S1>, c: G<Void>) {
+  given <U> => G<U> is P { type X = T
+    fun get() -> T { self.get() }
+    fun put(x: T) {} }
+  check<T>(a.get())
+  check<T>(b.get())
+  b.put(a.get())
+  check<S1>(b.get())
+}

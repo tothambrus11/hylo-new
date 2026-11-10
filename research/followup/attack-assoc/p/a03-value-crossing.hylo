@@ -1,0 +1,32 @@
+// assocsubst + headsubst: a value of type S0 reaches a function that expects an S1.
+// Box<V>.X and Box<W>.X are both read as (·::q).Y through the premise q of the conformance
+// declaration, and unified under V == W although V and W conform to Q through different witnesses.
+// In `mid`, V = A conforms through the local given (Y = S0) and W = T through the requirement of
+// `mid`, which `h` discharges with its own local given (Y = S1).
+trait Q { type Y
+  fun make() -> Y
+  fun eat(y: Y) }
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T where T is Q> => Box<T> is P { type X = T.Y
+  fun get() -> T.Y { self.t.make() }
+  fun put(x: T.Y) { self.t.eat(x) } }
+fun f<V, W where V == W, V is Q, W is Q>(v: Box<V>, w: Box<W>) { w.put(v.get()) }
+fun mid<T where T == A, T is Q>(w: Box<T>) {
+  given A is Q { type Y = S0
+    fun make() -> S0 { S0() }
+    fun eat(y: S0) {} }
+  f<A, T>(Box<A>(t: A()), w)
+}
+fun h() {
+  given A is Q { type Y = S1
+    fun make() -> S1 { S1() }
+    fun eat(y: S1) {} }
+  mid<A>(Box<A>(t: A()))
+}

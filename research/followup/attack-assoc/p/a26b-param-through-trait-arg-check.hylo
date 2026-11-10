@@ -1,0 +1,16 @@
+// As a26 with the result passed to a function instead of bound: bad2 passes the S1 where an S0 is expected.
+trait Into<U> { fun into() -> U }
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given S0 is Into<S1> { fun into() -> S1 { S1() } }
+given <T, U where T is Into<U>> => Box<T> is P { type X = U
+  fun get() -> U { self.t.into() } }
+fun check<T>(x: T) {}
+fun takeS0(x: S0) {}
+fun ok(a: Box<S0>) { check<S1>(a.get()) }
+fun bad1(a: Box<S0>) { check<S0>(a.get()) }
+fun bad2(a: Box<S0>) { takeS0(a.get()) }

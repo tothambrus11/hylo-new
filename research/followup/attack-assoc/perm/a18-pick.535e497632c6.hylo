@@ -1,0 +1,12 @@
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+fun pick<T where T is P>(t: T) -> T.X { pick(t) }
+fun give<T where T is P>(t: T, x: T.X) {}
+fun check<T>(x: T) {}
+fun ok(b: Box<S0>, c: Box<Box<S0>>) { check<S0>(pick(b))
+  check<S0>(pick(pick(c)))
+  give(c, b)
+  give(b, pick(pick(c))) }
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }

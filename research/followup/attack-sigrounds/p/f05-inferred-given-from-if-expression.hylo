@@ -1,0 +1,9 @@
+// A given whose type is inferred from a conditional expression over local bindings.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  let c = true
+  let x = A()
+  given let g = if c { x } else { A() }
+  need()
+}

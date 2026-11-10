@@ -1,0 +1,30 @@
+// expected after the change: as today with every flag (accepted)
+// reason: a07 written so that the argument that cannot be coerced is checked before `m` is
+//   looked up in K, which is the order of Typer queries that `lookahead` produces for a07.
+// currently (base): accepted; solver.forks=6 solver.overloads=3
+// currently (FULL): accepted; solver.forks=6 solver.overloads=3
+fun test() { let y = pair(two1(h()), k().m()) }
+trait P { type E }
+struct A { public memberwise init }
+struct Foo<T> { public memberwise init }
+given A is P { type E = Int }
+struct B { public memberwise init }
+struct C { public memberwise init }
+struct K {
+  public memberwise init
+  public fun m() -> X { 0 }
+}
+struct K2 {
+  public memberwise init
+  public fun m() -> Bool { true }
+}
+fun h() -> C { C() }
+fun h() -> B { B() }
+fun k() -> K { K() }
+fun k() -> K2 { K2() }
+fun two(x: B, y: Int) -> Int { y }
+fun two1(x: B) -> Int { 0 }
+fun pair(x: Int, y: Int) -> Int { y }
+type X = A.E
+given Foo<X> is P { type E = Bool }
+public fun main() {}

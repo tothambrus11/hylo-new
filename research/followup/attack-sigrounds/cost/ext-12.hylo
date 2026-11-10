@@ -1,0 +1,27 @@
+struct A {}
+struct S0 {}
+struct S1 {}
+struct S2 {}
+struct S3 {}
+struct S4 {}
+struct S5 {}
+struct S6 {}
+struct S7 {}
+struct S8 {}
+struct S9 {}
+struct S10 {}
+struct S11 {}
+struct S12 {}
+extension A { type M0 = S0 }
+extension A.M0 { type M1 = S1 }
+extension S0.M1 { type M2 = S2 }
+extension S1.M2 { type M3 = S3 }
+extension S2.M3 { type M4 = S4 }
+extension S3.M4 { type M5 = S5 }
+extension S4.M5 { type M6 = S6 }
+extension S5.M6 { type M7 = S7 }
+extension S6.M7 { type M8 = S8 }
+extension S7.M8 { type M9 = S9 }
+extension S8.M9 { type M10 = S10 }
+extension S9.M10 { type M11 = S11 }
+fun f(x: S10.M11) {}

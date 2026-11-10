@@ -498,7 +498,7 @@ FAMILIES = {
     "ovl-stmts":      (ovl_stmts,      [1, 2, 4, 8, 16, 32, 64], "ok", {}, "solver.forks"),
     "ovr-args":       (ovr_args,       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12], "ok", {}, "solver.forks"),
     "ovr-width":      (ovr_width,      [2, 3, 4, 6, 8, 12, 16], "ok", {}, "solver.forks"),
-    "nest":           (nest,           [1, 2, 3, 4, 5, 6, 7, 8], "ok", {}, M),
+    "nest":           (nest,           [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12], "ok", {}, M),
     "nest-deep":      (nest,           [4, 8, 16, 32, 64, 128], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "nest-neg":       (nest_neg,       [4, 8, 16, 32, 64, 128], "err", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "nest-diamond":   (nest_diamond,   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 20], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),

@@ -1,0 +1,5 @@
+// abstractstrict: a method of the trait passes self and a Self.X to a generic function that
+// requires T is P. The only witness involved is the one the trait declares. Valid.
+trait P { type X
+  fun m(x: X) { use(self, x) } }
+fun use<T where T is P>(t: T, x: T.X) {}

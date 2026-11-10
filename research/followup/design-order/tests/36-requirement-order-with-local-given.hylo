@@ -1,0 +1,10 @@
+// Expected after the change: rejected (no change): "type 'T' has no static member 'X'" for the where clause.
+// Reason: 11 with a given in the body. The requirement `T.X is Q` comes before `T is P`, so it cannot be typed; the given of the body is visible to the resolution made by the where clause, which is why the existing checker reports the error twice (it forces the given while `T is P` is hidden).
+// Currently: base rejects it; FULL rejects it (two errors).
+// Review: with the design as first written (binary eq17, FULL+sigrounds) it is rejected with one error: the given of the body is read from the table and its own subject is typed later, when both requirements are visible.
+trait P { type X }
+trait Q {}
+struct Foo<T> {}
+fun f<T where T.X is Q, T is P>() {
+  given Foo<T.X> is Q {}
+}

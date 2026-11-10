@@ -1,0 +1,5 @@
+// abstractstrict: a method of the trait calls a method of an extension of the conforming types. Valid.
+trait P { type X
+  fun put(x: X)
+  fun m(x: X) { self.twice(x) } }
+extension <T where T is P> T { fun twice(x: T.X) { self.put(x) } }

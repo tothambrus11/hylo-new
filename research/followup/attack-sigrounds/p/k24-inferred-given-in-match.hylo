@@ -1,0 +1,19 @@
+// Expected after the change: the same outcome as without `sigrounds` (accepted under FULL).
+// Reason: As 23, with a variable bound by a pattern: computing the given's type before the `match` is typed reaches `unreachable("pattern is not typed")`.
+// Currently: base crashes ("Fatal error: pattern is not typed", exit code 132, an existing defect of on-demand evaluation); FULL accepts it.
+// Review (attack 1): with the design as first written (binary eq17, FULL+sigrounds) it crashes with the same fatal error.
+enum E<T> {
+  case one
+  case two(x: T)
+}
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  let x = E<A>.one
+  match x {
+    case .one { }
+    case .two(sink let a) {
+      given let g = a
+    }
+  }
+}

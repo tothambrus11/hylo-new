@@ -1,0 +1,16 @@
+// assocsubst: the associated type is a struct declared inside the generic conformance.
+// Is Box<S0>.X the same type as Box<S1>.X? The struct holds a T.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  struct Inner { public var t: T
+    public memberwise init }
+  type X = Inner
+  fun get() -> Inner { self.get() }
+  fun put(x: Inner) {} }
+fun q0(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

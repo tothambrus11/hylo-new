@@ -1,0 +1,13 @@
+fun ok3(x: B0.X) { check<BBX.X>(x) }
+fun ok2(x: BBX.X) { check<S0>(x) }
+fun ok1(x: BB0.X) { check<Box<S0>>(x) }
+type BBX = BB0.X
+type BB1 = Box<Box<S1>>
+type BB0 = Box<Box<S0>>
+type B0 = Box<S0>
+fun check<T>(x: T) {}
+given <T> => Box<T> is P { type X = T }
+struct Box<T> { public memberwise init }
+struct S1 { public memberwise init }
+struct S0 { public memberwise init }
+trait P { type X }

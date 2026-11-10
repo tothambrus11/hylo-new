@@ -1,0 +1,11 @@
+// assocsubst: the parameter occurs twice in the head. ok is valid; bad is invalid (Pair<S0, S1> does not conform).
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <T> => Pair<T, T> is P { type X = T
+  fun get() -> T { self.get() } }
+fun check<T>(x: T) {}
+fun ok(p: Pair<S0, S0>) { check<S0>(p.get()) }
+fun bad1(p: Pair<S1, S1>) { check<S0>(p.get()) }

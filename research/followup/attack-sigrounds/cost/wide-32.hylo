@@ -1,0 +1,69 @@
+trait P { type E }
+trait Q {}
+struct A {}
+given A is P { type E = Int }
+given A.E is Q {}
+struct W0<C> {}
+given <C where C is P, C.E is Q> => W0<C> is Q {}
+struct W1<C> {}
+given <C where C is P, C.E is Q> => W1<C> is Q {}
+struct W2<C> {}
+given <C where C is P, C.E is Q> => W2<C> is Q {}
+struct W3<C> {}
+given <C where C is P, C.E is Q> => W3<C> is Q {}
+struct W4<C> {}
+given <C where C is P, C.E is Q> => W4<C> is Q {}
+struct W5<C> {}
+given <C where C is P, C.E is Q> => W5<C> is Q {}
+struct W6<C> {}
+given <C where C is P, C.E is Q> => W6<C> is Q {}
+struct W7<C> {}
+given <C where C is P, C.E is Q> => W7<C> is Q {}
+struct W8<C> {}
+given <C where C is P, C.E is Q> => W8<C> is Q {}
+struct W9<C> {}
+given <C where C is P, C.E is Q> => W9<C> is Q {}
+struct W10<C> {}
+given <C where C is P, C.E is Q> => W10<C> is Q {}
+struct W11<C> {}
+given <C where C is P, C.E is Q> => W11<C> is Q {}
+struct W12<C> {}
+given <C where C is P, C.E is Q> => W12<C> is Q {}
+struct W13<C> {}
+given <C where C is P, C.E is Q> => W13<C> is Q {}
+struct W14<C> {}
+given <C where C is P, C.E is Q> => W14<C> is Q {}
+struct W15<C> {}
+given <C where C is P, C.E is Q> => W15<C> is Q {}
+struct W16<C> {}
+given <C where C is P, C.E is Q> => W16<C> is Q {}
+struct W17<C> {}
+given <C where C is P, C.E is Q> => W17<C> is Q {}
+struct W18<C> {}
+given <C where C is P, C.E is Q> => W18<C> is Q {}
+struct W19<C> {}
+given <C where C is P, C.E is Q> => W19<C> is Q {}
+struct W20<C> {}
+given <C where C is P, C.E is Q> => W20<C> is Q {}
+struct W21<C> {}
+given <C where C is P, C.E is Q> => W21<C> is Q {}
+struct W22<C> {}
+given <C where C is P, C.E is Q> => W22<C> is Q {}
+struct W23<C> {}
+given <C where C is P, C.E is Q> => W23<C> is Q {}
+struct W24<C> {}
+given <C where C is P, C.E is Q> => W24<C> is Q {}
+struct W25<C> {}
+given <C where C is P, C.E is Q> => W25<C> is Q {}
+struct W26<C> {}
+given <C where C is P, C.E is Q> => W26<C> is Q {}
+struct W27<C> {}
+given <C where C is P, C.E is Q> => W27<C> is Q {}
+struct W28<C> {}
+given <C where C is P, C.E is Q> => W28<C> is Q {}
+struct W29<C> {}
+given <C where C is P, C.E is Q> => W29<C> is Q {}
+struct W30<C> {}
+given <C where C is P, C.E is Q> => W30<C> is Q {}
+struct W31<C> {}
+given <C where C is P, C.E is Q> => W31<C> is Q {}

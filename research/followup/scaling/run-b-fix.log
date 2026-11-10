@@ -1,0 +1,57 @@
+eqchain-goals      n=1024  FIX   ok       t=27380.08 wall=29.39 matches=2048 forks=None applies=None 
+assoceq            n=48    FIX   ok       t=4162.49 wall=5.16 matches=14017 forks=None applies=None 
+assoceq            n=96    FIX   ok       t=15711.0 wall=16.71 matches=41713 forks=None applies=None 
+assoceq            n=128   FIX   ok       t=31913.5 wall=32.9 matches=67857 forks=None applies=None 
+assoceq            n=160   FIX   ok       t=53302.92 wall=54.26 matches=100145 forks=None applies=None 
+assoceq            n=192   FIX   ok       t=88047.32 wall=89.09 matches=138577 forks=None applies=None 
+assoceq            n=256   FIX   timeout  t=None wall=120.02 matches=None forks=None applies=None 
+assoceq            n=512   FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+assoceq            n=1024  FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+assocneg           n=48    FIX   err      t=4382.76 wall=5.57 matches=13682 forks=None applies=None assocneg-48.hylo:4.15-16: error: cannot pass value of type '(T48::P).X' to parameter '(T0::P).X'
+assocneg           n=96    FIX   err      t=19283.89 wall=20.64 matches=41186 forks=None applies=None assocneg-96.hylo:4.15-16: error: cannot pass value of type '(T96::P).X' to parameter '(T0::P).X'
+assocneg           n=128   FIX   err      t=40541.18 wall=41.91 matches=67202 forks=None applies=None assocneg-128.hylo:4.15-16: error: cannot pass value of type '(T128::P).X' to parameter '(T0::P).X'
+assocneg           n=160   FIX   err      t=67781.78 wall=68.74 matches=99362 forks=None applies=None assocneg-160.hylo:4.15-16: error: cannot pass value of type '(T160::P).X' to parameter '(T0::P).X'
+assocneg           n=192   FIX   err      t=104901.87 wall=105.94 matches=137666 forks=None applies=None assocneg-192.hylo:4.15-16: error: cannot pass value of type '(T192::P).X' to parameter '(T0::P).X'
+assocneg           n=256   FIX   timeout  t=None wall=120.01 matches=None forks=None applies=None 
+assocneg           n=512   FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+assocneg           n=1024  FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+ctrl-goals         n=1     FIX   ok       t=17.83 wall=1.37 matches=None forks=None applies=None 
+ctrl-goals         n=2     FIX   ok       t=14.08 wall=1.34 matches=None forks=None applies=None 
+ctrl-goals         n=4     FIX   ok       t=13.46 wall=1.07 matches=None forks=None applies=None 
+ctrl-goals         n=8     FIX   ok       t=13.1 wall=1.51 matches=None forks=None applies=None 
+ctrl-goals         n=16    FIX   ok       t=18.78 wall=1.65 matches=None forks=None applies=None 
+ctrl-goals         n=32    FIX   ok       t=27.34 wall=1.65 matches=None forks=None applies=None 
+ctrl-goals         n=64    FIX   ok       t=18.15 wall=1.35 matches=None forks=None applies=None 
+ctrl-goals         n=128   FIX   ok       t=23.88 wall=1.2 matches=None forks=None applies=None 
+ctrl-goals         n=256   FIX   ok       t=29.18 wall=1.12 matches=None forks=None applies=None 
+ctrl-goals         n=512   FIX   ok       t=40.99 wall=1.57 matches=None forks=None applies=None 
+ctrl-goals         n=1024  FIX   ok       t=126.8 wall=1.18 matches=None forks=None applies=None 
+ctrl-assoc         n=1     FIX   ok       t=14.92 wall=0.98 matches=72 forks=None applies=None 
+ctrl-assoc         n=2     FIX   ok       t=14.8 wall=1.06 matches=73 forks=None applies=None 
+ctrl-assoc         n=4     FIX   ok       t=6.82 wall=0.93 matches=75 forks=None applies=None 
+ctrl-assoc         n=8     FIX   ok       t=30.54 wall=1.16 matches=79 forks=None applies=None 
+ctrl-assoc         n=16    FIX   ok       t=20.66 wall=1.03 matches=87 forks=None applies=None 
+ctrl-assoc         n=32    FIX   ok       t=22.98 wall=0.91 matches=103 forks=None applies=None 
+ctrl-assoc         n=64    FIX   ok       t=45.6 wall=1.08 matches=135 forks=None applies=None 
+ctrl-assoc         n=128   FIX   ok       t=74.76 wall=1.09 matches=199 forks=None applies=None 
+ctrl-assoc         n=256   FIX   ok       t=220.85 wall=1.2 matches=327 forks=None applies=None 
+div-branch         n=32    FIX   err      t=3638.8 wall=4.76 matches=6733 forks=None applies=None div-branch-32.hylo:1.1-69:1: error: implicit resolution is too complex: more than 100000 candidate d
+div-branch-eq      n=32    FIX   err      t=3218.26 wall=4.53 matches=6799 forks=None applies=None div-branch-eq-32.hylo:68.30-34: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void](
+div-trunc          n=12    FIX   err      t=3615.32 wall=4.56 matches=29517 forks=None applies=None div-trunc-12.hylo:1.1-42:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-trunc          n=16    FIX   err      t=8118.36 wall=9.6 matches=55693 forks=None applies=None div-trunc-16.hylo:1.1-54:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-trunc          n=32    FIX   err      t=3509.75 wall=4.78 matches=8845 forks=None applies=None div-trunc-32.hylo:1.1-102:1: error: implicit resolution is too complex: more than 100000 candidate d
+cyc-clique         n=4     FIX   err      t=5313.3 wall=6.44 matches=179253 forks=None applies=None cyc-clique-4.hylo:1.1-20:1: error: implicit resolution is too complex: more than 100000 candidate de
+cyc-clique         n=5     FIX   err      t=7931.08 wall=9.28 matches=245701 forks=None applies=None cyc-clique-5.hylo:1.1-29:1: error: implicit resolution is too complex: more than 100000 candidate de
+cyc-clique         n=6     FIX   err      t=5714.65 wall=6.92 matches=156201 forks=None applies=None cyc-clique-6.hylo:1.1-40:1: error: implicit resolution is too complex: more than 100000 candidate de
+cyc-clique         n=8     FIX   err      t=6208.57 wall=6.96 matches=100801 forks=None applies=None cyc-clique-8.hylo:1.1-68:1: error: implicit resolution is too complex: more than 100000 candidate de
+cyc-clique         n=12    FIX   err      t=4498.51 wall=5.82 matches=53733 forks=None applies=None cyc-clique-12.hylo:1.1-148:1: error: implicit resolution is too complex: more than 100000 candidate 
+cyc-clique         n=16    FIX   err      t=18384.49 wall=19.39 matches=149421 forks=None applies=None cyc-clique-16.hylo:1.1-260:1: error: implicit resolution is too complex: more than 100000 candidate 
+ovl-calls          n=14    FIX   ok       t=35007.04 wall=35.93 matches=305682 forks=246632 applies=None 
+ovl-calls          n=16    FIX   timeout  t=None wall=120.01 matches=None forks=None applies=None 
+ovl-calls          n=20    FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=16
+ovr-args           n=12    FIX   ok       t=46073.35 wall=47.22 matches=682744 forks=797160 applies=None 
+open-wide-nobudget n=6     FIX   err      t=23678.52 wall=25.9 matches=642047 forks=None applies=None open-wide-nobudget-6.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6> (Q<U1>, (T ~
+open-wide-nobudget n=7     FIX   err      t=44099.23 wall=47.17 matches=1297200 forks=None applies=None open-wide-nobudget-7.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7> (Q<U1>, 
+open-wide-nobudget n=8     FIX   crash    t=None wall=56.48 matches=None forks=None applies=None 
+req-traits-deep    n=256   FIX   ok       t=60102.83 wall=61.12 matches=116097 forks=None applies=None 
+req-params-deep    n=256   FIX   ok       t=61808.15 wall=62.55 matches=116097 forks=None applies=None 

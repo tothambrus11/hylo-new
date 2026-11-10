@@ -1,0 +1,12 @@
+fun bad2() { needQ<Bag<Box<Box<S0>>>>() }
+fun bad1() { needQ<Bag<Box<S1>>>() }
+fun needQ<T where T is Q>() {}
+given <T where T is P, T.X is Q> => Bag<T> is Q {}
+given S0 is Q {}
+given <T> => Box<T> is P { type X = T }
+struct Bag<T> { public memberwise init }
+struct Box<T> { public memberwise init }
+struct S1 { public memberwise init }
+struct S0 { public memberwise init }
+trait Q {}
+trait P { type X }

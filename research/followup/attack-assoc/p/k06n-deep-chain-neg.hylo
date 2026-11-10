@@ -1,0 +1,7 @@
+// As k06, invalid: the fourth associated type is S0, not Box<S0> (1 error expected).
+trait P { type X }
+struct S0 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+fun deep<T where T is P, T.X is P, T.X.X is P, T.X.X.X is P>(t: T, x: T.X.X.X.X) {}
+fun f(b: Box<Box<Box<Box<S0>>>>, s: Box<S0>) { deep(b, s) }

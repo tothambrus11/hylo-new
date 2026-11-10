@@ -1,0 +1,25 @@
+// expected after the change: as today (accepted); solver.forks at most 84 with `twins` alone
+//   and 12 with `twins,cleanfirst` (model)
+// reason: Method chain (member and requirement of the same type) whose arguments are overloaded
+//   calls with the right candidate declared last. The exploration of the first candidate of
+//   each `step` contains failed goals, so rule T4 does not apply to it and only T1 fires
+//   (deeper, where best is already 0). The model of the existing solver predicts the 136 forks
+//   and 51 sets of the binary.
+// currently (base): accepted; solver.forks=136 solver.overloads=51
+// currently (FULL): accepted; solver.forks=136 solver.overloads=51
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+trait Stepper { fun step(x: A2) -> Self }
+struct C {
+  public memberwise init
+  public fun step(x: A2) -> C { C() }
+}
+given C is Stepper {}
+public fun main() {
+  let c = C()
+  let d = c.step(f(A2())).step(f(A2())).step(f(A2()))
+}

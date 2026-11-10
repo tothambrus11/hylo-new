@@ -31,6 +31,8 @@ Algorithms:
   baseline(system, pref, ctr)              Solver.swift as it is
   proposed(system, pref, ctr, ...)         the design of DESIGN.md:
       twins=True       reuse the result of a candidate with the same type (step 1)
+      spotless=True    with twins: rule T4, reuse under any bound the result of an exploration
+                       in which no goal failed and every solution was clean (added in review)
       cleanfirst=True  look for the first clean candidate before anything else (step 2)
       lookahead=True   cut a subtree in which a pending goal is certain to fail (step 3)
       bound=True       the counted variant of the look-ahead, in the exact search (step 4)
@@ -65,7 +67,7 @@ class Counters:
 
 
 class State:
-    __slots__ = ('stack', 'types', 'bindings', 'errors', 'diags', 'dropped')
+    __slots__ = ('stack', 'types', 'bindings', 'errors', 'diags', 'dropped', 'blemished')
 
     def __init__(self, stack, types, bindings, errors, diags):
         self.stack = stack        # list of goals, top of the stack is the end
@@ -74,6 +76,8 @@ class State:
         self.errors = errors      # current.errors
         self.diags = diags        # tuple of diagnostic keys, no duplicates
         self.dropped = False      # proposal only: see _overload2
+        self.blemished = False    # proposal only: a goal failed, or a fork below returned
+                                  # nothing or a solution with a diagnostic (rule T4)
 
     def fork(self):
         return State(list(self.stack), dict(self.types), dict(self.bindings), self.errors,
@@ -192,8 +196,9 @@ def certain_failures(s, ctr, count_quirks=False):
 
 
 def proposed(system, pref, ctr, cleanfirst=True, twins=True, lookahead=True, bound=False,
-             mutant=None):
-    cfg = dict(twins=twins, lookahead=lookahead and cleanfirst, bound=bound, mutant=mutant)
+             mutant=None, spotless=True):
+    cfg = dict(twins=twins, lookahead=lookahead and cleanfirst, bound=bound, mutant=mutant,
+               spotless=spotless and twins)
     s = State(list(reversed(system)), {}, {}, 0, ())
     return _run2(s, INF, False, cleanfirst, pref, ctr, cfg)
 
@@ -213,6 +218,8 @@ def _run2(s, best, optimistic, may_try, pref, ctr, cfg):
             # Exact mode: Solver.swift as it is (plus twins and bounds, which are exact).
             return _overload2(s, g, best, optimistic, pref, ctr, cfg)
         step(s, g)
+        if s.errors > 0:
+            s.blemished = True
         if s.errors > best:
             return None
     if s.errors > best:
@@ -233,14 +240,17 @@ def _overload2(s, g, best, optimistic, pref, ctr, cfg):
             return None
     ctr.overloads += 1
     viable = []
-    memo = {}  # type -> (bound or None if optimistic, pure, result)
+    memo = {}  # type -> (bound or None if optimistic, pure, result, spotless)
     for i in range(len(g[2])):
         ty = g[2][i][0]
         r = None
         reused = False
         if cfg['twins'] and ty in memo:
-            m_bound, m_pure, m_result = memo[ty]
-            if optimistic:
+            m_bound, m_pure, m_result, m_spotless = memo[ty]
+            if cfg['spotless'] and m_spotless:
+                # Rule T4: nothing below depended on `best`.
+                reused = True
+            elif optimistic:
                 # The twin was evaluated by the same procedure from the same state.
                 reused = True
             elif m_bound is None:
@@ -260,7 +270,11 @@ def _overload2(s, g, best, optimistic, pref, ctr, cfg):
             f = choose(s, g, i)
             r = _run2(f, best, optimistic, False, pref, ctr, cfg)
             s.dropped = s.dropped or f.dropped
-            memo[ty] = (None if optimistic else best, not f.dropped, r)
+            blemished = (f.blemished or r is None
+                         or (len(r[1]) > 0 and mutant != 'spotless-errors-only'))
+            s.blemished = s.blemished or blemished
+            memo[ty] = (None if optimistic else best, not f.dropped, r,
+                        s.errors == 0 and not blemished)
         if r is not None:
             score = len(r[1])
             if optimistic:
@@ -341,6 +355,7 @@ def plus_chain(n):
 
 # The steps of the implementation order (DESIGN.md section 7), cumulated.
 VARIANTS = [
+    ('twins-T1', dict(cleanfirst=False, twins=True, lookahead=False, spotless=False)),
     ('twins', dict(cleanfirst=False, twins=True, lookahead=False)),
     ('twins+cleanfirst', dict(twins=True, lookahead=False)),
     ('twins+cleanfirst+lookahead', dict(twins=True, lookahead=True)),

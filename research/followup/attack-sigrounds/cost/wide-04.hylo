@@ -1,0 +1,13 @@
+trait P { type E }
+trait Q {}
+struct A {}
+given A is P { type E = Int }
+given A.E is Q {}
+struct W0<C> {}
+given <C where C is P, C.E is Q> => W0<C> is Q {}
+struct W1<C> {}
+given <C where C is P, C.E is Q> => W1<C> is Q {}
+struct W2<C> {}
+given <C where C is P, C.E is Q> => W2<C> is Q {}
+struct W3<C> {}
+given <C where C is P, C.E is Q> => W3<C> is Q {}

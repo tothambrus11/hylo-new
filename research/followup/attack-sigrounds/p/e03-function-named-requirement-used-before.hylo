@@ -1,0 +1,5 @@
+// As e01 for a function with nothing in its body: the signature of `f` is not computed during
+// the rounds. Compare with k25 (the same function with a local given).
+trait P { type X }
+trait Q {}
+fun f<T where T.X is Q, let u: P<T>>() {}

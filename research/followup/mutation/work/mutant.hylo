@@ -1,7 +1,7 @@
-trait P { type X }
-struct A {}
-struct B { public memberwise init }
-given A is P { type X = B }
-fun f2<T where T is P, T.X == B>() {}
-fun h<U where U.X == B>() { f2<U>() }
-public fun main() { }
+//! stage:typing no-std
+trait P {}
+trait Q {}
+struct Box<X> {}
+given <T, U where U is Q, T == U> => Box<T> is P {}
+fun need<W where W is P>() {}
+fun f<A0, A1, A2, A3, A4 where A0 == A1, A1 == A2, A2 == A3, A3 == A4>() { need<Box<A0>>() }

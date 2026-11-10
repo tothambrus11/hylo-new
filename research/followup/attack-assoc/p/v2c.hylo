@@ -1,0 +1,6 @@
+// v-abs-2 without the second conformance. Valid.
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun f<T where T == Self>(x: X) { check<T.X>(x) }
+}

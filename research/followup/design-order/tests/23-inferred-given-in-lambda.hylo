@@ -1,0 +1,12 @@
+// Expected after the change: accepted, in every order of the top-level declarations (no change).
+// Reason: The type of `g` is inferred from its initializer, which refers to a lambda parameter whose type is only known while the lambda is being typed. Such a given cannot be computed before the checks: it must not be a node (section 3.1).
+// Currently: base accepts it in all 6 orders tried; FULL accepts it in all 6 orders tried.
+// Review (attack 1): with the design as first written (binary eq17, FULL+sigrounds) it is rejected in all 6 orders: "parameter declaration requires an ascription".
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  let f: [](let A) -> Void = fun[](a) {
+    given let g = a
+    need()
+  }
+}

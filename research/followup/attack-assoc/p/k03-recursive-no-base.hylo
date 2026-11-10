@@ -1,0 +1,7 @@
+// assocsubst: recursive conditional conformance without a base case; Box<S0> does not conform. Must be rejected.
+trait P { type X }
+struct S0 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T where T is P> => Box<T> is P { type X = Box<T.X> }
+fun need<T where T is P>() {}
+fun f() { need<Box<Box<S0>>>() }

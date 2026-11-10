@@ -1,0 +1,17 @@
+// Expected after the change: accepted, and the same verdict as 37b.
+// Reason: An attempt at attack 3 through a member instead of a local alias: a conformance of the body, with a where clause, shadows a top-level one for the lookup `A.E` made by its own where clause, and its member `E` needs a resolution in its scope. If the lookup typed that member before the conformance's signature, the hook of section 3.6 would close a cycle in one order only.
+// Currently: base accepts it; FULL rejects it ("circular given").
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds+selfcheck) 37 and 37b are both accepted, in 3 rounds, and `sigrounds.ownerFirst` stays 0: the associated type of a conformance that has a where clause is not reduced to its implementation, so the member is not typed by the lookup. The same holds with `assocsubst`.
+trait P { type E }
+trait Q {}
+trait R { type F }
+struct A {}
+struct B {}
+struct Foo<T> {}
+given A is P { type E = Int }
+given B is R { type F = Int }
+given Int is Q {}
+fun h() {
+  given Foo<A.E> is Q {}
+  given <where A.E is Q> => A is P { type E = B.F }
+}

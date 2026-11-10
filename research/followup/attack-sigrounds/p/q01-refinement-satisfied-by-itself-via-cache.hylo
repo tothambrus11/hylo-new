@@ -1,0 +1,11 @@
+// `B is Derived` needs `B is Base` (the refinement). The only derivation of `Base<B>` goes through
+// the blanket conformance and `B is Derived` itself; the rule "a conformance cannot use itself to
+// satisfy the traits it refines" rejects it (control q01c). Here the extension makes the rounds
+// evaluate `Assoc`, whose `Self.E` resolves `Base<B>` in the scope of the conformance while the
+// conformance is visible.
+trait Base { type E }
+trait Derived refines Base { type Assoc }
+struct B {}
+given <U where U is Derived> => U is Base { type E = Int }
+given B is Derived { type Assoc = Self.E }
+extension B.Assoc { fun g() {} }

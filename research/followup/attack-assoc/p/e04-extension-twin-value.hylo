@@ -1,0 +1,26 @@
+// e02 with concrete types: an S1 reaches a function that expects an S0.
+// In `mid`, V = A conforms through the local given (X = S0) and W = T through the requirement of
+// `mid`, which `h` discharges with its own local given (X = S1). w.one() calls the `get` of the
+// second (an S1) and v.two gives it to the `put` of the first (x: S0).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun f<V, W where V == W, V is P, W is P>(v: V, w: W) { v.two(w.one()) }
+fun mid<T where T == A, T is P>(w: T) {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  f<A, T>(A(), w)
+}
+fun h() {
+  given A is P { type X = S1
+    fun get() -> S1 { S1() }
+    fun put(x: S1) {} }
+  mid<A>(A())
+}

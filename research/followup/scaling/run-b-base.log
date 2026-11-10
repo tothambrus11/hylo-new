@@ -156,3 +156,11 @@ req-eq             n=64    base  skipped  t=None wall=None matches=None forks=No
 req-eq             n=128   base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
 req-eq             n=256   base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
 req-eq             n=512   base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-traits-deep    n=256   base  ok       t=64830.32 wall=66.19 matches=116097 forks=None applies=None 
+req-params-deep    n=256   base  ok       t=56086.29 wall=57.08 matches=116097 forks=None applies=None 
+req-eq-deep        n=8     base  crash    t=None wall=44.79 matches=None forks=None applies=None 
+req-eq-deep        n=16    base  crash    t=None wall=43.2 matches=None forks=None applies=None 
+req-eq-deep        n=32    base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=64    base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=128   base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=256   base  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)

@@ -1,0 +1,18 @@
+// assocsubst: methods of an extension of the conforming types, used at an instance of a generic conformance.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t }
+  fun put(x: T) {} }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun check<T>(x: T) {}
+fun ok(a: Box<S0>) { check<S0>(a.one())
+  a.two(S0())
+  a.two(a.one()) }

@@ -1,0 +1,7 @@
+// Ill-typed: `B is Derived` needs `B is Base`, which nothing provides (control q03c: rejected).
+// Here the body of `g` resolves `Base<B>` in the scope of the conformance before the refinement
+// is checked. Not specific to sigrounds: every configuration is expected to agree.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+given B is Derived { fun g() { self.f() } }

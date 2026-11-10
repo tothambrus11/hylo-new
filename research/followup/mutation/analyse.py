@@ -212,6 +212,22 @@ def main():
         P(f"| {r['id']} | {mut(r)} | {r['base']['diags']} | {cell(r, 'base')} | {cell(r, 'min5')} | {cell(r, 'min5abs')} | {cell(r, 'full')} | {fmt(gain(r))} | {mscell(r)} |")
     P("")
 
+    wrong = [r for r in rows if r["cls"] == "equivalent" and r["full"]["status"] == "ok" and r["full"]["diags"] > 0]
+    P(f"### Ill-typed mutants that base accepts (rejected by FULL): {len(wrong)}\n")
+    P("They are not in the tables of rejected mutants. Their cost relative to the unmutated source:\n")
+    P("| config | n | median ratio | max ratio | more than 2× | more than 10× |")
+    P("|---|---:|---:|---:|---:|---:|")
+    for c in CFGS:
+        xs = [r["rm_" + c] for r in wrong]
+        if xs: P(f"| {c} | {len(xs)} | {fmt(quantile(xs, .5))} | {fmt(max(xs))} | {sum(x > 2 for x in xs)} | {sum(x > 10 for x in xs)} |")
+    P("")
+    P("| mutant | mutation | base: matches (×orig) | MIN5 | MIN5+abs | FULL | ms base / MIN5 / MIN5+abs / FULL |")
+    P("|---|---|---:|---:|---:|---:|---|")
+    for r in sorted(wrong, key=lambda r: -r["rm_min5"]):
+        if r["rm_min5"] <= 10 and r["rm_base"] <= 10: continue
+        P(f"| {r['id']} | {mut(r)} | {cell(r, 'base')} | {cell(r, 'min5')} | {cell(r, 'min5abs')} | {cell(r, 'full')} | {mscell(r)} |")
+    P("")
+
     # 4. the criterion
     P("## 4. Effect of the abstract model on rejected mutants (MIN5 versus MIN5 + absmodel,absquotient)\n")
     ok = [r for r in rej if r["min5"]["status"] == "ok" and r["min5abs"]["status"] == "ok"]
@@ -379,7 +395,7 @@ def main():
     dp = os.path.join(tc.HERE, "depth.jsonl")
     if os.path.exists(dp):
         P("## 8. Dependence on the depth bound `HYLO_TC_MAXDEPTH`\n")
-        P("`summon.matches` (typing ms, indicative); `to` = timeout at 120 s, `oom` = aborted at the 2.5 GB memory cap.\n")
+        P("`summon.matches` (typing ms, indicative); `dN` = N diagnostics; `oom` = memory exhausted (cap 1 GB); timeout 60 s.\n")
         d = collections.defaultdict(dict)
         for ln in open(dp):
             x = json.loads(ln); d[(x["id"], x["what"])][(x["config"], x["depth"])] = x

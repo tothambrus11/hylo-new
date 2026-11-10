@@ -1,0 +1,48 @@
+{
+ "file": "research/report/test-programs/declaration-order/names-verify-names-1-v6_summon_swapped.hylo",
+ "rel": "r1",
+ "vid": "perm:0,2,1,4,3,5,6",
+ "kind": "permute",
+ "desc": "top-level order 0 2 1 4 3 5 6",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+   "error: type 'Inner' has no static member 'Foo'",
+   "error: type 'Int' has no static member 'Inner'"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: type 'Inner' has no static member 'Foo'"
+   ],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+    "error: type 'Inner' has no static member 'Foo'"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+    "error: type 'Inner' has no static member 'Foo'"
+   ],
+   "b_errors": []
+  }
+ }
+}

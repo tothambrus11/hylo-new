@@ -2,13 +2,14 @@
 
 usage: tcrun.py BINID CONFIG[;CONFIG...] FILE... [--counters prefix,prefix] [--timeout S]
 A configuration is base, FIX, FULL, MIN5 or NEW, optionally followed by +flag+flag.
-NEW is FULL with the cycle rules replaced by sigrounds, plus the later fixes."""
+NEW is FULL plus the mechanisms of the follow-up; NEWX adds the experiments that accept more programs."""
 import os, re, subprocess, sys
 RES = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIX = "occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget"
 PERF = "symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo"
 CONFIGS = {"base": "", "FIX": FIX, "FULL": FIX + "," + PERF, "MIN5": "index,memberskip,typevec,symindex,traitindex",
-           "NEW": FIX + "," + PERF + ",sigrounds,assocsubst,eqindex,eqeager,premsubst,headsubst,abstractstrict"}
+           "NEW": FIX + "," + PERF + ",sigrounds,assocsubst,eqindex,eqeager,premsubst,headsubst,abstractstrict,twins,cleanfirst,lookahead"}
+CONFIGS["NEWX"] = CONFIGS["NEW"] + ",eqfilter,eqouter,eqclass"
 def flags(config):
     parts = config.split("+")
     return ",".join(x for x in [CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)

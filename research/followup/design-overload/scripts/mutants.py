@@ -11,6 +11,9 @@ must find systems on which the mutant differs from the baseline; the smallest on
   twins-no-purity  a result computed by the clean-first pass is reused under best == 0 although
                    a solution was dropped while computing it
   twins-any-bound  in the exact fallback, a result is reused although `best` changed since
+  spotless-errors-only  rule T4 (added in review) reuses a result under another bound when no
+                   goal failed during its exploration, without requiring that every solution
+                   found was clean
   bound0           not a variant of the design but the obvious shortcut: run the existing search
                    with best == 0 from the start and keep its result if it is clean; otherwise
                    run the existing search
@@ -24,7 +27,7 @@ import sys
 import model
 
 MUTANTS = ['no-erase', 'trust-nonclean', 'count-quirks', 'cut-any-bound', 'twins-no-purity',
-           'twins-any-bound', 'bound0']
+           'twins-any-bound', 'spotless-errors-only', 'bound0']
 
 
 def bound0(system, pref):
@@ -45,7 +48,10 @@ def differences(mutant, n, seed):
         if mutant == 'bound0':
             p = bound0(system, pref)
         else:
-            p = model.proposed(system, pref, model.Counters(), mutant=mutant)
+            # The mutants of rule T4 are run with `twins` alone, where the rule matters most.
+            alone = mutant.startswith('spotless')
+            p = model.proposed(system, pref, model.Counters(), mutant=mutant,
+                               cleanfirst=not alone, lookahead=not alone)
         if p != b:
             found += 1
             if example is None or len(repr(system)) < len(example['system']):

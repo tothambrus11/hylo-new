@@ -1,0 +1,6 @@
+// Ill-typed: the initializer of the given has type `B`, not `A`. Must be rejected.
+struct A { public memberwise init }
+struct B { public memberwise init }
+given let a: A = B()
+fun need<where let u: A>() {}
+public fun main() { need() }

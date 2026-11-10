@@ -1,0 +1,14 @@
+trait T0 {}
+trait T1 refines T0 {}
+struct X {}
+struct Y {}
+struct Z {}
+given X is T0 {}
+given Y is T0 {}
+given X is T1 {}
+given Y is T1 {}
+struct Opt<T> {}
+given <T is T0> => Opt<T> is T0 {}
+given <T is T1> => Opt<T> is T1 {}
+fun need<T is T0>() {}
+public fun main() { need<Opt<Opt<Opt<Opt<Z>>>>>() }

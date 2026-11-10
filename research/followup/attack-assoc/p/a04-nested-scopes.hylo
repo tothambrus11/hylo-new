@@ -1,0 +1,30 @@
+// assocsubst alone (no headsubst needed): Box<A>.X is (A::q).Y in every scope, whatever witness
+// A has there. `outer` gives A is Q with Y = S0, `inner` with Y = S1; the S0 made by `get` in
+// `outer` is passed to `put` in `inner`, which gives it to `eat(y: S1)`.
+trait Q { type Y
+  fun make() -> Y
+  fun eat(y: Y) }
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T where T is Q> => Box<T> is P { type X = T.Y
+  fun get() -> T.Y { self.t.make() }
+  fun put(x: T.Y) { self.t.eat(x) } }
+type BA = Box<A>
+fun outer() {
+  given A is Q { type Y = S0
+    fun make() -> S0 { S0() }
+    fun eat(y: S0) {} }
+  fun inner(v: BA.X) {
+    given A is Q { type Y = S1
+      fun make() -> S1 { S1() }
+      fun eat(y: S1) {} }
+    Box<A>(t: A()).put(v)
+  }
+  inner(Box<A>(t: A()).get())
+}

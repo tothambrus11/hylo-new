@@ -1,0 +1,26 @@
+trait T0 {}
+trait T1 refines T0 {}
+trait T2 refines T1 {}
+trait T3 refines T2 {}
+trait T4 refines T3 {}
+struct X {}
+struct Y {}
+struct Z {}
+given X is T0 {}
+given Y is T0 {}
+given X is T1 {}
+given Y is T1 {}
+given X is T2 {}
+given Y is T2 {}
+given X is T3 {}
+given Y is T3 {}
+given X is T4 {}
+given Y is T4 {}
+struct Cons<T, U> {}
+given <T is T0, U is T0> => Cons<T, U> is T0 {}
+given <T is T1, U is T1> => Cons<T, U> is T1 {}
+given <T is T2, U is T2> => Cons<T, U> is T2 {}
+given <T is T3, U is T3> => Cons<T, U> is T3 {}
+given <T is T4, U is T4> => Cons<T, U> is T4 {}
+fun need<T is T0>() {}
+public fun main() { need<Cons<X, Cons<X, Cons<X, Cons<X, Y>>>>>() }

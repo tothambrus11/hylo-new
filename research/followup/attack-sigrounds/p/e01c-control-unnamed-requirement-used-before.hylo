@@ -1,0 +1,5 @@
+// Control of e01: the same extension with an unnamed second requirement.
+trait P { type X }
+trait Q {}
+struct Box<T> {}
+extension <T where T.X is Q, T is P> Box<T> { fun g() {} }

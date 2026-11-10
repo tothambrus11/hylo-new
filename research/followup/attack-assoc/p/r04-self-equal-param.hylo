@@ -1,0 +1,6 @@
+// abstractstrict: T == Self without a second conformance: T.X is selected through the witness
+// of the trait, so it is Self.X. Valid.
+fun check<T>(x: T) {}
+trait P { type X
+  fun m<T where T == Self>(x: T.X) { check<X>(x) }
+  fun n<T where T == Self>(x: X) { check<T.X>(x) } }

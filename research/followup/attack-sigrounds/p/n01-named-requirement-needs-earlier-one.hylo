@@ -1,0 +1,9 @@
+// A named requirement whose type needs the requirement before it. The driver computes `u` on its
+// own, which enters the signature of `f`, which types `u` again.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = Int }
+given wq: Int is Q {}
+fun f<T where T is P, let u: Q<T.X>>() {}
+public fun main() { f<A>() }

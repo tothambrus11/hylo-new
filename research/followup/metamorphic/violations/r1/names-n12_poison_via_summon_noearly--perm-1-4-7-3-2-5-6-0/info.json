@@ -1,0 +1,48 @@
+{
+ "file": "research/report/test-programs/declaration-order/names-n12_poison_via_summon_noearly.hylo",
+ "rel": "r1",
+ "vid": "perm:1,4,7,3,2,5,6,0",
+ "kind": "permute",
+ "desc": "top-level order 1 4 7 3 2 5 6 0",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+   "error: type 'Inner' has no static member 'Foo'",
+   "error: type 'Int' has no static member 'Inner'"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "accept",
+   "a_errors": [],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+    "error: type 'Inner' has no static member 'Foo'",
+    "error: type 'Int' has no static member 'Inner'"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect",
+    "error: type 'Inner' has no static member 'Foo'",
+    "error: type 'Int' has no static member 'Inner'"
+   ],
+   "b_errors": []
+  }
+ }
+}

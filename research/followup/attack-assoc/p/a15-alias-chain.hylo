@@ -1,0 +1,17 @@
+// assocsubst: alias chain inside the conformance (type X = Z, type Z = W, type W = T) and a global alias.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  type X = Z
+  type Z = W
+  type W = T
+  fun get() -> T { self.t }
+  fun put(x: T) {} }
+fun check<T>(x: T) {}
+fun ok(a: Box<S0>) { check<S0>(a.get()) }
+fun bad(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

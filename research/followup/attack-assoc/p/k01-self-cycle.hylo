@@ -1,0 +1,8 @@
+// assocsubst: the associated type is defined by itself (type X = Self.X). Must be rejected without crash.
+trait P { type X }
+struct S0 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = Self.X }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+fun f(x: B0.X) { check<S0>(x) }

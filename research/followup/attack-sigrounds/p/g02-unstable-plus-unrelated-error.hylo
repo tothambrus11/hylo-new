@@ -1,0 +1,6 @@
+// No stable table (29) and an unrelated error in a function body: each reported once.
+struct A {}
+extension A { type Me = A }
+extension A.Me { type Me = Int }
+fun need(x: Int) {}
+fun f(x: Bool) { need(x) }

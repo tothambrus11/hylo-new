@@ -1,0 +1,8 @@
+trait P {}
+struct A {
+  struct Inner {}
+  fun m() {}
+}
+given A.Inner.Foo is P {}
+extension A.Inner { type Foo = Int }
+extension <T where T is P> T { type Inner = Bool }

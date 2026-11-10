@@ -1,0 +1,13 @@
+// `T.X` under `T is Q` needs the given that the refinement desugars to.
+trait P { type X }
+trait Q refines P {}
+trait R {}
+struct A {}
+struct Box<T> {}
+given A is P { type X = Int }
+given A is Q {}
+extension <T where T is Q> Box<T> { type E = T.X }
+type BA = Box<A>
+given BA.E is R {}
+fun need<T where T is R>(x: T) {}
+fun use(x: Int) { need(x) }

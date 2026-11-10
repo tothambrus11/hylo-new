@@ -9,5 +9,7 @@ case "$1" in
   *) F="$1";;
 esac
 shift
-HYLO_TC_EXPERIMENTS="$F" timeout 60 "$B" "$@"
+# One tc-bench process at a time: the lock is shared with scripts/tcb.sh.
+L="${TCB_LOCK:-$(dirname "$0")/results/.tcb.lock}"
+HYLO_TC_EXPERIMENTS="$F" flock "$L" timeout 60 "$B" "$@"
 echo "exit: $?"

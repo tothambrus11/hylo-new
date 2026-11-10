@@ -1,0 +1,12 @@
+// assocsubst: a parameter of the conformance that does not occur in its head defines X.
+// Nothing determines U, so Box<S0>.X must not be equal to S1 (nor to S0).
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T, U> => Box<T> is P { type X = U }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+fun f(x: B0.X) { check<S1>(x) }
+fun g(x: S1) { check<B0.X>(x) }
+fun h(x: B0.X) { check<S0>(x) }

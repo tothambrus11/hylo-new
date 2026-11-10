@@ -1,0 +1,67 @@
+struct A {}
+struct S0 {}
+struct S1 {}
+struct S2 {}
+struct S3 {}
+struct S4 {}
+struct S5 {}
+struct S6 {}
+struct S7 {}
+struct S8 {}
+struct S9 {}
+struct S10 {}
+struct S11 {}
+struct S12 {}
+struct S13 {}
+struct S14 {}
+struct S15 {}
+struct S16 {}
+struct S17 {}
+struct S18 {}
+struct S19 {}
+struct S20 {}
+struct S21 {}
+struct S22 {}
+struct S23 {}
+struct S24 {}
+struct S25 {}
+struct S26 {}
+struct S27 {}
+struct S28 {}
+struct S29 {}
+struct S30 {}
+struct S31 {}
+struct S32 {}
+extension A { type M0 = S0 }
+extension A.M0 { type M1 = S1 }
+extension S0.M1 { type M2 = S2 }
+extension S1.M2 { type M3 = S3 }
+extension S2.M3 { type M4 = S4 }
+extension S3.M4 { type M5 = S5 }
+extension S4.M5 { type M6 = S6 }
+extension S5.M6 { type M7 = S7 }
+extension S6.M7 { type M8 = S8 }
+extension S7.M8 { type M9 = S9 }
+extension S8.M9 { type M10 = S10 }
+extension S9.M10 { type M11 = S11 }
+extension S10.M11 { type M12 = S12 }
+extension S11.M12 { type M13 = S13 }
+extension S12.M13 { type M14 = S14 }
+extension S13.M14 { type M15 = S15 }
+extension S14.M15 { type M16 = S16 }
+extension S15.M16 { type M17 = S17 }
+extension S16.M17 { type M18 = S18 }
+extension S17.M18 { type M19 = S19 }
+extension S18.M19 { type M20 = S20 }
+extension S19.M20 { type M21 = S21 }
+extension S20.M21 { type M22 = S22 }
+extension S21.M22 { type M23 = S23 }
+extension S22.M23 { type M24 = S24 }
+extension S23.M24 { type M25 = S25 }
+extension S24.M25 { type M26 = S26 }
+extension S25.M26 { type M27 = S27 }
+extension S26.M27 { type M28 = S28 }
+extension S27.M28 { type M29 = S29 }
+extension S28.M29 { type M30 = S30 }
+extension S29.M30 { type M31 = S31 }
+fun f(x: S30.M31) {}

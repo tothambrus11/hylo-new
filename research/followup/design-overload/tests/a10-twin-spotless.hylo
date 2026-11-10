@@ -1,0 +1,21 @@
+// expected after the change: as today (accepted, and the same declaration bound to `m`: compare
+//   the dump of step 0); solver.forks=2 and solver.twinsReused=1 with `twins` alone
+// reason: As a09 with the argument that the two candidates of the same type accept. The member
+//   is explored under best = worst without any failure, so its result holds under any bound
+//   (rule T4); the requirement reuses it although best is now 0. Checks that the rebinding
+//   keeps the choice between member and requirement.
+// currently (base): accepted; solver.forks=3 solver.overloads=1
+// currently (FULL): accepted; solver.forks=3 solver.overloads=1
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+trait P { fun m(x: A0) -> Int }
+struct S {
+  public memberwise init
+  public fun m(x: A0) -> Int { 0 }
+}
+extension S { public fun m(x: A1) -> Int { 1 } }
+given S is P {}
+public fun main() {
+  let s = S()
+  let r = s.m(A0())
+}

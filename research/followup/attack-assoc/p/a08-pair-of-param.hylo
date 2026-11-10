@@ -1,0 +1,12 @@
+// assocsubst: the associated type is a type application of the parameter (type X = Pair<T, T>).
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <T> => Box<T> is P { type X = Pair<T, Box<T>> }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+fun ok(x: B0.X) { check<Pair<S0, Box<S0>>>(x) }
+fun bad1(x: B0.X) { check<Pair<S0, Box<S1>>>(x) }
+fun bad2(x: B0.X) { check<Pair<S1, Box<S0>>>(x) }

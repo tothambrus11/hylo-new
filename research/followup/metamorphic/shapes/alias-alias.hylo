@@ -1,0 +1,4 @@
+struct A { type Me = Int }
+type X = A.Me
+type Y = X
+fun f(x: Y) {}

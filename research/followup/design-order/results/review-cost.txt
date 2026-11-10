@@ -1,0 +1,10 @@
+member(10)  FULL            diagnostics=0 sigrounds.nodes=0 sigrounds.rounds=0 sigrounds.restores=0 summon.calls=10 summon.matches=865
+member(10)  FULL,sigrounds  diagnostics=0 sigrounds.nodes=21 sigrounds.rounds=2 sigrounds.restores=1 summon.calls=20 summon.matches=1630
+member(40)  FULL            diagnostics=0 sigrounds.nodes=0 sigrounds.rounds=0 sigrounds.restores=0 summon.calls=40 summon.matches=5260
+member(40)  FULL,sigrounds  diagnostics=0 sigrounds.nodes=81 sigrounds.rounds=2 sigrounds.restores=1 summon.calls=80 summon.matches=8920
+chain(4)    FULL            diagnostics=10 sigrounds.nodes=0 sigrounds.rounds=0 sigrounds.restores=0 summon.calls=8 summon.matches=297
+chain(4)    FULL,sigrounds  diagnostics=0 sigrounds.nodes=5 sigrounds.rounds=6 sigrounds.restores=5 summon.calls=48 summon.matches=1780
+chain(8)    FULL            diagnostics=18 sigrounds.nodes=0 sigrounds.rounds=0 sigrounds.restores=0 summon.calls=12 summon.matches=464
+chain(8)    FULL,sigrounds  diagnostics=0 sigrounds.nodes=9 sigrounds.rounds=10 sigrounds.restores=9 summon.calls=144 summon.matches=5616
+chain(16)   FULL            diagnostics=34 sigrounds.nodes=0 sigrounds.rounds=0 sigrounds.restores=0 summon.calls=20 summon.matches=834
+chain(16)   FULL,sigrounds  diagnostics=0 sigrounds.nodes=17 sigrounds.rounds=18 sigrounds.restores=17 summon.calls=480 summon.matches=20608

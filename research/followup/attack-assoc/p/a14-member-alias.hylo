@@ -1,0 +1,15 @@
+// assocsubst: the definition goes through a member alias of the generic struct (type X = Self.Elem).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public type Elem = T }
+given <T> => Box<T> is P {
+  type X = Self.Elem
+  fun get() -> X { self.get() }
+  fun put(x: X) {} }
+fun check<T>(x: T) {}
+fun bad(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

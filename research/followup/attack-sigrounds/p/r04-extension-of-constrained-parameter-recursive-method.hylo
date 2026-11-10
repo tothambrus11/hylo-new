@@ -1,0 +1,12 @@
+// Tests/CompilerTests/positive/resolution-in-extension.hylo with a declaration that forces more
+// than one round.
+trait P {}
+trait P2 { type X }
+trait Q {}
+struct A {}
+given A is P {}
+given A is P2 { type X = Int }
+given A.X is Q {}
+extension <T is P> T {
+  fun f() { self.f() }
+}

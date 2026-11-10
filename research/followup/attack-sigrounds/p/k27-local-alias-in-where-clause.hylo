@@ -1,0 +1,12 @@
+// Expected after the change: accepted, and the same verdict as 27b.
+// Reason: The where clause of `f` uses the local alias `LA`, which needs the first requirement of `f`. The signature of `f` must be computed before anything declared inside `f` (section 3.6); `LA` is then typed while the where clause is, as in the existing checker when `f` has no local given.
+// Currently: base rejects it; FULL rejects it ("definition of 'LA' refers to itself": the resolution inside `LA` forces the local given that mentions `LA`).
+// Review (attack 3): with the design as first written (binary eq17, FULL+sigrounds) it is accepted but 27b is rejected, and selfcheck reports "the stable round reports other diagnostics in reverse order" for both.
+trait P { type X }
+trait Q {}
+struct Foo<T> {}
+fun f<T where T is P, LA is Q>() {
+  type LA = T.X
+  given Foo<T.X> is Q {}
+  given Foo<LA> is P { type X = Int }
+}

@@ -1,0 +1,6 @@
+// An extension of every type declares `M`; a second extension extends `A.M`.
+struct A {}
+extension <T> T { type M = Bool }
+extension A.M { type N = Int }
+fun need(x: Int) {}
+fun f(x: Bool.N) { need(x) }

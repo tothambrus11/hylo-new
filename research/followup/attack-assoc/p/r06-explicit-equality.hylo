@@ -1,0 +1,7 @@
+// abstractstrict: a requirement of the trait with its own parameter and where clause that states
+// T.X == X explicitly. The equality is a given: no two witnesses are assumed equal. Valid.
+fun check<T>(x: T) {}
+trait P { type X
+  fun get() -> X
+  fun zip<T where T is P, T.X == X>(t: T) -> X { t.get() }
+  fun zap<T where T is P, X == T.X>(t: T, x: X) { check<T.X>(x) } }

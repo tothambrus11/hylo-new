@@ -1,0 +1,9 @@
+// The subject of a given contains a placeholder. A second given makes the program need more than
+// one round.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> {}
+given A is P { type X = Int }
+given A.X is Q {}
+given Box<_> is Q {}

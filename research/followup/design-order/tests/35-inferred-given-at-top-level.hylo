@@ -1,0 +1,12 @@
+// Expected after the change: rejected, in every order of the top-level declarations: the type of the given `w` must be written (section 3.1). This is a deliberate choice of the corrected design; see question 8 of section 7, whose alternative accepts this program in every order.
+// Reason: `w` has no ascription, so its type is only known by typing its initializer, which is not done while signatures are computed. The resolution of `P<A>` made for `Y` can see `w`. Ignoring `w` silently would make a signature and a function body resolve the same goal differently. Apart from `w`, this is Program 1 (an alias used by a given).
+// Currently: base accepts it in 16 of 24 orders; FULL accepts it in 16 of 24 orders (the order dependence of Program 1).
+// Review: with the design as first written (binary eq17, FULL+sigrounds+selfcheck) it is accepted in all 24 orders: `w` is a node there and its initializer is typed with the signatures, which attack 3 (tests/28) exploits.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Foo<T> {}
+given A is P { type X = Int }
+given let w = 1
+type Y = A.X
+given Foo<Y> is Q {}

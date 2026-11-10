@@ -29,13 +29,9 @@
    counters: names.appliesCalls=17 solver.goalSteps=4 solver.systems=2 summon.layers=25 summon.matchOK=9 summon.matches=646 summon.subgoals=9
 == p3-given-first.hylo FULL: accepted
    counters: index.fallback=2 index.unavailable=136 names.appliesCalls=3 solver.goalSteps=4 solver.systems=2 summon.layers=4 summon.matchOK=2 summon.matches=142 summon.subgoals=2
-== p4-chain.hylo base: rejected (3 errors)
-   counters: names.appliesCalls=8 solver.goalSteps=13 solver.systems=4 summon.calls=4 summon.layers=12 summon.matchOK=5 summon.matches=299 summon.subgoals=4
+== p4-chain.hylo base: rejected (1 errors)
+   counters: names.appliesCalls=12 solver.goalSteps=12 solver.systems=5 summon.calls=6 summon.layers=21 summon.matchOK=9 summon.matches=666 summon.subgoals=9
    7.6-7: error: definition of 'X' refers to itself
-   9.10-18: error: expression does not denote a type
-   9.17-18: error: type 'Foo<#!>' has no static member 'F'
-== p4-chain.hylo FULL: rejected (3 errors)
-   counters: coesrc.skipped=1224 index.fallback=2 index.unavailable=89 solver.goalSteps=13 solver.systems=4 summon.calls=4 summon.layers=2 summon.matchOK=2 summon.matches=145 summon.subgoals=2
+== p4-chain.hylo FULL: rejected (1 errors)
+   counters: coesrc.skipped=1820 index.fallback=3 index.unavailable=98 solver.goalSteps=12 solver.systems=5 summon.calls=6 summon.layers=3 summon.matchOK=3 summon.matches=218 summon.subgoals=3
    7.6-7: error: definition of 'X' refers to itself
-   9.10-18: error: expression does not denote a type
-   9.17-18: error: type 'Foo<#!>' has no static member 'F'

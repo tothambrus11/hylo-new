@@ -1,0 +1,6 @@
+// abstractstrict: a given nested in a trait about its associated type (type X ; given X is Q).
+// In f, Q<T.X> follows from the requirement T is P. Valid; no two witnesses are involved.
+trait Q {}
+trait P { type X ; given X is Q }
+fun needQ<T where T is Q>() {}
+fun f<T where T is P>(t: T) { needQ<T.X>() }

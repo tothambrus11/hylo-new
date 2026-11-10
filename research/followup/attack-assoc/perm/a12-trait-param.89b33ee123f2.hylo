@@ -1,0 +1,12 @@
+struct S1 { public memberwise init }
+struct S2 { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <A, K> => Box<A> is P<K> { type X = Pair<A, K> }
+fun check<T>(x: T) {}
+fun pick<T, K where T is P<K>>(t: T, k: K, x: T.X) {}
+fun ok(b: Box<S0>, k: S1, x: Pair<S0, S1>) { pick(b, k, x) }
+fun bad1(b: Box<S0>, k: S1, x: Pair<S1, S0>) { pick(b, k, x) }
+fun bad2(b: Box<S0>, k: S1, x: Pair<S0, S2>) { pick(b, k, x) }
+trait P<K> { type X }
+struct S0 { public memberwise init }

@@ -189,3 +189,5 @@
 {"file": "../Tests/CompilerTests/negative/unused-value-1.hylo", "base": true, "diff": {}}
 {"file": "../Tests/CompilerTests/negative/unused-value-2.hylo", "base": true, "diff": {}}
 {"file": "../Tests/CompilerTests/negative/use-before-declaration.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/negative/use-before-init.hylo", "base": true, "diff": {}}
+{"file": "workloads/breadth40.hylo", "base": true, "diff": {}}

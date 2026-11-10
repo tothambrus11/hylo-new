@@ -1,14 +1,19 @@
 # A result-preserving speed-up of overload resolution
 
-For the engineer who will implement it in `/home/user/hylo-impl/Sources/FrontEnd/Typer/Solver.swift`. Nothing here has been compiled: building was forbidden for this task. The behaviour of the existing solver was measured on the binary `exp/bin/eq9-723cc0e6b0f8/tc-bench`. The new algorithm has only been run in an executable model of the search (`scripts/model.py`), which reproduces the binary's fork counts and diagnostic counts on 18 programs. The Swift in section 4 is unbuilt.
+For the engineer who works on `/home/user/hylo-impl/Sources/FrontEnd/Typer/Solver.swift`. The behaviour of the existing solver was measured on the binary `exp/bin/eq9-723cc0e6b0f8/tc-bench`. The design was written without building anything, from an executable model of the search (`scripts/model.py`), which reproduces the binary's fork counts and diagnostic counts on 19 programs.
+
+**Status after review (section 9).** While the review was under way, the design was implemented as first written (hylo-impl commit `9dc04d7`, binary `exp/bin/eq25-c7cbd846a05c`). The review ran that binary. Two things follow, and the document has been revised accordingly:
+
+- `twins` returns the existing result on every program tried, and its fork counts are the model's.
+- `cleanfirst` and `lookahead` are **not** result-preserving. The search they perform returns the existing solution, but they skip or reorder queries to the Typer, and the verdict of a program can depend on those queries. Eight programs in `tests/` (`a01` to `a08`) show it; four of them change verdict on the binary, in base and in FULL, in both directions (accepted to rejected and rejected to accepted). With `sigrounds` these eight programs are stable. Sections 5.5 and 9 say what this means and what to do.
 
 Summary of the design: three changes, each behind its own flag.
 
-| Flag | What it does | Fixes | New code |
-|---|---|---|---:|
-| `twins` | Candidates of one overload set that have the same type share one exploration. | `a + b + c + …` on `Int` (2ⁿ today) | ~45 lines |
-| `cleanfirst` | Look for a solution without diagnostics first; run the existing search only if there is none. | calls whose wrong candidates fail at their own arguments (`ovl-4-8`) | ~45 lines |
-| `lookahead` | In the clean-first pass, abandon a branch as soon as a goal still on the stack is certain to fail. | candidates that differ only in their return type (`ovr-3-8`, `ovl-ret-9`) | ~70 lines |
+| Flag | What it does | Fixes | Result-preserving? | New code |
+|---|---|---|---|---:|
+| `twins` | Candidates of one overload set that have the same type share one exploration. | `a + b + c + …` on `Int` (2ⁿ today) | yes | ~60 lines |
+| `cleanfirst` | Look for a solution without diagnostics first; run the existing search only if there is none. | calls whose wrong candidates fail at their own arguments (`ovl-4-8`) | only if no query of a discarded fork changes the Typer's answers (5.5) | ~45 lines |
+| `lookahead` | In the clean-first pass, abandon a branch as soon as a goal still on the stack is certain to fail. | candidates that differ only in their return type (`ovr-3-8`, `ovl-ret-9`) | same condition, and it also asks `coerced` earlier | ~70 lines |
 
 ## 1. The problem
 

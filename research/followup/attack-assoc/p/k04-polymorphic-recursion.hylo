@@ -1,0 +1,9 @@
+// assocsubst: a conformance of Box<T> that requires Box<Box<T>> is P (no derivation). Must be rejected without crash.
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T where Box<Box<T>> is P> => Box<T> is P { type X = T
+  fun get() -> T { self.get() } }
+fun check<T>(x: T) {}
+fun f(b: Box<S0>) { check<S0>(b.get()) }

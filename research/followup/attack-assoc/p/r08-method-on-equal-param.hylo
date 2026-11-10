@@ -1,0 +1,6 @@
+// abstractstrict: a value of type T with T == Self (and no second conformance) uses the
+// methods of the trait through the witness of Self. Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X)
+  fun m<T where T == Self>(t: T) { t.put(self.get()) } }

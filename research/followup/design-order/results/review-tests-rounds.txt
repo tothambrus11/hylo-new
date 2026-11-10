@@ -1,0 +1,42 @@
+01-alias-used-by-given.hylo	accepted	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 
+02-alias-and-extension-of-alias.hylo	accepted	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 
+03-given-and-extension.hylo	accepted	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 
+04-extension-of-alias-declares-looked-up-name.hylo	accepted	sigrounds.nodes=1 sigrounds.restores=1 sigrounds.rounds=2 
+05-mutually-dependent-extensions.hylo	accepted	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 
+06-chain-of-aliases-and-givens.hylo	rejected(1)	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 
+07-contradiction.hylo	rejected(3)	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 sigrounds.unstable=1 
+08-extension-applies-to-its-own-lookup.hylo	rejected(3)	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 sigrounds.unstable=1 
+09-two-readings.hylo	rejected(2)	sigrounds.nodes=6 sigrounds.restores=3 sigrounds.rounds=4 sigrounds.unstable=1 
+09b-two-readings-swapped.hylo	rejected(2)	sigrounds.nodes=6 sigrounds.restores=3 sigrounds.rounds=4 sigrounds.unstable=1 
+10-alias-cycle.hylo	rejected(1)	
+11-requirement-order-in-where-clause.hylo	rejected(1)	
+12-requirement-order-in-where-clause-ok.hylo	accepted	
+13-given-whose-subject-needs-a-resolution.hylo	accepted	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 
+14-given-needs-itself.hylo	rejected(1)	sigrounds.nodes=1 sigrounds.rounds=1 
+15-local-given-uses-context-of-function.hylo	accepted	sigrounds.nodes=2 sigrounds.rounds=1 
+16-corpus-typealiases.hylo	accepted	sigrounds.nodes=2 sigrounds.rounds=1 
+17-corpus-self-where-clause.hylo	accepted	sigrounds.nodes=3 sigrounds.rounds=1 
+18-corpus-local-given.hylo	accepted	sigrounds.nodes=4 sigrounds.rounds=1 
+19-corpus-generic-extension.hylo	accepted	sigrounds.nodes=2 sigrounds.rounds=1 
+20-corpus-trait-refinement.hylo	rejected(2)	sigrounds.nodes=6 sigrounds.rounds=1 
+21-local-shadowing-given.hylo	accepted	sigrounds.nodes=2 sigrounds.rounds=1 
+22-ambiguous-member-through-alias.hylo	rejected(2)	sigrounds.nodes=2 sigrounds.rounds=1 
+06b-chain-through-alias.hylo	accepted	sigrounds.nodes=3 sigrounds.restores=3 sigrounds.rounds=4 
+23-inferred-given-in-lambda.hylo	rejected(2)	sigrounds.nodes=2 sigrounds.rounds=1 
+24-inferred-given-in-match.hylo	rejected(crash)	
+25-named-context-parameter-order.hylo	accepted	sigrounds.nodes=2 sigrounds.ownerFirst=3 sigrounds.restores=2 sigrounds.rounds=3 
+26-named-context-parameter.hylo	accepted	sigrounds.nodes=3 sigrounds.ownerFirst=3 sigrounds.restores=2 sigrounds.rounds=3 
+27-local-alias-in-where-clause.hylo	accepted	sigrounds.nodes=2 sigrounds.ownerFirst=2 sigrounds.restores=1 sigrounds.rounds=2 
+27b-local-alias-in-where-clause-swapped.hylo	rejected(1)	sigrounds.nodes=2 sigrounds.ownerFirst=2 sigrounds.restores=1 sigrounds.rounds=2 
+28-inferred-given-enters-function.hylo	accepted	sigrounds.nodes=4 sigrounds.restores=1 sigrounds.rounds=2 
+29-extension-sees-itself.hylo	rejected(2)	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 sigrounds.unstable=1 
+30-hard-cycle-two-entries.hylo	rejected(5)	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 sigrounds.unstable=1 
+31-member-of-itself-through-the-table.hylo	rejected(6)	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 sigrounds.unstable=1 
+32-conformance-in-lambda.hylo	accepted	sigrounds.nodes=2 sigrounds.restores=2 sigrounds.rounds=3 
+33-chain-of-five.hylo	accepted	sigrounds.nodes=5 sigrounds.restores=5 sigrounds.rounds=6 
+34-member-through-requirement.hylo	accepted	sigrounds.nodes=4 sigrounds.restores=1 sigrounds.rounds=2 
+35-inferred-given-at-top-level.hylo	accepted	sigrounds.nodes=3 sigrounds.restores=2 sigrounds.rounds=3 
+36-requirement-order-with-local-given.hylo	rejected(1)	sigrounds.nodes=1 sigrounds.ownerFirst=2 sigrounds.restores=1 sigrounds.rounds=2 
+37-member-of-conditional-given.hylo	accepted	sigrounds.nodes=5 sigrounds.restores=2 sigrounds.rounds=3 
+37b-member-of-conditional-given-swapped.hylo	accepted	sigrounds.nodes=5 sigrounds.restores=2 sigrounds.rounds=3 
+38-alias-cycle-entered-from-two-extensions.hylo	rejected(1)	sigrounds.nodes=2 sigrounds.rounds=1 

@@ -1,0 +1,6 @@
+// abstractstrict + premsubst: the trait body calls a function that requires T is P, T.X is Q at T = Self;
+// Q<Self.X> is given by the nested given. Valid.
+trait Q {}
+trait P { type X ; given X is Q
+  fun m() { needPQ<Self>() } }
+fun needPQ<T where T is P, T.X is Q>() {}

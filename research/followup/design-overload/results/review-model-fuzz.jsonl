@@ -1,0 +1,6 @@
+{"seed": 11, "summary": {"systems": 20000, "with_overloads": 16868, "clean": 9292, "nonclean": 10708, "fallbacks": 8082, "reused": 43538, "cuts": 5256, "mismatches": 0, "baseline_forks": 333240, "proposed_forks": 238324}}
+{"seed": 12, "summary": {"systems": 50000, "with_overloads": 42260, "clean": 23242, "nonclean": 26758, "fallbacks": 20331, "reused": 105392, "cuts": 13159, "mismatches": 0, "baseline_forks": 826435, "proposed_forks": 598933}}
+{"seed": 13, "summary": {"systems": 50000, "with_overloads": 42159, "clean": 23293, "nonclean": 26707, "fallbacks": 20329, "reused": 108832, "cuts": 13387, "mismatches": 0, "baseline_forks": 832930, "proposed_forks": 605572}}
+{"seed": 14, "summary": {"systems": 50000, "with_overloads": 42087, "clean": 23471, "nonclean": 26529, "fallbacks": 20111, "reused": 109006, "cuts": 13161, "mismatches": 0, "baseline_forks": 842229, "proposed_forks": 600328}}
+{"seed": 15, "summary": {"systems": 50000, "with_overloads": 42274, "clean": 23482, "nonclean": 26518, "fallbacks": 20127, "reused": 106623, "cuts": 13359, "mismatches": 0, "baseline_forks": 816096, "proposed_forks": 593798}}
+{"seed": 21, "summary": {"systems": 50000, "with_overloads": 42183, "clean": 23324, "nonclean": 26676, "fallbacks": 20209, "reused": 105895, "cuts": 13187, "mismatches": 0, "baseline_forks": 818916, "proposed_forks": 596720}}

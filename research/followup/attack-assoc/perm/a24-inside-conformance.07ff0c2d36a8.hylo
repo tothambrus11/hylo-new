@@ -1,0 +1,12 @@
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t }
+  fun put(x: T) {
+    let b = Box<Box<T>>(t: self)
+    b.put(self)
+    let c: Box<T> = b.get()
+    let d: T = c.get() } }
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }

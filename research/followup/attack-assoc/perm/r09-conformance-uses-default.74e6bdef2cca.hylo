@@ -1,0 +1,11 @@
+trait P { type X
+  fun get() -> X
+  fun dup() -> X { self.get() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.dup() } }
+fun check<T>(x: T) {}
+fun ok(b: Box<S0>) { check<S0>(b.dup()) }

@@ -1,0 +1,12 @@
+// assocsubst: with get/put, does a value cross between two instances when X is an undetermined parameter?
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T, U> => Box<T> is P { type X = T
+  fun get() -> T { self.t }
+  fun put(x: T) {} }
+fun q0(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

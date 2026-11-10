@@ -1,0 +1,11 @@
+// A given in a method whose type is inferred from a stored property of `self`.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+struct S {
+  var x: A
+  public memberwise init
+  public fun g() {
+    given let w = self.x
+    need()
+  }
+}

@@ -1,0 +1,17 @@
+// assocsubst: the struct declared in the generic conformance holds a T. Through Box<S0>, its field
+// is an S0; here it is passed where an S1 is expected.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  struct Inner { public var t: T
+    public memberwise init }
+  type X = Inner
+  fun get() -> Inner { Inner(t: self.t) }
+  fun put(x: Inner) { let y: T = x.t } }
+fun check<T>(x: T) {}
+fun q1(a: Box<S0>) { check<S1>(a.get().t) }

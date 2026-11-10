@@ -1,0 +1,6 @@
+// Control of e02: unnamed second requirement.
+trait P { type X }
+trait Q {}
+trait R {}
+struct Box<T> {}
+given <T where T.X is Q, T is P> => Box<T> is R {}

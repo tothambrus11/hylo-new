@@ -1,0 +1,11 @@
+// As n01 for a conformance.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given wq: Int is Q {}
+given <T where T is P, let u: Q<T.X>> => Box<T> is R {}
+fun need<T where T is R>(x: T) {}
+public fun main() { need(Box<A>()) }

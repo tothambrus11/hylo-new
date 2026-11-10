@@ -1,0 +1,17 @@
+// assocsubst: type X = Self.Elem with implementations that read and write the stored T.
+// q0 gives the S0 stored in a to the put of b, which stores it as an S1.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public type Elem = T
+  public fun first() -> Elem { self.t }
+  public fun take(x: Elem) { let y: T = x } }
+given <T> => Box<T> is P {
+  type X = Self.Elem
+  fun get() -> X { self.first() }
+  fun put(x: X) { self.take(x) } }
+fun q0(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

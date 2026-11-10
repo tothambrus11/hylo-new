@@ -1,0 +1,14 @@
+// Control of c01: the called requirement m2 has its own parameter W, so nothing can be captured.
+// The first binding is valid, the second is invalid (1 error expected).
+trait P { type X
+  fun get() -> X
+  fun m2<W>(w: W) -> X { self.get() }
+  fun m<U>(u: U, b: Box<U>) -> X {
+    let r: U = b.m2<S0>(S0())
+    let s: S0 = b.m2<S0>(S0())
+    return self.get() } }
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }

@@ -1,0 +1,7 @@
+struct A {}
+struct S0 {}
+struct S1 {}
+struct S2 {}
+extension A { type M0 = S0 }
+extension A.M0 { type M1 = S1 }
+fun f(x: S0.M1) {}

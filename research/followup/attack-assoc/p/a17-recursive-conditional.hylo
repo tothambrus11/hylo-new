@@ -1,0 +1,12 @@
+// assocsubst: recursive conditional conformance, type X = Box<T.X>.
+// Box<S0>.X should be Box<S1> (S0.X = S1). ok is valid, bad is invalid.
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given S0 is P { type X = S1 }
+given <T where T is P> => Box<T> is P { type X = Box<T.X> }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+fun ok(x: B0.X) { check<Box<S1>>(x) }
+fun bad(x: B0.X) { check<Box<S0>>(x) }

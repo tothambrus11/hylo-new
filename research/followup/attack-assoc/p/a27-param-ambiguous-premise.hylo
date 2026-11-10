@@ -1,0 +1,19 @@
+// assocsubst: X is a parameter U determined by a premise that has two solutions
+// (S0 is Into<S1> and S0 is Into<S0>). What is Box<S0>.X?
+trait Into<U> { fun into() -> U }
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct S2 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given S0 is Into<S1> { fun into() -> S1 { S1() } }
+given S0 is Into<S0> { fun into() -> S0 { S0() } }
+given <T, U where T is Into<U>> => Box<T> is P { type X = U
+  fun get() -> U { self.t.into() } }
+fun q(a: Box<S0>) {
+  let y: S1 = a.get()
+  let z: S0 = a.get()
+  let w: S2 = a.get()
+}

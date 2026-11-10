@@ -1,0 +1,6 @@
+// As e01 for a conformance. Control e02c.
+trait P { type X }
+trait Q {}
+trait R {}
+struct Box<T> {}
+given <T where T.X is Q, let u: P<T>> => Box<T> is R {}

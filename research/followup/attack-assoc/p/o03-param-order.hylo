@@ -1,0 +1,12 @@
+// assocsubst: the parameters of the conformance are declared in the other order than they occur in the head. Valid.
+trait P { type X
+  type Z }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <U, T> => Pair<T, U> is P { type X = U
+  type Z = T }
+fun check<T>(x: T) {}
+type P01 = Pair<S0, S1>
+fun ok1(x: P01.X) { check<S1>(x) }
+fun ok2(x: P01.Z) { check<S0>(x) }

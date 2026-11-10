@@ -1,0 +1,7 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: The second extension extends `A.Me`, which is `A`; it then declares a second `A.Me`, which makes its own extendee ambiguous. No stable table. Shows question 3 of section 7: a declaration sees its own signature of the previous round.
+// Currently: base accepts it in both orders (the extension is hidden while its own extendee is computed); FULL rejects it in both orders ("circular extension").
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds) it is rejected in both orders ("no stable interpretation was found").
+struct A {}
+extension A { type Me = A }
+extension A.Me { type Me = Int }

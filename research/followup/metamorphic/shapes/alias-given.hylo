@@ -1,0 +1,7 @@
+trait P {}
+trait Q { type O }
+struct T {}
+struct U {}
+given U is Q { type O = T }
+type K = U.O
+given K is P {}

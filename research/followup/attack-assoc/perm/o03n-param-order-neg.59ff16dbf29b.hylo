@@ -1,0 +1,11 @@
+fun check<T>(x: T) {}
+type P01 = Pair<S0, S1>
+fun bad1(x: P01.X) { check<S0>(x) }
+fun bad2(x: P01.Z) { check<S1>(x) }
+trait P { type X
+  type Z }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <U, T> => Pair<T, U> is P { type X = U
+  type Z = T }

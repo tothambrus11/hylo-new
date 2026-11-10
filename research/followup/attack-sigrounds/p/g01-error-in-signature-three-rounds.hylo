@@ -1,0 +1,9 @@
+// Ill-typed: `Missing` is not declared. The program needs three rounds; the error must be
+// reported exactly once.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = Int }
+type K = A.X
+given K is Q {}
+given Missing is Q {}

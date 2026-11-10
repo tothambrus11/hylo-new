@@ -1,0 +1,15 @@
+// assocsubst: substitution capturing a bound parameter. In the body of the requirement m<U>,
+// b has type Box<U>, so Box<U>.X is this U. The type of b.m seen through the conformance is
+// <U'>(u: U', b: Box<U'>) -> U: its binder is the same declaration U. If the substitution of X
+// by U is not capture-avoiding, b.m<S0>(...) gets the result type S0 instead of U.
+// The binding below is invalid: the call returns a Box<U>.X, which is U, not S0.
+trait P { type X
+  fun get() -> X
+  fun m<U>(u: U, b: Box<U>) -> X {
+    let r: S0 = b.m<S0>(S0(), Box<S0>(t: S0()))
+    return self.get() } }
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }

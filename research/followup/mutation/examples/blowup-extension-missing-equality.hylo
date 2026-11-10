@@ -1,0 +1,11 @@
+//! stage:typing no-std
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Flag { public memberwise init }
+extension <T where T is Collection, T.Element == Flag> Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+fun g<T where T is Collection>(b: Box<T>) {
+  let f: Flag = b.first()
+}

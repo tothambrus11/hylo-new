@@ -1,0 +1,7 @@
+// A conformance declared in the body of a struct, used by a member of the struct.
+trait P { type X }
+struct A {}
+struct S {
+  given A is P { type X = Int }
+  fun g(x: A.X) {}
+}

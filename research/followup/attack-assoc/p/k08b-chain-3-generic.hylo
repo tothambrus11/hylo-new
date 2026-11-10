@@ -1,0 +1,4 @@
+// premsubst + headsubst: the chain of k08 at a generic caller with the same requirements. Valid.
+trait P { type X }
+fun deep<T where T is P, T.X is P, T.X.X is P>(t: T, x: T.X.X.X) {}
+fun f<U where U is P, U.X is P, U.X.X is P>(u: U, s: U.X.X.X) { deep(u, s) }
