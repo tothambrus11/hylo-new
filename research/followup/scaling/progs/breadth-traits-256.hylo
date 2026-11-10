@@ -1,0 +1,770 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+trait P17 {}
+trait P18 {}
+trait P19 {}
+trait P20 {}
+trait P21 {}
+trait P22 {}
+trait P23 {}
+trait P24 {}
+trait P25 {}
+trait P26 {}
+trait P27 {}
+trait P28 {}
+trait P29 {}
+trait P30 {}
+trait P31 {}
+trait P32 {}
+trait P33 {}
+trait P34 {}
+trait P35 {}
+trait P36 {}
+trait P37 {}
+trait P38 {}
+trait P39 {}
+trait P40 {}
+trait P41 {}
+trait P42 {}
+trait P43 {}
+trait P44 {}
+trait P45 {}
+trait P46 {}
+trait P47 {}
+trait P48 {}
+trait P49 {}
+trait P50 {}
+trait P51 {}
+trait P52 {}
+trait P53 {}
+trait P54 {}
+trait P55 {}
+trait P56 {}
+trait P57 {}
+trait P58 {}
+trait P59 {}
+trait P60 {}
+trait P61 {}
+trait P62 {}
+trait P63 {}
+trait P64 {}
+trait P65 {}
+trait P66 {}
+trait P67 {}
+trait P68 {}
+trait P69 {}
+trait P70 {}
+trait P71 {}
+trait P72 {}
+trait P73 {}
+trait P74 {}
+trait P75 {}
+trait P76 {}
+trait P77 {}
+trait P78 {}
+trait P79 {}
+trait P80 {}
+trait P81 {}
+trait P82 {}
+trait P83 {}
+trait P84 {}
+trait P85 {}
+trait P86 {}
+trait P87 {}
+trait P88 {}
+trait P89 {}
+trait P90 {}
+trait P91 {}
+trait P92 {}
+trait P93 {}
+trait P94 {}
+trait P95 {}
+trait P96 {}
+trait P97 {}
+trait P98 {}
+trait P99 {}
+trait P100 {}
+trait P101 {}
+trait P102 {}
+trait P103 {}
+trait P104 {}
+trait P105 {}
+trait P106 {}
+trait P107 {}
+trait P108 {}
+trait P109 {}
+trait P110 {}
+trait P111 {}
+trait P112 {}
+trait P113 {}
+trait P114 {}
+trait P115 {}
+trait P116 {}
+trait P117 {}
+trait P118 {}
+trait P119 {}
+trait P120 {}
+trait P121 {}
+trait P122 {}
+trait P123 {}
+trait P124 {}
+trait P125 {}
+trait P126 {}
+trait P127 {}
+trait P128 {}
+trait P129 {}
+trait P130 {}
+trait P131 {}
+trait P132 {}
+trait P133 {}
+trait P134 {}
+trait P135 {}
+trait P136 {}
+trait P137 {}
+trait P138 {}
+trait P139 {}
+trait P140 {}
+trait P141 {}
+trait P142 {}
+trait P143 {}
+trait P144 {}
+trait P145 {}
+trait P146 {}
+trait P147 {}
+trait P148 {}
+trait P149 {}
+trait P150 {}
+trait P151 {}
+trait P152 {}
+trait P153 {}
+trait P154 {}
+trait P155 {}
+trait P156 {}
+trait P157 {}
+trait P158 {}
+trait P159 {}
+trait P160 {}
+trait P161 {}
+trait P162 {}
+trait P163 {}
+trait P164 {}
+trait P165 {}
+trait P166 {}
+trait P167 {}
+trait P168 {}
+trait P169 {}
+trait P170 {}
+trait P171 {}
+trait P172 {}
+trait P173 {}
+trait P174 {}
+trait P175 {}
+trait P176 {}
+trait P177 {}
+trait P178 {}
+trait P179 {}
+trait P180 {}
+trait P181 {}
+trait P182 {}
+trait P183 {}
+trait P184 {}
+trait P185 {}
+trait P186 {}
+trait P187 {}
+trait P188 {}
+trait P189 {}
+trait P190 {}
+trait P191 {}
+trait P192 {}
+trait P193 {}
+trait P194 {}
+trait P195 {}
+trait P196 {}
+trait P197 {}
+trait P198 {}
+trait P199 {}
+trait P200 {}
+trait P201 {}
+trait P202 {}
+trait P203 {}
+trait P204 {}
+trait P205 {}
+trait P206 {}
+trait P207 {}
+trait P208 {}
+trait P209 {}
+trait P210 {}
+trait P211 {}
+trait P212 {}
+trait P213 {}
+trait P214 {}
+trait P215 {}
+trait P216 {}
+trait P217 {}
+trait P218 {}
+trait P219 {}
+trait P220 {}
+trait P221 {}
+trait P222 {}
+trait P223 {}
+trait P224 {}
+trait P225 {}
+trait P226 {}
+trait P227 {}
+trait P228 {}
+trait P229 {}
+trait P230 {}
+trait P231 {}
+trait P232 {}
+trait P233 {}
+trait P234 {}
+trait P235 {}
+trait P236 {}
+trait P237 {}
+trait P238 {}
+trait P239 {}
+trait P240 {}
+trait P241 {}
+trait P242 {}
+trait P243 {}
+trait P244 {}
+trait P245 {}
+trait P246 {}
+trait P247 {}
+trait P248 {}
+trait P249 {}
+trait P250 {}
+trait P251 {}
+trait P252 {}
+trait P253 {}
+trait P254 {}
+trait P255 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+struct A32 {}
+struct A33 {}
+struct A34 {}
+struct A35 {}
+struct A36 {}
+struct A37 {}
+struct A38 {}
+struct A39 {}
+struct A40 {}
+struct A41 {}
+struct A42 {}
+struct A43 {}
+struct A44 {}
+struct A45 {}
+struct A46 {}
+struct A47 {}
+struct A48 {}
+struct A49 {}
+struct A50 {}
+struct A51 {}
+struct A52 {}
+struct A53 {}
+struct A54 {}
+struct A55 {}
+struct A56 {}
+struct A57 {}
+struct A58 {}
+struct A59 {}
+struct A60 {}
+struct A61 {}
+struct A62 {}
+struct A63 {}
+struct A64 {}
+struct A65 {}
+struct A66 {}
+struct A67 {}
+struct A68 {}
+struct A69 {}
+struct A70 {}
+struct A71 {}
+struct A72 {}
+struct A73 {}
+struct A74 {}
+struct A75 {}
+struct A76 {}
+struct A77 {}
+struct A78 {}
+struct A79 {}
+struct A80 {}
+struct A81 {}
+struct A82 {}
+struct A83 {}
+struct A84 {}
+struct A85 {}
+struct A86 {}
+struct A87 {}
+struct A88 {}
+struct A89 {}
+struct A90 {}
+struct A91 {}
+struct A92 {}
+struct A93 {}
+struct A94 {}
+struct A95 {}
+struct A96 {}
+struct A97 {}
+struct A98 {}
+struct A99 {}
+struct A100 {}
+struct A101 {}
+struct A102 {}
+struct A103 {}
+struct A104 {}
+struct A105 {}
+struct A106 {}
+struct A107 {}
+struct A108 {}
+struct A109 {}
+struct A110 {}
+struct A111 {}
+struct A112 {}
+struct A113 {}
+struct A114 {}
+struct A115 {}
+struct A116 {}
+struct A117 {}
+struct A118 {}
+struct A119 {}
+struct A120 {}
+struct A121 {}
+struct A122 {}
+struct A123 {}
+struct A124 {}
+struct A125 {}
+struct A126 {}
+struct A127 {}
+struct A128 {}
+struct A129 {}
+struct A130 {}
+struct A131 {}
+struct A132 {}
+struct A133 {}
+struct A134 {}
+struct A135 {}
+struct A136 {}
+struct A137 {}
+struct A138 {}
+struct A139 {}
+struct A140 {}
+struct A141 {}
+struct A142 {}
+struct A143 {}
+struct A144 {}
+struct A145 {}
+struct A146 {}
+struct A147 {}
+struct A148 {}
+struct A149 {}
+struct A150 {}
+struct A151 {}
+struct A152 {}
+struct A153 {}
+struct A154 {}
+struct A155 {}
+struct A156 {}
+struct A157 {}
+struct A158 {}
+struct A159 {}
+struct A160 {}
+struct A161 {}
+struct A162 {}
+struct A163 {}
+struct A164 {}
+struct A165 {}
+struct A166 {}
+struct A167 {}
+struct A168 {}
+struct A169 {}
+struct A170 {}
+struct A171 {}
+struct A172 {}
+struct A173 {}
+struct A174 {}
+struct A175 {}
+struct A176 {}
+struct A177 {}
+struct A178 {}
+struct A179 {}
+struct A180 {}
+struct A181 {}
+struct A182 {}
+struct A183 {}
+struct A184 {}
+struct A185 {}
+struct A186 {}
+struct A187 {}
+struct A188 {}
+struct A189 {}
+struct A190 {}
+struct A191 {}
+struct A192 {}
+struct A193 {}
+struct A194 {}
+struct A195 {}
+struct A196 {}
+struct A197 {}
+struct A198 {}
+struct A199 {}
+struct A200 {}
+struct A201 {}
+struct A202 {}
+struct A203 {}
+struct A204 {}
+struct A205 {}
+struct A206 {}
+struct A207 {}
+struct A208 {}
+struct A209 {}
+struct A210 {}
+struct A211 {}
+struct A212 {}
+struct A213 {}
+struct A214 {}
+struct A215 {}
+struct A216 {}
+struct A217 {}
+struct A218 {}
+struct A219 {}
+struct A220 {}
+struct A221 {}
+struct A222 {}
+struct A223 {}
+struct A224 {}
+struct A225 {}
+struct A226 {}
+struct A227 {}
+struct A228 {}
+struct A229 {}
+struct A230 {}
+struct A231 {}
+struct A232 {}
+struct A233 {}
+struct A234 {}
+struct A235 {}
+struct A236 {}
+struct A237 {}
+struct A238 {}
+struct A239 {}
+struct A240 {}
+struct A241 {}
+struct A242 {}
+struct A243 {}
+struct A244 {}
+struct A245 {}
+struct A246 {}
+struct A247 {}
+struct A248 {}
+struct A249 {}
+struct A250 {}
+struct A251 {}
+struct A252 {}
+struct A253 {}
+struct A254 {}
+struct A255 {}
+given A0 is P0 {}
+given A1 is P1 {}
+given A2 is P2 {}
+given A3 is P3 {}
+given A4 is P4 {}
+given A5 is P5 {}
+given A6 is P6 {}
+given A7 is P7 {}
+given A8 is P8 {}
+given A9 is P9 {}
+given A10 is P10 {}
+given A11 is P11 {}
+given A12 is P12 {}
+given A13 is P13 {}
+given A14 is P14 {}
+given A15 is P15 {}
+given A16 is P16 {}
+given A17 is P17 {}
+given A18 is P18 {}
+given A19 is P19 {}
+given A20 is P20 {}
+given A21 is P21 {}
+given A22 is P22 {}
+given A23 is P23 {}
+given A24 is P24 {}
+given A25 is P25 {}
+given A26 is P26 {}
+given A27 is P27 {}
+given A28 is P28 {}
+given A29 is P29 {}
+given A30 is P30 {}
+given A31 is P31 {}
+given A32 is P32 {}
+given A33 is P33 {}
+given A34 is P34 {}
+given A35 is P35 {}
+given A36 is P36 {}
+given A37 is P37 {}
+given A38 is P38 {}
+given A39 is P39 {}
+given A40 is P40 {}
+given A41 is P41 {}
+given A42 is P42 {}
+given A43 is P43 {}
+given A44 is P44 {}
+given A45 is P45 {}
+given A46 is P46 {}
+given A47 is P47 {}
+given A48 is P48 {}
+given A49 is P49 {}
+given A50 is P50 {}
+given A51 is P51 {}
+given A52 is P52 {}
+given A53 is P53 {}
+given A54 is P54 {}
+given A55 is P55 {}
+given A56 is P56 {}
+given A57 is P57 {}
+given A58 is P58 {}
+given A59 is P59 {}
+given A60 is P60 {}
+given A61 is P61 {}
+given A62 is P62 {}
+given A63 is P63 {}
+given A64 is P64 {}
+given A65 is P65 {}
+given A66 is P66 {}
+given A67 is P67 {}
+given A68 is P68 {}
+given A69 is P69 {}
+given A70 is P70 {}
+given A71 is P71 {}
+given A72 is P72 {}
+given A73 is P73 {}
+given A74 is P74 {}
+given A75 is P75 {}
+given A76 is P76 {}
+given A77 is P77 {}
+given A78 is P78 {}
+given A79 is P79 {}
+given A80 is P80 {}
+given A81 is P81 {}
+given A82 is P82 {}
+given A83 is P83 {}
+given A84 is P84 {}
+given A85 is P85 {}
+given A86 is P86 {}
+given A87 is P87 {}
+given A88 is P88 {}
+given A89 is P89 {}
+given A90 is P90 {}
+given A91 is P91 {}
+given A92 is P92 {}
+given A93 is P93 {}
+given A94 is P94 {}
+given A95 is P95 {}
+given A96 is P96 {}
+given A97 is P97 {}
+given A98 is P98 {}
+given A99 is P99 {}
+given A100 is P100 {}
+given A101 is P101 {}
+given A102 is P102 {}
+given A103 is P103 {}
+given A104 is P104 {}
+given A105 is P105 {}
+given A106 is P106 {}
+given A107 is P107 {}
+given A108 is P108 {}
+given A109 is P109 {}
+given A110 is P110 {}
+given A111 is P111 {}
+given A112 is P112 {}
+given A113 is P113 {}
+given A114 is P114 {}
+given A115 is P115 {}
+given A116 is P116 {}
+given A117 is P117 {}
+given A118 is P118 {}
+given A119 is P119 {}
+given A120 is P120 {}
+given A121 is P121 {}
+given A122 is P122 {}
+given A123 is P123 {}
+given A124 is P124 {}
+given A125 is P125 {}
+given A126 is P126 {}
+given A127 is P127 {}
+given A128 is P128 {}
+given A129 is P129 {}
+given A130 is P130 {}
+given A131 is P131 {}
+given A132 is P132 {}
+given A133 is P133 {}
+given A134 is P134 {}
+given A135 is P135 {}
+given A136 is P136 {}
+given A137 is P137 {}
+given A138 is P138 {}
+given A139 is P139 {}
+given A140 is P140 {}
+given A141 is P141 {}
+given A142 is P142 {}
+given A143 is P143 {}
+given A144 is P144 {}
+given A145 is P145 {}
+given A146 is P146 {}
+given A147 is P147 {}
+given A148 is P148 {}
+given A149 is P149 {}
+given A150 is P150 {}
+given A151 is P151 {}
+given A152 is P152 {}
+given A153 is P153 {}
+given A154 is P154 {}
+given A155 is P155 {}
+given A156 is P156 {}
+given A157 is P157 {}
+given A158 is P158 {}
+given A159 is P159 {}
+given A160 is P160 {}
+given A161 is P161 {}
+given A162 is P162 {}
+given A163 is P163 {}
+given A164 is P164 {}
+given A165 is P165 {}
+given A166 is P166 {}
+given A167 is P167 {}
+given A168 is P168 {}
+given A169 is P169 {}
+given A170 is P170 {}
+given A171 is P171 {}
+given A172 is P172 {}
+given A173 is P173 {}
+given A174 is P174 {}
+given A175 is P175 {}
+given A176 is P176 {}
+given A177 is P177 {}
+given A178 is P178 {}
+given A179 is P179 {}
+given A180 is P180 {}
+given A181 is P181 {}
+given A182 is P182 {}
+given A183 is P183 {}
+given A184 is P184 {}
+given A185 is P185 {}
+given A186 is P186 {}
+given A187 is P187 {}
+given A188 is P188 {}
+given A189 is P189 {}
+given A190 is P190 {}
+given A191 is P191 {}
+given A192 is P192 {}
+given A193 is P193 {}
+given A194 is P194 {}
+given A195 is P195 {}
+given A196 is P196 {}
+given A197 is P197 {}
+given A198 is P198 {}
+given A199 is P199 {}
+given A200 is P200 {}
+given A201 is P201 {}
+given A202 is P202 {}
+given A203 is P203 {}
+given A204 is P204 {}
+given A205 is P205 {}
+given A206 is P206 {}
+given A207 is P207 {}
+given A208 is P208 {}
+given A209 is P209 {}
+given A210 is P210 {}
+given A211 is P211 {}
+given A212 is P212 {}
+given A213 is P213 {}
+given A214 is P214 {}
+given A215 is P215 {}
+given A216 is P216 {}
+given A217 is P217 {}
+given A218 is P218 {}
+given A219 is P219 {}
+given A220 is P220 {}
+given A221 is P221 {}
+given A222 is P222 {}
+given A223 is P223 {}
+given A224 is P224 {}
+given A225 is P225 {}
+given A226 is P226 {}
+given A227 is P227 {}
+given A228 is P228 {}
+given A229 is P229 {}
+given A230 is P230 {}
+given A231 is P231 {}
+given A232 is P232 {}
+given A233 is P233 {}
+given A234 is P234 {}
+given A235 is P235 {}
+given A236 is P236 {}
+given A237 is P237 {}
+given A238 is P238 {}
+given A239 is P239 {}
+given A240 is P240 {}
+given A241 is P241 {}
+given A242 is P242 {}
+given A243 is P243 {}
+given A244 is P244 {}
+given A245 is P245 {}
+given A246 is P246 {}
+given A247 is P247 {}
+given A248 is P248 {}
+given A249 is P249 {}
+given A250 is P250 {}
+given A251 is P251 {}
+given A252 is P252 {}
+given A253 is P253 {}
+given A254 is P254 {}
+given A255 is P255 {}
+fun need<where A0 is P0>() {}
+public fun main() { need() }

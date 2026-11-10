@@ -1,0 +1,3 @@
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<V, W, D where V == W>() { needEq<D, V>() }

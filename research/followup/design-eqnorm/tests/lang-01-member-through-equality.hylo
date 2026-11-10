@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected: rejected at every stage of this design (unchanged). T == A does not make the members of
+// A available on a value of type T, although trait members are found through T == U (lang-02).
+// Open question 5.
+// currently: base rejected (summon.subgoals=2 summon.matches=146); FULL rejected. FULL says: type 'T' has no member 'foo'
+struct A { public memberwise init
+  fun foo() {} }
+fun f<T where T == A>(x: T) { x.foo() }

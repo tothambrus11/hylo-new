@@ -1,0 +1,4 @@
+fun need<A, B where A == B>() {}
+fun f<T0, T1 where T0 == T1>() {
+  need<T0, T1>()
+}

@@ -1,0 +1,194 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+trait P17 {}
+trait P18 {}
+trait P19 {}
+trait P20 {}
+trait P21 {}
+trait P22 {}
+trait P23 {}
+trait P24 {}
+trait P25 {}
+trait P26 {}
+trait P27 {}
+trait P28 {}
+trait P29 {}
+trait P30 {}
+trait P31 {}
+trait P32 {}
+trait P33 {}
+trait P34 {}
+trait P35 {}
+trait P36 {}
+trait P37 {}
+trait P38 {}
+trait P39 {}
+trait P40 {}
+trait P41 {}
+trait P42 {}
+trait P43 {}
+trait P44 {}
+trait P45 {}
+trait P46 {}
+trait P47 {}
+trait P48 {}
+trait P49 {}
+trait P50 {}
+trait P51 {}
+trait P52 {}
+trait P53 {}
+trait P54 {}
+trait P55 {}
+trait P56 {}
+trait P57 {}
+trait P58 {}
+trait P59 {}
+trait P60 {}
+trait P61 {}
+trait P62 {}
+trait P63 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+struct A32 {}
+struct A33 {}
+struct A34 {}
+struct A35 {}
+struct A36 {}
+struct A37 {}
+struct A38 {}
+struct A39 {}
+struct A40 {}
+struct A41 {}
+struct A42 {}
+struct A43 {}
+struct A44 {}
+struct A45 {}
+struct A46 {}
+struct A47 {}
+struct A48 {}
+struct A49 {}
+struct A50 {}
+struct A51 {}
+struct A52 {}
+struct A53 {}
+struct A54 {}
+struct A55 {}
+struct A56 {}
+struct A57 {}
+struct A58 {}
+struct A59 {}
+struct A60 {}
+struct A61 {}
+struct A62 {}
+struct A63 {}
+given A0 is P0 {}
+given A1 is P1 {}
+given A2 is P2 {}
+given A3 is P3 {}
+given A4 is P4 {}
+given A5 is P5 {}
+given A6 is P6 {}
+given A7 is P7 {}
+given A8 is P8 {}
+given A9 is P9 {}
+given A10 is P10 {}
+given A11 is P11 {}
+given A12 is P12 {}
+given A13 is P13 {}
+given A14 is P14 {}
+given A15 is P15 {}
+given A16 is P16 {}
+given A17 is P17 {}
+given A18 is P18 {}
+given A19 is P19 {}
+given A20 is P20 {}
+given A21 is P21 {}
+given A22 is P22 {}
+given A23 is P23 {}
+given A24 is P24 {}
+given A25 is P25 {}
+given A26 is P26 {}
+given A27 is P27 {}
+given A28 is P28 {}
+given A29 is P29 {}
+given A30 is P30 {}
+given A31 is P31 {}
+given A32 is P32 {}
+given A33 is P33 {}
+given A34 is P34 {}
+given A35 is P35 {}
+given A36 is P36 {}
+given A37 is P37 {}
+given A38 is P38 {}
+given A39 is P39 {}
+given A40 is P40 {}
+given A41 is P41 {}
+given A42 is P42 {}
+given A43 is P43 {}
+given A44 is P44 {}
+given A45 is P45 {}
+given A46 is P46 {}
+given A47 is P47 {}
+given A48 is P48 {}
+given A49 is P49 {}
+given A50 is P50 {}
+given A51 is P51 {}
+given A52 is P52 {}
+given A53 is P53 {}
+given A54 is P54 {}
+given A55 is P55 {}
+given A56 is P56 {}
+given A57 is P57 {}
+given A58 is P58 {}
+given A59 is P59 {}
+given A60 is P60 {}
+given A61 is P61 {}
+given A62 is P62 {}
+given A63 is P63 {}
+fun need<where A0 is P0>() {}
+public fun main() { need() }

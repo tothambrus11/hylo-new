@@ -1,0 +1,6 @@
+//! stage:typing no-std
+struct W<X0, X1, X2, X3, X4, X5> { public memberwise init }
+fun check<V>(x: V) {}
+fun f<T0, T1, T2, T3, T4, T5, U0, U1, U2, U3, U4, U5 where T0 == U0, T1 == U1, T2 == U2, T3 == U3, T4 == U4, T5 == U5>(x: W<T0, T1, T2, T3, T4, T5>) {
+  check<W<U0, U1, U2, U3, U4, U5>>(x)
+}

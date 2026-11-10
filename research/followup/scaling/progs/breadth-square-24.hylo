@@ -1,0 +1,674 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+trait P17 {}
+trait P18 {}
+trait P19 {}
+trait P20 {}
+trait P21 {}
+trait P22 {}
+trait P23 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+given A0 is P0 {}
+given A1 is P0 {}
+given A2 is P0 {}
+given A3 is P0 {}
+given A4 is P0 {}
+given A5 is P0 {}
+given A6 is P0 {}
+given A7 is P0 {}
+given A8 is P0 {}
+given A9 is P0 {}
+given A10 is P0 {}
+given A11 is P0 {}
+given A12 is P0 {}
+given A13 is P0 {}
+given A14 is P0 {}
+given A15 is P0 {}
+given A16 is P0 {}
+given A17 is P0 {}
+given A18 is P0 {}
+given A19 is P0 {}
+given A20 is P0 {}
+given A21 is P0 {}
+given A22 is P0 {}
+given A23 is P0 {}
+given A0 is P1 {}
+given A1 is P1 {}
+given A2 is P1 {}
+given A3 is P1 {}
+given A4 is P1 {}
+given A5 is P1 {}
+given A6 is P1 {}
+given A7 is P1 {}
+given A8 is P1 {}
+given A9 is P1 {}
+given A10 is P1 {}
+given A11 is P1 {}
+given A12 is P1 {}
+given A13 is P1 {}
+given A14 is P1 {}
+given A15 is P1 {}
+given A16 is P1 {}
+given A17 is P1 {}
+given A18 is P1 {}
+given A19 is P1 {}
+given A20 is P1 {}
+given A21 is P1 {}
+given A22 is P1 {}
+given A23 is P1 {}
+given A0 is P2 {}
+given A1 is P2 {}
+given A2 is P2 {}
+given A3 is P2 {}
+given A4 is P2 {}
+given A5 is P2 {}
+given A6 is P2 {}
+given A7 is P2 {}
+given A8 is P2 {}
+given A9 is P2 {}
+given A10 is P2 {}
+given A11 is P2 {}
+given A12 is P2 {}
+given A13 is P2 {}
+given A14 is P2 {}
+given A15 is P2 {}
+given A16 is P2 {}
+given A17 is P2 {}
+given A18 is P2 {}
+given A19 is P2 {}
+given A20 is P2 {}
+given A21 is P2 {}
+given A22 is P2 {}
+given A23 is P2 {}
+given A0 is P3 {}
+given A1 is P3 {}
+given A2 is P3 {}
+given A3 is P3 {}
+given A4 is P3 {}
+given A5 is P3 {}
+given A6 is P3 {}
+given A7 is P3 {}
+given A8 is P3 {}
+given A9 is P3 {}
+given A10 is P3 {}
+given A11 is P3 {}
+given A12 is P3 {}
+given A13 is P3 {}
+given A14 is P3 {}
+given A15 is P3 {}
+given A16 is P3 {}
+given A17 is P3 {}
+given A18 is P3 {}
+given A19 is P3 {}
+given A20 is P3 {}
+given A21 is P3 {}
+given A22 is P3 {}
+given A23 is P3 {}
+given A0 is P4 {}
+given A1 is P4 {}
+given A2 is P4 {}
+given A3 is P4 {}
+given A4 is P4 {}
+given A5 is P4 {}
+given A6 is P4 {}
+given A7 is P4 {}
+given A8 is P4 {}
+given A9 is P4 {}
+given A10 is P4 {}
+given A11 is P4 {}
+given A12 is P4 {}
+given A13 is P4 {}
+given A14 is P4 {}
+given A15 is P4 {}
+given A16 is P4 {}
+given A17 is P4 {}
+given A18 is P4 {}
+given A19 is P4 {}
+given A20 is P4 {}
+given A21 is P4 {}
+given A22 is P4 {}
+given A23 is P4 {}
+given A0 is P5 {}
+given A1 is P5 {}
+given A2 is P5 {}
+given A3 is P5 {}
+given A4 is P5 {}
+given A5 is P5 {}
+given A6 is P5 {}
+given A7 is P5 {}
+given A8 is P5 {}
+given A9 is P5 {}
+given A10 is P5 {}
+given A11 is P5 {}
+given A12 is P5 {}
+given A13 is P5 {}
+given A14 is P5 {}
+given A15 is P5 {}
+given A16 is P5 {}
+given A17 is P5 {}
+given A18 is P5 {}
+given A19 is P5 {}
+given A20 is P5 {}
+given A21 is P5 {}
+given A22 is P5 {}
+given A23 is P5 {}
+given A0 is P6 {}
+given A1 is P6 {}
+given A2 is P6 {}
+given A3 is P6 {}
+given A4 is P6 {}
+given A5 is P6 {}
+given A6 is P6 {}
+given A7 is P6 {}
+given A8 is P6 {}
+given A9 is P6 {}
+given A10 is P6 {}
+given A11 is P6 {}
+given A12 is P6 {}
+given A13 is P6 {}
+given A14 is P6 {}
+given A15 is P6 {}
+given A16 is P6 {}
+given A17 is P6 {}
+given A18 is P6 {}
+given A19 is P6 {}
+given A20 is P6 {}
+given A21 is P6 {}
+given A22 is P6 {}
+given A23 is P6 {}
+given A0 is P7 {}
+given A1 is P7 {}
+given A2 is P7 {}
+given A3 is P7 {}
+given A4 is P7 {}
+given A5 is P7 {}
+given A6 is P7 {}
+given A7 is P7 {}
+given A8 is P7 {}
+given A9 is P7 {}
+given A10 is P7 {}
+given A11 is P7 {}
+given A12 is P7 {}
+given A13 is P7 {}
+given A14 is P7 {}
+given A15 is P7 {}
+given A16 is P7 {}
+given A17 is P7 {}
+given A18 is P7 {}
+given A19 is P7 {}
+given A20 is P7 {}
+given A21 is P7 {}
+given A22 is P7 {}
+given A23 is P7 {}
+given A0 is P8 {}
+given A1 is P8 {}
+given A2 is P8 {}
+given A3 is P8 {}
+given A4 is P8 {}
+given A5 is P8 {}
+given A6 is P8 {}
+given A7 is P8 {}
+given A8 is P8 {}
+given A9 is P8 {}
+given A10 is P8 {}
+given A11 is P8 {}
+given A12 is P8 {}
+given A13 is P8 {}
+given A14 is P8 {}
+given A15 is P8 {}
+given A16 is P8 {}
+given A17 is P8 {}
+given A18 is P8 {}
+given A19 is P8 {}
+given A20 is P8 {}
+given A21 is P8 {}
+given A22 is P8 {}
+given A23 is P8 {}
+given A0 is P9 {}
+given A1 is P9 {}
+given A2 is P9 {}
+given A3 is P9 {}
+given A4 is P9 {}
+given A5 is P9 {}
+given A6 is P9 {}
+given A7 is P9 {}
+given A8 is P9 {}
+given A9 is P9 {}
+given A10 is P9 {}
+given A11 is P9 {}
+given A12 is P9 {}
+given A13 is P9 {}
+given A14 is P9 {}
+given A15 is P9 {}
+given A16 is P9 {}
+given A17 is P9 {}
+given A18 is P9 {}
+given A19 is P9 {}
+given A20 is P9 {}
+given A21 is P9 {}
+given A22 is P9 {}
+given A23 is P9 {}
+given A0 is P10 {}
+given A1 is P10 {}
+given A2 is P10 {}
+given A3 is P10 {}
+given A4 is P10 {}
+given A5 is P10 {}
+given A6 is P10 {}
+given A7 is P10 {}
+given A8 is P10 {}
+given A9 is P10 {}
+given A10 is P10 {}
+given A11 is P10 {}
+given A12 is P10 {}
+given A13 is P10 {}
+given A14 is P10 {}
+given A15 is P10 {}
+given A16 is P10 {}
+given A17 is P10 {}
+given A18 is P10 {}
+given A19 is P10 {}
+given A20 is P10 {}
+given A21 is P10 {}
+given A22 is P10 {}
+given A23 is P10 {}
+given A0 is P11 {}
+given A1 is P11 {}
+given A2 is P11 {}
+given A3 is P11 {}
+given A4 is P11 {}
+given A5 is P11 {}
+given A6 is P11 {}
+given A7 is P11 {}
+given A8 is P11 {}
+given A9 is P11 {}
+given A10 is P11 {}
+given A11 is P11 {}
+given A12 is P11 {}
+given A13 is P11 {}
+given A14 is P11 {}
+given A15 is P11 {}
+given A16 is P11 {}
+given A17 is P11 {}
+given A18 is P11 {}
+given A19 is P11 {}
+given A20 is P11 {}
+given A21 is P11 {}
+given A22 is P11 {}
+given A23 is P11 {}
+given A0 is P12 {}
+given A1 is P12 {}
+given A2 is P12 {}
+given A3 is P12 {}
+given A4 is P12 {}
+given A5 is P12 {}
+given A6 is P12 {}
+given A7 is P12 {}
+given A8 is P12 {}
+given A9 is P12 {}
+given A10 is P12 {}
+given A11 is P12 {}
+given A12 is P12 {}
+given A13 is P12 {}
+given A14 is P12 {}
+given A15 is P12 {}
+given A16 is P12 {}
+given A17 is P12 {}
+given A18 is P12 {}
+given A19 is P12 {}
+given A20 is P12 {}
+given A21 is P12 {}
+given A22 is P12 {}
+given A23 is P12 {}
+given A0 is P13 {}
+given A1 is P13 {}
+given A2 is P13 {}
+given A3 is P13 {}
+given A4 is P13 {}
+given A5 is P13 {}
+given A6 is P13 {}
+given A7 is P13 {}
+given A8 is P13 {}
+given A9 is P13 {}
+given A10 is P13 {}
+given A11 is P13 {}
+given A12 is P13 {}
+given A13 is P13 {}
+given A14 is P13 {}
+given A15 is P13 {}
+given A16 is P13 {}
+given A17 is P13 {}
+given A18 is P13 {}
+given A19 is P13 {}
+given A20 is P13 {}
+given A21 is P13 {}
+given A22 is P13 {}
+given A23 is P13 {}
+given A0 is P14 {}
+given A1 is P14 {}
+given A2 is P14 {}
+given A3 is P14 {}
+given A4 is P14 {}
+given A5 is P14 {}
+given A6 is P14 {}
+given A7 is P14 {}
+given A8 is P14 {}
+given A9 is P14 {}
+given A10 is P14 {}
+given A11 is P14 {}
+given A12 is P14 {}
+given A13 is P14 {}
+given A14 is P14 {}
+given A15 is P14 {}
+given A16 is P14 {}
+given A17 is P14 {}
+given A18 is P14 {}
+given A19 is P14 {}
+given A20 is P14 {}
+given A21 is P14 {}
+given A22 is P14 {}
+given A23 is P14 {}
+given A0 is P15 {}
+given A1 is P15 {}
+given A2 is P15 {}
+given A3 is P15 {}
+given A4 is P15 {}
+given A5 is P15 {}
+given A6 is P15 {}
+given A7 is P15 {}
+given A8 is P15 {}
+given A9 is P15 {}
+given A10 is P15 {}
+given A11 is P15 {}
+given A12 is P15 {}
+given A13 is P15 {}
+given A14 is P15 {}
+given A15 is P15 {}
+given A16 is P15 {}
+given A17 is P15 {}
+given A18 is P15 {}
+given A19 is P15 {}
+given A20 is P15 {}
+given A21 is P15 {}
+given A22 is P15 {}
+given A23 is P15 {}
+given A0 is P16 {}
+given A1 is P16 {}
+given A2 is P16 {}
+given A3 is P16 {}
+given A4 is P16 {}
+given A5 is P16 {}
+given A6 is P16 {}
+given A7 is P16 {}
+given A8 is P16 {}
+given A9 is P16 {}
+given A10 is P16 {}
+given A11 is P16 {}
+given A12 is P16 {}
+given A13 is P16 {}
+given A14 is P16 {}
+given A15 is P16 {}
+given A16 is P16 {}
+given A17 is P16 {}
+given A18 is P16 {}
+given A19 is P16 {}
+given A20 is P16 {}
+given A21 is P16 {}
+given A22 is P16 {}
+given A23 is P16 {}
+given A0 is P17 {}
+given A1 is P17 {}
+given A2 is P17 {}
+given A3 is P17 {}
+given A4 is P17 {}
+given A5 is P17 {}
+given A6 is P17 {}
+given A7 is P17 {}
+given A8 is P17 {}
+given A9 is P17 {}
+given A10 is P17 {}
+given A11 is P17 {}
+given A12 is P17 {}
+given A13 is P17 {}
+given A14 is P17 {}
+given A15 is P17 {}
+given A16 is P17 {}
+given A17 is P17 {}
+given A18 is P17 {}
+given A19 is P17 {}
+given A20 is P17 {}
+given A21 is P17 {}
+given A22 is P17 {}
+given A23 is P17 {}
+given A0 is P18 {}
+given A1 is P18 {}
+given A2 is P18 {}
+given A3 is P18 {}
+given A4 is P18 {}
+given A5 is P18 {}
+given A6 is P18 {}
+given A7 is P18 {}
+given A8 is P18 {}
+given A9 is P18 {}
+given A10 is P18 {}
+given A11 is P18 {}
+given A12 is P18 {}
+given A13 is P18 {}
+given A14 is P18 {}
+given A15 is P18 {}
+given A16 is P18 {}
+given A17 is P18 {}
+given A18 is P18 {}
+given A19 is P18 {}
+given A20 is P18 {}
+given A21 is P18 {}
+given A22 is P18 {}
+given A23 is P18 {}
+given A0 is P19 {}
+given A1 is P19 {}
+given A2 is P19 {}
+given A3 is P19 {}
+given A4 is P19 {}
+given A5 is P19 {}
+given A6 is P19 {}
+given A7 is P19 {}
+given A8 is P19 {}
+given A9 is P19 {}
+given A10 is P19 {}
+given A11 is P19 {}
+given A12 is P19 {}
+given A13 is P19 {}
+given A14 is P19 {}
+given A15 is P19 {}
+given A16 is P19 {}
+given A17 is P19 {}
+given A18 is P19 {}
+given A19 is P19 {}
+given A20 is P19 {}
+given A21 is P19 {}
+given A22 is P19 {}
+given A23 is P19 {}
+given A0 is P20 {}
+given A1 is P20 {}
+given A2 is P20 {}
+given A3 is P20 {}
+given A4 is P20 {}
+given A5 is P20 {}
+given A6 is P20 {}
+given A7 is P20 {}
+given A8 is P20 {}
+given A9 is P20 {}
+given A10 is P20 {}
+given A11 is P20 {}
+given A12 is P20 {}
+given A13 is P20 {}
+given A14 is P20 {}
+given A15 is P20 {}
+given A16 is P20 {}
+given A17 is P20 {}
+given A18 is P20 {}
+given A19 is P20 {}
+given A20 is P20 {}
+given A21 is P20 {}
+given A22 is P20 {}
+given A23 is P20 {}
+given A0 is P21 {}
+given A1 is P21 {}
+given A2 is P21 {}
+given A3 is P21 {}
+given A4 is P21 {}
+given A5 is P21 {}
+given A6 is P21 {}
+given A7 is P21 {}
+given A8 is P21 {}
+given A9 is P21 {}
+given A10 is P21 {}
+given A11 is P21 {}
+given A12 is P21 {}
+given A13 is P21 {}
+given A14 is P21 {}
+given A15 is P21 {}
+given A16 is P21 {}
+given A17 is P21 {}
+given A18 is P21 {}
+given A19 is P21 {}
+given A20 is P21 {}
+given A21 is P21 {}
+given A22 is P21 {}
+given A23 is P21 {}
+given A0 is P22 {}
+given A1 is P22 {}
+given A2 is P22 {}
+given A3 is P22 {}
+given A4 is P22 {}
+given A5 is P22 {}
+given A6 is P22 {}
+given A7 is P22 {}
+given A8 is P22 {}
+given A9 is P22 {}
+given A10 is P22 {}
+given A11 is P22 {}
+given A12 is P22 {}
+given A13 is P22 {}
+given A14 is P22 {}
+given A15 is P22 {}
+given A16 is P22 {}
+given A17 is P22 {}
+given A18 is P22 {}
+given A19 is P22 {}
+given A20 is P22 {}
+given A21 is P22 {}
+given A22 is P22 {}
+given A23 is P22 {}
+given A0 is P23 {}
+given A1 is P23 {}
+given A2 is P23 {}
+given A3 is P23 {}
+given A4 is P23 {}
+given A5 is P23 {}
+given A6 is P23 {}
+given A7 is P23 {}
+given A8 is P23 {}
+given A9 is P23 {}
+given A10 is P23 {}
+given A11 is P23 {}
+given A12 is P23 {}
+given A13 is P23 {}
+given A14 is P23 {}
+given A15 is P23 {}
+given A16 is P23 {}
+given A17 is P23 {}
+given A18 is P23 {}
+given A19 is P23 {}
+given A20 is P23 {}
+given A21 is P23 {}
+given A22 is P23 {}
+given A23 is P23 {}
+fun need0<where A0 is P0>() {}
+fun need1<where A7 is P1>() {}
+fun need2<where A14 is P2>() {}
+fun need3<where A21 is P3>() {}
+fun need4<where A4 is P4>() {}
+fun need5<where A11 is P5>() {}
+fun need6<where A18 is P6>() {}
+fun need7<where A1 is P7>() {}
+fun need8<where A8 is P8>() {}
+fun need9<where A15 is P9>() {}
+fun need10<where A22 is P10>() {}
+fun need11<where A5 is P11>() {}
+fun need12<where A12 is P12>() {}
+fun need13<where A19 is P13>() {}
+fun need14<where A2 is P14>() {}
+fun need15<where A9 is P15>() {}
+fun need16<where A16 is P16>() {}
+fun need17<where A23 is P17>() {}
+fun need18<where A6 is P18>() {}
+fun need19<where A13 is P19>() {}
+fun need20<where A20 is P20>() {}
+fun need21<where A3 is P21>() {}
+fun need22<where A10 is P22>() {}
+fun need23<where A17 is P23>() {}
+public fun main() {
+  need0()
+  need1()
+  need2()
+  need3()
+  need4()
+  need5()
+  need6()
+  need7()
+  need8()
+  need9()
+  need10()
+  need11()
+  need12()
+  need13()
+  need14()
+  need15()
+  need16()
+  need17()
+  need18()
+  need19()
+  need20()
+  need21()
+  need22()
+  need23()
+}

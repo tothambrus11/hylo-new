@@ -1,0 +1,3 @@
+//! stage:typing no-std
+fun id<X>(a: sink X) -> X { a }
+fun f<T, U where T == U>(t: sink T) { let y: U = id(t) }

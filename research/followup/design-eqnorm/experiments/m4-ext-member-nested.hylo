@@ -1,0 +1,5 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+struct Box<X> { public memberwise init }
+extension Box<A> { fun bar() {} }
+fun f<T where T == A>(x: Box<T>) { x.bar() }

@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected: rejected at every stage, with the type mismatch (not an ambiguity). `P<A>` is answered by
+// the outer `A is P` although the inner `B is P`, B == A, is declared nearer: a given that matches as
+// written is preferred to one that matches through an equality.
+// currently: base rejected (summon.subgoals=6 summon.matches=447); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: cannot pass value of type '(B::P).X' to parameter '(A::P).X'
+trait P { type X }
+fun check<T>(x: T) {}
+fun outer<A where A is P>() {
+  fun h<B where B == A, B is P>(y: B.X) { check<A.X>(y) }
+}

@@ -1,0 +1,5 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T5 is P, T6 is P, T7 is P, T8 is P, T9 is P, T10 is P, T11 is P, T12 is P, T13 is P, T14 is P, T15 is P, T16 is P, T17 is P, T18 is P, T19 is P, T20 is P, T21 is P, T22 is P, T23 is P, T24 is P, T25 is P, T26 is P, T27 is P, T28 is P, T29 is P, T30 is P, T31 is P, T32 is P, T0.X == T1.X, T1.X == T2.X, T2.X == T3.X, T3.X == T4.X, T4.X == T5.X, T5.X == T6.X, T6.X == T7.X, T7.X == T8.X, T8.X == T9.X, T9.X == T10.X, T10.X == T11.X, T11.X == T12.X, T12.X == T13.X, T13.X == T14.X, T14.X == T15.X, T15.X == T16.X, T17.X == T18.X, T18.X == T19.X, T19.X == T20.X, T20.X == T21.X, T21.X == T22.X, T22.X == T23.X, T23.X == T24.X, T24.X == T25.X, T25.X == T26.X, T26.X == T27.X, T27.X == T28.X, T28.X == T29.X, T29.X == T30.X, T30.X == T31.X, T31.X == T32.X>(x: T32.X) {
+  check<T0.X>(x)
+}

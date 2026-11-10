@@ -1,0 +1,9 @@
+trait P {
+  type X
+  fun back<T where T is P, T == Self>(x: X) -> T.X { x }
+  fun get() -> X
+}
+fun check<T>(x: T) {}
+fun f0<V, W where V == W, V is P, W is P>(v: V) {
+  check<W.X>(v.back<W>(v.get()))
+}

@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected: accepted at every stage. Inside the trait, X is Self.X; it equals T.X because `T is P` is
+// the only conformance of a type equal to Self other than the trait's own (the rule of eqsolve, kept
+// unchanged; open question 2).
+// currently: base accepted (summon.subgoals=34 summon.matches=971); FULL accepted (summon.subgoals=2 summon.matches=75 eqsolve.proved=1 index.fallback=1).
+fun need<A, B where A == B>() {}
+trait P {
+  type X
+  fun f<T, U where T == Self, T is P, T.X == U>() { need<X, U>() }
+}

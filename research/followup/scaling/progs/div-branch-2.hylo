@@ -1,0 +1,8 @@
+trait P {}
+struct Yb {}
+struct S1<T> {}
+given <T where S1<T> is P> => T is P {}
+struct S2<T> {}
+given <T where S2<T> is P> => T is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

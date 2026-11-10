@@ -1,0 +1,4 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+extension A { fun bar() {} }
+fun f<T where T == A>(x: T) { x.bar() }

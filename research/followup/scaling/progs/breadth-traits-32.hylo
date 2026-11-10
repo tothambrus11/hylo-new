@@ -1,0 +1,98 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+trait P17 {}
+trait P18 {}
+trait P19 {}
+trait P20 {}
+trait P21 {}
+trait P22 {}
+trait P23 {}
+trait P24 {}
+trait P25 {}
+trait P26 {}
+trait P27 {}
+trait P28 {}
+trait P29 {}
+trait P30 {}
+trait P31 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+given A0 is P0 {}
+given A1 is P1 {}
+given A2 is P2 {}
+given A3 is P3 {}
+given A4 is P4 {}
+given A5 is P5 {}
+given A6 is P6 {}
+given A7 is P7 {}
+given A8 is P8 {}
+given A9 is P9 {}
+given A10 is P10 {}
+given A11 is P11 {}
+given A12 is P12 {}
+given A13 is P13 {}
+given A14 is P14 {}
+given A15 is P15 {}
+given A16 is P16 {}
+given A17 is P17 {}
+given A18 is P18 {}
+given A19 is P19 {}
+given A20 is P20 {}
+given A21 is P21 {}
+given A22 is P22 {}
+given A23 is P23 {}
+given A24 is P24 {}
+given A25 is P25 {}
+given A26 is P26 {}
+given A27 is P27 {}
+given A28 is P28 {}
+given A29 is P29 {}
+given A30 is P30 {}
+given A31 is P31 {}
+fun need<where A0 is P0>() {}
+public fun main() { need() }

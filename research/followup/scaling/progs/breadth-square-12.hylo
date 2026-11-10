@@ -1,0 +1,194 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+given A0 is P0 {}
+given A1 is P0 {}
+given A2 is P0 {}
+given A3 is P0 {}
+given A4 is P0 {}
+given A5 is P0 {}
+given A6 is P0 {}
+given A7 is P0 {}
+given A8 is P0 {}
+given A9 is P0 {}
+given A10 is P0 {}
+given A11 is P0 {}
+given A0 is P1 {}
+given A1 is P1 {}
+given A2 is P1 {}
+given A3 is P1 {}
+given A4 is P1 {}
+given A5 is P1 {}
+given A6 is P1 {}
+given A7 is P1 {}
+given A8 is P1 {}
+given A9 is P1 {}
+given A10 is P1 {}
+given A11 is P1 {}
+given A0 is P2 {}
+given A1 is P2 {}
+given A2 is P2 {}
+given A3 is P2 {}
+given A4 is P2 {}
+given A5 is P2 {}
+given A6 is P2 {}
+given A7 is P2 {}
+given A8 is P2 {}
+given A9 is P2 {}
+given A10 is P2 {}
+given A11 is P2 {}
+given A0 is P3 {}
+given A1 is P3 {}
+given A2 is P3 {}
+given A3 is P3 {}
+given A4 is P3 {}
+given A5 is P3 {}
+given A6 is P3 {}
+given A7 is P3 {}
+given A8 is P3 {}
+given A9 is P3 {}
+given A10 is P3 {}
+given A11 is P3 {}
+given A0 is P4 {}
+given A1 is P4 {}
+given A2 is P4 {}
+given A3 is P4 {}
+given A4 is P4 {}
+given A5 is P4 {}
+given A6 is P4 {}
+given A7 is P4 {}
+given A8 is P4 {}
+given A9 is P4 {}
+given A10 is P4 {}
+given A11 is P4 {}
+given A0 is P5 {}
+given A1 is P5 {}
+given A2 is P5 {}
+given A3 is P5 {}
+given A4 is P5 {}
+given A5 is P5 {}
+given A6 is P5 {}
+given A7 is P5 {}
+given A8 is P5 {}
+given A9 is P5 {}
+given A10 is P5 {}
+given A11 is P5 {}
+given A0 is P6 {}
+given A1 is P6 {}
+given A2 is P6 {}
+given A3 is P6 {}
+given A4 is P6 {}
+given A5 is P6 {}
+given A6 is P6 {}
+given A7 is P6 {}
+given A8 is P6 {}
+given A9 is P6 {}
+given A10 is P6 {}
+given A11 is P6 {}
+given A0 is P7 {}
+given A1 is P7 {}
+given A2 is P7 {}
+given A3 is P7 {}
+given A4 is P7 {}
+given A5 is P7 {}
+given A6 is P7 {}
+given A7 is P7 {}
+given A8 is P7 {}
+given A9 is P7 {}
+given A10 is P7 {}
+given A11 is P7 {}
+given A0 is P8 {}
+given A1 is P8 {}
+given A2 is P8 {}
+given A3 is P8 {}
+given A4 is P8 {}
+given A5 is P8 {}
+given A6 is P8 {}
+given A7 is P8 {}
+given A8 is P8 {}
+given A9 is P8 {}
+given A10 is P8 {}
+given A11 is P8 {}
+given A0 is P9 {}
+given A1 is P9 {}
+given A2 is P9 {}
+given A3 is P9 {}
+given A4 is P9 {}
+given A5 is P9 {}
+given A6 is P9 {}
+given A7 is P9 {}
+given A8 is P9 {}
+given A9 is P9 {}
+given A10 is P9 {}
+given A11 is P9 {}
+given A0 is P10 {}
+given A1 is P10 {}
+given A2 is P10 {}
+given A3 is P10 {}
+given A4 is P10 {}
+given A5 is P10 {}
+given A6 is P10 {}
+given A7 is P10 {}
+given A8 is P10 {}
+given A9 is P10 {}
+given A10 is P10 {}
+given A11 is P10 {}
+given A0 is P11 {}
+given A1 is P11 {}
+given A2 is P11 {}
+given A3 is P11 {}
+given A4 is P11 {}
+given A5 is P11 {}
+given A6 is P11 {}
+given A7 is P11 {}
+given A8 is P11 {}
+given A9 is P11 {}
+given A10 is P11 {}
+given A11 is P11 {}
+fun need0<where A0 is P0>() {}
+fun need1<where A7 is P1>() {}
+fun need2<where A2 is P2>() {}
+fun need3<where A9 is P3>() {}
+fun need4<where A4 is P4>() {}
+fun need5<where A11 is P5>() {}
+fun need6<where A6 is P6>() {}
+fun need7<where A1 is P7>() {}
+fun need8<where A8 is P8>() {}
+fun need9<where A3 is P9>() {}
+fun need10<where A10 is P10>() {}
+fun need11<where A5 is P11>() {}
+public fun main() {
+  need0()
+  need1()
+  need2()
+  need3()
+  need4()
+  need5()
+  need6()
+  need7()
+  need8()
+  need9()
+  need10()
+  need11()
+}

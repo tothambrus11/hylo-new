@@ -1,0 +1,8 @@
+//! stage:typing no-std
+trait Q {}
+trait P {
+  type X
+  given X is Q
+}
+fun needQ<V where V is Q>() {}
+fun f<T where T is P>() { needQ<T.X>() }

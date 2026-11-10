@@ -1,0 +1,9 @@
+//! stage:typing no-std
+trait P { type X }
+fun check<T>(x: T) {}
+fun outer<A where A is P>(x: A.X) {
+  fun h<B where B == A, B is P>(y: B.X, z: A.X) {
+    check<A.X>(z)
+    check<A.X>(y)
+  }
+}

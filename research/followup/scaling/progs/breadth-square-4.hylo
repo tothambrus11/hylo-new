@@ -1,0 +1,34 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+given A0 is P0 {}
+given A1 is P0 {}
+given A2 is P0 {}
+given A3 is P0 {}
+given A0 is P1 {}
+given A1 is P1 {}
+given A2 is P1 {}
+given A3 is P1 {}
+given A0 is P2 {}
+given A1 is P2 {}
+given A2 is P2 {}
+given A3 is P2 {}
+given A0 is P3 {}
+given A1 is P3 {}
+given A2 is P3 {}
+given A3 is P3 {}
+fun need0<where A0 is P0>() {}
+fun need1<where A3 is P1>() {}
+fun need2<where A2 is P2>() {}
+fun need3<where A1 is P3>() {}
+public fun main() {
+  need0()
+  need1()
+  need2()
+  need3()
+}

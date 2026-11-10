@@ -1,0 +1,3 @@
+//! stage:typing no-std
+fun m<V>(x: inout V) {}
+fun f<T, U where T == U>(x: inout T) { m<U>(&x) }

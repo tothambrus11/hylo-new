@@ -1,0 +1,62 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+given A0 is P0 {}
+given A1 is P0 {}
+given A2 is P0 {}
+given A3 is P0 {}
+given A4 is P0 {}
+given A5 is P0 {}
+given A0 is P1 {}
+given A1 is P1 {}
+given A2 is P1 {}
+given A3 is P1 {}
+given A4 is P1 {}
+given A5 is P1 {}
+given A0 is P2 {}
+given A1 is P2 {}
+given A2 is P2 {}
+given A3 is P2 {}
+given A4 is P2 {}
+given A5 is P2 {}
+given A0 is P3 {}
+given A1 is P3 {}
+given A2 is P3 {}
+given A3 is P3 {}
+given A4 is P3 {}
+given A5 is P3 {}
+given A0 is P4 {}
+given A1 is P4 {}
+given A2 is P4 {}
+given A3 is P4 {}
+given A4 is P4 {}
+given A5 is P4 {}
+given A0 is P5 {}
+given A1 is P5 {}
+given A2 is P5 {}
+given A3 is P5 {}
+given A4 is P5 {}
+given A5 is P5 {}
+fun need0<where A0 is P0>() {}
+fun need1<where A1 is P1>() {}
+fun need2<where A2 is P2>() {}
+fun need3<where A3 is P3>() {}
+fun need4<where A4 is P4>() {}
+fun need5<where A5 is P5>() {}
+public fun main() {
+  need0()
+  need1()
+  need2()
+  need3()
+  need4()
+  need5()
+}

@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P {}
+struct W<X0, X1> {}
+fun need<V where V is P>() {}
+fun f<T0, T1, U0, U1 where T0 == U0, T1 == U1, W<T0, T1> is P>() {
+  need<W<U0, U1>>()
+}

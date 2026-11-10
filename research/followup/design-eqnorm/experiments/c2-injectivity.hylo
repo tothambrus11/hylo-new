@@ -1,0 +1,4 @@
+//! stage:typing no-std
+struct Box<X> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<T, U where Box<T> == Box<U>>(x: T) { check<U>(x) }

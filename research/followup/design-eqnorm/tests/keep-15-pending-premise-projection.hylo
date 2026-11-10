@@ -1,0 +1,15 @@
+//! stage:typing no-std
+// expected: accepted at every stage (soundness problem 3). `T.Element == Flag` of the extension is
+// proved while `T is Collection` is still pending; its T.Element must be identified with the
+// caller's. This is the part of solveEquality that stays outside the cached closure.
+// currently: base accepted (summon.subgoals=4860 summon.matches=91425); FULL accepted (summon.subgoals=7 summon.matches=433 eqsolve.proved=1 index.fallback=6).
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Flag { public memberwise init }
+extension <T where T is Collection, T.Element == Flag> Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+fun g<T where T is Collection, T.Element == Flag>(b: Box<T>) {
+  let f: Flag = b.first()
+}

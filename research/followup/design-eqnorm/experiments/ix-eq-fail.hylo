@@ -1,0 +1,87 @@
+//! stage:typing no-std
+trait P {}
+struct Z { public memberwise init }
+fun need<V where V is P>() {}
+struct S0 { public memberwise init }
+given S0 is P {}
+struct S1 { public memberwise init }
+given S1 is P {}
+struct S2 { public memberwise init }
+given S2 is P {}
+struct S3 { public memberwise init }
+given S3 is P {}
+struct S4 { public memberwise init }
+given S4 is P {}
+struct S5 { public memberwise init }
+given S5 is P {}
+struct S6 { public memberwise init }
+given S6 is P {}
+struct S7 { public memberwise init }
+given S7 is P {}
+struct S8 { public memberwise init }
+given S8 is P {}
+struct S9 { public memberwise init }
+given S9 is P {}
+struct S10 { public memberwise init }
+given S10 is P {}
+struct S11 { public memberwise init }
+given S11 is P {}
+struct S12 { public memberwise init }
+given S12 is P {}
+struct S13 { public memberwise init }
+given S13 is P {}
+struct S14 { public memberwise init }
+given S14 is P {}
+struct S15 { public memberwise init }
+given S15 is P {}
+struct S16 { public memberwise init }
+given S16 is P {}
+struct S17 { public memberwise init }
+given S17 is P {}
+struct S18 { public memberwise init }
+given S18 is P {}
+struct S19 { public memberwise init }
+given S19 is P {}
+struct S20 { public memberwise init }
+given S20 is P {}
+struct S21 { public memberwise init }
+given S21 is P {}
+struct S22 { public memberwise init }
+given S22 is P {}
+struct S23 { public memberwise init }
+given S23 is P {}
+struct S24 { public memberwise init }
+given S24 is P {}
+struct S25 { public memberwise init }
+given S25 is P {}
+struct S26 { public memberwise init }
+given S26 is P {}
+struct S27 { public memberwise init }
+given S27 is P {}
+struct S28 { public memberwise init }
+given S28 is P {}
+struct S29 { public memberwise init }
+given S29 is P {}
+struct S30 { public memberwise init }
+given S30 is P {}
+struct S31 { public memberwise init }
+given S31 is P {}
+struct S32 { public memberwise init }
+given S32 is P {}
+struct S33 { public memberwise init }
+given S33 is P {}
+struct S34 { public memberwise init }
+given S34 is P {}
+struct S35 { public memberwise init }
+given S35 is P {}
+struct S36 { public memberwise init }
+given S36 is P {}
+struct S37 { public memberwise init }
+given S37 is P {}
+struct S38 { public memberwise init }
+given S38 is P {}
+struct S39 { public memberwise init }
+given S39 is P {}
+fun f<A, B where A == B>() {
+  need<Z>()
+}

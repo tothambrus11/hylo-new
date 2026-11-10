@@ -1,0 +1,44 @@
+struct T0 { public memberwise init }
+struct T1 { public memberwise init }
+extension T0 { fun m0() {} }
+extension T1 { fun m1() {} }
+extension T0 { fun m2() {} }
+extension T1 { fun m3() {} }
+extension T0 { fun m4() {} }
+extension T1 { fun m5() {} }
+extension T0 { fun m6() {} }
+extension T1 { fun m7() {} }
+extension T0 { fun m8() {} }
+extension T1 { fun m9() {} }
+extension T0 { fun m10() {} }
+extension T1 { fun m11() {} }
+extension T0 { fun m12() {} }
+extension T1 { fun m13() {} }
+extension T0 { fun m14() {} }
+extension T1 { fun m15() {} }
+extension T0 { fun m16() {} }
+extension T1 { fun m17() {} }
+extension T0 { fun m18() {} }
+extension T1 { fun m19() {} }
+public fun main() {
+  T0().m0()
+  T1().m13()
+  T0().m6()
+  T1().m19()
+  T0().m12()
+  T1().m5()
+  T0().m18()
+  T1().m11()
+  T0().m4()
+  T1().m17()
+  T0().m10()
+  T1().m3()
+  T0().m16()
+  T1().m9()
+  T0().m2()
+  T1().m15()
+  T0().m8()
+  T1().m1()
+  T0().m14()
+  T1().m7()
+}

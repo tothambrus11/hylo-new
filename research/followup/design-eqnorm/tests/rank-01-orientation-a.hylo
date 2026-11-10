@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected: accepted in stages 1 and 2 (penalties are those of eqsolve: B ~ A is a fact, C ~ A needs
+// symmetry, so `B is P` wins). Stage 3, if the designers agree, makes it ambiguous like rank-02:
+// the two programs differ only in how one equality is written.
+// currently: base accepted (summon.subgoals=7 summon.matches=225); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B, C where B is P, C is P, B == A, A == C>() { g<A>() }

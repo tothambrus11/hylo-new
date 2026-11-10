@@ -1,0 +1,373 @@
+eqchain            n=8     base  ok       t=1426.11 wall=2.43 matches=61676 forks=None applies=8 
+eqchain            n=12    base  ok       t=2415.31 wall=3.51 matches=96248 forks=None applies=8 
+eqchain            n=16    base  ok       t=3856.79 wall=4.99 matches=139716 forks=None applies=8 
+eqchain            n=24    base  ok       t=7512.34 wall=8.79 matches=256412 forks=None applies=8 
+eqchain            n=32    base  ok       t=13491.57 wall=14.65 matches=417908 forks=None applies=8 
+eqchain            n=64    base  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 13 s at n=32, power-law extrapolation gives 55 s at n=64
+eqchain            n=128   base  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 13 s at n=32, power-law extrapolation gives 55 s at n=64
+eqchain            n=256   base  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 13 s at n=32, power-law extrapolation gives 55 s at n=64
+eqchain            n=8     FIX   ok       t=7.08 wall=0.54 matches=242 forks=None applies=None 
+eqchain            n=12    FIX   ok       t=22.91 wall=0.72 matches=254 forks=None applies=None 
+eqchain            n=16    FIX   ok       t=10.08 wall=0.92 matches=266 forks=None applies=None 
+eqchain            n=24    FIX   ok       t=12.26 wall=1.02 matches=290 forks=None applies=None 
+eqchain            n=32    FIX   ok       t=14.99 wall=0.78 matches=314 forks=None applies=None 
+eqchain            n=64    FIX   ok       t=13.9 wall=0.73 matches=410 forks=None applies=None 
+eqchain            n=128   FIX   ok       t=21.06 wall=0.7 matches=602 forks=None applies=None 
+eqchain            n=256   FIX   ok       t=41.76 wall=0.77 matches=986 forks=None applies=None 
+eqchain            n=6     MIN5  ok       t=771.41 wall=1.28 matches=47170 forks=None applies=None 
+eqchain            n=8     MIN5  ok       t=1252.35 wall=1.69 matches=61352 forks=None applies=None 
+eqchain            n=12    MIN5  ok       t=1962.12 wall=2.29 matches=95908 forks=None applies=None 
+eqchain            n=16    MIN5  ok       t=2681.11 wall=3.14 matches=139360 forks=None applies=None 
+eqchain            n=24    MIN5  ok       t=5267.2 wall=6.1 matches=256024 forks=None applies=None 
+eqchain            n=32    MIN5  ok       t=8093.88 wall=8.74 matches=417488 forks=None applies=None 
+eqchain            n=64    MIN5  timeout  t=None wall=20.12 matches=None forks=None applies=None 
+eqchain            n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain            n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain            n=6     FULL  ok       t=4.0 wall=0.45 matches=236 forks=None applies=None 
+eqchain            n=8     FULL  ok       t=4.1 wall=0.51 matches=242 forks=None applies=None 
+eqchain            n=12    FULL  ok       t=8.52 wall=0.5 matches=254 forks=None applies=None 
+eqchain            n=16    FULL  ok       t=4.44 wall=0.44 matches=266 forks=None applies=None 
+eqchain            n=24    FULL  ok       t=3.81 wall=0.41 matches=290 forks=None applies=None 
+eqchain            n=32    FULL  ok       t=5.33 wall=0.52 matches=314 forks=None applies=None 
+eqchain            n=64    FULL  ok       t=17.08 wall=0.65 matches=410 forks=None applies=None 
+eqchain            n=128   FULL  ok       t=22.47 wall=0.53 matches=602 forks=None applies=None 
+eqchain            n=256   FULL  ok       t=26.92 wall=0.57 matches=986 forks=None applies=None 
+eqchain-neg        n=1     base  err      t=29.8 wall=0.91 matches=143 forks=None applies=None eqchain-neg-1.hylo:3.33-38: error: no coercion from 'P<T1> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=2     base  err      t=56.64 wall=1.06 matches=145 forks=None applies=None eqchain-neg-2.hylo:3.47-52: error: no coercion from 'P<T2> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=3     base  ok       t=993.21 wall=2.22 matches=45728 forks=None applies=None 
+eqchain-neg        n=4     base  ok       t=976.41 wall=2.15 matches=57443 forks=None applies=None 
+eqchain-neg        n=5     base  ok       t=340.46 wall=1.1 matches=17426 forks=None applies=None 
+eqchain-neg        n=6     base  ok       t=365.28 wall=1.15 matches=20369 forks=None applies=None 
+eqchain-neg        n=8     base  ok       t=711.75 wall=1.59 matches=26969 forks=None applies=None 
+eqchain-neg        n=12    base  ok       t=1228.45 wall=2.33 matches=43193 forks=None applies=None 
+eqchain-neg        n=16    base  ok       t=1648.83 wall=2.47 matches=63769 forks=None applies=None 
+eqchain-neg        n=24    base  ok       t=2722.2 wall=3.84 matches=119513 forks=None applies=None 
+eqchain-neg        n=32    base  ok       t=5482.21 wall=6.36 matches=197273 forks=None applies=None 
+eqchain-neg        n=64    base  timeout  t=None wall=20.04 matches=None forks=None applies=None 
+eqchain-neg        n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-neg        n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-neg        n=1     FIX   err      t=10.07 wall=0.48 matches=143 forks=None applies=None eqchain-neg-1.hylo:3.33-38: error: no coercion from 'P<T1> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=2     FIX   err      t=11.87 wall=0.49 matches=145 forks=None applies=None eqchain-neg-2.hylo:3.47-52: error: no coercion from 'P<T2> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=3     FIX   err      t=12.66 wall=0.48 matches=149 forks=None applies=None eqchain-neg-3.hylo:3.61-66: error: no coercion from 'P<T3> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=4     FIX   err      t=12.79 wall=0.48 matches=151 forks=None applies=None eqchain-neg-4.hylo:3.75-80: error: no coercion from 'P<T4> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=5     FIX   err      t=17.81 wall=0.63 matches=153 forks=None applies=None eqchain-neg-5.hylo:3.89-94: error: no coercion from 'P<T5> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=6     FIX   err      t=10.55 wall=0.52 matches=155 forks=None applies=None eqchain-neg-6.hylo:3.103-108: error: no coercion from 'P<T6> ==> [Void]() let -> Void' to '[Void]() 
+eqchain-neg        n=8     FIX   err      t=17.44 wall=0.54 matches=159 forks=None applies=None eqchain-neg-8.hylo:3.131-136: error: no coercion from 'P<T8> ==> [Void]() let -> Void' to '[Void]() 
+eqchain-neg        n=12    FIX   err      t=14.03 wall=0.51 matches=167 forks=None applies=None eqchain-neg-12.hylo:3.195-201: error: no coercion from 'P<T12> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=16    FIX   err      t=14.69 wall=0.5 matches=175 forks=None applies=None eqchain-neg-16.hylo:3.263-269: error: no coercion from 'P<T16> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=24    FIX   err      t=17.41 wall=0.6 matches=191 forks=None applies=None eqchain-neg-24.hylo:3.397-403: error: no coercion from 'P<T24> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=32    FIX   err      t=16.19 wall=0.51 matches=207 forks=None applies=None eqchain-neg-32.hylo:3.533-539: error: no coercion from 'P<T32> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=64    FIX   err      t=18.34 wall=0.57 matches=271 forks=None applies=None eqchain-neg-64.hylo:3.1077-1083: error: no coercion from 'P<T64> ==> [Void]() let -> Void' to '[Void
+eqchain-neg        n=128   FIX   err      t=21.77 wall=0.5 matches=399 forks=None applies=None eqchain-neg-128.hylo:3.2251-2258: error: no coercion from 'P<T128> ==> [Void]() let -> Void' to '[Vo
+eqchain-neg        n=256   FIX   err      t=33.15 wall=0.47 matches=655 forks=None applies=None eqchain-neg-256.hylo:3.4809-4816: error: no coercion from 'P<T256> ==> [Void]() let -> Void' to '[Vo
+eqchain-neg        n=1     MIN5  err      t=3.09 wall=0.26 matches=3 forks=None applies=None eqchain-neg-1.hylo:3.33-38: error: no coercion from 'P<T1> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=2     MIN5  err      t=3.0 wall=0.22 matches=145 forks=None applies=None eqchain-neg-2.hylo:3.47-52: error: no coercion from 'P<T2> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=3     MIN5  ok       t=620.13 wall=0.9 matches=45728 forks=None applies=None 
+eqchain-neg        n=4     MIN5  ok       t=821.95 wall=1.14 matches=57443 forks=None applies=None 
+eqchain-neg        n=5     MIN5  ok       t=237.14 wall=0.5 matches=17426 forks=None applies=None 
+eqchain-neg        n=6     MIN5  ok       t=234.22 wall=0.51 matches=20369 forks=None applies=None 
+eqchain-neg        n=8     MIN5  ok       t=492.73 wall=0.76 matches=26969 forks=None applies=None 
+eqchain-neg        n=12    MIN5  ok       t=620.89 wall=0.94 matches=43193 forks=None applies=None 
+eqchain-neg        n=16    MIN5  ok       t=997.93 wall=1.26 matches=63769 forks=None applies=None 
+eqchain-neg        n=24    MIN5  ok       t=2333.88 wall=2.68 matches=119513 forks=None applies=None 
+eqchain-neg        n=32    MIN5  ok       t=4121.11 wall=4.71 matches=197273 forks=None applies=None 
+eqchain-neg        n=64    MIN5  timeout  t=None wall=20.05 matches=None forks=None applies=None 
+eqchain-neg        n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-neg        n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-neg        n=1     FULL  err      t=4.33 wall=0.27 matches=1 forks=None applies=None eqchain-neg-1.hylo:3.33-38: error: no coercion from 'P<T1> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=2     FULL  err      t=5.34 wall=0.29 matches=145 forks=None applies=None eqchain-neg-2.hylo:3.47-52: error: no coercion from 'P<T2> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=3     FULL  err      t=4.85 wall=0.23 matches=149 forks=None applies=None eqchain-neg-3.hylo:3.61-66: error: no coercion from 'P<T3> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=4     FULL  err      t=4.49 wall=0.24 matches=151 forks=None applies=None eqchain-neg-4.hylo:3.75-80: error: no coercion from 'P<T4> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=5     FULL  err      t=4.66 wall=0.2 matches=153 forks=None applies=None eqchain-neg-5.hylo:3.89-94: error: no coercion from 'P<T5> ==> [Void]() let -> Void' to '[Void]() le
+eqchain-neg        n=6     FULL  err      t=4.48 wall=0.27 matches=155 forks=None applies=None eqchain-neg-6.hylo:3.103-108: error: no coercion from 'P<T6> ==> [Void]() let -> Void' to '[Void]() 
+eqchain-neg        n=8     FULL  err      t=6.09 wall=0.23 matches=159 forks=None applies=None eqchain-neg-8.hylo:3.131-136: error: no coercion from 'P<T8> ==> [Void]() let -> Void' to '[Void]() 
+eqchain-neg        n=12    FULL  err      t=4.51 wall=0.52 matches=167 forks=None applies=None eqchain-neg-12.hylo:3.195-201: error: no coercion from 'P<T12> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=16    FULL  err      t=5.67 wall=0.37 matches=175 forks=None applies=None eqchain-neg-16.hylo:3.263-269: error: no coercion from 'P<T16> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=24    FULL  err      t=6.26 wall=0.45 matches=191 forks=None applies=None eqchain-neg-24.hylo:3.397-403: error: no coercion from 'P<T24> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=32    FULL  err      t=5.01 wall=0.33 matches=207 forks=None applies=None eqchain-neg-32.hylo:3.533-539: error: no coercion from 'P<T32> ==> [Void]() let -> Void' to '[Void](
+eqchain-neg        n=64    FULL  err      t=7.57 wall=0.32 matches=271 forks=None applies=None eqchain-neg-64.hylo:3.1077-1083: error: no coercion from 'P<T64> ==> [Void]() let -> Void' to '[Void
+eqchain-neg        n=128   FULL  err      t=11.19 wall=0.45 matches=399 forks=None applies=None eqchain-neg-128.hylo:3.2251-2258: error: no coercion from 'P<T128> ==> [Void]() let -> Void' to '[Vo
+eqchain-neg        n=256   FULL  err      t=14.8 wall=0.42 matches=655 forks=None applies=None eqchain-neg-256.hylo:3.4809-4816: error: no coercion from 'P<T256> ==> [Void]() let -> Void' to '[Vo
+eqchain-goals      n=1     base  ok       t=13.7 wall=0.95 matches=72 forks=None applies=None 
+eqchain-goals      n=2     base  ok       t=66.96 wall=1.1 matches=951 forks=None applies=None 
+eqchain-goals      n=3     base  ok       t=195.56 wall=1.09 matches=15485 forks=None applies=None 
+eqchain-goals      n=4     base  ok       t=681.78 wall=1.61 matches=35677 forks=None applies=None 
+eqchain-goals      n=5     base  ok       t=1376.13 wall=2.09 matches=61925 forks=None applies=None 
+eqchain-goals      n=6     base  ok       t=2485.78 wall=3.4 matches=94937 forks=None applies=None 
+eqchain-goals      n=8     base  ok       t=7360.59 wall=9.29 matches=184205 forks=None applies=None 
+eqchain-goals      n=12    base  ok       t=16491.23 wall=18.6 matches=477725 forks=None applies=None 
+eqchain-goals      n=16    base  timeout  t=None wall=20.04 matches=None forks=None applies=None 
+eqchain-goals      n=24    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=64    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=1     FIX   ok       t=5.58 wall=0.88 matches=2 forks=None applies=None 
+eqchain-goals      n=2     FIX   ok       t=4.56 wall=0.71 matches=4 forks=None applies=None 
+eqchain-goals      n=3     FIX   ok       t=6.2 wall=0.79 matches=6 forks=None applies=None 
+eqchain-goals      n=4     FIX   ok       t=7.97 wall=0.8 matches=8 forks=None applies=None 
+eqchain-goals      n=5     FIX   ok       t=7.1 wall=0.87 matches=10 forks=None applies=None 
+eqchain-goals      n=6     FIX   ok       t=24.18 wall=0.84 matches=12 forks=None applies=None 
+eqchain-goals      n=8     FIX   ok       t=17.57 wall=0.85 matches=16 forks=None applies=None 
+eqchain-goals      n=12    FIX   ok       t=10.47 wall=1.11 matches=24 forks=None applies=None 
+eqchain-goals      n=16    FIX   ok       t=28.17 wall=0.85 matches=32 forks=None applies=None 
+eqchain-goals      n=24    FIX   ok       t=39.78 wall=1.04 matches=48 forks=None applies=None 
+eqchain-goals      n=32    FIX   ok       t=33.53 wall=0.82 matches=64 forks=None applies=None 
+eqchain-goals      n=64    FIX   ok       t=64.73 wall=0.99 matches=128 forks=None applies=None 
+eqchain-goals      n=128   FIX   ok       t=412.97 wall=1.14 matches=256 forks=None applies=None 
+eqchain-goals      n=256   FIX   ok       t=1590.95 wall=2.24 matches=512 forks=None applies=None 
+eqchain-goals      n=1     MIN5  ok       t=1.09 wall=0.42 matches=72 forks=None applies=None 
+eqchain-goals      n=2     MIN5  ok       t=11.68 wall=0.58 matches=951 forks=None applies=None 
+eqchain-goals      n=3     MIN5  ok       t=441.6 wall=1.04 matches=15485 forks=None applies=None 
+eqchain-goals      n=4     MIN5  ok       t=867.6 wall=1.53 matches=35677 forks=None applies=None 
+eqchain-goals      n=5     MIN5  ok       t=2110.17 wall=2.85 matches=61925 forks=None applies=None 
+eqchain-goals      n=6     MIN5  ok       t=2427.32 wall=3.0 matches=94937 forks=None applies=None 
+eqchain-goals      n=8     MIN5  ok       t=4434.28 wall=5.14 matches=184205 forks=None applies=None 
+eqchain-goals      n=12    MIN5  ok       t=12830.56 wall=14.46 matches=477725 forks=None applies=None 
+eqchain-goals      n=16    MIN5  timeout  t=None wall=20.07 matches=None forks=None applies=None 
+eqchain-goals      n=24    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=16
+eqchain-goals      n=1     FULL  ok       t=0.81 wall=0.51 matches=2 forks=None applies=None 
+eqchain-goals      n=2     FULL  ok       t=1.62 wall=0.79 matches=4 forks=None applies=None 
+eqchain-goals      n=3     FULL  ok       t=1.12 wall=0.33 matches=6 forks=None applies=None 
+eqchain-goals      n=4     FULL  ok       t=1.38 wall=0.39 matches=8 forks=None applies=None 
+eqchain-goals      n=5     FULL  ok       t=1.97 wall=0.31 matches=10 forks=None applies=None 
+eqchain-goals      n=6     FULL  ok       t=1.73 wall=0.38 matches=12 forks=None applies=None 
+eqchain-goals      n=8     FULL  ok       t=2.27 wall=0.46 matches=16 forks=None applies=None 
+eqchain-goals      n=12    FULL  ok       t=11.83 wall=0.43 matches=24 forks=None applies=None 
+eqchain-goals      n=16    FULL  ok       t=17.16 wall=0.76 matches=32 forks=None applies=None 
+eqchain-goals      n=24    FULL  ok       t=9.66 wall=0.54 matches=48 forks=None applies=None 
+eqchain-goals      n=32    FULL  ok       t=14.34 wall=0.55 matches=64 forks=None applies=None 
+eqchain-goals      n=64    FULL  ok       t=41.59 wall=0.43 matches=128 forks=None applies=None 
+eqchain-goals      n=128   FULL  ok       t=356.06 wall=0.67 matches=256 forks=None applies=None 
+eqchain-goals      n=256   FULL  ok       t=729.63 wall=1.32 matches=512 forks=None applies=None 
+assoceq            n=1     base  ok       t=57.28 wall=1.18 matches=1110 forks=None applies=16 
+assoceq            n=2     base  ok       t=236.05 wall=1.29 matches=4423 forks=None applies=24 
+assoceq            n=3     base  ok       t=1679.05 wall=3.06 matches=60438 forks=None applies=32 
+assoceq            n=4     base  ok       t=1800.11 wall=2.96 matches=75042 forks=None applies=40 
+assoceq            n=5     base  ok       t=2463.35 wall=3.57 matches=91512 forks=None applies=48 
+assoceq            n=6     base  ok       t=2973.2 wall=4.21 matches=109938 forks=None applies=56 
+assoceq            n=8     base  ok       t=3599.35 wall=4.63 matches=153018 forks=None applies=72 
+assoceq            n=12    base  ok       t=9148.08 wall=10.18 matches=266610 forks=None applies=104 
+assoceq            n=16    base  ok       t=16124.23 wall=17.84 matches=421578 forks=None applies=136 
+assoceq            n=24    base  timeout  t=None wall=20.07 matches=None forks=None applies=None 
+assoceq            n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=64    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=1     FIX   ok       t=21.15 wall=0.55 matches=293 forks=None applies=None 
+assoceq            n=2     FIX   ok       t=23.29 wall=0.48 matches=447 forks=None applies=None 
+assoceq            n=3     FIX   ok       t=49.42 wall=0.6 matches=607 forks=None applies=None 
+assoceq            n=4     FIX   ok       t=42.52 wall=0.42 matches=773 forks=None applies=None 
+assoceq            n=5     FIX   ok       t=83.13 wall=0.55 matches=945 forks=None applies=None 
+assoceq            n=6     FIX   ok       t=82.76 wall=0.56 matches=1123 forks=None applies=None 
+assoceq            n=8     FIX   ok       t=111.11 wall=0.62 matches=1497 forks=None applies=None 
+assoceq            n=12    FIX   ok       t=244.42 wall=0.77 matches=2317 forks=None applies=None 
+assoceq            n=16    FIX   ok       t=373.64 wall=0.86 matches=3233 forks=None applies=None 
+assoceq            n=24    FIX   ok       t=514.98 wall=0.99 matches=5353 forks=None applies=None 
+assoceq            n=32    FIX   ok       t=867.94 wall=1.42 matches=7857 forks=None applies=None 
+assoceq            n=64    FIX   ok       t=4764.22 wall=5.25 matches=21713 forks=None applies=None 
+assoceq            n=128   FIX   timeout  t=None wall=20.01 matches=None forks=None applies=None 
+assoceq            n=256   FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=128
+assoceq            n=1     MIN5  ok       t=27.09 wall=0.49 matches=810 forks=None applies=8 
+assoceq            n=2     MIN5  ok       t=118.19 wall=0.63 matches=4115 forks=None applies=16 
+assoceq            n=3     MIN5  ok       t=1038.07 wall=1.42 matches=60122 forks=None applies=24 
+assoceq            n=4     MIN5  ok       t=1068.41 wall=1.39 matches=74718 forks=None applies=32 
+assoceq            n=5     MIN5  ok       t=1661.76 wall=2.25 matches=91180 forks=None applies=40 
+assoceq            n=6     MIN5  ok       t=2258.13 wall=2.84 matches=109598 forks=None applies=48 
+assoceq            n=8     MIN5  ok       t=2657.67 wall=3.18 matches=152662 forks=None applies=64 
+assoceq            n=12    MIN5  ok       t=5406.65 wall=6.05 matches=266222 forks=None applies=96 
+assoceq            n=16    MIN5  ok       t=8521.97 wall=9.16 matches=421158 forks=None applies=128 
+assoceq            n=24    MIN5  timeout  t=None wall=20.05 matches=None forks=None applies=None 
+assoceq            n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assoceq            n=1     FULL  ok       t=10.33 wall=0.22 matches=293 forks=None applies=None 
+assoceq            n=2     FULL  ok       t=18.54 wall=0.32 matches=447 forks=None applies=None 
+assoceq            n=3     FULL  ok       t=29.77 wall=0.24 matches=607 forks=None applies=None 
+assoceq            n=4     FULL  ok       t=46.46 wall=0.28 matches=773 forks=None applies=None 
+assoceq            n=5     FULL  ok       t=60.17 wall=0.34 matches=945 forks=None applies=None 
+assoceq            n=6     FULL  ok       t=58.39 wall=0.3 matches=1123 forks=None applies=None 
+assoceq            n=8     FULL  ok       t=108.22 wall=0.33 matches=1497 forks=None applies=None 
+assoceq            n=12    FULL  ok       t=165.48 wall=0.4 matches=2317 forks=None applies=None 
+assoceq            n=16    FULL  ok       t=257.9 wall=0.56 matches=3233 forks=None applies=None 
+assoceq            n=24    FULL  ok       t=478.32 wall=0.71 matches=5353 forks=None applies=None 
+assoceq            n=32    FULL  ok       t=797.97 wall=1.0 matches=7857 forks=None applies=None 
+assoceq            n=64    FULL  ok       t=3012.33 wall=3.3 matches=21713 forks=None applies=None 
+assoceq            n=128   FULL  ok       t=15085.34 wall=15.37 matches=67857 forks=None applies=None 
+assoceq            n=256   FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 15 s at n=128, power-law extrapolation gives 76 s at n=256
+assocneg           n=1     base  err      t=41.51 wall=1.01 matches=441 forks=None applies=8 assocneg-1.hylo:4.15-16: error: cannot pass value of type '(T1::P).X' to parameter '(T0::P).X'
+assocneg           n=2     base  err      t=43.91 wall=0.76 matches=899 forks=None applies=16 assocneg-2.hylo:4.15-16: error: cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg           n=3     base  ok       t=953.75 wall=1.79 matches=47781 forks=None applies=24 
+assocneg           n=4     base  ok       t=1384.48 wall=2.36 matches=60817 forks=None applies=32 
+assocneg           n=5     base  ok       t=1421.04 wall=2.42 matches=75969 forks=None applies=40 
+assocneg           n=6     base  ok       t=2370.71 wall=3.45 matches=92611 forks=None applies=48 
+assocneg           n=8     base  ok       t=3223.67 wall=4.28 matches=131895 forks=None applies=64 
+assocneg           n=12    base  ok       t=6903.94 wall=8.28 matches=236983 forks=None applies=96 
+assocneg           n=16    base  ok       t=9290.06 wall=10.3 matches=382231 forks=None applies=128 
+assocneg           n=24    base  timeout  t=None wall=20.07 matches=None forks=None applies=None 
+assocneg           n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=64    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=1     FIX   err      t=7.62 wall=0.6 matches=145 forks=None applies=None assocneg-1.hylo:4.15-16: error: cannot pass value of type '(T1::P).X' to parameter '(T0::P).X'
+assocneg           n=2     FIX   err      t=17.96 wall=0.56 matches=295 forks=None applies=None assocneg-2.hylo:4.15-16: error: cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg           n=3     FIX   err      t=29.05 wall=0.65 matches=452 forks=None applies=None assocneg-3.hylo:4.15-16: error: cannot pass value of type '(T3::P).X' to parameter '(T0::P).X'
+assocneg           n=4     FIX   err      t=42.7 wall=0.5 matches=614 forks=None applies=None assocneg-4.hylo:4.15-16: error: cannot pass value of type '(T4::P).X' to parameter '(T0::P).X'
+assocneg           n=5     FIX   err      t=43.88 wall=0.51 matches=782 forks=None applies=None assocneg-5.hylo:4.15-16: error: cannot pass value of type '(T5::P).X' to parameter '(T0::P).X'
+assocneg           n=6     FIX   err      t=127.07 wall=0.62 matches=956 forks=None applies=None assocneg-6.hylo:4.15-16: error: cannot pass value of type '(T6::P).X' to parameter '(T0::P).X'
+assocneg           n=8     FIX   err      t=124.5 wall=0.56 matches=1322 forks=None applies=None assocneg-8.hylo:4.15-16: error: cannot pass value of type '(T8::P).X' to parameter '(T0::P).X'
+assocneg           n=12    FIX   err      t=181.46 wall=0.65 matches=2126 forks=None applies=None assocneg-12.hylo:4.15-16: error: cannot pass value of type '(T12::P).X' to parameter '(T0::P).X'
+assocneg           n=16    FIX   err      t=237.41 wall=0.77 matches=3026 forks=None applies=None assocneg-16.hylo:4.15-16: error: cannot pass value of type '(T16::P).X' to parameter '(T0::P).X'
+assocneg           n=24    FIX   err      t=691.93 wall=1.19 matches=5114 forks=None applies=None assocneg-24.hylo:4.15-16: error: cannot pass value of type '(T24::P).X' to parameter '(T0::P).X'
+assocneg           n=32    FIX   err      t=915.2 wall=1.48 matches=7586 forks=None applies=None assocneg-32.hylo:4.15-16: error: cannot pass value of type '(T32::P).X' to parameter '(T0::P).X'
+assocneg           n=64    FIX   err      t=4058.29 wall=4.55 matches=21314 forks=None applies=None assocneg-64.hylo:4.15-16: error: cannot pass value of type '(T64::P).X' to parameter '(T0::P).X'
+assocneg           n=128   FIX   timeout  t=None wall=20.01 matches=None forks=None applies=None 
+assocneg           n=256   FIX   skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=128
+assocneg           n=1     MIN5  err      t=1.06 wall=0.49 matches=5 forks=None applies=None assocneg-1.hylo:4.15-16: error: cannot pass value of type '(T1::P).X' to parameter '(T0::P).X'
+assocneg           n=2     MIN5  err      t=31.11 wall=0.33 matches=595 forks=None applies=8 assocneg-2.hylo:4.15-16: error: cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg           n=3     MIN5  ok       t=862.16 wall=1.22 matches=47469 forks=None applies=16 
+assocneg           n=4     MIN5  ok       t=1199.17 wall=1.77 matches=60497 forks=None applies=24 
+assocneg           n=5     MIN5  ok       t=1420.34 wall=2.04 matches=75641 forks=None applies=32 
+assocneg           n=6     MIN5  ok       t=1845.18 wall=2.38 matches=92275 forks=None applies=40 
+assocneg           n=8     MIN5  ok       t=3141.62 wall=3.8 matches=131543 forks=None applies=56 
+assocneg           n=12    MIN5  ok       t=5732.28 wall=6.38 matches=236599 forks=None applies=88 
+assocneg           n=16    MIN5  ok       t=9106.45 wall=9.84 matches=381815 forks=None applies=120 
+assocneg           n=24    MIN5  timeout  t=None wall=20.14 matches=None forks=None applies=None 
+assocneg           n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=24
+assocneg           n=1     FULL  err      t=2.04 wall=0.4 matches=5 forks=None applies=None assocneg-1.hylo:4.15-16: error: cannot pass value of type '(T1::P).X' to parameter '(T0::P).X'
+assocneg           n=2     FULL  err      t=22.21 wall=0.59 matches=295 forks=None applies=None assocneg-2.hylo:4.15-16: error: cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg           n=3     FULL  err      t=26.79 wall=0.62 matches=452 forks=None applies=None assocneg-3.hylo:4.15-16: error: cannot pass value of type '(T3::P).X' to parameter '(T0::P).X'
+assocneg           n=4     FULL  err      t=42.07 wall=0.4 matches=614 forks=None applies=None assocneg-4.hylo:4.15-16: error: cannot pass value of type '(T4::P).X' to parameter '(T0::P).X'
+assocneg           n=5     FULL  err      t=56.6 wall=0.49 matches=782 forks=None applies=None assocneg-5.hylo:4.15-16: error: cannot pass value of type '(T5::P).X' to parameter '(T0::P).X'
+assocneg           n=6     FULL  err      t=99.65 wall=0.56 matches=956 forks=None applies=None assocneg-6.hylo:4.15-16: error: cannot pass value of type '(T6::P).X' to parameter '(T0::P).X'
+assocneg           n=8     FULL  err      t=96.0 wall=0.39 matches=1322 forks=None applies=None assocneg-8.hylo:4.15-16: error: cannot pass value of type '(T8::P).X' to parameter '(T0::P).X'
+assocneg           n=12    FULL  err      t=290.99 wall=0.7 matches=2126 forks=None applies=None assocneg-12.hylo:4.15-16: error: cannot pass value of type '(T12::P).X' to parameter '(T0::P).X'
+assocneg           n=16    FULL  err      t=376.41 wall=0.7 matches=3026 forks=None applies=None assocneg-16.hylo:4.15-16: error: cannot pass value of type '(T16::P).X' to parameter '(T0::P).X'
+assocneg           n=24    FULL  err      t=690.24 wall=1.05 matches=5114 forks=None applies=None assocneg-24.hylo:4.15-16: error: cannot pass value of type '(T24::P).X' to parameter '(T0::P).X'
+assocneg           n=32    FULL  err      t=1155.23 wall=1.42 matches=7586 forks=None applies=None assocneg-32.hylo:4.15-16: error: cannot pass value of type '(T32::P).X' to parameter '(T0::P).X'
+assocneg           n=64    FULL  err      t=4177.07 wall=4.56 matches=21314 forks=None applies=None assocneg-64.hylo:4.15-16: error: cannot pass value of type '(T64::P).X' to parameter '(T0::P).X'
+assocneg           n=128   FULL  err      t=16596.59 wall=17.15 matches=67202 forks=None applies=None assocneg-128.hylo:4.15-16: error: cannot pass value of type '(T128::P).X' to parameter '(T0::P).X'
+assocneg           n=256   FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 17 s at n=128, power-law extrapolation gives 66 s at n=256
+breadth-traits     n=8     base  ok       t=19.64 wall=0.94 matches=79 forks=None applies=None 
+breadth-traits     n=16    base  ok       t=37.68 wall=1.09 matches=87 forks=None applies=None 
+breadth-traits     n=32    base  ok       t=18.18 wall=0.99 matches=103 forks=None applies=None 
+breadth-traits     n=64    base  ok       t=30.62 wall=1.08 matches=135 forks=None applies=None 
+breadth-traits     n=128   base  ok       t=38.3 wall=0.99 matches=199 forks=None applies=None 
+breadth-traits     n=256   base  ok       t=207.85 wall=1.39 matches=327 forks=None applies=None 
+breadth-traits     n=512   base  ok       t=352.23 wall=1.39 matches=583 forks=None applies=None 
+breadth-traits     n=1024  base  ok       t=1805.11 wall=2.98 matches=1095 forks=None applies=None 
+breadth-traits     n=8     FIX   ok       t=18.14 wall=0.71 matches=79 forks=None applies=None 
+breadth-traits     n=16    FIX   ok       t=7.61 wall=0.73 matches=87 forks=None applies=None 
+breadth-traits     n=32    FIX   ok       t=9.58 wall=0.75 matches=103 forks=None applies=None 
+breadth-traits     n=64    FIX   ok       t=18.41 wall=0.58 matches=135 forks=None applies=None 
+breadth-traits     n=128   FIX   ok       t=39.27 wall=0.82 matches=199 forks=None applies=None 
+breadth-traits     n=256   FIX   ok       t=216.9 wall=0.89 matches=327 forks=None applies=None 
+breadth-traits     n=512   FIX   ok       t=301.58 wall=0.89 matches=583 forks=None applies=None 
+breadth-traits     n=1024  FIX   ok       t=2021.89 wall=2.71 matches=1095 forks=None applies=None 
+breadth-traits     n=8     MIN5  ok       t=0.76 wall=0.36 matches=2 forks=None applies=None 
+breadth-traits     n=16    MIN5  ok       t=1.03 wall=0.47 matches=2 forks=None applies=None 
+breadth-traits     n=32    MIN5  ok       t=1.89 wall=0.37 matches=2 forks=None applies=None 
+breadth-traits     n=64    MIN5  ok       t=2.27 wall=0.57 matches=2 forks=None applies=None 
+breadth-traits     n=128   MIN5  ok       t=9.09 wall=0.4 matches=2 forks=None applies=None 
+breadth-traits     n=256   MIN5  ok       t=9.29 wall=0.45 matches=2 forks=None applies=None 
+breadth-traits     n=512   MIN5  ok       t=30.94 wall=0.63 matches=2 forks=None applies=None 
+breadth-traits     n=1024  MIN5  ok       t=61.6 wall=0.57 matches=2 forks=None applies=None 
+breadth-traits     n=8     FULL  ok       t=1.78 wall=0.44 matches=2 forks=None applies=None 
+breadth-traits     n=16    FULL  ok       t=2.48 wall=0.3 matches=2 forks=None applies=None 
+breadth-traits     n=32    FULL  ok       t=3.87 wall=0.55 matches=2 forks=None applies=None 
+breadth-traits     n=64    FULL  ok       t=9.47 wall=0.44 matches=2 forks=None applies=None 
+breadth-traits     n=128   FULL  ok       t=7.87 wall=0.39 matches=2 forks=None applies=None 
+breadth-traits     n=256   FULL  ok       t=18.1 wall=0.52 matches=2 forks=None applies=None 
+breadth-traits     n=512   FULL  ok       t=24.35 wall=0.62 matches=2 forks=None applies=None 
+breadth-traits     n=1024  FULL  ok       t=41.71 wall=0.53 matches=2 forks=None applies=None 
+breadth-types      n=8     base  ok       t=71.9 wall=1.32 matches=79 forks=None applies=None 
+breadth-types      n=16    base  ok       t=32.88 wall=1.01 matches=87 forks=None applies=None 
+breadth-types      n=32    base  ok       t=18.86 wall=1.06 matches=103 forks=None applies=None 
+breadth-types      n=64    base  ok       t=27.68 wall=1.06 matches=135 forks=None applies=None 
+breadth-types      n=128   base  ok       t=35.97 wall=0.81 matches=199 forks=None applies=None 
+breadth-types      n=256   base  ok       t=104.13 wall=1.38 matches=327 forks=None applies=None 
+breadth-types      n=512   base  ok       t=378.08 wall=1.33 matches=583 forks=None applies=None 
+breadth-types      n=1024  base  ok       t=1991.89 wall=3.07 matches=1095 forks=None applies=None 
+breadth-types      n=8     FIX   ok       t=11.51 wall=0.69 matches=79 forks=None applies=None 
+breadth-types      n=16    FIX   ok       t=14.78 wall=0.67 matches=87 forks=None applies=None 
+breadth-types      n=32    FIX   ok       t=11.15 wall=0.7 matches=103 forks=None applies=None 
+breadth-types      n=64    FIX   ok       t=31.48 wall=0.58 matches=135 forks=None applies=None 
+breadth-types      n=128   FIX   ok       t=38.53 wall=0.72 matches=199 forks=None applies=None 
+breadth-types      n=256   FIX   ok       t=76.33 wall=0.67 matches=327 forks=None applies=None 
+breadth-types      n=512   FIX   ok       t=369.36 wall=1.23 matches=583 forks=None applies=None 
+breadth-types      n=1024  FIX   ok       t=1862.29 wall=2.65 matches=1095 forks=None applies=None 
+breadth-types      n=8     MIN5  ok       t=0.72 wall=0.25 matches=9 forks=None applies=None 
+breadth-types      n=16    MIN5  ok       t=0.89 wall=0.35 matches=17 forks=None applies=None 
+breadth-types      n=32    MIN5  ok       t=1.34 wall=0.41 matches=33 forks=None applies=None 
+breadth-types      n=64    MIN5  ok       t=2.93 wall=0.34 matches=65 forks=None applies=None 
+breadth-types      n=128   MIN5  ok       t=6.19 wall=0.36 matches=129 forks=None applies=None 
+breadth-types      n=256   MIN5  ok       t=7.7 wall=0.51 matches=257 forks=None applies=None 
+breadth-types      n=512   MIN5  ok       t=15.71 wall=0.36 matches=513 forks=None applies=None 
+breadth-types      n=1024  MIN5  ok       t=43.55 wall=0.56 matches=1025 forks=None applies=None 
+breadth-types      n=8     FULL  ok       t=1.93 wall=0.4 matches=9 forks=None applies=None 
+breadth-types      n=16    FULL  ok       t=2.4 wall=0.49 matches=17 forks=None applies=None 
+breadth-types      n=32    FULL  ok       t=2.23 wall=0.51 matches=33 forks=None applies=None 
+breadth-types      n=64    FULL  ok       t=3.93 wall=0.32 matches=65 forks=None applies=None 
+breadth-types      n=128   FULL  ok       t=10.86 wall=0.53 matches=129 forks=None applies=None 
+breadth-types      n=256   FULL  ok       t=11.69 wall=0.46 matches=257 forks=None applies=None 
+breadth-types      n=512   FULL  ok       t=62.83 wall=0.56 matches=513 forks=None applies=None 
+breadth-types      n=1024  FULL  ok       t=69.38 wall=0.39 matches=1025 forks=None applies=None 
+breadth-square     n=4     base  ok       t=39.14 wall=1.03 matches=348 forks=None applies=None 
+breadth-square     n=6     base  ok       t=32.91 wall=1.26 matches=642 forks=None applies=None 
+breadth-square     n=8     base  ok       t=63.41 wall=1.28 matches=1080 forks=None applies=None 
+breadth-square     n=12    base  ok       t=146.49 wall=1.19 matches=2580 forks=None applies=None 
+breadth-square     n=16    base  ok       t=341.79 wall=1.57 matches=5232 forks=None applies=None 
+breadth-square     n=24    base  ok       t=964.65 wall=1.91 matches=15528 forks=None applies=None 
+breadth-square     n=32    base  ok       t=2436.53 wall=3.57 matches=35040 forks=None applies=None 
+breadth-square     n=40    base  ok       t=6537.37 wall=7.61 matches=66840 forks=None applies=None 
+breadth-square     n=48    base  ok       t=14921.37 wall=16.23 matches=114000 forks=None applies=None 
+breadth-square     n=4     FIX   ok       t=30.14 wall=0.77 matches=348 forks=None applies=None 
+breadth-square     n=6     FIX   ok       t=20.58 wall=0.72 matches=642 forks=None applies=None 
+breadth-square     n=8     FIX   ok       t=44.54 wall=0.77 matches=1080 forks=None applies=None 
+breadth-square     n=12    FIX   ok       t=64.02 wall=0.84 matches=2580 forks=None applies=None 
+breadth-square     n=16    FIX   ok       t=311.24 wall=0.97 matches=5232 forks=None applies=None 
+breadth-square     n=24    FIX   ok       t=906.99 wall=1.73 matches=15528 forks=None applies=None 
+breadth-square     n=32    FIX   ok       t=2228.28 wall=3.09 matches=35040 forks=None applies=None 
+breadth-square     n=40    FIX   ok       t=5668.19 wall=6.37 matches=66840 forks=None applies=None 
+breadth-square     n=48    FIX   ok       t=11618.38 wall=12.32 matches=114000 forks=None applies=None 
+breadth-square     n=4     MIN5  ok       t=0.88 wall=0.34 matches=20 forks=None applies=None 
+breadth-square     n=6     MIN5  ok       t=1.69 wall=0.5 matches=42 forks=None applies=None 
+breadth-square     n=8     MIN5  ok       t=4.16 wall=0.48 matches=72 forks=None applies=None 
+breadth-square     n=12    MIN5  ok       t=5.61 wall=0.28 matches=156 forks=None applies=None 
+breadth-square     n=16    MIN5  ok       t=7.39 wall=0.38 matches=272 forks=None applies=None 
+breadth-square     n=24    MIN5  ok       t=24.02 wall=0.32 matches=600 forks=None applies=None 
+breadth-square     n=32    MIN5  ok       t=27.12 wall=0.38 matches=1056 forks=None applies=None 
+breadth-square     n=40    MIN5  ok       t=53.26 wall=0.37 matches=1640 forks=None applies=None 
+breadth-square     n=48    MIN5  ok       t=50.52 wall=0.38 matches=2352 forks=None applies=None 
+breadth-square     n=4     FULL  ok       t=2.66 wall=0.45 matches=20 forks=None applies=None 
+breadth-square     n=6     FULL  ok       t=3.08 wall=0.36 matches=42 forks=None applies=None 
+breadth-square     n=8     FULL  ok       t=4.12 wall=0.44 matches=72 forks=None applies=None 
+breadth-square     n=12    FULL  ok       t=6.42 wall=0.4 matches=156 forks=None applies=None 
+breadth-square     n=16    FULL  ok       t=20.21 wall=0.43 matches=272 forks=None applies=None 
+breadth-square     n=24    FULL  ok       t=35.69 wall=0.33 matches=600 forks=None applies=None 
+breadth-square     n=32    FULL  ok       t=53.72 wall=0.46 matches=1056 forks=None applies=None 
+breadth-square     n=40    FULL  ok       t=58.12 wall=0.55 matches=1640 forks=None applies=None 
+breadth-square     n=48    FULL  ok       t=79.72 wall=0.41 matches=2352 forks=None applies=None 
+div-branch         n=1     base  err      t=29.23 wall=0.88 matches=1350 forks=None applies=None div-branch-1.hylo:6.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let
+div-branch         n=2     base  err      t=1400.49 wall=2.42 matches=110449 forks=None applies=None div-branch-2.hylo:8.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let
+div-branch         n=3     base  timeout  t=None wall=20.09 matches=None forks=None applies=None 
+div-branch         n=4     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=5     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=6     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=8     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=12    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=16    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=3
+div-branch         n=1     FIX   err      t=15.62 wall=0.68 matches=1350 forks=None applies=None div-branch-1.hylo:6.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let
+div-branch         n=2     FIX   err      t=1909.1 wall=2.64 matches=110449 forks=None applies=None div-branch-2.hylo:8.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let
+div-branch         n=3     FIX   err      t=3362.43 wall=4.13 matches=159579 forks=None applies=None div-branch-3.hylo:1.1-11:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-branch         n=4     FIX   err      t=6421.86 wall=7.26 matches=202021 forks=None applies=None div-branch-4.hylo:1.1-13:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-branch         n=5     FIX   err      t=4308.99 wall=5.2 matches=117151 forks=None applies=None div-branch-5.hylo:1.1-15:1: error: implicit resolution is too complex: more than 100000 candidate de

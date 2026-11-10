@@ -1,0 +1,2 @@
+fun g<T1, U1 where T1 == U1>() {}
+fun f<T1, U1 where T1 == U1>() { g<T1, U1>() }

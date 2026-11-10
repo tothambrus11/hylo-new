@@ -1,0 +1,8 @@
+fun need<A, B where A == B>() {}
+fun f<T0, T1, T2, T3, T4, T5 where T0 == T1, T1 == T2, T2 == T3, T3 == T4, T4 == T5>() {
+  need<T0, T1>()
+  need<T0, T2>()
+  need<T0, T3>()
+  need<T0, T4>()
+  need<T0, T5>()
+}

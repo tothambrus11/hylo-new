@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// expected: accepted at every stage (positive/equality).
+// currently: base accepted (summon.subgoals=54 summon.matches=1166); FULL accepted (summon.subgoals=3 summon.matches=6 eqsolve.proved=3).
+fun f0<T>() { f1<T, T>() }
+fun f1<T, U where T == U>() { f1<U, T>() }
+fun f2<T, U, V where T == U, U == V>() { f1<T, V>() }

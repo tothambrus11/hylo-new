@@ -1,0 +1,10 @@
+//! stage:typing no-std
+trait P {}
+fun g<V where V is P>() {}
+fun check<T>(x: T) {}
+fun outer<A, B where A is P>() {
+  fun inner<C where C == A, B == C>(x: B) {
+    check<A>(x)
+    g<B>()
+  }
+}

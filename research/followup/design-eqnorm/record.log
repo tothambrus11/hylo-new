@@ -1,0 +1,37 @@
+cost-01-index-under-equality.hylo | base accepted (summon.subgoals=40 summon.matches=4480); FULL accepted (summon.subgoals=40 summon.matches=4480 index.fallback=40).
+cost-02-index-without-equality.hylo | base accepted (summon.subgoals=40 summon.matches=4440); FULL accepted (summon.subgoals=40 summon.matches=1640).
+gain-01-wide-given.hylo | base out of memory; FULL rejected (summon.subgoals=18 summon.matches=176 summon.depthExhausted=1 eqsolve.proved=16 index.fallback=2). FULL says: no coercion from 'P<W<U0, U1, U2, U3, U4,
+gain-02-wide-value.hylo | base timeout; FULL rejected (summon.subgoals=9 summon.matches=10 summon.depthExhausted=1 eqsolve.proved=9). FULL says: cannot pass value of type 'W<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9
+gain-03-compound-equality-in-given.hylo | base rejected (summon.subgoals=2 summon.matches=145); FULL rejected (summon.subgoals=2 summon.matches=145 index.fallback=2). FULL says: no coercion from 'P<Box<B>> ==> [Void]() let -> Vo
+gain-04-congruence-then-fact.hylo | base rejected (summon.matches=1); FULL rejected (summon.matches=1). FULL says: cannot pass value of type 'C' to parameter 'Box<B>'
+gain-05-parameter-equal-to-concrete.hylo | base rejected (summon.subgoals=2 summon.matches=147); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: no coercion from 'P<C> ==> [Void]() let -> Void' t
+gain-06-projection-equal-to-concrete.hylo | base rejected (summon.subgoals=8 summon.matches=590); FULL rejected (summon.subgoals=4 summon.matches=292 index.fallback=4). FULL says: no coercion from 'P<(T::Collection).Element> ==> [
+keep-01-two-witnesses.hylo | base rejected (summon.subgoals=6 summon.matches=447); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: cannot pass value of type '(U::P).X' to parameter 
+keep-02-two-witnesses-stated.hylo | base accepted (summon.subgoals=36 summon.matches=1506); FULL accepted (summon.subgoals=6 summon.matches=300 eqsolve.proved=2 index.fallback=4).
+keep-03-projection-through-equal-type.hylo | base accepted (summon.subgoals=11 summon.matches=661); FULL accepted (summon.subgoals=3 summon.matches=146 eqsolve.proved=1 index.fallback=2).
+keep-04-conformance-via-equality.hylo | base accepted (summon.subgoals=4 summon.matches=146); FULL accepted (summon.subgoals=2 summon.matches=75 eqsolve.proved=1 index.fallback=1).
+keep-05-refl-sym-trans.hylo | base accepted (summon.subgoals=54 summon.matches=1166); FULL accepted (summon.subgoals=3 summon.matches=6 eqsolve.proved=3).
+keep-06-unrelated-equality.hylo | base accepted (summon.subgoals=1089 summon.matches=21084); FULL rejected (summon.subgoals=2 summon.matches=1 eqsolve.refuted=2). FULL says: no coercion from '(D ~ V) ==> [Void]() let -> 
+keep-07-unrelated-nested.hylo | base accepted (summon.subgoals=2429 summon.matches=47781); FULL rejected (summon.subgoals=7 summon.matches=452 eqsolve.refuted=1 index.fallback=6). FULL says: cannot pass value of type '
+keep-08-chain-8.hylo | base accepted (summon.subgoals=3445 summon.matches=61676); FULL accepted (summon.subgoals=5 summon.matches=242 eqsolve.proved=2 index.fallback=3).
+keep-09-assoc-chain-broken.hylo | base rejected (summon.subgoals=48 summon.matches=4025); FULL rejected (summon.subgoals=16 summon.matches=1321 index.fallback=16). FULL says: cannot pass value of type '(T8::P).X' to para
+keep-10-assoc-chain-8.hylo | base accepted (summon.subgoals=8215 summon.matches=153018); FULL accepted (summon.subgoals=19 summon.matches=1497 eqsolve.proved=1 index.fallback=18).
+keep-11-no-injectivity.hylo | base rejected (summon.matches=1); FULL rejected (summon.matches=1). FULL says: cannot pass value of type 'T' to parameter 'U'
+keep-12-self-projection.hylo | base accepted (summon.subgoals=34 summon.matches=971); FULL accepted (summon.subgoals=2 summon.matches=75 eqsolve.proved=1 index.fallback=1).
+keep-13-open-requirement.hylo | base accepted (summon.subgoals=200 summon.matches=4105); FULL accepted (summon.subgoals=3 summon.matches=77 eqsolve.proved=1 eqmgu.solved=1 index.fallback=1).
+keep-14-equality-premise.hylo | base accepted (summon.subgoals=22 summon.matches=584); FULL accepted (summon.subgoals=5 summon.matches=150 eqsolve.proved=3 index.fallback=2).
+keep-15-pending-premise-projection.hylo | base accepted (summon.subgoals=4860 summon.matches=91425); FULL accepted (summon.subgoals=7 summon.matches=433 eqsolve.proved=1 index.fallback=6).
+keep-16-pending-premise-wrong.hylo | base rejected (summon.subgoals=60090 summon.matches=1065099 summon.depthExhausted=1); FULL rejected (summon.subgoals=6 summon.matches=360 eqsolve.refuted=1 index.fallback=5). FULL says: 
+keep-17-local-witness-is-opaque.hylo | base rejected (summon.subgoals=3 summon.matches=224); FULL rejected (summon.subgoals=1 summon.matches=74 index.fallback=1). FULL says: cannot pass value of type '(T::P).X' to parameter '
+keep-18-nested-scope.hylo | base accepted (summon.subgoals=191 summon.matches=3951); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+keep-19-nested-scope-leak.hylo | base rejected (summon.subgoals=41 summon.matches=880); FULL rejected (summon.subgoals=1 summon.matches=4 eqsolve.proved=1). FULL says: cannot pass value of type 'B' to parameter 'A'
+keep-20-tuple-arrow.hylo | base rejected (summon.subgoals=439 summon.matches=8869); FULL accepted (summon.subgoals=5 summon.matches=10 eqsolve.proved=5).
+keep-21-cache-across-hypotheses.hylo | base accepted (summon.subgoals=7388 summon.matches=128802); FULL accepted (summon.subgoals=4 summon.matches=79 eqsolve.proved=3 index.fallback=1).
+keep-22-divergent-givens-with-equality.hylo | base rejected (summon.subgoals=21 summon.matches=1450 summon.depthExhausted=2); FULL rejected (summon.subgoals=2 summon.matches=1 absmodel.refuted=2). FULL says: no coercion from 'P<S<Z>
+lang-01-member-through-equality.hylo | base rejected (summon.subgoals=2 summon.matches=146); FULL rejected. FULL says: type 'T' has no member 'foo'
+lang-02-trait-member-through-equality.hylo | base accepted (summon.subgoals=13 summon.matches=440); FULL accepted (summon.subgoals=2 summon.matches=74 eqsolve.proved=1 index.fallback=1).
+lang-03-conflicting-concrete-types.hylo | base accepted (summon.subgoals=42 summon.matches=880); FULL accepted (summon.subgoals=1 summon.matches=3 eqsolve.proved=1).
+rank-01-orientation-a.hylo | base accepted (summon.subgoals=7 summon.matches=225); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+rank-02-orientation-b.hylo | base rejected (summon.subgoals=14 summon.matches=449); FULL rejected (summon.subgoals=6 summon.matches=157 eqsolve.proved=4 index.fallback=2). FULL says: no coercion from 'P<A> ==> [Void
+rank-03-nearer-equality.hylo | base accepted (summon.subgoals=7 summon.matches=225); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+rank-04-syntactic-beats-equal.hylo | base rejected (summon.subgoals=6 summon.matches=447); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: cannot pass value of type '(B::P).X' to parameter 

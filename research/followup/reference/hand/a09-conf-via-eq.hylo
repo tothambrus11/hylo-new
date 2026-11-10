@@ -1,0 +1,11 @@
+trait P {}
+trait Q {}
+given <T where T is P> => T is Q {}
+fun needP<W where W is P>() {}
+fun needQ<W where W is Q>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T, U where T == U, T is P>() { needP<U>() }
+fun q1<T, U where T == U, T is P>() { needQ<U>() }
+fun q2<T, U, V where T == U, V == U, T is P>() { needP<V>() }
+fun q3<T, U, V where T == U, V == U, T is P>() { needQ<V>() }

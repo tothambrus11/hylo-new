@@ -1,0 +1,4 @@
+trait P {
+  type X
+  fun cast<T, U where T is P, T == Self, U is P, U == Self>(x: T.X) -> X { x }
+}

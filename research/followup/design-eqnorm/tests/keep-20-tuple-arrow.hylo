@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// expected: accepted at every stage. Congruence under tuples and arrows (labels, effects and access
+// are part of the constructor).
+// currently: base rejected (summon.subgoals=439 summon.matches=8869); FULL accepted (summon.subgoals=5 summon.matches=10 eqsolve.proved=5).
+fun need2<A, B where A == B>() {}
+fun check<T>(x: T) {}
+fun f<T, U where T == U>(x: {T, U}, y: [](T) -> U) {
+  need2<{T, U}, {U, T}>()
+  check<{U, T}>(x)
+  check<[](U) -> T>(y)
+}

@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// expected: accepted from stage 2. Today each of the 8 differing arguments becomes a hypothesis that
+// costs one search step, and the 10-step bound is exceeded (summon.depthExhausted=1 under FULL; base
+// runs out of memory). With the closure consulted inside `match`, the 8 pairs cost no step.
+// currently: base out of memory; FULL rejected (summon.subgoals=18 summon.matches=176 summon.depthExhausted=1 eqsolve.proved=16 index.fallback=2). FULL says: no coercion from 'P<W<U0, U1, U2, U3, U4, U5, U6, U7>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+struct W<X0, X1, X2, X3, X4, X5, X6, X7> {}
+fun need<V where V is P>() {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, U0, U1, U2, U3, U4, U5, U6, U7 where T0 == U0, T1 == U1, T2 == U2, T3 == U3, T4 == U4, T5 == U5, T6 == U6, T7 == U7, W<T0, T1, T2, T3, T4, T5, T6, T7> is P>() {
+  need<W<U0, U1, U2, U3, U4, U5, U6, U7>>()
+}

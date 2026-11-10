@@ -1,0 +1,754 @@
+{"file": "../Tests/CompilerTests/positive/abstract-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/adjunct-conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 556, "selfcheck.reify.confirmed": 399, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/assignment.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 179, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 150, "selfcheck.traitindex.confirmed": 11}}
+{"file": "../Tests/CompilerTests/positive/associated-type-equality.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 4, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 1224, "selfcheck.traitindex.confirmed": 9}}
+{"file": "../Tests/CompilerTests/positive/big-return.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 158, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 60, "selfcheck.traitindex.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/branch-inference.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 141, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/buffer-literal.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 67, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/builtins.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 522, "selfcheck.model.confirmed": 12, "selfcheck.reify.confirmed": 5717, "selfcheck.traitindex.confirmed": 624}}
+{"file": "../Tests/CompilerTests/positive/bundle-application-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 34, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/bundle-application-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 105, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 59, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/bundle-requirement.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 17, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/chained-type-aliases.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/coercion-derivability-cache.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 56440}}
+{"file": "../Tests/CompilerTests/positive/conformance-via-equivalence.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 107}}
+{"file": "../Tests/CompilerTests/positive/conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 276, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 41, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/context-bound.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 24, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/control-flow.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 51, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/conversion.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 63, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/division-by-zero-signed.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/division-by-zero-unsigned.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/division-result-unrepresentable.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/division-succeeds.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 114, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 354, "selfcheck.traitindex.confirmed": 30}}
+{"file": "../Tests/CompilerTests/positive/enum-constructor.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 400, "selfcheck.reify.confirmed": 40, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/enum-inference.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 110, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/equality.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 2065}}
+{"file": "../Tests/CompilerTests/positive/existentialization-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 357, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 128, "selfcheck.traitindex.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/existentialization-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 464, "selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 65, "selfcheck.traitindex.confirmed": 9}}
+{"file": "../Tests/CompilerTests/positive/existentialization-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 789, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 500, "selfcheck.traitindex.confirmed": 52}}
+{"file": "../Tests/CompilerTests/positive/existentialization-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 512, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 370, "selfcheck.traitindex.confirmed": 24}}
+{"file": "../Tests/CompilerTests/positive/existentialization-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 813, "selfcheck.model.confirmed": 10, "selfcheck.reify.confirmed": 222, "selfcheck.traitindex.confirmed": 28}}
+{"file": "../Tests/CompilerTests/positive/explicit-deinit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 50, "selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/extension.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 34, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/factorial.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 71, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/fibonacci.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 87, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/float-arithmetic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1016, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 2160, "selfcheck.traitindex.confirmed": 137}}
+{"file": "../Tests/CompilerTests/positive/float-literal.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 101, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/generic-bundle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 71, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/generic-call-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 125, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/generic-call-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 382, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 69, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/generic-constructor.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 104, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/generic-extension.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 19, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/generic-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 34, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/generic-member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 187, "selfcheck.reify.confirmed": 222, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/generic-qualification.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 9, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/generic-witness-table.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 323, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 66, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/global-binding.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/higher-kinded.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 93, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/implicit-qualification.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 266, "selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 592, "selfcheck.traitindex.confirmed": 14}}
+{"file": "../Tests/CompilerTests/positive/inlining-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 32, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/inlining-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 32, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/inlining-broken-cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12}}
+{"file": "../Tests/CompilerTests/positive/inlining-deep-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "../Tests/CompilerTests/positive/inlining-existentialized.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 571, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 118, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/inlining-shared-callee.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "../Tests/CompilerTests/positive/inlining-with-extensions.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 47, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/integer-bits.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 530, "selfcheck.model.confirmed": 9, "selfcheck.reify.confirmed": 3041, "selfcheck.traitindex.confirmed": 271}}
+{"file": "../Tests/CompilerTests/positive/integer-conversions.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 758, "selfcheck.model.confirmed": 19, "selfcheck.reify.confirmed": 4183, "selfcheck.traitindex.confirmed": 279}}
+{"file": "../Tests/CompilerTests/positive/integer-literal.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 456, "selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 181, "selfcheck.traitindex.confirmed": 13}}
+{"file": "../Tests/CompilerTests/positive/keyword-identifiers.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/lambda-inference.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 98}}
+{"file": "../Tests/CompilerTests/positive/local-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 270, "selfcheck.reify.confirmed": 43}}
+{"file": "../Tests/CompilerTests/positive/loop-break.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 379, "selfcheck.reify.confirmed": 458, "selfcheck.traitindex.confirmed": 36}}
+{"file": "../Tests/CompilerTests/positive/loop-continue.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 379, "selfcheck.reify.confirmed": 429, "selfcheck.traitindex.confirmed": 34}}
+{"file": "../Tests/CompilerTests/positive/member-bundle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 86, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/memberwise-init-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 158, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/memberwise-init-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 36, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/memberwise-init-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 158, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 40, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/metatype.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/nested-given-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 278, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 165}}
+{"file": "../Tests/CompilerTests/positive/nested-given-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 345, "selfcheck.reify.confirmed": 43, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/new-expression.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 50, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/nullary-conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 260, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 197, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/overload-priority.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 124, "selfcheck.reify.confirmed": 114, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/overloading-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 42, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/overloading-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 69, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/partial-type-substitution.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 21}}
+{"file": "../Tests/CompilerTests/positive/pattern-matching.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 79, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/pointer-place-roundtrip.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 31, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/refinement.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 536, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 83, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/positive/remote-binding.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "../Tests/CompilerTests/positive/resolution-in-extension.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 15, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/return-in-if-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 91, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/return-in-if-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 158, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 94, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/runtime-record-offsets.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 879, "selfcheck.model.confirmed": 7, "selfcheck.reify.confirmed": 1701, "selfcheck.traitindex.confirmed": 125}}
+{"file": "../Tests/CompilerTests/positive/self-where-clause.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 36}}
+{"file": "../Tests/CompilerTests/positive/sink-subscript-locally-movable.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 204, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 97, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/sink-subscript.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 100, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 183, "selfcheck.traitindex.confirmed": 12}}
+{"file": "../Tests/CompilerTests/positive/standard-library.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 245, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 546, "selfcheck.traitindex.confirmed": 36}}
+{"file": "../Tests/CompilerTests/positive/static-function.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/static-member-name-clash.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 50, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 26, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/stored-binding.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 70, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 41, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 85, "selfcheck.traitindex.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 76, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 87, "selfcheck.traitindex.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 50, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 68, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/subscript-decomposition-7.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 287, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 115, "selfcheck.traitindex.confirmed": 15}}
+{"file": "../Tests/CompilerTests/positive/subscript-load-across-yieldpoint.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 109, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 126, "selfcheck.traitindex.confirmed": 9}}
+{"file": "../Tests/CompilerTests/positive/subscript-optimized.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12}}
+{"file": "../Tests/CompilerTests/positive/subscript-use-erased-parameter-in-slide.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 245, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 138, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/synthesized-deinit-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 950, "selfcheck.reify.confirmed": 86, "selfcheck.traitindex.confirmed": 8}}
+{"file": "../Tests/CompilerTests/positive/synthesized-deinit-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 50, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/ternary.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 127, "selfcheck.reify.confirmed": 91, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/positive/trap-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/trap-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/trap-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 6}}
+{"file": "../Tests/CompilerTests/positive/trap-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 10}}
+{"file": "../Tests/CompilerTests/positive/tuple-consing.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 70, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/positive/typealias-transparent.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/positive/typealiases.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/positive/unsigned-multiplication-succeeds.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 285, "selfcheck.model.confirmed": 15, "selfcheck.reify.confirmed": 365, "selfcheck.traitindex.confirmed": 25}}
+{"file": "../Tests/CompilerTests/positive/while-project.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/positive/while-with-alloca.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/ambiguous-implementation.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/ambiguous-overload.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 13}}
+{"file": "../Tests/CompilerTests/negative/argument-labels.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/associated-type-inequality.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/bodyless-local-function.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/conditional-sink.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 121, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 68, "selfcheck.traitindex.confirmed": 6}}
+{"file": "../Tests/CompilerTests/negative/cyclic-binding.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/cyclic-typealias.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/empty-initialization.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/exclusivity-violation.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 108, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/extern-c-indirect-llvm.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/extern-c-indirect-typing.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/extern-c-indirect.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/generic-requirement.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 14, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/illegal-conditional-expression.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-enum-case.hylo", "rc": -4, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-inlining.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/illegal-loop-control.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-memberwise-init.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/illegal-move-sink-subscript.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 100, "selfcheck.reify.confirmed": 34, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/illegal-mutation-marker.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-nested-yield.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-remote-type.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-return-yield.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-sink-global.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/illegal-sink-let.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 262, "selfcheck.traitindex.confirmed": 33}}
+{"file": "../Tests/CompilerTests/negative/illegal-stored-properties.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/illegal-trait-extension.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/illegal-yield.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/impossible-implicit-deinit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 17, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/negative/incompatible-if-branches.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/incomplete-type-declaration.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 102, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/negative/invalid-annotation.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/invalid-ascription.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-binding-declaration.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-builtin-dereference.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12}}
+{"file": "../Tests/CompilerTests/negative/invalid-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 14}}
+{"file": "../Tests/CompilerTests/negative/invalid-captures.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 62, "selfcheck.traitindex.confirmed": 13}}
+{"file": "../Tests/CompilerTests/negative/invalid-deconstruction.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 9, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/invalid-modifier-1.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-modifier-2.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-redeclaration.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/invalid-return.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 30, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/invalid-wildcard.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-argument.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12}}
+{"file": "../Tests/CompilerTests/negative/missing-associated-type-conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 64, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/missing-binding-ascription.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-comma.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-context.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 122, "selfcheck.reify.confirmed": 35, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/missing-implementation.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "../Tests/CompilerTests/negative/missing-initializer.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/missing-parameter-ascription.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-return-ascription.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-semicolon.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-type-identifier.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/missing-variant.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 57, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/missing-yield-value.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/no-conversion.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/no-given-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 64}}
+{"file": "../Tests/CompilerTests/negative/no-given-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 40, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/no-given-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20}}
+{"file": "../Tests/CompilerTests/negative/polycephalic-trait.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 201, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 234, "selfcheck.traitindex.confirmed": 4}}
+{"file": "../Tests/CompilerTests/negative/recursive-implicit-deinit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 100, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "../Tests/CompilerTests/negative/recursive-inlining.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12}}
+{"file": "../Tests/CompilerTests/negative/static-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 42}}
+{"file": "../Tests/CompilerTests/negative/static-member-via-instance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/synthetic-conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1000, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 103, "selfcheck.traitindex.confirmed": 5}}
+{"file": "../Tests/CompilerTests/negative/trait-refinement.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 853, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 173, "selfcheck.traitindex.confirmed": 7}}
+{"file": "../Tests/CompilerTests/negative/undefined-module.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/undefined-symbol.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/undefined-variant.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 5}}
+{"file": "../Tests/CompilerTests/negative/unmatched-comment-delimiter.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/unterminated-call-at-eof.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 6}}
+{"file": "../Tests/CompilerTests/negative/unused-value-1.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "../Tests/CompilerTests/negative/unused-value-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 18, "selfcheck.traitindex.confirmed": 1}}
+{"file": "../Tests/CompilerTests/negative/use-before-declaration.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "../Tests/CompilerTests/negative/use-before-init.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "workloads/breadth40.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 65080, "selfcheck.reify.confirmed": 6720}}
+{"file": "workloads/breadth80.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 510960, "selfcheck.reify.confirmed": 26240}}
+{"file": "workloads/chain12.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1407, "selfcheck.reify.confirmed": 205}}
+{"file": "workloads/chain3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 268, "selfcheck.reify.confirmed": 57}}
+{"file": "workloads/chain8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 603, "selfcheck.reify.confirmed": 112}}
+{"file": "workloads/chain9.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1340, "selfcheck.reify.confirmed": 186}}
+{"file": "workloads/div-dead-20.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 21, "selfcheck.reify.confirmed": 176}}
+{"file": "workloads/div-dead.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 24}}
+{"file": "workloads/div-grow-20.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 21, "selfcheck.reify.confirmed": 1646}}
+{"file": "workloads/div-grow.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 164}}
+{"file": "workloads/div-loop-20.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 21, "selfcheck.reify.confirmed": 1642}}
+{"file": "workloads/div-loop.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 160}}
+{"file": "workloads/empty.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "workloads/members-big.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 200, "selfcheck.reify.confirmed": 20000, "selfcheck.traitindex.confirmed": 2000}}
+{"file": "workloads/members.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 100, "selfcheck.reify.confirmed": 10000, "selfcheck.traitindex.confirmed": 1000}}
+{"file": "workloads/ovl-4-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 750, "selfcheck.traitindex.confirmed": 44}}
+{"file": "workloads/ovl-4-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 7268, "selfcheck.traitindex.confirmed": 448}}
+{"file": "workloads/ovl-4-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 50264, "selfcheck.traitindex.confirmed": 3184}}
+{"file": "workloads/ovl-8-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 16, "selfcheck.reify.confirmed": 563300, "selfcheck.traitindex.confirmed": 36128}}
+{"file": "workloads/ovr-3-10.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 1033476, "selfcheck.traitindex.confirmed": 3}}
+{"file": "workloads/ovr-3-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 982, "selfcheck.traitindex.confirmed": 3}}
+{"file": "workloads/ovr-3-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 9918, "selfcheck.traitindex.confirmed": 3}}
+{"file": "workloads/ovr-3-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 101786, "selfcheck.traitindex.confirmed": 3}}
+{"file": "workloads/ovr-3-9.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 6, "selfcheck.reify.confirmed": 364184, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/abstract-model/aq1-premise-instance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 56}}
+{"file": "report/test-programs/abstract-model/aq2-congruent-instance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 56}}
+{"file": "report/test-programs/abstract-model/aq3-generic-instance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 64}}
+{"file": "report/test-programs/abstract-model/aq4-ground-using.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 72}}
+{"file": "report/test-programs/abstract-model/probe1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 110}}
+{"file": "report/test-programs/abstract-model/probe2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 32}}
+{"file": "report/test-programs/cycles-and-crashes/a1-arrow-env-cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 40}}
+{"file": "report/test-programs/cycles-and-crashes/a1b-arrow-input-cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 40}}
+{"file": "report/test-programs/cycles-and-crashes/a2-arrow-env-generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "report/test-programs/cycles-and-crashes/a3-arrow-env-eq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 97885}}
+{"file": "report/test-programs/cycles-and-crashes/a4-annot.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 135}}
+{"file": "report/test-programs/cycles-and-crashes/a4-env-var-goal.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 216}}
+{"file": "report/test-programs/cycles-and-crashes/a4-explicit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 128}}
+{"file": "report/test-programs/cycles-and-crashes/a5-env-var-goal-ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 216}}
+{"file": "report/test-programs/cycles-and-crashes/b1-arrow.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 35, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b1-bundle-cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 83, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b10-arrow-let.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 53, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b11-bundle-tuple.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 65, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b1c-method-cycle-ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 83, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b1d-method-env-cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 83, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b2-bundle-cycle-free.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 95}}
+{"file": "report/test-programs/cycles-and-crashes/b2-bundle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 47, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b3-bundle-direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 56, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b4-bundle-inst.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 61, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b5-arrow-inst.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 54, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b6-bundle-inst2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 66, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b7-bundle-selfapp.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 57, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/b8-arrow-selfapp.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 45, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/b9-bundle-let.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 47, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c1-cycle-plus-coercion.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 192, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c1-empty-where.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 16}}
+{"file": "report/test-programs/cycles-and-crashes/c2-control.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 600, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c2-eq-in-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 4, "selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 187420}}
+{"file": "report/test-programs/cycles-and-crashes/c3-accept-change.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 194, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c4-control.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 504, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c5-order1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 218, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/c5-order2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 212, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/cyclic-query-segfault.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 176}}
+{"file": "report/test-programs/cycles-and-crashes/dag12.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 112}}
+{"file": "report/test-programs/cycles-and-crashes/dag14.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 130}}
+{"file": "report/test-programs/cycles-and-crashes/dag8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 76}}
+{"file": "report/test-programs/cycles-and-crashes/e1-env-capture.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 21}}
+{"file": "report/test-programs/cycles-and-crashes/e1-sym-proof.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 360}}
+{"file": "report/test-programs/cycles-and-crashes/e2-abs-qual-distinct-conf.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 96, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/e2-env-capture-ctl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 36}}
+{"file": "report/test-programs/cycles-and-crashes/e3-abs-qual-ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/cycles-and-crashes/e3-env-implicit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 19}}
+{"file": "report/test-programs/cycles-and-crashes/n1-nested-occurs.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 222, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/n1-nested.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 192}}
+{"file": "report/test-programs/cycles-and-crashes/n2-nested2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 208}}
+{"file": "report/test-programs/cycles-and-crashes/o1-value-ctx.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 539, "selfcheck.reify.confirmed": 1206}}
+{"file": "report/test-programs/cycles-and-crashes/o2-toplevel-occurs.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 44}}
+{"file": "report/test-programs/cycles-and-crashes/o3-toplevel-occurs-ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 48}}
+{"file": "report/test-programs/cycles-and-crashes/o4-toplevel-occurs-full.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 203, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/o5-assign-occurs.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 26}}
+{"file": "report/test-programs/cycles-and-crashes/o6-return-occurs.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 46}}
+{"file": "report/test-programs/cycles-and-crashes/o7-assign-occurs-bound.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 33}}
+{"file": "report/test-programs/cycles-and-crashes/o8-assign-ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 30}}
+{"file": "report/test-programs/cycles-and-crashes/o9-assign-mk.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 60}}
+{"file": "report/test-programs/cycles-and-crashes/p1-deep-100.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 2029}}
+{"file": "report/test-programs/cycles-and-crashes/p1-deep-25.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1429}}
+{"file": "report/test-programs/cycles-and-crashes/p1-deep-50.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1629}}
+{"file": "report/test-programs/cycles-and-crashes/p2-alias-deep.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1293}}
+{"file": "report/test-programs/cycles-and-crashes/p3-alias-deep256.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1301}}
+{"file": "report/test-programs/cycles-and-crashes/q1-open-eq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 25079}}
+{"file": "report/test-programs/cycles-and-crashes/q2-open-eq-amb.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 275}}
+{"file": "report/test-programs/cycles-and-crashes/r1-bundle-eq.hylo", "rc": 0, "violations": ["the equality procedure refuted ([Void](auto A) auto -> Void { let, inout } ~ [Void](auto B) auto -> Void { let, inout }), which search derives"], "selfcheck": {"selfcheck.reify.confirmed": 2467, "selfcheck.violations": 2}}
+{"file": "report/test-programs/cycles-and-crashes/r2-bundle-eq-neg.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 96656}}
+{"file": "report/test-programs/cycles-and-crashes/r3-arrow-eq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 5, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 226276}}
+{"file": "report/test-programs/cycles-and-crashes/s1-selfapp.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 11}}
+{"file": "report/test-programs/cycles-and-crashes/s2-tuple.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 36}}
+{"file": "report/test-programs/cycles-and-crashes/s3-generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 83, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/s4-check.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 80, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/t1-assign.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 42, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/t2-assign-only.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 35, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/t3-assign-ctl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 99, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 91, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 64, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 91, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 48, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 53, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/v7.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 53, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/cycles-and-crashes/variant-swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 176}}
+{"file": "report/test-programs/cycles-and-crashes/x1-extorder-after.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/cycles-and-crashes/x2-extorder-self.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 201, "selfcheck.reify.confirmed": 23, "selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/al1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/al2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/al3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/amb0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/amb1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/amb2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/amb3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/amb4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/amb5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/amb_direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/amb_e1first.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/amb_e2first.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/amb_e2first_use.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/amb_viaalias_direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/casc1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/casc2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/casc3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/ext-order-amb0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/ext-order-amb1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/ext-order-amb2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/ext-order-amb3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/ext-order-amb4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/ext-order-amb5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/ext-order-amb_direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/ext-order-amb_e1first.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/ext-order-amb_e2first.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/ext-order-amb_e2first_use.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/ext-order-amb_viaalias_direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/g1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/g2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/g3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/g4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/g_dup0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 20}}
+{"file": "report/test-programs/declaration-order/g_dup0_nouse.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "report/test-programs/declaration-order/g_dup1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/g_dup2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/g_dup3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/ge1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/ge2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/ge3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/gvalid.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/gx1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 17, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/gx1_ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 19, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/gx1_swap.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 17, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/gx1_use.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/gz0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/gz1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/gz1b.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 68, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 32, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/gz1c.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 40, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/gz2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/gz3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/gz4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/n01_noext_member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/n04-order-a.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/n04-order-b.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/n05_givenonly.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/n05_nogiven.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-casc1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-casc2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-casc3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-g1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-g2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-g3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-g4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-n01_alias_cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-n02_reverse_poison_noeffect.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 7}}
+{"file": "report/test-programs/declaration-order/names-n03_reverse_poison.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-n04_reverse_poison_min.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/names-n05_spurious_cycle_conformance.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 17, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-n06_diag_ambiguous.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 53, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-n07_bad_extendee.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-n08_conditional_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 239, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 183, "selfcheck.traitindex.confirmed": 10}}
+{"file": "report/test-programs/declaration-order/names-n09_kinds.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 158, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 119, "selfcheck.traitindex.confirmed": 18}}
+{"file": "report/test-programs/declaration-order/names-n10_trait_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 11, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-n11_poison_via_summon.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 37, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-n12_poison_via_summon_noearly.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/names-n13_typevar_in_diag.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 58, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/names-n14_typevar_in_diag2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 145, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-n15_local_extension.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-n16_cycle_via_where.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 11, "selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/names-n17_alias_cycle_generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-n18_summon_cache_refinement.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 25, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/names-n19_summon_cache_refinement_ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 21}}
+{"file": "report/test-programs/declaration-order/names-t01_ext_order.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/names-t02_names_worse.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-t03_names_worse.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-t04_init_ops_subscript.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 100, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 168, "selfcheck.traitindex.confirmed": 20}}
+{"file": "report/test-programs/declaration-order/names-t05_conf_in_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 331, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 58, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-t06_ambiguous_notfound.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 65, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/declaration-order/names-t07_conditional_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 59, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 120, "selfcheck.traitindex.confirmed": 7}}
+{"file": "report/test-programs/declaration-order/names-t08_local_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 67, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-t09_cycle_extendee.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-t10_alias_extendee.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 71, "selfcheck.traitindex.confirmed": 7}}
+{"file": "report/test-programs/declaration-order/names-t11_static_meta.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 39, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/declaration-order/names-t12_self_ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 192, "selfcheck.model.confirmed": 3, "selfcheck.reify.confirmed": 64, "selfcheck.traitindex.confirmed": 9}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v1_noearly.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v2_swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v3_nouse.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v4_noC.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v5_early_other.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/declaration-order/names-verify-names-1-v6_summon_swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v01_ext_declares_foo.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v02_ext_before_alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v03_direct_control.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v04_use_before.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v05_true_cycle.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v06_member_of_ext_alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v07_ext_of_alias_member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/names-verify-names-2-v08_two_aliases.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/pc1_selfapply.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/pc1_selfapply_nouse.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/perf_g1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/perf_g16.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1072, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 408, "selfcheck.traitindex.confirmed": 49}}
+{"file": "report/test-programs/declaration-order/perf_g4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 268, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 108, "selfcheck.traitindex.confirmed": 13}}
+{"file": "report/test-programs/declaration-order/r1_alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/r1_nested.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/r1_selfname.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/r1_selfname_fun.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/r2_bare.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 4, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/r2_where_assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 9, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/r2_where_assoc_ctrl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/r2_where_assoc_fun.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/declaration-order/r2_where_trait.hylo", "rc": 0, "violations": [], "selfcheck": {}}
+{"file": "report/test-programs/declaration-order/red1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 68, "selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 40, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/red2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 195, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 36, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/declaration-order/red3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 24, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/declaration-order/v2_noearly.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/v4-swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/declaration-order/v4-use-first.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/a01-self-trait.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 567, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/a02-conformance-def.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 732, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/a03-generic-given-body.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 128}}
+{"file": "report/test-programs/equalities/a04-cond-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 3, "selfcheck.reify.confirmed": 764}}
+{"file": "report/test-programs/equalities/a05-quantified.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 22298}}
+{"file": "report/test-programs/equalities/a06-tuple-arrow.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 5, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 19373}}
+{"file": "report/test-programs/equalities/a07-open.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 3, "selfcheck.reify.confirmed": 389}}
+{"file": "report/test-programs/equalities/a08-assoc-generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 6, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 8465, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/a09-conf-via-eq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 4, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 11864}}
+{"file": "report/test-programs/equalities/abs-launder-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/abs-launder-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/abs-launder-direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/abs-launder.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 1484, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/abs-trans-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/abs-trans-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/abs-trans-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 34666, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/abs-trans-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 34764, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/abs-trans-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 104072, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/abs-trans-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 108120, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/absinst-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 127388, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absinst-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 138614, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absinst-ok.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 99, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absleak-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absleak-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absleak-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/absleak-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 31435, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/absleak-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 62862, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/alias-hk-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 35}}
+{"file": "report/test-programs/equalities/alias-hk-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 34, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/alias-proj-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 30, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/assoc-eq-call-incomplete.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.index.confirmed": 138, "selfcheck.reify.confirmed": 51692, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/assoceq-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 376, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/assoceq-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 6050, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/assoceq-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 27835, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/assoceq-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 10, "selfcheck.reify.confirmed": 32246, "selfcheck.traitindex.confirmed": 10}}
+{"file": "report/test-programs/equalities/assoceq-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 13, "selfcheck.reify.confirmed": 37021, "selfcheck.traitindex.confirmed": 12}}
+{"file": "report/test-programs/equalities/assoceq-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 16, "selfcheck.reify.confirmed": 42172, "selfcheck.traitindex.confirmed": 14}}
+{"file": "report/test-programs/equalities/assoceq-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 22, "selfcheck.reify.confirmed": 10768, "selfcheck.traitindex.confirmed": 18}}
+{"file": "report/test-programs/equalities/assocneg-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/assocneg-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23937, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/assocneg-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 28032, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/assocneg-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 32584, "selfcheck.traitindex.confirmed": 10}}
+{"file": "report/test-programs/equalities/assocneg-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 37399, "selfcheck.traitindex.confirmed": 12}}
+{"file": "report/test-programs/equalities/assocneg-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 10020, "selfcheck.traitindex.confirmed": 16}}
+{"file": "report/test-programs/equalities/ate-f1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 103, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/ate.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 4, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 1224, "selfcheck.traitindex.confirmed": 9}}
+{"file": "report/test-programs/equalities/ati.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/bug-assoc-eq-two-links.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23937, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/c01-single-eq-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 110902}}
+{"file": "report/test-programs/equalities/c02-no-eq-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 92606}}
+{"file": "report/test-programs/equalities/c03-single-eq-given.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 112216}}
+{"file": "report/test-programs/equalities/c04-single-assoc-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 114790, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/c05-single-eq-both-unrelated.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 96640}}
+{"file": "report/test-programs/equalities/c06-single-eq-struct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 124472}}
+{"file": "report/test-programs/equalities/c07-single-assoc-arg.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 114880, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/cong-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 103, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/cong-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 197, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/cong-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 465, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/decomp-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 114}}
+{"file": "report/test-programs/equalities/decomp-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 32}}
+{"file": "report/test-programs/equalities/decomp-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 114}}
+{"file": "report/test-programs/equalities/dump-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 20379}}
+{"file": "report/test-programs/equalities/e01-orient-amb.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 479}}
+{"file": "report/test-programs/equalities/e01b-both-direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 4, "selfcheck.reify.confirmed": 392}}
+{"file": "report/test-programs/equalities/e02-penalty.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 400}}
+{"file": "report/test-programs/equalities/e03-penalty2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 372}}
+{"file": "report/test-programs/equalities/e04-penalty-scope.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 206}}
+{"file": "report/test-programs/equalities/e05-penalty-scope2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 206}}
+{"file": "report/test-programs/equalities/e06-elab-change.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 130}}
+{"file": "report/test-programs/equalities/e07-refine.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 273, "selfcheck.reify.confirmed": 133, "selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/equalities/e08-shapes.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 101770}}
+{"file": "report/test-programs/equalities/e09-trait-self-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 3254, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/eq-regress-judge-e04-penalty-scope.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 206}}
+{"file": "report/test-programs/equalities/eq-regress-judge-e05-penalty-scope2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 206}}
+{"file": "report/test-programs/equalities/eq-regress-judge-e06-elab-change.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 130}}
+{"file": "report/test-programs/equalities/eq-regress-judge-o2-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 6022}}
+{"file": "report/test-programs/equalities/eq-regress-judge-o2b-call-infer.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 5938}}
+{"file": "report/test-programs/equalities/eq-regress-judge-o2d-order.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1768}}
+{"file": "report/test-programs/equalities/eq-regress-judge-p01-cc-big.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 17, "selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 380, "selfcheck.reify.confirmed": 487382}}
+{"file": "report/test-programs/equalities/eq-regress-judge-p02-cc-big.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 27, "selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 870, "selfcheck.reify.confirmed": 867476}}
+{"file": "report/test-programs/equalities/eq-regress-judge-x01-ext-arg-member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 25, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/eq-regress-judge-x03-ext-nested-struct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/eq-regress-judge-x06-nested-ext-no-alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 13, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/eq-regress-judge-x09-ext-generic-where-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 13, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/eq-regress-judge-x10b-ext-where-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 64949, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/eq-unsound-v-abs-7.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1441, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/eqbug-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23937, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 25956, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23937, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23929, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 396, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug1-plain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23937, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqbug1-struct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 27737, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqchain-fix-assoceq-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 6050, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/eqchain-fix-assoceq-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 27835, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/eqchain-fix-assoceq-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 10, "selfcheck.reify.confirmed": 32246, "selfcheck.traitindex.confirmed": 10}}
+{"file": "report/test-programs/equalities/eqchain-fix-assoceq-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 13, "selfcheck.reify.confirmed": 37021, "selfcheck.traitindex.confirmed": 12}}
+{"file": "report/test-programs/equalities/eqchain-fix-assoceq-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 16, "selfcheck.reify.confirmed": 42172, "selfcheck.traitindex.confirmed": 14}}
+{"file": "report/test-programs/equalities/eqchain-fix-trans-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 3258, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/eqchain-fix-trans-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 60030, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/eqchain-fix-trans-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 12, "selfcheck.reify.confirmed": 68410, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/eqchain-fix-trans-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 16, "selfcheck.reify.confirmed": 77510, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/eqchain-fix-trans-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 20, "selfcheck.reify.confirmed": 87190, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/extwhere-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 46424, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/extwhere-1ok.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 220, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/extwhere-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 93741}}
+{"file": "report/test-programs/equalities/extwhere-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 128}}
+{"file": "report/test-programs/equalities/mirror-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/mirror-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 780, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/mirror-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 430, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/n-nested-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23945, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/n-params-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 22889}}
+{"file": "report/test-programs/equalities/n-params-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 49616}}
+{"file": "report/test-programs/equalities/n-params-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 22897}}
+{"file": "report/test-programs/equalities/n-three-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 28329, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/n-tuple-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 58650, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/nested-eq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 92606}}
+{"file": "report/test-programs/equalities/o1-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 418}}
+{"file": "report/test-programs/equalities/o2-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 6022}}
+{"file": "report/test-programs/equalities/o2b-call-infer.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 5938}}
+{"file": "report/test-programs/equalities/o2c-call-explicit.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 6250}}
+{"file": "report/test-programs/equalities/o2d-order.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1768}}
+{"file": "report/test-programs/equalities/o3-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 27279}}
+{"file": "report/test-programs/equalities/o4-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 10, "selfcheck.reify.confirmed": 31277}}
+{"file": "report/test-programs/equalities/o5-open-chain.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 13, "selfcheck.reify.confirmed": 35555}}
+{"file": "report/test-programs/equalities/open-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 99}}
+{"file": "report/test-programs/equalities/open-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1608}}
+{"file": "report/test-programs/equalities/open-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1624}}
+{"file": "report/test-programs/equalities/open-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 29681}}
+{"file": "report/test-programs/equalities/openchain-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 33830}}
+{"file": "report/test-programs/equalities/openchain-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 38337}}
+{"file": "report/test-programs/equalities/p01-cc-big.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 17, "selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 380, "selfcheck.reify.confirmed": 487382}}
+{"file": "report/test-programs/equalities/p02-cc-big.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 27, "selfcheck.equality.proofConfirmed": 3, "selfcheck.proofStep.confirmed": 870, "selfcheck.reify.confirmed": 867476}}
+{"file": "report/test-programs/equalities/pen-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/pen-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/pen-ref-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 404, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/pen-ref-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 421, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/pen-ref-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 438, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/pen-ref-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.model.confirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 446, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/pend-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 4, "selfcheck.index.confirmed": 134, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 136667}}
+{"file": "report/test-programs/equalities/pend-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 4, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 152778}}
+{"file": "report/test-programs/equalities/perf-alias-7.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1305}}
+{"file": "report/test-programs/equalities/perf-alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1297}}
+{"file": "report/test-programs/equalities/perf-deep-100.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 2029}}
+{"file": "report/test-programs/equalities/perf-deep-200.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 2829}}
+{"file": "report/test-programs/equalities/perf-deep-50.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1629}}
+{"file": "report/test-programs/equalities/quant-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 111, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/quant-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "report/test-programs/equalities/quant-2b.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 368}}
+{"file": "report/test-programs/equalities/quant-2c.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "report/test-programs/equalities/quant-2d.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 106}}
+{"file": "report/test-programs/equalities/quant-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 29496}}
+{"file": "report/test-programs/equalities/quant-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16}}
+{"file": "report/test-programs/equalities/structwhere-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 33, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/structwhere-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 25, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/trans-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 206, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 3258, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 60030, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 12, "selfcheck.reify.confirmed": 68410, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 16, "selfcheck.reify.confirmed": 77510, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 20, "selfcheck.reify.confirmed": 87190, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/trans-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 28, "selfcheck.reify.confirmed": 20630, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transconf-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1633}}
+{"file": "report/test-programs/equalities/transconf-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 30019}}
+{"file": "report/test-programs/equalities/transconf-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 34209}}
+{"file": "report/test-programs/equalities/transconf-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 38759}}
+{"file": "report/test-programs/equalities/transconf-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 10, "selfcheck.reify.confirmed": 43599}}
+{"file": "report/test-programs/equalities/transconf-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 14, "selfcheck.reify.confirmed": 10319}}
+{"file": "report/test-programs/equalities/transneg-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transneg-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transneg-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transneg-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transneg-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/transneg-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-abs-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 4433, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-abs-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 372, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 4433, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 63450, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-7.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1441, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 24, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-abs-9.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-alias-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 103}}
+{"file": "report/test-programs/equalities/v-alias-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 5752}}
+{"file": "report/test-programs/equalities/v-alias-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 25982}}
+{"file": "report/test-programs/equalities/v-chain-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 5752}}
+{"file": "report/test-programs/equalities/v-chain-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 5752}}
+{"file": "report/test-programs/equalities/v-chain3-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 27835, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/v-chain3-mixed.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 26643}}
+{"file": "report/test-programs/equalities/v-chain3-par.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 26639}}
+{"file": "report/test-programs/equalities/v-congr-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 98908, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-congr-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-congr-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 461, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-congr-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.reify.confirmed": 196, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-congr-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 109, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/v-congr-6.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 103, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/v-def-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 461, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-def-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 6004, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-def-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.reify.confirmed": 102826, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/v-def-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 376, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/v01-single.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/v02-params.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 22889}}
+{"file": "report/test-programs/equalities/v03-box.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 23945, "selfcheck.traitindex.confirmed": 6}}
+{"file": "report/test-programs/equalities/v04-boxside.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.reify.confirmed": 22893}}
+{"file": "report/test-programs/equalities/v05-single-struct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "report/test-programs/equalities/v06-onesided.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 8}}
+{"file": "report/test-programs/equalities/v07-samegiven.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 3, "selfcheck.reify.confirmed": 1600}}
+{"file": "report/test-programs/equalities/x01-ext-arg-member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 25, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/x02-ext-nested.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 24, "selfcheck.traitindex.confirmed": 5}}
+{"file": "report/test-programs/equalities/x03-ext-nested-struct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/x04-generic-ext-where.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 43, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/x05-alias-ext.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 8}}
+{"file": "report/test-programs/equalities/x06-nested-ext-no-alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 13, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/x07-given-arg-member.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 42, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/equalities/x08-ext-arg-member-reordered.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 25, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/x09-ext-generic-where-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 13, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/equalities/x10-ext-where-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 48309, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/x10b-ext-where-assoc.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 64949, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/equalities/x11-ext-forward.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.reify.confirmed": 12, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/equalities/x12-ext-members-kinds.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 71, "selfcheck.traitindex.confirmed": 7}}
+{"file": "report/test-programs/equalities/x13-ext-body-lookup.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 53, "selfcheck.traitindex.confirmed": 7}}
+{"file": "report/test-programs/equalities/x14-ext-generic-arg-assoc-std.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 57, "selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/performance/cc-chain-k16-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 32115}}
+{"file": "report/test-programs/performance/cc-chain-k16-w10-m8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 8, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 265257}}
+{"file": "report/test-programs/performance/cc-chain-k24-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 10780}}
+{"file": "report/test-programs/performance/cc-chain-k4-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 10659}}
+{"file": "report/test-programs/performance/cc-chain-k8-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 17043}}
+{"file": "report/test-programs/performance/cc-deep-10-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 26057}}
+{"file": "report/test-programs/performance/cc-deep-20-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 26137}}
+{"file": "report/test-programs/performance/cc-deep-40-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 26297}}
+{"file": "report/test-programs/performance/cc-deep-40-m10.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 10, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 607445}}
+{"file": "report/test-programs/performance/cc-deep-40-m30.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 30, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 1901205}}
+{"file": "report/test-programs/performance/cc-deep-60-m30.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 30, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 1901365}}
+{"file": "report/test-programs/performance/cc-deep-80-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 26617}}
+{"file": "report/test-programs/performance/cc-goals-m10.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 10, "selfcheck.reify.confirmed": 12730}}
+{"file": "report/test-programs/performance/cc-goals-m20.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 20, "selfcheck.reify.confirmed": 26260}}
+{"file": "report/test-programs/performance/cc-goals-m30.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 30, "selfcheck.reify.confirmed": 40590}}
+{"file": "report/test-programs/performance/cc-goals-m36.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 36, "selfcheck.reify.confirmed": 49572}}
+{"file": "report/test-programs/performance/cc-refl-k12-w10-m8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 8, "selfcheck.reify.confirmed": 2176}}
+{"file": "report/test-programs/performance/cc-refl-k16-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 1412}}
+{"file": "report/test-programs/performance/cc-refl-k16-w10-m4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 4, "selfcheck.reify.confirmed": 1856}}
+{"file": "report/test-programs/performance/cc-refl-k4-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 428}}
+{"file": "report/test-programs/performance/cc-refl-k8-w10-m1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 756}}
+{"file": "report/test-programs/performance/div-eq-b2-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 28676}}
+{"file": "report/test-programs/performance/div-eq-b2-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 16384}}
+{"file": "report/test-programs/performance/div-eq-b3-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 413366}}
+{"file": "report/test-programs/performance/div-eq-b3-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 17516}}
+{"file": "report/test-programs/performance/div-eq-ovl-b2-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 4, "selfcheck.reify.confirmed": 28716, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/performance/div-eq-ovl-b2-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 16424, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/performance/div-eq-ovl-b3-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 413406, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/performance/div-eq-ovl-b3-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.model.inconclusive": 2, "selfcheck.reify.confirmed": 17556, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/performance/div-trunc-b1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 1407, "selfcheck.reify.confirmed": 165}}
+{"file": "report/test-programs/performance/div-trunc-b2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 205690, "selfcheck.reify.confirmed": 21532}}
+{"file": "report/test-programs/performance/div-trunc-b3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 3956216, "selfcheck.reify.confirmed": 413402}}
+{"file": "report/test-programs/performance/div-trunc-b4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 2927230, "selfcheck.reify.confirmed": 305920}}
+{"file": "report/test-programs/performance/div-valid-b3-d4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 5360, "selfcheck.reify.confirmed": 646}}
+{"file": "report/test-programs/performance/div-valid-b3-d5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 5360, "selfcheck.reify.confirmed": 650}}
+{"file": "report/test-programs/performance/div-valid-b4-d4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 11390, "selfcheck.reify.confirmed": 1300}}
+{"file": "report/test-programs/performance/extchain-16.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 136}}
+{"file": "report/test-programs/performance/extchain-24.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 300}}
+{"file": "report/test-programs/performance/extchain-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 36}}
+{"file": "report/test-programs/performance/extsame-16.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 32}}
+{"file": "report/test-programs/performance/extsame-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.traitindex.confirmed": 16}}
+{"file": "report/test-programs/performance/occurs-dag-12.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 175}}
+{"file": "report/test-programs/performance/occurs-dag-16.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 195}}
+{"file": "report/test-programs/performance/occurs-dag-18.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 205}}
+{"file": "report/test-programs/performance/occurs-dag-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 136, "selfcheck.reify.confirmed": 155}}
+{"file": "report/test-programs/performance/occurs-only-18.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 272, "selfcheck.reify.confirmed": 254}}
+{"file": "report/test-programs/performance/occurs-only-22.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 272, "selfcheck.reify.confirmed": 270}}
+{"file": "report/test-programs/performance/occurs-only-24.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 272, "selfcheck.reify.confirmed": 278}}
+{"file": "report/test-programs/performance/occurs-valid-20.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 209, "selfcheck.reify.confirmed": 201}}
+{"file": "report/test-programs/performance/occurs-valid-22.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 209, "selfcheck.reify.confirmed": 209}}
+{"file": "report/test-programs/performance/occurs-valid-24.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 209, "selfcheck.reify.confirmed": 217}}
+{"file": "report/test-programs/performance/open-neg-0.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 27}}
+{"file": "report/test-programs/performance/open-neg-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 27}}
+{"file": "report/test-programs/performance/open-neg-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 1, "selfcheck.reify.confirmed": 27}}
+{"file": "report/test-programs/performance/open-pos-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 1, "selfcheck.reify.confirmed": 396}}
+{"file": "report/test-programs/performance/open-pos-chain-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 5938}}
+{"file": "report/test-programs/performance/open-pos-chain-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 7, "selfcheck.reify.confirmed": 26966}}
+{"file": "report/test-programs/performance/open-pos-chain-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 10, "selfcheck.reify.confirmed": 30926}}
+{"file": "report/test-programs/performance/open-wide-1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 39}}
+{"file": "report/test-programs/performance/open-wide-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 478}}
+{"file": "report/test-programs/performance/open-wide-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 15, "selfcheck.index.confirmed": 804, "selfcheck.reify.confirmed": 6401}}
+{"file": "report/test-programs/performance/open-wide-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 239, "selfcheck.index.confirmed": 8308, "selfcheck.reify.confirmed": 100943}}
+{"file": "report/test-programs/performance/ovl-ret-12.hylo", "rc": "timeout", "violations": [], "selfcheck": {}}
+{"file": "report/test-programs/performance/ovl-ret-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 2812, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/performance/ovl-ret-8.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 961348, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/performance/ovl-ret-9.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 8, "selfcheck.reify.confirmed": 4107078, "selfcheck.traitindex.confirmed": 4}}
+{"file": "report/test-programs/performance/pending-var-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 2, "selfcheck.proofStep.confirmed": 5, "selfcheck.reify.confirmed": 6505}}
+{"file": "report/test-programs/performance/pending-var-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 11, "selfcheck.reify.confirmed": 33730}}
+{"file": "report/test-programs/performance/pending-var-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 2, "selfcheck.proofStep.confirmed": 17, "selfcheck.reify.confirmed": 62115}}
+{"file": "report/test-programs/performance/pending-var2-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 30043}}
+{"file": "report/test-programs/performance/pending-var2-5.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 8, "selfcheck.reify.confirmed": 38783}}
+{"file": "report/test-programs/performance/poison-a-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.index.confirmed": 256, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 30059, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/performance/poison-b-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 30038, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/performance/poison-trans-2.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 1607}}
+{"file": "report/test-programs/performance/poison-trans-3.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.proofStep.confirmed": 4, "selfcheck.reify.confirmed": 29680}}
+{"file": "report/test-programs/performance/poison-trans-4.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 6, "selfcheck.reify.confirmed": 33829}}
+{"file": "report/test-programs/unsimplified-projections/j1-box-nongeneric.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 27, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/j2-generic-conf-alias.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/min.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 50572, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/t1.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 50572, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/t10-wrongx.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t11-generic-conf.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t12-assoc-in-body-generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 201, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t13-generic-conf-const.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 29, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t14-generic-conf-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 30, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/t2-swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 15, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/t3-param.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t4-generic-caller.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 63704, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t5-concrete-x.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t6-ret.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 3}}
+{"file": "report/test-programs/unsimplified-projections/t7-cond-direct.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 44, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/t8-cond-call.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.index.confirmed": 272, "selfcheck.reify.confirmed": 51152, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/t9-two-conf.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 20, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/v2-swapped.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.reify.confirmed": 15, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/v3-param.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 134, "selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 28, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/v4-plaineq.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.reify.confirmed": 103}}
+{"file": "report/test-programs/unsimplified-projections/v5-generic.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.inconclusive": 1, "selfcheck.proofStep.confirmed": 2, "selfcheck.reify.confirmed": 64436, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/v6-refl.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.equality.proofConfirmed": 1, "selfcheck.index.confirmed": 67, "selfcheck.reify.confirmed": 372, "selfcheck.traitindex.confirmed": 2}}
+{"file": "report/test-programs/unsimplified-projections/v7-ret.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.index.confirmed": 201, "selfcheck.reify.confirmed": 24, "selfcheck.traitindex.confirmed": 1}}
+{"file": "report/test-programs/unsimplified-projections/v8-proj.hylo", "rc": 0, "violations": [], "selfcheck": {"selfcheck.model.confirmed": 2, "selfcheck.reify.confirmed": 16, "selfcheck.traitindex.confirmed": 2}}

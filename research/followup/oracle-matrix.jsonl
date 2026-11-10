@@ -1,0 +1,9 @@
+{"file": "../Tests/CompilerTests/positive/abstract-given.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/adjunct-conformance.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/assignment.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/associated-type-equality.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/big-return.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/branch-inference.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/buffer-literal.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/builtins.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/bundle-application-1.hylo", "base": true, "diff": {}}

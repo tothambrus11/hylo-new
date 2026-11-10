@@ -1,0 +1,6 @@
+fun need<A, B where A == B>() {}
+fun f<T0, T1, T2, T3 where T0 == T1, T1 == T2, T2 == T3>() {
+  need<T0, T1>()
+  need<T0, T2>()
+  need<T0, T3>()
+}

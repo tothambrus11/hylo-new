@@ -1,0 +1,7 @@
+__pycache__/
+mutation/bin/
+usage/clones/
+usage/**/.git/
+*.dump
+*.tmp
+scratch/

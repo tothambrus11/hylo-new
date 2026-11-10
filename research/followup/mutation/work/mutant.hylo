@@ -1,0 +1,21 @@
+//! exit-status:42
+
+trait P {
+  fun foo() -> Int32
+}
+
+trait Q {
+  fun bar() -> Int32
+}
+
+given wa: Void is P {
+  fun foo() -> Int32 { 40 }
+}
+
+given wb: <T> => T is Q {
+  fun bar() -> Int32 { self.foo() + (2 as Int32) }
+}
+
+public fun main() -> Int32 {
+  ().bar()
+}

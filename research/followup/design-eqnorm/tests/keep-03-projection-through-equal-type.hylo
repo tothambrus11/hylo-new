@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected: accepted at every stage (positive/associated-type-equality, f1). U.X is read through the
+// only conformance, `T is P`, coerced along T == U; both spellings denote (T::w).X.
+// currently: base accepted (summon.subgoals=11 summon.matches=661); FULL accepted (summon.subgoals=3 summon.matches=146 eqsolve.proved=1 index.fallback=2).
+trait P { type X }
+fun check<T>(x: T) {}
+fun f1<T, U where T == U, T is P>(x: U.X) {
+  check<T.X>(x)
+  let y: T.X = x
+}

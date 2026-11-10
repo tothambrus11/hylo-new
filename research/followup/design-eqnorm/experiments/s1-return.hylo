@@ -1,0 +1,2 @@
+//! stage:typing no-std
+fun f<T, U where T == U>(x: sink T) -> U { x }

@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected: accepted at every stage of this design (unchanged): A == B follows from T == A, T == B.
+// The closure makes the conflict visible (one class with two distinct nominal types), so it could be
+// reported at the declaration instead. Open question 3.
+// currently: base accepted (summon.subgoals=42 summon.matches=880); FULL accepted (summon.subgoals=1 summon.matches=3 eqsolve.proved=1).
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun check<T>(x: T) {}
+fun f<T where T == A, T == B>(x: A) { check<B>(x) }

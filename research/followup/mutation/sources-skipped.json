@@ -1,0 +1,94 @@
+[
+ [
+  "research/workloads/breadth80.hylo",
+  "slow"
+ ],
+ [
+  "research/workloads/chain12.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/chain9.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-dead-20.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-dead.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-grow-20.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-grow.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-loop-20.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/div-loop.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/members-big.hylo",
+  "slow"
+ ],
+ [
+  "research/workloads/ovl-8-8.hylo",
+  "slow"
+ ],
+ [
+  "research/workloads/ovr-3-9.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/assocneg-2.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/assocneg-3.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/assocneg-5.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/assocneg-8.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/assocneg3.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/bug-assoc-eq-two-links.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/orig-assoc-ineq.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/transneg-2.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/transneg-3.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/transneg-5.hylo",
+  "not accepted by every configuration"
+ ],
+ [
+  "research/workloads/round3/transneg-8.hylo",
+  "not accepted by every configuration"
+ ]
+]

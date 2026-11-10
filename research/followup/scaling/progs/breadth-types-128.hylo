@@ -1,0 +1,259 @@
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+struct A32 {}
+struct A33 {}
+struct A34 {}
+struct A35 {}
+struct A36 {}
+struct A37 {}
+struct A38 {}
+struct A39 {}
+struct A40 {}
+struct A41 {}
+struct A42 {}
+struct A43 {}
+struct A44 {}
+struct A45 {}
+struct A46 {}
+struct A47 {}
+struct A48 {}
+struct A49 {}
+struct A50 {}
+struct A51 {}
+struct A52 {}
+struct A53 {}
+struct A54 {}
+struct A55 {}
+struct A56 {}
+struct A57 {}
+struct A58 {}
+struct A59 {}
+struct A60 {}
+struct A61 {}
+struct A62 {}
+struct A63 {}
+struct A64 {}
+struct A65 {}
+struct A66 {}
+struct A67 {}
+struct A68 {}
+struct A69 {}
+struct A70 {}
+struct A71 {}
+struct A72 {}
+struct A73 {}
+struct A74 {}
+struct A75 {}
+struct A76 {}
+struct A77 {}
+struct A78 {}
+struct A79 {}
+struct A80 {}
+struct A81 {}
+struct A82 {}
+struct A83 {}
+struct A84 {}
+struct A85 {}
+struct A86 {}
+struct A87 {}
+struct A88 {}
+struct A89 {}
+struct A90 {}
+struct A91 {}
+struct A92 {}
+struct A93 {}
+struct A94 {}
+struct A95 {}
+struct A96 {}
+struct A97 {}
+struct A98 {}
+struct A99 {}
+struct A100 {}
+struct A101 {}
+struct A102 {}
+struct A103 {}
+struct A104 {}
+struct A105 {}
+struct A106 {}
+struct A107 {}
+struct A108 {}
+struct A109 {}
+struct A110 {}
+struct A111 {}
+struct A112 {}
+struct A113 {}
+struct A114 {}
+struct A115 {}
+struct A116 {}
+struct A117 {}
+struct A118 {}
+struct A119 {}
+struct A120 {}
+struct A121 {}
+struct A122 {}
+struct A123 {}
+struct A124 {}
+struct A125 {}
+struct A126 {}
+struct A127 {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given A4 is P {}
+given A5 is P {}
+given A6 is P {}
+given A7 is P {}
+given A8 is P {}
+given A9 is P {}
+given A10 is P {}
+given A11 is P {}
+given A12 is P {}
+given A13 is P {}
+given A14 is P {}
+given A15 is P {}
+given A16 is P {}
+given A17 is P {}
+given A18 is P {}
+given A19 is P {}
+given A20 is P {}
+given A21 is P {}
+given A22 is P {}
+given A23 is P {}
+given A24 is P {}
+given A25 is P {}
+given A26 is P {}
+given A27 is P {}
+given A28 is P {}
+given A29 is P {}
+given A30 is P {}
+given A31 is P {}
+given A32 is P {}
+given A33 is P {}
+given A34 is P {}
+given A35 is P {}
+given A36 is P {}
+given A37 is P {}
+given A38 is P {}
+given A39 is P {}
+given A40 is P {}
+given A41 is P {}
+given A42 is P {}
+given A43 is P {}
+given A44 is P {}
+given A45 is P {}
+given A46 is P {}
+given A47 is P {}
+given A48 is P {}
+given A49 is P {}
+given A50 is P {}
+given A51 is P {}
+given A52 is P {}
+given A53 is P {}
+given A54 is P {}
+given A55 is P {}
+given A56 is P {}
+given A57 is P {}
+given A58 is P {}
+given A59 is P {}
+given A60 is P {}
+given A61 is P {}
+given A62 is P {}
+given A63 is P {}
+given A64 is P {}
+given A65 is P {}
+given A66 is P {}
+given A67 is P {}
+given A68 is P {}
+given A69 is P {}
+given A70 is P {}
+given A71 is P {}
+given A72 is P {}
+given A73 is P {}
+given A74 is P {}
+given A75 is P {}
+given A76 is P {}
+given A77 is P {}
+given A78 is P {}
+given A79 is P {}
+given A80 is P {}
+given A81 is P {}
+given A82 is P {}
+given A83 is P {}
+given A84 is P {}
+given A85 is P {}
+given A86 is P {}
+given A87 is P {}
+given A88 is P {}
+given A89 is P {}
+given A90 is P {}
+given A91 is P {}
+given A92 is P {}
+given A93 is P {}
+given A94 is P {}
+given A95 is P {}
+given A96 is P {}
+given A97 is P {}
+given A98 is P {}
+given A99 is P {}
+given A100 is P {}
+given A101 is P {}
+given A102 is P {}
+given A103 is P {}
+given A104 is P {}
+given A105 is P {}
+given A106 is P {}
+given A107 is P {}
+given A108 is P {}
+given A109 is P {}
+given A110 is P {}
+given A111 is P {}
+given A112 is P {}
+given A113 is P {}
+given A114 is P {}
+given A115 is P {}
+given A116 is P {}
+given A117 is P {}
+given A118 is P {}
+given A119 is P {}
+given A120 is P {}
+given A121 is P {}
+given A122 is P {}
+given A123 is P {}
+given A124 is P {}
+given A125 is P {}
+given A126 is P {}
+given A127 is P {}
+fun need<where A0 is P>() {}
+public fun main() { need() }

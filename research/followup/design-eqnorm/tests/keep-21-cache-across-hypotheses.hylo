@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// expected: accepted at every stage (positive/coercion-derivability-cache). The answer for V ~ Box<T>
+// must not depend on what an earlier candidate left in a cache.
+// currently: base accepted (summon.subgoals=7388 summon.matches=128802); FULL accepted (summon.subgoals=4 summon.matches=79 eqsolve.proved=3 index.fallback=1).
+trait P {}
+struct Box<X> {}
+struct Pair<X, Y> {}
+fun need<W is P>() {}
+fun f<T, U, V where T == U, Box<U> == V>() {
+  given Pair<Box<T>, Box<T>> is P {}
+  given <where Box<T> == V> => Pair<Box<T>, Box<T>> is P {}
+  need<Pair<V, V>>()
+}

@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected: accepted at every stage. The premise `T == U` of the local given is a hypothesis while
+// the head is matched, and is then proved from the scope.
+// currently: base accepted (summon.subgoals=22 summon.matches=584); FULL accepted (summon.subgoals=5 summon.matches=150 eqsolve.proved=3 index.fallback=2).
+trait P {}
+struct Box<X> {}
+fun need<W is P>() {}
+fun f<T, U where T == U>() {
+  given <where T == U> => Box<T> is P {}
+  need<Box<U>>()
+  need<Box<T>>()
+}

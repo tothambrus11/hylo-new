@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected: accepted in stages 1 and 2, choosing `Pair<A, D> is P`. Both givens match through
+// equalities; today the one with a single differing argument finishes one search step earlier and
+// wins. Stage 1 must reproduce that timing (the `delay` of the design); without it both finish
+// together with penalty 0 and the call becomes ambiguous. Stage 3 makes it ambiguous on purpose.
+// currently: base accepted (summon.subgoals=8 summon.matches=229); FULL accepted (summon.subgoals=4 summon.matches=80 eqsolve.proved=3 index.fallback=1).
+trait P {}
+struct Pair<X, Y> {}
+fun need<V where V is P>() {}
+fun f<A, B, C, D where B == A, C == A, D == A, Pair<B, C> is P, Pair<A, D> is P>() {
+  need<Pair<A, A>>()
+}

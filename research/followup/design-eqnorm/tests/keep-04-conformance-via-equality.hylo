@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// expected: accepted at every stage (positive/conformance-via-equivalence).
+// currently: base accepted (summon.subgoals=4 summon.matches=146); FULL accepted (summon.subgoals=2 summon.matches=75 eqsolve.proved=1 index.fallback=1).
+trait P {}
+fun g<V where V is P>() {}
+fun f<T, U where T == U, T is P>() { g<U>() }

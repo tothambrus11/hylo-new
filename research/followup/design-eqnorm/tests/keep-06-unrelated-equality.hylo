@@ -1,0 +1,5 @@
+//! stage:typing no-std
+// expected: rejected at every stage. Nothing relates D and V (soundness problem 1; base accepts).
+// currently: base accepted (summon.subgoals=1089 summon.matches=21084); FULL rejected (summon.subgoals=2 summon.matches=1 eqsolve.refuted=2). FULL says: no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+fun g<T, U where T == U>() {}
+fun f<V, W, D where V == W>() { g<D, V>() }

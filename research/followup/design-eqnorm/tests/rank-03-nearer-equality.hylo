@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected: accepted in stages 1 and 2 (the equality C == A is declared nearer than B == A, so
+// `C is P` wins). Open question 4 asks whether that is intended.
+// currently: base accepted (summon.subgoals=7 summon.matches=225); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B where B == A>() {
+  fun h<C where C == A, B is P, C is P>() { g<A>() }
+}

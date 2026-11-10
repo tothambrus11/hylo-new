@@ -1,0 +1,3 @@
+//! stage:typing no-std
+fun same<X>(a: X, b: X) {}
+fun f<T, U where T == U>(t: T, u: U) { same(t, u) }

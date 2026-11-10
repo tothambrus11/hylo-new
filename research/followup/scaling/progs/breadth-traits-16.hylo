@@ -1,0 +1,50 @@
+trait P0 {}
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+given A0 is P0 {}
+given A1 is P1 {}
+given A2 is P2 {}
+given A3 is P3 {}
+given A4 is P4 {}
+given A5 is P5 {}
+given A6 is P6 {}
+given A7 is P7 {}
+given A8 is P8 {}
+given A9 is P9 {}
+given A10 is P10 {}
+given A11 is P11 {}
+given A12 is P12 {}
+given A13 is P13 {}
+given A14 is P14 {}
+given A15 is P15 {}
+fun need<where A0 is P0>() {}
+public fun main() { need() }

@@ -1,0 +1,7 @@
+trait P {}
+struct A0 {}
+struct A1 {}
+given <where A1 is P> => A0 is P {}
+given <where A0 is P> => A1 is P {}
+fun need<where A0 is P>() {}
+public fun main() { need() }
