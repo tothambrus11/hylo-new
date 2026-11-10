@@ -1,0 +1,7 @@
+trait P { type X }
+trait Q {}
+struct B { public memberwise init }
+given B is Q {}
+struct Box<T> { public memberwise init }
+given <T is Q> => Box<T> is P { type X = T }
+public fun main() { let y: Box<B>.X = B() }

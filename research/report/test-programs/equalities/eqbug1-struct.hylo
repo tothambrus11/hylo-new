@@ -1,0 +1,5 @@
+struct Box<T> { public memberwise init }
+trait P { type X }
+trait Q { type Y }
+fun check<T>(x: T) {}
+fun f<A, B, C, D, Z, W where Box<Z> == W, A is P, B is P, C is P, D is P, A.X == B.X, C.X == D.X>(x: D.X) { check<A.X>(x) }

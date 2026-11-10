@@ -1,0 +1,12 @@
+//! no-std
+trait P {
+  type X
+  // Accepted by every configuration (the v-abs-7 rule): T.X ~ X because T == Self.
+  fun cast<T where T is P, T == Self>(x: T.X) -> X { x }
+}
+fun check<T>(x: T) {}
+// Same premises as negative/associated-type-inequality.hylo, where `check<V.X>(x)` with
+// `x: W.X` is rejected. Going through `cast` launders W.X into V.X.
+fun f0<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.cast<W>(x))
+}

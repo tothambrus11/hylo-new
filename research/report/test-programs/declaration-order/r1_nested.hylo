@@ -1,0 +1,5 @@
+struct Outer {
+  struct Index {}
+}
+extension Outer.Index { type Index = Int }
+fun k(y: Outer.Index.Index) {}

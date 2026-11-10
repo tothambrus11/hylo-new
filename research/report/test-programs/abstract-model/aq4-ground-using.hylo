@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// The fact Q<Box<X>> comes from the generic given `<T> Box<T> is Q`; Box<X> == Opt<Y> makes
+// Q<Opt<Y>> derivable by coercion. The premise Opt<T> of the second given is abstracted as Opt(v),
+// which unifies with no fact Q(Box(v)) unless every Box/Opt term is opaque.
+trait P {}
+trait Q {}
+struct Box<T> {}
+struct Opt<T> {}
+struct Wrap<T> {}
+given <T> => Box<T> is Q {}
+given <T where Opt<T> is Q> => Wrap<T> is P {}
+fun need<T where T is P>() {}
+fun f<X, Y where Box<X> == Opt<Y>, Box<X> is Q>() { need<Wrap<Y>>() }

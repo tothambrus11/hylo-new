@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// Search for a coercion goal S<?x> ~> ?x solved while fresh (top-level occurs in match).
+struct S<T> { public memberwise init }
+fun mk<T>(x: T) -> S<T> { S<T>() }
+fun same<T>(x: T, y: T) {}
+fun same3<T>(x: T, y: T, z: T) {}
+fun check<T>(x: T) {}
+fun first<T>(x: T, y: S<T>) {}
+public fun main() {
+  let f = fun[](a) { same(a, mk(a)); check<Void>(a) }
+}

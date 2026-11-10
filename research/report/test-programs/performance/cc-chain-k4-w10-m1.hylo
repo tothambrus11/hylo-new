@@ -1,0 +1,11 @@
+struct Box<T> {}
+fun need<A, B where A == B>() {}
+fun f<T, U, X1, Y1, X2, Y2, X3, Y3, X4, Y4 where
+  T == U,
+  X1 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<T>>>>>>>>>>, Y1 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<U>>>>>>>>>>,
+  X2 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X1>>>>>>>>>>, Y2 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y1>>>>>>>>>>,
+  X3 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X2>>>>>>>>>>, Y3 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y2>>>>>>>>>>,
+  X4 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<X3>>>>>>>>>>, Y4 == Box<Box<Box<Box<Box<Box<Box<Box<Box<Box<Y3>>>>>>>>>>
+>() {
+  need<X4, Y4>()
+}

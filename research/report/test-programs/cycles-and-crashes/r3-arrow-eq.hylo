@@ -1,0 +1,12 @@
+//! stage:typing no-std
+fun need<X, Y where X == Y>() {}
+fun f<A, B where A == B>() {
+  need<[A](let B) -> A, [B](let A) -> B>()
+  need<{A, B}, {B, A}>()
+}
+fun g<A, B where A == B>() {
+  need<[Void](inout A) -> Void, [Void](let B) -> Void>()
+}
+fun h<A, B where A == B>() {
+  need<[Void](x: A) -> Void, [Void](y: B) -> Void>()
+}

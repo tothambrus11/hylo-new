@@ -1,0 +1,7 @@
+trait P {}
+struct A { public memberwise init; struct Inner { public memberwise init } }
+fun need<T where T is P>(x: T) {}
+fun use1() { need(A.Inner()) }
+type X = A.Inner
+extension X { fun req() {} }
+given X is P {}

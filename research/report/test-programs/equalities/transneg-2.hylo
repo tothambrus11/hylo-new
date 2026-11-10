@@ -1,0 +1,6 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun g<V where V is P>() {}
+fun f<T0, T1, T2 where T0 == T1, T1 == T2, T0 is P, T2 is P>(x: T2.X) {
+  check<T0.X>(x)
+}

@@ -1,0 +1,7 @@
+trait P {}
+trait Q {}
+fun need<W where W is P>() {}
+fun f<T0, T1, T2, T3, T4, T5 where T0 == T1, T1 == T2, T2 == T3, T3 == T4, T4 == T5>() {
+  given <X, U where X == T5, U == X> => X is P {}
+  need<T0>()
+}

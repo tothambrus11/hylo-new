@@ -1,0 +1,10 @@
+//! stage:typing no-std
+struct Box<T> {}
+type D1<T> = Box<Box<Box<Box<T>>>>
+type D2<T> = D1<D1<D1<D1<T>>>>
+type D3<T> = D2<D2<D2<D2<T>>>>
+type D4<T> = D3<D3<D3<D3<T>>>>
+fun need<X, Y where X == Y>() {}
+fun f<A, B where A == B>() {
+  need<D4<A>, D4<B>>()
+}

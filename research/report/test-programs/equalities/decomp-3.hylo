@@ -1,0 +1,6 @@
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<A, B, C where Box<A> == C>(x: Pair<Box<A>, Int>) {
+  check<Pair<C, Int>>(x)
+}

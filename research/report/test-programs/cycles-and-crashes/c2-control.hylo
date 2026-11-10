@@ -1,0 +1,11 @@
+//! Same as c1 without the cycle: S<T> replaced by T. Should be accepted by everyone.
+trait P { type X }
+trait P3<B, C> {}
+trait R {}
+struct M {}
+given <U> => U is P3<U, M> {}
+fun needR<T where T is R>() {}
+fun f<A where A is P, A.X == M>() {
+  given <T where T is P3<T, A.X>> => T is R {}
+  needR()
+}

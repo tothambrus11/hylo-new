@@ -1,0 +1,3 @@
+struct S {}
+fun check<T>(x: T) {}
+fun f<A, B, D where A == B>(x: D) { check<A>(x) }

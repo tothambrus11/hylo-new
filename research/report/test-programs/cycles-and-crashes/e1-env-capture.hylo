@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// ?a == [let ?a]() -> Void: the variable occurs only in the arrow's environment, which
+// Arrow.properties does not count, so occurs() returns early on !hasVariable.
+fun same<T>(x: T, y: T) {}
+public fun main() {
+  let f = fun[](a) { same(a, fun[let c = a]() {}) }
+}

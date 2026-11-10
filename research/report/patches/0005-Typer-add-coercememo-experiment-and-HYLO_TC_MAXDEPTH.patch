@@ -1,0 +1,121 @@
+From 10db7b338eba435e900daae05b621057fd250bea Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 20:49:21 +0000
+Subject: [PATCH 05/12] Typer: add coercememo experiment and HYLO_TC_MAXDEPTH
+ override
+
+coercememo memoizes canDeriveCoercions under assumptions when every visible
+given is settled and no implicit is on the stack. HYLO_TC_MAXDEPTH overrides
+the implicit-resolution depth cap (a semantic knob, for measurements only).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 40 +++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift | 11 ++++++
+ 2 files changed, 50 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index dbd5416..204a7e7 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -21,7 +21,7 @@ public struct Typer {
+   private let isLoggingEnabled: ((AnySyntaxIdentity, Program) -> Bool)?
+ 
+   /// The maximum depth of a derivation during implicit search.
+-  private let maxImplicitDepth = 10
++  private let maxImplicitDepth = TyperExperiments.maxImplicitDepth
+ 
+   /// Creates an instance assigning types to syntax trees in `m`, which is a module in `p`.
+   public init(
+@@ -78,6 +78,23 @@ public struct Typer {
+     /// The cache of `Typer.extensions(visibleFrom:)`.
+     fileprivate var scopeToExtensions: [ScopeIdentity: [ExtensionDeclaration.ID]]
+ 
++    /// A query of `Typer.canDeriveCoercions(_:_:in:where:)` made under assumptions.
++    fileprivate struct CoercionQuery: Hashable {
++
++      /// The scope in which the query is made.
++      let scope: ScopeIdentity
++
++      /// The queried pair of types.
++      let pair: TypePair
++
++      /// The types of the givens assumed by the resolution thread making the query.
++      let assumptions: [AnyTypeIdentity]
++
++    }
++
++    /// The cache of `Typer.canDeriveCoercions(_:_:in:where:)` for queries under assumptions.
++    fileprivate var coercionsUnderAssumptions: [CoercionQuery: Bool] = [:]
++
+     /// The scopes from which the types of all visible givens are memoized.
+     fileprivate var scopesWithSettledGivens: Set<ScopeIdentity> = []
+ 
+@@ -4290,6 +4307,25 @@ public struct Typer {
+       return memoized
+     }
+ 
++    // Experiment: memoize queries made under assumptions or with open variables as well, keyed by
++    // the assumptions. That is valid when the computation only reads memoized declared types and
++    // when no given is on the stack (so that `givens(visibleFrom:)` filters nothing).
++    var extendedKey: Memos.CoercionQuery? = nil
++    if TyperExperiments.coercememo && !memoizable && !hasImplicitOnStack()
++      && allGivensSettled(visibleFrom: scopeOfUse)
++    {
++      // Assumed givens only contribute their types (`declaredType(of: .assumed(_, t)) == t`).
++      let k = Memos.CoercionQuery(
++        scope: scopeOfUse, pair: p, assumptions: environment.givens.map({ (g) in
++          if case .assumed(_, let t) = g { t } else { declaredType(of: g) }
++        }))
++      if let memoized = cache.coercionsUnderAssumptions[k] {
++        TyperCounters.bump("coercememo.hits")
++        return memoized
++      }
++      extendedKey = k
++    }
++
+     // Check if there are givens in scope that could be used to derive a coercion.
+     var result: UInt8 = 0
+     let sources: [Given]
+@@ -4310,6 +4346,7 @@ public struct Typer {
+         if memoizable && !hasImplicitOnStack() {
+           cache.scopeToPotentialCoercions[scopeOfUse, default: [:]][p] = true
+         }
++        if let k = extendedKey { cache.coercionsUnderAssumptions[k] = true }
+         return true
+       }
+     }
+@@ -4318,6 +4355,7 @@ public struct Typer {
+     if memoizable && !hasImplicitOnStack() {
+       cache.scopeToPotentialCoercions[scopeOfUse, default: [:]][p] = false
+     }
++    if let k = extendedKey { cache.coercionsUnderAssumptions[k] = false }
+     return false
+   }
+ 
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 207ad40..a5e1bdb 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -71,6 +71,17 @@ public enum TyperExperiments {
+   /// Remember which givens can never be used to derive a coercion.
+   nonisolated(unsafe) public static var coesrc: Bool = enabled.contains("coesrc")
+ 
++  /// Memoize coercion-derivability queries made under assumptions, keyed by the assumptions.
++  nonisolated(unsafe) public static var coercememo: Bool = enabled.contains("coercememo")
++
++  /// The maximum number of steps of implicit resolution (`HYLO_TC_MAXDEPTH`, default 10).
++  ///
++  /// Changing it changes the semantics; it exists to measure the sensitivity to the cap.
++  nonisolated(unsafe) public static var maxImplicitDepth: Int = {
++    guard let p = getenv("HYLO_TC_MAXDEPTH") else { return 10 }
++    return Int(String(cString: p)) ?? 10
++  }()
++
+   /// Build the standard library's symbol table in a single pass over its syntax.
+   nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
+ 
+-- 
+2.43.0
+

@@ -1,0 +1,8 @@
+//! stage:typing no-std
+fun need2<A, B where A == B>() {}
+fun check<T>(x: T) {}
+fun f<T, U where T == U>(x: {T, U}, y: [](T) -> U) {
+  need2<{T, U}, {U, T}>()
+  check<{U, T}>(x)
+  check<[](U) -> T>(y)
+}

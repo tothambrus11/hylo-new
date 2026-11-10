@@ -1,0 +1,12 @@
+//! stage:typing no-std
+struct Box<T> {
+  fun m(x: auto T) auto -> Void {
+    let { () }
+    inout { () }
+  }
+}
+fun mkbox<T>(x: T) -> Box<T> { mkbox(x) }
+fun same<T>(x: T, y: T) {}
+public fun main() {
+  let f = fun[](a) { same(a, mkbox(a).m) }
+}

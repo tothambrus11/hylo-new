@@ -1,0 +1,11 @@
+//! no-std
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun use<T>(x: T) {}
+struct S<T where T == A> {
+  public memberwise init
+}
+public fun main() {
+  let s = S<B>()
+  use(s)
+}

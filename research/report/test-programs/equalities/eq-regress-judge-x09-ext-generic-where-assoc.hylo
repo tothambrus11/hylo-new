@@ -1,0 +1,9 @@
+//! stage:typing no-std
+trait Collection { type Element }
+struct Wrapper<T> { public memberwise init }
+struct Bag {}
+given Bag is Collection { type Element = Bool }
+extension <C is Collection> Wrapper<C.Element> {
+  type Element = C.Element
+}
+public fun main() {}

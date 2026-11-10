@@ -1,0 +1,23 @@
+trait P {}
+trait Q {}
+
+struct Box<T> { public memberwise init }
+struct I {}
+struct J {}
+
+given I is P {}
+given <T where T is P> => Box<T> is Q {}
+
+extension <T where T is P> Box<T> { fun onlyP() -> Int { 1 } }
+extension <T where Box<T> is Q> Box<T> { fun onlyQ() -> Int { 2 } }
+extension <T is Q> T { fun anyQ() -> Int { 3 } }
+extension <T> Box<T> { fun all() -> Int { 4 } }
+
+fun use(a: Box<I>, b: Box<J>) {
+  let x0 = a.all()
+  let x1 = a.onlyP()
+  let x2 = a.onlyQ()
+  let x3 = a.anyQ()
+  let y0 = b.all()
+  let y1 = b.onlyP()
+}

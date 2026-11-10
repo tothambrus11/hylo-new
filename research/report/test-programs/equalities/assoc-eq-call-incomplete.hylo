@@ -1,0 +1,13 @@
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given A is P { type X = B }
+given B is Q {}
+given <T, U where T == U, T is P> => U is Q {}
+fun needQ<T where T is Q>() {}
+fun g<V where V is P>() {}
+fun f2<T where T is P, T.X == B>() {}
+public fun main() {
+  f2<A>()
+}

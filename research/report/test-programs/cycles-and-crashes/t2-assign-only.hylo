@@ -1,0 +1,6 @@
+//! stage:typing no-std
+struct S<T> { public memberwise init }
+fun mk<T>(x: T) -> S<T> { S<T>() }
+public fun main() {
+  let f = fun[](a: inout _) { &a = mk(a) }
+}

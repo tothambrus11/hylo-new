@@ -1,0 +1,4 @@
+struct A {}
+extension A.X { type Y = Int }
+extension A.Y { type X = Bool }
+extension A { type X = A }

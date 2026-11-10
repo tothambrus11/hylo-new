@@ -1,0 +1,18 @@
+struct S0 {}
+struct S1 {}
+struct S2 {}
+struct S3 {}
+struct S4 {}
+struct S5 {}
+struct S6 {}
+struct S7 {}
+struct S8 {}
+extension S0 { type Y = S1 }
+extension S0.Y { type Y = S2 }
+extension S0.Y.Y { type Y = S3 }
+extension S0.Y.Y.Y { type Y = S4 }
+extension S0.Y.Y.Y.Y { type Y = S5 }
+extension S0.Y.Y.Y.Y.Y { type Y = S6 }
+extension S0.Y.Y.Y.Y.Y.Y { type Y = S7 }
+extension S0.Y.Y.Y.Y.Y.Y.Y { type Y = S8 }
+fun f(x: S0.Y.Y.Y.Y.Y.Y.Y.Y) {}

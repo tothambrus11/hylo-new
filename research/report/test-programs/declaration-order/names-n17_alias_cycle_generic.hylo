@@ -1,0 +1,8 @@
+struct G<T> { struct Inner {} }
+
+type X = G<Int>.Inner
+
+extension <U> G<U> { fun unrelated() {} }
+extension X { fun g() {} }
+
+fun h(x: G<Int>.Inner, y: G<Bool>) { x.g(); y.unrelated() }

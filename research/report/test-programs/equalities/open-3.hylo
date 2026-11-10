@@ -1,0 +1,5 @@
+struct Box<X> { public memberwise init }
+fun pick<T>(x: Box<T>, y: Box<T>) {}
+fun f<A, B, C where A == B, B == C>(a: Box<A>, c: Box<C>) {
+  pick(a, c)
+}

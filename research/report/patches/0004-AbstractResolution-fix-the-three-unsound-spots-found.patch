@@ -1,0 +1,181 @@
+From 10c066963d31eea6f083af4e7504a8f96302cd38 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 20:03:46 +0000
+Subject: [PATCH 04/12] AbstractResolution: fix the three unsound spots found
+ by the review
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- subsumes(): a repeated variable never matches a term containing ⊤, since
+  distinct ⊤ occurrences are unrelated (absmodel-1: t03, t02, t23).
+- unify(): binding a variable to a term containing it binds it to ⊤, which
+  over-approximates the rational solution the concrete unifier may build;
+  substitutions are never cyclic, so saturation cannot overflow the stack
+  (absmodel-2: t01, t18 crashed).
+- Share file-level models only between files importing the same modules
+  (absmodel-3), and rename fact variables to negative numbers so they never
+  clash with clause variables (absmodel-5).
+
+Refutation counters are unchanged on the stdlib and the workloads.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ .../FrontEnd/Typer/AbstractResolution.swift   | 45 ++++++++++++++-----
+ Sources/FrontEnd/Typer/Typer.swift            | 23 ++++++++--
+ 2 files changed, 54 insertions(+), 14 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/AbstractResolution.swift b/Sources/FrontEnd/Typer/AbstractResolution.swift
+index 0041613..6ffea87 100644
+--- a/Sources/FrontEnd/Typer/AbstractResolution.swift
++++ b/Sources/FrontEnd/Typer/AbstractResolution.swift
+@@ -120,7 +120,7 @@ internal struct AbstractResolutionModel {
+     for f in facts[k] ?? [] {
+       var s: [Int: Term] = [:]
+       // Variables of facts are renamed apart from those of the query by offsetting them.
+-      let g = f.isGround ? f : f.offsettingVariables(by: 1 << 20)
++      let g = f.isGround ? f : f.renamedApart(0)
+       if Self.unify(query, g, &s) { return true }
+     }
+     return false
+@@ -211,7 +211,7 @@ internal struct AbstractResolutionModel {
+     for f in bucket[range] {
+       work += 1
+       var t = s
+-      let g = f.isGround ? f : f.offsettingVariables(by: (1 << 20) + (work << 8))
++      let g = f.isGround ? f : f.renamedApart(work)
+       if Self.unify(p, g, &t) {
+         match(ps.dropFirst(), j + 1, delta, lo, hi, &t, c, &result)
+       }
+@@ -279,7 +279,9 @@ internal struct AbstractResolutionModel {
+ 
+   /// Returns `true` iff `a` and `b` are unifiable, extending `s`.
+   ///
+-  /// `⊤` unifies with anything. There is no occurs check, mirroring the concrete unifier.
++  /// `⊤` unifies with anything. Binding a variable `v` to a term in which `v` occurs binds `v` to
++  /// `⊤` instead: the concrete unifier has no occurs check and may build a cyclic (rational)
++  /// solution, which `⊤` over-approximates. So `s` is never cyclic.
+   internal static func unify(_ a: Term, _ b: Term, _ s: inout [Int: Term]) -> Bool {
+     let x = walk(a, s)
+     let y = walk(b, s)
+@@ -289,10 +291,10 @@ internal struct AbstractResolutionModel {
+     case (.variable(let v), .variable(let w)) where v == w:
+       return true
+     case (.variable(let v), _):
+-      s[v] = y
++      s[v] = occurs(v, in: y, s) ? .top : y
+       return true
+     case (_, .variable(let w)):
+-      s[w] = x
++      s[w] = occurs(w, in: x, s) ? .top : x
+       return true
+     case (.node(let k, let xs), .node(let l, let ys)):
+       if k != l || xs.count != ys.count { return false }
+@@ -301,6 +303,15 @@ internal struct AbstractResolutionModel {
+     }
+   }
+ 
++  /// Returns `true` iff `v` occurs in `t` under the (acyclic) substitution `s`.
++  private static func occurs(_ v: Int, in t: Term, _ s: [Int: Term]) -> Bool {
++    switch walk(t, s) {
++    case .top: return false
++    case .variable(let w): return v == w
++    case .node(_, let xs): return xs.contains(where: { (x) in occurs(v, in: x, s) })
++    }
++  }
++
+   /// Returns `true` iff every instance of `specific` is an instance of `general`.
+   internal static func subsumes(_ general: Term, _ specific: Term) -> Bool {
+     var s: [Int: Term] = [:]
+@@ -309,7 +320,9 @@ internal struct AbstractResolutionModel {
+       case (.top, _):
+         return true
+       case (.variable(let v), _):
+-        if let u = s[v] { return u == t }
++        // Distinct occurrences of `⊤` denote unrelated terms, so a repeated variable never
++        // matches a term containing `⊤`.
++        if let u = s[v] { return (u == t) && !t.containsTop }
+         s[v] = t
+         return true
+       case (.node(let k, let xs), .node(let l, let ys)):
+@@ -336,12 +349,24 @@ extension AbstractResolutionModel.Term {
+     }
+   }
+ 
+-  /// Returns `self` with every variable `v` renamed to `v + n`.
+-  fileprivate func offsettingVariables(by n: Int) -> Self {
++  /// `true` iff `self` contains `⊤`.
++  fileprivate var containsTop: Bool {
++    switch self {
++    case .top: return true
++    case .variable: return false
++    case .node(_, let xs): return xs.contains(where: \.containsTop)
++    }
++  }
++
++  /// Returns `self` with its variables renamed to negative numbers that are unique for each `n`.
++  ///
++  /// Variables of clauses and queries are non-negative, so they never clash with the result.
++  /// Facts are canonical, so their variables are numbered from 0 in order of occurrence.
++  fileprivate func renamedApart(_ n: Int) -> Self {
+     switch self {
+     case .top: return .top
+-    case .variable(let v): return .variable(v + n)
+-    case .node(let k, let xs): return .node(k, xs.map({ (x) in x.offsettingVariables(by: n) }))
++    case .variable(let v): return .variable(-1 - (n << 16) - v)
++    case .node(let k, let xs): return .node(k, xs.map({ (x) in x.renamedApart(n) }))
+     }
+   }
+ 
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 3412cf7..dbd5416 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -133,7 +133,19 @@ public struct Typer {
+     fileprivate var scopeToAbstractModel: [ScopeIdentity: AbstractResolutionModel] = [:]
+ 
+     /// The abstract model of the givens visible at the top level of each module.
+-    fileprivate var moduleToAbstractModel: [Module.ID: AbstractResolutionModel] = [:]
++    fileprivate var moduleToAbstractModel: [FileModelKey: AbstractResolutionModel] = [:]
++
++    /// The identity of the givens visible at the top level of a file: those of all the files in
++    /// its module and those of the modules it imports.
++    fileprivate struct FileModelKey: Hashable {
++
++      /// The module containing the file.
++      let module: Module.ID
++
++      /// The modules imported by the file.
++      let imports: [Module.ID]
++
++    }
+ 
+     /// The cache of `Typer.applies(_:to:in:)`.
+     fileprivate var scopeToExtensionApplies: [ScopeIdentity: [ExtensionAndType: SummonResult]]
+@@ -3989,8 +4001,10 @@ public struct Typer {
+     if let p = program.parent(containing: scopeOfUse), let n = abstractModel(visibleFrom: p) {
+       m = n
+       local = givens(lexicallyIn: scopeOfUse).filter(notOnStack(_:))
+-    } else if let n = cache.moduleToAbstractModel[scopeOfUse.module] {
+-      // All files of a module see the same set of givens.
++    } else if let n = cache.moduleToAbstractModel[
++      .init(module: scopeOfUse.module, imports: imports(of: scopeOfUse.file))]
++    {
++      // Files of a module importing the same modules see the same set of givens.
+       cache.scopeToAbstractModel[scopeOfUse] = n
+       return n
+     } else {
+@@ -4015,7 +4029,8 @@ public struct Typer {
+     if declarationsOnStack.isEmpty {
+       cache.scopeToAbstractModel[scopeOfUse] = m
+       if program.parent(containing: scopeOfUse) == nil {
+-        cache.moduleToAbstractModel[scopeOfUse.module] = m
++        let k = Memos.FileModelKey(module: scopeOfUse.module, imports: imports(of: scopeOfUse.file))
++        cache.moduleToAbstractModel[k] = m
+       }
+     }
+     return m
+-- 
+2.43.0
+

@@ -1,0 +1,487 @@
+<title>Hylo Type-Checker Optimizations</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column (~72ch) with wide tables allowed to scroll; technique entries as ruled rows, not cards. */
+:root {
+  --bg: #fbfbfc;
+  --surface: #f1f3f6;
+  --fg: #1b2230;
+  --muted: #5a6475;
+  --rule: #d9dde4;
+  --accent: #1f5fae;
+  --accent-soft: #e3ecf8;
+  --good: #1d7a4a;
+  --good-soft: #e1f3e8;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --bad: #b3261e;
+  --bad-soft: #fbe3e1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+    --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+    --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+  --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+  --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 76ch; margin: 0 auto; padding-block: 48px 80px; display: grid; gap: 56px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.5rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--fg); }
+h3 { font-size: 1.15rem; font-weight: 600; }
+p, ul { margin: 0; }
+ul { padding-left: 1.2em; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surface); padding: 0.1em 0.35em; border-radius: 4px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.12rem; color: var(--fg); }
+.muted { color: var(--muted); }
+header { display: grid; gap: 14px; }
+.meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.config { background: var(--surface); border-left: 3px solid var(--accent); padding: 14px 16px; display: grid; gap: 8px; font-size: 0.95rem; }
+.config div { min-width: 0; overflow-wrap: anywhere; }
+.config b { font-family: var(--font-display); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; color: var(--muted); border-bottom: 1.5px solid var(--fg); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-mono); font-size: 0.86rem; }
+td.x { font-weight: 600; color: var(--good); }
+td.fixd { color: var(--accent); font-weight: 600; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.perf { background: var(--good-soft); color: var(--good); }
+.pill.fix { background: var(--accent-soft); color: var(--accent); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+.pill.neutral { background: var(--warn-soft); color: var(--warn); }
+.tech { display: grid; gap: 10px; padding-block: 18px; border-top: 1px solid var(--rule); }
+.tech:first-of-type { border-top: none; padding-top: 4px; }
+.tech-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.tech-head h3 code { font-size: 1rem; background: none; padding: 0; }
+.tech-head .area { color: var(--muted); font-size: 0.92rem; }
+dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 14px; margin: 0; font-size: 0.95rem; }
+dt { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+dd { margin: 0; min-width: 0; }
+@media (max-width: 560px) {
+  h1 { font-size: 1.8rem; }
+  dl { grid-template-columns: 1fr; gap: 2px; }
+  dd { margin-bottom: 8px; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.88rem; color: var(--muted); align-items: center; }
+footer { font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
+
+.refs { display: grid; gap: 8px; font-size: 0.9rem; padding-left: 2.2em; margin: 0; }
+.refs li { padding-left: 0.2em; }
+.refs .v { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.lit { display: grid; gap: 10px; }
+.lit h3 { margin-top: 8px; }
+.lit .para { display: grid; gap: 6px; }
+sup.c { font-family: var(--font-mono); font-size: 0.72em; color: var(--accent); }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section > *, li { min-width: 0; }
+pre { max-width: 100%; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.5; background: var(--surface); padding: 12px 14px; border-radius: 6px; overflow-x: auto; margin: 0; }
+pre code { background: none; padding: 0; font-size: inherit; }
+.bug { display: grid; gap: 10px; padding-block: 18px; border-top: 1px solid var(--rule); }
+.bug:first-of-type { border-top: none; padding-top: 4px; }
+.flag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.toc { display: grid; gap: 4px; font-size: 0.95rem; padding-left: 1.4em; margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); padding: 12px 14px; border-radius: 6px; display: grid; gap: 2px; min-width: 0; }
+.kpi b { font-family: var(--font-display); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 0.86rem; color: var(--muted); }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Hylo compiler · type checker</div>
+    <h1>Hylo Type-Checker Optimizations</h1>
+    <p class="lede">Hylo's type checker spends most of its time on implicit resolution: finding the given (conformance, where-clause requirement or equality) that proves a goal like <code>T is P</code>. This report describes a set of techniques that make it 4× faster on the standard library and 10–1000× faster on hard cases. It also covers the soundness bugs of the existing checker found along the way, and how each one is fixed.</p>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <div class="kpis">
+      <div class="kpi"><b>4.1×</b><span>standard library (616 → 151 ms)</span></div>
+      <div class="kpi"><b>10–1000×</b><span>stress programs</span></div>
+      <div class="kpi"><b>216 / 216</b><span>corpus files with identical results</span></div>
+      <div class="kpi"><b>0</b><span>crashes on 520 adversarial programs (before: 21)</span></div>
+    </div>
+    <ul>
+      <li><strong>Speed.</strong> The largest gains come from three ideas:
+        <ul>
+          <li>try only the givens that can match a goal;</li>
+          <li>prove early that a search will fail;</li>
+          <li>decide equalities between types with a decision procedure instead of a search.</li>
+        </ul>
+      </li>
+      <li><strong>Correctness.</strong> The existing checker accepts some ill-typed programs, crashes on some others, and gives answers that depend on declaration order. Five such problems are fixed. The fixes are what make the equality procedure possible, so the two parts belong together.</li>
+      <li><strong>Unchanged behaviour elsewhere.</strong> On the compiler's 192 tests and 24 workloads, every type, name binding, implicit argument and diagnostic is identical to the existing checker.</li>
+      <li><strong>Open problems.</strong> Return-type overloads stay exponential. A few programs whose meaning depends on mutually recursive extensions are now rejected (see Limitations).</li>
+    </ul>
+    <p class="muted">Contents: Background · Results · Speed-ups · Correctness fixes · Approaches that do not work · Limitations · Validation · Using the patches · Related work.</p>
+  </section>
+
+  <section>
+    <h2>Background: how implicit resolution works</h2>
+    <p>A <em>given</em> is something the checker may use as a proof:
+      <ul>
+        <li>a conformance declaration (<code>given Int is P</code>), possibly generic and conditional (<code>given &lt;T where T is P&gt; Box&lt;T&gt; is P</code>);</li>
+        <li>a where-clause requirement of the enclosing function (<code>T is P</code>, <code>A == B</code>);</li>
+        <li>one of three built-in equality rules: reflexivity, symmetry and transitivity.</li>
+      </ul>
+    </p>
+    <p>To prove a goal, the checker matches it against every visible given. A conditional given turns its conditions into new goals. The search is breadth-first, so the first layer of the search tree that contains a complete proof wins. Within that layer, the proof with the lowest penalty is chosen, where givens from inner scopes are cheaper. A tie is reported as ambiguity. The search gives up after 10 steps.</p>
+    <p>Equalities enter through <em>coercions</em>. When a given almost matches a goal (<code>P&lt;A&gt;</code> against <code>P&lt;B&gt;</code>), the checker may assume <code>A == B</code> and must then prove that equality as another goal, using the same search.</p>
+    <p>Three things follow from this design:
+      <ul>
+        <li><strong>Many givens in scope</strong> means many dead branches at every step.</li>
+        <li><strong>A goal that cannot be proved</strong> is only rejected after the whole tree up to the depth cap has been explored, which is exponential in the cap.</li>
+        <li><strong>Equality reasoning</strong> by symmetry and transitivity creates new open goals at each step, so equality chains are exponential in their length and soon exceed the cap.</li>
+      </ul>
+    </p>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <p class="muted">Typing time in ms, best of three runs, one core. Differences under about 10% are noise. "Fixes only" enables the correctness fixes; "All" adds the speed-ups.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Program</th><th>What makes it hard</th><th class="num">Before</th><th class="num">Fixes only</th><th class="num">All</th><th class="num">Speed-up</th></tr></thead>
+        <tbody>
+          <tr><td>standard library</td><td>everyday code</td><td class="num">616</td><td class="num">389</td><td class="num">151</td><td class="num x">4.1×</td></tr>
+          <tr><td>members-big</td><td>2000 extensions, 1000 member lookups</td><td class="num">13,172</td><td class="num">544</td><td class="num">356</td><td class="num x">37×</td></tr>
+          <tr><td>breadth40</td><td>40 unrelated conformances in scope</td><td class="num">4,617</td><td class="num">4,937</td><td class="num">38</td><td class="num x">121×</td></tr>
+          <tr><td>div-branch</td><td>a goal that cannot be proved, with branching givens</td><td class="num">1,350</td><td class="num">1,333</td><td class="num">1.8</td><td class="num x">734×</td></tr>
+          <tr><td>div-loop-20</td><td>20 goals that loop (<code>P&lt;T&gt;</code> needs <code>P&lt;T&gt;</code>)</td><td class="num">131</td><td class="num">91</td><td class="num">2.6</td><td class="num x">51×</td></tr>
+          <tr><td>trans-8</td><td>a chain of 8 equalities</td><td class="num">1,076</td><td class="num">7.5</td><td class="num">3.5</td><td class="num x">306×</td></tr>
+          <tr><td>assoceq-8</td><td>equalities between associated types</td><td class="num">2,750</td><td class="num">92</td><td class="num">74</td><td class="num x">37×</td></tr>
+          <tr><td>coercion-cache</td><td>many coercions through equalities</td><td class="num">2,165</td><td class="num">12</td><td class="num">3.9</td><td class="num x">552×</td></tr>
+          <tr><td>assocneg-8</td><td>an ill-typed equality chain</td><td class="num">2,487 <span class="pill no">wrongly accepted</span></td><td class="num">79</td><td class="num">66</td><td class="num fixd">rejected</td></tr>
+          <tr><td>conditional extension</td><td><code>extension &lt;T where T.Element == Flag&gt; Box&lt;T&gt;</code></td><td class="num">1,406</td><td class="num">17</td><td class="num">15</td><td class="num x">97×</td></tr>
+          <tr><td>open-equalities</td><td>equality requirements with an inferred argument</td><td class="num">out of memory</td><td class="num">344</td><td class="num">189</td><td class="num fixd">fixed</td></tr>
+          <tr><td>tuple-equalities</td><td>31 equalities between 32-element tuples</td><td class="num">out of memory</td><td class="num">64</td><td class="num">63</td><td class="num fixd">fixed</td></tr>
+          <tr><td>divergence + equality</td><td>looping givens in a function with <code>where A == B</code></td><td class="num">out of memory</td><td class="num">3,096 <span class="pill neutral">rejected</span></td><td class="num">3.1</td><td class="num fixd">fixed</td></tr>
+          <tr><td>shared bindings</td><td>a type variable bound to a term that repeats other variables</td><td class="num">2,324</td><td class="num">2,164</td><td class="num">2.3</td><td class="num x">1000×</td></tr>
+          <tr><td>overloads</td><td>8 calls, each choosing among 4 overloads</td><td class="num">3,880</td><td class="num">158</td><td class="num">118</td><td class="num x">33×</td></tr>
+          <tr><td>return-type overloads</td><td>overloads that differ only by return type</td><td class="num">236</td><td class="num">226</td><td class="num">141</td><td class="num x">1.7×</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">With the fixes only, "divergence + equality" is rejected as too complex (see <code>budget</code>); with all techniques it is accepted.</p>
+  </section>
+
+  <section>
+    <h2>Speed-ups</h2>
+    <p>Each technique below changes only how much work the checker does, never the result. Every one is a runtime flag (in <span class="flag">grey</span>), so it can be measured and verified on its own.</p>
+
+    <h3>Try only the givens that can match</h3>
+    <div class="tech">
+      <div class="tech-head"><h3>Index givens by their head</h3><span class="flag">index</span></div>
+      <dl>
+        <dt>Idea</dt><dd>Group the givens of each scope by the outermost type constructor of what they prove. A goal <code>P&lt;…&gt;</code> only tries the givens that prove <code>P&lt;…&gt;</code>, plus the few that could prove anything. Order and penalties are kept.</dd>
+        <dt>Correct because</dt><dd>A given with a different head fails at its first step and has no effect on the search. The index is not used where a coercion could make two different heads match: when an equality given is visible, or when an equality is assumed.</dd>
+        <dt>Effect</dt><dd>2.2× on the standard library, 81× with 40 unrelated conformances in scope.</dd>
+        <dt>Cost</dt><dd>One small table per scope.</dd>
+      </dl>
+    </div>
+    <div class="tech">
+      <div class="tech-head"><h3>Remember givens that can never produce a coercion</h3><span class="flag">coesrc</span></div>
+      <dl>
+        <dt>Idea</dt><dd>Before assuming an equality, the checker scans all givens for one that could prove it. A given whose type is not an equality, and not a fully generic <code>&lt;T&gt; T</code>, can never help. It is now classified once instead of on every scan.</dd>
+        <dt>Correct because</dt><dd>The classification depends only on the given's own type.</dd>
+        <dt>Effect</dt><dd>1.2× on the standard library, 7.5× with many conformances in scope.</dd>
+        <dt>Cost</dt><dd>One set per module.</dd>
+      </dl>
+    </div>
+
+    <h3>Prove early that a search will fail</h3>
+    <div class="tech">
+      <div class="tech-head"><h3>Abstract model of the givens</h3><span class="flag">absmodel</span></div>
+      <dl>
+        <dt>Idea</dt><dd>This answers the question that started the project: a cheap, sound test that resolution <em>will fail</em>.
+          <ul>
+            <li>Read each given as a logic rule: <code>given &lt;T where T is P&gt; Box&lt;T&gt; is Q</code> becomes "<code>Q(Box(T))</code> if <code>P(T)</code>".</li>
+            <li>Compute everything the rules can derive, with types cut off below depth 2 (deeper parts become a wildcard), so the computation is finite.</li>
+            <li>A goal that matches nothing in that set cannot be proved, and is rejected at once.</li>
+          </ul></dd>
+        <dt>Correct because</dt><dd>The cut-off set contains a match for every provable goal, because cutting off and wildcards only add matches. A rejected goal therefore had no proof, and no result, penalty or ambiguity changes. Goals proved under temporary assumptions are covered too: those assumptions must themselves be proved from the scope before a proof is accepted.</dd>
+        <dt>Effect</dt><dd>Failing and looping searches no longer explore the tree to the depth cap: 734× on <code>div-branch</code>, 51× on <code>div-loop-20</code>. The cost of a refutable failure no longer grows with the cap.</dd>
+        <dt>Cost</dt><dd>About 1,400 derived facts for the standard library, a few ms. Facts deeper than the cut-off make the model weaker, never wrong.</dd>
+      </dl>
+    </div>
+    <div class="tech">
+      <div class="tech-head"><h3>Keep the model working when equalities are in scope</h3><span class="flag">absquotient</span></div>
+      <dl>
+        <dt>Idea</dt><dd>An equality requirement like <code>where A == B</code> lets a proof of <code>P&lt;A&gt;</code> stand for <code>P&lt;B&gt;</code>, which the model above cannot see, so it used to switch itself off. Instead, every type constructor that appears in a non-trivial equality is treated as a wildcard. For <code>A == B</code> that is just <code>A</code> and <code>B</code>; for <code>Box&lt;X&gt; == Opt&lt;Y&gt;</code> it is every <code>Box</code> and every <code>Opt</code>.</dd>
+        <dt>Correct because</dt><dd>Two types that are equal under the equalities first differ at a position whose constructor takes part in an equality. Both sides become wildcards there, so they still match.
+          <ul>
+            <li>The wildcard is chosen per <em>constructor</em>, not per type. A type that never appears in the equalities can still equal one that does (<code>Box&lt;Z&gt;</code> when <code>Z == X</code> and <code>Box&lt;X&gt; == Opt&lt;Y&gt;</code>), and so can the instance of a generic given. Erasing whole constructors covers both.</li>
+            <li>The erasure depends only on the constructor at each position, so it commutes with substituting the parameters of generic givens.</li>
+          </ul></dd>
+        <dt>Effect</dt><dd>The "divergence + equality" program goes from out of memory to 3 ms.</dd>
+        <dt>Cost</dt><dd>The model of such a scope is rebuilt rather than inherited from the enclosing scope. Equalities between compound types weaken it.</dd>
+      </dl>
+    </div>
+
+    <h3>Decide equalities instead of searching for them</h3>
+    <div class="tech">
+      <div class="tech-head"><h3>Equality decision procedure</h3><span class="flag">eqsolve</span></div>
+      <dl>
+        <dt>Idea</dt><dd>When a goal is an equality between types with no unknowns, the checker no longer searches:
+          <ul>
+            <li>It collects the equality facts that hold in that place.</li>
+            <li>It computes their congruence closure: which types are equal, including <code>Box&lt;A&gt; == Box&lt;B&gt;</code> when <code>A == B</code>.</li>
+            <li>It answers yes or no directly, in <code>O(n log n)</code>.</li>
+          </ul>
+          A "yes" comes with a proof built from the cheapest chain of facts. That chain carries the same penalty the search would have given it, so the choice between alternative proofs does not change.</dd>
+        <dt>Correct because</dt><dd>Equality between closed types under closed equations is decidable, and congruence closure decides it exactly for the rules the search uses. The procedure steps back and lets the search run in every case it cannot decide:
+          <ul>
+            <li>the goal has unknowns (rigid E-unification);</li>
+            <li>an equality is generic or conditional (the word problem, which is undecidable);</li>
+            <li>a given could prove anything.</li>
+          </ul>
+          Two refinements are needed for associated types; they are explained under Correctness fixes.</dd>
+        <dt>Effect</dt><dd>trans-8 306×, assoceq-8 37×, coercion-cache 552×. The 31-equality tuple program goes from out of memory to 63 ms. Ill-typed equality chains are rejected in milliseconds instead of being wrongly accepted after seconds.</dd>
+        <dt>Cost</dt><dd>A small graph is built per equality goal.</dd>
+      </dl>
+    </div>
+    <div class="tech">
+      <div class="tech-head"><h3>Solve "find a type equal to X" directly</h3><span class="flag">eqmgu</span></div>
+      <dl>
+        <dt>Idea</dt><dd>A requirement like <code>where T == U</code> is often checked while <code>U</code> is still being inferred, which gives the goal <code>A ~ ?u</code>. The search used to try reflexivity, every fact and every transitivity step, each creating new open goals. Now the checker simply sets <code>?u := A</code>.</dd>
+        <dt>Correct because</dt><dd>This is the most general answer: any other answer is a type equal to <code>A</code>, and the remaining goals hold for one exactly when they hold for the other. The extra answers used to show up only as false ambiguity errors.</dd>
+        <dt>Effect</dt><dd>Programs of three lines that ran out of memory now take 0.2–0.3 s. Ill-typed ones are rejected in 3 ms instead of 24 s.</dd>
+        <dt>Cost</dt><dd>None measurable. The checker now always picks <code>A</code> itself, where the old search sometimes picked another type known to be equal to it.</dd>
+      </dl>
+    </div>
+
+    <h3>Faster member lookup</h3>
+    <div class="tech">
+      <div class="tech-head"><h3>Skip extensions that cannot matter</h3><span class="flag">memberskip</span></div>
+      <dl>
+        <dt>Idea</dt><dd>Looking up <code>x.m</code> used to check, for every visible extension, whether it applies to <code>x</code>'s type. Each check is a small resolution. Now an extension is skipped when it declares no member named <code>m</code>, and when checking it is known to have no side effect.</dd>
+        <dt>Correct because</dt><dd>The applicability check can force the computation of types that other lookups then reuse, so skipping it could change the order of those computations and, with it, results. The skip is restricted to cases where everything the check could compute is already computed.</dd>
+        <dt>Effect</dt><dd>1.7× on the standard library and 15× on members-big. The applicability checks on members-big drop from 4 million to 1000.</dd>
+        <dt>Cost</dt><dd>A small cache per extension.</dd>
+      </dl>
+    </div>
+    <div class="tech">
+      <div class="tech-head"><h3>Index traits by member name</h3><span class="flag">traitindex</span></div>
+      <dl>
+        <dt>Idea</dt><dd>A lookup like <code>T.m</code> visits only the traits that declare <code>m</code>, instead of every visible trait.</dd>
+        <dt>Correct because</dt><dd>A trait without <code>m</code> contributes nothing, and the order of the rest is kept.</dd>
+        <dt>Effect</dt><dd>Small (about 6% on the standard library); it matters with many traits.</dd>
+        <dt>Cost</dt><dd>One table per scope.</dd>
+      </dl>
+    </div>
+
+    <h3>Constant factors</h3>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Technique</th><th>Idea</th><th>Effect</th></tr></thead>
+        <tbody>
+          <tr><td>Contiguous type storage <span class="flag">typevec</span></td><td>Read types from a plain array instead of through an unspecialized generic set.</td><td>1.1–1.4× everywhere</td></tr>
+          <tr><td>Reify shared terms once <span class="flag">reifymemo</span></td><td>Substituting into a type that repeats other variables walked the sharing as a tree, which is exponential. Each subterm is now substituted once per call.</td><td>2.3 s → 2.3 ms on the shared-bindings program</td></tr>
+          <tr><td>Tag-first unification <span class="flag">unify</span></td><td>Compare the two kinds of type first, then cast once.</td><td>about 1.1×</td></tr>
+          <tr><td>One-pass symbol table <span class="flag">symindex</span></td><td>Find the ~24 types the compiler needs by name (<code>Bool</code>, <code>Int</code>, …) in one scan of the standard library instead of 24.</td><td>−12% on the standard library</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Correctness fixes</h2>
+    <p>These change results on purpose. Each one fixes a way in which the existing checker accepts an ill-typed program, crashes, or gives an answer that depends on declaration order. None of them changes any result in the compiler's test suite.</p>
+
+    <div class="bug">
+      <h3>1. Unrelated equalities make types interchangeable</h3>
+      <pre><code>fun g&lt;T, U where T == U&gt;() {}
+fun f&lt;V, W, D where V == W&gt;() { g&lt;D, V&gt;() }   // accepted, although nothing says D == V</code></pre>
+      <p><strong>Cause.</strong> When the checker assumes an equality to make a given fit, it forgets the type-variable bindings it made while matching. A later step can then bind the same variable differently, so the fact <code>V == W</code> ends up "proving" <code>D == V</code>.</p>
+      <p><strong>Fix</strong> <span class="flag">fixsubst</span>. The bindings are kept. Honest equality proofs then need more steps, so this fix only works together with the decision procedure (<code>eqsolve</code>), which needs none.</p>
+    </div>
+
+    <div class="bug">
+      <h3>2. Equality chains time out or are rejected</h3>
+      <pre><code>fun f&lt;T0, T1, T2, T3 where T0 == T1, T1 == T2, T2 == T3, T0 is P&gt;(x: T3.X) { … }</code></pre>
+      <p><strong>Cause.</strong> Proving <code>T0 == T3</code> by searching through symmetry and transitivity is exponential in the length of the chain, and it needs about two steps per link. Beyond four links the 10-step cap is exceeded and valid programs are rejected.</p>
+      <p><strong>Fix</strong> <span class="flag">eqsolve</span>, <span class="flag">eqmgu</span>. A decision procedure takes the place of the search (see Speed-ups).</p>
+    </div>
+
+    <div class="bug">
+      <h3>3. Associated types through a callee's requirements are not simplified</h3>
+      <pre><code>extension &lt;T where T is Collection, T.Element == Flag&gt; Box&lt;T&gt; { fun first() -&gt; Flag { … } }
+fun g&lt;T where T is Collection, T.Element == Flag&gt;(b: Box&lt;T&gt;) { let f: Flag = b.first() }</code></pre>
+      <p><strong>Cause.</strong> The checker verifies the extension's requirements one by one, in reverse order. When it checks <code>T.Element == Flag</code>, the <code>T.Element</code> in that requirement still refers to the extension's own, not-yet-proved <code>T is Collection</code>. Nothing connects it to the caller's <code>T.Element</code>, so the equality can only be found by a slow search (1.4 s here), or not at all.</p>
+      <p><strong>Fix</strong> <span class="flag">eqsolve</span>. The pending requirement <code>T is Collection</code> is resolved first. If that resolution has a single answer, and nothing it depends on is still unknown, <code>T.Element</code> is identified with the caller's (17 ms). Otherwise no verdict is drawn from it, and the search decides as before. This covers the common case; other forms of the problem remain (see Limitations).</p>
+    </div>
+
+    <div class="bug">
+      <h3>4. A type variable bound to a type containing itself crashes the compiler</h3>
+      <pre><code>given &lt;U&gt; =&gt; U is P&lt;U&gt; {}
+given &lt;T where T is P&lt;S&lt;T&gt;&gt;&gt; =&gt; T is R {}
+public fun main() { needR() }   // the checker binds ?y := S&lt;?y&gt; and overflows its stack</code></pre>
+      <p><strong>Cause.</strong> Unification has no occurs check. The same defect also hid in a few kinds of type: the variables of a closure's environment were invisible, and so were those of method bundles.</p>
+      <p><strong>Fix</strong> <span class="flag">occurs</span>, <span class="flag">arrowenv</span>. Cyclic bindings are refused. The check covers every kind of type, takes linear time on shared terms, and treats a failure at the top of a match as a mismatch (before the fix, such a failure was treated as a match, so a <code>Void</code> value could stand in for a proof).</p>
+    </div>
+
+    <div class="bug">
+      <h3>5. Results depend on declaration order</h3>
+      <pre><code>given T is P { type Y = U }
+given U is Q { type O = T }
+given Z.O is P { type Y = Int }   // accepted…
+type Z = T.Y                      // …but rejected when these two lines are swapped</code></pre>
+      <p><strong>Cause.</strong> While the checker computes the type of a declaration, it hides that declaration from lookups, and it remembers the answers of those lookups. Here, computing the type of <code>given Z.O is P</code> needs <code>T.Y</code>, which needs <code>T is P</code>, and the given being computed is hidden. Whether the hidden declaration would have changed the answer is never checked, so the outcome depends on which declaration happens to be computed first. Extensions whose extended type depends on other extensions have the same problem.</p>
+      <p><strong>Fix</strong> <span class="flag">givencheck</span>, <span class="flag">extorder</span>. Every lookup that skipped a hidden declaration is recorded. Once all the declarations involved are known, the checker tests whether the hidden one could have taken part. If it could, the program is reported as circular, in every order. If it could not, the skip was harmless, and the program is accepted as before.</p>
+    </div>
+
+    <h3>Making the equality procedure safe in every context</h3>
+    <p>The same goal can be posed in different contexts: under different temporary assumptions, in different generic instantiations, at different points of the order of computation. A decision procedure must give an answer that does not depend on such accidents. Three rules ensure that:</p>
+    <ul>
+      <li><strong>Associated types of <code>Self</code>.</strong> Inside a trait, <code>Self.X</code> is the trait's own, abstract associated type. The language says it equals <code>T.X</code> when <code>T == Self</code>, and the old search used that rule (accepted test <code>v-abs-7</code>). The language also says that <code>T.X</code> and <code>U.X</code> differ when they come from two different conformances, even if <code>T == U</code> (negative test <code>associated-type-inequality</code>). Applying the first rule freely contradicts the second: with <code>T == Self</code> and <code>U == Self</code>, it gives <code>T.X == Self.X == U.X</code>. The procedure therefore equates <code>Self.X</code> with <code>T.X</code> only when the scope has <em>exactly one</em> conformance to the trait for a type equal to <code>Self</code>. That is decided from the scope's own declarations, never from the goal or from temporary assumptions, so it is the same everywhere, and assuming more never takes a conclusion back.</li>
+      <li><strong>Pending requirements</strong> (fix 3) are resolved ahead of time only when nothing they depend on is still unknown. A "no" answer that depends on an unresolved one is not trusted: the search decides instead.</li>
+      <li><strong>Temporary assumptions</strong> are used as facts only for the duration of the proof that made them. Every one of them must itself be proved before a result is accepted.</li>
+    </ul>
+
+    <h3>Bounding runaway searches</h3>
+    <p>Some searches still grow exponentially: goals the abstract model cannot refute, with branching givens. The old checker ran out of memory on them. With <span class="flag">budget</span>, a search whose frontier passes 100,000 candidates is abandoned and reported as "implicit resolution is too complex". The report is an error, so an abandoned search can never silently make the checker pick a different overload or extension.</p>
+  </section>
+
+  <section>
+    <h2>Approaches that do not work</h2>
+    <p>These looked promising and are faster. They are not used because each one changes results.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Idea</th><th>Why it fails</th></tr></thead>
+        <tbody>
+          <tr><td>Skip extensions without the looked-up name, unconditionally</td><td>Checking an extension has side effects that later lookups depend on (see fix 5). Skipping it changed results on programs with interdependent extensions. The restricted version above is safe.</td></tr>
+          <tr><td>Prune a goal that repeats one of its ancestors (loop check)</td><td>The classic argument assumes plain logic-programming search. Hylo lets pending requirements act as assumptions, so a repeated goal can be cheaper than its ancestor. Pruning changed chosen proofs, lost valid proofs and hid ambiguities.</td></tr>
+          <tr><td>Delay overload choices and try the most constrained first</td><td>The order in which the checker ranks overloads is part of the meaning of a program. Changing it flipped acceptance in both directions.</td></tr>
+          <tr><td>Refute equalities by grouping types into classes, without congruence</td><td>It rejected a valid program, because associated types of <code>Self</code> can be equal through their trait (see above).</td></tr>
+          <tr><td>Undo every result computed during a cyclic lookup</td><td>It accepted an ambiguous program, its verdict still depended on order, and undoing was expensive.</td></tr>
+          <tr><td>Cache coercion checks made under assumptions</td><td>Safe, but no faster: those checks were already cheap.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Limitations</h2>
+    <ul>
+      <li><strong>Return-type overloads stay exponential.</strong> <code>g(h(), h(), …)</code> with <code>h</code> overloaded on its return type takes 8 s for 9 arguments. Fixing this needs an overload solver that prunes candidates without changing the order in which the checker ranks them.</li>
+      <li><strong>Mutually recursive extensions are rejected.</strong> Two extensions whose extended types depend on each other's members are reported as circular, even when only one reading is consistent:
+        <pre><code>extension A.Inner.Foo { type Inner = Bool }   // needs Foo, provided by the next extension
+extension A.Inner { type Foo = Int }          // needs Inner in A, which the first one might provide</code></pre>
+        The old checker accepted this only by accident of evaluation order. Accepting it in every order would need a fixed-point computation.</li>
+      <li><strong>The complexity limit can reject valid programs.</strong> With the fixes but without the speed-ups, a few valid programs with looping givens reach it; with the abstract model they do not.</li>
+      <li><strong>Some equalities still need the search:</strong>
+        <ul>
+          <li>goals with unknowns inside a type (<code>Box&lt;?v&gt; ~ C</code>);</li>
+          <li>associated types reached through more complex forms of pending requirements.</li>
+        </ul>
+      </li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Validation</h2>
+    <ul>
+      <li><strong>Identical results on the test suite.</strong> A semantic dump compares every expression type, name binding, implicit argument, conformance table and diagnostic with the existing checker. It is identical on the compiler's 192 tests and 24 workloads, with the fixes alone and with everything enabled.</li>
+      <li><strong>Adversarial programs.</strong> 520 small programs written specifically to break each technique cover unsound acceptance, crashes, order dependence and slow cases. Each claimed problem was confirmed by re-running it, and every confirmed one is fixed. On these programs, the existing checker crashes 21 times and times out (30 s) 43 times. The new one never crashes and times out once, on a return-type overload. Every changed verdict is one of these:
+        <ul>
+          <li>an ill-typed program that is now rejected;</li>
+          <li>a crash or timeout that now gets an answer;</li>
+          <li>the mutually-recursive-extension case above.</li>
+        </ul>
+      </li>
+      <li><strong>An argument per technique.</strong> Each technique comes with the reason it cannot change a result, given above and in full in the per-technique documents.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Using the patches</h2>
+    <p>The work is a series of 12 patches on the Hylo front end (<code>patches/</code> in the archive). Every technique is a switch, set with <code>HYLO_TC_EXPERIMENTS</code>:</p>
+    <div class="config">
+      <div><b>Fixes only:</b> <code>occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget</code></div>
+      <div><b>All (recommended):</b> the fixes plus <code>symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo</code></div>
+    </div>
+    <p>The fixes should land together: <code>fixsubst</code> needs <code>occurs</code> (without it, new crashes appear) and <code>eqsolve</code> (without it, equality chains hit the depth cap).</p>
+  </section>
+
+  <section>
+    <h2>Related work</h2>
+    <div class="lit">
+      <div class="para"><strong>Resolution as logic programming.</strong> Givens are Horn clauses, and resolution is proof search. For clauses without variables, provability takes linear time<sup class="c">[1, 2]</sup>; with variables, it is undecidable in general. The abstract model uses depth-k abstraction<sup class="c">[3]</sup>, one of several finite approximations of what a logic program can derive<sup class="c">[4, 5, 6, 7, 8]</sup>. Non-failure analysis<sup class="c">[9]</sup> is the closest earlier use of such approximations to show that a call must fail. The rejected loop check comes from the loop-checking literature<sup class="c">[10]</sup>, whose soundness argument assumes plain SLD resolution.</div>
+      <div class="para"><strong>Smallest proofs.</strong> Choosing the cheapest proof and reporting ties is Knuth's generalization of shortest paths<sup class="c">[11]</sup>, also known as weighted deduction<sup class="c">[12, 13]</sup>; counting ties is semiring parsing<sup class="c">[14]</sup>. The equality procedure rebuilds its proofs as cheapest paths for this reason.</div>
+      <div class="para"><strong>Type classes and traits elsewhere.</strong>
+        <ul>
+          <li>Repeated and cyclic subgoals: Lean 4 tables them<sup class="c">[15]</sup>, and Rust's new trait solver caches canonical goals and computes fixed points<sup class="c">[16]</sup>.</li>
+          <li>Divergence: Scala 3 and GHC bound it with termination checks<sup class="c">[17, 18]</sup>; the complexity limit here is a cruder relative.</li>
+          <li>Coherence: the requirement that equally good proofs mean the same program is studied by Bottu et al.<sup class="c">[19]</sup> and in COCHIS<sup class="c">[20]</sup>. Quantified constraints<sup class="c">[21]</sup> explain why generic equalities defeat the simple models.</li>
+          <li>Equality of types: Swift decides it with a rewrite system completed by Knuth–Bendix<sup class="c">[22]</sup>.</li>
+        </ul></div>
+      <div class="para"><strong>Equality.</strong> The equality procedure is congruence closure<sup class="c">[23, 24]</sup> over union-find<sup class="c">[25]</sup>. Its limits follow the decidability results: equations with unknowns are rigid E-unification, which is NP-complete<sup class="c">[26]</sup>, and general equations raise the word problem, which is undecidable<sup class="c">[27]</sup>. The occurs check belongs to unification from its origin<sup class="c">[28, 29]</sup>.</div>
+      <div class="para"><strong>Indexing.</strong> Grouping givens by head constructor is the first level of discrimination-tree and substitution-tree indexing<sup class="c">[30, 31]</sup>, as in Lean's instance index<sup class="c">[32]</sup> and GHC's rough-match keys<sup class="c">[18]</sup>.</div>
+      <div class="para"><strong>Overloading.</strong> Overload resolution is NP-complete in general<sup class="c">[33]</sup>. Ada has polynomial cases<sup class="c">[34]</sup>, and constraint-satisfaction pruning helps in practice<sup class="c">[35]</sup>. Swift's solver combines a constraint graph with pruning of overload choices<sup class="c">[36]</sup>.</div>
+      <div class="para"><strong>Name resolution and evaluation order.</strong> Fix 5 is an instance of a known problem: a type checker answers a name query before everything that could affect the answer is known. Scope graphs formalize name resolution<sup class="c">[37]</sup>, and later work gives criteria for when a query may safely be answered<sup class="c">[38, 39]</sup>. Skipping only work whose inputs are settled follows the build-system view of incremental computation<sup class="c">[40, 41]</sup>.</div>
+    </div>
+    <h3>References</h3>
+    <ol class="refs">
+      <li>W. F. Dowling, J. H. Gallier. Linear-time algorithms for testing the satisfiability of propositional Horn formulae. <i>Journal of Logic Programming</i> 1(3):267–284, 1984.</li>
+      <li>X. Liu, S. A. Smolka. Simple linear-time algorithms for minimal fixed points. ICALP 1998, LNCS 1443:53–66.</li>
+      <li>T. Sato, H. Tamaki. Enumeration of success patterns in logic programs. <i>Theoretical Computer Science</i> 34(1–2):227–240, 1984.</li>
+      <li>N. Heintze, J. Jaffar. A finite presentation theorem for approximating logic programs. POPL 1990, 197–209.</li>
+      <li>T. Frühwirth, E. Shapiro, M. Y. Vardi, E. Yardeni. Logic programs as types for logic programs. LICS 1991, 300–309.</li>
+      <li>J. P. Gallagher, G. Puebla. Abstract interpretation over non-deterministic finite tree automata for set-based analysis of logic programs. PADL 2002, LNCS 2257:243–261.</li>
+      <li>B. Kafle, J. P. Gallagher. Tree automata-based refinement with application to Horn clause verification. VMCAI 2015, LNCS 8931:209–226.</li>
+      <li>Y. Kostyukov, D. Mordvinov, G. Fedyukovich. Beyond the elementary representations of program invariants over algebraic data types. PLDI 2021, 451–465.</li>
+      <li>S. K. Debray, P. López-García, M. Hermenegildo. Non-failure analysis for logic programs. ICLP 1997, 48–62.</li>
+      <li>R. N. Bol, K. R. Apt, J. W. Klop. An analysis of loop checking mechanisms for logic programs. <i>Theoretical Computer Science</i> 86(1):35–79, 1991.</li>
+      <li>D. E. Knuth. A generalization of Dijkstra's algorithm. <i>Information Processing Letters</i> 6(1):1–5, 1977.</li>
+      <li>M.-J. Nederhof. Weighted deductive parsing and Knuth's algorithm. <i>Computational Linguistics</i> 29(1):135–143, 2003.</li>
+      <li>P. F. Felzenszwalb, D. McAllester. The generalized A* architecture. <i>Journal of Artificial Intelligence Research</i> 29:153–190, 2007.</li>
+      <li>J. Goodman. Semiring parsing. <i>Computational Linguistics</i> 25(4):573–606, 1999.</li>
+      <li>D. Selsam, S. Ullrich, L. de Moura. Tabled typeclass resolution. arXiv:2001.04301, 2020.</li>
+      <li>The Rust compiler team. The next-generation trait solver: caching and coinduction. <i>rustc-dev-guide</i>, rustc-dev-guide.rust-lang.org/solve/.</li>
+      <li>Scala 3 reference: changes in implicit resolution (by-name implicits and the divergence check, SIP-31). docs.scala-lang.org.</li>
+      <li>GHC User's Guide: instance termination rules; GHC source <code>GHC.Core.RoughMap</code>.</li>
+      <li>G.-J. Bottu, N. Xie, K. Marntirosian, T. Schrijvers. Coherence of type class resolution. <i>PACMPL</i> 3(ICFP), 2019.</li>
+      <li>T. Schrijvers, B. C. d. S. Oliveira, P. Wadler, K. Marntirosian. COCHIS: stable and coherent implicits. <i>Journal of Functional Programming</i> 29:e3, 2019.</li>
+      <li>G.-J. Bottu, G. Karachalias, T. Schrijvers, B. C. d. S. Oliveira, P. Wadler. Quantified class constraints. Haskell Symposium 2017, 148–161.</li>
+      <li>S. Pestov. <i>Compiling Swift Generics</i>. Swift project documentation, 2023–2025.</li>
+      <li>G. Nelson, D. C. Oppen. Fast decision procedures based on congruence closure. <i>Journal of the ACM</i> 27(2):356–364, 1980.</li>
+      <li>P. J. Downey, R. Sethi, R. E. Tarjan. Variations on the common subexpression problem. <i>Journal of the ACM</i> 27(4):758–771, 1980.</li>
+      <li>R. E. Tarjan. Efficiency of a good but not linear set union algorithm. <i>Journal of the ACM</i> 22(2):215–225, 1975.</li>
+      <li>J. Gallier, P. Narendran, D. Plaisted, W. Snyder. Rigid E-unification: NP-completeness and applications to equational matings. <i>Information and Computation</i> 87:129–195, 1990.</li>
+      <li>E. L. Post. Recursive unsolvability of a problem of Thue. <i>Journal of Symbolic Logic</i> 12(1):1–11, 1947.</li>
+      <li>J. A. Robinson. A machine-oriented logic based on the resolution principle. <i>Journal of the ACM</i> 12(1):23–41, 1965.</li>
+      <li>A. Martelli, U. Montanari. An efficient unification algorithm. <i>ACM TOPLAS</i> 4(2):258–282, 1982.</li>
+      <li>W. McCune. Experiments with discrimination-tree indexing and path indexing for term retrieval. <i>Journal of Automated Reasoning</i> 9(2):147–167, 1992.</li>
+      <li>P. Graf. Substitution tree indexing. RTA 1995, LNCS 914.</li>
+      <li>Lean 4 source: <code>Lean.Meta.DiscrTree</code> and <code>Lean.Meta.SynthInstance</code>.</li>
+      <li>J. Palsberg. Overloading is NP-complete. In <i>Logic and Program Semantics</i>, LNCS 7230, Springer, 2012.</li>
+      <li>T. P. Baker. A one-pass algorithm for overload resolution in Ada. <i>ACM TOPLAS</i> 4(4):601–614, 1982.</li>
+      <li>A. Mackworth. Consistency in networks of relations. <i>Artificial Intelligence</i> 8(1):99–118, 1977.</li>
+      <li>Swift project. Type checker design and implementation (<code>docs/TypeChecker.md</code>); S. Pestov, "Recent improvements to the type checker", Swift Forums, 2026.</li>
+      <li>P. Néron, A. Tolmach, E. Visser, G. Wachsmuth. A theory of name resolution. ESOP 2015.</li>
+      <li>A. Rouvoet, H. van Antwerpen, C. Bach Poulsen, R. Krebbers, E. Visser. Knowing when to ask: sound scheduling of name resolution in type checkers derived from declarative specifications. <i>PACMPL</i> 4(OOPSLA), 2020.</li>
+      <li>H. van Antwerpen, E. Visser. Scope states: guarding safety of name resolution in parallel type checkers. ECOOP 2021.</li>
+      <li>A. Mokhov, N. Mitchell, S. Peyton Jones. Build systems à la carte. ICFP 2018.</li>
+      <li>A. Zwaan, H. van Antwerpen, E. Visser. Incremental type-checking for free. <i>PACMPL</i> 6(OOPSLA2), 2022.</li>
+    </ol>
+  </section>
+</main>

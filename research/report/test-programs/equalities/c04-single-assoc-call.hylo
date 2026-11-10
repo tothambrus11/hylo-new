@@ -1,0 +1,3 @@
+trait P { type X }
+fun g<T, U where T == U>() {}
+fun f<A, B, D where A is P, B is P, D is P, A.X == B.X>() { g<D.X, A.X>() }

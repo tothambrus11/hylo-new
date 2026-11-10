@@ -1,0 +1,4 @@
+trait P { type X }
+struct B { public memberwise init }
+fun f2<T where T is P, T.X == B>() {}
+fun g<U where U is P, U.X == B>() { f2<U>() }

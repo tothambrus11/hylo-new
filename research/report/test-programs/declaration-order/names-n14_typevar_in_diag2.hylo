@@ -1,0 +1,16 @@
+struct A { fun m() {} }
+extension <T> T { fun anything() {} }
+
+fun f<T>() -> T { f() }
+fun p<T>() -> {T, Bool} { p() }
+fun g<T>(_ x: T, _ y: T) {}
+
+fun use(a: A) {
+  a.m()
+  let x: Int = p()
+  g(f(), true)
+  let w = a.anything
+  let v = f().m()
+  let u = p().1.nope
+  let t: {Int, Int} = p()
+}

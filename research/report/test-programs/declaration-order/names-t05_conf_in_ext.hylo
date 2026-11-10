@@ -1,0 +1,11 @@
+trait P { fun req() -> Int }
+trait Q { type T }
+struct A {}
+extension A {
+  fun req() -> Int { 1 }
+}
+given A is P {}
+extension <X is P> X { fun viaP() -> Int { self.req() } }
+given A is Q { type T = Bool }
+extension A { fun useT() -> A.T { true } }
+fun use(a: A) -> Int { let _ = a.useT(); a.viaP() }

@@ -1,0 +1,12 @@
+//! stage:typing no-std
+struct Box<T> { public memberwise init }
+struct A { public memberwise init }
+fun mkbox<T>(x: T) -> Box<T> { mkbox(x) }
+fun check<T>(x: T) {}
+public fun main() {
+  let f = fun[](a) {
+    var x = a
+    &x = mkbox(x)
+    check<A>(x)
+  }
+}

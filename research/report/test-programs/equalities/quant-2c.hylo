@@ -1,0 +1,5 @@
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<A, B, C where C == Box<A>, A == B>(x: C) {
+  check<Box<B>>(x)
+}

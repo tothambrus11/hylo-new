@@ -1,0 +1,8 @@
+//! no-std
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun f<T, U where T == Self, U == Self, T is P, U is P>(x: U.X) {
+    check<T.X>(x)
+  }
+}

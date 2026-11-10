@@ -1,0 +1,6 @@
+struct A {}
+struct B {}
+extension X { type Me = Int }
+extension A { type Me = B }
+type X = A.Me
+fun f(x: X.Me) {}

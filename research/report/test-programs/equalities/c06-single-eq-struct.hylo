@@ -1,0 +1,4 @@
+struct S {}
+struct Q {}
+fun g<T, U where T == U>() {}
+fun f<V where V == S>() { g<Q, S>() }

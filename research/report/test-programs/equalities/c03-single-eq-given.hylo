@@ -1,0 +1,6 @@
+trait P {}
+fun need<T is P>() {}
+fun f<V, W, D where V == W>() {
+  given <X where X == V> => X is P {}
+  need<D>()
+}

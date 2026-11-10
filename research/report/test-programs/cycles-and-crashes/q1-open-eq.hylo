@@ -1,0 +1,9 @@
+//! stage:typing no-std
+fun g<T, U where T == U>(x: T) -> U { g(x) }
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A == B, C == D>(a: A) {
+  check<D>(g(a))
+}
+fun f2<A, B, C, D where A == B, C == D>(a: A) {
+  check<B>(g(a))
+}

@@ -1,0 +1,8 @@
+//! no-std
+trait P { type X }
+trait Q1 refines P {}
+struct A { public memberwise init }
+fun f<V, W where W == V, W is Q1>() {
+  given V is P { type X = A }
+  let z: W.X = A()
+}

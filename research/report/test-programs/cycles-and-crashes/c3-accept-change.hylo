@@ -1,0 +1,15 @@
+//! The variable T occurs only in the premise. Matching that premise against U is P3<U, M> would
+//! bind ?t := S<?t> and also needs the derivable coercion A.X ~ M, so the baseline drops the
+//! cyclic binding instead of crashing. No T satisfies T == S<T>: the call should be rejected.
+trait P { type X }
+trait P3<B, C> {}
+trait R {}
+struct S<T> {}
+struct M {}
+struct Z {}
+given <U> => U is P3<U, M> {}
+fun needR<T where T is R>() {}
+fun f<A where A is P, A.X == M>() {
+  given <T where T is P3<S<T>, A.X>> => Z is R {}
+  needR<Z>()
+}

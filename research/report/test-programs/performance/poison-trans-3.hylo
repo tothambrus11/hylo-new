@@ -1,0 +1,5 @@
+struct Z1 {}
+struct Z2 {}
+trait R { given Z1 == Z2 }
+fun need<A, B where A == B>() {}
+fun f<T0, T1, T2, T3 where T0 == T1, T1 == T2, T2 == T3>() { need<T0, T3>() }

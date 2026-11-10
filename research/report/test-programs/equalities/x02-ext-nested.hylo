@@ -1,0 +1,8 @@
+//! stage:typing no-std
+struct A { public memberwise init; type Foo = B }
+struct B { public memberwise init }
+extension A.Foo { type Foo = A }
+public fun main() {
+  let x: B.Foo = A()
+  let y: A.Foo = B()
+}

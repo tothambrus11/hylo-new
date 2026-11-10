@@ -1,0 +1,4 @@
+struct A { public memberwise init; struct Inner { public memberwise init } }
+fun use(x: A.Inner) { x.h() }
+type X = A.Inner
+extension X { fun h() {} }

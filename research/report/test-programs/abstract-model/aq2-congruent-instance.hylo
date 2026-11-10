@@ -1,0 +1,10 @@
+//! no-std
+// Box<Z> is equal to Opt<Y> by congruence (Z == X, Box<X> == Opt<Y>), but Box<Z> is not a
+// subterm of the equalities, so absquotient abstracts it as Box(⊤) instead of ⊤.
+trait P {}
+trait Q {}
+struct Box<T> {}
+struct Opt<T> {}
+given <T where Opt<T> is Q> => T is P {}
+fun need<T where T is P>() {}
+fun f<X, Y, Z where Box<X> == Opt<Y>, Z == X, Box<Z> is Q>() { need<Y>() }

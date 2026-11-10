@@ -1,0 +1,5 @@
+struct A {}
+fun f(x: X) {}
+extension A { type Me = A }
+type X = A.Me
+extension X { type Me = Int }

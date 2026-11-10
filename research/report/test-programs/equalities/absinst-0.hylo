@@ -1,0 +1,8 @@
+//! no-std
+trait P {
+  type X
+  fun f<where X == Bool>()
+}
+fun caller<V, W where V is P, W is P, W.X == Bool>(v: V) {
+  v.f()
+}

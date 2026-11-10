@@ -1,0 +1,11 @@
+//! stage:typing no-std
+fun g<T>(x: auto T) auto -> T {
+  let { g(x) }
+  inout { g(x) }
+}
+fun same<T>(x: T, y: T) {}
+fun same3<T>(x: T, y: T, z: T) {}
+public fun main() {
+  let f = fun[](a) { same(a, g) }
+  let h = fun[](a, b) { same3(a, g, b); same(b, g(a)) }
+}

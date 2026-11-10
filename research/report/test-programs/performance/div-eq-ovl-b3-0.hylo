@@ -1,0 +1,11 @@
+trait P {}
+struct Yb { public memberwise init }
+struct S1<T> {}
+given <T where S1<T> is P> => T is P {}
+struct S2<T> {}
+given <T where S2<T> is P> => T is P {}
+struct S3<T> {}
+given <T where S3<T> is P> => T is P {}
+fun h<T where T is P>(x: T) {}
+fun h(x: Yb) {}
+fun f<A, B >() { h(Yb()) }

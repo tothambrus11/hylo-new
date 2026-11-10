@@ -1,0 +1,7 @@
+//! stage:typing no-std
+struct S<T> { public memberwise init }
+fun same<T>(x: T, y: T) {}
+fun mk<T>(x: T) -> S<T> { S<T>() }
+public fun main() {
+  let f = fun[](a: S<_>) { same(a, mk(a)) }
+}

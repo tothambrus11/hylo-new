@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P { type X }
+struct Box<T> { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+fun check<T>(x: T) {}
+fun need<A, B where A == B>() {}
+fun f<A, B, C, D where A == B, C == D>() { need<A, D>() }

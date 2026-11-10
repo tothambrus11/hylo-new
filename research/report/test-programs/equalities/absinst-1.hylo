@@ -1,0 +1,10 @@
+//! no-std
+trait P {
+  type X
+  fun f<where X == Bool>()
+}
+// V and W are equal but carry distinct conformances to P, so nothing says V.X == Bool:
+// only W.X == Bool is known (cf. negative/associated-type-inequality.hylo).
+fun caller<V, W where V == W, V is P, W is P, W.X == Bool>(v: V) {
+  v.f()
+}

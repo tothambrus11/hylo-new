@@ -1,0 +1,4 @@
+fun pick<T>(x: T, y: T) {}
+fun f<A, B, C where A == B, B == C>(a: A, c: C) {
+  pick(a, c)
+}

@@ -1,0 +1,8 @@
+//! no-std
+trait P { type X }
+struct A { public memberwise init }
+fun check<T>(x: T) {}
+fun f<V, W where W == V, W is P>(x: W.X) {
+  given V is P { type X = A }
+  check<A>(x)
+}

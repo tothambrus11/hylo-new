@@ -1,0 +1,10 @@
+//! stage:typing no-std
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Bag { public memberwise init }
+struct Flag { public memberwise init }
+given Bag is Collection { type Element = Flag }
+extension <T is Collection> Box<T> {
+  type Element = T.Element
+}
+public fun main() {}

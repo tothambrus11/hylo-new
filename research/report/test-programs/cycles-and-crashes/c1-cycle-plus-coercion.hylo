@@ -1,0 +1,13 @@
+//! The match that would build ?t := S<?t> also records a derivable coercion (A.X ~ M), so the
+//! baseline drops its substitutions instead of reifying them. Does `occurs` change the outcome?
+trait P { type X }
+trait P3<B, C> {}
+trait R {}
+struct S<T> {}
+struct M {}
+given <U> => U is P3<U, M> {}
+fun needR<T where T is R>() {}
+fun f<A where A is P, A.X == M>() {
+  given <T where T is P3<S<T>, A.X>> => T is R {}
+  needR()
+}

@@ -1,0 +1,9 @@
+trait P { fun req() }
+struct A {
+  struct Inner {}
+}
+type X = A.Inner
+given X is P {
+  public fun req() {}
+}
+fun use(x: A.Inner) { x.req() }

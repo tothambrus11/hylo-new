@@ -1,0 +1,465 @@
+From 9b9bf6aeba045eba7281a418d90b366c3a3e9fd5 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 6 Nov 2026 16:03:17 +0000
+Subject: [PATCH 10/12] Typer: premise-resolved projections in eqsolve,
+ absquotient, budget, reifymemo
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ .../FrontEnd/Typer/AbstractResolution.swift   |  19 +-
+ Sources/FrontEnd/Typer/Typer.swift            | 216 +++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift    |  17 ++
+ Sources/FrontEnd/Types/TypeStore.swift        |  32 +++
+ 4 files changed, 269 insertions(+), 15 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/AbstractResolution.swift b/Sources/FrontEnd/Typer/AbstractResolution.swift
+index 6ffea87..bcd193d 100644
+--- a/Sources/FrontEnd/Typer/AbstractResolution.swift
++++ b/Sources/FrontEnd/Typer/AbstractResolution.swift
+@@ -84,6 +84,10 @@ internal struct AbstractResolutionModel {
+   /// `true` iff the analysis can't be used to refute queries.
+   private(set) var isInconclusive: Bool = false
+ 
++  /// The types abstracted as `⊤` because they belong to a non-trivial class of the equalities
++  /// that hold in the scope of the model (see `Typer.abstractModel(visibleFrom:)`).
++  internal var opaque: Set<AnyTypeIdentity> = []
++
+   /// Statistics: the number of clause applications attempted during saturation.
+   private(set) var work: Int = 0
+ 
+@@ -379,8 +383,9 @@ extension TypeStore {
+   /// terms are replaced by `⊤`.
+   internal func abstraction(
+     of t: AnyTypeIdentity, binding bound: [GenericParameter.ID: Int],
+-    variables: inout [AnyTypeIdentity: Int]
++    variables: inout [AnyTypeIdentity: Int], opaque: Set<AnyTypeIdentity> = []
+   ) -> AbstractResolutionModel.Term {
++    if !opaque.isEmpty && opaque.contains(t) { return .top }
+     if t.isVariable {
+       if let v = variables[t] { return .variable(v) }
+       let v = (1 << 30) + variables.count
+@@ -399,7 +404,7 @@ extension TypeStore {
+       switch self[u.abstraction] {
+       case is Struct, is Enum, is Trait:
+         let xs = u.arguments.values.map { (a) in
+-          abstraction(of: a, binding: bound, variables: &variables)
++          abstraction(of: a, binding: bound, variables: &variables, opaque: opaque)
+         }
+         return .node(.type(u.abstraction), xs)
+       default:
+@@ -411,17 +416,17 @@ extension TypeStore {
+         return .node(.empty, [])
+       case .cons(let h, let r):
+         return .node(.cons, [
+-          abstraction(of: h, binding: bound, variables: &variables),
+-          abstraction(of: r, binding: bound, variables: &variables),
++          abstraction(of: h, binding: bound, variables: &variables, opaque: opaque),
++          abstraction(of: r, binding: bound, variables: &variables, opaque: opaque),
+         ])
+       }
+     case let u as EqualityWitness:
+       return .node(.equality, [
+-        abstraction(of: u.lhs, binding: bound, variables: &variables),
+-        abstraction(of: u.rhs, binding: bound, variables: &variables),
++        abstraction(of: u.lhs, binding: bound, variables: &variables, opaque: opaque),
++        abstraction(of: u.rhs, binding: bound, variables: &variables, opaque: opaque),
+       ])
+     case let u as TypeAlias:
+-      return abstraction(of: u.aliasee, binding: bound, variables: &variables)
++      return abstraction(of: u.aliasee, binding: bound, variables: &variables, opaque: opaque)
+     default:
+       return .top
+     }
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 73e5ade..4036b96 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -25,8 +25,9 @@ public struct Typer {
+   private var pendingExtensionChecks:
+     [ExtensionDeclaration.ID: [(AnyTypeIdentity, ScopeIdentity, Name)]] = [:]
+ 
+-  /// The where-clause usings being introduced by `initializeContext`, which are on the stack
+-  /// because they are not visible yet rather than because their types are being computed.
++  /// The declarations on the stack because they are deliberately hidden from implicit resolution
++  /// rather than because their types are being computed: where-clause usings being introduced by
++  /// `initializeContext`, and a conformance resolving its own refined requirements.
+   private var contextUsingsOnStack: Set<DeclarationIdentity> = []
+ 
+   /// The givens skipped by implicit resolution because their types were being computed, with the
+@@ -34,6 +35,12 @@ public struct Typer {
+   /// (`givencheck`).
+   private var pendingGivenChecks: [(Given, DeclarationIdentity, AnyTypeIdentity, ScopeIdentity)] = []
+ 
++  /// The number of nested premise resolutions made by `solveEquality`.
++  private var premiseResolutionDepth = 0
++
++  /// The scopes in which implicit resolution was abandoned (`budget`).
++  private var reportedBudgetScopes: Set<ScopeIdentity> = []
++
+   /// `true` iff `pendingGivenChecks` are being processed.
+   private var checkingPendingGivens = false
+ 
+@@ -647,7 +654,11 @@ public struct Typer {
+       // type to avoid creating cycles through nested givens. For example, if `Q` refines `P` and
+       // `d` is declaring a conformance to `Q`, we cannot use `d` to resolve `P<Self>`.
+       declarationsOnStack.insert(.init(d))
+-      defer { declarationsOnStack.remove(.init(d)) }
++      let hidden = contextUsingsOnStack.insert(.init(d)).inserted
++      defer {
++        declarationsOnStack.remove(.init(d))
++        if hidden { contextUsingsOnStack.remove(.init(d)) }
++      }
+ 
+       let summonings = summon(requiredType, in: .init(node: d))
+       if let pick = summonings.uniqueElement {
+@@ -4037,6 +4048,15 @@ public struct Typer {
+       depth += 1
+       swap(&next, &work)
+       TyperCounters.bump("summon.layers")
++
++      // Fix (`budget`): a frontier this large comes from exponential search; give up and reject
++      // the program rather than exhaust memory. Giving up is reported as an error, since a failed
++      // resolution may otherwise steer overload or extension selection to another candidate.
++      if TyperExperiments.budget && done.isEmpty && work.count > TyperExperiments.budgetLimit {
++        TyperCounters.bump("summon.budgetExhausted")
++        reportResolutionBudgetExhausted(in: scopeOfUse)
++        work = []
++      }
+       if depth == maxImplicitDepth && done.isEmpty && !work.isEmpty {
+         TyperCounters.bump("summon.depthExhausted")
+       }
+@@ -4159,11 +4179,31 @@ public struct Typer {
+     }
+     if let m = cache.scopeToAbstractModel[scopeOfUse] { return m }
+ 
++    // Fix (`absquotient`): ground equalities make coercions possible, which the syntactic model
++    // cannot see. Instead of giving up, abstract every type that is equal to another one as `⊤`;
++    // two types equal in the theory then have unifiable abstractions.
++    if TyperExperiments.absquotient, let o = equalityOpaqueTypes(visibleFrom: scopeOfUse) {
++      var m = AbstractResolutionModel(depth: TyperExperiments.absDepth)
++      m.opaque = o
++      for g in givens(visibleFrom: scopeOfUse).joined() {
++        let gt = declaredType(of: g)
++        if isGroundEquality(gt) { continue }
++        m.add(abstractClause(of: gt, opaque: o))
++      }
++      m.saturate()
++      TyperCounters.bump("absmodel.quotient")
++      if m.isInconclusive { TyperCounters.bump("absmodel.inconclusive") }
++      if declarationsOnStack.isEmpty { cache.scopeToAbstractModel[scopeOfUse] = m }
++      return m
++    }
++
+     // The givens visible from `scopeOfUse` are those of its lexical parent plus those declared
+     // in `scopeOfUse`. Since least models are monotonic, start from the parent's model.
+     var m: AbstractResolutionModel
+     var local: [Given]
+-    if let p = program.parent(containing: scopeOfUse), let n = abstractModel(visibleFrom: p) {
++    if let p = program.parent(containing: scopeOfUse), let n = abstractModel(visibleFrom: p),
++      n.opaque.isEmpty
++    {
+       m = n
+       local = givens(lexicallyIn: scopeOfUse).filter(notOnStack(_:))
+     } else if let n = cache.moduleToAbstractModel[
+@@ -4202,27 +4242,115 @@ public struct Typer {
+   }
+ 
+   /// Returns the Horn clause abstracting a given of type `t`.
+-  private func abstractClause(of t: AnyTypeIdentity) -> AbstractResolutionModel.Clause {
++  private func abstractClause(
++    of t: AnyTypeIdentity, opaque: Set<AnyTypeIdentity> = []
++  ) -> AbstractResolutionModel.Clause {
+     let (context, head) = program.types.contextAndHead(t)
+     var bound: [GenericParameter.ID: Int] = [:]
+     for (i, p) in context.parameters.enumerated() { bound[p] = i }
+     var vs: [AnyTypeIdentity: Int] = [:]
+-    let h = program.types.abstraction(of: head, binding: bound, variables: &vs)
++    let h = program.types.abstraction(of: head, binding: bound, variables: &vs, opaque: opaque)
+     // Premises that are themselves quantified or conditional are dropped (over-approximation).
+     let ps = context.usings.compactMap { (u) -> AbstractResolutionModel.Term? in
+       program.types.hasContext(u)
+-        ? nil : program.types.abstraction(of: u, binding: bound, variables: &vs)
++        ? nil : program.types.abstraction(of: u, binding: bound, variables: &vs, opaque: opaque)
+     }
+     return .init(head: h, premises: ps)
+   }
+ 
++  /// Returns `true` iff `t` is the type of a given asserting an equality between closed types.
++  private func isGroundEquality(_ t: AnyTypeIdentity) -> Bool {
++    let (c, h) = program.types.contextAndHead(t)
++    return c.parameters.isEmpty && c.usings.isEmpty && !h[.hasVariable]
++      && program.types.isEquality(h)
++  }
++
++  /// Returns the types that belong to a non-trivial class of the congruence closure of the
++  /// ground equality givens visible from `scopeOfUse`, or `nil` if there are no such givens or
++  /// if a given may derive other equalities (in which case the abstract model gives up).
++  ///
++  /// The closure is computed over the subterms of the equalities, merging the abstract and
++  /// concrete projections of an associated type freely (an over-approximation of the merges
++  /// `solveEquality` makes, which is sound here since more merges only make more types opaque).
++  private mutating func equalityOpaqueTypes(
++    visibleFrom scopeOfUse: ScopeIdentity
++  ) -> Set<AnyTypeIdentity>? {
++    var facts: [(AnyTypeIdentity, AnyTypeIdentity)] = []
++    for g in givens(visibleFrom: scopeOfUse).joined() {
++      let gt = declaredType(of: g)
++      if gt[.hasError] { continue }
++      let h = program.types.contextAndHead(gt).head
++      guard let e = program.types.cast(h, to: EqualityWitness.self) else { continue }
++      if !isGroundEquality(gt) { return nil }
++      facts.append((program.types[e].lhs, program.types[e].rhs))
++    }
++    if facts.isEmpty { return nil }
++
++    var nodes: [AnyTypeIdentity] = []
++    var index: [AnyTypeIdentity: Int] = [:]
++    var children: [[Int]] = []
++    var shapes: [String?] = []
++    func node(_ x: AnyTypeIdentity) -> Int {
++      let y = program.types.dealiased(x)
++      if let i = index[y] { return i }
++      let i = nodes.count
++      nodes.append(y); index[y] = i; children.append([]); shapes.append(nil)
++      var cs: [Int] = []
++      var shape: String? = nil
++      switch program.types[y] {
++      case let u as TypeApplication:
++        cs = [node(u.abstraction)] + u.arguments.values.map({ (a) in node(a) }); shape = "app"
++      case let u as Tuple:
++        if case .cons(let h, let r) = u { cs = [node(h), node(r)]; shape = "cons" }
++      case let u as Metatype:
++        cs = [node(u.inhabitant)]; shape = "meta"
++      case let u as EqualityWitness:
++        cs = [node(u.lhs), node(u.rhs)]; shape = "eq"
++      case let u as AssociatedType:
++        cs = [node(u.qualification.type)]; shape = "assoc \(u.declaration)"
++      default:
++        break
++      }
++      children[i] = cs; shapes[i] = shape
++      return i
++    }
++    let pairs = facts.map({ (l, r) in (node(l), node(r)) })
++    var parent = Array(nodes.indices)
++    func find(_ x: Int) -> Int {
++      var x = x
++      while parent[x] != x { parent[x] = parent[parent[x]]; x = parent[x] }
++      return x
++    }
++    for (i, j) in pairs { let (x, y) = (find(i), find(j)); if x != y { parent[x] = y } }
++    var changed = true
++    while changed {
++      changed = false
++      var table: [EqualitySignature: Int] = [:]
++      for p in nodes.indices where shapes[p] != nil {
++        let k = EqualitySignature(shape: shapes[p]!, children: children[p].map(find))
++        if let q = table[k] {
++          let (x, y) = (find(p), find(q))
++          if x != y { parent[x] = y; changed = true }
++        } else {
++          table[k] = p
++        }
++      }
++    }
++    var size: [Int: Int] = [:]
++    for i in nodes.indices { size[find(i), default: 0] += 1 }
++    var result = Set<AnyTypeIdentity>()
++    for i in nodes.indices where size[find(i)]! > 1 { result.insert(nodes[i]) }
++    for (l, r) in facts { result.insert(l); result.insert(r) }
++    return result
++  }
++
+   /// Returns `true` iff `t` might be derivable from the givens visible from `scopeOfUse`.
+   ///
+   /// A `false` result is a proof that implicit resolution of `t` fails.
+   internal mutating func mayDerive(_ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity) -> Bool {
+     guard let m = abstractModel(visibleFrom: scopeOfUse) else { return true }
+     var vs: [AnyTypeIdentity: Int] = [:]
+-    let q = program.types.abstraction(of: t, binding: [:], variables: &vs)
++    let q = program.types.abstraction(of: t, binding: [:], variables: &vs, opaque: m.opaque)
+     let r = m.mayDerive(m.truncated(q, at: m.depth))
+     if !r { TyperCounters.bump("absmodel.refuted") }
+     return r
+@@ -5844,6 +5972,55 @@ public struct Typer {
+     let b = node(rhs)
+     let factNodes = facts.map({ (l, r, w, c) in (node(l), node(r), w, c) })
+ 
++    // A projection `(T::$k).X` through a premise `$k : P<T>` that has not been discharged yet is
++    // equal to `(T::w).X`, where `w` is the witness that will discharge `$k`, if resolution of
++    // `P<T>` has a unique result in the environment in which `$k` will be discharged (the givens
++    // assumed before `$k`). Resolution is deterministic, so that is the witness eventually used.
++    var resolvedPremises: [(Int, Int)] = []
++    if premiseResolutionDepth < 2 {
++      premiseResolutionDepth += 1
++      defer { premiseResolutionDepth -= 1 }
++      let visible = Set(groups.joined())
++      for n in concreteProjections.values.joined() {
++        let u = program.types[nodes[n]] as! AssociatedType
++        let position: Int
++        switch u.qualification.value {
++        case .assumed(let k):
++          guard let p = environment.givens.firstIndex(where: { (g) in
++            if case .assumed(k, _) = g { true } else { false }
++          }) else { continue }
++          position = p
++        case .reference(let d) where !visible.contains(.user(d)):
++          // A using of a callee, whose premise is assumed with the same type and not discharged.
++          let q = program.types.reify(
++            u.qualification.type, applying: environment.substitutions, withVariables: .kept)
++          let ps = environment.givens.indices.filter({ (i) in
++            if case .assumed(_, let t) = environment.givens[i] {
++              program.types.reify(t, applying: environment.substitutions, withVariables: .kept) == q
++            } else { false }
++          })
++          guard let p = ps.uniqueElement else { continue }
++          position = p
++        default:
++          continue
++        }
++        var env = ResolutionThread.Environment(
++          substitutions: environment.substitutions,
++          givens: Array(environment.givens[..<position]),
++          nextGivenIdentifier: environment.nextGivenIdentifier)
++        env.log = []
++        let q = u.qualification.type
++        let ts = summon(q, in: scopeOfUse, where: env, then: [], penalties: 0)
++        let rs = takeSummonResults(from: ts, in: scopeOfUse)
++        guard let r = rs.uniqueElement else { continue }
++        let v = program.types.reify(r.witness, applying: r.substitutions, withVariables: .kept)
++        if v.type[.hasVariable] || v.type[.hasError] { continue }
++        let m = node(demand(AssociatedType(declaration: u.declaration, qualification: v)).erased)
++        TyperCounters.bump("eqsolve.premises")
++        resolvedPremises.append((n, m))
++      }
++    }
++
+     // Close under congruence, with a signature table and use lists (Nelson-Oppen). An abstract
+     // projection `(Self::P).X` is merged with the concrete projections `(T::w).X` whose
+     // qualifications are equal to its own only if they all fall in one class: otherwise it would
+@@ -5900,6 +6077,10 @@ public struct Typer {
+       }
+       for p in nodes.indices where shapes[p] != nil { register(p) }
+       drain()
++      for (i, j) in resolvedPremises {
++        pending.append((i, j))
++        drain()
++      }
+       for (i, j, w, c) in factNodes {
+         edges[i].append(.init(target: j, proof: w, reversed: false, cost: c + builtinCost))
+         edges[j].append(.init(target: i, proof: w, reversed: true, cost: c + 2 * builtinCost))
+@@ -5940,6 +6121,14 @@ public struct Typer {
+ 
+     if find(a) != find(b) {
+       TyperCounters.bump("eqsolve.refuted")
++      if TyperExperiments.enabled.contains("trace") {
++        print("[trace] eqsolve refuted \(program.show(goal)) with facts " + facts.map({ (l, r, _, _) in "\(program.show(l)) ~ \(program.show(r))" }).joined(separator: ", "))
++        for n in concreteProjections.values.joined() {
++          let u = program.types[nodes[n]] as! AssociatedType
++          print("[trace]   projection \(program.show(nodes[n])) through \(program.show(u.qualification)) class \(find(n))")
++        }
++        print("[trace]   assumed: " + environment.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", "))
++      }
+       return .refuted
+     }
+ 
+@@ -6262,6 +6451,17 @@ public struct Typer {
+     pendingGivenChecks = remaining
+   }
+ 
++  /// Reports that implicit resolution in `scopeOfUse` was abandoned (`budget`).
++  private mutating func reportResolutionBudgetExhausted(in scopeOfUse: ScopeIdentity) {
++    if !reportedBudgetScopes.insert(scopeOfUse).inserted { return }
++    let m = "implicit resolution is too complex: more than \(TyperExperiments.budgetLimit) candidate derivations; consider adding explicit type arguments or annotations"
++    if let n = scopeOfUse.node {
++      report(.init(.error, m, at: program.spanForDiagnostic(about: n)))
++    } else {
++      report(.init(.error, m, at: program[scopeOfUse.file].source.span))
++    }
++  }
++
+   /// Reports that the extendee of `e` depends on a lookup of `n`, which `e` may affect.
+   private mutating func reportCircularExtension(_ e: ExtensionDeclaration.ID, lookingUp n: Name) {
+     if !reportedCircularExtensions.insert(e).inserted { return }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index d850a83..8be6bf9 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -115,6 +115,23 @@ public enum TyperExperiments {
+   /// have given them (on by default with `eqsolve`; `eqsolvefree` turns it off).
+   nonisolated(unsafe) public static var eqsolveCost: Bool = !enabled.contains("eqsolvefree")
+ 
++  /// Variant of `absmodel`: ground equality givens make the types they relate opaque (`⊤`)
++  /// instead of making the model inconclusive.
++  nonisolated(unsafe) public static var absquotient: Bool = enabled.contains("absquotient")
++
++  /// SEMANTIC FIX: abandon (and report) an implicit resolution whose frontier exceeds
++  /// `budgetLimit` threads (`HYLO_TC_BUDGET`, default 100000) instead of exhausting memory.
++  nonisolated(unsafe) public static var budget: Bool = enabled.contains("budget")
++
++  /// The frontier size above which `budget` abandons a resolution.
++  nonisolated(unsafe) public static var budgetLimit: Int = {
++    guard let p = getenv("HYLO_TC_BUDGET") else { return 100_000 }
++    return Int(String(cString: p)) ?? 100_000
++  }()
++
++  /// Memoize the reification of subterms within one call to `TypeStore.reify`.
++  nonisolated(unsafe) public static var reifymemo: Bool = enabled.contains("reifymemo")
++
+   nonisolated(unsafe) public static var arrowenv: Bool = enabled.contains("arrowenv")
+ 
+   /// SEMANTIC FIX: an open equality goal `?v ~ X` (?v not in X) is solved only by its most
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index eca8b06..b84061e 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -874,6 +874,12 @@ public struct TypeStore: Sendable {
+     // Nothing to do if there aren't any open type variable.
+     if !n[.hasVariable] { return n }
+ 
++    // Experiment (`reifymemo`): substitutions often form DAGs; reify each subterm once.
++    if TyperExperiments.reifymemo {
++      var memo: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++      return reify(n, applying: substitutions, withVariables: substitutionPolicy, memo: &memo)
++    }
++
+     // Reduce type applications if the abstraction is a universal type.
+     var t = substitutions[n]
+     while let a = self[t] as? TypeApplication, let f = self[a.abstraction] as? UniversalType {
+@@ -890,6 +896,32 @@ public struct TypeStore: Sendable {
+     }
+   }
+ 
++  /// Returns `n` reified as by `reify(_:applying:withVariables:)`, memoizing the reification of
++  /// each subterm in `memo`.
++  private mutating func reify(
++    _ n: AnyTypeIdentity,
++    applying substitutions: SubstitutionTable,
++    withVariables substitutionPolicy: SubstitutionPolicy,
++    memo: inout [AnyTypeIdentity: AnyTypeIdentity]
++  ) -> AnyTypeIdentity {
++    if !n[.hasVariable] { return n }
++    if let m = memo[n] { return m }
++    var t = substitutions[n]
++    while let a = self[t] as? TypeApplication, let f = self[a.abstraction] as? UniversalType {
++      t = substitute(.init(mapping: f.parameters, to: a.arguments.values), in: f.head)
++    }
++    let r: AnyTypeIdentity
++    if t.isVariable {
++      r = (substitutionPolicy == .kept) ? t : .error
++    } else {
++      r = self.modified(t) { (s, u) in
++        .stepOver(s.reify(u, applying: substitutions, withVariables: substitutionPolicy, memo: &memo))
++      }
++    }
++    memo[n] = r
++    return r
++  }
++
+   /// Returns `r` with its open variables reified by `substitutions` and `substitutionPolicy`.
+   public mutating func reify(
+     _ r: DeclarationReference,
+-- 
+2.43.0
+

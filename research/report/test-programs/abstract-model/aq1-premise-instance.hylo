@@ -1,0 +1,9 @@
+//! no-std
+trait P {}
+trait Q {}
+struct Box<T> {}
+struct Opt<T> {}
+given <T> => Box<T> is Q {}
+given <T where Opt<T> is Q> => T is P {}
+fun need<T where T is P>() {}
+fun f<X, Y where Box<X> == Opt<Y>>() { need<Y>() }

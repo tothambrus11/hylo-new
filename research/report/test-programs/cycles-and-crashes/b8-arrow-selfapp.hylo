@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Arrow counterpart of b7.
+struct B { public memberwise init }
+fun same<T>(x: T, y: T) {}
+fun h<T>(x: T) -> B { B() }
+public fun main() {
+  let f = fun[](a) { same(a, h<_>); a(a) }
+}

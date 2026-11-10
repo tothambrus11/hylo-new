@@ -1,0 +1,86 @@
+From 152ac34fc609e3b29cd09b6e9e9d28752e4ea0e7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 21:25:08 +0000
+Subject: [PATCH 06/12] TypeStore: add typevec experiment (contiguous storage
+ for projections)
+
+TypeStore never removes types, so a tree inserted into the StableSet lands
+at position count; mirroring insertions in a ContiguousArray lets
+projections avoid StableSet's unspecialized generic accessors.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/TyperCounters.swift |  3 +++
+ Sources/FrontEnd/Types/TypeStore.swift     | 20 ++++++++++++++++++--
+ 2 files changed, 21 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index a5e1bdb..25cd9cb 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -82,6 +82,9 @@ public enum TyperExperiments {
+     return Int(String(cString: p)) ?? 10
+   }()
+ 
++  /// Keep the type store's trees in a contiguous array for projections.
++  nonisolated(unsafe) public static var typevec: Bool = enabled.contains("typevec")
++
+   /// Build the standard library's symbol table in a single pass over its syntax.
+   nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
+ 
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 41c13aa..2dac533 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -21,6 +21,16 @@ public struct TypeStore: Sendable {
+   /// The types contained in this store.
+   private var types: StableSet<AnyTypeTree>
+ 
++  /// Experiment (`typevec`): the types contained in this store, in insertion order.
++  ///
++  /// `trees[i]` is `types[i]`: `types` never removes elements, so a newly inserted tree always
++  /// takes position `types.count - 1`. Reading from a contiguous array avoids the unspecialized
++  /// generic accessors of `StableSet`, which live in another module.
++  private var trees: ContiguousArray<AnyTypeTree> = []
++
++  /// `true` iff `trees` is maintained and used for projections.
++  private let usesTreeVector: Bool = TyperExperiments.typevec
++
+   /// The identifier of the next fresh variable.
+   private var nextFreshIdentifier: Int
+ 
+@@ -43,6 +53,7 @@ public struct TypeStore: Sendable {
+   /// Reserves enough space to store `minimumCapacity` types without allocating new storage.
+   public mutating func reserveCapacity(_ minimumCapacity: Int) {
+     self.types.reserveCapacity(minimumCapacity)
++    if usesTreeVector { self.trees.reserveCapacity(minimumCapacity) }
+   }
+ 
+   /// Returns the identity of a fresh type variable.
+@@ -90,7 +101,12 @@ public struct TypeStore: Sendable {
+ 
+   /// Inserts `t` in `self` and returns its identity, assuming `t` is not present in `self`.
+   private mutating func insert(_ t: any TypeTree) -> AnyTypeIdentity {
+-    let i = types.insert(.init(t)).position
++    let x = AnyTypeTree(t)
++    let (inserted, i) = types.insert(x)
++    if usesTreeVector && inserted {
++      assert(i == trees.count, "type store has holes")
++      trees.append(x)
++    }
+ 
+     // 8 bits are reserved for the properties.
+     assert(UInt64(i) < (UInt64(1) << 55), "too many types")
+@@ -742,7 +758,7 @@ public struct TypeStore: Sendable {
+       case _ where n.isVariable:
+         TypeVariable(identifier: Int(n.bits & ((1 << 54) - 1)))
+       default:
+-        types[n.offset].wrapped
++        usesTreeVector ? trees[n.offset].wrapped : types[n.offset].wrapped
+       }
+     }
+   }
+-- 
+2.43.0
+

@@ -1,0 +1,5 @@
+trait P {}
+struct I { type Back = A }
+struct A { type Inner = I }
+extension <T where T is P> T { type Inner = Bool }
+given A.Inner.Back is P {}

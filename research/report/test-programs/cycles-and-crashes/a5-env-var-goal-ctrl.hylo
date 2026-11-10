@@ -1,0 +1,6 @@
+//! stage:typing no-std
+fun need<X, Y where X == Y>(x: X, y: Y) {}
+fun mk<E>() -> [Void](let E) -> Void { mk() }
+fun f<E>(p: [Void](let E) -> Void) {
+  need(p, mk())
+}

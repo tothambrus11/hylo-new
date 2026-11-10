@@ -1,0 +1,22 @@
+trait P {}
+struct A { public memberwise init; struct Inner { public memberwise init } }
+fun need<T where T is P>(x: T) {}
+fun use1() { need(A.Inner()) }
+fun use2() { need(A.Inner()) }
+fun use3() { need(A.Inner()) }
+fun use4() { need(A.Inner()) }
+fun use5() { need(A.Inner()) }
+fun use6() { need(A.Inner()) }
+fun use7() { need(A.Inner()) }
+fun use8() { need(A.Inner()) }
+fun use9() { need(A.Inner()) }
+fun use10() { need(A.Inner()) }
+fun use11() { need(A.Inner()) }
+fun use12() { need(A.Inner()) }
+fun use13() { need(A.Inner()) }
+fun use14() { need(A.Inner()) }
+fun use15() { need(A.Inner()) }
+fun use16() { need(A.Inner()) }
+type X = A.Inner
+extension X { fun req() {} }
+given X is P {}

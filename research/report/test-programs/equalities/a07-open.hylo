@@ -1,0 +1,9 @@
+//! stage:typing no-std
+fun need2<A, B where A == B>(x: A) -> B { need2(x) }
+fun check<T>(x: T) {}
+struct Box<X> {}
+fun f<T, U where T == U>(x: T, y: Box<T>) {
+  let a: U = need2(x)
+  let b = need2(x)
+  let c: Box<U> = need2(y)
+}

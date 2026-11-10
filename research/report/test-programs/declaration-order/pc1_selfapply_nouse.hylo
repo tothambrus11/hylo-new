@@ -1,0 +1,2 @@
+struct A { type Foo = A }
+extension A.Foo { type Foo = Int }

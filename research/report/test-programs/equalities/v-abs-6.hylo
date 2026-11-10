@@ -1,0 +1,6 @@
+//! stage:typing no-std
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun f<T, U where T == Self, T is P, U == T.X>(x: U) { check<X>(x) }
+}

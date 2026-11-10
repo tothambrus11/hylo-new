@@ -1,0 +1,6 @@
+trait P { type X }
+struct A {}
+struct B { public memberwise init }
+given A is P { type X = B }
+fun f3<T where T is P>(x: T.X) {}
+public fun main() { f3<A>(B()) }

@@ -1,0 +1,8 @@
+//! stage:typing no-std
+fun need<A, B where A == B>() {}
+fun check<T>(x: T) {}
+trait P { type X }
+struct S { public memberwise init }
+given S is P { type X = Bool }
+type Q = S
+fun f<T, U where T == Q, U == S>() { need<T, U>() }

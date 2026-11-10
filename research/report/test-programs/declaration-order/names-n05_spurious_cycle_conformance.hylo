@@ -1,0 +1,17 @@
+trait P { fun req() }
+
+struct A {
+  struct Inner {}
+}
+
+// The conformance's witness needs member `Inner` of `A`; the baseline also evaluates the
+// extendee of every visible extension, including the one below that depends on this alias.
+type X = A.Inner
+
+extension X {
+  fun req() {}
+}
+
+given X is P {}
+
+fun use(x: A.Inner) { x.req() }

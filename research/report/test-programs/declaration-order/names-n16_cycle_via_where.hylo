@@ -1,0 +1,10 @@
+trait P {}
+struct A { struct Inner {} }
+
+// The where-clause of the first extension mentions a member that only the second declares.
+extension <T where T.Assoc is P> T { fun f() {} }
+extension A.Inner { type Assoc = A }
+given A is P {}
+
+type K = A.Inner
+fun use(x: A.Inner) { x.f() }

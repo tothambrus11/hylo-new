@@ -1,0 +1,12 @@
+//! stage:typing no-std
+trait P {}
+struct Box<T> {}
+struct One<T> {}
+struct Two<T> { public memberwise init }
+struct C<T> {}
+given <X where let v: Two<One<X>>, let w: Two<One<Box<X>>>> => C<X> is P {}
+fun h<T where T is P>() {}
+public fun main() {
+  given Two<One<Void>> = Two<One<Void>>()
+  h()
+}

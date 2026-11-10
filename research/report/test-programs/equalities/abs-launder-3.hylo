@@ -1,0 +1,10 @@
+//! no-std
+trait P {
+  type X
+  fun id(x: X) -> X
+}
+fun check<T>(x: T) {}
+// Control without any equality: V and W unrelated.
+fun f0<V, W where V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.id(x))
+}

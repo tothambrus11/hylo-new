@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// Expression solver path: T == {T, T}.
+fun same<T>(x: T, y: T) {}
+public fun main() {
+  let f = fun[](a) { same(a, (a, a)) }
+}

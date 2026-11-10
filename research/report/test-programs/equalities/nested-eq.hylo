@@ -1,0 +1,6 @@
+//! no-std
+struct A {}
+struct B {}
+trait R { given A == B }
+fun need<X, Y where X == Y>() {}
+fun f() { need<A, B>() }

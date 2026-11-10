@@ -1,0 +1,516 @@
+From 1f43195527d2940228497ac9a0e9c96671de89d7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 5 Nov 2026 23:53:30 +0000
+Subject: [PATCH 07/12] Typer: soundness fixes behind flags, and a resolution
+ trace
+
+- fixsubst: keep the substitutions computed by match when it assumes
+  coercions; dropping them let resolution prove unrelated equalities.
+- eqrefute: refute closed equality goals between atoms that lie in
+  different classes of the ground equalities in scope (with fixsubst).
+- occurs: occurs check in unification (cyclic substitutions crashed).
+- cyclecut (+cyclecutstack experiment): evaluate unmemoized extendees and
+  given types as transactions, rolled back when a cycle is cut.
+- trace: print the derivation of each completed resolution.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 209 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  17 ++
+ Sources/FrontEnd/Types/TypeStore.swift     |  30 +++
+ 3 files changed, 246 insertions(+), 10 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 204a7e7..3956554 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -17,6 +17,19 @@ public struct Typer {
+   /// The set of declarations whose type is being computed.
+   private var declarationsOnStack: Set<DeclarationIdentity>
+ 
++  /// Fix (`cyclecut`): the number of cyclic references cut so far.
++  private var cycleCuts: Int = 0
++
++  /// Fix (`cyclecut`): for each speculative evaluation in progress, the declarations that were
++  /// being typed when it started.
++  private var transactionBases: [Set<DeclarationIdentity>] = []
++
++  /// Fix (`cyclecut`): the depth of nested speculative evaluations.
++  private var speculating: Int = 0
++
++  /// Fix (`cyclecut`): the diagnostics reported during speculative evaluations.
++  private var heldDiagnostics: [Diagnostic] = []
++
+   /// A predicate to determine whether inference steps should be logged.
+   private let isLoggingEnabled: ((AnySyntaxIdentity, Program) -> Bool)?
+ 
+@@ -1341,6 +1354,7 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
++      let cuts = cycleCuts
+ 
+       var c = InferenceContext()
+       let p = inferredType(of: d, in: &c)
+@@ -1348,13 +1362,14 @@ public struct Typer {
+       let u = program.types.reify(p, applying: s.substitutions)
+ 
+       ascribe(.let, u, to: program[d].pattern)
+-      program[d.module].setType(u, for: d)
++      if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+       return u
+     }
+ 
+     // Cyclic reference detected.
+     else {
+       let s = program[program[program[d].pattern].pattern].site
++      cycleCuts += 1
+       report(.init(.error, "declaration refers to itself", at: s))
+       return .error
+     }
+@@ -1368,6 +1383,7 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
++      let cuts = cycleCuts
+ 
+       initializeContext(program[d].contextParameters)
+       let t = evaluateTypeAscription(.init(program[d].witness))
+@@ -1379,14 +1395,14 @@ public struct Typer {
+         let s = program.castToDeclaration(program.parent(containing: d).node!)!
+         let g = genericParameters(s)
+         let u = program.types.introduce(parameters: g, into: t)
+-        program[d.module].setType(u, for: d)
++        if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+         return u
+       }
+ 
+       // Otherwise, the conformance may have its own context parameters.
+       else {
+         let u = introduce(program[d].contextParameters, into: t)
+-        program[d.module].setType(u, for: d)
++        if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+         return u
+       }
+     }
+@@ -1394,6 +1410,7 @@ public struct Typer {
+     // Cyclic reference detected.
+     else {
+       let s = program.spanForDiagnostic(about: d)
++      cycleCuts += 1
+       report(.init(.error, "declaration refers to itself", at: s))
+       return .error
+     }
+@@ -1581,17 +1598,18 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
++      let cuts = cycleCuts
+ 
+       switch evaluateTypeAscription(program[d].aliasee) {
+       case .error:
+-        program[d.module].setType(.error, for: d)
++        if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(.error, for: d) }
+         return .error
+ 
+       case let aliasee:
+         let t = metatype(
+           of: TypeAlias(declaration: d, aliasee: aliasee),
+           parameterizedBy: program[d].parameters)
+-        program[d.module].setType(t.erased, for: d)
++        if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(t.erased, for: d) }
+         return t.erased
+       }
+     }
+@@ -1599,6 +1617,7 @@ public struct Typer {
+     // Cyclic reference detected.
+     else {
+       let n = program[d].identifier
++      cycleCuts += 1
+       report(.init(.error, "definition of '\(n)' refers to itself", at: n.site))
+       return .error
+     }
+@@ -1694,6 +1713,19 @@ public struct Typer {
+     let result: AnyTypeIdentity
+     switch g {
+     case .user(let d):
++      // Fix (`cyclecut`): evaluate the type of a given as a transaction when it is not memoized;
++      // if that evaluation cuts a cycle, roll it back and treat the given as unusable here.
++      if TyperExperiments.cyclecut && (program[d.module].type(assignedTo: d) == nil) {
++        let cuts = cycleCuts
++        let snapshot = (program, cache)
++        let t = declaredType(of: d)
++        if cycleCuts != cuts {
++          TyperCounters.bump("cyclecut.discardedGivens")
++          (program, cache) = snapshot
++          return .error
++        }
++        return t
++      }
+       return declaredType(of: d)
+ 
+     case .nested(let p, let d):
+@@ -1794,18 +1826,20 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
++      let cuts = cycleCuts
+ 
+       initializeContext(program[d].contextParameters)
+       let t = ignoring(d, { (me) in me.evaluateTypeAscription(me.program[d].extendee) })
+       let u = introduce(program[d].contextParameters, into: t)
+ 
+-      program[d.module].setType(u, for: d)
++      if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+       return u
+     }
+ 
+     // Cyclic reference detected.
+     else {
+       let s = program.spanForDiagnostic(about: d)
++      cycleCuts += 1
+       report(.init(.error, "declaration refers to itself", at: s))
+       return .error
+     }
+@@ -3554,6 +3588,9 @@ public struct Typer {
+       /// which the premise is a (transitive) subgoal.
+       var ancestry: [Int: [AnyTypeIdentity]] = [:]
+ 
++      /// Research tracing: the steps that led to this environment (only with the `trace` flag).
++      var log: [String] = []
++
+       /// Returns a copy of `self` in which `ts` are assumed given.
+       func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
+         let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
+@@ -3561,6 +3598,7 @@ public struct Typer {
+           substitutions: substitutions, givens: givens + gs,
+           nextGivenIdentifier: nextGivenIdentifier + gs.count)
+         e.ancestry = ancestry
++        e.log = log
+         return e
+       }
+ 
+@@ -3572,6 +3610,7 @@ public struct Typer {
+         var e = Environment(
+           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
+         e.ancestry = ancestry
++        e.log = log
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -3690,6 +3729,10 @@ public struct Typer {
+         }
+       }
+     }
++    if TyperExperiments.eqrefute && equalityIsRefuted(t, in: scopeOfUse, where: environment) {
++      TyperCounters.bump("eqrefute.refuted")
++      return []
++    }
+     if TyperExperiments.index || TyperExperiments.absmodel,
+       let r = indexedSummon(
+         t, in: scopeOfUse, where: environment, then: continuation, penalties: penalties,
+@@ -3714,11 +3757,16 @@ public struct Typer {
+     ])
+ 
+     let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++    let tracing = TyperExperiments.enabled.contains("trace")
+     return gs.enumerated().reduce(into: []) { (result, grouping) in
+       for g in grouping.element {
+         let w = expression(referringTo: g)
++        var e = environment
++        if tracing {
++          e.log.append("goal \(program.show(u)) <- try \(program.show(w.value)) : \(program.show(w.type))")
++        }
+         let r = formThread(
+-          matching: w, to: u, in: environment, then: continuation,
++          matching: w, to: u, in: e, then: continuation,
+           penalties: penalties + grouping.offset, ancestors: ancestors)
+         result.append(r)
+       }
+@@ -3823,7 +3871,27 @@ public struct Typer {
+     }
+ 
+     // If yes, assume non-syntactic equalities between pairwise nested parts.
+-    let e = thread.environment.assuming(givens: gs)
++    var e = thread.environment.assuming(givens: gs)
++
++    // Fix (`fixsubst`): keep the variable assignments made while unifying the parts that did
++    // match. Dropping them lets later premises re-bind the same variables differently, which
++    // makes resolution accept underivable equalities (research/round3/soundness.md).
++    if TyperExperiments.fixsubst {
++      var f = ResolutionThread.Environment(
++        substitutions: thread.environment.substitutions.union(substitutions),
++        givens: e.givens, nextGivenIdentifier: e.nextGivenIdentifier)
++      f.ancestry = e.ancestry
++      f.log = e.log
++      e = f
++    }
++    if TyperExperiments.enabled.contains("trace") {
++      let n = thread.environment.nextGivenIdentifier
++      e.log.append("  coerce \(program.show(a)) to \(program.show(b)) assuming " + gs.enumerated().map({ (i, g) in "$\(n + i): \(program.show(g))" }).joined(separator: ", "))
++    }
++    if false {
++      let n = thread.environment.nextGivenIdentifier
++      print("[trace]     match \(program.show(thread.witness)) : \(program.show(a)) vs \(program.show(b)) => assume " + gs.enumerated().map({ (i, g) in "$\(n + i): \(program.show(g))" }).joined(separator: ", ") + " | env " + thread.environment.givens.map({ (g) in if case .assumed(let i, let t) = g { "$\(i): \(program.show(t))" } else { "?" } }).joined(separator: ", "))
++    }
+     let t = demand(EqualityWitness(lhs: a, rhs: b)).erased
+     let w = WitnessExpression(
+       value: .termApplication(.init(value: .builtin(.coercion), type: t), thread.witness),
+@@ -3841,7 +3909,14 @@ public struct Typer {
+         substitutions: operand.substitutions, givens: thread.environment.givens.dropLast(),
+         nextGivenIdentifier: thread.environment.nextGivenIdentifier)
+       e.ancestry = thread.environment.ancestry
++      e.log = thread.environment.log
+       let ancestors = e.ancestry.removeValue(forKey: i) ?? []
++      if TyperExperiments.enabled.contains("trace") {
++        e.log.append("  solved with \(program.show(operand.witness)); now prove $\(i): \(program.show(assumed)) [pending: " + e.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", ") + "]")
++      }
++      if false {
++        print("[trace]     discharge $\(i): \(program.show(assumed)) after \(program.show(operand.witness)) | still assumed: " + e.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", "))
++      }
+       var t = thread.tail
+       t.append(.init(i, in: operand))
+       return .next(
+@@ -3852,6 +3927,10 @@ public struct Typer {
+ 
+     // We're done; apply the continuation.
+     else {
++      if TyperExperiments.enabled.contains("trace") {
++        print("[trace] DONE \(program.show(operand.witness))")
++        for l in thread.environment.log { print("[trace]   \(l)") }
++      }
+       assert(thread.environment.givens.isEmpty)
+       return .done(applyContinuation(thread.tail[...], to: operand))
+     }
+@@ -3902,7 +3981,15 @@ public struct Typer {
+       }
+     }
+ 
+-    return done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
++    let result = done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
++    if TyperExperiments.enabled.contains("trace") && !threads.isEmpty {
++      let q = program.show(threads[0].queried)
++      print("[trace] resolve \(q): \(depth) layers, \(done.count) done, \(result.count) minimal")
++      for r in result {
++        print("[trace]   penalty \(r.penalties): \(program.show(r.witness))")
++      }
++    }
++    return result
+   }
+ 
+   // MARK: Experiments: indexed and refuted implicit resolution
+@@ -4755,7 +4842,15 @@ public struct Typer {
+     var candidates: [NameResolutionCandidate] = []
+     let qs = TyperExperiments.memberskip ? headShape(of: q) : nil
+     var settled: Bool? = nil
+-    for e in extensions where !declarationsOnStack.contains(.init(e)) {
++    for e in extensions {
++      if declarationsOnStack.contains(.init(e)) {
++        // Skipping an extension whose extendee was already being computed when the current
++        // speculative evaluation started makes this lookup depend on the order of evaluation.
++        if TyperExperiments.cyclecutStack, let b = transactionBases.last, b.contains(.init(e)) {
++          cycleCuts += 1
++        }
++        continue
++      }
+       // Experiment: skip extensions that do not declare any member named `n` and whose
+       // applicability check is known to fail without any observable effect.
+       if TyperExperiments.memberskip,
+@@ -4771,6 +4866,22 @@ public struct Typer {
+         continue
+       }
+       TyperCounters.bump("names.appliesCalls")
++      if TyperExperiments.cyclecut && (program[e.module].type(assignedTo: e) == nil) {
++        // Evaluate the extendee as a transaction: if that evaluation runs into a cycle, its
++        // results depend on the order of evaluation, so every effect it had (memoized types,
++        // diagnostics, caches) is rolled back and `e` is considered not to apply here. It will be
++        // evaluated again, outside of the cycle, when it is needed.
++        let cuts = cycleCuts
++        let snapshot = (program, cache)
++        transactionBases.append(declarationsOnStack)
++        _ = extendeeType(e)
++        transactionBases.removeLast()
++        if cycleCuts != cuts {
++          TyperCounters.bump("cyclecut.discarded")
++          (program, cache) = snapshot
++          continue
++        }
++      }
+       if let a = applies(e, to: q, in: scopeOfUse) {
+         let w = program.types.reify(
+           a.witness, applying: a.substitutions, withVariables: .substitutedByError)
+@@ -5462,6 +5573,10 @@ public struct Typer {
+ 
+   /// Reports the diagnostic `d`.
+   private mutating func report(_ d: Diagnostic) {
++    if speculating > 0 {
++      heldDiagnostics.append(d)
++      return
++    }
+     program[module].addDiagnostic(d)
+   }
+ 
+@@ -5512,6 +5627,80 @@ public struct Typer {
+     }
+   }
+ 
++  /// Returns `true` if `t` is an equality `a ~ b` that implicit resolution provably cannot derive
++  /// from the givens visible from `scopeOfUse` and those assumed in `environment`.
++  ///
++  /// Requires `fixsubst`: without it, resolution derives equalities that do not hold.
++  ///
++  /// The test computes the classes of the equivalence relation generated by the ground equality
++  /// givens in scope (and by unifiability between their sides) and refutes `a ~ b` when `a` and `b`
++  /// fall into different classes. It only applies when every side is an atom (a generic parameter,
++  /// an associated type, or a nominal or machine type without arguments), so that congruence cannot
++  /// relate two classes, and gives up if a given may derive an equality from its parameters (a
++  /// quantified equality or a bare-variable head) or if `t` has open variables.
++  private mutating func equalityIsRefuted(
++    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment
++  ) -> Bool {
++    let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++    guard !u[.hasVariable], let e = program.types.cast(u, to: EqualityWitness.self) else {
++      return false
++    }
++
++    func atom(_ x: AnyTypeIdentity) -> AnyTypeIdentity? {
++      let y = program.types.dealiased(x)
++      if y[.hasVariable] || y[.hasError] { return nil }
++      switch program.types[y] {
++      case is GenericParameter, is AssociatedType, is Struct, is Enum, is Trait, is MachineType:
++        return y
++      default:
++        return nil
++      }
++    }
++    guard let a = atom(program.types[e].lhs), let b = atom(program.types[e].rhs) else {
++      return false
++    }
++    if a == b { return false }
++
++    // Collect the ground equality facts.
++    var facts: [(AnyTypeIdentity, AnyTypeIdentity)] = []
++    let gs = environment.givens + Array(givens(visibleFrom: scopeOfUse).joined())
++    for g in gs {
++      let w = declaredType(of: g)
++      if w[.hasError] { continue }
++      let (c, h) = program.types.contextAndHead(w)
++      if c.parameters.contains(where: { (p) in p.erased == h }) { return false }
++      guard let f = program.types.cast(h, to: EqualityWitness.self) else { continue }
++      if !c.parameters.isEmpty || !c.usings.isEmpty { return false }
++      guard let l = atom(program.types[f].lhs), let r = atom(program.types[f].rhs) else {
++        return false
++      }
++      facts.append((l, r))
++    }
++
++    // Union-find over atoms, merging the sides of facts and unifiable atoms.
++    var atoms = [a, b]
++    for (l, r) in facts { atoms.append(l); atoms.append(r) }
++    var parent: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++    func find(_ x: AnyTypeIdentity) -> AnyTypeIdentity {
++      var x = x
++      while let p = parent[x], p != x { x = p }
++      return x
++    }
++    func union(_ x: AnyTypeIdentity, _ y: AnyTypeIdentity) {
++      let (i, j) = (find(x), find(y))
++      if i != j { parent[i] = j }
++    }
++    for (l, r) in facts { union(l, r) }
++    let distinct = Array(Set(atoms))
++    for i in distinct.indices {
++      for j in distinct.indices where j > i {
++        if program.types.unifiable(distinct[i], distinct[j]) != nil { union(distinct[i], distinct[j]) }
++      }
++    }
++    return find(a) != find(b)
++  }
++
+   /// Returns `true` iff there is a declaration introducing an implicit that is being typed.
+   private func hasImplicitOnStack() -> Bool {
+     declarationsOnStack.contains(where: program.isImplicit)
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 25cd9cb..82a935b 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -85,6 +85,23 @@ public enum TyperExperiments {
+   /// Keep the type store's trees in a contiguous array for projections.
+   nonisolated(unsafe) public static var typevec: Bool = enabled.contains("typevec")
+ 
++  /// SEMANTIC FIX: keep substitutions computed by `match` when it assumes coercions.
++  nonisolated(unsafe) public static var fixsubst: Bool = enabled.contains("fixsubst")
++
++  /// SEMANTIC FIX: occurs check in unification.
++  nonisolated(unsafe) public static var occurs: Bool = enabled.contains("occurs")
++
++  /// SEMANTIC FIX: evaluate extendees speculatively during member lookup, discarding results
++  /// computed across a cyclic reference.
++  nonisolated(unsafe) public static var cyclecut: Bool = enabled.contains("cyclecut")
++
++  /// With `cyclecut`, also treat lookups that skip an extension being typed as cycle cuts.
++  nonisolated(unsafe) public static var cyclecutStack: Bool = enabled.contains("cyclecutstack")
++
++  /// Refute equality goals outside the equivalence classes of the ground equalities in scope
++  /// (requires `fixsubst`).
++  nonisolated(unsafe) public static var eqrefute: Bool = enabled.contains("eqrefute")
++
+   /// Build the standard library's symbol table in a single pass over its syntax.
+   nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
+ 
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 2dac533..fb0bac2 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1003,9 +1003,13 @@ public struct TypeStore: Sendable {
+ 
+     // There are type variables?
+     else if a.isVariable {
++      // Fix (`occurs`): binding a variable to a term containing it creates a cyclic substitution
++      // that makes reification recurse forever.
++      if TyperExperiments.occurs && occurs(a, in: b, under: ss) { return false }
+       ss.assign(b, to: .init(uncheckedFrom: a))
+       return true
+     } else if b.isVariable {
++      if TyperExperiments.occurs && occurs(b, in: a, under: ss) { return false }
+       ss.assign(a, to: .init(uncheckedFrom: b))
+       return true
+     }
+@@ -1074,6 +1078,32 @@ public struct TypeStore: Sendable {
+     return result || areCoercible(a, b)
+   }
+ 
++  /// Returns `true` iff the type variable `v` occurs in `t` once `ss` is applied.
++  internal func occurs(
++    _ v: AnyTypeIdentity, in t: AnyTypeIdentity, under ss: SubstitutionTable
++  ) -> Bool {
++    let u = ss[t]
++    if u.isVariable { return u == v }
++    if !u[.hasVariable] { return false }
++    let o: (AnyTypeIdentity) -> Bool = { (x) in self.occurs(v, in: x, under: ss) }
++    switch self[u] {
++    case let x as TypeApplication: return o(x.abstraction) || x.arguments.values.contains(where: o)
++    case let x as Tuple:
++      if case .cons(let h, let r) = x { return o(h) || o(r) } else { return false }
++    case let x as Metatype: return o(x.inhabitant)
++    case let x as EqualityWitness: return o(x.lhs) || o(x.rhs)
++    case let x as AssociatedType: return o(x.qualification.type)
++    case let x as Arrow:
++      return o(x.environment) || o(x.output) || x.inputs.contains(where: { (p) in o(p.type) })
++    case let x as Implication: return o(x.head) || x.usings.contains(where: o)
++    case let x as UniversalType: return o(x.head)
++    case let x as RemoteType: return o(x.projectee)
++    case let x as FunctionPointer: return o(x.output) || x.inputs.contains(where: o)
++    case let x as TypeAlias: return o(x.aliasee)
++    default: return false
++    }
++  }
++
+   /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
+   /// but compares type tags before projecting and casting each operand once.
+   private func unifiableSameShape(
+-- 
+2.43.0
+

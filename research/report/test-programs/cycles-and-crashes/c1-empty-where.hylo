@@ -1,0 +1,10 @@
+//! stage:typing no-std
+trait P {}
+struct A {}
+given <where> => A is P {}
+fun g<where>() {}
+fun h<T where T is P>() {}
+public fun main() {
+  g()
+  h<A>()
+}

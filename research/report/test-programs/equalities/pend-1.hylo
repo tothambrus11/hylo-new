@@ -1,0 +1,9 @@
+//! no-std
+trait P {}
+struct A {}
+struct B {}
+struct C {}
+fun use<T>(x: T) {}
+// Premises: A == B (false), B == A (false). Proving one from the other must not suffice.
+given <where A == B, B == A> => C is P {}
+public fun main() { use(summon[P<C>]) }

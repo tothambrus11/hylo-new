@@ -1,0 +1,3 @@
+//! stage:typing no-std
+trait P { type X }
+fun g<T, U where T is P, U is P, U == T>(x: U.X) -> T.X { x }

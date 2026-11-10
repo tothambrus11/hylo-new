@@ -1,0 +1,17 @@
+//! Like c3, plus a second premise T is Q that pins T := Z2 after the cyclic match dropped its
+//! bindings. Z2 is P3<S<Z2>, A.X> is not derivable (it needs Z2 == S<Z2>): should be rejected.
+trait P { type X }
+trait P3<B, C> {}
+trait Q {}
+trait R {}
+struct S<T> {}
+struct M {}
+struct Z {}
+struct Z2 {}
+given Z2 is Q {}
+given <U> => U is P3<U, M> {}
+fun needR<T where T is R>() {}
+fun f<A where A is P, A.X == M>() {
+  given <T where T is P3<S<T>, A.X>, T is Q> => Z is R {}
+  needR<Z>()
+}

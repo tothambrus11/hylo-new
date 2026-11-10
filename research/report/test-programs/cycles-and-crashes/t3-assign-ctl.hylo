@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// Control: same with a concrete parameter type; must be rejected.
+struct S<T> { public memberwise init }
+fun mk<T>(x: T) -> S<T> { S<T>() }
+public fun main() {
+  let f = fun[](a: inout Void) { &a = mk(a) }
+}

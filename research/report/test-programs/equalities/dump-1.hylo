@@ -1,0 +1,8 @@
+//! no-std
+struct A {}
+struct Box<T> {}
+type Al = A
+fun need<X, Y where X == Y>() {}
+fun f<U, V, W where U == Al, Box<V> == W, V == U>() {
+  need<Box<A>, W>()
+}

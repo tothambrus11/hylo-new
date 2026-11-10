@@ -1,0 +1,10 @@
+//! stage:typing no-std
+struct B { public memberwise init }
+fun same<T>(x: T, y: T) {}
+fun h<T>(x: auto T) auto -> B {
+  let { B() }
+  inout { B() }
+}
+public fun main() {
+  let f = fun[](a) { same(a, h<_>) }
+}
