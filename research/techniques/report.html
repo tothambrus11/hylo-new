@@ -1,0 +1,367 @@
+<title>Hylo Type-Checker Optimizations</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column (~72ch) with wide tables allowed to scroll; technique entries as ruled rows, not cards. */
+:root {
+  --bg: #fbfbfc;
+  --surface: #f1f3f6;
+  --fg: #1b2230;
+  --muted: #5a6475;
+  --rule: #d9dde4;
+  --accent: #1f5fae;
+  --accent-soft: #e3ecf8;
+  --good: #1d7a4a;
+  --good-soft: #e1f3e8;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --bad: #b3261e;
+  --bad-soft: #fbe3e1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+    --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+    --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+  --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+  --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 76ch; margin: 0 auto; padding-block: 48px 80px; display: grid; gap: 56px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.5rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--fg); }
+h3 { font-size: 1.15rem; font-weight: 600; }
+p, ul { margin: 0; }
+ul { padding-left: 1.2em; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surface); padding: 0.1em 0.35em; border-radius: 4px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.12rem; color: var(--fg); }
+.muted { color: var(--muted); }
+header { display: grid; gap: 14px; }
+.meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.config { background: var(--surface); border-left: 3px solid var(--accent); padding: 14px 16px; display: grid; gap: 8px; font-size: 0.95rem; }
+.config div { min-width: 0; overflow-wrap: anywhere; }
+.config b { font-family: var(--font-display); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; color: var(--muted); border-bottom: 1.5px solid var(--fg); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-mono); font-size: 0.86rem; }
+td.x { font-weight: 600; color: var(--good); }
+td.fixd { color: var(--accent); font-weight: 600; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.perf { background: var(--good-soft); color: var(--good); }
+.pill.fix { background: var(--accent-soft); color: var(--accent); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+.pill.neutral { background: var(--warn-soft); color: var(--warn); }
+.tech { display: grid; gap: 10px; padding-block: 18px; border-top: 1px solid var(--rule); }
+.tech:first-of-type { border-top: none; padding-top: 4px; }
+.tech-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.tech-head h3 code { font-size: 1rem; background: none; padding: 0; }
+.tech-head .area { color: var(--muted); font-size: 0.92rem; }
+dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 14px; margin: 0; font-size: 0.95rem; }
+dt { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+dd { margin: 0; min-width: 0; }
+@media (max-width: 560px) {
+  h1 { font-size: 1.8rem; }
+  dl { grid-template-columns: 1fr; gap: 2px; }
+  dd { margin-bottom: 8px; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.88rem; color: var(--muted); align-items: center; }
+footer { font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Hylo front end · Typer · research report</div>
+    <h1>Hylo Type-Checker Optimizations</h1>
+    <p class="lede">This report covers the techniques that make the type checker faster, why each one is sound, what it speeds up and what it costs. It also covers the fixes needed to make the faster checker correct, and the ideas that were tried and retired.</p>
+    <div class="meta">
+      <span>Branch <code>claude/stoic-bell-b2molq</code></span>
+      <span>Patches <code>research/impl/0001–0011</code></span>
+      <span>Binary <code>eq7-3bbd2b60cb89</code></span>
+      <span>November 2026</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Summary</h2>
+    <p>Every technique sits behind a runtime flag, <code>HYLO_TC_EXPERIMENTS=a,b,…</code>, so it can be measured and verified on its own. Two configurations are recommended:</p>
+    <div class="config">
+      <div><b>FIX</b> (semantic fixes only): <code>occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget</code></div>
+      <div><b>FULL</b> (fixes and speed-ups): FIX + <code>symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo</code></div>
+    </div>
+    <ul>
+      <li><strong>Same output as the baseline on the corpus.</strong> Both configurations produce identical types, name bindings, witnesses and diagnostics on all 216 corpus files (192 compiler tests and 24 workloads).</li>
+      <li><strong>No crashes.</strong> On the 520 programs written by two rounds of adversarial reviewers, the baseline crashes on 21 and times out on 43. FULL crashes on none and times out on 1.</li>
+      <li><strong>Faster.</strong> Standard-library typing is 3.8× faster, and the stress workloads are 10× to 700× faster. Several programs that ran out of memory now finish in milliseconds.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Results</h2>
+    <p class="muted">Typing time in ms, best of 3 in-process runs, pinned to one core of a 4-core cloud VM. Treat differences under about 10% as noise. The stdlib row is standard-library typing; the other rows are user-code typing.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Workload</th><th>What it stresses</th><th class="num">Baseline</th><th class="num">FIX</th><th class="num">FULL</th><th class="num">Speed-up</th></tr></thead>
+        <tbody>
+          <tr><td>stdlib</td><td>standard library</td><td class="num">735</td><td class="num">444</td><td class="num">191</td><td class="num x">3.8×</td></tr>
+          <tr><td>members-big</td><td>2000 extensions, 1000 lookups</td><td class="num">15,321</td><td class="num">761</td><td class="num">486</td><td class="num x">32×</td></tr>
+          <tr><td>breadth40</td><td>many givens in scope</td><td class="num">4,881</td><td class="num">4,872</td><td class="num">55</td><td class="num x">88×</td></tr>
+          <tr><td>div-loop-20</td><td>looping givens</td><td class="num">136</td><td class="num">135</td><td class="num">3.6</td><td class="num x">38×</td></tr>
+          <tr><td>div-branch</td><td>branching failure</td><td class="num">1,609</td><td class="num">1,634</td><td class="num">2.2</td><td class="num x">738×</td></tr>
+          <tr><td>wide-tuple-5</td><td>structural conformance</td><td class="num">62</td><td class="num">55</td><td class="num">4.1</td><td class="num x">15×</td></tr>
+          <tr><td>trans-8</td><td>equality chain of 8</td><td class="num">1,247</td><td class="num">8.7</td><td class="num">3.8</td><td class="num x">330×</td></tr>
+          <tr><td>assoceq-8</td><td>associated-type equalities</td><td class="num">3,635</td><td class="num">143</td><td class="num">116</td><td class="num x">31×</td></tr>
+          <tr><td>orig-coerc-cache</td><td>coercion derivability</td><td class="num">2,696</td><td class="num">12</td><td class="num">4.4</td><td class="num x">608×</td></tr>
+          <tr><td>assocneg-8</td><td>ill-typed equalities</td><td class="num">3,064 <span class="pill no">wrongly accepted</span></td><td class="num">109</td><td class="num">100</td><td class="num fixd">fixed</td></tr>
+          <tr><td>refine-8</td><td>trait refinement</td><td class="num">49</td><td class="num">33</td><td class="num">4.4</td><td class="num x">11×</td></tr>
+          <tr><td>nestwide-8</td><td>nested givens</td><td class="num">66</td><td class="num">48</td><td class="num">6.8</td><td class="num x">10×</td></tr>
+          <tr><td>ovl-4-8</td><td>overloads</td><td class="num">4,693</td><td class="num">233</td><td class="num">182</td><td class="num x">26×</td></tr>
+          <tr><td>ovr-3-8</td><td>return-type overloads</td><td class="num">279</td><td class="num">276</td><td class="num">219</td><td class="num x">1.3×</td></tr>
+          <tr><td>x10b</td><td>conditional extension with <code>T.Element == Flag</code></td><td class="num">1,779</td><td class="num">23</td><td class="num">17</td><td class="num x">105×</td></tr>
+          <tr><td>open-wide-4</td><td>open equality premises</td><td class="num">out of memory</td><td class="num">496</td><td class="num">202</td><td class="num fixd">fixed</td></tr>
+          <tr><td>div-eq-ovl-b3-1</td><td>divergence plus one equality</td><td class="num">out of memory</td><td class="num">3,301 <span class="pill neutral">budget</span></td><td class="num">4.2</td><td class="num fixd">fixed</td></tr>
+          <tr><td>occurs-dag-16</td><td>shared substitutions</td><td class="num">2,860</td><td class="num">2,872</td><td class="num">3.3</td><td class="num x">870×</td></tr>
+          <tr><td>p02-cc-big</td><td>31 tuple equalities</td><td class="num">out of memory</td><td class="num">82</td><td class="num">63</td><td class="num fixd">fixed</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>How soundness was checked</h2>
+    <ul>
+      <li><strong>Semantic oracle.</strong> <code>research/exp/tcx.py semtest</code> dumps every expression type, every name binding (including implicit and witness arguments), every witness table and every diagnostic, and compares the dump against the baseline. Both final configurations are identical on all 216 corpus files.</li>
+      <li><strong>Two adversarial reviews.</strong> In each review, reviewer agents tried to break the checker: unsound acceptance, regressions, dependence on declaration order, crashes and slow programs. A judge agent re-ran every claim. Every confirmed finding was fixed, and the 520 programs the reviewers wrote are re-run on every build (<code>round3/soundness/regress-final.md</code>).</li>
+      <li><strong>Per-technique argument.</strong> Each technique below states why it cannot change the result. For pure speed-ups the argument is "same output". For fixes it is "rejects only what has no consistent reading".</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Speed-ups</h2>
+    <div class="legend"><span class="pill perf">sound</span> the output is identical to the baseline; only the work changes. Per-flag numbers are measured with that flag alone.</div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>index</code></h3><span class="area">Implicit resolution: which givens to try</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>The visible givens of each scope are bucketed by the head constructor of their conclusion. A goal headed by <code>P</code> only tries the givens in bucket <code>P</code> plus the wildcards, in their original order and with their original penalties.</dd>
+        <dt>Why sound</dt><dd>When no coercion source is visible, a given with a different head fails at its first match and produces no result or child thread, so skipping it changes nothing. The index falls back to the full scan when an equality or wildcard given is visible, when an equality is assumed, or when a declaration is on the stack.</dd>
+        <dt>Speeds up</dt><dd>Resolution with many unrelated givens in scope: stdlib 2.2×, breadth40 81×, div-loop-20 10×.</dd>
+        <dt>Costs</dt><dd>One index per scope, built in O(visible givens). It does not apply in scopes with equality givens.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>absmodel</code></h3><span class="area">Implicit resolution: a "will fail" test</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>Givens are read as Horn clauses, and their least model is computed bottom-up with terms truncated at depth 2. A subgoal that unifies with no fact of the model is refuted before any thread is formed for it.</dd>
+        <dt>Why sound</dt><dd>The abstract model over-approximates every concrete derivation: truncation is monotone, <code>⊤</code> unifies with everything, and dropping premises only adds facts. A refuted goal therefore has no derivation, so the selected result, the penalties and any ambiguity are unchanged. Four bugs found in review were fixed: subsumption with <code>⊤</code>, cyclic substitutions, file models keyed by imports, and renaming apart.</dd>
+        <dt>Speeds up</dt><dd>Failing or divergent resolution, which no longer runs to the depth cap: div-branch 150×, div-loop-20 12×.</dd>
+        <dt>Costs</dt><dd>About 1.4k facts on the stdlib, a few ms. A base fact deeper than the truncation depth weakens the model.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>absquotient</code></h3><span class="area">Extends absmodel to scopes with equalities</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>Before this flag, a single <code>where A == B</code> switched the model off. Now, when every equality in scope is ground, every type in a non-trivial equality class is abstracted as <code>⊤</code>, so the model stays usable.</dd>
+        <dt>Why sound</dt><dd>Two types that are equal in the congruence closure differ only at positions in non-trivial classes, so their abstractions unify. A derivation that uses coercions maps to an abstract derivation that does not need them.</dd>
+        <dt>Speeds up</dt><dd>Divergent givens in generic code with equality requirements: div-eq-ovl-b3-1 goes from 45 s (or out of memory) to 4 ms.</dd>
+        <dt>Costs</dt><dd>Scopes with equalities build their model from scratch. More opaque types mean fewer refutations.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>memberskip</code></h3><span class="area">Member lookup through extensions</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>An extension is skipped when it declares no member with the looked-up name <em>and</em> its applicability check provably has no effect. That is the case when its extendee is already memoized and either the match fails at the root or every visible given is already typed.</dd>
+        <dt>Why sound</dt><dd>It only skips a call when everything that call could force is already memoized. The order in which extendees and givens are first evaluated is therefore exactly the baseline's, and so is every cycle cut. This is the property the retired <code>names</code> flag violated.</dd>
+        <dt>Speeds up</dt><dd>Programs with many extensions: members-big 14.7× and stdlib 1.7× alone. <code>applies</code> calls on members-big drop from 4,008,000 to 1000.</dd>
+        <dt>Costs</dt><dd>One head-shape cache per extension and one "givens settled" bit per scope.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>coesrc</code></h3><span class="area">Coercion-derivability pre-check</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>A given that can never derive a coercion (its head is neither <code>T ~ U</code> nor a bare variable) is remembered in a set, and later scans skip it.</dd>
+        <dt>Why sound</dt><dd>The classification depends only on the given's declared type. A skipped given contributes "no" to an OR, so the answer and the early-exit point are unchanged. Types computed under a cycle cut are never cached.</dd>
+        <dt>Speeds up</dt><dd>Structural mismatches with many givens in scope: breadth40 7.5× and stdlib 1.2× alone.</dd>
+        <dt>Costs</dt><dd>One set of givens per typer.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>traitindex</code></h3><span class="area">Member lookup through traits</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>Each scope keeps a map from member identifier to the visible traits that declare it. A qualified lookup like <code>T.m</code> visits only those traits.</dd>
+        <dt>Why sound</dt><dd>A trait without the identifier contributes an empty, side-effect-free lookup. The per-identifier lists keep the order of <code>traits(visibleFrom:)</code>.</dd>
+        <dt>Speeds up</dt><dd>Qualified lookups with many traits in scope. On the stdlib it is small (1007 → 947 ms); it mostly removes a copy of the typer's state.</dd>
+        <dt>Costs</dt><dd>One copy-on-write map per scope.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>symindex</code></h3><span class="area">Standard-library setup</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>The about 24 compiler-known entities (<code>Bool</code>, <code>Int</code>, <code>Movable</code>, …) are found with one scan of the standard library instead of one scan per entity.</dd>
+        <dt>Why sound</dt><dd>Same predicate and same order, so <code>uniqueElement</code> and the preconditions behave identically.</dd>
+        <dt>Speeds up</dt><dd>Every compilation, by a fixed amount: stdlib −12%.</dd>
+        <dt>Costs</dt><dd>One small dictionary during initialization.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>typevec</code></h3><span class="area">Type-store storage</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>A contiguous array mirrors the hash-consed type set, so type projections no longer go through unspecialized generic code.</dd>
+        <dt>Why sound</dt><dd>Types are never removed and are appended in insertion order, so element <code>i</code> is the same tree as before. Identities and hash-consing are untouched.</dd>
+        <dt>Speeds up</dt><dd>Everything, as a constant factor: 1.1–1.4×, and stdlib −20%.</dd>
+        <dt>Costs</dt><dd>8 bytes per type, and a copy of the array after a solver fork.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>unify</code></h3><span class="area">Unification constant factor</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>Unification compares the two dynamic types first, then casts each operand once, instead of matching a tuple of existentials against 20 patterns.</dd>
+        <dt>Why sound</dt><dd>The set of type kinds is closed, so a cast succeeds exactly when the dynamic types are equal, and the same per-kind function runs.</dd>
+        <dt>Speeds up</dt><dd>Every unification: about 1.1×. Most of the gain overlaps with <code>typevec</code>.</dd>
+        <dt>Costs</dt><dd>None measurable.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>reifymemo</code></h3><span class="area">Substitution</span><span class="pill perf">sound</span></div>
+      <dl>
+        <dt>How</dt><dd>Within one reification call, the result for each subterm is memoized. Substitutions are often DAGs, which the baseline walked as trees.</dd>
+        <dt>Why sound</dt><dd>Within one call, reification is a pure function of the subterm's identity.</dd>
+        <dt>Speeds up</dt><dd>Bindings that share subterms: occurs-dag-18 goes from 8.8 s to 3.7 ms.</dd>
+        <dt>Costs</dt><dd>One dictionary per call that has variables.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>Correctness fixes</h2>
+    <div class="legend"><span class="pill fix">fix</span> changes results on purpose. Each one removes an unsound acceptance, a crash or an order dependence of the baseline, and leaves the corpus identical. Several are also large speed-ups.</div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>fixsubst</code></h3><span class="area">Keep substitutions when a match assumes coercions</span><span class="pill fix">fix</span></div>
+      <dl>
+        <dt>Problem</dt><dd>When <code>match</code> assumed equalities between mismatching parts, it dropped the variable bindings it had already made. Later premises could rebind them, so a single unrelated <code>V == W</code> let resolution "prove" <code>D == V</code>.</dd>
+        <dt>Fix</dt><dd>Keep the bindings. This requires <code>occurs</code> (without it, new cycles crash) and <code>eqsolve</code> (without it, honest equality chains hit the depth cap).</dd>
+        <dt>Effect</dt><dd>The bogus derivations in both reviews are rejected, for example <code>c01-single-eq-call</code>, <code>v03-box</code>, <code>assocneg-*</code>.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>eqsolve</code></h3><span class="area">Decision procedure for closed equality goals</span><span class="pill fix">fix</span><span class="pill perf">speed-up</span></div>
+      <dl>
+        <dt>How</dt><dd>A closed equality goal is decided by a congruence closure over the ground equality facts (a signature table with use lists, <code>O(n log n)</code>) instead of a search through symmetry and transitivity. Two refinements:
+          <ul>
+            <li>An abstract projection <code>(Self::P).X</code> is merged only with a <em>unique</em> concrete projection class.</li>
+            <li>Projections through premises that are not discharged yet are resolved ahead of time when their resolution is unique.</li>
+          </ul>
+          Proofs are rebuilt from the cheapest path and carry the penalty search would have given them.</dd>
+        <dt>Why sound</dt><dd>Without injectivity, congruence closure decides exactly the theory that search explores. Open goals, and quantified or conditional equalities, are left to search. The uniqueness rule for abstract projections keeps <code>v-abs-7</code> valid and <code>associated-type-inequality</code> rejected.</dd>
+        <dt>Speeds up</dt><dd>Equality reasoning, which was the one pattern no earlier flag helped: trans-8 330×, assoceq-8 31×, coerc-cache 600×. It also turns wrong acceptances into fast rejections.</dd>
+        <dt>Costs</dt><dd>The graph is rebuilt for each closed equality goal (cheap). A premise projection costs one nested resolution.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>eqmgu</code></h3><span class="area">Open equality goals <code>?v ~ X</code></span><span class="pill fix">fix</span><span class="pill perf">speed-up</span></div>
+      <dl>
+        <dt>How</dt><dd>A goal <code>?v ~ X</code>, where <code>?v</code> does not occur in <code>X</code>, gets one thread: bind <code>?v := X</code> by reflexivity.</dd>
+        <dt>Why sound</dt><dd>That binding is the most general solution. Every other solution binds <code>?v</code> to a type equal to <code>X</code>, and the remaining goals are transported along proved equalities, so the extra solutions only produced false ambiguity.</dd>
+        <dt>Speeds up</dt><dd>Equality premises posed while a type variable is still open: open-wide-4 went from out of memory to 202 ms, open-neg-0 from 24 s to 3 ms.</dd>
+        <dt>Costs</dt><dd>One occurs check per open equality goal.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>extorder</code></h3><span class="area">Order-independent lookup through extensions</span><span class="pill fix">fix</span></div>
+      <dl>
+        <dt>Problem</dt><dd>An extension whose extendee is being computed is silently skipped, and results computed meanwhile are memoized. Whether a program is accepted depended on the order of declarations.</dd>
+        <dt>Fix</dt><dd>Extensions that do not declare the looked-up name are skipped without evaluation. Extendee computations that close a cycle form a group. When the group completes, every lookup its members made is checked against the members' final extendees, and a group whose member may affect one of those lookups is reported as circular.</dd>
+        <dt>Why sound</dt><dd>The verdict uses only final extendees and the whole group, so it does not depend on which member was entered first. Skips that could not have mattered are kept.</dd>
+        <dt>Costs</dt><dd>One recorded lookup per lookup inside an extendee computation. It rejects mutual cycles that have a unique reading (see Limitations).</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>givencheck</code></h3><span class="area">Givens skipped while their own type is computed</span><span class="pill fix">fix</span></div>
+      <dl>
+        <dt>Problem</dt><dd>A given is invisible while its own type is being computed, and nothing re-checks it afterwards. This baseline bug accepted programs with no consistent reading (<code>gz1</code>, <code>ge1</code>, <code>gx1</code>), and the verdict depended on declaration order.</dd>
+        <dt>Fix</dt><dd>Record each skipped given with the query it was skipped for. Once its type is known, report it as circular if it could have matched that query. Deliberate hiding is not recorded: where-clause scoping, and a conformance resolving its own refined requirements.</dd>
+        <dt>Costs</dt><dd>A scan of the visible givens per resolution, and only during declared-type computations.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>occurs</code> and <code>arrowenv</code></h3><span class="area">Occurs check in unification</span><span class="pill fix">fix</span></div>
+      <dl>
+        <dt>Problem</dt><dd>Binding <code>?a := Box&lt;?a&gt;</code> created cyclic substitutions, and reification then overflowed the stack. Arrow environments were invisible to the "has variables" property, which hid some of these cycles and also left open goals looking closed.</dd>
+        <dt>Fix</dt><dd>Refuse cyclic bindings. The walk covers every type kind, including method bundles and arrow environments, and is linear on DAGs. An occurs failure at the root of a match is now a mismatch; before, it was accepted, so a <code>Void</code> value could stand in for a proof of <code>Box&lt;Void&gt;</code>. Arrows include their environment in their properties.</dd>
+        <dt>Costs</dt><dd>A linear check per variable binding.</dd>
+      </dl>
+    </div>
+
+    <div class="tech">
+      <div class="tech-head"><h3><code>budget</code></h3><span class="area">Runaway searches</span><span class="pill fix">fix</span></div>
+      <dl>
+        <dt>How</dt><dd>When a search layer ends with no result and more than 100,000 live threads (<code>HYLO_TC_BUDGET</code>), the resolution is abandoned and reported as "implicit resolution is too complex".</dd>
+        <dt>Why sound</dt><dd>Abandoning only makes a goal fail. Because it is reported as an error, it cannot quietly steer overload or extension selection, and the program is rejected.</dd>
+        <dt>Costs</dt><dd>A valid program that genuinely needs a larger search is rejected. The baseline ran out of memory on these. The limit is a tunable, not a rule of the language.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <h2>Tried and retired</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Flag</th><th>Idea</th><th>Status</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td><code>names</code></td><td>skip extensions without the name before the applicability check</td><td><span class="pill no">unsound</span></td><td>The applicability check has side effects (it memoizes extendees and givens), so skipping it changed results on mutually dependent extensions. Replaced by <code>memberskip</code>.</td></tr>
+          <tr><td><code>loopcheck</code></td><td>prune subgoals equal to an ancestor</td><td><span class="pill no">unsound</span></td><td>Pending sibling premises break the smallest-derivation argument: it changed witnesses, lost successes and hid ambiguities. <code>absmodel</code> covers the divergence cases.</td></tr>
+          <tr><td><code>solver</code></td><td>deferred overload branching with forward checking</td><td><span class="pill no">unsound</span></td><td>It changes the order in which overloads are ranked, which flips acceptance. It needs a redesign that keeps the baseline's branch points.</td></tr>
+          <tr><td><code>eqrefute</code></td><td>refute equalities outside the equivalence classes of atoms</td><td><span class="pill no">unsound</span></td><td>It rejected the valid <code>v-abs-7</code>. Superseded by <code>eqsolve</code>.</td></tr>
+          <tr><td><code>cyclecut</code></td><td>transactional evaluation across cycle cuts</td><td><span class="pill no">unsound</span></td><td>It accepted an ambiguous program, was itself order-dependent, and its rollbacks were expensive. Superseded by <code>extorder</code>.</td></tr>
+          <tr><td><code>coercememo</code></td><td>memoize coercion queries made under assumptions</td><td><span class="pill neutral">no gain</span></td><td>Sound, but the queries were already cheap; the cost of equality reasoning was in the search itself.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>Limitations and next steps</h2>
+    <ul>
+      <li><strong>Return-type overloads stay exponential.</strong> <code>ovl-ret-9</code> takes 8 s and <code>ovl-ret-12</code> times out, as in the baseline. Fixing this needs a sound overload solver that resolves each overload set where the baseline would and commits only a sole survivor.</li>
+      <li><strong>Mutual extension cycles are rejected.</strong> <code>extorder</code> rejects two extensions whose extendees depend on each other even when a unique reading exists (<code>v4_noC</code>). The baseline accepts these only through order-dependent memoization. Accepting them in every order needs a fixpoint with rollback.</li>
+      <li><strong>The budget can reject valid programs.</strong> Under FIX alone, a few divergent but valid programs hit the limit and are rejected; FULL accepts them because <code>absmodel</code> refutes the dead branches. A stronger abstract model would make the budget unnecessary.</li>
+      <li><strong>Some equality reasoning still uses search.</strong> Open goals that are not a bare variable (<code>Box&lt;?v&gt; ~ C</code>) are searched. Projections through less direct premise forms, such as a coerced witness, are not resolved ahead of time.</li>
+    </ul>
+  </section>
+
+  <footer>
+    <div>Full documents, one per flag: <code>research/techniques/*.md</code>. Soundness investigation and both reviews: <code>research/round3/soundness.md</code>. Raw benchmarks: <code>research/round3/soundness/bench-final.md</code>. Regression sweep: <code>research/round3/soundness/regress-final.md</code>.</div>
+  </footer>
+</main>
