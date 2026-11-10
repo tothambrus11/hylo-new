@@ -1,0 +1,19 @@
+//! stage:typing no-std
+// attack (review): capture, with a requirement that mentions the function's parameter (the design's
+// assumption A7 said this needs a requirement without parameters). The recursive call f<T, W<T.X>>
+// instantiates T at itself. Must be rejected: 'W<T.X> is R' is not known in the body of f. With
+// assocsubst the blanket conformance gives T.X = B and the call is accepted through it.
+// expected (premsubst with the capture rule of 3.4): rejected, with and without assocsubst.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=4); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=9 matches=689): no coercion from '(P<T>, Q<(T::P).X>, R<W<(T::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=85): no coercion from '(P<T>, Q<(T::P).X>, R<W<(T::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R {}
+struct B {}
+struct W<T> {}
+given B is Q {}
+given W<B> is R {}
+given <T> => T is P { type X = B }
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  f<T, W<T.X>>()
+}

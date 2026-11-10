@@ -1,0 +1,10 @@
+//! Top-down: the query R(?y) with ?y unconstrained hits the premise P(?y, S(?y)) and the concrete
+//! unifier (no occurs check) may bind ?y := S<?y>. Checks what the baseline does and that
+//! absmodel (which crashes while building the model, see t01/t18) diverges.
+trait R {}
+fun needR<T where T is R>() {}
+public fun main() {
+  needR()
+}
+struct Nq {}
+given Nq is R {}

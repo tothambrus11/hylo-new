@@ -152,8 +152,8 @@
    "exp_r": 1.01,
    "fit_from": 24.0,
    "fit_span": 42.666666666666664,
-   "kind": "poly",
-   "law": "n^1.47 for n \u2265 24 (rms 0.16)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.4656463876284378
   },
   "end": "completed",
@@ -248,7 +248,7 @@
    "law": "n^1.51 for n \u2265 3 (rms 0.07)",
    "exponent": 1.51436790139956
   },
-  "end": "timeout (>20 s) at n=64",
+  "end": "crash (exit 134) at n=64",
   "other": "\u2013",
   "sizes": [
    1,
@@ -329,8 +329,8 @@
    "exp_r": 1.01,
    "fit_from": 4.0,
    "fit_span": 256.0,
-   "kind": "poly",
-   "law": "n^0.82 for n \u2265 4 (rms 0.11)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.8189628160121871
   },
   "end": "completed",
@@ -570,8 +570,8 @@
    "exp_r": 1.01,
    "fit_from": 64.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^0.58 for n \u2265 64 (rms 0.14)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.5797023857747143
   },
   "end": "completed",
@@ -598,75 +598,75 @@
  "eqchain-conf/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 11,
+   "k": 12,
    "nmin": 1.0,
-   "nmax": 32.0,
+   "nmax": 64.0,
    "ymin": 146.0,
-   "ymax": 208693.0,
-   "span": 32.0,
-   "ratio": 1429.4041095890411,
-   "loglog_p": 1.3026880439280895,
-   "loglog_r2": 0.9892223754457863,
-   "semilog_r2": 0.9839921520710613,
-   "semilog_r": 1.0867213710090222,
-   "last_p": 1.7001667130507778,
+   "ymax": 817045.0,
+   "span": 64.0,
+   "ratio": 5596.198630136986,
+   "loglog_p": 1.5810648650846635,
+   "loglog_r2": 0.9860612122784792,
+   "semilog_r2": 0.9636856699506157,
+   "semilog_r": 1.058165803640687,
+   "last_p": 1.969033328891628,
    "step_factors": [
-    1.097985670257471,
     1.0790247179529564,
-    1.0630460672519497
+    1.0630460672519497,
+    1.0435735556211447
    ],
    "local_exponents": [
-    1.2997305176256921,
     1.5006488636866477,
-    1.7001667130507778
+    1.7001667130507778,
+    1.969033328891628
    ],
    "kind": "poly",
    "exponent": 3.0,
    "exact": true,
    "coeffs": [
-    1.0000000000000135,
-    102.9999999999992,
-    1955.0000000000118,
-    7892.9999999999445
+    0.9999999999999906,
+    103.00000000000094,
+    1954.9999999999725,
+    7893.000000000146
    ],
    "fit_from": 3.0,
-   "fit_span": 10.666666666666666,
+   "fit_span": 21.333333333333332,
    "law": "n^3 + 103n^2 + 1,955n + 7,893 (exact, n \u2265 3)"
   },
   "time_fit": {
-   "k": 11,
+   "k": 12,
    "nmin": 1.0,
-   "nmax": 32.0,
+   "nmax": 64.0,
    "ymin": 2.83,
-   "ymax": 4417.78,
-   "span": 32.0,
-   "ratio": 1561.0530035335687,
-   "loglog_p": 1.3916047594918957,
-   "loglog_r2": 0.976139838418579,
-   "semilog_r2": 0.9863927957817773,
-   "semilog_r": 1.0936756667841023,
-   "last_p": 1.8545207034971436,
+   "ymax": 49830.42,
+   "span": 64.0,
+   "ratio": 17607.9222614841,
+   "loglog_p": 2.134038146049145,
+   "loglog_r2": 0.942864615128402,
+   "semilog_r2": 0.9936623151015322,
+   "semilog_r": 1.0824680390788122,
+   "last_p": 3.495633252793047,
    "step_factors": [
-    1.074572821870223,
     1.0965700748296627,
-    1.0689630270085897
+    1.0689630270085897,
+    1.0786587653458017
    ],
    "local_exponents": [
-    1.0000373952793775,
     1.8188927771825276,
-    1.8545207034971436
+    1.8545207034971436,
+    3.495633252793047
    ],
-   "poly_rms": 0.09697646634330861,
-   "poly_p": 1.7278689886957674,
-   "exp_rms": 0.21349491785102598,
-   "exp_r": 1.1109031669449136,
-   "fit_from": 3.0,
-   "fit_span": 10.666666666666666,
-   "kind": "poly",
-   "law": "n^1.73 for n \u2265 3 (rms 0.10)",
-   "exponent": 1.7278689886957674
+   "poly_rms": 0.07569011130642955,
+   "poly_p": 3.531255652833167,
+   "exp_rms": 0.044149864994421306,
+   "exp_r": 1.0794047652341234,
+   "fit_from": 12.0,
+   "fit_span": 5.333333333333333,
+   "kind": "exp",
+   "law": "1.08^n for n \u2265 12 (rms 0.04)",
+   "base": 1.0794047652341234
   },
-  "end": "timeout (>20 s) at n=64",
+  "end": "stopped before n=128: predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128",
   "other": "\u2013",
   "sizes": [
    1,
@@ -679,7 +679,8 @@
    12,
    16,
    24,
-   32
+   32,
+   64
   ]
  },
  "eqchain-conf/FULL": {
@@ -747,8 +748,8 @@
    "exp_r": 1.01,
    "fit_from": 64.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^1.55 for n \u2265 64 (rms 0.14)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.5457500170167502
   },
   "end": "completed",
@@ -922,8 +923,8 @@
    "exp_r": 1.01,
    "fit_from": 12.0,
    "fit_span": 85.33333333333333,
-   "kind": "poly",
-   "law": "n^1.01 for n \u2265 12 (rms 0.14)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.0092055008160816
   },
   "end": "completed",
@@ -950,74 +951,75 @@
  "eqchain-neg/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 9,
+   "k": 10,
    "nmin": 3.0,
-   "nmax": 32.0,
+   "nmax": 64.0,
    "ymin": 17426.0,
-   "ymax": 197273.0,
-   "span": 10.666666666666666,
-   "ratio": 11.320612877309767,
-   "loglog_p": 1.438749930735144,
-   "loglog_r2": 0.9936710725468522,
-   "semilog_r2": 0.986336034017658,
-   "semilog_r": 1.0851091922747171,
-   "last_p": 1.7420738104632847,
+   "ymax": 789913.0,
+   "span": 21.333333333333332,
+   "ratio": 45.32956501778951,
+   "loglog_p": 1.740837010199007,
+   "loglog_r2": 0.9933122945138443,
+   "semilog_r2": 0.9735956915392806,
+   "semilog_r": 1.055485588089887,
+   "last_p": 2.0015002520388565,
    "step_factors": [
-    1.1022981012395152,
     1.0816847146030544,
-    1.0646492748346448
+    1.0646492748346448,
+    1.0443077184655876
    ],
    "local_exponents": [
-    1.3542336178457866,
     1.549228184262605,
-    1.7420738104632847
+    1.7420738104632847,
+    2.0015002520388565
    ],
    "kind": "poly",
    "exponent": 3.0,
    "exact": true,
    "coeffs": [
-    0.9999999999999971,
-    100.0000000000002,
-    1751.999999999996,
-    6041.00000000002
+    1.000000000000002,
+    100.0,
+    1752.000000000001,
+    6041.000000000039
    ],
    "fit_from": 5.0,
-   "fit_span": 6.4,
+   "fit_span": 12.8,
    "law": "n^3 + 100n^2 + 1,752n + 6,041 (exact, n \u2265 5)"
   },
   "time_fit": {
-   "k": 9,
+   "k": 10,
    "nmin": 3.0,
-   "nmax": 32.0,
+   "nmax": 64.0,
    "ymin": 234.22,
-   "ymax": 4121.11,
-   "span": 10.666666666666666,
-   "ratio": 17.595038852361025,
-   "loglog_p": 1.5992492942295724,
-   "loglog_r2": 0.9574150772930293,
-   "semilog_r2": 0.9913615871522717,
-   "semilog_r": 1.0971664922308908,
-   "last_p": 1.976454149694079,
+   "ymax": 38477.17,
+   "span": 21.333333333333332,
+   "ratio": 164.27790111860642,
+   "loglog_p": 2.4550587537347406,
+   "loglog_r2": 0.9790957667260208,
+   "semilog_r2": 0.9893938963892206,
+   "semilog_r": 1.0803952117882532,
+   "last_p": 3.222897815207123,
    "step_factors": [
-    1.1259558284811992,
     1.1120448558495186,
-    1.0736604625611186
+    1.0736604625611186,
+    1.0723051791557223
    ],
    "local_exponents": [
-    1.6494917355770577,
     2.095381938130692,
-    1.976454149694079
+    1.976454149694079,
+    3.222897815207123
    ],
-   "poly_rms": 0.04757967906510598,
-   "poly_p": 2.675504768985152,
-   "exp_rms": 0.07503810116514013,
-   "exp_r": 1.09716367083027,
+   "poly_rms": 0.06950313865796569,
+   "poly_p": 3.105778141558952,
+   "exp_rms": 0.14452243139389548,
+   "exp_r": 1.0815452427798462,
    "fit_from": 8.0,
-   "fit_span": 4.0,
-   "kind": "undecided",
-   "law": "undecided: n^2.7 (rms 0.05) or 1.10^n (rms 0.08)"
+   "fit_span": 8.0,
+   "kind": "poly",
+   "law": "n^3.11 for n \u2265 8 (rms 0.07)",
+   "exponent": 3.105778141558952
   },
-  "end": "timeout (>20 s) at n=64; fitted on n=3..32 (accepted); verdict differs from the intended one at n=3..32",
+  "end": "stopped before n=128: predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128; fitted on n=3..64 (accepted); verdict differs from the intended one at n=3..64",
   "other": "\u2013",
   "sizes": [
    3,
@@ -1028,7 +1030,8 @@
    12,
    16,
    24,
-   32
+   32,
+   64
   ]
  },
  "eqchain-neg/FULL": {
@@ -1096,8 +1099,8 @@
    "exp_r": 1.01,
    "fit_from": 1.0,
    "fit_span": 1024.0,
-   "kind": "poly",
-   "law": "n^1.06 (rms 0.10)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.062806911456061
   },
   "end": "completed",
@@ -1271,8 +1274,8 @@
    "exp_r": 1.01,
    "fit_from": 64.0,
    "fit_span": 16.0,
-   "kind": "undecided",
-   "law": "undecided: n^5.6 (rms 0.37) or 1.01^n (rms 0.37)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -1360,8 +1363,8 @@
    "exp_r": 1.01,
    "fit_from": 32.0,
    "fit_span": 32.0,
-   "kind": "poly",
-   "law": "n^1.56 for n \u2265 32 (rms 0.34)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.5551719014484822
   },
   "end": "completed",
@@ -1564,72 +1567,76 @@
  "eqchain-goals/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 8,
+   "k": 10,
    "nmin": 1.0,
-   "nmax": 12.0,
+   "nmax": 24.0,
    "ymin": 72.0,
-   "ymax": 477725.0,
-   "span": 12.0,
-   "ratio": 6635.069444444444,
-   "loglog_p": 2.3315546147815884,
-   "loglog_r2": 0.9999829674424024,
-   "semilog_r2": 0.9862917190351368,
-   "semilog_r": 1.3304211780860735,
-   "last_p": 2.3503526350586865,
+   "ymax": 2796557.0,
+   "span": 24.0,
+   "ratio": 38841.069444444445,
+   "loglog_p": 2.4332838747165497,
+   "loglog_r2": 0.9992680323132067,
+   "semilog_r2": 0.9695555535280086,
+   "semilog_r": 1.201864072010356,
+   "last_p": 2.6114486716411784,
    "step_factors": [
-    1.533096487686718,
-    1.3929417491245173,
-    1.2690219635146
+    1.2690219635146,
+    1.1937080029217695,
+    1.1415150995856531
    ],
    "local_exponents": [
-    2.3436040469246895,
-    2.3040565179910906,
-    2.3503526350586865
+    2.3503526350586865,
+    2.461945993177655,
+    2.6114486716411784
    ],
-   "poly_rms": 0.05064179518122283,
-   "poly_p": 2.4425910046596906,
-   "exp_rms": 0.29901353000217634,
-   "exp_r": 1.4354513858640272,
-   "fit_from": 3.0,
-   "fit_span": 4.0,
    "kind": "poly",
-   "law": "n^2.44 for n \u2265 3 (rms 0.05)",
-   "exponent": 2.4425910046596906
+   "exponent": 4.0,
+   "exact": true,
+   "coeffs": [
+    0.9999999999999045,
+    100.00000000000506,
+    1730.999999999911,
+    4200.000000000665,
+    -15475.000000001506
+   ],
+   "fit_from": 3.0,
+   "fit_span": 8.0,
+   "law": "n^4 + 100n^3 + 1,731n^2 + 4,200n \u2212 15,475 (exact, n \u2265 3)"
   },
   "time_fit": {
-   "k": 8,
+   "k": 10,
    "nmin": 1.0,
-   "nmax": 12.0,
+   "nmax": 24.0,
    "ymin": 1.09,
-   "ymax": 12830.56,
-   "span": 12.0,
-   "ratio": 11771.155963302752,
-   "loglog_p": 2.123942298948871,
-   "loglog_r2": 0.9743981396322492,
-   "semilog_r2": 0.9960760424570562,
-   "semilog_r": 1.3031307029328185,
-   "last_p": 2.620360042159789,
+   "ymax": 106882.58,
+   "span": 24.0,
+   "ratio": 98057.41284403669,
+   "loglog_p": 2.8331004779001154,
+   "loglog_r2": 0.9898380145997866,
+   "semilog_r2": 0.9575277759556694,
+   "semilog_r": 1.2383319754936304,
+   "last_p": 2.2589934601158244,
    "step_factors": [
-    1.150295947719852,
-    1.3515995524917133,
-    1.3042343217360164
+    1.3042343217360164,
+    1.3511951525028663,
+    1.1213046555973551
    ],
    "local_exponents": [
-    0.7679797034038349,
-    2.0945952050121726,
-    2.620360042159789
+    2.620360042159789,
+    4.18502962510162,
+    2.2589934601158244
    ],
-   "poly_rms": 0.12979044033772125,
-   "poly_p": 2.382608479512153,
-   "exp_rms": 0.3108194079380431,
-   "exp_r": 1.4247645925312544,
-   "fit_from": 3.0,
-   "fit_span": 4.0,
+   "poly_rms": 0.12664990561782974,
+   "poly_p": 3.222728994979221,
+   "exp_rms": 0.28409318311151716,
+   "exp_r": 1.2418835779482613,
+   "fit_from": 5.0,
+   "fit_span": 4.8,
    "kind": "poly",
-   "law": "n^2.38 for n \u2265 3 (rms 0.13)",
-   "exponent": 2.382608479512153
+   "law": "n^3.22 for n \u2265 5 (rms 0.13)",
+   "exponent": 3.222728994979221
   },
-  "end": "timeout (>20 s) at n=16",
+  "end": "timeout (>120 s) at n=32",
   "other": "\u2013",
   "sizes": [
    1,
@@ -1639,7 +1646,9 @@
    5,
    6,
    8,
-   12
+   12,
+   16,
+   24
   ]
  },
  "eqchain-goals/FULL": {
@@ -1786,7 +1795,7 @@
    "kind": "few",
    "law": "too few points (4); per-step factors 3.88, 3.91, 14.2"
   },
-  "end": "stopped before n=12: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..8",
+  "end": "stopped before n=16: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..12",
   "other": "\u2013",
   "sizes": [
    1,
@@ -1976,74 +1985,74 @@
  "assoceq/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 9,
+   "k": 10,
    "nmin": 1.0,
-   "nmax": 16.0,
+   "nmax": 24.0,
    "ymin": 810.0,
-   "ymax": 421158.0,
-   "span": 16.0,
-   "ratio": 519.9481481481481,
-   "loglog_p": 1.315370706928188,
-   "loglog_r2": 0.9945802371989143,
-   "semilog_r2": 0.9940456188843461,
-   "semilog_r": 1.1487531006022427,
-   "last_p": 1.594390325072735,
+   "ymax": 878198.0,
+   "span": 24.0,
+   "ratio": 1084.195061728395,
+   "loglog_p": 1.4974135363926726,
+   "loglog_r2": 0.9924412156281897,
+   "semilog_r2": 0.986551575664321,
+   "semilog_r": 1.1213497072656746,
+   "last_p": 1.8123976782613838,
    "step_factors": [
-    1.1802232323707684,
     1.1491540407878804,
-    1.1215025831263048
+    1.1215025831263048,
+    1.0962091521451653
    ],
    "local_exponents": [
-    1.1519911487588435,
     1.3715217629345235,
-    1.594390325072735
+    1.594390325072735,
+    1.8123976782613838
    ],
    "kind": "poly",
    "exponent": 3.0,
    "exact": true,
    "coeffs": [
-    14.99999999999986,
-    753.0000000000055,
-    8769.999999999938,
-    26630.00000000015
+    15.000000000000043,
+    752.9999999999982,
+    8770.000000000016,
+    26629.999999999858
    ],
    "fit_from": 3.0,
-   "fit_span": 5.333333333333333,
+   "fit_span": 8.0,
    "law": "15n^3 + 753n^2 + 8,770n + 26,630 (exact, n \u2265 3)"
   },
   "time_fit": {
-   "k": 9,
+   "k": 10,
    "nmin": 1.0,
-   "nmax": 16.0,
+   "nmax": 24.0,
    "ymin": 27.09,
-   "ymax": 8521.97,
-   "span": 16.0,
-   "ratio": 314.5799187892211,
-   "loglog_p": 1.381675804106769,
-   "loglog_r2": 0.98125047883908,
-   "semilog_r2": 0.9867621543231534,
-   "semilog_r": 1.1573296517108331,
-   "last_p": 1.5816691443191775,
+   "ymax": 41286.05,
+   "span": 24.0,
+   "ratio": 1524.0328534514583,
+   "loglog_p": 2.036383026264796,
+   "loglog_r2": 0.9183319485839615,
+   "semilog_r2": 0.9893652843812137,
+   "semilog_r": 1.176037772317233,
+   "last_p": 3.891523843082198,
    "step_factors": [
-    1.08486589575431,
     1.1942817630429483,
-    1.1204769740555445
+    1.1204769740555445,
+    1.2180298080888556
    ],
    "local_exponents": [
-    0.5662944532912593,
     1.7515190928004547,
-    1.5816691443191775
+    1.5816691443191775,
+    3.891523843082198
    ],
-   "poly_rms": 0.09153540211679609,
-   "poly_p": 1.7624010524923137,
-   "exp_rms": 0.1336292747256622,
-   "exp_r": 1.179955590930791,
-   "fit_from": 3.0,
-   "fit_span": 5.333333333333333,
+   "poly_rms": 0.12463150355725451,
+   "poly_p": 3.567645453041237,
+   "exp_rms": 0.08346203139587464,
+   "exp_r": 1.2023993466392744,
+   "fit_from": 5.0,
+   "fit_span": 4.8,
    "kind": "undecided",
-   "law": "undecided: n^1.8 (rms 0.09) or 1.18^n (rms 0.13)"
+   "law": "undecided: n^3.6 (rms 0.12) or 1.20^n (rms 0.08)"
   },
-  "end": "timeout (>20 s) at n=24",
+  "end": "crash (exit 134) at n=32",
   "other": "\u2013",
   "sizes": [
    1,
@@ -2054,7 +2063,8 @@
    6,
    8,
    12,
-   16
+   16,
+   24
   ]
  },
  "assoceq/FULL": {
@@ -2407,72 +2417,74 @@
  "assocneg/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 7,
+   "k": 8,
    "nmin": 3.0,
-   "nmax": 16.0,
+   "nmax": 24.0,
    "ymin": 47469.0,
-   "ymax": 381815.0,
-   "span": 5.333333333333333,
-   "ratio": 8.043459942278119,
-   "loglog_p": 1.4479032551826585,
-   "loglog_r2": 0.9967544992901561,
-   "semilog_r2": 0.9944691156253335,
-   "semilog_r": 1.151773740073403,
-   "last_p": 1.6635359618823005,
+   "ymax": 815767.0,
+   "span": 8.0,
+   "ratio": 17.185257747161305,
+   "loglog_p": 1.6611627069470722,
+   "loglog_r2": 0.9958530747965536,
+   "semilog_r2": 0.9888011788710716,
+   "semilog_r": 1.1188936867119406,
+   "last_p": 1.8723992809432488,
    "step_factors": [
-    1.193965682250896,
     1.1580739447211776,
-    1.127093695033981
+    1.127093695033981,
+    1.0995478744772806
    ],
    "local_exponents": [
-    1.2324735511883513,
     1.4478013493386284,
-    1.6635359618823005
+    1.6635359618823005,
+    1.8723992809432488
    ],
-   "poly_rms": 0.009858673074643848,
-   "poly_p": 1.7485210004663925,
-   "exp_rms": 0.08114988133119144,
-   "exp_r": 1.1717187621656961,
-   "fit_from": 3.0,
-   "fit_span": 5.333333333333333,
    "kind": "poly",
-   "law": "n^1.75 (rms 0.01)",
-   "exponent": 1.7485210004663925
+   "exponent": 3.0,
+   "exact": true,
+   "coeffs": [
+    15.00000000000005,
+    714.9999999999985,
+    7403.999999999997,
+    18871.00000000014
+   ],
+   "fit_from": 5.0,
+   "fit_span": 4.8,
+   "law": "15n^3 + 715n^2 + 7,404n + 18,871 (exact, n \u2265 5)"
   },
   "time_fit": {
-   "k": 7,
+   "k": 8,
    "nmin": 3.0,
-   "nmax": 16.0,
+   "nmax": 24.0,
    "ymin": 862.16,
-   "ymax": 9106.45,
-   "span": 5.333333333333333,
-   "ratio": 10.562366614085553,
-   "loglog_p": 1.6065281964072498,
-   "loglog_r2": 0.9981700505710727,
-   "semilog_r2": 0.9744449273904606,
-   "semilog_r": 1.1677595726149108,
-   "last_p": 1.6089622560440027,
+   "ymax": 29948.08,
+   "span": 8.0,
+   "ratio": 34.736104667347135,
+   "loglog_p": 2.0238889309120314,
+   "loglog_r2": 0.9655035912631355,
+   "semilog_r2": 0.9981645475181791,
+   "semilog_r": 1.1498849051919995,
+   "last_p": 2.9360905246783062,
    "step_factors": [
-    1.3048405877958813,
     1.1622336241708875,
-    1.1226785573041944
+    1.1226785573041944,
+    1.1604528104085292
    ],
    "local_exponents": [
-    1.849825928322644,
     1.4831726697865348,
-    1.6089622560440027
+    1.6089622560440027,
+    2.9360905246783062
    ],
-   "poly_rms": 0.040641890475606186,
-   "poly_p": 1.8250053471728318,
-   "exp_rms": 0.1313891042570797,
-   "exp_r": 1.19818631244493,
+   "poly_rms": 0.09638627852418885,
+   "poly_p": 2.2598117521000587,
+   "exp_rms": 0.15000788635080214,
+   "exp_r": 1.1789938086569225,
    "fit_from": 3.0,
-   "fit_span": 5.333333333333333,
-   "kind": "poly",
-   "law": "n^1.83 (rms 0.04)",
-   "exponent": 1.8250053471728318
+   "fit_span": 8.0,
+   "kind": "undecided",
+   "law": "undecided: n^2.3 (rms 0.10) or 1.18^n (rms 0.15)"
   },
-  "end": "timeout (>20 s) at n=24; fitted on n=3..16 (accepted); verdict differs from the intended one at n=3..16",
+  "end": "crash (exit 134) at n=32; fitted on n=3..24 (accepted); verdict differs from the intended one at n=3..24",
   "other": "\u2013",
   "sizes": [
    3,
@@ -2481,7 +2493,8 @@
    6,
    8,
    12,
-   16
+   16,
+   24
   ]
  },
  "assocneg/FULL": {
@@ -2694,8 +2707,8 @@
    "exp_r": 1.01,
    "fit_from": 1.0,
    "fit_span": 1024.0,
-   "kind": "undecided",
-   "law": "undecided: n^0.7 (rms 0.26) or 1.01^n (rms 0.37)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 5n (exact)",
@@ -2749,8 +2762,8 @@
    "exp_r": 1.01,
    "fit_from": 64.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^2.01 for n \u2265 64 (rms 0.10)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 2.007736874563073
   },
   "end": "completed",
@@ -2777,13 +2790,53 @@
    "law": "\u2013"
   },
   "time_fit": {
-   "k": 0,
-   "kind": "none",
-   "law": "\u2013"
+   "k": 11,
+   "nmin": 1.0,
+   "nmax": 1024.0,
+   "ymin": 0.26,
+   "ymax": 61.89,
+   "span": 1024.0,
+   "ratio": 238.03846153846152,
+   "loglog_p": 1.032662865547135,
+   "loglog_r2": 0.8620096066666182,
+   "semilog_r2": 0.748691219503994,
+   "semilog_r": 1.0032932938535,
+   "last_p": 1.295710203749101,
+   "step_factors": [
+    0.9987210327115437,
+    1.0055069926904214,
+    1.0017556758710904
+   ],
+   "local_exponents": [
+    -0.23633161229432173,
+    2.0283173749541654,
+    1.295710203749101
+   ],
+   "poly_rms": 0.22343593084131513,
+   "poly_p": 2.276046817813839,
+   "exp_rms": 0.5537802686540636,
+   "exp_r": 1.01,
+   "fit_from": 64.0,
+   "fit_span": 16.0,
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
+   "exponent": 2.276046817813839
   },
   "end": "completed",
-  "other": "\u2013",
-  "sizes": []
+  "other": "`solver.goalSteps`: 5n (exact)",
+  "sizes": [
+   1,
+   2,
+   4,
+   8,
+   16,
+   32,
+   64,
+   128,
+   256,
+   512,
+   1024
+  ]
  },
  "ctrl-goals/FULL": {
   "counter": "summon.matches",
@@ -2822,7 +2875,7 @@
    "fit_from": 1.0,
    "fit_span": 1024.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.067564805924416
   },
   "end": "completed",
@@ -3008,18 +3061,85 @@
  "ctrl-assoc/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 0,
-   "kind": "none",
-   "law": "\u2013"
+   "k": 9,
+   "nmin": 1.0,
+   "nmax": 256.0,
+   "ymin": 2.0,
+   "ymax": 257.0,
+   "span": 256.0,
+   "ratio": 128.5,
+   "loglog_p": 0.9803156551951885,
+   "loglog_r2": 0.9999427287616489,
+   "semilog_r2": 0.8755384890855074,
+   "semilog_r": 1.0103552114716838,
+   "last_p": 0.994397293770624,
+   "step_factors": [
+    1.0214097091242103,
+    1.0107673225712404,
+    1.0053993969892416
+   ],
+   "local_exponents": [
+    0.9779736936700011,
+    0.9888594423947997,
+    0.994397293770624
+   ],
+   "kind": "poly",
+   "exponent": 1.0,
+   "exact": true,
+   "coeffs": [
+    1.0,
+    1.000000000000037
+   ],
+   "fit_from": 1.0,
+   "fit_span": 256.0,
+   "law": "n + 1 (exact)"
   },
   "time_fit": {
-   "k": 0,
-   "kind": "none",
-   "law": "\u2013"
+   "k": 9,
+   "nmin": 1.0,
+   "nmax": 256.0,
+   "ymin": 0.71,
+   "ymax": 29.3,
+   "span": 256.0,
+   "ratio": 41.26760563380282,
+   "loglog_p": 1.2189024389615801,
+   "loglog_r2": 0.9721418965052404,
+   "semilog_r2": 0.8560324018378451,
+   "semilog_r": 1.0129284242590741,
+   "last_p": 1.2163323889813906,
+   "step_factors": [
+    1.0447767417437914,
+    1.0103114406326532,
+    1.006608438174041
+   ],
+   "local_exponents": [
+    2.0222299473834657,
+    0.9472057348301373,
+    1.2163323889813906
+   ],
+   "poly_rms": 0.17245391305754365,
+   "poly_p": 1.4616061511489686,
+   "exp_rms": 0.5408072442961683,
+   "exp_r": 1.0146699487826671,
+   "fit_from": 4.0,
+   "fit_span": 64.0,
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
+   "exponent": 1.4616061511489686
   },
   "end": "completed",
   "other": "\u2013",
-  "sizes": []
+  "sizes": [
+   1,
+   2,
+   4,
+   8,
+   16,
+   32,
+   64,
+   128,
+   256
+  ]
  },
  "ctrl-assoc/FULL": {
   "counter": "summon.matches",
@@ -3087,7 +3207,7 @@
    "fit_from": 1.0,
    "fit_span": 256.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.2742909006901804
   },
   "end": "completed",
@@ -3325,8 +3445,8 @@
    "exp_r": 1.01,
    "fit_from": 8.0,
    "fit_span": 128.0,
-   "kind": "poly",
-   "law": "n^1.17 (rms 0.23)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.165622495385374
   },
   "end": "completed",
@@ -3400,7 +3520,7 @@
    "fit_from": 64.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.8988621196223217
   },
   "end": "completed",
@@ -3646,7 +3766,7 @@
    "fit_from": 64.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.28734734871869
   },
   "end": "completed",
@@ -3727,8 +3847,8 @@
    "exp_r": 1.01,
    "fit_from": 8.0,
    "fit_span": 128.0,
-   "kind": "poly",
-   "law": "n^1.26 (rms 0.18)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.2577265593795826
   },
   "end": "completed",
@@ -3979,8 +4099,8 @@
    "exp_r": 1.0665274240456204,
    "fit_from": 12.0,
    "fit_span": 4.0,
-   "kind": "undecided",
-   "law": "undecided: n^1.7 (rms 0.19) or 1.07^n (rms 0.30)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -4062,8 +4182,8 @@
    "exp_r": 1.0824536991391678,
    "fit_from": 4.0,
    "fit_span": 12.0,
-   "kind": "poly",
-   "law": "n^2.22 (rms 0.10)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 2.221358606390572
   },
   "end": "completed",
@@ -4262,7 +4382,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 72.9, 49.4"
   },
-  "end": "stopped before n=4: predicted timeout: 10 s at n=3, power-law extrapolation gives 163 s at n=4",
+  "end": "crash (exit 134) at n=4",
   "other": "\u2013",
   "sizes": [
    1,
@@ -4322,7 +4442,7 @@
     0.17922456218007438
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 6n + 6 (exact)",
@@ -4570,7 +4690,7 @@
    "kind": "few",
    "law": "too few points (2); per-step factors 91.4"
   },
-  "end": "timeout (>20 s) at n=3",
+  "end": "crash (exit 134) at n=3",
   "other": "\u2013",
   "sizes": [
    1,
@@ -4629,7 +4749,7 @@
     0.6897774057649164
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 6n + 6 (exact)",
@@ -4954,7 +5074,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 170, 53.8"
   },
-  "end": "stopped before n=4: predicted timeout: 12 s at n=3, power-law extrapolation gives 209 s at n=4",
+  "end": "crash (exit 134) at n=4",
   "other": "\u2013",
   "sizes": [
    1,
@@ -5237,71 +5357,71 @@
  "div-depth/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 6,
+   "k": 7,
    "nmin": 5.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 93.0,
-   "ymax": 49149.0,
-   "span": 2.8,
-   "ratio": 528.483870967742,
-   "loglog_p": 8.223723433991495,
-   "loglog_r2": 0.9976798894661374,
-   "semilog_r2": 0.9999999869042926,
-   "semilog_r": 2.0004580537597323,
-   "last_p": 8.994300226809143,
+   "ymax": 196605.0,
+   "span": 3.2,
+   "ratio": 2114.032258064516,
+   "loglog_p": 8.82176825146274,
+   "loglog_r2": 0.9951512525919911,
+   "semilog_r2": 0.999999986838418,
+   "semilog_r": 2.0003068711040854,
+   "last_p": 10.382128965970104,
    "step_factors": [
-    2.002939017015334,
     2.000733003506377,
-    2.000183141797921
+    2.000183141797921,
+    2.000045778637405
    ],
    "local_exponents": [
-    6.2257287410336835,
     7.607587685876617,
-    8.994300226809143
+    8.994300226809143,
+    10.382128965970104
    ],
-   "poly_rms": 0.12442791465503913,
-   "poly_p": 7.440278959348085,
-   "exp_rms": 0.006422151823852297,
-   "exp_r": 2.0060887985660987,
+   "poly_rms": 0.18340163113293453,
+   "poly_p": 8.083085412586506,
+   "exp_rms": 0.006782168790397743,
+   "exp_r": 2.004690772200705,
    "fit_from": 5.0,
-   "fit_span": 2.8,
+   "fit_span": 3.2,
    "kind": "exp",
-   "law": "2.01^n (rms 0.01)",
-   "base": 2.0060887985660987
+   "law": "2.00^n (rms 0.01)",
+   "base": 2.004690772200705
   },
   "time_fit": {
-   "k": 6,
+   "k": 7,
    "nmin": 5.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 3.71,
-   "ymax": 4207.71,
-   "span": 2.8,
-   "ratio": 1134.1536388140162,
-   "loglog_p": 9.439617443115589,
-   "loglog_r2": 0.9842209091748322,
-   "semilog_r2": 0.9699436246944085,
-   "semilog_r": 2.201595625204259,
-   "last_p": 7.117213348147751,
+   "ymax": 23108.11,
+   "span": 3.2,
+   "ratio": 6228.601078167116,
+   "loglog_p": 10.014112070127345,
+   "loglog_r2": 0.9906910783785814,
+   "semilog_r2": 0.9875617226049771,
+   "semilog_r": 2.1898988488380335,
+   "last_p": 12.755540461129893,
    "step_factors": [
-    1.5138515914959616,
     2.8005144298908373,
-    1.7307617647617226
+    1.7307617647617226,
+    2.3434695401956542
    ],
    "local_exponents": [
-    3.7165055737210975,
     11.296559149400089,
-    7.117213348147751
+    7.117213348147751,
+    12.755540461129893
    ],
-   "poly_rms": 0.42781682008596833,
-   "poly_p": 6.747972634188333,
-   "exp_rms": 0.3912064217695017,
-   "exp_r": 2.118304082638144,
+   "poly_rms": 0.5160103679331371,
+   "poly_p": 7.924353993564807,
+   "exp_rms": 0.3584316185093443,
+   "exp_r": 2.1234764864525157,
    "fit_from": 5.0,
-   "fit_span": 2.8,
+   "fit_span": 3.2,
    "kind": "undecided",
-   "law": "undecided: n^6.7 (rms 0.43) or 2.12^n (rms 0.39)"
+   "law": "undecided: n^7.9 (rms 0.52) or 2.12^n (rms 0.36)"
   },
-  "end": "timeout (>20 s) at n=16",
+  "end": "stopped before n=20: predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20",
   "other": "\u2013",
   "sizes": [
    5,
@@ -5309,7 +5429,8 @@
    8,
    10,
    12,
-   14
+   14,
+   16
   ]
  },
  "div-depth/FULL": {
@@ -5370,7 +5491,7 @@
    "fit_from": 5.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -5610,71 +5731,72 @@
  "div-trunc-depth/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 6,
+   "k": 7,
    "nmin": 5.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 185.0,
-   "ymax": 98297.0,
-   "span": 2.8,
-   "ratio": 531.3351351351351,
-   "loglog_p": 8.224183967714126,
-   "loglog_r2": 0.9976817252721865,
-   "semilog_r2": 0.9999999821727141,
-   "semilog_r": 2.0005344525075164,
-   "last_p": 8.994498264665967,
+   "ymax": 393209.0,
+   "span": 3.2,
+   "ratio": 2125.4540540540543,
+   "loglog_p": 8.822105380748546,
+   "loglog_r2": 0.9951538603952318,
+   "semilog_r2": 0.9999999820829485,
+   "semilog_r": 2.000358049262154,
+   "last_p": 10.38218610628002,
    "step_factors": [
-    2.0034306743613257,
     2.0008552839628115,
-    2.0002136724966353
+    2.0002136724966353,
+    2.000053408851764
    ],
    "local_exponents": [
-    6.227928561122336,
     7.608258105347386,
-    8.994498264665967
+    8.994498264665967,
+    10.38218610628002
    ],
-   "poly_rms": 0.12462156393669402,
-   "poly_p": 7.438531826144514,
-   "exp_rms": 0.007517202086275082,
-   "exp_r": 2.007121674773342,
+   "poly_rms": 0.18365832171287202,
+   "poly_p": 8.081264759803876,
+   "exp_rms": 0.007937125688800355,
+   "exp_r": 2.005485925657759,
    "fit_from": 5.0,
-   "fit_span": 2.8,
+   "fit_span": 3.2,
    "kind": "exp",
    "law": "2.01^n (rms 0.01)",
-   "base": 2.007121674773342
+   "base": 2.005485925657759
   },
   "time_fit": {
-   "k": 6,
+   "k": 7,
    "nmin": 5.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 16.58,
-   "ymax": 5660.08,
-   "span": 2.8,
-   "ratio": 341.37997587454765,
-   "loglog_p": 9.527125240353769,
-   "loglog_r2": 0.9974344616027863,
-   "semilog_r2": 0.9999943725842336,
-   "semilog_r": 2.233049076398153,
-   "last_p": 10.465978350450278,
+   "ymax": 25978.19,
+   "span": 3.2,
+   "ratio": 1566.8389626055489,
+   "loglog_p": 10.07541804916634,
+   "loglog_r2": 0.996412801762832,
+   "semilog_r2": 0.9998416160054564,
+   "semilog_r": 2.2061756714735474,
+   "last_p": 11.411693411551047,
    "step_factors": [
-    1.5906179860088008,
     2.225690182538496,
-    2.240432301280728
+    2.240432301280728,
+    2.1423634954635373
    ],
    "local_exponents": [
-    4.159856813532569,
     8.776439560807,
-    10.465978350450278
+    10.465978350450278,
+    11.411693411551047
    ],
-   "poly_rms": 0.2322493143863898,
-   "poly_p": 8.15992045132504,
-   "exp_rms": 0.16091921057465353,
-   "exp_r": 2.1101778016058517,
+   "poly_rms": 0.27695013954315617,
+   "poly_p": 9.085141195009115,
+   "exp_rms": 0.15069007247211608,
+   "exp_r": 2.1359261344054987,
    "fit_from": 5.0,
-   "fit_span": 2.8,
-   "kind": "undecided",
-   "law": "undecided: n^8.2 (rms 0.23) or 2.11^n (rms 0.16)"
+   "fit_span": 3.2,
+   "kind": "exp",
+   "law": "2.14^n (rms 0.15)",
+   "base": 2.1359261344054987
   },
-  "end": "timeout (>20 s) at n=16",
+  "end": "stopped before n=20: predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20",
   "other": "\u2013",
   "sizes": [
    5,
@@ -5682,7 +5804,8 @@
    8,
    10,
    12,
-   14
+   14,
+   16
   ]
  },
  "div-trunc-depth/FULL": {
@@ -5988,8 +6111,8 @@
    "exp_r": 2.103097117987839,
    "fit_from": 1.0,
    "fit_span": 8.0,
-   "kind": "undecided",
-   "law": "undecided: n^4.3 (rms 0.18) or 2.10^n (rms 0.11)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -6068,8 +6191,8 @@
    "exp_r": 1.84999277466989,
    "fit_from": 1.0,
    "fit_span": 8.0,
-   "kind": "undecided",
-   "law": "undecided: n^3.6 (rms 0.23) or 1.85^n (rms 0.18)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -6244,72 +6367,72 @@
  "div-valid-deep/MIN5": {
   "counter": "summon.matches",
   "counter_fit": {
-   "k": 7,
+   "k": 8,
    "nmin": 2.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 22.0,
-   "ymax": 98302.0,
-   "span": 7.0,
-   "ratio": 4468.272727272727,
-   "loglog_p": 7.399623134235864,
-   "loglog_r2": 0.9931553579193667,
-   "semilog_r2": 0.9999999765946408,
-   "semilog_r": 2.0004092368500874,
-   "last_p": 8.993508176118842,
+   "ymax": 393214.0,
+   "span": 8.0,
+   "ratio": 17873.363636363636,
+   "loglog_p": 8.820420275774435,
+   "loglog_r2": 0.9951408178979295,
+   "semilog_r2": 0.9999999985384752,
+   "semilog_r": 2.0001022527051338,
+   "last_p": 10.381900411996382,
    "step_factors": [
-    2.0009775967997228,
     2.0002442052146914,
-    2.0000610391922624
+    2.0000610391922624,
+    2.0000152590413003
    ],
    "local_exponents": [
-    6.216947390606599,
     7.604907372493014,
-    8.993508176118842
+    8.993508176118842,
+    10.381900411996382
    ],
-   "poly_rms": 0.3310516355755938,
-   "poly_p": 6.094414459009009,
-   "exp_rms": 0.019900040492126035,
-   "exp_r": 2.011024042767111,
+   "poly_rms": 0.43076907089081123,
+   "poly_p": 6.778351544579186,
+   "exp_rms": 0.020047500973052527,
+   "exp_r": 2.008716938822329,
    "fit_from": 2.0,
-   "fit_span": 7.0,
+   "fit_span": 8.0,
    "kind": "exp",
    "law": "2.01^n (rms 0.02)",
-   "base": 2.011024042767111
+   "base": 2.008716938822329
   },
   "time_fit": {
-   "k": 7,
+   "k": 8,
    "nmin": 2.0,
-   "nmax": 14.0,
+   "nmax": 16.0,
    "ymin": 1.44,
-   "ymax": 6523.74,
-   "span": 7.0,
-   "ratio": 4530.375,
-   "loglog_p": 8.7166687476873,
-   "loglog_r2": 0.9901680662506764,
-   "semilog_r2": 0.9982703246869374,
-   "semilog_r": 2.2643406751286626,
-   "last_p": 9.8244798204801,
+   "ymax": 38320.14,
+   "span": 8.0,
+   "ratio": 26611.208333333332,
+   "loglog_p": 10.749162182421161,
+   "loglog_r2": 0.9954494409938327,
+   "semilog_r2": 0.9987451555044172,
+   "semilog_r": 2.3259239857675498,
+   "last_p": 13.259262414836085,
    "step_factors": [
-    2.1000280434689107,
     2.5063492054689456,
-    2.1323509887814214
+    2.1323509887814214,
+    2.4236238716683
    ],
    "local_exponents": [
-    6.649985574786182,
     10.079194261787016,
-    9.8244798204801
+    9.8244798204801,
+    13.259262414836085
    ],
-   "poly_rms": 0.42546154096030847,
-   "poly_p": 7.312725198031213,
-   "exp_rms": 0.13004435248603544,
-   "exp_r": 2.1643368584856617,
-   "fit_from": 2.0,
-   "fit_span": 7.0,
+   "poly_rms": 0.40952395190978574,
+   "poly_p": 9.11060856863482,
+   "exp_rms": 0.1345629757291542,
+   "exp_r": 2.243242776025968,
+   "fit_from": 4.0,
+   "fit_span": 4.0,
    "kind": "exp",
-   "law": "2.16^n (rms 0.13)",
-   "base": 2.1643368584856617
+   "law": "2.24^n for n \u2265 4 (rms 0.13)",
+   "base": 2.243242776025968
   },
-  "end": "timeout (>20 s) at n=16",
+  "end": "stopped before n=20: predicted timeout: 38 s at n=16, power-law extrapolation gives 739 s at n=20",
   "other": "\u2013",
   "sizes": [
    2,
@@ -6318,7 +6441,8 @@
    8,
    10,
    12,
-   14
+   14,
+   16
   ]
  },
  "div-valid-deep/FULL": {
@@ -6631,7 +6755,7 @@
    "fit_from": 2.0,
    "fit_span": 32.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -6699,7 +6823,7 @@
     0.2261691120819313
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 4n + 6 (exact)",
@@ -6781,7 +6905,7 @@
    "fit_from": 8.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -6977,7 +7101,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 12.6, 62.5"
   },
-  "end": "stopped before n=5: predicted timeout: 4 s at n=4, power-law extrapolation gives 98 s at n=5",
+  "end": "crash (exit 134) at n=5",
   "other": "\u2013",
   "sizes": [
    2,
@@ -7043,7 +7167,7 @@
    "fit_from": 2.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 4n^2 \u2212 4n + 6 (exact)",
@@ -7101,8 +7225,8 @@
    "local_exponents": [
     10.308323796451575
    ],
-   "kind": "few",
-   "law": "too few points (2); per-step factors 65.3"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4",
   "other": "\u2013",
@@ -7249,8 +7373,8 @@
    "exp_r": 1.01,
    "fit_from": 40.0,
    "fit_span": 32.0,
-   "kind": "undecided",
-   "law": "undecided: n^0.6 (rms 0.44) or 1.01^n (rms 1.13)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -7321,8 +7445,8 @@
    "exp_r": 1.01,
    "fit_from": 80.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^0.63 for n \u2265 80 (rms 0.28)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.6342302991946958
   },
   "end": "completed",
@@ -7394,8 +7518,8 @@
    "exp_r": 1.01,
    "fit_from": 20.0,
    "fit_span": 64.0,
-   "kind": "poly",
-   "law": "n^1.77 (rms 0.06)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.7740287825822594
   },
   "end": "completed",
@@ -7636,8 +7760,8 @@
    "exp_r": 1.01,
    "fit_from": 40.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^0.93 for n \u2265 40 (rms 0.23)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.9334450432121117
   },
   "end": "completed",
@@ -7717,8 +7841,8 @@
    "exp_r": 1.01,
    "fit_from": 40.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^1.60 for n \u2265 40 (rms 0.05)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.602540827206281
   },
   "end": "completed",
@@ -8039,8 +8163,8 @@
    "exp_r": 1.01,
    "fit_from": 20.0,
    "fit_span": 32.0,
-   "kind": "poly",
-   "law": "n^1.09 (rms 0.18)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.0874377342233918
   },
   "end": "completed",
@@ -8266,7 +8390,7 @@
    "fit_from": 4.0,
    "fit_span": 32.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`memberskip.settled`: 16n + 24 (exact)",
@@ -8338,7 +8462,7 @@
    "fit_from": 2.0,
    "fit_span": 64.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.773935752861395
   },
   "end": "completed",
@@ -8584,7 +8708,7 @@
    "kind": "undecided",
    "law": "undecided: n^7.1 (rms 0.15) or 2.22^n (rms 0.36)"
   },
-  "end": "stopped before n=16: predicted timeout: 19 s at n=14, power-law extrapolation gives 45 s at n=16",
+  "end": "timeout (>120 s) at n=16",
   "other": "`summon.matches`: 2.20^n (rms 0.13)",
   "sizes": [
    1,
@@ -8834,8 +8958,8 @@
    "exp_r": 1.1013543734136653,
    "fit_from": 3.0,
    "fit_span": 5.333333333333333,
-   "kind": "undecided",
-   "law": "undecided: n^0.9 (rms 0.08) or 1.10^n (rms 0.11)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -8916,7 +9040,7 @@
    "fit_from": 4.0,
    "fit_span": 4.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -8997,7 +9121,7 @@
    "fit_from": 2.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.1066487034179016
   },
   "end": "completed",
@@ -9158,8 +9282,8 @@
    "exp_r": 1.017269082349508,
    "fit_from": 1.0,
    "fit_span": 64.0,
-   "kind": "undecided",
-   "law": "undecided: n^0.3 (rms 0.16) or 1.02^n (rms 0.25)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -9239,7 +9363,7 @@
    "fit_from": 4.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.0013946335299204
   },
   "end": "completed",
@@ -9320,7 +9444,7 @@
    "fit_from": 1.0,
    "fit_span": 64.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -9503,71 +9627,71 @@
  "ovr-args/MIN5": {
   "counter": "solver.forks",
   "counter_fit": {
-   "k": 10,
+   "k": 11,
    "nmin": 1.0,
-   "nmax": 10.0,
+   "nmax": 12.0,
    "ymin": 3.0,
-   "ymax": 88572.0,
-   "span": 10.0,
-   "ratio": 29524.0,
-   "loglog_p": 8.583933353804602,
-   "loglog_r2": 0.9943525820862189,
-   "semilog_r2": 0.9999999746076359,
-   "semilog_r": 3.0009355586123245,
-   "last_p": 10.427494143621802,
+   "ymax": 797160.0,
+   "span": 12.0,
+   "ratio": 265720.0,
+   "loglog_p": 9.46091540492159,
+   "loglog_r2": 0.9882333285391353,
+   "semilog_r2": 0.9999999801901844,
+   "semilog_r": 3.0005758718678925,
+   "last_p": 12.051452771283545,
    "step_factors": [
-    3.0009149130832573,
     3.0003048780487807,
-    3.0001016156894624
+    3.0001016156894624,
+    3.0000225804145013
    ],
    "local_exponents": [
-    8.229654402629503,
     9.32828656858658,
-    10.427494143621802
+    10.427494143621802,
+    12.051452771283545
    ],
-   "poly_rms": 0.3065337720888119,
-   "poly_p": 7.1647834123355345,
-   "exp_rms": 0.02552032684532893,
-   "exp_r": 3.030776082579055,
+   "poly_rms": 0.4582481381282084,
+   "poly_p": 8.027416250229916,
+   "exp_rms": 0.026247613236013986,
+   "exp_r": 3.023365681758722,
    "fit_from": 2.0,
-   "fit_span": 5.0,
+   "fit_span": 6.0,
    "kind": "exp",
-   "law": "3.03^n for n \u2265 2 (rms 0.03)",
-   "base": 3.030776082579055
+   "law": "3.02^n for n \u2265 2 (rms 0.03)",
+   "base": 3.023365681758722
   },
   "time_fit": {
-   "k": 10,
+   "k": 11,
    "nmin": 1.0,
-   "nmax": 10.0,
+   "nmax": 12.0,
    "ymin": 1.14,
-   "ymax": 3974.92,
-   "span": 10.0,
-   "ratio": 3486.7719298245615,
-   "loglog_p": 9.76821602961904,
-   "loglog_r2": 0.9969956658200312,
-   "semilog_r2": 0.984348742829398,
-   "semilog_r": 3.452389815084535,
-   "last_p": 7.983997934948598,
+   "ymax": 29837.64,
+   "span": 12.0,
+   "ratio": 26173.368421052633,
+   "loglog_p": 9.909828024641273,
+   "loglog_r2": 0.9982442602674505,
+   "semilog_r2": 0.9860827816829908,
+   "semilog_r": 3.1178987759123533,
+   "last_p": 11.056103825926115,
    "step_factors": [
-    3.298322864728356,
     3.3649285377728915,
-    2.319143970687764
+    2.319143970687764,
+    2.739794810204716
    ],
    "local_exponents": [
-    8.937329964270095,
     10.30205002946029,
-    7.983997934948598
+    7.983997934948598,
+    11.056103825926115
    ],
-   "poly_rms": 0.5742293392284127,
-   "poly_p": 8.666884366174596,
-   "exp_rms": 0.4246537631792112,
-   "exp_r": 3.235906484676792,
-   "fit_from": 2.0,
-   "fit_span": 5.0,
+   "poly_rms": 0.10030690761812028,
+   "poly_p": 10.12538988998218,
+   "exp_rms": 0.3096104273245905,
+   "exp_r": 3.2710743673604155,
+   "fit_from": 3.0,
+   "fit_span": 4.0,
    "kind": "undecided",
-   "law": "undecided: n^8.7 (rms 0.57) or 3.24^n (rms 0.42)"
+   "law": "undecided: n^10.1 (rms 0.10) or 3.27^n (rms 0.31)"
   },
-  "end": "timeout (>20 s) at n=12",
+  "end": "completed",
   "other": "\u2013",
   "sizes": [
    1,
@@ -9579,7 +9703,8 @@
    7,
    8,
    9,
-   10
+   10,
+   12
   ]
  },
  "ovr-args/FULL": {
@@ -10061,9 +10186,9 @@
     -0.20005665778891848
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
-  "end": "completed",
+  "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12",
   "other": "\u2013",
   "sizes": [
    1,
@@ -10136,9 +10261,9 @@
     0.06595529627839943
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
-  "end": "completed",
+  "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12",
   "other": "\u2013",
   "sizes": [
    1,
@@ -10217,9 +10342,9 @@
    "fit_from": 1.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
-  "end": "completed",
+  "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12",
   "other": "\u2013",
   "sizes": [
    1,
@@ -10292,9 +10417,9 @@
     -1.9293570022879125
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
-  "end": "completed",
+  "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12",
   "other": "\u2013",
   "sizes": [
    1,
@@ -10451,8 +10576,8 @@
    "exp_r": 1.0177824212003828,
    "fit_from": 8.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^0.89 for n \u2265 8 (rms 0.20)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.8898459361379265
   },
   "end": "completed",
@@ -10532,7 +10657,7 @@
    "fit_from": 8.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 2.0824832289293855
   },
   "end": "completed",
@@ -10612,7 +10737,7 @@
    "fit_from": 4.0,
    "fit_span": 32.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -10851,7 +10976,7 @@
    "fit_from": 8.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.0798850087472407
   },
   "end": "completed",
@@ -10931,7 +11056,7 @@
    "fit_from": 4.0,
    "fit_span": 32.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -11010,7 +11135,7 @@
    "fit_from": 4.0,
    "fit_span": 32.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 1.0670042124474106
   },
   "end": "completed",
@@ -11248,8 +11373,8 @@
    "exp_r": 3.0293580397174016,
    "fit_from": 1.0,
    "fit_span": 8.0,
-   "kind": "undecided",
-   "law": "undecided: n^6.4 (rms 0.21) or 3.03^n (rms 0.23)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20",
   "other": "\u2013",
@@ -11328,8 +11453,8 @@
    "exp_r": 2.4804366782002365,
    "fit_from": 1.0,
    "fit_span": 8.0,
-   "kind": "undecided",
-   "law": "undecided: n^5.8 (rms 0.25) or 2.48^n (rms 0.26)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20",
   "other": "\u2013",
@@ -11395,8 +11520,8 @@
     -0.004855677213254558,
     0.9657363935753961
    ],
-   "kind": "flat",
-   "law": "no clear growth (within a factor 2.5)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64",
   "other": "`solver.goalSteps`: 2n + 26 (exact)",
@@ -11463,8 +11588,8 @@
     0.43029470238794787,
     -0.6464684708697183
    ],
-   "kind": "flat",
-   "law": "no clear growth (within a factor 2.5)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64",
   "other": "`solver.goalSteps`: 2n + 26 (exact)",
@@ -11544,7 +11669,7 @@
    "fit_from": 8.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64",
   "other": "`solver.goalSteps`: 2n + 26 (exact)",
@@ -11624,7 +11749,7 @@
    "fit_from": 8.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64",
   "other": "`solver.goalSteps`: 2n + 26 (exact)",
@@ -11706,8 +11831,8 @@
    "exp_r": 1.0608602652878254,
    "fit_from": 4.0,
    "fit_span": 5.0,
-   "kind": "undecided",
-   "law": "undecided: n^0.6 (rms 0.10) or 1.06^n (rms 0.15)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -11879,7 +12004,7 @@
    "fit_from": 5.0,
    "fit_span": 4.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -11950,7 +12075,7 @@
     0.5720333825265816
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "`solver.goalSteps`: 2n + 24 (exact)",
@@ -12036,7 +12161,7 @@
    "fit_from": 4.0,
    "fit_span": 5.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12115,8 +12240,8 @@
     -0.21385162955115897,
     1.5335474775792879
    ],
-   "kind": "flat",
-   "law": "no clear growth (within a factor 2.5)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12197,8 +12322,8 @@
    "exp_r": 1.2613754746439028,
    "fit_from": 1.0,
    "fit_span": 8.0,
-   "kind": "undecided",
-   "law": "undecided: n^2.0 (rms 0.24) or 1.26^n (rms 0.24)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12279,7 +12404,7 @@
    "fit_from": 1.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12360,7 +12485,7 @@
    "fit_from": 1.0,
    "fit_span": 8.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12600,7 +12725,7 @@
    "fit_from": 4.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12678,7 +12803,7 @@
    "fit_from": 4.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12918,8 +13043,8 @@
    "exp_r": 1.0492683411604036,
    "fit_from": 2.0,
    "fit_span": 32.0,
-   "kind": "undecided",
-   "law": "undecided: n^2.1 (rms 0.14) or 1.05^n (rms 0.22)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -12998,8 +13123,8 @@
    "exp_r": 1.0412388273509967,
    "fit_from": 4.0,
    "fit_span": 16.0,
-   "kind": "poly",
-   "law": "n^0.97 for n \u2265 4 (rms 0.10)",
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.9680463849995828
   },
   "end": "completed",
@@ -13165,8 +13290,8 @@
    "exp_r": 1.01,
    "fit_from": 2.0,
    "fit_span": 256.0,
-   "kind": "undecided",
-   "law": "undecided: n^0.1 (rms 0.28) or 1.01^n (rms 0.38)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -13259,7 +13384,7 @@
    "law": "n^1.83 for n \u2265 3 (rms 0.06)",
    "exponent": 1.8319615189378715
   },
-  "end": "stopped before n=64: predicted timeout: 15 s at n=32, power-law extrapolation gives 62 s at n=64",
+  "end": "crash (exit 134) at n=64",
   "other": "\u2013",
   "sizes": [
    1,
@@ -13341,7 +13466,7 @@
    "fit_from": 24.0,
    "fit_span": 21.333333333333332,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.9630137515905515
   },
   "end": "completed",
@@ -13522,8 +13647,8 @@
    "exp_r": 1.01,
    "fit_from": 32.0,
    "fit_span": 16.0,
-   "kind": "undecided",
-   "law": "undecided: n^2.2 (rms 0.29) or 1.01^n (rms 0.35)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -13557,7 +13682,7 @@
    "kind": "none",
    "law": "\u2013"
   },
-  "end": "timeout (>20 s) at n=1",
+  "end": "crash (exit 134) at n=1",
   "other": "\u2013",
   "sizes": []
  },
@@ -13619,7 +13744,7 @@
    "fit_from": 1.0,
    "fit_span": 512.0,
    "kind": "small",
-   "law": "below 50 ms throughout",
+   "law": "below 200 ms throughout (not fitted)",
    "exponent": 0.5259017783348305
   },
   "end": "completed",
@@ -13813,7 +13938,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 23.6, 37.9"
   },
-  "end": "stopped before n=4: predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4",
+  "end": "crash (exit 134) at n=4",
   "other": "\u2013",
   "sizes": [
    1,
@@ -14055,7 +14180,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 21.5, 50.1"
   },
-  "end": "stopped before n=4: predicted timeout: 4 s at n=3, power-law extrapolation gives 66 s at n=4",
+  "end": "crash (exit 134) at n=4",
   "other": "\u2013",
   "sizes": [
    1,
@@ -14186,8 +14311,8 @@
     0.4754082929175877,
     2.5568719031283833
    ],
-   "kind": "flat",
-   "law": "no clear growth (within a factor 2.5)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14266,7 +14391,7 @@
    "fit_from": 1.0,
    "fit_span": 9.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14345,7 +14470,7 @@
    "fit_from": 1.0,
    "fit_span": 9.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14418,7 +14543,7 @@
     -7.014257007334528
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14496,8 +14621,8 @@
    "exp_r": 1.5274862015789905,
    "fit_from": 1.0,
    "fit_span": 9.0,
-   "kind": "undecided",
-   "law": "undecided: n^3.4 (rms 0.12) or 1.53^n (rms 0.14)"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14576,7 +14701,7 @@
    "fit_from": 1.0,
    "fit_span": 9.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14655,7 +14780,7 @@
    "fit_from": 1.0,
    "fit_span": 9.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14728,7 +14853,7 @@
     -4.824751268394896
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128",
   "other": "\u2013",
@@ -14787,8 +14912,8 @@
     -1.0862949216715605,
     3.2202644314423163
    ],
-   "kind": "few",
-   "law": "too few points (3); per-step factors 0.471, 3.05"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "crash (exit 134) at n=8",
   "other": "\u2013",
@@ -14864,7 +14989,7 @@
    "fit_from": 1.0,
    "fit_span": 9.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512",
   "other": "\u2013",
@@ -14926,7 +15051,7 @@
    "kind": "few",
    "law": "too few points (3); per-step factors 2.6, 7.61"
   },
-  "end": "timeout (>20 s) at n=8",
+  "end": "crash (exit 134) at n=8",
   "other": "\u2013",
   "sizes": [
    1,
@@ -14994,7 +15119,7 @@
     0.3774037774040396
    ],
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512",
   "other": "\u2013",
@@ -15866,10 +15991,10 @@
     1.408280133103535,
     5.768650296500525
    ],
-   "kind": "few",
-   "law": "too few points (3); per-step factors 2.65, 7.38"
+   "kind": "small",
+   "law": "below 200 ms throughout (not fitted)"
   },
-  "end": "timeout (>20 s) at n=8",
+  "end": "crash (exit 134) at n=8",
   "other": "\u2013",
   "sizes": [
    1,
@@ -16250,7 +16375,7 @@
    "fit_from": 2.0,
    "fit_span": 64.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -16331,7 +16456,7 @@
    "fit_from": 8.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",
@@ -16412,7 +16537,7 @@
    "fit_from": 8.0,
    "fit_span": 16.0,
    "kind": "small",
-   "law": "below 50 ms throughout"
+   "law": "below 200 ms throughout (not fitted)"
   },
   "end": "completed",
   "other": "\u2013",

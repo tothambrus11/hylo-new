@@ -1,0 +1,19 @@
+file,lines,declarations,generic,where,conformance_reqs,equality_reqs,param == param,param == concrete,param == constructed,assoc == concrete,assoc == constructed,assoc == param,assoc == assoc (same root),assoc == assoc (different roots),other,conditional_conformances,conditional_extensions,extensions,conformance_decls,traits,assoc_types,functions
+Core/Assert.hylo,12,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+Core/Bool.hylo,60,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,6
+Core/Comparable.hylo,36,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,4
+Core/Copyable.hylo,16,4,1,0,2,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1,0,1
+Core/Deinitializable.hylo,16,4,1,0,2,0,0,0,0,0,0,0,0,0,0,1,0,0,2,1,0,1
+Core/Equatable.hylo,24,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2
+Core/MemoryLayout.hylo,27,4,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+Core/Movable.hylo,28,6,1,0,2,0,0,0,0,0,0,0,0,0,0,1,0,1,2,1,0,2
+Core/Numbers/AdditiveArithmetic.hylo,28,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,5
+Core/Numbers/ExpressibleByFloatingPointLiteral.hylo,9,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1
+Core/Numbers/ExpressibleByIntegerLiteral.hylo,9,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1
+Core/Numbers/Float32.hylo,119,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,14
+Core/Numbers/Float64.hylo,119,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,14
+Core/Numbers/Numeric.hylo,15,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,2
+Core/Optional.hylo,14,2,2,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,1,0,0,0
+Core/Pointer.hylo,17,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1
+Core/Prelude.hylo,13,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+Core/Runtime/OffsetOfMember.hylo,172,15,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,8

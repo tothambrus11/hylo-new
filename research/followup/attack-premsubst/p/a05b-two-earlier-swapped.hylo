@@ -1,0 +1,7 @@
+// Control of a05, ILL TYPED: the caller knows Pair<W.Y, V.X> is Q, the callee needs Pair<V.X, W.Y> is Q.
+trait P { type X }
+trait R { type Y }
+trait Q {}
+struct Pair<A, B> {}
+fun f<T, U where T is P, U is R, Pair<T.X, U.Y> is Q>() {}
+fun g<V, W where V is P, W is R, Pair<W.Y, V.X> is Q>() { f<V, W>() }

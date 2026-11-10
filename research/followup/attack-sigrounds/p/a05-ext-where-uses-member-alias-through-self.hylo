@@ -1,0 +1,12 @@
+// As a01 without any requirement for the hook to type: the member alias `LA` is `Self`. Entered
+// at the extension, `Self` is read while the extension is on the stack and the extendee is
+// evaluated directly. Entered at `LA` (through `A.LA` in the last given, which finds the
+// extension in the table), `Self` computes the signature of the extension, whose where clause
+// needs `LA`.
+trait Q {}
+trait R {}
+struct A {}
+struct Foo<T> {}
+given <U> => Foo<U> is Q {}
+extension <where Foo<LA> is Q> A { type LA = Self }
+given A.LA is R {}

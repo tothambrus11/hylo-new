@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// CONTROL for equality-determined-parameter.hylo: without a condition on the determined parameter the conformance is found.
+// EXPECTED and OBSERVED: accepted (FIX and FULL: eqmgu.solved > 0).
+trait It { type Item }
+struct W<I> { public memberwise init }
+given <I, U where I is It, I.Item == U> => W<I> is It { type Item = U }
+fun needIt<T where T is It>() {}
+fun f<I, V where I is It, I.Item == V>() { needIt<W<I>>() }

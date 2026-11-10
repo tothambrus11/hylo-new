@@ -1,0 +1,10 @@
+// T.X == U.Y, concrete caller: A.X = B and C.Y = B. Well typed.
+trait P { type X }
+trait R { type Y }
+struct A {}
+struct B {}
+struct C {}
+given A is P { type X = B }
+given C is R { type Y = B }
+fun f<T, U where T is P, U is R, T.X == U.Y>() {}
+public fun main() { f<A, C>() }

@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+struct S {
+  public init<T where T is P, T.X is Q>(x: T) {}
+}
+fun g<U where U is P, U.X is Q>(u: U) { let _ = S(u) }

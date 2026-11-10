@@ -1,0 +1,10 @@
+// Ill-typed, as q03, with the use that goes wrong: `callDerived(B())` passes `B` to `callBase`,
+// which calls `Base.f` on it, and no implementation of `f` for `B` exists. The requirement
+// `B is Base` of the refinement is unsatisfied. Not specific to sigrounds.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+given B is Derived { public fun g() { self.f() } }
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+public fun main() { callDerived(B()) }

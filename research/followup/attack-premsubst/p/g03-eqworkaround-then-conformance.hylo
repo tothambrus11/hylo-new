@@ -1,0 +1,7 @@
+// An equality and a conformance on the same projection. Well typed: U.X == B and B is Q.
+trait P { type X }
+trait Q {}
+struct B { public memberwise init }
+given B is Q {}
+fun f<T where T is P, T.X == B, T.X is Q>() {}
+fun g<U where U is P, U.X == B>() { f<U>() }

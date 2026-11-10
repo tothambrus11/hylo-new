@@ -1,0 +1,8 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+extension <T where T is P> Box<T> {
+  fun a<where T.X is Q>() {}
+}
+fun g<U where U is P, U.X is Q>(x: Box<U>) { x.a() }

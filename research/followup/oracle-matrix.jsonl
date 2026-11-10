@@ -191,3 +191,15 @@
 {"file": "../Tests/CompilerTests/negative/use-before-declaration.hylo", "base": true, "diff": {}}
 {"file": "../Tests/CompilerTests/negative/use-before-init.hylo", "base": true, "diff": {}}
 {"file": "workloads/breadth40.hylo", "base": true, "diff": {}}
+{"file": "workloads/breadth80.hylo", "base": true, "diff": {}}
+{"file": "workloads/chain12.hylo", "base": true, "diff": {}}
+{"file": "workloads/chain3.hylo", "base": true, "diff": {}}
+{"file": "workloads/chain8.hylo", "base": true, "diff": {}}
+{"file": "workloads/chain9.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-dead-20.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-dead.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-grow-20.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-grow.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-loop-20.hylo", "base": true, "diff": {}}
+{"file": "workloads/div-loop.hylo", "base": true, "diff": {}}
+{"file": "workloads/empty.hylo", "base": true, "diff": {}}

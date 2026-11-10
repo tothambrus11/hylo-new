@@ -1,0 +1,7 @@
+// Two type parameters with the same shape of requirements; the caller has the facts crossed.
+// ILL TYPED: f needs V.X is Q and W.X is R; g knows V.X is R and W.X is Q.
+trait P { type X }
+trait Q {}
+trait R {}
+fun f<T, U where T is P, U is P, T.X is Q, U.X is R>() {}
+fun g<V, W where V is P, W is P, V.X is R, W.X is Q>() { f<V, W>() }

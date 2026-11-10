@@ -1,0 +1,10 @@
+// Control of e04, ILL TYPED: Box<C>.X = C is not Q.
+trait P { type X }
+trait Q {}
+struct B {}
+struct C {}
+struct Box<T> {}
+given B is Q {}
+given <T> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<Box<C>>() }

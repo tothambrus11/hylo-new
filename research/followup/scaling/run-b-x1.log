@@ -8,3 +8,16 @@ eqchain-neg        n=512   FULL-eqsolve err      t=3035.88 wall=3.47 matches=452
 eqchain-neg        n=1024  FULL-eqsolve err      t=12016.28 wall=12.85 matches=8617 forks=None applies=None eqchain-neg-1024.hylo:3.20243-20251: error: no coercion from 'P<T1024> ==> [Void]() let -> Void' to 
 eqchain-goals      n=8     FULL-eqsolve err      t=17528.31 wall=18.8 matches=474835 forks=None applies=None eqchain-goals-8.hylo:10.3-15: error: no coercion from '(T0 ~ T8) ==> [Void]() let -> Void' to '[Void
 eqchain-goals      n=12    FULL-eqsolve err      t=69977.19 wall=74.72 matches=1615871 forks=None applies=None eqchain-goals-12.hylo:10.3-15: error: no coercion from '(T0 ~ T8) ==> [Void]() let -> Void' to '[Voi
+eqchain-goals      n=16    FULL-eqsolve err      t=32815.54 wall=34.59 matches=1100179 forks=None applies=None eqchain-goals-16.hylo:10.3-15: error: no coercion from '(T0 ~ T8) ==> [Void]() let -> Void' to '[Voi
+eqchain-goals      n=24    FULL-eqsolve err      t=114927.98 wall=119.51 matches=3635419 forks=None applies=None eqchain-goals-24.hylo:10.3-15: error: no coercion from '(T0 ~ T8) ==> [Void]() let -> Void' to '[Voi
+eqchain-goals      n=32    FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+eqchain-goals      n=64    FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+eqchain-goals      n=128   FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+eqchain-goals      n=256   FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+eqchain-goals      n=512   FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+eqchain-goals      n=1024  FULL-eqsolve skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32
+assoceq            n=48    FULL-eqsolve err      t=4388.2 wall=4.79 matches=42574 forks=None applies=None assoceq-48.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate derivat
+assoceq            n=96    FULL-eqsolve err      t=18433.45 wall=19.03 matches=130366 forks=None applies=None assoceq-96.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate derivat
+assoceq            n=128   FULL-eqsolve err      t=22050.72 wall=22.52 matches=111735 forks=None applies=None assoceq-128.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate deriva
+assoceq            n=160   FULL-eqsolve err      t=38352.94 wall=38.7 matches=165143 forks=None applies=None assoceq-160.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate deriva
+assoceq            n=192   FULL-eqsolve err      t=62470.74 wall=63.0 matches=228791 forks=None applies=None assoceq-192.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate deriva

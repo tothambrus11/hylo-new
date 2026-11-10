@@ -1,0 +1,17 @@
+// Nested three deep: Box<Box<Box<A>>> through a given with dependent requirements.
+// Well typed: Box<T> is P needs T is P and T.X is Q; X of Box<T> is T; A.X = B; B, A, Box<A>,
+// Box<Box<A>> are Q; the final requirement is Box<Box<A>> is R.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct Box<T> {}
+given B is Q {}
+given A is Q {}
+given <T> => Box<T> is Q {}
+given <T> => Box<T> is R {}
+given A is P { type X = B }
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is R>() {}
+public fun main() { f<Box<Box<Box<A>>>>() }

@@ -1,0 +1,18 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct C1 {}
+struct C2 {}
+struct C3 {}
+struct Box<T> { public memberwise init }
+given A is P { type X = B }
+given B is Q {}
+given C1 is Q {}
+given C2 is Q {}
+given C3 is Q {}
+given <T, V where T is P, V is Q, T.X == V> => Box<T> is R {}
+fun need<T where T is R>() {}
+public fun main() { need<Box<A>>() }

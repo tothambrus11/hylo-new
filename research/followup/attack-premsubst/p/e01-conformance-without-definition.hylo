@@ -1,0 +1,8 @@
+// The conformance of A does not define X. The declaration of the given is in error; the call must
+// be rejected too, without a crash.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P {}
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<A>() }

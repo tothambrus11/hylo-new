@@ -3,6 +3,7 @@
 // arrives with the caller's witness already in it.
 // (research/report/test-programs/equalities/x10b-ext-where-assoc.hylo, the example of
 // research/report/soundness/3-unsimplified-projections.md)
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=2 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base accepted (subgoals=4860 matches=91425); FULL accepted (subgoals=7 matches=433 proved=1 premises=1)
 trait Collection { type Element }
 struct Box<T> { public memberwise init }

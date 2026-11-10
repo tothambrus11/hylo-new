@@ -1,0 +1,6 @@
+// A dependent requirement in the middle of the clause. Well typed.
+trait P { type X }
+trait Q {}
+trait R {}
+fun f<T where T is P, T.X is Q, T is R>() {}
+fun g<U where U is P, U.X is Q, U is R>() { f<U>() }

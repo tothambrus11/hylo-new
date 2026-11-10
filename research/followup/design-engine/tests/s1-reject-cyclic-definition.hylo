@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// review: the associated type is defined by itself. Checks that reducing a projection through a
+// declared conformance (step 3) terminates and reports nothing new.
+// expected: rejected at the conformance, as today, with or without premsubst.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 normalized=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=8 matches=581): no coercion from '(P<A>, P<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=147): no coercion from '(P<A>, P<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+struct A {}
+given A is P { type X = A.X }
+fun f<T where T is P, T.X is P>() {}
+public fun main() { f<A>() }

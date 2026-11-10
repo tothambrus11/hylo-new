@@ -1,0 +1,14 @@
+// The mentioned premise is discharged by a given that has its own dependent requirements.
+// Well typed: Box<A> is P because A is P and A.X (= B) is Q; Box<A>.X = A, and A is R.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct Box<T> {}
+given B is Q {}
+given A is R {}
+given A is P { type X = B }
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is R>() {}
+public fun main() { f<Box<A>>() }

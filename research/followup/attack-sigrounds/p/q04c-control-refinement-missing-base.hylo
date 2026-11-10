@@ -1,0 +1,8 @@
+// Control of q04: the body of `g` does not resolve `Base<B>`; the missing conformance is reported.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+given B is Derived { public fun g() {} }
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+public fun main() { callDerived(B()) }

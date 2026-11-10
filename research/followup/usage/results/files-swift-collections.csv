@@ -1,0 +1,577 @@
+file,lines,declarations,generic,where,conformance_reqs,equality_reqs,param == param,param == concrete,param == constructed,assoc == concrete,assoc == constructed,assoc == param,assoc == assoc (same root),assoc == assoc (different roots),other,conditional_conformances,conditional_extensions,extensions,conformance_decls,traits,assoc_types,functions
+BasicContainers/HashTable/_HTable+Bitmap.swift,201,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,12
+BasicContainers/HashTable/_HTable+Bucket.swift,174,22,0,2,0,1,0,1,0,0,0,0,0,0,0,0,1,8,4,0,0,12
+BasicContainers/HashTable/_HTable+Consumption.swift,26,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/HashTable/_HTable+Debug.swift,169,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/HashTable/_HTable+Deprecated.swift,60,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/HashTable/_HTable+Find.swift,65,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/HashTable/_HTable+Insert.swift,86,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/HashTable/_HTable+Iteration.swift,395,22,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,17
+BasicContainers/HashTable/_HTable+Removal.swift,124,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/HashTable/_HTable+Resizing.swift,73,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/HashTable/_HTable+Sizing.swift,165,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5
+BasicContainers/HashTable/_HTable.swift,267,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,1,0,0,12
+BasicContainers/RigidArray/RigidArray+Append.swift,376,22,5,6,6,6,0,0,0,0,0,6,0,0,0,0,0,4,0,0,0,18
+BasicContainers/RigidArray/RigidArray+Consumption.swift,230,15,1,4,1,1,0,0,0,0,0,0,0,1,0,0,0,4,1,0,0,9
+BasicContainers/RigidArray/RigidArray+ContainerOperations.swift,493,30,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,24
+BasicContainers/RigidArray/RigidArray+Deprecated.swift,294,25,3,1,2,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,23
+BasicContainers/RigidArray/RigidArray+Descriptions.swift,43,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0
+BasicContainers/RigidArray/RigidArray+Equatable.swift,53,7,0,4,3,0,0,0,0,0,0,0,0,0,0,1,2,4,1,0,0,3
+BasicContainers/RigidArray/RigidArray+Experimental.swift,73,4,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2
+BasicContainers/RigidArray/RigidArray+Formatter.swift,54,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+BasicContainers/RigidArray/RigidArray+Hashable.swift,41,5,0,3,3,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,2
+BasicContainers/RigidArray/RigidArray+Initializers.swift,197,15,3,5,4,5,0,0,0,0,0,5,0,0,0,0,0,5,0,0,0,10
+BasicContainers/RigidArray/RigidArray+Insertions.swift,404,15,1,3,1,2,0,0,0,0,0,2,0,0,0,0,0,4,0,0,0,11
+BasicContainers/RigidArray/RigidArray+Iterable.swift,37,4,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,1
+BasicContainers/RigidArray/RigidArray+Removals.swift,158,10,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0,2,0,0,0,8
+BasicContainers/RigidArray/RigidArray+Replacements.swift,597,19,4,4,4,2,0,0,0,0,0,2,0,0,0,0,0,5,0,0,0,14
+BasicContainers/RigidArray/RigidArray.swift,376,21,3,7,3,0,0,0,0,0,0,0,0,0,0,1,0,8,2,0,0,12
+BasicContainers/RigidDictionary/RigidDictionary+Consumption.swift,61,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/RigidDictionary/RigidDictionary+Debugging.swift,54,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/RigidDictionary/RigidDictionary+Equatable.swift,70,7,0,4,2,0,0,0,0,0,0,0,0,0,0,1,1,4,1,0,0,3
+BasicContainers/RigidDictionary/RigidDictionary+Hashable.swift,47,3,0,2,2,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,1
+BasicContainers/RigidDictionary/RigidDictionary+Index.swift,104,10,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,6
+BasicContainers/RigidDictionary/RigidDictionary+Indices.swift,93,11,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,4,0,0,4
+BasicContainers/RigidDictionary/RigidDictionary+Initializers.swift,56,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/RigidDictionary/RigidDictionary+Insertions.swift,155,7,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,6
+BasicContainers/RigidDictionary/RigidDictionary+Keys.swift,36,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/RigidDictionary/RigidDictionary+Lookup.swift,97,8,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,7
+BasicContainers/RigidDictionary/RigidDictionary+Removals.swift,99,7,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,6
+BasicContainers/RigidDictionary/RigidDictionary+Resizing.swift,91,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/RigidDictionary/RigidDictionary.swift,166,10,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,5
+BasicContainers/RigidSet/RigidSet+Consumption.swift,49,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/RigidSet/RigidSet+Debugging.swift,172,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5
+BasicContainers/RigidSet/RigidSet+Deprecated.swift,31,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/RigidSet/RigidSet+Equatable.swift,54,5,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,2
+BasicContainers/RigidSet/RigidSet+Hashable.swift,53,4,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,2
+BasicContainers/RigidSet/RigidSet+Index.swift,191,17,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,15
+BasicContainers/RigidSet/RigidSet+Initializers.swift,111,11,4,4,6,7,0,0,0,0,0,7,0,0,0,0,0,2,0,0,0,9
+BasicContainers/RigidSet/RigidSet+Insertions.swift,247,15,4,5,5,5,0,0,0,0,0,5,0,0,0,0,0,3,1,0,0,11
+BasicContainers/RigidSet/RigidSet+Iterable.swift,117,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,7
+BasicContainers/RigidSet/RigidSet+Lookup.swift,49,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/RigidSet/RigidSet+Removals.swift,73,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/RigidSet/RigidSet+Resizing.swift,85,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/RigidSet/RigidSet.swift,194,14,2,4,2,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,7
+BasicContainers/UniqueArray/UniqueArray+Append.swift,336,17,4,6,5,5,0,0,0,0,0,5,0,0,0,0,0,4,0,0,0,13
+BasicContainers/UniqueArray/UniqueArray+Consumption.swift,129,8,1,2,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,5
+BasicContainers/UniqueArray/UniqueArray+ContainerOperations.swift,406,24,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,19
+BasicContainers/UniqueArray/UniqueArray+Deprecated.swift,324,27,4,1,3,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,25
+BasicContainers/UniqueArray/UniqueArray+Descriptions.swift,29,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0
+BasicContainers/UniqueArray/UniqueArray+Equatable.swift,52,7,0,4,3,0,0,0,0,0,0,0,0,0,0,1,2,4,1,0,0,3
+BasicContainers/UniqueArray/UniqueArray+Experimental.swift,86,7,4,2,4,3,0,0,0,0,0,3,0,0,0,0,0,3,0,0,0,4
+BasicContainers/UniqueArray/UniqueArray+Hashable.swift,39,5,0,3,3,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,2
+BasicContainers/UniqueArray/UniqueArray+Initializers.swift,163,14,3,5,4,4,0,0,0,0,0,4,0,0,0,0,0,5,0,0,0,9
+BasicContainers/UniqueArray/UniqueArray+Insertions.swift,339,14,1,3,1,1,0,0,0,0,0,1,0,0,0,0,0,4,0,0,0,10
+BasicContainers/UniqueArray/UniqueArray+Iterable.swift,33,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BasicContainers/UniqueArray/UniqueArray+Removals.swift,142,10,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0,2,0,0,0,8
+BasicContainers/UniqueArray/UniqueArray+Replacements.swift,516,16,2,4,2,1,0,0,0,0,0,1,0,0,0,0,0,5,0,0,0,11
+BasicContainers/UniqueArray/UniqueArray.swift,230,17,2,5,2,0,0,0,0,0,0,0,0,0,0,1,0,6,2,0,0,10
+BasicContainers/UniqueDictionary/UniqueDictionary+Consumption.swift,47,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/UniqueDictionary/UniqueDictionary+Debugging.swift,56,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/UniqueDictionary/UniqueDictionary+Equatable.swift,54,7,0,4,2,0,0,0,0,0,0,0,0,0,0,1,1,4,1,0,0,3
+BasicContainers/UniqueDictionary/UniqueDictionary+Hashable.swift,33,3,0,2,2,0,0,0,0,0,0,0,0,0,0,1,1,2,1,0,0,1
+BasicContainers/UniqueDictionary/UniqueDictionary+Index.swift,68,9,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,5
+BasicContainers/UniqueDictionary/UniqueDictionary+Indices.swift,30,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+BasicContainers/UniqueDictionary/UniqueDictionary+Initializers.swift,36,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/UniqueDictionary/UniqueDictionary+Insertions.swift,115,5,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/UniqueDictionary/UniqueDictionary+Keys.swift,36,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/UniqueDictionary/UniqueDictionary+Lookup.swift,70,5,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/UniqueDictionary/UniqueDictionary+Removals.swift,68,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/UniqueDictionary/UniqueDictionary+Resizing.swift,43,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/UniqueDictionary/UniqueDictionary.swift,85,6,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,2
+BasicContainers/UniqueSet/UniqueSet+Consumption.swift,40,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BasicContainers/UniqueSet/UniqueSet+Debugging.swift,56,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+BasicContainers/UniqueSet/UniqueSet+Deprecated.swift,31,2,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/UniqueSet/UniqueSet+Equatable.swift,42,5,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,2
+BasicContainers/UniqueSet/UniqueSet+Hashable.swift,37,4,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,2
+BasicContainers/UniqueSet/UniqueSet+Index.swift,81,9,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,7
+BasicContainers/UniqueSet/UniqueSet+Initializers.swift,80,10,3,5,5,4,0,0,0,0,0,4,0,0,0,0,1,3,0,0,0,7
+BasicContainers/UniqueSet/UniqueSet+Insertions.swift,142,12,4,5,5,5,0,0,0,0,0,5,0,0,0,0,0,3,0,0,0,9
+BasicContainers/UniqueSet/UniqueSet+Iterable.swift,41,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,2
+BasicContainers/UniqueSet/UniqueSet+Lookup.swift,25,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BasicContainers/UniqueSet/UniqueSet+Removals.swift,49,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/UniqueSet/UniqueSet+Resizing.swift,43,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+BasicContainers/UniqueSet/UniqueSet.swift,83,6,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,2
+BitCollections/BitArray/BinaryInteger extensions.swift,221,9,4,0,4,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,7
+BitCollections/BitArray/BitArray+BitwiseOperations.swift,201,13,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,3,0,0,0,10
+BitCollections/BitArray/BitArray+ChunkedBitsIterators.swift,109,10,0,1,0,1,0,0,0,1,0,0,0,0,0,0,1,1,0,0,0,5
+BitCollections/BitArray/BitArray+Codable.swift,82,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,2
+BitCollections/BitArray/BitArray+Collection.swift,191,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,8
+BitCollections/BitArray/BitArray+Copy.swift,179,13,1,1,1,2,0,0,0,2,0,0,0,0,0,0,0,3,0,0,0,10
+BitCollections/BitArray/BitArray+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+BitCollections/BitArray/BitArray+Descriptions.swift,90,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,0
+BitCollections/BitArray/BitArray+Equatable.swift,32,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitArray/BitArray+ExpressibleByArrayLiteral.swift,21,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitArray/BitArray+ExpressibleByStringLiteral.swift,26,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitArray/BitArray+Extras.swift,54,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,3
+BitCollections/BitArray/BitArray+Fill.swift,49,4,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,3
+BitCollections/BitArray/BitArray+Hashable.swift,31,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitArray/BitArray+Initializers.swift,101,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,4
+BitCollections/BitArray/BitArray+Invariants.swift,45,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BitCollections/BitArray/BitArray+LosslessStringConvertible.swift,69,3,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,1,0,0,2
+BitCollections/BitArray/BitArray+RandomBits.swift,45,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BitCollections/BitArray/BitArray+RangeReplaceableCollection.swift,554,32,0,0,0,4,0,0,0,4,0,0,0,0,0,0,0,7,1,0,0,25
+BitCollections/BitArray/BitArray+Shifts.swift,165,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,8
+BitCollections/BitArray/BitArray+Testing.swift,23,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+BitCollections/BitArray/BitArray._UnsafeHandle.swift,174,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,8
+BitCollections/BitArray/BitArray.swift,128,11,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,7
+BitCollections/BitSet/BitSet+BidirectionalCollection.swift,298,20,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,4,0,0,14
+BitCollections/BitSet/BitSet+Codable.swift,41,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,2
+BitCollections/BitSet/BitSet+CustomDebugStringConvertible.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+BitCollections/BitSet/BitSet+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+BitCollections/BitSet/BitSet+CustomStringConvertible.swift,26,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+BitCollections/BitSet/BitSet+Equatable.swift,28,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitSet/BitSet+ExpressibleByArrayLiteral.swift,30,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitSet/BitSet+Extras.swift,199,11,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,4,1,0,0,7
+BitCollections/BitSet/BitSet+Hashable.swift,27,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+BitCollections/BitSet/BitSet+Initializers.swift,220,13,0,0,0,3,0,0,0,3,0,0,0,0,0,0,0,3,0,0,0,10
+BitCollections/BitSet/BitSet+Invariants.swift,44,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BitCollections/BitSet/BitSet+Random.swift,36,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+BitCollections/BitSet/BitSet+SetAlgebra basics.swift,138,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,7
+BitCollections/BitSet/BitSet+SetAlgebra conformance.swift,15,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+BitCollections/BitSet/BitSet+SetAlgebra formIntersection.swift,102,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra formSymmetricDifference.swift,101,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra formUnion.swift,103,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra intersection.swift,94,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isDisjoint.swift,109,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isEqualSet.swift,114,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isStrictSubset.swift,162,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isStrictSuperset.swift,132,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isSubset.swift,140,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra isSuperset.swift,114,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra subtract.swift,120,7,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,6
+BitCollections/BitSet/BitSet+SetAlgebra subtracting.swift,95,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra symmetricDifference.swift,98,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+SetAlgebra union.swift,95,5,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,4
+BitCollections/BitSet/BitSet+Sorted Collection APIs.swift,52,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,3
+BitCollections/BitSet/BitSet.Counted.swift,1364,135,0,0,0,17,0,0,0,17,0,0,0,0,0,0,0,34,13,0,0,98
+BitCollections/BitSet/BitSet.Index.swift,96,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,6,0,0,5
+BitCollections/BitSet/BitSet._UnsafeHandle.swift,256,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,11
+BitCollections/BitSet/BitSet.swift,105,10,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,7
+BitCollections/Shared/Range+Utilities.swift,39,3,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,2
+BitCollections/Shared/Slice+Utilities.swift,19,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+BitCollections/Shared/UInt+Tricks.swift,39,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+BitCollections/Shared/_Word.swift,77,4,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,1,0,0,0,2
+Collections/Collections.swift,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+ContainersPreview/Conformances/InputSpan+Container.swift,106,10,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,8
+ContainersPreview/Conformances/MutableSpan+Container.swift,158,14,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,10
+ContainersPreview/Conformances/OutputSpan+Container.swift,97,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,8
+ContainersPreview/Conformances/RigidArray+Container.swift,320,22,8,10,13,13,0,0,0,0,0,13,0,0,0,0,0,9,7,0,0,13
+ContainersPreview/Conformances/RigidDeque+Container.swift,348,23,12,14,20,21,0,0,0,0,0,20,0,1,0,0,0,9,7,0,0,14
+ContainersPreview/Conformances/RigidSet+Container.swift,60,6,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,3,0,0,3
+ContainersPreview/Conformances/Span+Container.swift,97,8,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,6
+ContainersPreview/Conformances/UniqueArray+Container.swift,58,9,0,7,0,0,0,0,0,0,0,0,0,0,0,0,0,7,7,0,0,2
+ContainersPreview/Conformances/UniqueDeque+Container.swift,211,16,5,10,9,9,0,0,0,0,0,9,0,0,0,0,0,9,7,0,0,7
+ContainersPreview/Conformances/UniqueSet+Container.swift,110,10,3,5,5,5,0,0,0,0,0,5,0,0,0,0,0,3,3,0,0,6
+ContainersPreview/Extensions/RigidSet+Extras.swift,146,11,8,7,14,16,0,0,0,0,0,16,0,0,0,0,0,3,0,0,0,8
+ContainersPreview/Protocols/Container/BidirectionalContainer.swift,203,22,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,2,17
+ContainersPreview/Protocols/Container/Container+Filter.swift,160,13,1,5,1,0,0,0,0,0,0,0,0,0,0,0,0,4,3,0,0,7
+ContainersPreview/Protocols/Container/Container+SpanwiseZip.swift,69,2,1,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+ContainersPreview/Protocols/Container/Container.swift,443,33,0,5,3,1,0,0,0,1,0,0,0,0,0,0,0,4,0,1,2,26
+ContainersPreview/Protocols/Container/ContainerIterator.swift,103,10,1,3,1,1,0,0,0,0,1,0,0,0,0,0,1,2,2,0,0,6
+ContainersPreview/Protocols/Container/DrainableContainer.swift,352,42,0,9,4,5,0,0,0,0,0,0,2,3,0,0,3,7,0,1,1,33
+ContainersPreview/Protocols/Container/DynamicContainer.swift,129,11,3,5,6,4,0,0,0,0,0,2,0,2,0,0,1,2,0,1,0,8
+ContainersPreview/Protocols/Container/MutableContainer+UpdateSubrange.swift,236,9,5,5,8,10,0,0,0,2,0,2,0,6,0,0,1,2,0,0,0,7
+ContainersPreview/Protocols/Container/MutableContainer.swift,187,13,0,4,2,0,0,0,0,0,0,0,0,0,0,0,2,3,0,1,0,9
+ContainersPreview/Protocols/Container/PermutableContainer+HeapSort.swift,94,6,0,2,3,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,4
+ContainersPreview/Protocols/Container/PermutableContainer+MoveSubrange.swift,50,2,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1
+ContainersPreview/Protocols/Container/PermutableContainer+Reverse.swift,55,4,0,2,2,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0,2
+ContainersPreview/Protocols/Container/PermutableContainer+Shuffle.swift,79,3,1,1,2,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,2
+ContainersPreview/Protocols/Container/PermutableContainer.swift,25,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1
+ContainersPreview/Protocols/Container/RandomAccessContainer.swift,262,36,0,4,3,4,0,0,0,4,0,0,0,0,0,0,3,4,0,1,2,29
+ContainersPreview/Protocols/Container/RangeExpression2.swift,81,14,6,6,7,6,0,0,0,0,0,5,0,1,0,0,0,5,5,1,1,7
+ContainersPreview/Protocols/Container/RangeReplaceableContainer.swift,903,47,33,24,43,47,0,0,0,0,0,6,0,41,0,0,1,5,0,1,0,41
+ContainersPreview/Protocols/Container/Strideable+Limits.swift,32,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+ContainersPreview/Protocols/Drain/ContainerDrain.swift,33,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1
+ContainersPreview/Protocols/Drain/Drain+Map.swift,102,8,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,5
+ContainersPreview/Protocols/Drain/Drain+Reduce.swift,64,3,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+ContainersPreview/Protocols/Drain/Drain.swift,230,6,0,2,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,1,0,4
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+Copy.swift,64,3,1,1,2,1,0,0,0,0,0,0,0,1,0,0,1,1,0,0,0,2
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+ElementsEqual.swift,62,4,2,4,3,3,0,0,0,0,0,0,0,3,0,0,1,2,0,0,0,2
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+Filter.swift,76,8,1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,3
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+Map.swift,145,11,4,3,2,1,0,0,0,1,0,0,0,0,0,0,0,2,2,0,0,7
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+MapError.swift,98,10,3,4,4,1,0,0,0,1,0,0,0,0,0,0,0,2,2,0,0,5
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+Reduce.swift,60,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+ContainersPreview/Protocols/Iterable/BorrowingIteratorProtocol+SpanwiseZip.swift,95,2,1,2,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1
+ContainersPreview/Protocols/Iterable/Iterable+ElementsEqual.swift,66,4,2,4,3,3,0,0,0,0,0,0,0,3,0,0,1,2,0,0,0,2
+ContainersPreview/Protocols/Iterable/Iterable+Filter.swift,77,9,1,3,1,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,3
+ContainersPreview/Protocols/Iterable/Iterable+Reduce.swift,61,6,4,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,4
+ContainersPreview/Protocols/Producer/CountedProducer.swift,33,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0
+ContainersPreview/Protocols/Producer/Producer+Collect.swift,64,4,1,1,1,3,0,0,0,0,0,0,0,3,0,0,0,1,0,0,0,3
+ContainersPreview/Protocols/Producer/Producer+Filter.swift,118,10,1,4,5,0,0,0,0,0,0,0,0,0,0,1,0,3,3,0,0,4
+ContainersPreview/Protocols/Producer/Producer+Map.swift,123,10,2,4,2,0,0,0,0,0,0,0,0,0,0,1,0,3,3,0,0,5
+ContainersPreview/Protocols/Producer/Producer+Reduce.swift,81,3,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+ContainersPreview/Protocols/Producer/Producer+Unfold.swift,91,6,2,1,2,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,4
+ContainersPreview/Protocols/Producer/Producer.swift,354,12,0,2,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,2,7
+ContainersPreview/Types/Shared.swift,164,18,1,7,1,0,0,0,0,0,0,0,0,0,0,1,0,7,1,0,0,9
+ContainersPreview/Types/UniqueBox.swift,191,17,1,6,2,0,0,0,0,0,0,0,0,0,0,1,1,6,2,0,0,8
+DequeModule/Deque/Deque+Codable.swift,54,4,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+DequeModule/Deque/Deque+Collection.swift,928,50,3,1,1,6,0,0,0,0,0,6,0,0,0,1,0,5,6,0,0,41
+DequeModule/Deque/Deque+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+DequeModule/Deque/Deque+Descriptions.swift,33,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+DequeModule/Deque/Deque+Equatable.swift,35,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+DequeModule/Deque/Deque+ExpressibleByArrayLiteral.swift,30,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+DequeModule/Deque/Deque+Extras.swift,196,7,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,5
+DequeModule/Deque/Deque+Hashable.swift,27,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+DequeModule/Deque/Deque+Testing.swift,93,2,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,1
+DequeModule/Deque/Deque._Storage.swift,227,27,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,1,0,0,15
+DequeModule/Deque/Deque._UnsafeHandle.swift,867,53,3,2,2,2,0,0,0,0,0,2,0,0,0,0,0,15,0,0,0,36
+DequeModule/Deque/Deque.swift,110,5,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,2
+DequeModule/Deque/_DequeBuffer.swift,59,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0
+DequeModule/Deque/_DequeBufferHeader.swift,53,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,3
+DequeModule/RigidDeque/RigidDeque+Append.swift,326,17,4,6,5,5,0,0,0,0,0,5,0,0,0,0,0,4,0,0,0,13
+DequeModule/RigidDeque/RigidDeque+Consumption.swift,274,16,1,4,1,1,0,0,0,0,0,0,0,1,0,0,0,4,1,0,0,9
+DequeModule/RigidDeque/RigidDeque+ContainerOperations.swift,128,14,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,13
+DequeModule/RigidDeque/RigidDeque+Deprecations.swift,308,10,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,8
+DequeModule/RigidDeque/RigidDeque+Descriptions.swift,29,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0
+DequeModule/RigidDeque/RigidDeque+Equatable.swift,66,7,0,4,3,0,0,0,0,0,0,0,0,0,0,1,2,4,1,0,0,3
+DequeModule/RigidDeque/RigidDeque+Hashable.swift,49,5,0,3,3,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,2
+DequeModule/RigidDeque/RigidDeque+Initializers.swift,187,14,4,5,6,7,0,0,0,0,0,7,0,0,0,0,0,4,0,0,0,10
+DequeModule/RigidDeque/RigidDeque+Insertions.swift,371,14,1,3,1,2,0,0,0,0,0,2,0,0,0,0,0,4,0,0,0,10
+DequeModule/RigidDeque/RigidDeque+Iterable.swift,93,6,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,4
+DequeModule/RigidDeque/RigidDeque+Prepend.swift,423,20,6,8,8,9,0,0,0,0,0,9,0,0,0,0,0,4,0,0,0,16
+DequeModule/RigidDeque/RigidDeque+Removals.swift,189,14,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,12
+DequeModule/RigidDeque/RigidDeque+Replacements.swift,470,13,2,2,2,2,0,0,0,0,0,2,0,0,0,0,0,3,0,0,0,10
+DequeModule/RigidDeque/RigidDeque+Testing.swift,55,3,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,1
+DequeModule/RigidDeque/RigidDeque.swift,368,25,1,6,1,0,0,0,0,0,0,0,0,0,0,1,0,7,2,0,0,14
+DequeModule/UniqueDeque/UniqueDeque+Append.swift,326,16,4,6,5,5,0,0,0,0,0,5,0,0,0,0,0,4,0,0,0,12
+DequeModule/UniqueDeque/UniqueDeque+Consumption.swift,163,9,1,2,1,1,0,0,0,0,0,0,0,1,0,0,0,2,0,0,0,6
+DequeModule/UniqueDeque/UniqueDeque+ContainerOperations.swift,98,14,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,13
+DequeModule/UniqueDeque/UniqueDeque+Deprecations.swift,332,11,1,1,1,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,9
+DequeModule/UniqueDeque/UniqueDeque+Descriptions.swift,29,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0
+DequeModule/UniqueDeque/UniqueDeque+Equatable.swift,52,7,0,4,3,0,0,0,0,0,0,0,0,0,0,1,2,4,1,0,0,3
+DequeModule/UniqueDeque/UniqueDeque+Hashable.swift,35,5,0,3,3,0,0,0,0,0,0,0,0,0,0,1,2,3,1,0,0,2
+DequeModule/UniqueDeque/UniqueDeque+Initializers.swift,165,13,4,5,6,6,0,0,0,0,0,6,0,0,0,0,0,4,0,0,0,9
+DequeModule/UniqueDeque/UniqueDeque+Insertions.swift,390,14,1,3,1,2,0,0,0,0,0,2,0,0,0,0,0,4,0,0,0,10
+DequeModule/UniqueDeque/UniqueDeque+Iterable.swift,31,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+DequeModule/UniqueDeque/UniqueDeque+Prepend.swift,420,19,6,8,8,9,0,0,0,0,0,9,0,0,0,0,0,4,0,0,0,15
+DequeModule/UniqueDeque/UniqueDeque+Removals.swift,150,11,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,9
+DequeModule/UniqueDeque/UniqueDeque+Replacements.swift,484,13,2,2,2,2,0,0,0,0,0,2,0,0,0,0,0,3,0,0,0,10
+DequeModule/UniqueDeque/UniqueDeque.swift,323,23,1,6,1,0,0,0,0,0,0,0,0,0,0,1,0,7,2,0,0,14
+DequeModule/_DequeSlot.swift,82,11,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,5,3,0,0,5
+DequeModule/_UnsafeDequeHandle.swift,1539,105,12,29,11,4,0,0,0,0,0,4,0,0,0,0,0,33,1,0,0,70
+DequeModule/_UnsafeDequeSegments.swift,304,26,5,5,3,4,0,0,0,0,0,4,0,0,0,0,0,4,0,0,0,20
+HashTreeCollections/HashNode/_AncestorHashSlots.swift,114,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,9
+HashTreeCollections/HashNode/_Bitmap.swift,224,33,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,4,0,0,23
+HashTreeCollections/HashNode/_Bucket.swift,74,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,4
+HashTreeCollections/HashNode/_Hash.swift,97,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,2,0,0,6
+HashTreeCollections/HashNode/_HashLevel.swift,104,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,7
+HashTreeCollections/HashNode/_HashNode+Builder.swift,374,31,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,9,0,0,0,19
+HashTreeCollections/HashNode/_HashNode+Debugging.swift,126,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,5
+HashTreeCollections/HashNode/_HashNode+Initializers.swift,268,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,14
+HashTreeCollections/HashNode/_HashNode+Invariants.swift,114,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,7
+HashTreeCollections/HashNode/_HashNode+Lookups.swift,272,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,0,10
+HashTreeCollections/HashNode/_HashNode+Primitive Insertions.swift,125,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,5
+HashTreeCollections/HashNode/_HashNode+Primitive Removals.swift,161,10,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,8
+HashTreeCollections/HashNode/_HashNode+Primitive Replacement.swift,97,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+HashTreeCollections/HashNode/_HashNode+Storage.swift,286,16,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,9
+HashTreeCollections/HashNode/_HashNode+Structural compactMapValues.swift,49,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+HashTreeCollections/HashNode/_HashNode+Structural filter.swift,86,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/HashNode/_HashNode+Structural intersection.swift,198,4,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/HashNode/_HashNode+Structural isDisjoint.swift,114,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/HashNode/_HashNode+Structural isEqualSet.swift,64,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+HashTreeCollections/HashNode/_HashNode+Structural isSubset.swift,92,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+HashTreeCollections/HashNode/_HashNode+Structural mapValues.swift,93,3,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/HashNode/_HashNode+Structural merge.swift,332,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/HashNode/_HashNode+Structural subtracting.swift,202,4,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/HashNode/_HashNode+Structural symmetricDifference.swift,271,9,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5
+HashTreeCollections/HashNode/_HashNode+Structural union.swift,260,4,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/HashNode/_HashNode+Subtree Insertions.swift,591,25,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,19
+HashTreeCollections/HashNode/_HashNode+Subtree Modify.swift,288,14,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,9
+HashTreeCollections/HashNode/_HashNode+Subtree Removals.swift,286,16,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,9
+HashTreeCollections/HashNode/_HashNode+UnsafeHandle.swift,305,20,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,13
+HashTreeCollections/HashNode/_HashNode.swift,146,11,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,4
+HashTreeCollections/HashNode/_HashNodeHeader.swift,138,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,2
+HashTreeCollections/HashNode/_HashSlot.swift,114,19,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,5,0,0,10
+HashTreeCollections/HashNode/_HashStack.swift,123,6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5
+HashTreeCollections/HashNode/_HashTreeIterator.swift,145,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,7
+HashTreeCollections/HashNode/_HashTreeStatistics.swift,132,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/HashNode/_RawHashNode+UnsafeHandle.swift,120,7,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3
+HashTreeCollections/HashNode/_RawHashNode.swift,79,8,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,4
+HashTreeCollections/HashNode/_UnmanagedHashNode.swift,114,9,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,5
+HashTreeCollections/HashNode/_UnsafePath.swift,899,48,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,16,4,0,0,31
+HashTreeCollections/TreeDictionary/TreeDictionary+Codable.swift,191,8,0,2,4,0,0,0,0,0,0,0,0,0,0,2,0,2,3,0,0,5
+HashTreeCollections/TreeDictionary/TreeDictionary+Collection.swift,312,24,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,9,8,0,0,14
+HashTreeCollections/TreeDictionary/TreeDictionary+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+HashTreeCollections/TreeDictionary/TreeDictionary+Debugging.swift,48,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/TreeDictionary/TreeDictionary+Descriptions.swift,33,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+HashTreeCollections/TreeDictionary/TreeDictionary+Equatable.swift,26,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+HashTreeCollections/TreeDictionary/TreeDictionary+ExpressibleByDictionaryLiteral.swift,38,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+HashTreeCollections/TreeDictionary/TreeDictionary+Filter.swift,61,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/TreeDictionary/TreeDictionary+Hashable.swift,31,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+HashTreeCollections/TreeDictionary/TreeDictionary+Initializers.swift,316,14,3,3,5,8,0,0,1,0,2,0,0,5,0,0,0,2,0,0,0,12
+HashTreeCollections/TreeDictionary/TreeDictionary+Keys.swift,332,38,2,2,4,0,0,0,0,0,0,0,0,0,0,2,0,12,11,0,0,20
+HashTreeCollections/TreeDictionary/TreeDictionary+MapValues.swift,71,3,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/TreeDictionary/TreeDictionary+Merge.swift,270,7,0,0,0,4,0,0,0,0,2,0,0,2,0,0,0,1,0,0,0,6
+HashTreeCollections/TreeDictionary/TreeDictionary+Sendable.swift,16,1,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+HashTreeCollections/TreeDictionary/TreeDictionary+Sequence.swift,78,10,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,3,3,0,0,3
+HashTreeCollections/TreeDictionary/TreeDictionary+Values.swift,169,27,0,2,4,0,0,0,0,0,0,0,0,0,0,2,0,8,8,0,0,12
+HashTreeCollections/TreeDictionary/TreeDictionary.swift,555,15,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,11
+HashTreeCollections/TreeSet/TreeSet+Codable.swift,51,4,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+HashTreeCollections/TreeSet/TreeSet+Collection.swift,378,32,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,9,8,0,0,22
+HashTreeCollections/TreeSet/TreeSet+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+HashTreeCollections/TreeSet/TreeSet+Debugging.swift,48,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/TreeSet/TreeSet+Descriptions.swift,33,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+HashTreeCollections/TreeSet/TreeSet+Equatable.swift,34,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+HashTreeCollections/TreeSet/TreeSet+ExpressibleByArrayLiteral.swift,37,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+HashTreeCollections/TreeSet/TreeSet+Extras.swift,74,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,2
+HashTreeCollections/TreeSet/TreeSet+Filter.swift,58,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+HashTreeCollections/TreeSet/TreeSet+Hashable.swift,31,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+HashTreeCollections/TreeSet/TreeSet+Sendable.swift,15,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+HashTreeCollections/TreeSet/TreeSet+Sequence.swift,58,8,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,2,3,0,0,4
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra Initializers.swift,76,5,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra basics.swift,137,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,5
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra formIntersection.swift,79,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra formSymmetricDifference.swift,74,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra formUnion.swift,95,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra intersection.swift,116,5,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isDisjoint.swift,83,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isEqualSet.swift,128,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSubset.swift,143,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isStrictSuperset.swift,128,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSubset.swift,116,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra isSuperset.swift,93,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtract.swift,74,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra subtracting.swift,103,5,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra symmetricDifference.swift,120,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet+SetAlgebra union.swift,113,4,1,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+HashTreeCollections/TreeSet/TreeSet.swift,87,5,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+HeapModule/Heap+Descriptions.swift,39,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+HeapModule/Heap+ExpressibleByArrayLiteral.swift,28,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+HeapModule/Heap+Invariants.swift,74,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+HeapModule/Heap+Testing.swift,19,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+HeapModule/Heap+UnsafeHandle.swift,393,25,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,19
+HeapModule/Heap.swift,398,17,1,1,2,2,0,0,0,0,0,2,0,0,0,1,0,3,1,0,0,13
+HeapModule/_HeapNode.swift,177,23,0,1,0,1,0,1,0,0,0,0,0,0,0,0,1,6,2,0,0,16
+InternalCollectionsUtilities/BorrowingIteratorProtocol+Equality.swift,143,4,2,4,3,3,0,0,0,0,0,0,0,3,0,0,1,2,0,0,0,2
+InternalCollectionsUtilities/BorrowingIteratorProtocol+Extras.swift,53,4,0,2,1,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,0,2
+InternalCollectionsUtilities/Debugging.swift,28,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+InternalCollectionsUtilities/Descriptions.swift,73,5,3,1,2,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,5
+InternalCollectionsUtilities/Immortalize.swift,27,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1
+InternalCollectionsUtilities/IntegerTricks/FixedWidthInteger+roundUpToPowerOfTwo.swift,24,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+InternalCollectionsUtilities/IntegerTricks/Integer rank.swift,153,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,4
+InternalCollectionsUtilities/IntegerTricks/UInt+first and last set bit.swift,28,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+InternalCollectionsUtilities/IntegerTricks/UInt+reversed.swift,30,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+InternalCollectionsUtilities/Iterable+CopyContents.swift,39,2,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1
+InternalCollectionsUtilities/Iterable+Equality.swift,79,4,2,4,3,3,0,0,0,0,0,0,0,3,0,0,1,2,0,0,0,2
+InternalCollectionsUtilities/LifetimeOverride.swift,92,5,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5
+InternalCollectionsUtilities/MutableRef.swift,87,5,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,3
+InternalCollectionsUtilities/MutableSpan+Extras.swift,147,7,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,5
+InternalCollectionsUtilities/OutputSpan+Extras.swift,171,13,2,4,2,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,8
+InternalCollectionsUtilities/RandomAccessCollection+Offsets.swift,30,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+InternalCollectionsUtilities/Span+Extras.swift,240,22,1,9,4,0,0,0,0,0,0,0,0,0,0,0,4,9,0,0,0,12
+InternalCollectionsUtilities/Strideable+LimitHelpers.swift,68,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,3
+InternalCollectionsUtilities/String+Padding.swift,38,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+InternalCollectionsUtilities/TemporaryAllocation.swift,57,2,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet+Index.swift,95,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,8
+InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet+_Word.swift,362,44,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,12,4,0,0,31
+InternalCollectionsUtilities/UnsafeBitSet/_UnsafeBitSet.swift,479,34,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,3,0,0,26
+InternalCollectionsUtilities/UnsafeBufferPointer+Extras.swift,173,13,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,9
+InternalCollectionsUtilities/UnsafeMutableBufferPointer+Extras.swift,420,44,8,15,2,8,0,0,7,0,0,0,0,1,0,0,0,13,0,0,0,31
+InternalCollectionsUtilities/UnsafeMutablePointer+Extras.swift,65,5,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,2
+InternalCollectionsUtilities/UnsafeMutableRawBufferPointer+Extras.swift,25,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+InternalCollectionsUtilities/UnsafePointer+Extras.swift,39,3,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,1
+InternalCollectionsUtilities/UnsafeRawBufferPointer+Extras.swift,23,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+InternalCollectionsUtilities/_SortedCollection.swift,33,4,0,3,3,0,0,0,0,0,0,0,0,0,0,3,0,3,3,1,0,0
+InternalCollectionsUtilities/_UniqueCollection.swift,41,4,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,3,3,1,0,0
+OrderedCollections/HashTable/_HashTable+Bucket.swift,41,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,2
+OrderedCollections/HashTable/_HashTable+BucketIterator.swift,290,18,2,0,2,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,12
+OrderedCollections/HashTable/_HashTable+Constants.swift,101,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/HashTable/_HashTable+CustomStringConvertible.swift,64,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,4,0,0,1
+OrderedCollections/HashTable/_HashTable+Testing.swift,67,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,4
+OrderedCollections/HashTable/_HashTable+UnsafeHandle.swift,628,38,7,5,12,0,0,0,0,0,0,0,0,0,0,0,0,10,0,0,0,25
+OrderedCollections/HashTable/_HashTable.swift,249,15,4,3,5,0,0,0,0,0,0,0,0,0,0,0,1,5,1,0,0,8
+OrderedCollections/HashTable/_Hashtable+Header.swift,102,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+OrderedCollections/OrderedDictionary/OrderedDictionary+Codable.swift,92,4,0,2,4,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+OrderedCollections/OrderedDictionary/OrderedDictionary+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+OrderedCollections/OrderedDictionary/OrderedDictionary+Deprecations.swift,55,5,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,3
+OrderedCollections/OrderedDictionary/OrderedDictionary+Descriptions.swift,33,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.SubSequence.swift,361,29,0,2,4,0,0,0,0,0,0,0,0,0,0,2,0,9,7,0,0,14
+OrderedCollections/OrderedDictionary/OrderedDictionary+Elements.swift,719,56,0,4,5,1,0,0,0,1,0,0,0,0,0,3,1,18,8,0,0,34
+OrderedCollections/OrderedDictionary/OrderedDictionary+Equatable.swift,26,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+OrderedCollections/OrderedDictionary/OrderedDictionary+ExpressibleByDictionaryLiteral.swift,38,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+OrderedCollections/OrderedDictionary/OrderedDictionary+Hashable.swift,28,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+OrderedCollections/OrderedDictionary/OrderedDictionary+Initializers.swift,466,21,3,3,5,14,0,0,1,0,7,4,0,2,0,0,0,7,0,0,0,14
+OrderedCollections/OrderedDictionary/OrderedDictionary+Invariants.swift,40,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+OrderedCollections/OrderedDictionary/OrderedDictionary+Move.swift,165,5,0,0,0,3,0,0,0,0,0,1,0,2,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedDictionary/OrderedDictionary+Partial MutableCollection.swift,266,13,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1,5,0,0,0,8
+OrderedCollections/OrderedDictionary/OrderedDictionary+Partial RangeReplaceableCollection.swift,187,11,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,10
+OrderedCollections/OrderedDictionary/OrderedDictionary+Sendable.swift,16,1,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+OrderedCollections/OrderedDictionary/OrderedDictionary+Sequence.swift,69,7,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,2,3,0,0,3
+OrderedCollections/OrderedDictionary/OrderedDictionary+Values.swift,408,33,4,3,4,0,0,0,0,0,0,0,0,0,0,3,0,11,8,0,0,17
+OrderedCollections/OrderedDictionary/OrderedDictionary.swift,1064,30,5,0,1,4,0,0,0,0,4,0,0,0,0,0,0,8,0,0,0,20
+OrderedCollections/OrderedSet/OrderedSet+Codable.swift,51,4,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+OrderedCollections/OrderedSet/OrderedSet+CustomReflectable.swift,22,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+OrderedCollections/OrderedSet/OrderedSet+Descriptions.swift,33,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,0
+OrderedCollections/OrderedSet/OrderedSet+Diffing.swift,103,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Equatable.swift,31,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+OrderedCollections/OrderedSet/OrderedSet+ExpressibleByArrayLiteral.swift,39,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+OrderedCollections/OrderedSet/OrderedSet+Hashable.swift,27,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+OrderedCollections/OrderedSet/OrderedSet+Initializers.swift,158,9,1,0,0,3,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,7
+OrderedCollections/OrderedSet/OrderedSet+Insertions.swift,333,17,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,5,0,0,0,12
+OrderedCollections/OrderedSet/OrderedSet+Invariants.swift,71,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+OrderedCollections/OrderedSet/OrderedSet+Move.swift,803,23,0,1,0,6,0,0,0,1,0,2,0,3,0,0,1,5,0,0,0,18
+OrderedCollections/OrderedSet/OrderedSet+Partial MutableCollection.swift,453,22,3,2,4,0,0,0,0,0,0,0,0,0,0,0,2,9,0,0,0,13
+OrderedCollections/OrderedSet/OrderedSet+Partial RangeReplaceableCollection.swift,225,10,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,9
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formIntersection.swift,88,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formSymmetricDifference.swift,90,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra formUnion.swift,106,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra intersection.swift,113,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isDisjoint.swift,133,5,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isEqualSet.swift,89,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSubset.swift,165,5,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isStrictSuperset.swift,163,5,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSubset.swift,158,5,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra isSuperset.swift,127,6,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,5
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtract.swift,77,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra subtracting.swift,113,5,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra symmetricDifference.swift,141,4,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra union.swift,111,5,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,4
+OrderedCollections/OrderedSet/OrderedSet+Partial SetAlgebra+Basics.swift,79,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+RandomAccessCollection.swift,310,24,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,18
+OrderedCollections/OrderedSet/OrderedSet+ReserveCapacity.swift,132,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3
+OrderedCollections/OrderedSet/OrderedSet+Sendable.swift,15,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+OrderedCollections/OrderedSet/OrderedSet+SubSequence.swift,383,38,1,1,1,0,0,0,0,0,0,0,0,0,0,1,0,10,8,0,0,22
+OrderedCollections/OrderedSet/OrderedSet+Testing.swift,128,11,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,4,0,0,0,7
+OrderedCollections/OrderedSet/OrderedSet+UnorderedView.swift,1013,72,1,1,1,15,0,0,0,0,0,15,0,0,0,1,0,23,8,0,0,47
+OrderedCollections/OrderedSet/OrderedSet+UnstableInternals.swift,54,5,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,2,1,0,0,1
+OrderedCollections/OrderedSet/OrderedSet.swift,597,27,1,2,2,0,0,0,0,0,0,0,0,0,0,0,1,9,0,0,0,16
+OrderedCollections/Utilities/UnsafeBitset.swift,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+RopeModule/BigString/Basics/BigString+Builder.swift,148,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,13
+RopeModule/BigString/Basics/BigString+Contents.swift,560,62,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,13,0,0,0,49
+RopeModule/BigString/Basics/BigString+Debugging.swift,20,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+RopeModule/BigString/Basics/BigString+Index.swift,238,23,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,5,0,0,13
+RopeModule/BigString/Basics/BigString+Ingester.swift,172,19,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,12
+RopeModule/BigString/Basics/BigString+Invariants.swift,38,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+RopeModule/BigString/Basics/BigString+Metrics.swift,296,31,0,1,0,1,0,0,0,1,0,0,0,0,0,0,0,1,4,1,0,23
+RopeModule/BigString/Basics/BigString+Summary.swift,81,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,2,0,0,4
+RopeModule/BigString/Basics/BigString.swift,27,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1
+RopeModule/BigString/Chunk/BigString+Chunk+Append and Insert.swift,240,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,11
+RopeModule/BigString/Chunk/BigString+Chunk+Breaks.swift,78,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2
+RopeModule/BigString/Chunk/BigString+Chunk+Character.swift,367,16,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,13
+RopeModule/BigString/Chunk/BigString+Chunk+Counts.swift,151,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,7
+RopeModule/BigString/Chunk/BigString+Chunk+Description.swift,70,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+RopeModule/BigString/Chunk/BigString+Chunk+Index.swift,142,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,4,0,0,6
+RopeModule/BigString/Chunk/BigString+Chunk+RopeElement.swift,155,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,6
+RopeModule/BigString/Chunk/BigString+Chunk+Splitting.swift,144,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5
+RopeModule/BigString/Chunk/BigString+Chunk+UTF16.swift,178,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,8
+RopeModule/BigString/Chunk/BigString+Chunk+UTF8.swift,25,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+RopeModule/BigString/Chunk/BigString+Chunk+UnicodeScalar.swift,139,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,7
+RopeModule/BigString/Chunk/BigString+Chunk.swift,194,21,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,12
+RopeModule/BigString/Conformances/BigString+BidirectionalCollection.swift,74,12,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,9
+RopeModule/BigString/Conformances/BigString+Comparable.swift,38,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+RopeModule/BigString/Conformances/BigString+CustomDebugStringConvertible.swift,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+RopeModule/BigString/Conformances/BigString+CustomStringConvertible.swift,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+RopeModule/BigString/Conformances/BigString+Equatable.swift,104,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,4
+RopeModule/BigString/Conformances/BigString+ExpressibleByStringLiteral.swift,20,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+RopeModule/BigString/Conformances/BigString+Hashing.swift,54,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,4
+RopeModule/BigString/Conformances/BigString+LosslessStringConvertible.swift,18,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+RopeModule/BigString/Conformances/BigString+RangeReplaceableCollection.swift,221,32,0,0,0,4,0,0,0,4,0,0,0,0,0,0,0,1,1,0,0,31
+RopeModule/BigString/Conformances/BigString+Sequence.swift,234,15,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,2,0,0,8
+RopeModule/BigString/Conformances/BigString+TextOutputStream.swift,33,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,2,0,0,2
+RopeModule/BigString/Operations/BigString+Append.swift,197,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,9
+RopeModule/BigString/Operations/BigString+Initializers.swift,163,14,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0,12
+RopeModule/BigString/Operations/BigString+Insert.swift,99,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,3
+RopeModule/BigString/Operations/BigString+Managing Breaks.swift,275,13,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,9
+RopeModule/BigString/Operations/BigString+RemoveSubrange.swift,48,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,3
+RopeModule/BigString/Operations/BigString+ReplaceSubrange.swift,87,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,5
+RopeModule/BigString/Operations/BigString+Split.swift,41,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+RopeModule/BigString/Operations/Range+BigString.swift,20,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0
+RopeModule/BigString/Views/BigString+UTF16View.swift,151,30,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,6,0,0,17
+RopeModule/BigString/Views/BigString+UTF8View.swift,187,31,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,6,0,0,18
+RopeModule/BigString/Views/BigString+UnicodeScalarView.swift,397,66,0,0,0,4,0,0,0,4,0,0,0,0,0,0,0,11,10,0,0,49
+RopeModule/BigString/Views/BigSubstring+UTF16View.swift,204,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,0,19
+RopeModule/BigString/Views/BigSubstring+UTF8View.swift,176,32,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,0,19
+RopeModule/BigString/Views/BigSubstring+UnicodeScalarView.swift,323,51,1,0,0,4,0,0,0,4,0,0,0,0,0,0,0,13,10,0,0,33
+RopeModule/BigString/Views/BigSubstring.swift,362,53,1,0,0,4,0,0,0,4,0,0,0,0,0,0,0,13,12,0,0,35
+RopeModule/Rope/Basics/Rope+Builder.swift,486,23,1,0,0,3,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,20
+RopeModule/Rope/Basics/Rope+Debugging.swift,99,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,2,0,0,2
+RopeModule/Rope/Basics/Rope+Invariants.swift,73,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,3
+RopeModule/Rope/Basics/Rope+_Node.swift,640,63,4,1,1,0,0,0,0,0,0,0,0,0,0,1,0,15,2,0,0,39
+RopeModule/Rope/Basics/Rope+_Storage.swift,62,7,1,0,1,1,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,2
+RopeModule/Rope/Basics/Rope+_UnmanagedLeaf.swift,53,10,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,3
+RopeModule/Rope/Basics/Rope+_UnsafeHandle.swift,236,18,1,0,1,2,0,0,0,0,0,1,0,1,0,0,0,2,0,0,0,14
+RopeModule/Rope/Basics/Rope.swift,75,10,1,1,2,0,0,0,0,0,0,0,0,0,0,1,0,4,1,0,0,5
+RopeModule/Rope/Basics/RopeElement.swift,80,9,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,2,5
+RopeModule/Rope/Basics/RopeMetric.swift,38,6,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,3
+RopeModule/Rope/Basics/RopeSummary.swift,65,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,0,4
+RopeModule/Rope/Basics/_RopeItem.swift,94,17,0,1,2,0,0,0,0,0,0,0,0,0,0,0,1,6,3,1,1,5
+RopeModule/Rope/Basics/_RopePath.swift,127,17,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,6,4,0,0,9
+RopeModule/Rope/Basics/_RopeVersion.swift,51,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,5
+RopeModule/Rope/Conformances/Rope+Collection.swift,501,36,1,0,0,13,0,0,0,0,0,13,0,0,0,0,0,12,1,0,0,23
+RopeModule/Rope/Conformances/Rope+Index.swift,110,17,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,5,0,0,7
+RopeModule/Rope/Conformances/Rope+Sequence.swift,51,6,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,4
+RopeModule/Rope/Operations/Rope+Append.swift,78,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,2
+RopeModule/Rope/Operations/Rope+Extract.swift,96,5,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,3
+RopeModule/Rope/Operations/Rope+Find.swift,91,5,0,0,0,3,0,0,0,0,0,3,0,0,0,0,0,2,0,0,0,3
+RopeModule/Rope/Operations/Rope+ForEachWhile.swift,94,6,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,2,0,0,0,4
+RopeModule/Rope/Operations/Rope+Insert.swift,224,15,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,4,0,0,0,11
+RopeModule/Rope/Operations/Rope+Join.swift,134,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,7
+RopeModule/Rope/Operations/Rope+MutatingForEach.swift,100,6,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,4
+RopeModule/Rope/Operations/Rope+Remove.swift,213,12,0,0,0,2,0,0,0,0,0,2,0,0,0,0,0,5,0,0,0,7
+RopeModule/Rope/Operations/Rope+RemoveSubrange.swift,334,12,0,0,0,7,0,0,0,0,0,7,0,0,0,0,0,2,0,0,0,10
+RopeModule/Rope/Operations/Rope+Split.swift,151,7,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,2,0,0,0,5
+RopeModule/Utilities/Optional Utilities.swift,22,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1
+RopeModule/Utilities/String Utilities.swift,133,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,7
+RopeModule/Utilities/String.Index+ABI.swift,116,7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,4
+RopeModule/Utilities/_CharacterRecognizer.swift,200,18,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,13
+SortedCollections/BTree/_BTree+BidirectionalCollection.swift,212,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,9
+SortedCollections/BTree/_BTree+CustomDebugStringConvertible.swift,34,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/BTree/_BTree+CustomReflectable.swift,27,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/BTree/_BTree+Invariants.swift,109,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,3
+SortedCollections/BTree/_BTree+Partial RangeReplaceableCollection.swift,148,11,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,10
+SortedCollections/BTree/_BTree+Sequence.swift,201,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,2,0,0,7
+SortedCollections/BTree/_BTree+SubSequence.swift,194,26,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0,17
+SortedCollections/BTree/_BTree+UnsafeCursor.swift,513,16,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,13
+SortedCollections/BTree/_BTree.Builder.swift,377,14,1,2,1,2,0,1,0,0,0,0,0,1,0,0,1,2,0,0,0,10
+SortedCollections/BTree/_BTree.Index.swift,152,11,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,1,0,0,6
+SortedCollections/BTree/_BTree.swift,604,28,2,0,1,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,19
+SortedCollections/BTree/_FixedSizeArray.swift,143,6,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,4
+SortedCollections/BTree/_Node+CustomDebugString.swift,24,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/BTree/_Node+Testing.swift,69,3,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,2
+SortedCollections/BTree/_Node.Splinter.swift,58,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+SortedCollections/BTree/_Node.Storage.swift,263,8,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,5
+SortedCollections/BTree/_Node.UnsafeHandle+CustomDebugStringConvertible.swift,158,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,2
+SortedCollections/BTree/_Node.UnsafeHandle+Deletion.swift,499,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,8
+SortedCollections/BTree/_Node.UnsafeHandle+Insertion.swift,500,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,6
+SortedCollections/BTree/_Node.UnsafeHandle.swift,811,35,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,30
+SortedCollections/BTree/_Node.swift,379,20,5,0,1,0,0,0,0,0,0,0,0,0,0,0,0,4,1,0,0,14
+SortedCollections/SortedDictionary/SortedDictionary+BidirectionalCollection.swift,182,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,9
+SortedCollections/SortedDictionary/SortedDictionary+Codable.swift,84,4,0,2,4,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+SortedCollections/SortedDictionary/SortedDictionary+CustomReflectable.swift,26,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/SortedDictionary/SortedDictionary+CustomStringConvertible.swift,61,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/SortedDictionary/SortedDictionary+Equatable.swift,40,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+SortedCollections/SortedDictionary/SortedDictionary+ExpressibleByDictionaryLiteral.swift,40,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+SortedCollections/SortedDictionary/SortedDictionary+Hashable.swift,33,2,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+SortedCollections/SortedDictionary/SortedDictionary+Initializers.swift,151,6,5,5,5,5,0,0,1,0,4,0,0,0,0,0,0,1,0,0,0,5
+SortedCollections/SortedDictionary/SortedDictionary+Keys.swift,266,26,0,3,5,0,0,0,0,0,0,0,0,0,0,3,0,8,7,0,0,14
+SortedCollections/SortedDictionary/SortedDictionary+Partial RangeReplaceableCollection.swift,181,11,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,10
+SortedCollections/SortedDictionary/SortedDictionary+Sendable.swift,20,1,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+SortedCollections/SortedDictionary/SortedDictionary+Sequence.swift,57,7,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,2,3,0,0,4
+SortedCollections/SortedDictionary/SortedDictionary+SubSequence.swift,328,32,0,4,7,0,0,0,0,0,0,0,0,0,0,4,0,7,7,0,0,19
+SortedCollections/SortedDictionary/SortedDictionary+Subscripts.swift,182,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,4
+SortedCollections/SortedDictionary/SortedDictionary+Values.swift,285,26,0,4,6,0,0,0,0,0,0,0,0,0,0,4,0,8,7,0,0,14
+SortedCollections/SortedDictionary/SortedDictionary.Index.swift,63,9,0,1,2,0,0,0,0,0,0,0,0,0,0,1,0,4,3,0,0,4
+SortedCollections/SortedDictionary/SortedDictionary.swift,228,14,4,0,1,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,7
+SortedCollections/SortedSet/SortedSet+BidirectionalCollection.swift,182,10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,9
+SortedCollections/SortedSet/SortedSet+Codable.swift,61,4,0,2,2,0,0,0,0,0,0,0,0,0,0,2,0,2,2,0,0,2
+SortedCollections/SortedSet/SortedSet+CustomReflectable.swift,26,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/SortedSet/SortedSet+CustomStringConvertible.swift,54,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0
+SortedCollections/SortedSet/SortedSet+Equatable.swift,40,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+SortedCollections/SortedSet/SortedSet+ExpressibleByArrayLiteral.swift,39,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,1
+SortedCollections/SortedSet/SortedSet+Hashable.swift,32,2,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,1
+SortedCollections/SortedSet/SortedSet+Initializers.swift,60,3,2,2,2,2,0,0,0,0,0,2,0,0,0,0,0,1,0,0,0,2
+SortedCollections/SortedSet/SortedSet+Partial RangeReplaceableCollection.swift,181,11,1,1,1,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,10
+SortedCollections/SortedSet/SortedSet+Sendable.swift,19,1,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,1,1,0,0,0
+SortedCollections/SortedSet/SortedSet+Sequence.swift,61,7,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,2,3,0,0,4
+SortedCollections/SortedSet/SortedSet+SetAlgebra.swift,556,30,0,0,0,13,0,0,0,0,0,13,0,0,0,0,0,2,1,0,0,28
+SortedCollections/SortedSet/SortedSet+SubSequence.swift,327,32,0,3,3,0,0,0,0,0,0,0,0,0,0,3,0,7,7,0,0,19
+SortedCollections/SortedSet/SortedSet+Subscripts.swift,104,9,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,8
+SortedCollections/SortedSet/SortedSet.Index.swift,95,11,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,4,3,0,0,6
+SortedCollections/SortedSet/SortedSet.swift,44,4,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2
+SpanPreview/InputSpan.swift,661,52,3,14,3,0,0,0,0,0,0,0,0,0,0,1,0,18,3,0,0,31
+SpanPreview/MutableSpan+InputSpanHelpers.swift,92,3,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+SpanPreview/OutputSpan+InputSpanHelpers.swift,53,3,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,2
+TrailingElementsModule/TrailingArray.swift,411,23,10,4,4,0,0,0,0,0,0,0,0,0,0,0,3,4,1,0,0,17
+TrailingElementsModule/TrailingElements.swift,24,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0
+TrailingElementsModule/TrailingPadding.swift,141,8,3,2,2,0,0,0,0,0,0,0,0,0,0,1,1,2,2,0,0,5

@@ -1,0 +1,12 @@
+// assocsubst: conformance with a premise T == S0. ok valid; bad1, bad2 invalid (2 errors expected).
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T where T == S0> => Box<T> is P { type X = T
+  fun get() -> T { self.get() } }
+fun check<T>(x: T) {}
+fun ok(p: Box<S0>) { check<S0>(p.get()) }
+fun bad1(p: Box<S0>) { check<S1>(p.get()) }
+fun bad2(p: Box<S1>) { check<S1>(p.get()) }

@@ -1,0 +1,10 @@
+// A NON-dependent requirement (S<U> is R, listed last) whose only derivation needs the fact stated
+// by a dependent one. FULL keeps `T.X is Q` on the stack of hypotheses; NEW defers it.
+// Well typed in the caller: S<U> is R follows from U is P and U.X is Q, both known to g.
+trait P { type X }
+trait Q {}
+trait R {}
+struct S<T> {}
+given <V where V is P, V.X is Q> => S<V> is R {}
+fun f<T where T is P, T.X is Q, S<T> is R>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

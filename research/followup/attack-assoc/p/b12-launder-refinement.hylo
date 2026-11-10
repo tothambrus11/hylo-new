@@ -1,0 +1,13 @@
+// abstractstrict: launder-5 with the second conformance stated through a refinement (T is R).
+// In `cast`, t.get() is a T.X through the witness of T is R and the result is a Self.X.
+// f0 then converts a W.X into a V.X, which negative/associated-type-inequality.hylo forbids.
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun get() -> X
+  fun cast<T where T == Self, T is R>(t: T) -> X { t.get() }
+}
+trait R refines P {}
+fun f0<V, W where V == W, V is P, W is R>(v: V, w: W) {
+  check<V.X>(v.cast<W>(w))
+}

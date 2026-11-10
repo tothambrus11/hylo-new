@@ -1,7 +1,4 @@
-// The where clause of the extension names the extension's own member alias `LA`, which needs the
-// first requirement. Entered at the extension: fine. Entered at `LA` (through `BA.LA` in the
-// last given, which finds the extension in the table): the hook types the where clause inside
-// `LA`, which the where clause needs.
+// a01 with its last two declarations swapped.
 trait P { type X }
 trait Q {}
 trait R {}

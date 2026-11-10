@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// GAP: a type expression that does not resolve is not reported, and two unresolved types are compatible.
+// EXPECTED: an error for `C.Element` (it does not resolve, see inherited-associated-type.hylo), or acceptance
+// with `C.Element` resolved.  OBSERVED: accepted without any diagnostic, with both types equal to '#!'.
+// CONSEQUENCE for testing: "accepted" does not show that the types of a program were resolved.
+trait Sequence { type Element }
+trait Collection refines Sequence { type Index }
+fun check<T>(x: T) {}
+fun f<C where C is Collection>(e: C.Element) { check<C.Element>(e) }

@@ -1,0 +1,7 @@
+// Ill-typed: a cycle of two aliases, each the subject of a given. Which alias is blamed depends
+// on which given is computed first (question 7 of the design); the verdict does not.
+trait P {}
+type X = Y
+type Y = X
+given X is P {}
+given Y is P {}

@@ -3,6 +3,7 @@
 // language designers (DESIGN.md, section 7, question 4). `A is P` has two witnesses of equal rank.
 // Each is tried; only the first makes `A.X is Q` hold, so the resolution as a whole has one result.
 // The alternative rule ("each requirement must have a unique witness on its own") rejects it.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=2 normalized=2); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base rejected (subgoals=6 matches=447): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=80): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }
 trait Q {}

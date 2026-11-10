@@ -1,0 +1,16 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q0 {}
+trait Q1 {}
+trait Q2 {}
+trait Q3 {}
+trait Q4 {}
+trait R {}
+struct S<T> {}
+given <V where V is Q0> => V is Q1 {}
+given <V where V is Q1> => V is Q2 {}
+given <V where V is Q2> => V is Q3 {}
+given <V where V is Q3> => V is Q4 {}
+given <V where V is Q4> => S<V> is R {}
+fun f<T where T is P, T.X is Q4, S<T.X> is R>() {}
+fun g<U where U is P, U.X is Q0>() { f<U>() }

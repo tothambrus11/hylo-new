@@ -1,0 +1,8 @@
+// h01 with the two dependent requirements swapped (ORDER: same verdict expected).
+trait P { type X }
+trait Q {}
+trait R {}
+struct S<T> {}
+given <V where V is Q> => S<V> is R {}
+fun f<T where T is P, S<T.X> is R, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

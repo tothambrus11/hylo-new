@@ -1,0 +1,18 @@
+// Two witnesses of `A is P`; only the one with X = B makes `A.X is Q` hold (design question 4).
+// The body of `f` uses both requirements on one value, so the two witnesses passed must agree:
+// `t.get()` is a B (first conformance) or a C (second); `use` is the one of `B is Q`.
+// Acceptable: accepted with the first conformance passed for `T is P`, or rejected as ambiguous.
+// UNSOUND if accepted with the second conformance (check with trace).
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given B is Q { fun use() {} }
+given A is P { type X = B
+  fun get() -> B { B() } }
+given A is P { type X = C
+  fun get() -> C { C() } }
+fun f<T where T is P, T.X is Q>(t: T) { t.get().use() }
+public fun main() { f<A>(A()) }

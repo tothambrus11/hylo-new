@@ -8,7 +8,7 @@ The claims of the form "an exponential behaviour becomes polynomial" rest on sin
 
 The work counters are exact and deterministic. The times are measurements taken on a heavily loaded machine and are indicative only.
 
-1. **Most of the claims hold, now with curves.** Under FULL the work counter is constant or linear where the existing checker is quadratic, cubic, quartic or exponential:
+1. **Most of the claims hold, now with curves.** Under FULL the growth of the work counter drops, in most families to linear or constant, where the existing checker is quadratic, cubic, quartic or exponential:
 
    | Family | base | FULL |
    |---|---|---|
@@ -79,9 +79,9 @@ The `-deep` families and the diamonds (except `nest-diamond-default`) run with `
 
 **Runs.** `run.py` runs `tc-bench --count` (binary `eq9-723cc0e6b0f8`) for each (family, size, configuration), one process at a time, under `timeout`, and appends a record to `results.jsonl`: verdict, diagnostics, every counter of the user module, the `type.user` time, exit code, wall time and peak memory. Within a series the sizes are run in increasing order. The series stops after a timeout, after two consecutive crashes, or when a run slower than 2 s predicts more than twice the timeout for the next size by power-law extrapolation from the last two sizes (which underestimates an exponential). Sizes that were not run are recorded as `skipped`, with the reason.
 
-Every point was first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. COMPLETION_NOTE
+Every point was first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. COMPLETION_NOTE RUN_STATS
 
-Three leave-one-out configurations were also run on the families they concern: FULL without `eqsolve`, FULL without `absmodel` and `absquotient`, and FULL without `absquotient`. A second pass repeated the FULL points that finish within 5 s: the counters and verdicts were identical in all of them, and the time reported for those points is the smaller of the two.
+Three leave-one-out configurations were also run on the families they concern: FULL without `eqsolve`, FULL without `absmodel` and `absquotient`, and FULL without `absquotient`. A second pass repeated the PASS1_COUNT points of FULL that finish within 5 s: the counters and verdicts were identical in all of them, and the time reported for those points is the smaller of the two.
 
 **Fits.** `analyze.py` produces this file from `results.jsonl` and `README.head.md`, and writes the fits to `fits.json`. For each (family, configuration):
 - If the counter values lie *exactly* on a polynomial of degree at most 5 (relative error below 10⁻⁶, with at least two more points than coefficients), that polynomial is reported, possibly from some size on. Since the counters are deterministic, this test is much sharper than a regression. For example the count of base on `eqchain` is the cubic above for every `n` from 3 to 64, whereas a log-log regression on the same points gives an exponent of 1.3, because the cubic term is still small.
@@ -90,6 +90,18 @@ Three leave-one-out configurations were also run on the families they concern: F
 - Times are fitted the same way with looser thresholds. A series whose times all stay below 200 ms is not fitted: at that scale the noise of this machine is as large as the signal.
 
 **Reproducing.** `python3 run.py --timeout 20`, then `python3 run.py --timeout 120`, then `python3 analyze.py`. `run.py --configs FULL-eqsolve --only FAMILY,…` runs a leave-one-out configuration, and `run.py --pass 1` repeats the fast points. The runner skips the points already in `results.jsonl`.
+
+**Files.**
+
+| File | Content |
+|---|---|
+| `gen.py` | the program families: generators, sizes, intended verdicts, environment, primary counter |
+| `run.py` | the restartable runner |
+| `analyze.py` | the fits; writes `README.md`, `tables.md` (the generated part of this file alone) and `fits.json` |
+| `README.head.md` | the hand-written part of this file |
+| `results.jsonl` | one record per run (the last record of a point wins; `pass` 1 is the repeated timing pass) |
+| `fits.json` | every fit, with the residuals of both models, the local exponents and the growth factors |
+| `progs/` | the programs, named `FAMILY-N.hylo` |
 
 ## What remains uncertain
 

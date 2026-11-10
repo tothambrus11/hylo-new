@@ -1,0 +1,19 @@
+//! stage:typing no-std
+// attack (review): companion of s1-attack-shadowed-result-type. The result is ascribed the type that
+// the call site calls W<A.X>; rejected under NEW with the message "no coercion from 'W<X>' to 'W<X>'".
+// expected: rejected under both readings (under the commit rule because 'C is Q' does not hold).
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=2 normalized=2); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=17 matches=1274): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> W<(A::P).X>' to '[Void]() let -> W<(A::P).X>'; FULL rejected (subgoals=7 matches=298 refuted=2): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> W<(A::P).X>' to '[Void]() let -> W<(A::P).X>'
+trait P { type X }
+trait Q {}
+struct A {}
+struct B { public memberwise init }
+struct C { public memberwise init }
+struct W<T> { public memberwise init }
+given B is Q {}
+given A is P { type X = B }
+fun f<T where T is P, T.X is Q>() -> W<T.X> { W<T.X>() }
+public fun main() {
+  given A is P { type X = C }
+  let x: W<A.X> = f<A>()
+}

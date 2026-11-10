@@ -1,0 +1,7 @@
+// As e05 from a generic caller. Well typed: Box<U>.X = U.X is Q.
+trait P { type X }
+trait Q {}
+struct Box<T> {}
+given <T where T is P> => Box<T> is P { type X = T.X }
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<Box<U>>() }

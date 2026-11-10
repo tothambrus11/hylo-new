@@ -1,0 +1,89 @@
+//! stage:typing no-std
+
+// SOURCE: three declarations whose equalities only connect through a third term.
+//   swiftlang/swift, stdlib/public/core/RangeSet.swift:180-188
+//       public init<S: Sequence, C: Collection>(indices: S, within collection: C)
+//         where S.Element == C.Index, C.Index == Bound {
+//         self.init()
+//         for i in indices { self.insert(i, within: collection) }      // i: S.Element, expected: Bound
+//       }
+//   swiftlang/swift, stdlib/public/core/EitherSequence.swift:185-197
+//       extension AnyCollection {
+//         init<L: Collection, R: Collection>(other: _Either<L,R>)
+//           where L.Element == Element, R.Element == Element
+//   apple/swift-algorithms, Sources/Algorithms/Chain.swift:13-14 and the extension that follows
+//       public struct Chain2Sequence<Base1: Sequence, Base2: Sequence> where Base1.Element == Base2.Element
+//       extension Chain2Sequence: Sequence { ... typealias Element = Base1.Element ... }
+//
+// PATTERN: these are the declarations with the largest classes of equal terms that the census
+// found in written where clauses (three terms, a chain of two equalities), and the equalities
+// relate associated types of different parameters.  `RangeSet.init` type-checks only by
+// transitivity: `S.Element == Bound` is not written.
+//
+// TRANSLATION LIMITS: the original bodies go on to use `Chain2<A, B>.Element`; this compiler does
+// not reduce an associated type defined by a generic conformance (see gaps/generic-projection.hylo),
+// so the benchmark stops at the conformance itself.
+//
+// Lines starting with `// NEG:` are plausible but false claims; `run_benchmarks.py` enables them
+// in a generated copy to measure the cost of rejecting.
+
+trait Sequence {
+  type Element
+  type Iterator
+}
+
+trait Collection {
+  type Element
+  type Iterator
+  type Index
+  type SubSequence
+  type Indices
+}
+
+struct RangeSet<Bound> { public memberwise init }
+struct Chain2<Base1, Base2> { public memberwise init }
+
+fun need<A, B where A == B>() {}
+fun check<T>(x: T) {}
+
+// RangeSet.insert(_:within:)
+fun insert<Bound, C where C is Collection, C.Index == Bound>(i: Bound, s: RangeSet<Bound>, c: C) {}
+
+// RangeSet.init(_:within:)
+fun rangeSetInit<Bound, S, C where
+  S is Sequence, C is Collection, S.Element == C.Index, C.Index == Bound
+>(first: S.Element, s: RangeSet<Bound>, c: C) {
+  need<S.Element, Bound>()                 // transitivity, 2 steps, across parameters
+  check<Bound>(first)                      // the same, as a coercion of a value
+  insert<Bound, C>(first, s, c)            // the call in the original body
+  need<S.Element, C.Element>()
+  need<S.Iterator, C.Iterator>()
+}
+
+// AnyCollection.init(_: _Either<L, R>)
+fun anyCollectionInit<Element, L, R where
+  L is Collection, R is Collection, L.Element == Element, R.Element == Element
+>(l: L.Element, r: R.Element) {
+  need<L.Element, R.Element>()             // transitivity through the parameter of the extended type
+  check<R.Element>(l)
+  check<Element>(r)
+  need<L.Index, R.Index>()
+  need<L, R>()
+}
+
+// Chain2Sequence: a conditional conformance whose condition is an equality.
+given <Base1, Base2 where Base1 is Sequence, Base2 is Sequence, Base1.Element == Base2.Element> =>
+  Chain2<Base1, Base2> is Sequence {
+  type Element = Base1.Element
+  type Iterator = Base1.Iterator
+}
+
+fun needSequence<T where T is Sequence>() {}
+
+fun chainUse<A, B, X where
+  A is Sequence, B is Sequence, A.Element == X, B.Element == X
+>() {
+  needSequence<Chain2<A, B>>()             // the condition A.Element == B.Element holds by transitivity
+  needSequence<Chain2<A, X>>()
+  needSequence<Chain2<B.Iterator, A>>()
+}

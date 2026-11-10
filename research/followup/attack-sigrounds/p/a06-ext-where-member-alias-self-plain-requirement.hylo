@@ -1,0 +1,8 @@
+// As a05 with an ordinary requirement: the extension applies when its member alias `LA` (which
+// is `Self`, that is `A`) conforms to `Q`.
+trait Q {}
+trait R {}
+struct A {}
+given A is Q {}
+extension <where LA is Q> A { type LA = Self }
+given A.LA is R {}

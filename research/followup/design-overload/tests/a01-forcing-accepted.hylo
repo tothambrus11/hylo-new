@@ -1,7 +1,8 @@
 // expected after the change: with `twins` alone: as today (accepted). With `cleanfirst`:
 //   REJECTED, "definition of 'X' refers to itself", in base and in FULL: a known change of
 //   verdict
-// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand. The
+// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand; the
+//   outcome with the flags was observed on the implementation (binary eq25, DESIGN.md 9.2). The
 //   candidate f(x: A), declared first, fails at its argument. Today its fork goes on and looks
 //   `m` up in C, which computes the extended type of `extension X` before anything else needs
 //   the alias X; that order is accepted. `cleanfirst` cancels the fork at the failed argument,

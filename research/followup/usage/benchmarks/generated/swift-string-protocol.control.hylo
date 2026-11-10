@@ -1,0 +1,111 @@
+//! stage:typing no-std
+
+// SOURCE: Swift standard library (swiftlang/swift, stdlib/public/core/StringProtocol.swift).
+//   lines 14-22   public protocol StringProtocol: BidirectionalCollection, ...
+//                   where Iterator.Element == Character, Index == String.Index,
+//                         SubSequence: StringProtocol,
+//                         StringInterpolation == DefaultStringInterpolation
+//   lines 23-33   associatedtype UTF8View: Collection
+//                   where UTF8View.Element == UInt8, UTF8View.Index == Index
+//                 associatedtype UTF16View: BidirectionalCollection
+//                   where UTF16View.Element == UInt16, UTF16View.Index == Index
+//                 associatedtype UnicodeScalarView: BidirectionalCollection
+//                   where UnicodeScalarView.Element == Unicode.Scalar, UnicodeScalarView.Index == Index
+//   lines 50-53   init<C: Collection, Encoding: Unicode.Encoding>(decoding codeUnits: C, as: Encoding.Type)
+//                   where C.Iterator.Element == Encoding.CodeUnit
+//
+// PATTERN: the protocol with the most equalities in the Swift standard library (9 of its own,
+// plus those it inherits from Collection and Sequence).  Associated types are equated to concrete
+// types, so classes contain three or more terms, one of them concrete.
+//
+// TRANSLATION LIMITS: as in swift-collection-signature.hylo.  The refinement chain
+// StringProtocol : BidirectionalCollection : Collection : Sequence is flattened into one trait, and
+// the equalities are restated in the where clause.
+//
+// Lines starting with `// NEG:` are plausible but false claims; `run_benchmarks.py` enables them
+// in a generated copy to measure the cost of rejecting.
+
+trait IteratorProtocol { type Element }
+
+trait Collection {
+  type Element
+  type Iterator
+  type Index
+  type SubSequence
+  type Indices
+}
+
+trait UnicodeEncoding { type CodeUnit }
+
+trait StringProtocol {
+  type Element
+  type Iterator
+  type Index
+  type SubSequence
+  type Indices
+  type UTF8View
+  type UTF16View
+  type UnicodeScalarView
+  type StringInterpolation
+}
+
+struct Character {}
+struct StringIndex {}
+struct UInt8 {}
+struct UInt16 {}
+struct UnicodeScalar {}
+struct DefaultStringInterpolation {}
+
+fun need<A, B where A == B>() {}
+
+// A generic function over a string: 16 equalities, 7 conformances.
+fun overString<S where
+  S is StringProtocol,
+  S.Iterator is IteratorProtocol, S.Iterator.Element == S.Element,
+  S.Iterator.Element == Character, S.Index == StringIndex,
+  S.SubSequence is StringProtocol,
+  S.StringInterpolation == DefaultStringInterpolation,
+  S.SubSequence.Index == S.Index, S.Element == S.SubSequence.Element,
+  S.SubSequence.SubSequence == S.SubSequence,
+  S.Indices is Collection,
+  S.Indices.Element == S.Index, S.Indices.Index == S.Index, S.Indices.SubSequence == S.Indices,
+  S.UTF8View is Collection, S.UTF8View.Element == UInt8, S.UTF8View.Index == S.Index,
+  S.UTF16View is Collection, S.UTF16View.Element == UInt16, S.UTF16View.Index == S.Index,
+  S.UnicodeScalarView is Collection,
+  S.UnicodeScalarView.Element == UnicodeScalar, S.UnicodeScalarView.Index == S.Index
+>() {
+  need<S.Element, Zz>()
+  need<Character, Zz>()
+  need<S.UTF8View.Index, Zz>()
+  need<StringIndex, Zz>()
+  need<S.UTF8View.Index, Zz>()
+  need<S.UTF16View.Index, Zz>()
+  need<S.UnicodeScalarView.Index, Zz>()
+  need<S.SubSequence.Index, Zz>()
+  need<S.SubSequence.Element, Zz>()
+  need<Character, Zz>()
+  need<S.Indices.Element, Zz>()
+  need<S.UTF16View.Index, Zz>()
+  need<S.SubSequence.SubSequence.Index, Zz>()
+  need<StringIndex, Zz>()
+  need<S.SubSequence.SubSequence.Element, Zz>()
+  need<S.Iterator.Element, Zz>()
+  // NEG: need<S.UTF8View.Element, S.UTF16View.Element>()
+  // NEG: need<S.Element, UInt8>()
+  // NEG: need<S.Index, S.UTF8View.Element>()
+  // NEG: need<S.UnicodeScalarView.Element, Character>()
+}
+
+// `init(decoding:as:)`: an equality between associated types of two parameters.  3 equalities.
+fun decoding<C, E where
+  C is Collection,
+  C.Iterator is IteratorProtocol, C.Iterator.Element == C.Element,
+  E is UnicodeEncoding,
+  C.Iterator.Element == E.CodeUnit
+>() {
+  need<C.Element, Zz>()
+  need<E.CodeUnit, Zz>()
+  // NEG: need<C.Index, E.CodeUnit>()
+}
+
+struct Zz {}

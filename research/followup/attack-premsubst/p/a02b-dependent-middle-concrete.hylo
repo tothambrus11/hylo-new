@@ -1,0 +1,11 @@
+// A dependent requirement in the middle of the clause, concrete caller. Well typed.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+given B is Q {}
+given A is R {}
+given A is P { type X = B }
+fun f<T where T is P, T.X is Q, T is R>() {}
+public fun main() { f<A>() }

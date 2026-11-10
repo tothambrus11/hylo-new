@@ -1,0 +1,2249 @@
+{
+ "hylo-new-stdlib": {
+  "files": 18,
+  "lines": 734,
+  "declarations": {
+   "function": 68,
+   "type": 6,
+   "conformance": 24,
+   "trait": 9,
+   "extension": 4,
+   "alias": 4
+  },
+  "generic declarations": 9,
+  "generic functions": 2,
+  "generic types": 2,
+  "functions": 68,
+  "functions in a generic context": 8,
+  "where clauses": 1,
+  "conformance requirements (where)": 0,
+  "conformance requirements (inline bounds)": 7,
+  "conformance requirements (associated type declarations)": 0,
+  "inverse / lifetime / layout requirements": 0,
+  "equality requirements": 0,
+  "equality requirements by origin": {},
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 0,
+   "param == constructed": 0,
+   "assoc == concrete": 0,
+   "assoc == constructed": 0,
+   "assoc == param": 0,
+   "assoc == assoc (same root)": 0,
+   "assoc == assoc (different roots)": 0,
+   "other": 0
+  },
+  "equality requirements written in traits": 0,
+  "equality requirements by projection depth": {},
+  "declarations with an equality requirement": 0,
+  "extensions": 4,
+  "conformance declarations": 28,
+  "conformances declared (one per trait named)": 28,
+  "conditional conformances": 4,
+  "conditional conformances with an equality": 0,
+  "conditional extensions": 0,
+  "conditional extensions with an equality": 0,
+  "extensions of a trait": 0,
+  "types extended": 10,
+  "extensions per type (median, p95, max)": [
+   1,
+   7,
+   7
+  ],
+  "most extended": [
+   [
+    "Float32",
+    7
+   ],
+   [
+    "Float64",
+    7
+   ],
+   [
+    "Bool",
+    3
+   ],
+   [
+    "Void",
+    3
+   ],
+   [
+    "{T,...U}",
+    3
+   ],
+   [
+    "Metatype",
+    1
+   ],
+   [
+    "T:Movable",
+    1
+   ],
+   [
+    "Optional",
+    1
+   ]
+  ],
+  "traits": 9,
+  "traits with associated types": 0,
+  "traits with associated types (incl. inherited)": 0,
+  "associated types": 0,
+  "function names (container, name)": 68,
+  "overloaded function names (same container)": 0,
+  "largest overload sets (same container)": [
+   [
+    "<global>.fatal_error",
+    1
+   ],
+   [
+    "<global>.precondition",
+    1
+   ],
+   [
+    "Bool.init",
+    1
+   ],
+   [
+    "Bool.infix&&",
+    1
+   ],
+   [
+    "Bool.infix||",
+    1
+   ],
+   [
+    "Bool.prefix!",
+    1
+   ]
+  ],
+  "distinct bare function names": 33,
+  "bare names declared more than once": 17,
+  "largest bare-name sets": [
+   [
+    "init",
+    5
+   ],
+   [
+    "infix==",
+    4
+   ],
+   [
+    "infix!=",
+    4
+   ],
+   [
+    "infix<",
+    3
+   ],
+   [
+    "infix<=",
+    3
+   ],
+   [
+    "infix>",
+    3
+   ]
+  ],
+  "constrained declarations": 4,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   2,
+   2,
+   2,
+   2
+  ],
+  "declarations with equalities (excluding traits)": 0,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "functions with a local equality in scope": 0,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "functions with any equality in scope incl. those of the named traits": 0,
+  "declarations whose visible equalities form a class of 3 or more terms": 0,
+  "largest equivalence class among visible equalities": 0,
+  "class sizes (declarations by largest class)": {},
+  "declarations needing a chain of 2 or more equalities": 0,
+  "longest chain of equalities": 0,
+  "chain lengths (declarations by longest chain)": {},
+  "declarations where a projection of an equated term is written": 0,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 0,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "Comparable": [
+    0,
+    0,
+    0
+   ],
+   "Copyable": [
+    0,
+    0,
+    0
+   ],
+   "Deinitializable": [
+    0,
+    0,
+    0
+   ],
+   "Equatable": [
+    0,
+    0,
+    0
+   ],
+   "Movable": [
+    0,
+    0,
+    0
+   ],
+   "AdditiveArithmetic": [
+    0,
+    0,
+    0
+   ],
+   "ExpressibleByFloatingPointLiteral": [
+    0,
+    0,
+    0
+   ],
+   "ExpressibleByIntegerLiteral": [
+    0,
+    0,
+    0
+   ],
+   "Numeric": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "hylo-new-tests": {
+  "files": 204,
+  "lines": 4481,
+  "declarations": {
+   "trait": 60,
+   "conformance": 55,
+   "function": 563,
+   "type": 140,
+   "alias": 25,
+   "extension": 32,
+   "assoctype": 7
+  },
+  "generic declarations": 150,
+  "generic functions": 80,
+  "generic types": 37,
+  "functions": 563,
+  "functions in a generic context": 127,
+  "where clauses": 38,
+  "conformance requirements (where)": 36,
+  "conformance requirements (inline bounds)": 25,
+  "conformance requirements (associated type declarations)": 0,
+  "inverse / lifetime / layout requirements": 0,
+  "equality requirements": 12,
+  "equality requirements by origin": {
+   "where": 12
+  },
+  "equality requirements by shape": {
+   "param == param": 8,
+   "param == concrete": 1,
+   "param == constructed": 2,
+   "assoc == concrete": 0,
+   "assoc == constructed": 0,
+   "assoc == param": 0,
+   "assoc == assoc (same root)": 0,
+   "assoc == assoc (different roots)": 1,
+   "other": 0
+  },
+  "equality requirements written in traits": 0,
+  "equality requirements by projection depth": {
+   "0": 11,
+   "1": 1
+  },
+  "declarations with an equality requirement": 9,
+  "extensions": 32,
+  "conformance declarations": 102,
+  "conformances declared (one per trait named)": 110,
+  "conditional conformances": 10,
+  "conditional conformances with an equality": 1,
+  "conditional extensions": 6,
+  "conditional extensions with an equality": 0,
+  "extensions of a trait": 5,
+  "types extended": 17,
+  "extensions per type (median, p95, max)": [
+   2,
+   20,
+   21
+  ],
+  "most extended": [
+   [
+    "Void",
+    21
+   ],
+   [
+    "A",
+    20
+   ],
+   [
+    "S",
+    10
+   ],
+   [
+    "T",
+    8
+   ],
+   [
+    "B",
+    7
+   ],
+   [
+    "Int",
+    4
+   ],
+   [
+    "",
+    3
+   ],
+   [
+    "C",
+    3
+   ]
+  ],
+  "traits": 60,
+  "traits with associated types": 7,
+  "traits with associated types (incl. inherited)": 7,
+  "associated types": 7,
+  "function names (container, name)": 547,
+  "overloaded function names (same container)": 15,
+  "largest overload sets (same container)": [
+   [
+    "negative/ambiguous-implementation.hylo:Void.f",
+    2
+   ],
+   [
+    "negative/ambiguous-overload.hylo:<global>.f",
+    2
+   ],
+   [
+    "negative/argument-labels.hylo:<global>.one",
+    2
+   ],
+   [
+    "negative/extern-c-indirect.hylo:<global>.f4",
+    2
+   ],
+   [
+    "negative/invalid-modifier-1.hylo:A.f0",
+    2
+   ],
+   [
+    "positive/branch-inference.hylo:A.init",
+    2
+   ]
+  ],
+  "distinct bare function names": 504,
+  "bare names declared more than once": 46,
+  "largest bare-name sets": [
+   [
+    "positive/adjunct-conformance.hylo:f",
+    4
+   ],
+   [
+    "positive/adjunct-conformance.hylo:g",
+    4
+   ],
+   [
+    "positive/generic-call-2.hylo:i",
+    4
+   ],
+   [
+    "negative/generic-requirement.hylo:f",
+    3
+   ],
+   [
+    "negative/missing-associated-type-conformance.hylo:x",
+    3
+   ],
+   [
+    "negative/recursive-implicit-deinit.hylo:deinit",
+    3
+   ]
+  ],
+  "constrained declarations": 56,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "declarations with equalities (excluding traits)": 9,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   2,
+   2,
+   2
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   1,
+   2
+  ],
+  "functions with a local equality in scope": 8,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   0,
+   1,
+   2
+  ],
+  "functions with any equality in scope incl. those of the named traits": 8,
+  "declarations whose visible equalities form a class of 3 or more terms": 2,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 8,
+   "3": 2
+  },
+  "declarations needing a chain of 2 or more equalities": 2,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 8,
+   "2": 2
+  },
+  "declarations where a projection of an equated term is written": 1,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 1,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "P": [
+    7,
+    0,
+    0
+   ],
+   "A": [
+    0,
+    0,
+    0
+   ],
+   "Q": [
+    0,
+    0,
+    0
+   ],
+   "Base": [
+    0,
+    0,
+    0
+   ],
+   "Derived": [
+    0,
+    0,
+    0
+   ],
+   "FurtherDerived": [
+    0,
+    0,
+    0
+   ],
+   "DefaultConstructible": [
+    0,
+    0,
+    0
+   ],
+   "R": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "hylo-old-stdlib": {
+  "files": 63,
+  "lines": 6350,
+  "declarations": {
+   "type": 36,
+   "function": 861,
+   "conformance": 150,
+   "alias": 40,
+   "extension": 17,
+   "namespace": 3,
+   "trait": 22,
+   "assoctype": 6
+  },
+  "generic declarations": 61,
+  "generic functions": 46,
+  "generic types": 14,
+  "functions": 861,
+  "functions in a generic context": 214,
+  "where clauses": 16,
+  "conformance requirements (where)": 18,
+  "conformance requirements (inline bounds)": 37,
+  "conformance requirements (associated type declarations)": 5,
+  "inverse / lifetime / layout requirements": 0,
+  "equality requirements": 1,
+  "equality requirements by origin": {
+   "where": 1
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 1,
+   "param == constructed": 0,
+   "assoc == concrete": 0,
+   "assoc == constructed": 0,
+   "assoc == param": 0,
+   "assoc == assoc (same root)": 0,
+   "assoc == assoc (different roots)": 0,
+   "other": 0
+  },
+  "equality requirements written in traits": 0,
+  "equality requirements by projection depth": {
+   "0": 1
+  },
+  "declarations with an equality requirement": 1,
+  "extensions": 17,
+  "conformance declarations": 171,
+  "conformances declared (one per trait named)": 176,
+  "conditional conformances": 7,
+  "conditional conformances with an equality": 0,
+  "conditional extensions": 9,
+  "conditional extensions with an equality": 1,
+  "extensions of a trait": 8,
+  "types extended": 29,
+  "extensions per type (median, p95, max)": [
+   4,
+   16,
+   16
+  ],
+  "most extended": [
+   [
+    "Int",
+    16
+   ],
+   [
+    "Int8",
+    16
+   ],
+   [
+    "Int32",
+    13
+   ],
+   [
+    "Int64",
+    13
+   ],
+   [
+    "UInt",
+    13
+   ],
+   [
+    "UInt8",
+    13
+   ],
+   [
+    "UInt32",
+    10
+   ],
+   [
+    "UInt64",
+    10
+   ]
+  ],
+  "traits": 22,
+  "traits with associated types": 5,
+  "traits with associated types (incl. inherited)": 10,
+  "associated types": 6,
+  "function names (container, name)": 791,
+  "overloaded function names (same container)": 32,
+  "largest overload sets (same container)": [
+   [
+    "<global>.spawn_thread",
+    6
+   ],
+   [
+    "BoundedArray.init",
+    5
+   ],
+   [
+    "Int.init",
+    5
+   ],
+   [
+    "Int32.init",
+    5
+   ],
+   [
+    "Int64.init",
+    5
+   ],
+   [
+    "Int8.init",
+    5
+   ]
+  ],
+  "distinct bare function names": 181,
+  "bare names declared more than once": 94,
+  "largest bare-name sets": [
+   [
+    "init",
+    83
+   ],
+   [
+    "infix==",
+    21
+   ],
+   [
+    "copy",
+    20
+   ],
+   [
+    "infix!=",
+    13
+   ],
+   [
+    "infix<",
+    13
+   ],
+   [
+    "infix>",
+    13
+   ]
+  ],
+  "constrained declarations": 46,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   2,
+   4,
+   4
+  ],
+  "declarations with equalities (excluding traits)": 1,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   1,
+   1,
+   1
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   1,
+   2,
+   4
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   1
+  ],
+  "functions with a local equality in scope": 1,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   0,
+   0,
+   1
+  ],
+  "functions with any equality in scope incl. those of the named traits": 1,
+  "declarations whose visible equalities form a class of 3 or more terms": 0,
+  "largest equivalence class among visible equalities": 2,
+  "class sizes (declarations by largest class)": {
+   "2": 2
+  },
+  "declarations needing a chain of 2 or more equalities": 0,
+  "longest chain of equalities": 1,
+  "chain lengths (declarations by longest chain)": {
+   "1": 2
+  },
+  "declarations where a projection of an equated term is written": 0,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 0,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   3,
+   0,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "Collection": [
+    2,
+    0,
+    1
+   ],
+   "Comparable": [
+    0,
+    0,
+    0
+   ],
+   "Copyable": [
+    0,
+    0,
+    0
+   ],
+   "Deinitializable": [
+    0,
+    0,
+    0
+   ],
+   "Equatable": [
+    0,
+    0,
+    0
+   ],
+   "ForeignConvertible": [
+    1,
+    0,
+    0
+   ],
+   "Hashable": [
+    0,
+    0,
+    0
+   ],
+   "Iterator": [
+    1,
+    0,
+    0
+   ],
+   "Linear": [
+    0,
+    0,
+    0
+   ],
+   "Movable": [
+    0,
+    0,
+    0
+   ],
+   "MutableCollection": [
+    0,
+    0,
+    0
+   ],
+   "SemiRegular": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "swift-stdlib-core": {
+  "files": 268,
+  "lines": 150232,
+  "declarations": {
+   "extension": 1997,
+   "type": 449,
+   "alias": 528,
+   "function": 6820,
+   "trait": 148,
+   "assoctype": 82
+  },
+  "generic declarations": 1601,
+  "generic functions": 1411,
+  "generic types": 126,
+  "functions": 6820,
+  "functions in a generic context": 4038,
+  "where clauses": 942,
+  "conformance requirements (where)": 608,
+  "conformance requirements (inline bounds)": 952,
+  "conformance requirements (associated type declarations)": 56,
+  "inverse / lifetime / layout requirements": 485,
+  "equality requirements": 357,
+  "equality requirements by origin": {
+   "where": 312,
+   "primary": 45
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 13,
+   "param == constructed": 31,
+   "assoc == concrete": 94,
+   "assoc == constructed": 24,
+   "assoc == param": 91,
+   "assoc == assoc (same root)": 22,
+   "assoc == assoc (different roots)": 82,
+   "other": 0
+  },
+  "equality requirements written in traits": 39,
+  "equality requirements by projection depth": {
+   "0": 44,
+   "1": 263,
+   "2": 49,
+   "3": 1
+  },
+  "declarations with an equality requirement": 337,
+  "extensions": 1997,
+  "conformance declarations": 1064,
+  "conformances declared (one per trait named)": 1193,
+  "conditional conformances": 207,
+  "conditional conformances with an equality": 0,
+  "conditional extensions": 183,
+  "conditional extensions with an equality": 41,
+  "extensions of a trait": 280,
+  "types extended": 354,
+  "extensions per type (median, p95, max)": [
+   3,
+   21,
+   77
+  ],
+  "most extended": [
+   [
+    "String",
+    77
+   ],
+   [
+    "Substring",
+    38
+   ],
+   [
+    "Sequence",
+    37
+   ],
+   [
+    "_RigidArray",
+    36
+   ],
+   [
+    "RawRepresentable",
+    35
+   ],
+   [
+    "UnsafeMutablePointer",
+    34
+   ],
+   [
+    "UniqueArray",
+    34
+   ],
+   [
+    "_StringGuts",
+    32
+   ]
+  ],
+  "traits": 148,
+  "traits with associated types": 47,
+  "traits with associated types (incl. inherited)": 57,
+  "associated types": 82,
+  "function names (container, name)": 4259,
+  "overloaded function names (same container)": 984,
+  "largest overload sets (same container)": [
+   [
+    "String.init",
+    62
+   ],
+   [
+    "UnkeyedEncodingContainer.encode",
+    54
+   ],
+   [
+    "KeyedEncodingContainerProtocol.encodeIfPresent",
+    34
+   ],
+   [
+    "KeyedDecodingContainerProtocol.decodeIfPresent",
+    34
+   ],
+   [
+    "UnkeyedDecodingContainer.decodeIfPresent",
+    34
+   ],
+   [
+    "Float16.init",
+    25
+   ]
+  ],
+  "distinct bare function names": 1784,
+  "bare names declared more than once": 663,
+  "largest bare-name sets": [
+   [
+    "init",
+    1158
+   ],
+   [
+    "encode",
+    204
+   ],
+   [
+    "subscript",
+    196
+   ],
+   [
+    "index",
+    185
+   ],
+   [
+    "decode",
+    120
+   ],
+   [
+    "decodeIfPresent",
+    119
+   ]
+  ],
+  "constrained declarations": 1443,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "declarations with equalities (excluding traits)": 309,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   2,
+   3,
+   7
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   1,
+   1,
+   4
+  ],
+  "functions with a local equality in scope": 438,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   7,
+   15,
+   47
+  ],
+  "functions with any equality in scope incl. those of the named traits": 1250,
+  "declarations whose visible equalities form a class of 3 or more terms": 6,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 512,
+   "3": 6
+  },
+  "declarations needing a chain of 2 or more equalities": 6,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 512,
+   "2": 6
+  },
+  "declarations where a projection of an equated term is written": 112,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 80,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   1334,
+   37,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "StringProtocol": [
+    4,
+    9,
+    4
+   ],
+   "SIMDScalar": [
+    7,
+    7,
+    9
+   ],
+   "Collection": [
+    5,
+    6,
+    3
+   ],
+   "BinaryInteger": [
+    1,
+    3,
+    2
+   ],
+   "_UnicodeEncoding": [
+    4,
+    3,
+    5
+   ],
+   "_ArrayProtocol": [
+    1,
+    2,
+    1
+   ],
+   "Iterable": [
+    3,
+    2,
+    2
+   ],
+   "ExpressibleByStringInterpolation": [
+    2,
+    2,
+    2
+   ],
+   "_ArrayBufferProtocol": [
+    0,
+    1,
+    0
+   ],
+   "CaseIterable": [
+    1,
+    1,
+    1
+   ],
+   "FloatingPoint": [
+    1,
+    1,
+    1
+   ],
+   "LazySequenceProtocol": [
+    1,
+    1,
+    1
+   ]
+  }
+ },
+ "swift-collections": {
+  "files": 576,
+  "lines": 90637,
+  "declarations": {
+   "extension": 1602,
+   "type": 192,
+   "alias": 218,
+   "function": 3946,
+   "trait": 21,
+   "assoctype": 16
+  },
+  "generic declarations": 752,
+  "generic functions": 703,
+  "generic types": 49,
+  "functions": 3946,
+  "functions in a generic context": 2753,
+  "where clauses": 712,
+  "conformance requirements (where)": 213,
+  "conformance requirements (inline bounds)": 355,
+  "conformance requirements (associated type declarations)": 10,
+  "inverse / lifetime / layout requirements": 997,
+  "equality requirements": 527,
+  "equality requirements by origin": {
+   "where": 113,
+   "primary": 414
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 5,
+   "param == constructed": 10,
+   "assoc == concrete": 80,
+   "assoc == constructed": 21,
+   "assoc == param": 313,
+   "assoc == assoc (same root)": 2,
+   "assoc == assoc (different roots)": 96,
+   "other": 0
+  },
+  "equality requirements written in traits": 5,
+  "equality requirements by projection depth": {
+   "0": 15,
+   "1": 508,
+   "2": 4
+  },
+  "declarations with an equality requirement": 447,
+  "extensions": 1602,
+  "conformance declarations": 566,
+  "conformances declared (one per trait named)": 596,
+  "conditional conformances": 98,
+  "conditional conformances with an equality": 0,
+  "conditional extensions": 71,
+  "conditional extensions with an equality": 11,
+  "extensions of a trait": 83,
+  "types extended": 197,
+  "extensions per type (median, p95, max)": [
+   4,
+   37,
+   65
+  ],
+  "most extended": [
+   [
+    "OrderedSet",
+    65
+   ],
+   [
+    "BigString",
+    60
+   ],
+   [
+    "RigidArray",
+    59
+   ],
+   [
+    "UniqueArray",
+    54
+   ],
+   [
+    "RigidDeque",
+    54
+   ],
+   [
+    "_HashNode",
+    53
+   ],
+   [
+    "UniqueDeque",
+    52
+   ],
+   [
+    "BitSet",
+    43
+   ]
+  ],
+  "traits": 21,
+  "traits with associated types": 11,
+  "traits with associated types (incl. inherited)": 18,
+  "associated types": 16,
+  "function names (container, name)": 2310,
+  "overloaded function names (same container)": 675,
+  "largest overload sets (same container)": [
+   [
+    "BigString.init",
+    25
+   ],
+   [
+    "RigidDeque.prepend",
+    20
+   ],
+   [
+    "UniqueDeque.prepend",
+    18
+   ],
+   [
+    "RigidDeque.init",
+    17
+   ],
+   [
+    "OrderedDictionary.init",
+    17
+   ],
+   [
+    "RigidArray.init",
+    16
+   ]
+  ],
+  "distinct bare function names": 833,
+  "bare names declared more than once": 338,
+  "largest bare-name sets": [
+   [
+    "init",
+    550
+   ],
+   [
+    "index",
+    191
+   ],
+   [
+    "subscript",
+    120
+   ],
+   [
+    "insert",
+    115
+   ],
+   [
+    "append",
+    108
+   ],
+   [
+    "formIndex",
+    93
+   ]
+  ],
+  "constrained declarations": 731,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   4,
+   4,
+   5
+  ],
+  "declarations with equalities (excluding traits)": 443,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   2,
+   3,
+   3
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   2,
+   4,
+   5
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   1,
+   2,
+   3
+  ],
+  "functions with a local equality in scope": 479,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   4,
+   9,
+   18
+  ],
+  "functions with any equality in scope incl. those of the named traits": 634,
+  "declarations whose visible equalities form a class of 3 or more terms": 1,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 500,
+   "3": 1
+  },
+  "declarations needing a chain of 2 or more equalities": 1,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 500,
+   "2": 1
+  },
+  "declarations where a projection of an equated term is written": 0,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 81,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   568,
+   14,
+   1,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "DrainableContainer": [
+    1,
+    2,
+    1
+   ],
+   "Container": [
+    2,
+    1,
+    3
+   ],
+   "Drain": [
+    0,
+    1,
+    0
+   ],
+   "_StringMetric": [
+    0,
+    1,
+    0
+   ]
+  }
+ },
+ "swift-algorithms": {
+  "files": 28,
+  "lines": 9464,
+  "declarations": {
+   "extension": 197,
+   "function": 419,
+   "type": 75,
+   "alias": 13
+  },
+  "generic declarations": 72,
+  "generic functions": 39,
+  "generic types": 33,
+  "functions": 419,
+  "functions in a generic context": 416,
+  "where clauses": 118,
+  "conformance requirements (where)": 127,
+  "conformance requirements (inline bounds)": 59,
+  "conformance requirements (associated type declarations)": 0,
+  "inverse / lifetime / layout requirements": 0,
+  "equality requirements": 22,
+  "equality requirements by origin": {
+   "where": 22
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 0,
+   "param == constructed": 0,
+   "assoc == concrete": 6,
+   "assoc == constructed": 4,
+   "assoc == param": 2,
+   "assoc == assoc (same root)": 0,
+   "assoc == assoc (different roots)": 10,
+   "other": 0
+  },
+  "equality requirements written in traits": 0,
+  "equality requirements by projection depth": {
+   "1": 16,
+   "2": 6
+  },
+  "declarations with an equality requirement": 22,
+  "extensions": 197,
+  "conformance declarations": 154,
+  "conformances declared (one per trait named)": 163,
+  "conditional conformances": 74,
+  "conditional conformances with an equality": 1,
+  "conditional extensions": 24,
+  "conditional extensions with an equality": 2,
+  "extensions of a trait": 71,
+  "types extended": 53,
+  "extensions per type (median, p95, max)": [
+   3,
+   7,
+   24
+  ],
+  "most extended": [
+   [
+    "Collection",
+    24
+   ],
+   [
+    "Sequence",
+    20
+   ],
+   [
+    "LazySequenceProtocol",
+    13
+   ],
+   [
+    "BidirectionalCollection",
+    7
+   ],
+   [
+    "MutableCollection",
+    7
+   ],
+   [
+    "EvenlyChunkedCollection",
+    6
+   ],
+   [
+    "InterspersedSequence",
+    6
+   ],
+   [
+    "AdjacentPairsCollection",
+    5
+   ]
+  ],
+  "traits": 0,
+  "traits with associated types": 0,
+  "traits with associated types (incl. inherited)": 0,
+  "associated types": 0,
+  "function names (container, name)": 308,
+  "overloaded function names (same container)": 67,
+  "largest overload sets (same container)": [
+   [
+    "AdjacentPairsCollection.index",
+    4
+   ],
+   [
+    "Chain2Sequence.index",
+    4
+   ],
+   [
+    "EvenlyChunkedCollection.index",
+    4
+   ],
+   [
+    "ChunksOfCountCollection.index",
+    4
+   ],
+   [
+    "CycledTimesCollection.index",
+    4
+   ],
+   [
+    "EitherSequence.index",
+    4
+   ]
+  ],
+  "distinct bare function names": 82,
+  "bare names declared more than once": 46,
+  "largest bare-name sets": [
+   [
+    "init",
+    69
+   ],
+   [
+    "index",
+    69
+   ],
+   [
+    "subscript",
+    21
+   ],
+   [
+    "<",
+    19
+   ],
+   [
+    "next",
+    18
+   ],
+   [
+    "makeIterator",
+    18
+   ]
+  ],
+  "constrained declarations": 151,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   3,
+   4,
+   4
+  ],
+  "declarations with equalities (excluding traits)": 22,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   1,
+   1,
+   1
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   2,
+   3,
+   4
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   1,
+   1,
+   1
+  ],
+  "functions with a local equality in scope": 32,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   1,
+   14,
+   16,
+   22
+  ],
+  "functions with any equality in scope incl. those of the named traits": 235,
+  "declarations whose visible equalities form a class of 3 or more terms": 0,
+  "largest equivalence class among visible equalities": 2,
+  "class sizes (declarations by largest class)": {
+   "2": 50
+  },
+  "declarations needing a chain of 2 or more equalities": 0,
+  "longest chain of equalities": 1,
+  "chain lengths (declarations by longest chain)": {
+   "1": 50
+  },
+  "declarations where a projection of an equated term is written": 5,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 10,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   294,
+   12,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {}
+ },
+ "rust-core-iter": {
+  "files": 46,
+  "lines": 17335,
+  "declarations": {
+   "conformance": 355,
+   "trait": 40,
+   "function": 928,
+   "assoctype": 10,
+   "alias": 70,
+   "type": 42,
+   "extension": 38
+  },
+  "generic declarations": 751,
+  "generic functions": 347,
+  "generic types": 42,
+  "functions": 928,
+  "functions in a generic context": 840,
+  "where clauses": 492,
+  "conformance requirements (where)": 895,
+  "conformance requirements (inline bounds)": 257,
+  "conformance requirements (associated type declarations)": 28,
+  "inverse / lifetime / layout requirements": 64,
+  "equality requirements": 553,
+  "equality requirements by origin": {
+   "fnsugar": 376,
+   "binding": 177
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 0,
+   "param == constructed": 0,
+   "assoc == concrete": 107,
+   "assoc == constructed": 52,
+   "assoc == param": 371,
+   "assoc == assoc (same root)": 1,
+   "assoc == assoc (different roots)": 22,
+   "other": 0
+  },
+  "equality requirements written in traits": 1,
+  "equality requirements by projection depth": {
+   "1": 529,
+   "2": 24
+  },
+  "declarations with an equality requirement": 384,
+  "extensions": 38,
+  "conformance declarations": 355,
+  "conformances declared (one per trait named)": 355,
+  "conditional conformances": 285,
+  "conditional conformances with an equality": 68,
+  "conditional extensions": 18,
+  "conditional extensions with an equality": 5,
+  "extensions of a trait": 0,
+  "types extended": 81,
+  "extensions per type (median, p95, max)": [
+   3,
+   12,
+   19
+  ],
+  "most extended": [
+   [
+    "Zip",
+    19
+   ],
+   [
+    "Take",
+    14
+   ],
+   [
+    "Map",
+    13
+   ],
+   [
+    "Fuse",
+    13
+   ],
+   [
+    "Cloned",
+    12
+   ],
+   [
+    "Copied",
+    12
+   ],
+   [
+    "Enumerate",
+    12
+   ],
+   [
+    "$a",
+    12
+   ]
+  ],
+  "traits": 40,
+  "traits with associated types": 9,
+  "traits with associated types (incl. inherited)": 19,
+  "associated types": 10,
+  "function names (container, name)": 798,
+  "overloaded function names (same container)": 84,
+  "largest overload sets (same container)": [
+   [
+    "FlattenCompat.flatten",
+    8
+   ],
+   [
+    "Iterator.check",
+    8
+   ],
+   [
+    "$a.sum",
+    6
+   ],
+   [
+    "$a.product",
+    6
+   ],
+   [
+    "Enumerate.enumerate",
+    4
+   ],
+   [
+    "Zip.size_hint",
+    4
+   ]
+  ],
+  "distinct bare function names": 201,
+  "bare names declared more than once": 79,
+  "largest bare-name sets": [
+   [
+    "next",
+    50
+   ],
+   [
+    "size_hint",
+    47
+   ],
+   [
+    "next_back",
+    37
+   ],
+   [
+    "fold",
+    34
+   ],
+   [
+    "try_fold",
+    33
+   ],
+   [
+    "new",
+    32
+   ]
+  ],
+  "constrained declarations": 712,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   2,
+   6,
+   7,
+   8
+  ],
+  "declarations with equalities (excluding traits)": 383,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   2,
+   4,
+   4
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   2,
+   6,
+   10,
+   14
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   2,
+   3,
+   4
+  ],
+  "functions with a local equality in scope": 223,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   3,
+   4,
+   5
+  ],
+  "functions with any equality in scope incl. those of the named traits": 263,
+  "declarations whose visible equalities form a class of 3 or more terms": 1,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 264,
+   "3": 1
+  },
+  "declarations needing a chain of 2 or more equalities": 1,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 264,
+   "2": 1
+  },
+  "declarations where a projection of an equated term is written": 55,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 22,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   612,
+   2,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "IntoIterator": [
+    2,
+    1,
+    1
+   ],
+   "Step": [
+    0,
+    0,
+    0
+   ],
+   "RangeIteratorImpl": [
+    1,
+    0,
+    0
+   ],
+   "RangeInclusiveIteratorImpl": [
+    1,
+    0,
+    0
+   ],
+   "SpecFold": [
+    0,
+    0,
+    0
+   ],
+   "SpecNextChunk": [
+    0,
+    0,
+    1
+   ],
+   "SpecAssumeCount": [
+    0,
+    0,
+    0
+   ],
+   "ConstSizeIntoIterator": [
+    0,
+    0,
+    0
+   ],
+   "OneShot": [
+    0,
+    0,
+    0
+   ],
+   "FuseImpl": [
+    1,
+    0,
+    0
+   ],
+   "SourceIter": [
+    1,
+    0,
+    0
+   ],
+   "SpecRangeSetup": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "rust-core-ops-slice": {
+  "files": 37,
+  "lines": 22228,
+  "declarations": {
+   "trait": 65,
+   "assoctype": 26,
+   "function": 827,
+   "conformance": 326,
+   "alias": 86,
+   "type": 53,
+   "extension": 54
+  },
+  "generic declarations": 524,
+  "generic functions": 163,
+  "generic types": 43,
+  "functions": 827,
+  "functions in a generic context": 722,
+  "where clauses": 195,
+  "conformance requirements (where)": 249,
+  "conformance requirements (inline bounds)": 194,
+  "conformance requirements (associated type declarations)": 5,
+  "inverse / lifetime / layout requirements": 95,
+  "equality requirements": 187,
+  "equality requirements by origin": {
+   "binding": 15,
+   "fnsugar": 172
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 0,
+   "param == constructed": 0,
+   "assoc == concrete": 148,
+   "assoc == constructed": 3,
+   "assoc == param": 34,
+   "assoc == assoc (same root)": 2,
+   "assoc == assoc (different roots)": 0,
+   "other": 0
+  },
+  "equality requirements written in traits": 4,
+  "equality requirements by projection depth": {
+   "1": 183,
+   "2": 4
+  },
+  "declarations with an equality requirement": 179,
+  "extensions": 54,
+  "conformance declarations": 326,
+  "conformances declared (one per trait named)": 326,
+  "conditional conformances": 125,
+  "conditional conformances with an equality": 45,
+  "conditional extensions": 18,
+  "conditional extensions with an equality": 10,
+  "extensions of a trait": 0,
+  "types extended": 104,
+  "extensions per type (median, p95, max)": [
+   2,
+   10,
+   25
+  ],
+  "most extended": [
+   [
+    "$t",
+    25
+   ],
+   [
+    "[T]",
+    13
+   ],
+   [
+    "T",
+    12
+   ],
+   [
+    "ChunksMut",
+    10
+   ],
+   [
+    "ChunksExactMut",
+    10
+   ],
+   [
+    "RChunksMut",
+    10
+   ],
+   [
+    "RChunksExactMut",
+    10
+   ],
+   [
+    "Windows",
+    9
+   ]
+  ],
+  "traits": 65,
+  "traits with associated types": 23,
+  "traits with associated types (incl. inherited)": 25,
+  "associated types": 26,
+  "function names (container, name)": 788,
+  "overloaded function names (same container)": 29,
+  "largest overload sets (same container)": [
+   [
+    "T.small_sort_threshold",
+    6
+   ],
+   [
+    "T.small_sort",
+    6
+   ],
+   [
+    "<global>.is_ascii",
+    3
+   ],
+   [
+    "<global>.sort",
+    3
+   ],
+   [
+    "$t.div",
+    2
+   ],
+   [
+    "$t.rem",
+    2
+   ]
+  ],
+  "distinct bare function names": 367,
+  "bare names declared more than once": 97,
+  "largest bare-name sets": [
+   [
+    "new",
+    27
+   ],
+   [
+    "next",
+    24
+   ],
+   [
+    "size_hint",
+    24
+   ],
+   [
+    "fmt",
+    23
+   ],
+   [
+    "next_back",
+    22
+   ],
+   [
+    "index",
+    16
+   ]
+  ],
+  "constrained declarations": 320,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   2,
+   3,
+   5,
+   7
+  ],
+  "declarations with equalities (excluding traits)": 176,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   1,
+   2,
+   2
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   0,
+   2,
+   4,
+   5
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   1,
+   2
+  ],
+  "functions with a local equality in scope": 10,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   0,
+   2,
+   2
+  ],
+  "functions with any equality in scope incl. those of the named traits": 19,
+  "declarations whose visible equalities form a class of 3 or more terms": 1,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 16,
+   "3": 1
+  },
+  "declarations needing a chain of 2 or more equalities": 1,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 16,
+   "2": 1
+  },
+  "declarations where a projection of an equated term is written": 1,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 0,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   146,
+   1,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "Residual": [
+    1,
+    2,
+    1
+   ],
+   "AsyncFnMut": [
+    1,
+    1,
+    2
+   ],
+   "AsyncFnOnce": [
+    2,
+    1,
+    2
+   ],
+   "Add": [
+    1,
+    0,
+    0
+   ],
+   "Sub": [
+    1,
+    0,
+    0
+   ],
+   "Mul": [
+    1,
+    0,
+    0
+   ],
+   "Div": [
+    1,
+    0,
+    0
+   ],
+   "Rem": [
+    1,
+    0,
+    0
+   ],
+   "Neg": [
+    1,
+    0,
+    0
+   ],
+   "AddAssign": [
+    0,
+    0,
+    0
+   ],
+   "SubAssign": [
+    0,
+    0,
+    0
+   ]
+  }
+ },
+ "rust-alloc-collections": {
+  "files": 54,
+  "lines": 36109,
+  "declarations": {
+   "type": 136,
+   "conformance": 539,
+   "function": 1706,
+   "extension": 183,
+   "alias": 92,
+   "trait": 19,
+   "assoctype": 2
+  },
+  "generic declarations": 1080,
+  "generic functions": 305,
+  "generic types": 105,
+  "functions": 1706,
+  "functions in a generic context": 1344,
+  "where clauses": 231,
+  "conformance requirements (where)": 377,
+  "conformance requirements (inline bounds)": 902,
+  "conformance requirements (associated type declarations)": 2,
+  "inverse / lifetime / layout requirements": 222,
+  "equality requirements": 139,
+  "equality requirements by origin": {
+   "fnsugar": 67,
+   "binding": 72
+  },
+  "equality requirements by shape": {
+   "param == param": 0,
+   "param == concrete": 0,
+   "param == constructed": 2,
+   "assoc == concrete": 50,
+   "assoc == constructed": 11,
+   "assoc == param": 75,
+   "assoc == assoc (same root)": 0,
+   "assoc == assoc (different roots)": 0,
+   "other": 1
+  },
+  "equality requirements written in traits": 0,
+  "equality requirements by projection depth": {
+   "0": 3,
+   "1": 136
+  },
+  "declarations with an equality requirement": 131,
+  "extensions": 183,
+  "conformance declarations": 539,
+  "conformances declared (one per trait named)": 539,
+  "conditional conformances": 358,
+  "conditional conformances with an equality": 26,
+  "conditional extensions": 66,
+  "conditional extensions with an equality": 1,
+  "extensions of a trait": 0,
+  "types extended": 110,
+  "extensions per type (median, p95, max)": [
+   2,
+   38,
+   60
+  ],
+  "most extended": [
+   [
+    "IntoIter",
+    60
+   ],
+   [
+    "Vec",
+    54
+   ],
+   [
+    "NodeRef",
+    51
+   ],
+   [
+    "Iter",
+    44
+   ],
+   [
+    "Handle",
+    43
+   ],
+   [
+    "VecDeque",
+    38
+   ],
+   [
+    "IterMut",
+    27
+   ],
+   [
+    "Drain",
+    27
+   ]
+  ],
+  "traits": 19,
+  "traits with associated types": 2,
+  "traits with associated types (incl. inherited)": 3,
+  "associated types": 2,
+  "function names (container, name)": 1349,
+  "overloaded function names (same container)": 224,
+  "largest overload sets (same container)": [
+   [
+    "Vec.from",
+    10
+   ],
+   [
+    "DropGuard.drop",
+    8
+   ],
+   [
+    "VecDeque.spec_extend_front",
+    7
+   ],
+   [
+    "IntoIter.next",
+    6
+   ],
+   [
+    "IntoIter.size_hint",
+    6
+   ],
+   [
+    "IntoIter.next_back",
+    6
+   ]
+  ],
+  "distinct bare function names": 768,
+  "bare names declared more than once": 221,
+  "largest bare-name sets": [
+   [
+    "fmt",
+    60
+   ],
+   [
+    "next",
+    47
+   ],
+   [
+    "drop",
+    39
+   ],
+   [
+    "size_hint",
+    36
+   ],
+   [
+    "clone",
+    30
+   ],
+   [
+    "default",
+    29
+   ]
+  ],
+  "constrained declarations": 842,
+  "requirements per constrained declaration (median, p95, p99, max)": [
+   1,
+   4,
+   4,
+   5
+  ],
+  "declarations with equalities (excluding traits)": 131,
+  "equalities per declaration that has one (median, p95, p99, max)": [
+   1,
+   2,
+   2,
+   2
+  ],
+  "local givens visible in a function (median, p95, p99, max)": [
+   1,
+   3,
+   4,
+   6
+  ],
+  "local equalities visible in a function (median, p95, p99, max)": [
+   0,
+   0,
+   1,
+   2
+  ],
+  "functions with a local equality in scope": 73,
+  "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
+   0,
+   0,
+   2,
+   4
+  ],
+  "functions with any equality in scope incl. those of the named traits": 75,
+  "declarations whose visible equalities form a class of 3 or more terms": 1,
+  "largest equivalence class among visible equalities": 3,
+  "class sizes (declarations by largest class)": {
+   "2": 102,
+   "3": 1
+  },
+  "declarations needing a chain of 2 or more equalities": 1,
+  "longest chain of equalities": 2,
+  "chain lengths (declarations by longest chain)": {
+   "1": 102,
+   "2": 1
+  },
+  "declarations where a projection of an equated term is written": 0,
+  "declarations where congruence applies": 0,
+  "declarations with equalities between different roots": 0,
+  "projections written in the code, by depth (1, 2, 3, 4+)": [
+   66,
+   1,
+   0,
+   0
+  ],
+  "trait signatures (trait: associated types, equalities, conformances)": {
+   "SpecExtend": [
+    0,
+    0,
+    1
+   ],
+   "BorrowType": [
+    0,
+    0,
+    0
+   ],
+   "IsSetVal": [
+    0,
+    0,
+    0
+   ],
+   "SpecExtendFromWithin": [
+    0,
+    0,
+    0
+   ],
+   "SpecExtendFront": [
+    0,
+    0,
+    0
+   ],
+   "SpecFromIter": [
+    0,
+    0,
+    0
+   ],
+   "InPlaceCollect": [
+    1,
+    0,
+    0
+   ],
+   "SpecInPlaceCollect": [
+    0,
+    0,
+    0
+   ]
+  }
+ }
+}

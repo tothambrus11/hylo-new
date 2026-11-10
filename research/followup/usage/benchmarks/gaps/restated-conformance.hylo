@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// GAP (by design of non-unique conformances): stating a conformance that follows from an equality
+// creates a second witness, and projections through the two witnesses are different types.
+// Swift derives `C.SubSequence.SubSequence: Collection` from `SubSequence.SubSequence == SubSequence`.
+// EXPECTED (Swift): accepted.  OBSERVED: rejected; accepted without the third requirement.
+trait Collection { type Index; type SubSequence }
+fun need<A, B where A == B>() {}
+fun f<C where C is Collection, C.SubSequence is Collection, C.SubSequence.SubSequence is Collection,
+  C.SubSequence.SubSequence == C.SubSequence, C.SubSequence.Index == C.Index>() {
+  need<C.SubSequence.SubSequence.Index, C.Index>()
+}

@@ -48,6 +48,10 @@ def run(path, flags, timeout=200):
     # Builtin function references print the raw identity of a machine type (`erased: 8800`),
     # which shifts when fewer types are interned; it is not part of the result.
     text = re.sub(r'erased: \d+', 'erased: _', text)
+    # A type variable left without assignment (ill-typed programs only) is printed with its
+    # number, which shifts when forks are skipped: `apply<A, %2v4>` against `apply<A, %2v3>`,
+    # `f<%2u1>` against `f<%2u0>`.
+    text = re.sub(r'%[0-9][0-9a-z]*', '%_', text)
     # The dump of the user module only: the standard library is the same in every run compared.
     user = text.split('== module', 2)[-1] if text.count('== module') >= 2 else text
     return dict(exit=p.returncode, diagnostics=int(d.group(1)) if d else None, messages=msgs,

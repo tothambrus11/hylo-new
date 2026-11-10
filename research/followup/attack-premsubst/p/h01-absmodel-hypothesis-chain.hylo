@@ -1,0 +1,10 @@
+// Two dependent requirements released together; the later one (S<T.X> is R) is derivable from a
+// given whose premise is the earlier one (T.X is Q). Well typed. Tests that the abstract model and
+// the index do not refute the later goal while the earlier one is not a hypothesis yet.
+trait P { type X }
+trait Q {}
+trait R {}
+struct S<T> {}
+given <V where V is Q> => S<V> is R {}
+fun f<T where T is P, T.X is Q, S<T.X> is R>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

@@ -1,0 +1,9 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> { type Y = A }
+type BA = Box<A>
+given A is P { type X = BA.Y }
+public fun main() {}

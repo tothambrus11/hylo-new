@@ -1,0 +1,5 @@
+// abstractstrict: an extension of Box<T> for T is P with a parameter of type T.X, called in the body of the trait on a Box<Self>. Valid.
+struct Box<T> { public memberwise init }
+trait P { type X
+  fun m(b: Box<Self>, x: X) { b.store(x) } }
+extension <T where T is P> Box<T> { fun store(x: T.X) {} }

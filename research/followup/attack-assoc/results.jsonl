@@ -690,3 +690,137 @@
 {"program": "k06n-deep-chain-neg.hylo", "sha": "2abbad3206f8", "config": "FULL", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P).X::P).X::P).X::P).X) let -> Void' to '[Void](let Box<Box<Box<Box<S0>>>>, let ((((Box<Box<Box<Box<S0>>>>::P).X::P).X::P).X::P).X) let -> Void'"], "violations": []}
 {"program": "k06n-deep-chain-neg.hylo", "sha": "2abbad3206f8", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'Box<S0>' to parameter '(((Box<Box<Box<S0>>>::P).X::P).X::P).X'"], "violations": []}
 {"program": "k06n-deep-chain-neg.hylo", "sha": "2abbad3206f8", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'Box<S0>' to parameter '(((Box<Box<Box<S0>>>::P).X::P).X::P).X'"], "violations": []}
+{"program": "k02-growing.hylo", "sha": "859e87c1fe53", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'Box<Box<Box<Box<Box<Box<S0>>>>>>'"], "violations": []}
+{"program": "k02-growing.hylo", "sha": "859e87c1fe53", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'Box<Box<Box<Box<Box<Box<S0>>>>>>'"], "violations": []}
+{"program": "k02-growing.hylo", "sha": "859e87c1fe53", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "k02-growing.hylo", "sha": "859e87c1fe53", "config": "NEW+selfcheck", "verdict": "accept", "errors": [], "violations": []}
+{"program": "k07-chain-2.hylo", "sha": "b8d7ca121bb7", "config": "base", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>>, let ((Box<Box<S0>>::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k07-chain-2.hylo", "sha": "b8d7ca121bb7", "config": "FULL", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>>, let ((Box<Box<S0>>::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k07-chain-2.hylo", "sha": "b8d7ca121bb7", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter '(Box<S0>::P).X'"], "violations": []}
+{"program": "k07-chain-2.hylo", "sha": "b8d7ca121bb7", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter '(Box<S0>::P).X'"], "violations": []}
+{"program": "k08-chain-3.hylo", "sha": "24597ff40f32", "config": "base", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void' to '[Void](let Box<Box<Box<S0>>>, let (((Box<Box<Box<S0>>>::P).X::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k08-chain-3.hylo", "sha": "24597ff40f32", "config": "FULL", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void' to '[Void](let Box<Box<Box<S0>>>, let (((Box<Box<Box<S0>>>::P).X::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k08-chain-3.hylo", "sha": "24597ff40f32", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter '((Box<Box<S0>>::P).X::P).X'"], "violations": []}
+{"program": "k08-chain-3.hylo", "sha": "24597ff40f32", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter '((Box<Box<S0>>::P).X::P).X'"], "violations": []}
+{"program": "k08b-chain-3-generic.hylo", "sha": "73fdd979e930", "config": "base", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void' to '[Void](let U, let (((U::P).X::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k08b-chain-3-generic.hylo", "sha": "73fdd979e930", "config": "FULL", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void' to '[Void](let U, let (((U::P).X::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k08b-chain-3-generic.hylo", "sha": "73fdd979e930", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type '(((U::P).X::P).X::P).X' to parameter '(((U::P).X::P).X::P).X'"], "violations": []}
+{"program": "k08b-chain-3-generic.hylo", "sha": "73fdd979e930", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type '(((U::P).X::P).X::P).X' to parameter '(((U::P).X::P).X::P).X'"], "violations": []}
+{"program": "k09-chain-2-generic.hylo", "sha": "b22ee002dcb3", "config": "base", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k09-chain-2-generic.hylo", "sha": "b22ee002dcb3", "config": "FULL", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U::P).X::P).X) let -> Void'"], "violations": []}
+{"program": "k09-chain-2-generic.hylo", "sha": "b22ee002dcb3", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type '((U::P).X::P).X' to parameter '((U::P).X::P).X'"], "violations": []}
+{"program": "k09-chain-2-generic.hylo", "sha": "b22ee002dcb3", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type '((U::P).X::P).X' to parameter '((U::P).X::P).X'"], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "base", "verdict": "reject", "errors": ["no coercion from 'X' to 'S1'", "cannot pass value of type 'X' to parameter 'S0'"], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "FULL", "verdict": "reject", "errors": ["no coercion from 'X' to 'S1'", "cannot pass value of type 'X' to parameter 'S0'"], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "NEW+selfcheck", "verdict": "accept", "errors": [], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "NEW-assocsubst", "verdict": "reject", "errors": ["no coercion from 'X' to 'S1'", "cannot pass value of type 'X' to parameter 'S0'"], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "FULL+assocsubst", "verdict": "accept", "errors": [], "violations": []}
+{"program": "c02-capture-value.hylo", "sha": "a3cd3b6c108f", "config": "FULL+abstractstrict", "verdict": "reject", "errors": ["no coercion from 'X' to 'S1'", "cannot pass value of type 'X' to parameter 'S0'"], "violations": []}
+{"program": "d01-equality-premise.hylo", "sha": "21352844e18d", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d01-equality-premise.hylo", "sha": "21352844e18d", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d01-equality-premise.hylo", "sha": "21352844e18d", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d01-equality-premise.hylo", "sha": "21352844e18d", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d02-ground-equality-premise.hylo", "sha": "827aa2209ad1", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Box<S1>' has no member 'get'"], "violations": []}
+{"program": "d02-ground-equality-premise.hylo", "sha": "827aa2209ad1", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Box<S1>' has no member 'get'"], "violations": []}
+{"program": "d02-ground-equality-premise.hylo", "sha": "827aa2209ad1", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Box<S1>' has no member 'get'"], "violations": []}
+{"program": "d02-ground-equality-premise.hylo", "sha": "827aa2209ad1", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Box<S1>' has no member 'get'"], "violations": []}
+{"program": "d03-tuple-head.hylo", "sha": "9a6e6c33509a", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'"], "violations": []}
+{"program": "d03-tuple-head.hylo", "sha": "9a6e6c33509a", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'X' to parameter 'S1'"], "violations": []}
+{"program": "d03-tuple-head.hylo", "sha": "9a6e6c33509a", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S1' to parameter 'S0'"], "violations": []}
+{"program": "d03-tuple-head.hylo", "sha": "9a6e6c33509a", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S1' to parameter 'S0'"], "violations": []}
+{"program": "d04-alias-head.hylo", "sha": "cf7cb9382025", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type '#!' to parameter 'S0'", "type 'Pair<S0, S1>' has no member 'get'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d04-alias-head.hylo", "sha": "cf7cb9382025", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type '#!' to parameter 'S0'", "type 'Pair<S0, S1>' has no member 'get'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d04-alias-head.hylo", "sha": "cf7cb9382025", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type '#!' to parameter 'S0'", "type 'Pair<S0, S1>' has no member 'get'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d04-alias-head.hylo", "sha": "cf7cb9382025", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type '#!' to parameter 'S0'", "type 'Pair<S0, S1>' has no member 'get'", "cannot pass value of type '#!' to parameter 'S1'", "type 'Pair<S0, S1>' has no member 'get'"], "violations": []}
+{"program": "d05-member-order.hylo", "sha": "e44fd143e854", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'S0' to parameter 'X'"], "violations": []}
+{"program": "d05-member-order.hylo", "sha": "e44fd143e854", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'X' to parameter 'S0'", "cannot pass value of type 'S0' to parameter 'X'"], "violations": []}
+{"program": "d05-member-order.hylo", "sha": "e44fd143e854", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'"], "violations": []}
+{"program": "d05-member-order.hylo", "sha": "e44fd143e854", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'S0' to parameter 'S1'"], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "base", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "NEW+selfcheck", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r24-extension-equality-from-trait.hylo", "sha": "11ebd3e99892", "config": "FULL+abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "base", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "NEW", "verdict": "reject", "errors": ["no coercion from 'Q<Box<(T::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["no coercion from 'Q<Box<(T::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r25-nested-given-compound.hylo", "sha": "f8993f86ca1e", "config": "FULL+abstractstrict", "verdict": "reject", "errors": ["no coercion from 'Q<Box<(T::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "base", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'"], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'"], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "r26-extension-of-box-from-trait.hylo", "sha": "1113f4ddc65a", "config": "FULL+abstractstrict", "verdict": "reject", "errors": ["cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "NEW-abstractstrict", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "r26b-extension-of-box-from-generic.hylo", "sha": "189a64ff7273", "config": "FULL+abstractstrict", "verdict": "reject", "errors": ["cannot pass value of type '(V::P).X' to parameter '(V::P).X'"], "violations": []}
+{"program": "adjunct-conformance.hylo", "sha": "21258e14081b", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "adjunct-conformance.hylo", "sha": "21258e14081b", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "bundle-requirement.hylo", "sha": "4e78c75b1ae0", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "bundle-requirement.hylo", "sha": "4e78c75b1ae0", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "coercion-derivability-cache.hylo", "sha": "8e2e6b8f98e9", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "coercion-derivability-cache.hylo", "sha": "8e2e6b8f98e9", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "conformance-via-equivalence.hylo", "sha": "90af34398032", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "conformance-via-equivalence.hylo", "sha": "90af34398032", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "conformance.hylo", "sha": "37e718ade2aa", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "conformance.hylo", "sha": "37e718ade2aa", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "context-bound.hylo", "sha": "3d2eda74013a", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "context-bound.hylo", "sha": "3d2eda74013a", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "existentialization-2.hylo", "sha": "8261a3c7b717", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "existentialization-2.hylo", "sha": "8261a3c7b717", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "extension.hylo", "sha": "808e196287c2", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "extension.hylo", "sha": "808e196287c2", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-call-1.hylo", "sha": "8c5a55bf9090", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-call-1.hylo", "sha": "8c5a55bf9090", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-call-2.hylo", "sha": "d313927316a8", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-call-2.hylo", "sha": "d313927316a8", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-extension.hylo", "sha": "3c4ad572d5bc", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-extension.hylo", "sha": "3c4ad572d5bc", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-given.hylo", "sha": "9d3d0a999885", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-given.hylo", "sha": "9d3d0a999885", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-member.hylo", "sha": "0a475a65e9da", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-member.hylo", "sha": "0a475a65e9da", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-witness-table.hylo", "sha": "c98f9ea67826", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "generic-witness-table.hylo", "sha": "c98f9ea67826", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "inlining-existentialized.hylo", "sha": "75f91f65f82e", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "inlining-existentialized.hylo", "sha": "75f91f65f82e", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "local-given.hylo", "sha": "34d772fc0262", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "local-given.hylo", "sha": "34d772fc0262", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nested-given-1.hylo", "sha": "3ea0742723fd", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nested-given-1.hylo", "sha": "3ea0742723fd", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nested-given-2.hylo", "sha": "8b99fb53b2d6", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nested-given-2.hylo", "sha": "8b99fb53b2d6", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nullary-conformance.hylo", "sha": "80fc0cc07fa5", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "nullary-conformance.hylo", "sha": "80fc0cc07fa5", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "refinement.hylo", "sha": "20c089893e3a", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "refinement.hylo", "sha": "20c089893e3a", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "resolution-in-extension.hylo", "sha": "1ea78e992c25", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "resolution-in-extension.hylo", "sha": "1ea78e992c25", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "self-where-clause.hylo", "sha": "76a13acae5f0", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "self-where-clause.hylo", "sha": "76a13acae5f0", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "base", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "NEW", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "NEW+selfcheck", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12-launder-refinement.hylo", "sha": "43f97020c1f8", "config": "NEW-headsubst", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "base", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "FULL", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "NEW", "verdict": "reject", "errors": ["no coercion from '(T::P).X' to '(Self::P).X'"], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["no coercion from '(T::P).X' to '(Self::P).X'"], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "NEW-abstractstrict", "verdict": "accept", "errors": [], "violations": []}
+{"program": "b12c-launder-refinement-ctl.hylo", "sha": "9c211a0d7ca6", "config": "NEW-headsubst", "verdict": "reject", "errors": ["no coercion from '(T::P).X' to '(Self::P).X'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "base", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "FULL", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "NEW", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "NEW+selfcheck", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "NEW-abstractstrict", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}
+{"program": "e06-extension-nested-scopes.hylo", "sha": "55523edb512f", "config": "NEW-headsubst", "verdict": "reject", "errors": ["cannot pass value of type 'XX' to parameter '(A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'XX'"], "violations": []}

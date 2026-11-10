@@ -1,5 +1,6 @@
 // expected after the change: as today (accepted, and the same declaration bound to `m`: compare
-//   the dump of step 0); solver.forks=2 and solver.twinsReused=1 with `twins` alone
+//   the dump of step 0); solver.forks=2 and solver.twinsReused=1 with `twins` alone once rule
+//   T4 is in (3 forks and no reuse with rules T1 to T3 only, as in commit 9dc04d7)
 // reason: As a09 with the argument that the two candidates of the same type accept. The member
 //   is explored under best = worst without any failure, so its result holds under any bound
 //   (rule T4); the requirement reuses it although best is now 0. Checks that the rebinding

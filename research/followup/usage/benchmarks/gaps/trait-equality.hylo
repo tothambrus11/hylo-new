@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// GAP: a trait cannot state an equality between its associated types.
+// Swift: `associatedtype Iterator: IteratorProtocol where Iterator.Element == Element` (Sequence.swift:331).
+// EXPECTED: accepted.  OBSERVED: syntax error "expected 'is'".
+trait IteratorProtocol { type Element }
+trait Sequence { type Element; type Iterator; given Iterator is IteratorProtocol; given Iterator.Element == Element }
+fun need<A, B where A == B>() {}
+fun f<S where S is Sequence, S.Iterator is IteratorProtocol>() { need<S.Iterator.Element, S.Element>() }

@@ -1,12 +1,13 @@
 // expected after the change: with `twins` alone: as today (rejected). With `cleanfirst`:
 //   ACCEPTED, in base and in FULL: a known change of verdict
-// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand. The
+// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand; the
+//   outcome with the flags was observed on the implementation (binary eq25, DESIGN.md 9.2). The
 //   mirror image of a01: the discarded fork looks `m` up in C, and C.m mentions the alias X in
 //   its signature, so the alias is entered first and the self-reference is reported, although
 //   that fork contributes nothing to the solution. `cleanfirst` cancels the fork before the
 //   lookup. a04 shows the verdict without that lookup.
-// currently (base): rejected, 1 diagnostic(s): 25.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
-// currently (FULL): rejected, 1 diagnostic(s): 25.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+// currently (base): rejected, 1 diagnostic(s): 26.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 1 diagnostic(s): 26.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
 fun test(b: B) { let y = f(b).m() }
 struct A { public memberwise init }
 struct B { public memberwise init }

@@ -1,0 +1,10 @@
+// An extension declared in a function body, used by a local conformance and by a local binding.
+trait Q {}
+struct A {}
+fun need<T where T is Q>(x: T) {}
+fun h(y: Int) {
+  extension A { type M = Int }
+  given A.M is Q {}
+  let z: A.M = y
+  need(z)
+}

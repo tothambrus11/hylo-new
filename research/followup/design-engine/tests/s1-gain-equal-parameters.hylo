@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// review: the dependent requirement is stated on U and found through T == U. Name resolution removes
+// the coercion in the callee's own clause, so the premise is a projection through the first requirement.
+// expected (premsubst, step 2): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=18 matches=881): no coercion from '((A ~ B), P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=8 matches=371 proved=3): no coercion from '((A ~ B), P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T, U where T == U, T is P, U.X is Q>() {}
+fun g<A, B where A == B, A is P, B.X is Q>() { f<A, B>() }

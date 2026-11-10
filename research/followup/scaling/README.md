@@ -8,7 +8,7 @@ The claims of the form "an exponential behaviour becomes polynomial" rest on sin
 
 The work counters are exact and deterministic. The times are measurements taken on a heavily loaded machine and are indicative only.
 
-1. **Most of the claims hold, now with curves.** Under FULL the work counter is constant or linear where the existing checker is quadratic, cubic, quartic or exponential:
+1. **Most of the claims hold, now with curves.** Under FULL the growth of the work counter drops, in most families to linear or constant, where the existing checker is quadratic, cubic, quartic or exponential:
 
    | Family | base | FULL |
    |---|---|---|
@@ -26,7 +26,7 @@ The work counters are exact and deterministic. The times are measurements taken 
 
 3. **MIN5 has the gains of indexing and nothing else.** On every equality and divergence family it follows the same growth law as base (with the same or a smaller constant), including the wrong acceptances and the memory exhaustion on `open-neg`. On the breadth, member-lookup, refinement, nesting and where-clause families it follows the law of FULL, except where FULL's abstract model refutes the goal at once (`nest-diamond-neg`: `n² + 3n + 5` against a constant).
 
-4. **Exponential behaviours that remain under FULL** (the first three are reachable with the default settings):
+4. **Exponential behaviours that remain under FULL** (all but the last occur with the default settings):
    - **Overloads distinguished by their return type.** `g(h(), …, h())` with `n` arguments and `m` overloads of `h` costs exactly `m + m² + … + mⁿ` solver forks under every configuration (`ovr-args`: 3ⁿ; `ovr-width`: `m⁴ + m³ + m² + m`). Twelve arguments and three overloads take 34 s.
    - **Nested overloaded calls.** `g(f(A0()), …)` with `n` calls and 4 overloads of `f`: the number of forks grows by a factor of 2.0 to 2.2 per call from 10 to 16 calls, and the factor is not falling. Sixteen calls take 113 s (`ovl-calls`). The same calls in separate statements cost `4n` (`ovl-stmts`).
    - **Several inferred arguments constrained by equalities.** `pick<T, U1, …, Un where Ui is Q, T == Ui>(x)`: 3, 79, 1351 and 24281 matches for `n` = 1 to 4, a factor of 17 to 26 per argument. At `n` = 5 the valid program is rejected, by the resource bound, or by the depth bound if the resource bound is lifted (`open-wide`, `open-wide-nobudget`).
@@ -35,12 +35,12 @@ The work counters are exact and deterministic. The times are measurements taken 
    - **Diamond-shaped conditional givens.** `S<T> is P` and `S<T> is Q` each requiring `T is P` and `T is Q` cost `2^d` for nesting `d`: subgoals are not shared (`nest-diamond`). This needs a raised depth bound; with the default bound the program is rejected from `d = 3`.
 
 5. **Super-linear polynomial behaviours that remain under FULL:**
-   - **`n` equalities between associated types** (`assoceq`, `assocneg`): `3n² + 145n + 145` matches, and a time that grows faster than the count: 0.8 s at 32, 15 s at 128, 52 s at 192, no answer in 120 s at 256 (exponent about 2.5). The control without the equalities takes 15 ms at 256.
-   - **`n` equality goals over `n` equalities** (`eqchain-goals`): `2n` matches, but 0.7 s at 256, 4.2 s at 512 and 23 s at 1024 (exponent about 2.4). The control without equalities takes 46 ms at 1024. Each goal runs the decision procedure over all the facts in scope again. A single goal stays cheap: 74 ms for a chain of 1024 (`eqchain`).
+   - **`n` equalities between associated types** (`assoceq`, `assocneg`): `3n² + 145n + 145` matches, and a time that grows faster than the count: 0.8 s at 32, 15 s at 128, 52 s at 192, no answer in 120 s at 256 (exponent about 2.5). The control without the equalities takes 13 ms at 256.
+   - **`n` equality goals over `n` equalities** (`eqchain-goals`): `2n` matches, but 0.7 s at 256, 4.2 s at 512 and 23 s at 1024 (exponent about 2.4). The control without equalities takes 42 ms at 1024. The count of matches does not see this cost; presumably each goal runs the decision procedure over all the facts in scope again. `n` independent requirements `Ti == Ui` behave alike (`req-eq-deep`: `n + 1` matches, 0.4 s at 256). A single goal stays cheap: 67 ms for a chain of 1024 (`eqchain`).
    - **A call with `n` requirements from a function with `n` requirements** (`req-traits-deep`, `req-params-deep`): `0.5n² + 0.5n + 1` or `1.5n² − 0.5n + 1` matches, time exponent 2.6 to 2.8 (3.2 s for 256 type parameters with one requirement each). With the default depth bound this cannot be observed, because the call is rejected from 10 requirements (result 6).
    - **`n` lookups among `n` candidates that the index does not separate**: `n² + n` for conformances of `n` types to the same trait (`breadth-square`), `n² + 3n` for `n` nested givens (`nestwide`). One lookup among `n` conformances to one trait costs `n + 1` (`breadth-types`).
    - **Overload width**: `m² + 7m` forks for four nested calls with `m` overloads (`ovl-width`), `m⁴ + …` for four arguments overloaded on the return type (`ovr-width`).
-   - **Time without a counter**: with linear or constant counters, the time of `members-ext`, `members-use` and `breadth-types` grows with exponents between 1.3 and 1.8. All these times are below 0.1 s at the largest size (1280 extensions, 1024 conformances), so the exponents are uncertain.
+   - Nothing super-linear was found in member lookup (`members-*`, `condext`), nesting (`nest-deep`, 128 levels) or refinement (`refine-deep`, 64 levels): the counters are linear or constant and the times stay below 0.12 s at the largest sizes (1280 extensions, 640 lookups).
 
 6. **The depth bound of 10 counts resolution steps, not nesting depth, and it rejects valid programs of modest size under all four configurations.** A call whose callee has 10 or more requirements is rejected (`req-traits`, `req-params`: accepted up to 9), as are 10 independent equality requirements under FIX and FULL (`req-eq`), a conditional conformance nested 9 deep (`nest` is accepted up to 8), a diamond nested 3 deep, and 5 inferred arguments. Most scaling behaviours of valid programs are therefore cut off by a rejection before they become expensive. The curves beyond those sizes were measured with the bound raised to 1000 (families named `-deep`, and the diamonds).
 
@@ -51,7 +51,7 @@ The work counters are exact and deterministic. The times are measurements taken 
 These were run to tie each curve to the technique that produces it. The points are few, because the resource bound of `budget` cuts every explosion short.
 
 - **FULL without `eqsolve`.** `eqchain`: 363, 1260, 9655, 120230 matches for 1 to 4 links (factors 3.5, 7.7, 12.5), then the resource bound rejects the valid program. `eqchain-goals`: 72, 586, 5324, 66171, then the same. `assoceq` is rejected from 4 equalities, `open-chain` from 4 links, `req-eq-deep` from 8 requirements. The ill-typed `eqchain-neg` and `assocneg` are still rejected, but from 3 links on only after the resource bound has stopped a search, which takes 1 to 11 s.
-- **FULL without `absmodel` and `absquotient`.** `div-depth`: 93, 189, 765, 3069, 12285, 49149 for depth bounds 5 to 14, that is `2^d` again, with the counts of MIN5. `div-branch`, `div-trunc` and `cyc-clique` explode with the counts of MIN5 (for example 20, 3069 and then no answer in 20 s for `div-branch` with 1, 2 and 3 branches), and `div-branch-eq` with those of FIX. `nest-diamond-neg` returns to `n² + 3n + 5`. `cyc-ring`, `nest-neg`, `req-neg` and `eqchain-neg` stay linear: there the model saves a constant factor only.
+- **FULL without `absmodel` and `absquotient`.** `div-depth`: 93, 189, 765, 3069, 12285, 49149 for depth bounds 5 to 14, that is `2^d` again, with the counts of MIN5. `div-branch`, `div-trunc` and `cyc-clique` explode with the counts of MIN5 until the resource bound stops them (for example 20 and 3069 matches for `div-branch` with 1 and 2 branches, against 1 with the model), and `div-branch-eq` with those of FIX. `nest-diamond-neg` returns to `n² + 3n + 5`. `cyc-ring`, `nest-neg`, `req-neg` and `eqchain-neg` stay linear: there the model saves a constant factor only.
 - **FULL without `absquotient`.** `div-branch-eq` (an equality in scope) gives exactly the counts of FULL without the whole model: 1369, 111983, then the resource bound. With an equality in scope, the benefit of the abstract model depends entirely on `absquotient`. `eqchain-neg` is unaffected.
 
 ## What was done
@@ -79,7 +79,7 @@ The `-deep` families and the diamonds (except `nest-diamond-default`) run with `
 
 **Runs.** `run.py` runs `tc-bench --count` (binary `eq9-723cc0e6b0f8`) for each (family, size, configuration), one process at a time, under `timeout`, and appends a record to `results.jsonl`: verdict, diagnostics, every counter of the user module, the `type.user` time, exit code, wall time and peak memory. Within a series the sizes are run in increasing order. The series stops after a timeout, after two consecutive crashes, or when a run slower than 2 s predicts more than twice the timeout for the next size by power-law extrapolation from the last two sizes (which underestimates an exponential). Sizes that were not run are recorded as `skipped`, with the reason.
 
-Every point was first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. The continuation was not completed for every series: the following ones end with a 20 s timeout (or with a prediction against 20 s) instead of 120 s, and the tables say so point by point. **MIN5**: `assoceq`, `assocneg`, `cyc-clique`, `div-branch`, `div-branch-eq`, `div-depth`, `div-trunc`, `div-trunc-depth`, `div-valid-deep`, `eqchain`, `eqchain-conf`, `eqchain-goals`, `eqchain-neg`, `open-chain`, `open-neg`, `open-wide`, `open-wide-nobudget`, `ovl-calls`, `ovr-args`, `req-eq`, `req-eq-deep`; **FULL-eqsolve**: `assoceq`, `assocneg`, `eqchain-goals`, `open-chain`, `req-eq-deep`; **FULL-absmodel**: `cyc-clique`, `div-branch`, `div-branch-eq`, `div-depth`, `div-trunc`; **FULL-absquotient**: `div-branch-eq`.
+Every point was first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. The continuation was not completed for every series: the following ones end with a 20 s timeout (or with a prediction against 20 s) instead of 120 s, and the tables say so point by point. **FULL-eqsolve**: `assoceq`, `assocneg`, `eqchain-goals`, `open-chain`, `req-eq-deep`; **FULL-absmodel**: `cyc-clique`, `div-branch`, `div-branch-eq`, `div-depth`, `div-trunc`; **FULL-absquotient**: `div-branch-eq`; **MIN5**: `req-eq-deep`.
 
 Three leave-one-out configurations were also run on the families they concern: FULL without `eqsolve`, FULL without `absmodel` and `absquotient`, and FULL without `absquotient`. A second pass repeated the FULL points that finish within 5 s: the counters and verdicts were identical in all of them, and the time reported for those points is the smaller of the two.
 
@@ -87,9 +87,21 @@ Three leave-one-out configurations were also run on the families they concern: F
 - If the counter values lie *exactly* on a polynomial of degree at most 5 (relative error below 10⁻⁶, with at least two more points than coefficients), that polynomial is reported, possibly from some size on. Since the counters are deterministic, this test is much sharper than a regression. For example the count of base on `eqchain` is the cubic above for every `n` from 3 to 64, whereas a log-log regression on the same points gives an exponent of 1.3, because the cubic term is still small.
 - Otherwise two models with a constant term, `a + c·n^p` and `a + c·r^n`, are fitted in log space to the series and to its suffixes (at least five points). A model is retained when its root-mean-square error (`rms`, in units of natural log, so 0.05 is about 5%) is small and clearly below the other's, when the sizes span at least a factor of 4 for a polynomial, and when the values grow at least 8-fold for an exponential. An exponent above 5 is retained only on a close fit. Otherwise the result is "undecided" or "too few points".
 - The detailed tables also give the plain log-log and semi-log regressions over the upper half of the sizes (exponent and base, with R²), and the local exponents and the growth factors per unit of size over the last three intervals. A steady factor indicates an exponential; a factor that falls towards 1 indicates a polynomial.
-- Times are fitted the same way with looser thresholds. Times that stay below 50 ms are not fitted.
+- Times are fitted the same way with looser thresholds. A series whose times all stay below 200 ms is not fitted: at that scale the noise of this machine is as large as the signal.
 
 **Reproducing.** `python3 run.py --timeout 20`, then `python3 run.py --timeout 120`, then `python3 analyze.py`. `run.py --configs FULL-eqsolve --only FAMILY,…` runs a leave-one-out configuration, and `run.py --pass 1` repeats the fast points. The runner skips the points already in `results.jsonl`.
+
+**Files.**
+
+| File | Content |
+|---|---|
+| `gen.py` | the program families: generators, sizes, intended verdicts, environment, primary counter |
+| `run.py` | the restartable runner |
+| `analyze.py` | the fits; writes `README.md`, `tables.md` (the generated part of this file alone) and `fits.json` |
+| `README.head.md` | the hand-written part of this file |
+| `results.jsonl` | one record per run (the last record of a point wins; `pass` 1 is the repeated timing pass) |
+| `fits.json` | every fit, with the residuals of both models, the local exponents and the growth factors |
+| `progs/` | the programs, named `FAMILY-N.hylo` |
 
 ## What remains uncertain
 
@@ -101,59 +113,59 @@ Three leave-one-out configurations were also run on the families they concern: F
 
 ## Summary: growth of the primary counter / of the time
 
-Each cell gives the growth of the counter, then that of the time, in the size `n` of the family. `n^k exact`: the counter is exactly a polynomial of degree `k` (given in the next table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<50 ms`: the time stays too small to fit; `too few`: fewer than five points completed; `capped`: every point was cut short by the resource bound; `undecided`: neither model fits clearly better (`exp?`, `poly?`: what the last growth factors suggest).
+Each cell gives the growth of the counter, then that of the time, in the size `n` of the family. `n^k exact`: the counter is exactly a polynomial of degree `k` (given in the next table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<0.2 s`: the time stays too small to fit; `too few`: fewer than five points completed; `capped`: every point was cut short by the resource bound; `undecided`: neither model fits clearly better (`exp?`, `poly?`: what the last growth factors suggest).
 
 | Family | base | FIX | MIN5 | FULL |
 |---|---|---|---|---|
-| eqchain | n^3 exact / n^2.5 † | n^1 exact / n^1.5 | n^3 exact / n^1.5 † | n^1 exact / n^0.8 |
-| eqchain-conf | n^3 exact / n^2.6 † | n^1 exact / n^0.6 | n^3 exact / n^1.7 † | n^1 exact / n^1.5 |
-| eqchain-neg | n^3 exact / undecided † ✗ | n^1 exact / n^1.0 | n^3 exact / undecided † ✗ | n^1 exact / n^1.1 |
-| eqchain-goals | n^4 exact / n^2.8 † | n^1 exact / n^2.1 | n^2.4 / n^2.4 † | n^1 exact / n^2.4 |
-| assoceq | n^3 exact / n^2.5 ‡ | n^2 exact / n^2.9 † | n^3 exact / undecided † | n^2 exact / n^2.4 † |
-| assocneg | n^3 exact / undecided ‡ ✗ | n^2 exact / n^2.6 † | n^1.7 / n^1.8 † ✗ | n^2 exact / n^2.6 † |
-| ctrl-goals | – / undecided | – / n^2.0 | – / – | – / <50 ms |
-| ctrl-assoc | n^1 exact / undecided | n^1 exact / undecided | – / – | n^1 exact / <50 ms |
-| breadth-traits | n^1 exact / n^1.9 | n^1 exact / n^1.8 | flat / n^1.2 | flat / <50 ms |
-| breadth-types | n^1 exact / n^2.3 | n^1 exact / n^2.6 | n^1 exact / <50 ms | n^1 exact / n^1.3 |
-| breadth-square | n^3 exact / undecided | n^3 exact / n^3.6 | n^2 exact / undecided | n^2 exact / n^2.2 |
-| div-branch | too few / too few ‡ | capped / capped [B] | too few / too few † | flat / <50 ms |
-| div-branch-eq | too few / too few ‡ | capped / capped [B] | too few / too few † | flat / <50 ms |
-| div-trunc | too few / too few ‡ | capped / capped [B] | too few / too few † | capped / capped ‡ [B] |
-| div-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / undecided † | flat / <50 ms |
-| div-trunc-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / undecided † | 2.0^n / 2.3^n [B] |
-| div-valid | 2.0^n / undecided | 2.0^n / undecided | 2.0^n / undecided | 2.0^n / undecided |
+| eqchain | n^3 exact / n^2.5 † | n^1 exact / <0.2 s | n^3 exact / n^1.5 ‡ | n^1 exact / <0.2 s |
+| eqchain-conf | n^3 exact / n^2.6 † | n^1 exact / <0.2 s | n^3 exact / 1.1^n † | n^1 exact / <0.2 s |
+| eqchain-neg | n^3 exact / undecided † ✗ | n^1 exact / <0.2 s | n^3 exact / n^3.1 † ✗ | n^1 exact / <0.2 s |
+| eqchain-goals | n^4 exact / n^2.8 † | n^1 exact / n^2.1 | n^4 exact / n^3.2 † | n^1 exact / n^2.4 |
+| assoceq | n^3 exact / n^2.5 ‡ | n^2 exact / n^2.9 † | n^3 exact / undecided ‡ | n^2 exact / n^2.4 † |
+| assocneg | n^3 exact / undecided ‡ ✗ | n^2 exact / n^2.6 † | n^3 exact / undecided ‡ ✗ | n^2 exact / n^2.6 † |
+| ctrl-goals | – / <0.2 s | – / <0.2 s | – / <0.2 s | – / <0.2 s |
+| ctrl-assoc | n^1 exact / undecided | n^1 exact / undecided | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| breadth-traits | n^1 exact / n^1.9 | n^1 exact / n^1.8 | flat / <0.2 s | flat / <0.2 s |
+| breadth-types | n^1 exact / n^2.3 | n^1 exact / n^2.6 | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| breadth-square | n^3 exact / undecided | n^3 exact / n^3.6 | n^2 exact / <0.2 s | n^2 exact / <0.2 s |
+| div-branch | too few / too few ‡ | capped / capped [B] | too few / too few ‡ | flat / <0.2 s |
+| div-branch-eq | too few / too few ‡ | capped / capped [B] | too few / too few ‡ | flat / <0.2 s |
+| div-trunc | too few / too few ‡ | capped / capped [B] | too few / too few ‡ | capped / capped ‡ [B] |
+| div-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / undecided † | flat / <0.2 s |
+| div-trunc-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / 2.1^n † | 2.0^n / 2.3^n [B] |
+| div-valid | 2.0^n / undecided | 2.0^n / undecided | 2.0^n / <0.2 s | 2.0^n / <0.2 s |
 | div-valid-deep | 2.0^n / 2.0^n † | 2.0^n / undecided ✗ [B] | 2.0^n / 2.2^n † | 2.0^n / 2.2^n † ✗ [B] |
-| cyc-ring | n^1 exact / undecided | n^1 exact / undecided | n^1 exact / <50 ms | flat / <50 ms |
-| cyc-clique | too few / too few ‡ | capped / capped [B] | too few / too few † | flat / <50 ms |
-| members-ext | n^1 exact / n^0.5 | flat / undecided | flat / n^0.6 | flat / n^1.8 |
-| members-use | n^1 exact / n^1.3 | n^1 exact / undecided | n^1 exact / n^0.9 | n^1 exact / n^1.6 |
-| members-both | n^2 exact / n^1.4 | n^1 exact / n^1.5 | n^1 exact / n^2.0 | n^1 exact / n^1.1 |
-| condext | n^1 exact / n^2.2 | flat / n^1.1 | flat / <50 ms | flat / <50 ms |
+| cyc-ring | n^1 exact / undecided | n^1 exact / undecided | n^1 exact / <0.2 s | flat / <0.2 s |
+| cyc-clique | too few / too few ‡ | capped / capped [B] | too few / too few ‡ | flat / <0.2 s |
+| members-ext | n^1 exact / n^0.5 | flat / <0.2 s | flat / <0.2 s | flat / <0.2 s |
+| members-use | n^1 exact / n^1.3 | n^1 exact / undecided | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| members-both | n^2 exact / n^1.4 | n^1 exact / n^1.5 | n^1 exact / n^2.0 | n^1 exact / <0.2 s |
+| condext | n^1 exact / n^2.2 | flat / n^1.1 | flat / <0.2 s | flat / <0.2 s |
 | ovl-calls | undecided (poly?) / undecided † | undecided / undecided † | undecided / undecided † | undecided (exp?) / 2.3^n † |
-| ovl-width | n^2 exact / undecided | n^2 exact / undecided | n^2 exact / <50 ms | n^2 exact / <50 ms |
-| ovl-stmts | n^1 exact / n^0.6 | n^1 exact / undecided | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| ovr-args | 3.0^n / undecided | 3.0^n / undecided | 3.0^n / undecided † | 3.0^n / 3.6^n |
+| ovl-width | n^2 exact / undecided | n^2 exact / <0.2 s | n^2 exact / <0.2 s | n^2 exact / <0.2 s |
+| ovl-stmts | n^1 exact / n^0.6 | n^1 exact / <0.2 s | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| ovr-args | 3.0^n / undecided | 3.0^n / undecided | 3.0^n / undecided | 3.0^n / 3.6^n |
 | ovr-width | n^4 exact / n^4.3 | n^4 exact / undecided | n^4 exact / n^3.9 | n^4 exact / n^3.7 |
-| nest | n^1 exact / <50 ms | n^1 exact / <50 ms | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| nest-deep | n^1 exact / undecided | n^1 exact / n^0.9 | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| nest-neg | n^1 exact / n^0.8 | n^1 exact / n^1.3 | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| nest-diamond | 2.1^n / undecided ✗ | 2.1^n / undecided ✗ | 2.3^n / undecided ✗ | 2.3^n / undecided ✗ |
-| nest-diamond-default | flat / flat ✗ | flat / flat ✗ | undecided / <50 ms ✗ | undecided / <50 ms ✗ |
-| nest-diamond-neg | n^2 exact / undecided | n^2 exact / undecided | n^2 exact / <50 ms | flat / <50 ms |
-| refine | n^2 exact / flat | n^2 exact / undecided | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| refine-deep | n^2 exact / undecided | n^2 exact / n^2.1 | n^1 exact / <50 ms | n^1 exact / <50 ms |
-| nestwide | n^2 exact / n^2.2 | n^2 exact / n^2.0 | n^2 exact / undecided | n^2 exact / n^1.0 |
-| open-chain | n^3 exact / n^1.8 ‡ | n^1 exact / undecided | n^3 exact / n^1.8 † | n^1 exact / <50 ms |
-| open-neg | – / – ‡ | n^1 exact / undecided | – / – † | flat / <50 ms |
-| open-wide | too few / too few ‡ | too few / too few ✗ [B] | too few / too few † | too few / too few ✗ [B] |
-| open-wide-nobudget | too few / too few ‡ | too few / too few ‡ ✗ | too few / too few † | too few / too few ‡ ✗ |
-| req-traits | n^2 exact / flat ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ |
-| req-params | n^2 exact / undecided ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ |
-| req-eq | too few / too few ‡ | n^1 exact / <50 ms ✗ | too few / too few † | n^1 exact / <50 ms ✗ |
+| nest | n^1 exact / <0.2 s ✗ | n^1 exact / <0.2 s ✗ | n^1 exact / <0.2 s ✗ | n^1 exact / <0.2 s ✗ |
+| nest-deep | n^1 exact / undecided | n^1 exact / <0.2 s | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| nest-neg | n^1 exact / n^0.8 | n^1 exact / n^1.3 | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| nest-diamond | 2.1^n / undecided ✗ | 2.1^n / undecided ✗ | 2.3^n / <0.2 s ✗ | 2.3^n / <0.2 s ✗ |
+| nest-diamond-default | flat / <0.2 s ✗ | flat / <0.2 s ✗ | undecided / <0.2 s ✗ | undecided / <0.2 s ✗ |
+| nest-diamond-neg | n^2 exact / <0.2 s | n^2 exact / undecided | n^2 exact / <0.2 s | flat / <0.2 s |
+| refine | n^2 exact / <0.2 s | n^2 exact / <0.2 s | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| refine-deep | n^2 exact / undecided | n^2 exact / n^2.1 | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| nestwide | n^2 exact / n^2.2 | n^2 exact / n^2.0 | n^2 exact / <0.2 s | n^2 exact / <0.2 s |
+| open-chain | n^3 exact / n^1.8 ‡ | n^1 exact / <0.2 s | n^3 exact / n^1.8 ‡ | n^1 exact / <0.2 s |
+| open-neg | – / – ‡ | n^1 exact / <0.2 s | – / – ‡ | flat / <0.2 s |
+| open-wide | too few / too few ‡ | too few / too few ✗ [B] | too few / too few ‡ | too few / too few ✗ [B] |
+| open-wide-nobudget | too few / too few ‡ | too few / too few ‡ ✗ | too few / too few ‡ | too few / too few ‡ ✗ |
+| req-traits | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ |
+| req-params | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ | n^2 exact / <0.2 s ✗ |
+| req-eq | too few / <0.2 s ‡ | n^1 exact / <0.2 s ✗ | too few / too few ‡ | n^1 exact / <0.2 s ✗ |
 | req-traits-deep | n^2 exact / n^3.0 | n^2 exact / n^2.8 | n^2 exact / n^3.3 | n^2 exact / n^2.8 |
 | req-params-deep | n^2 exact / n^2.7 | n^2 exact / n^2.9 | n^2 exact / n^3.3 | n^2 exact / n^2.6 |
-| req-eq-deep | too few / too few ‡ | n^1 exact / n^2.2 | too few / too few † | n^1 exact / n^2.0 |
-| req-neg | n^2 exact / n^1.7 | n^2 exact / n^2.4 | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| req-eq-deep | too few / too few ‡ | n^1 exact / n^2.2 | too few / <0.2 s ‡ | n^1 exact / n^2.0 |
+| req-neg | n^2 exact / n^1.7 | n^2 exact / n^2.4 | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
 
 † the series ends with a timeout (or was stopped because a timeout was predicted); ‡ it ends with a crash; ✗ at some size the verdict differs from the intended one; [B] the resource bound of `budget` stopped a resolution, so the count is capped.
 
@@ -163,26 +175,26 @@ An expression in `n` without qualification is exact: every measured size lies on
 
 | Family | Counter | base | FIX | MIN5 | FULL |
 |---|---|---|---|---|---|
-| eqchain | matches | 2n^3 + 206n^2 + 3,915n + 16,148 (n ≥ 3) † | 3n + 218 | 2n^3 + 206n^2 + 3,911n + 15,856 (n ≥ 3) † | 3n + 218 |
+| eqchain | matches | 2n^3 + 206n^2 + 3,915n + 16,148 (n ≥ 3) † | 3n + 218 | 2n^3 + 206n^2 + 3,911n + 15,856 (n ≥ 3) ‡ | 3n + 218 |
 | eqchain-conf | matches | n^3 + 103n^2 + 1,955n + 7,893 (n ≥ 3) † | n + 74 | n^3 + 103n^2 + 1,955n + 7,893 (n ≥ 3) † | n + 74 |
 | eqchain-neg | matches | n^3 + 100n^2 + 1,752n + 6,041 (n ≥ 5) † | 2n + 143 (n ≥ 3) | n^3 + 100n^2 + 1,752n + 6,041 (n ≥ 5) † | 2n + 143 (n ≥ 3) |
-| eqchain-goals | matches | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (n ≥ 3) † | 2n | n^2.44 for n ≥ 3 † | 2n |
-| assoceq | matches | 15n^3 + 753n^2 + 8,778n + 26,922 (n ≥ 3) ‡ | 3n^2 + 145n + 145 † | 15n^3 + 753n^2 + 8,770n + 26,630 (n ≥ 3) † | 3n^2 + 145n + 145 † |
-| assocneg | matches | 15n^3 + 715n^2 + 7,412n + 19,159 (n ≥ 5) ‡ | 3n^2 + 141n + 2 (n ≥ 3) † | n^1.75 † | 3n^2 + 141n + 2 (n ≥ 3) † |
+| eqchain-goals | matches | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (n ≥ 3) † | 2n | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (n ≥ 3) † | 2n |
+| assoceq | matches | 15n^3 + 753n^2 + 8,778n + 26,922 (n ≥ 3) ‡ | 3n^2 + 145n + 145 † | 15n^3 + 753n^2 + 8,770n + 26,630 (n ≥ 3) ‡ | 3n^2 + 145n + 145 † |
+| assocneg | matches | 15n^3 + 715n^2 + 7,412n + 19,159 (n ≥ 5) ‡ | 3n^2 + 141n + 2 (n ≥ 3) † | 15n^3 + 715n^2 + 7,404n + 18,871 (n ≥ 5) ‡ | 3n^2 + 141n + 2 (n ≥ 3) † |
 | ctrl-goals | matches | – | – | – | – |
-| ctrl-assoc | matches | 5n + 363 | n + 71 | – | n + 1 |
+| ctrl-assoc | matches | 5n + 363 | n + 71 | n + 1 | n + 1 |
 | breadth-traits | matches | n + 71 | n + 71 | flat | flat |
 | breadth-types | matches | n + 71 | n + 71 | n + 1 | n + 1 |
 | breadth-square | matches | n^3 + 71n | n^3 + 71n | n^2 + n | n^2 + n |
-| div-branch | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 153, 38.5 † | flat |
-| div-branch-eq | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) | too few points (2); per-step factors 81.8 † | flat |
-| div-trunc | matches | too few points (2); per-step factors 82.9 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 157, 38.5 † | capped by the resource bound (not fitted) ‡ |
-| div-depth | matches | 2.01^n † | too few points (4); per-step factors 2.04, 2.02, 2 | 2.01^n † | flat |
+| div-branch | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 153, 38.5 ‡ | flat |
+| div-branch-eq | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) | too few points (2); per-step factors 81.8 ‡ | flat |
+| div-trunc | matches | too few points (2); per-step factors 82.9 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 157, 38.5 ‡ | capped by the resource bound (not fitted) ‡ |
+| div-depth | matches | 2.01^n † | too few points (4); per-step factors 2.04, 2.02, 2 | 2.00^n † | flat |
 | div-trunc-depth | matches | 2.01^n † | too few points (4); per-step factors 2.04, 2.02, 2 | 2.01^n † | 2.01^n |
 | div-valid | matches | 2.04^n for n ≥ 2 | 2.04^n for n ≥ 2 | 2.03^n for n ≥ 2 | 2.03^n for n ≥ 2 |
 | div-valid-deep | matches | 2.02^n † | 2.03^n | 2.01^n † | 2.01^n † |
 | cyc-ring | matches | 19n + 1,331 | 19n + 1,331 | 19n + 1 | flat |
-| cyc-clique | matches | too few points (2); per-step factors 85.2 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 236, 51.3 † | flat |
+| cyc-clique | matches | too few points (2); per-step factors 85.2 ‡ | capped by the resource bound (not fitted) | too few points (3); per-step factors 236, 51.3 ‡ | flat |
 | members-ext | appliesCalls | 40n + 160 | flat | flat | flat |
 | members-use | appliesCalls | 208n | n | n | n |
 | members-both | appliesCalls | 2n^2 + 8n | n | n | n |
@@ -190,7 +202,7 @@ An expression in `n` without qualification is exact: every measured size lies on
 | ovl-calls | forks | undecided: n^6.6 † | undecided: n^7.2 † | undecided: n^7.2 † | undecided: n^7.8 † |
 | ovl-width | forks | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) |
 | ovl-stmts | forks | 4n | 4n | 4n | 4n |
-| ovr-args | forks | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 | 3.03^n for n ≥ 2 † | 3.02^n for n ≥ 2 |
+| ovr-args | forks | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 |
 | ovr-width | forks | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n |
 | nest | matches | 72n + 73 | 72n + 73 | 2n + 3 | 2n + 3 |
 | nest-deep | matches | 72n + 73 | 72n + 73 | 2n + 3 | 2n + 3 |
@@ -201,16 +213,16 @@ An expression in `n` without qualification is exact: every measured size lies on
 | refine | matches | n^2 + 72n + 73 | n^2 + 72n + 73 | n + 3 | n + 3 |
 | refine-deep | matches | n^2 + 72n + 73 | n^2 + 72n + 73 | n + 3 | n + 3 |
 | nestwide | matches | 4n^2 + 142n | 4n^2 + 142n | n^2 + 3n | n^2 + 3n |
-| open-chain | matches | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) ‡ | n + 75 | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) † | n + 75 |
-| open-neg | matches | – ‡ | n + 72 | – † | flat |
-| open-wide | matches | too few points (3); per-step factors 16.8, 31.8 ‡ | too few points (4); per-step factors 3, 8.73, 14.8 | too few points (3); per-step factors 20.9, 33.1 † | too few points (4); per-step factors 26.3, 17.1, 18 |
-| open-wide-nobudget | matches | too few points (3); per-step factors 16.8, 31.8 ‡ | too few points (4); per-step factors 3, 8.73, 14.8 ‡ | too few points (3); per-step factors 20.9, 33.1 † | too few points (4); per-step factors 26.3, 17.1, 18 ‡ |
+| open-chain | matches | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) ‡ | n + 75 | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) ‡ | n + 75 |
+| open-neg | matches | – ‡ | n + 72 | – ‡ | flat |
+| open-wide | matches | too few points (3); per-step factors 16.8, 31.8 ‡ | too few points (4); per-step factors 3, 8.73, 14.8 | too few points (3); per-step factors 20.9, 33.1 ‡ | too few points (4); per-step factors 26.3, 17.1, 18 |
+| open-wide-nobudget | matches | too few points (3); per-step factors 16.8, 31.8 ‡ | too few points (4); per-step factors 3, 8.73, 14.8 ‡ | too few points (3); per-step factors 20.9, 33.1 ‡ | too few points (4); per-step factors 26.3, 17.1, 18 ‡ |
 | req-traits | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 0.5n^2 + 0.5n + 1 | 0.5n^2 + 0.5n + 1 |
 | req-params | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 1.5n^2 − 0.5n + 1 | 1.5n^2 − 0.5n + 1 |
-| req-eq | matches | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 | too few points (3); per-step factors 4.11, 4.8 † | n + 1 |
+| req-eq | matches | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 |
 | req-traits-deep | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 0.5n^2 + 0.5n + 1 | 0.5n^2 + 0.5n + 1 |
 | req-params-deep | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 1.5n^2 − 0.5n + 1 | 1.5n^2 − 0.5n + 1 |
-| req-eq-deep | matches | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 | too few points (3); per-step factors 4.11, 4.8 † | n + 1 |
+| req-eq-deep | matches | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 |
 | req-neg | matches | n^2 + 71n + 69 | n^2 + 71n + 69 | 2n − 1 | n |
 
 ## Summary: leave-one-out configurations
@@ -219,9 +231,9 @@ An expression in `n` without qualification is exact: every measured size lies on
 |---|---|---|---|
 | eqchain | FULL-eqsolve | too few / too few ✗ [B] | completed; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..1024 |
 | eqchain-neg | FULL-eqsolve | capped / capped [B] | completed; fitted on n=3..1024 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
-| eqchain-neg | FULL-absmodel | n^1 exact / undecided | completed |
-| eqchain-neg | FULL-absquotient | n^1 exact / n^1.6 | completed |
-| eqchain-goals | FULL-eqsolve | too few / too few † ✗ [B] | stopped before n=12: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..8 |
+| eqchain-neg | FULL-absmodel | n^1 exact / <0.2 s | completed |
+| eqchain-neg | FULL-absquotient | n^1 exact / <0.2 s | completed |
+| eqchain-goals | FULL-eqsolve | too few / too few † ✗ [B] | stopped before n=16: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..12 |
 | assoceq | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=128; fitted on n=4..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..64 |
 | assocneg | FULL-eqsolve | capped / capped † [B] | stopped before n=128: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | div-branch | FULL-absmodel | too few / too few † | timeout (>20 s) at n=3 |
@@ -229,13 +241,13 @@ An expression in `n` without qualification is exact: every measured size lies on
 | div-branch-eq | FULL-absquotient | capped / capped † [B] | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 79 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | div-trunc | FULL-absmodel | too few / too few † [B] | stopped before n=4: predicted timeout: 13 s at n=3, power-law extrapolation gives 154 s at n=4; fitted on n=1..2 (rejected); resource bound (`budget`) hit from n=3 |
 | div-depth | FULL-absmodel | 2.0^n / too few † | timeout (>20 s) at n=16 |
-| cyc-ring | FULL-absmodel | n^1 exact / <50 ms | completed |
-| cyc-clique | FULL-absmodel | too few / too few † [B] | stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4 |
-| nest-neg | FULL-absmodel | n^1 exact / <50 ms | completed |
-| nest-diamond-neg | FULL-absmodel | n^2 exact / <50 ms | completed |
+| cyc-ring | FULL-absmodel | n^1 exact / <0.2 s | completed |
+| cyc-clique | FULL-absmodel | too few / <0.2 s † [B] | stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4 |
+| nest-neg | FULL-absmodel | n^1 exact / <0.2 s | completed |
+| nest-diamond-neg | FULL-absmodel | n^2 exact / <0.2 s | completed |
 | open-chain | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=128; fitted on n=8..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=4..64 |
 | req-eq-deep | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=64; fitted on n=8..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=8..32 |
-| req-neg | FULL-absmodel | n^1 exact / <50 ms | completed |
+| req-neg | FULL-absmodel | n^1 exact / <0.2 s | completed |
 
 ## Tables per family
 
@@ -258,8 +270,8 @@ Valid: conformance and associated type transported along n equality links. Inten
 | 16 | 139,716 | 3,857 | 266 | 10.1 | 139,360 | 2,681 | 266 | 4.4 |
 | 24 | 256,412 | 7,512 | 290 | 12.3 | 256,024 | 5,267 | 290 | 3.8 |
 | 32 | 417,908 | 13,492 | 314 | 15.0 | 417,488 | 8,094 | 314 | 5.3 |
-| 64 | 1,634,772 | 103,169 | 410 | 13.9 | timeout | >20 s | 410 | 8.4 |
-| 128 | not run |  | 602 | 21.1 | not run |  | 602 | 16.5 |
+| 64 | 1,634,772 | 103,169 | 410 | 13.9 | crash (out of memory) | 98 s wall | 410 | 8.4 |
+| 128 | not run |  | 602 | 21.1 | timeout | >120 s | 602 | 16.5 |
 | 256 | not run |  | 986 | 41.8 | not run |  | 986 | 23.6 |
 | 512 | not run |  | 1,754 | 54.1 | not run |  | 1,754 | 34.6 |
 | 1024 | not run |  | 3,290 | 198 | not run |  | 3,290 | 67.3 |
@@ -267,9 +279,9 @@ Valid: conformance and associated type transported along n equality links. Inten
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 2n^3 + 206n^2 + 3,915n + 16,148 (exact, n ≥ 3) | n^2.52 for n ≥ 5 (rms 0.12) | n^1.58 (R² 0.986) / 1.06^n (R² 0.964); last local exponents 1.5, 1.7, 2.0; last per-step factors 1.08, 1.06, 1.04 | – | stopped before n=128: predicted timeout: 103 s at n=64, power-law extrapolation gives 789 s at n=128 |
-| FIX | 3n + 218 (exact) | n^1.47 for n ≥ 24 (rms 0.16) | n^0.60 (R² 0.966) / 1.00^n (R² 0.898); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| MIN5 | 2n^3 + 206n^2 + 3,911n + 15,856 (exact, n ≥ 3) | n^1.51 for n ≥ 3 (rms 0.07) | n^1.30 (R² 0.989) / 1.09^n (R² 0.984); last local exponents 1.3, 1.5, 1.7; last per-step factors 1.10, 1.08, 1.06 | – | timeout (>20 s) at n=64 |
-| FULL | 3n + 218 (exact) | n^0.82 for n ≥ 4 (rms 0.11) | n^0.60 (R² 0.966) / 1.00^n (R² 0.898); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| FIX | 3n + 218 (exact) | below 200 ms throughout (not fitted) | n^0.60 (R² 0.966) / 1.00^n (R² 0.898); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| MIN5 | 2n^3 + 206n^2 + 3,911n + 15,856 (exact, n ≥ 3) | n^1.51 for n ≥ 3 (rms 0.07) | n^1.30 (R² 0.989) / 1.09^n (R² 0.984); last local exponents 1.3, 1.5, 1.7; last per-step factors 1.10, 1.08, 1.06 | – | crash (exit 134) at n=64 |
+| FULL | 3n + 218 (exact) | below 200 ms throughout (not fitted) | n^0.60 (R² 0.966) / 1.00^n (R² 0.898); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 | FULL-eqsolve | too few points (4); per-step factors 3.47, 7.66, 12.5 | too few points (4); per-step factors 1.42, 11.5, 14.5 | n^6.47 (R² 0.975) / 9.77^n (R² 0.996); last local exponents 1.8, 5.0, 8.8; last per-step factors 3.47, 7.66, 12.45 | – | completed; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..1024 |
 
 Leave-one-out configurations (same counter):
@@ -310,7 +322,7 @@ Valid: conformance transported along n equality links (no associated type). Inte
 | 16 | 69,637 | 1,815 | 90 | 16.3 | 69,637 | 1,239 | 90 | 6.5 |
 | 24 | 127,965 | 3,681 | 98 | 18.4 | 127,965 | 2,591 | 98 | 7.6 |
 | 32 | 208,693 | 6,481 | 106 | 22.3 | 208,693 | 4,418 | 106 | 5.8 |
-| 64 | 817,045 | 45,665 | 138 | 13.3 | timeout | >20 s | 138 | 10.1 |
+| 64 | 817,045 | 45,665 | 138 | 13.3 | 817,045 | 49,830 | 138 | 10.1 |
 | 128 | not run |  | 202 | 25.0 | not run |  | 202 | 8.3 |
 | 256 | not run |  | 330 | 42.9 | not run |  | 330 | 16.4 |
 | 512 | not run |  | 586 | 51.9 | not run |  | 586 | 24.0 |
@@ -319,9 +331,9 @@ Valid: conformance transported along n equality links (no associated type). Inte
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | n^3 + 103n^2 + 1,955n + 7,893 (exact, n ≥ 3) | n^2.60 for n ≥ 5 (rms 0.09) | n^1.58 (R² 0.986) / 1.06^n (R² 0.964); last local exponents 1.5, 1.7, 2.0; last per-step factors 1.08, 1.06, 1.04 | – | stopped before n=128: predicted timeout: 46 s at n=64, power-law extrapolation gives 322 s at n=128 |
-| FIX | n + 74 (exact) | n^0.58 for n ≥ 64 (rms 0.14) | n^0.60 (R² 0.965) / 1.00^n (R² 0.899); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| MIN5 | n^3 + 103n^2 + 1,955n + 7,893 (exact, n ≥ 3) | n^1.73 for n ≥ 3 (rms 0.10) | n^1.30 (R² 0.989) / 1.09^n (R² 0.984); last local exponents 1.3, 1.5, 1.7; last per-step factors 1.10, 1.08, 1.06 | – | timeout (>20 s) at n=64 |
-| FULL | n + 74 (exact) | n^1.55 for n ≥ 64 (rms 0.14) | n^0.60 (R² 0.965) / 1.00^n (R² 0.899); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| FIX | n + 74 (exact) | below 200 ms throughout (not fitted) | n^0.60 (R² 0.965) / 1.00^n (R² 0.899); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| MIN5 | n^3 + 103n^2 + 1,955n + 7,893 (exact, n ≥ 3) | 1.08^n for n ≥ 12 (rms 0.04) | n^1.58 (R² 0.986) / 1.06^n (R² 0.964); last local exponents 1.5, 1.7, 2.0; last per-step factors 1.08, 1.06, 1.04 | – | stopped before n=128: predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128 |
+| FULL | n + 74 (exact) | below 200 ms throughout (not fitted) | n^0.60 (R² 0.965) / 1.00^n (R² 0.899); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 
 ### eqchain-neg
 
@@ -340,7 +352,7 @@ Ill-typed: the chain of n links has its middle link missing, so T{n} is not P. I
 | 16 | 63,769 (accepted!) | 1,649 | 175 | 14.7 | 63,769 (accepted!) | 998 | 175 | 5.7 |
 | 24 | 119,513 (accepted!) | 2,722 | 191 | 17.4 | 119,513 (accepted!) | 2,334 | 191 | 6.3 |
 | 32 | 197,273 (accepted!) | 5,482 | 207 | 16.2 | 197,273 (accepted!) | 4,121 | 207 | 5.0 |
-| 64 | 789,913 (accepted!) | 39,541 | 271 | 18.3 | timeout | >20 s | 271 | 7.6 |
+| 64 | 789,913 (accepted!) | 39,541 | 271 | 18.3 | 789,913 (accepted!) | 38,477 | 271 | 7.6 |
 | 128 | not run |  | 399 | 21.8 | not run |  | 399 | 9.8 |
 | 256 | not run |  | 655 | 33.1 | not run |  | 655 | 14.8 |
 | 512 | not run |  | 1,167 | 82.6 | not run |  | 1,167 | 35.2 |
@@ -349,12 +361,12 @@ Ill-typed: the chain of n links has its middle link missing, so T{n} is not P. I
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | n^3 + 100n^2 + 1,752n + 6,041 (exact, n ≥ 5) | undecided: n^2.8 (rms 0.12) or 1.07^n (rms 0.12) | n^1.74 (R² 0.993) / 1.06^n (R² 0.974); last local exponents 1.5, 1.7, 2.0; last per-step factors 1.08, 1.06, 1.04 | – | stopped before n=128: predicted timeout: 40 s at n=64, power-law extrapolation gives 285 s at n=128; fitted on n=3..64 (accepted); verdict differs from the intended one at n=3..64 |
-| FIX | 2n + 143 (exact, n ≥ 3) | n^1.01 for n ≥ 12 (rms 0.14) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| MIN5 | n^3 + 100n^2 + 1,752n + 6,041 (exact, n ≥ 5) | undecided: n^2.7 (rms 0.05) or 1.10^n (rms 0.08) | n^1.44 (R² 0.994) / 1.09^n (R² 0.986); last local exponents 1.4, 1.5, 1.7; last per-step factors 1.10, 1.08, 1.06 | – | timeout (>20 s) at n=64; fitted on n=3..32 (accepted); verdict differs from the intended one at n=3..32 |
-| FULL | 2n + 143 (exact, n ≥ 3) | n^1.06 (rms 0.10) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| FIX | 2n + 143 (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| MIN5 | n^3 + 100n^2 + 1,752n + 6,041 (exact, n ≥ 5) | n^3.11 for n ≥ 8 (rms 0.07) | n^1.74 (R² 0.993) / 1.06^n (R² 0.974); last local exponents 1.5, 1.7, 2.0; last per-step factors 1.08, 1.06, 1.04 | – | stopped before n=128: predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128; fitted on n=3..64 (accepted); verdict differs from the intended one at n=3..64 |
+| FULL | 2n + 143 (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 | FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.60 (R² 0.307) / 1.00^n (R² 0.451); last local exponents -0.2, -5.2, 0.9; last per-step factors 1.00, 0.99, 1.00 | – | completed; fitted on n=3..1024 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
-| FULL-absmodel | 2n + 143 (exact, n ≥ 3) | undecided: n^5.6 (rms 0.37) or 1.01^n (rms 0.37) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| FULL-absquotient | 2n + 143 (exact, n ≥ 3) | n^1.56 for n ≥ 32 (rms 0.34) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| FULL-absmodel | 2n + 143 (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
+| FULL-absquotient | 2n + 143 (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^0.61 (R² 0.966) / 1.00^n (R² 0.897); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 
 Leave-one-out configurations (same counter):
 
@@ -391,9 +403,9 @@ Valid: a chain of n links and n equality goals T0 == Ti, one per link. Intended 
 | 6 | 94,937 | 2,486 | 12 | 24.2 | 94,937 | 2,427 | 12 | 1.7 |
 | 8 | 184,205 | 7,361 | 16 | 17.6 | 184,205 | 4,434 | 16 | 2.3 |
 | 12 | 477,725 | 16,491 | 24 | 10.5 | 477,725 | 12,831 | 24 | 3.7 |
-| 16 | 969,997 | 35,814 | 32 | 28.2 | timeout | >20 s | 32 | 13.9 |
-| 24 | timeout | >120 s | 48 | 39.8 | not run |  | 48 | 9.7 |
-| 32 | not run |  | 64 | 33.5 | not run |  | 64 | 14.3 |
+| 16 | 969,997 | 35,814 | 32 | 28.2 | 969,997 | 42,768 | 32 | 13.9 |
+| 24 | timeout | >120 s | 48 | 39.8 | 2,796,557 | 106,883 | 48 | 9.7 |
+| 32 | not run |  | 64 | 33.5 | timeout | >120 s | 64 | 14.3 |
 | 64 | not run |  | 128 | 64.7 | not run |  | 128 | 41.6 |
 | 128 | not run |  | 256 | 413 | not run |  | 256 | 162 |
 | 256 | not run |  | 512 | 1,591 | not run |  | 512 | 730 |
@@ -404,9 +416,9 @@ Valid: a chain of n links and n equality goals T0 == Ti, one per link. Intended 
 |---|---|---|---|---|---|
 | base | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (exact, n ≥ 3) | n^2.85 for n ≥ 4 (rms 0.14) | n^2.36 (R² 1.000) / 1.28^n (R² 0.981); last local exponents 2.3, 2.4, 2.5; last per-step factors 1.39, 1.27, 1.19 | – | timeout (>120 s) at n=24 |
 | FIX | 2n (exact) | n^2.10 for n ≥ 64 (rms 0.17) | n^1.00 (R² 1.000) / 1.00^n (R² 0.780); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| MIN5 | n^2.44 for n ≥ 3 (rms 0.05) | n^2.38 for n ≥ 3 (rms 0.13) | n^2.33 (R² 1.000) / 1.33^n (R² 0.986); last local exponents 2.3, 2.3, 2.4; last per-step factors 1.53, 1.39, 1.27 | – | timeout (>20 s) at n=16 |
+| MIN5 | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (exact, n ≥ 3) | n^3.22 for n ≥ 5 (rms 0.13) | n^2.43 (R² 0.999) / 1.20^n (R² 0.970); last local exponents 2.4, 2.5, 2.6; last per-step factors 1.27, 1.19, 1.14 | – | timeout (>120 s) at n=32 |
 | FULL | 2n (exact) | n^2.36 for n ≥ 24 (rms 0.07) | n^1.00 (R² 1.000) / 1.00^n (R² 0.780); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| FULL-eqsolve | too few points (4); per-step factors 8.14, 9.09, 12.4 | too few points (4); per-step factors 3.88, 3.91, 14.2 | n^6.73 (R² 0.982) / 10.63^n (R² 0.999); last local exponents 3.0, 5.4, 8.8; last per-step factors 8.14, 9.09, 12.43 | – | stopped before n=12: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..8 |
+| FULL-eqsolve | too few points (4); per-step factors 8.14, 9.09, 12.4 | too few points (4); per-step factors 3.88, 3.91, 14.2 | n^6.73 (R² 0.982) / 10.63^n (R² 0.999); last local exponents 3.0, 5.4, 8.8; last per-step factors 8.14, 9.09, 12.43 | – | stopped before n=16: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..12 |
 
 Leave-one-out configurations (same counter):
 
@@ -419,6 +431,7 @@ Leave-one-out configurations (same counter):
 | 5 | 265,019 ✗ [B] | 6,604 |
 | 6 | 599,816 ✗ [B] | 16,902 |
 | 8 | 474,835 ✗ [B] | 17,528 |
+| 12 | 1,615,871 ✗ [B] | 69,977 |
 
 ### assoceq
 
@@ -435,21 +448,21 @@ Valid: n equalities T{i}.X == T{i+1}.X; goal T0.X == T{n}.X. Intended verdict: a
 | 8 | 153,018 | 3,599 | 1,497 | 111 | 152,662 | 2,658 | 1,497 | 92.4 |
 | 12 | 266,610 | 9,148 | 2,317 | 244 | 266,222 | 5,407 | 2,317 | 165 |
 | 16 | 421,578 | 16,124 | 3,233 | 374 | 421,158 | 8,522 | 3,233 | 249 |
-| 24 | 878,682 | 42,382 | 5,353 | 515 | timeout | >20 s | 5,353 | 478 |
-| 32 | crash (out of memory) | 86 s wall | 7,857 | 868 | not run |  | 7,857 | 798 |
-| 48 | crash (out of memory) | 103 s wall | 14,017 | 4,162 |  |  | 14,017 | 1,883 |
+| 24 | 878,682 | 42,382 | 5,353 | 515 | 878,198 | 41,286 | 5,353 | 478 |
+| 32 | crash (out of memory) | 86 s wall | 7,857 | 868 | crash (out of memory) | 38 s wall | 7,857 | 798 |
+| 48 | crash (out of memory) | 103 s wall | 14,017 | 4,162 | crash (out of memory) | 41 s wall | 14,017 | 1,883 |
 | 64 | not run |  | 21,713 | 4,764 | not run |  | 21,713 | 3,012 |
-| 96 | not run |  | 41,713 | 15,711 |  |  | 41,713 | 11,462 |
+| 96 | not run |  | 41,713 | 15,711 | not run |  | 41,713 | 11,462 |
 | 128 | not run |  | 67,857 | 31,914 | not run |  | 67,857 | 15,085 |
-| 160 | not run |  | 100,145 | 53,303 |  |  | 100,145 | 41,914 |
-| 192 | not run |  | 138,577 | 88,047 |  |  | 138,577 | 51,927 |
+| 160 | not run |  | 100,145 | 53,303 | not run |  | 100,145 | 41,914 |
+| 192 | not run |  | 138,577 | 88,047 | not run |  | 138,577 | 51,927 |
 | 256 | not run |  | timeout | >120 s | not run |  | timeout | >120 s |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 15n^3 + 753n^2 + 8,778n + 26,922 (exact, n ≥ 3) | n^2.50 for n ≥ 3 (rms 0.07) | n^1.50 (R² 0.992) / 1.12^n (R² 0.987); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.15, 1.12, 1.10 | – | crash (exit 134) at n=32 |
 | FIX | 3n^2 + 145n + 145 (exact) | n^2.92 for n ≥ 48 (rms 0.11) | n^1.52 (R² 0.997) / 1.02^n (R² 0.938); last local exponents 1.7, 1.7, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
-| MIN5 | 15n^3 + 753n^2 + 8,770n + 26,630 (exact, n ≥ 3) | undecided: n^1.8 (rms 0.09) or 1.18^n (rms 0.13) | n^1.32 (R² 0.995) / 1.15^n (R² 0.994); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.18, 1.15, 1.12 | – | timeout (>20 s) at n=24 |
+| MIN5 | 15n^3 + 753n^2 + 8,770n + 26,630 (exact, n ≥ 3) | undecided: n^3.6 (rms 0.12) or 1.20^n (rms 0.08) | n^1.50 (R² 0.992) / 1.12^n (R² 0.987); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.15, 1.12, 1.10 | – | crash (exit 134) at n=32 |
 | FULL | 3n^2 + 145n + 145 (exact) | n^2.45 for n ≥ 12 (rms 0.14) | n^1.52 (R² 0.997) / 1.02^n (R² 0.938); last local exponents 1.7, 1.7, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
 | FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.28 (R² 0.086) / 0.99^n (R² 0.032); last local exponents 1.9, -5.4, 1.5; last per-step factors 1.10, 0.82, 1.03 | – | timeout (>20 s) at n=128; fitted on n=4..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..64 |
 
@@ -486,21 +499,21 @@ Ill-typed: like assoceq with the middle equality missing. Intended verdict: reje
 | 8 | 131,895 (accepted!) | 3,224 | 1,322 | 124 | 131,543 (accepted!) | 3,142 | 1,322 | 96.0 |
 | 12 | 236,983 (accepted!) | 6,904 | 2,126 | 181 | 236,599 (accepted!) | 5,732 | 2,126 | 145 |
 | 16 | 382,231 (accepted!) | 9,290 | 3,026 | 237 | 381,815 (accepted!) | 9,106 | 3,026 | 274 |
-| 24 | 816,247 (accepted!) | 55,601 | 5,114 | 692 | timeout | >20 s | 5,114 | 539 |
-| 32 | crash (out of memory) | 102 s wall | 7,586 | 915 | not run |  | 7,586 | 769 |
-| 48 | crash (out of memory) | 104 s wall | 13,682 | 4,383 |  |  | 13,682 | 1,569 |
+| 24 | 816,247 (accepted!) | 55,601 | 5,114 | 692 | 815,767 (accepted!) | 29,948 | 5,114 | 539 |
+| 32 | crash (out of memory) | 102 s wall | 7,586 | 915 | crash (out of memory) | 44 s wall | 7,586 | 769 |
+| 48 | crash (out of memory) | 104 s wall | 13,682 | 4,383 | crash (out of memory) | 49 s wall | 13,682 | 1,569 |
 | 64 | not run |  | 21,314 | 4,058 | not run |  | 21,314 | 3,040 |
-| 96 | not run |  | 41,186 | 19,284 |  |  | 41,186 | 12,076 |
+| 96 | not run |  | 41,186 | 19,284 | not run |  | 41,186 | 12,076 |
 | 128 | not run |  | 67,202 | 40,541 | not run |  | 67,202 | 16,597 |
-| 160 | not run |  | 99,362 | 67,782 |  |  | 99,362 | 33,464 |
-| 192 | not run |  | 137,666 | 104,902 |  |  | 137,666 | 50,723 |
+| 160 | not run |  | 99,362 | 67,782 | not run |  | 99,362 | 33,464 |
+| 192 | not run |  | 137,666 | 104,902 | not run |  | 137,666 | 50,723 |
 | 256 | not run |  | timeout | >120 s | not run |  | 232,706 | 116,179 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 15n^3 + 715n^2 + 7,412n + 19,159 (exact, n ≥ 5) | undecided: n^4.0 (rms 0.18) or 1.23^n (rms 0.13) | n^1.66 (R² 0.996) / 1.12^n (R² 0.989); last local exponents 1.4, 1.7, 1.9; last per-step factors 1.16, 1.13, 1.10 | – | crash (exit 134) at n=32; fitted on n=3..24 (accepted); verdict differs from the intended one at n=3..24 |
 | FIX | 3n^2 + 141n + 2 (exact, n ≥ 3) | n^2.63 for n ≥ 6 (rms 0.20) | n^1.55 (R² 0.997) / 1.02^n (R² 0.935); last local exponents 1.7, 1.8, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
-| MIN5 | n^1.75 (rms 0.01) | n^1.83 (rms 0.04) | n^1.45 (R² 0.997) / 1.15^n (R² 0.994); last local exponents 1.2, 1.4, 1.7; last per-step factors 1.19, 1.16, 1.13 | – | timeout (>20 s) at n=24; fitted on n=3..16 (accepted); verdict differs from the intended one at n=3..16 |
+| MIN5 | 15n^3 + 715n^2 + 7,404n + 18,871 (exact, n ≥ 5) | undecided: n^2.3 (rms 0.10) or 1.18^n (rms 0.15) | n^1.66 (R² 0.996) / 1.12^n (R² 0.989); last local exponents 1.4, 1.7, 1.9; last per-step factors 1.16, 1.13, 1.10 | – | crash (exit 134) at n=32; fitted on n=3..24 (accepted); verdict differs from the intended one at n=3..24 |
 | FULL | 3n^2 + 141n + 2 (exact, n ≥ 3) | n^2.63 for n ≥ 24 (rms 0.12) | n^1.61 (R² 0.998) / 1.02^n (R² 0.931); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.01, 1.01, 1.01 | – | stopped before n=512: predicted timeout: 116 s at n=256, power-law extrapolation gives 813 s at n=512 |
 | FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.21 (R² 0.050) / 1.00^n (R² 0.013); last local exponents 2.0, -5.3, 1.5; last per-step factors 1.10, 0.83, 1.03 | – | stopped before n=128: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 
@@ -527,24 +540,24 @@ Valid control for eqchain-goals: n + 1 type parameters and n calls, no equality 
 
 | n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 0 | 41.5 | 0 | 17.8 |  |  | 0 | 0.2 |
-| 2 | 0 | 45.8 | 0 | 14.1 |  |  | 0 | 0.3 |
-| 4 | 0 | 49.8 | 0 | 13.5 |  |  | 0 | 0.4 |
-| 8 | 0 | 58.3 | 0 | 13.1 |  |  | 0 | 0.4 |
-| 16 | 0 | 47.9 | 0 | 18.8 |  |  | 0 | 0.5 |
-| 32 | 0 | 40.6 | 0 | 27.3 |  |  | 0 | 1.1 |
-| 64 | 0 | 44.2 | 0 | 18.1 |  |  | 0 | 1.7 |
-| 128 | 0 | 53.2 | 0 | 23.9 |  |  | 0 | 4.7 |
-| 256 | 0 | 144 | 0 | 29.2 |  |  | 0 | 6.5 |
-| 512 | 0 | 77.4 | 0 | 41.0 |  |  | 0 | 10.8 |
-| 1024 | 0 | 117 | 0 | 127 |  |  | 0 | 42.3 |
+| 1 | 0 | 41.5 | 0 | 17.8 | 0 | 4.4 | 0 | 0.2 |
+| 2 | 0 | 45.8 | 0 | 14.1 | 0 | 0.3 | 0 | 0.3 |
+| 4 | 0 | 49.8 | 0 | 13.5 | 0 | 0.3 | 0 | 0.4 |
+| 8 | 0 | 58.3 | 0 | 13.1 | 0 | 0.4 | 0 | 0.4 |
+| 16 | 0 | 47.9 | 0 | 18.8 | 0 | 0.6 | 0 | 0.5 |
+| 32 | 0 | 40.6 | 0 | 27.3 | 0 | 0.9 | 0 | 1.1 |
+| 64 | 0 | 44.2 | 0 | 18.1 | 0 | 6.6 | 0 | 1.7 |
+| 128 | 0 | 53.2 | 0 | 23.9 | 0 | 7.3 | 0 | 4.7 |
+| 256 | 0 | 144 | 0 | 29.2 | 0 | 6.2 | 0 | 6.5 |
+| 512 | 0 | 77.4 | 0 | 41.0 | 0 | 25.2 | 0 | 10.8 |
+| 1024 | 0 | 117 | 0 | 127 | 0 | 61.9 | 0 | 42.3 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | – | undecided: n^0.7 (rms 0.26) or 1.01^n (rms 0.37) | – | `solver.goalSteps`: 5n (exact) | completed |
-| FIX | – | n^2.01 for n ≥ 64 (rms 0.10) | – | `solver.goalSteps`: 5n (exact) | completed |
-| MIN5 | – | – | – | – | completed |
-| FULL | – | below 50 ms throughout | – | `solver.goalSteps`: 5n (exact) | completed |
+| base | – | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 5n (exact) | completed |
+| FIX | – | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 5n (exact) | completed |
+| MIN5 | – | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 5n (exact) | completed |
+| FULL | – | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 5n (exact) | completed |
 
 ### ctrl-assoc
 
@@ -552,22 +565,22 @@ Valid control for assoceq: n + 1 parameters with T{i} is P, no equality; x: T0.X
 
 | n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | 368 | 53.1 | 72 | 14.9 |  |  | 2 | 1.8 |
-| 2 | 373 | 81.3 | 73 | 14.8 |  |  | 3 | 1.7 |
-| 4 | 383 | 104 | 75 | 6.8 |  |  | 5 | 2.1 |
-| 8 | 403 | 57.3 | 79 | 30.5 |  |  | 9 | 2.1 |
-| 16 | 443 | 56.4 | 87 | 20.7 |  |  | 17 | 2.4 |
-| 32 | 523 | 113 | 103 | 23.0 |  |  | 33 | 2.8 |
-| 64 | 683 | 84.9 | 135 | 45.6 |  |  | 65 | 3.3 |
-| 128 | 1,003 | 222 | 199 | 74.8 |  |  | 129 | 7.6 |
-| 256 | 1,643 | 338 | 327 | 221 |  |  | 257 | 13.4 |
+| 1 | 368 | 53.1 | 72 | 14.9 | 2 | 0.7 | 2 | 1.8 |
+| 2 | 373 | 81.3 | 73 | 14.8 | 3 | 5.9 | 3 | 1.7 |
+| 4 | 383 | 104 | 75 | 6.8 | 5 | 0.7 | 5 | 2.1 |
+| 8 | 403 | 57.3 | 79 | 30.5 | 9 | 0.9 | 9 | 2.1 |
+| 16 | 443 | 56.4 | 87 | 20.7 | 17 | 1.2 | 17 | 2.4 |
+| 32 | 523 | 113 | 103 | 23.0 | 33 | 1.6 | 33 | 2.8 |
+| 64 | 683 | 84.9 | 135 | 45.6 | 65 | 6.5 | 65 | 3.3 |
+| 128 | 1,003 | 222 | 199 | 74.8 | 129 | 12.6 | 129 | 7.6 |
+| 256 | 1,643 | 338 | 327 | 221 | 257 | 29.3 | 257 | 13.4 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 5n + 363 (exact) | undecided: n^1.1 (rms 0.21) or 1.01^n (rms 0.30) | n^0.47 (R² 0.962) / 1.01^n (R² 0.968); last local exponents 0.4, 0.6, 0.7; last per-step factors 1.01, 1.01, 1.00 | – | completed |
 | FIX | n + 71 (exact) | undecided: n^1.6 (rms 0.09) or 1.01^n (rms 0.14) | n^0.48 (R² 0.962) / 1.01^n (R² 0.968); last local exponents 0.4, 0.6, 0.7; last per-step factors 1.01, 1.01, 1.00 | – | completed |
-| MIN5 | – | – | – | – | completed |
-| FULL | n + 1 (exact) | below 50 ms throughout | n^0.98 (R² 1.000) / 1.01^n (R² 0.876); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+| MIN5 | n + 1 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.876); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+| FULL | n + 1 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.876); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
 
 ### breadth-traits
 
@@ -588,8 +601,8 @@ Valid: n conformances A{i} is P{i} (n traits, n types) and one lookup. Intended 
 |---|---|---|---|---|---|
 | base | n + 71 (exact) | n^1.87 for n ≥ 32 (rms 0.26) | n^0.82 (R² 0.997) / 1.00^n (R² 0.945); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 | FIX | n + 71 (exact) | n^1.80 for n ≥ 16 (rms 0.28) | n^0.82 (R² 0.997) / 1.00^n (R² 0.945); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| MIN5 | flat | n^1.17 (rms 0.23) | – | `solver.goalSteps`: 2n + 6 (exact) | completed |
-| FULL | flat | below 50 ms throughout | – | `absmodel.facts`: n + 63 (exact) | completed |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 2n + 6 (exact) | completed |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `absmodel.facts`: n + 63 (exact) | completed |
 
 ### breadth-types
 
@@ -610,8 +623,8 @@ Valid: n conformances A{i} is P (one trait, n types) and one lookup. Intended ve
 |---|---|---|---|---|---|
 | base | n + 71 (exact) | n^2.27 for n ≥ 32 (rms 0.09) | n^0.82 (R² 0.997) / 1.00^n (R² 0.945); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
 | FIX | n + 71 (exact) | n^2.60 for n ≥ 64 (rms 0.05) | n^0.82 (R² 0.997) / 1.00^n (R² 0.945); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| MIN5 | n + 1 (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| FULL | n + 1 (exact) | n^1.26 (rms 0.18) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| MIN5 | n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| FULL | n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 
 ### breadth-square
 
@@ -633,8 +646,8 @@ Valid: n traits x n types = n*n conformances and n lookups (the shape of breadth
 |---|---|---|---|---|---|
 | base | n^3 + 71n (exact) | undecided: n^3.9 (rms 0.12) or 1.13^n (rms 0.14) | n^2.81 (R² 1.000) / 1.10^n (R² 0.980); last local exponents 2.8, 2.9, 2.9; last per-step factors 1.11, 1.08, 1.07 | – | completed |
 | FIX | n^3 + 71n (exact) | n^3.56 for n ≥ 12 (rms 0.18) | n^2.81 (R² 1.000) / 1.10^n (R² 0.980); last local exponents 2.8, 2.9, 2.9; last per-step factors 1.11, 1.08, 1.07 | – | completed |
-| MIN5 | n^2 + n (exact) | undecided: n^1.7 (rms 0.19) or 1.07^n (rms 0.30) | n^1.96 (R² 1.000) / 1.07^n (R² 0.975); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.07, 1.06, 1.05 | – | completed |
-| FULL | n^2 + n (exact) | n^2.22 (rms 0.10) | n^1.96 (R² 1.000) / 1.07^n (R² 0.975); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.07, 1.06, 1.05 | – | completed |
+| MIN5 | n^2 + n (exact) | below 200 ms throughout (not fitted) | n^1.96 (R² 1.000) / 1.07^n (R² 0.975); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.07, 1.06, 1.05 | – | completed |
+| FULL | n^2 + n (exact) | below 200 ms throughout (not fitted) | n^1.96 (R² 1.000) / 1.07^n (R² 0.975); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.07, 1.06, 1.05 | – | completed |
 
 ### div-branch
 
@@ -645,8 +658,8 @@ Ill-typed: Yb is P is underivable; b givens `S_j<T> is P => T is P` make the sea
 | 1 | 1,350 | 29.2 | 1,350 | 15.6 | 20 | 2.8 | 1 | 2.3 |
 | 2 | 110,449 | 1,400 | 110,449 | 1,909 | 3,069 | 207 | 1 | 2.2 |
 | 3 | crash (out of memory) | 100 s wall | 159,579 [B] | 3,362 | 118,096 | 10,239 | 1 | 2.4 |
-| 4 | crash (out of memory) | 90 s wall | 202,021 [B] | 6,422 | not run |  | 1 | 2.4 |
-| 5 | not run |  | 117,151 [B] | 4,309 | not run |  | 1 | 2.1 |
+| 4 | crash (out of memory) | 90 s wall | 202,021 [B] | 6,422 | crash (out of memory) | 40 s wall | 1 | 2.4 |
+| 5 | not run |  | 117,151 [B] | 4,309 | crash (out of memory) | 34 s wall | 1 | 2.1 |
 | 6 | not run |  | 236,361 [B] | 9,622 | not run |  | 1 | 2.2 |
 | 8 | not run |  | 91,261 [B] | 5,332 | not run |  | 1 | 2.9 |
 | 12 | not run |  | 25,749 [B] | 2,353 | not run |  | 1 | 2.5 |
@@ -657,8 +670,8 @@ Ill-typed: Yb is P is underivable; b givens `S_j<T> is P => T is P` make the sea
 |---|---|---|---|---|---|
 | base | too few points (2); per-step factors 81.8 | too few points (2); per-step factors 47.9 | n^6.35 (R² 1.000) / 81.81^n (R² 1.000); last local exponents 6.4; last per-step factors 81.81 | – | crash (exit 134) at n=3 |
 | FIX | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-1.73 (R² 0.829) / 0.91^n (R² 0.841); last local exponents -3.1, 2.1, -2.8; last per-step factors 0.73, 1.16, 0.89 | – | completed; fitted on n=3..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
-| MIN5 | too few points (3); per-step factors 153, 38.5 | too few points (3); per-step factors 72.9, 49.4 | n^7.83 (R² 0.997) / 76.84^n (R² 0.992); last local exponents 7.3, 9.0; last per-step factors 153.45, 38.48 | – | stopped before n=4: predicted timeout: 10 s at n=3, power-law extrapolation gives 163 s at n=4 |
-| FULL | flat | below 50 ms throughout | – | `solver.goalSteps`: 6n + 6 (exact) | completed |
+| MIN5 | too few points (3); per-step factors 153, 38.5 | too few points (3); per-step factors 72.9, 49.4 | n^7.83 (R² 0.997) / 76.84^n (R² 0.992); last local exponents 7.3, 9.0; last per-step factors 153.45, 38.48 | – | crash (exit 134) at n=4 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 6n + 6 (exact) | completed |
 | FULL-absmodel | too few points (2); per-step factors 153 | too few points (2); per-step factors 70.2 | n^7.26 (R² 1.000) / 153.45^n (R² 1.000); last local exponents 7.3; last per-step factors 153.45 | – | timeout (>20 s) at n=3 |
 
 Leave-one-out configurations (same counter):
@@ -677,8 +690,8 @@ Ill-typed: div_branch with an unrelated equality A == B in scope. Intended verdi
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | 1 | 1,369 | 67.5 | 1,369 | 28.2 | 1,369 | 16.1 | 1 | 4.1 |
 | 2 | 111,983 | 1,954 | 111,983 | 2,008 | 111,983 | 1,472 | 1 | 4.1 |
-| 3 | crash (out of memory) | 90 s wall | 161,765 [B] | 4,458 | timeout | >20 s | 1 | 3.6 |
-| 4 | crash (out of memory) | 83 s wall | 204,751 [B] | 7,567 | not run |  | 1 | 3.7 |
+| 3 | crash (out of memory) | 90 s wall | 161,765 [B] | 4,458 | crash (out of memory) | 50 s wall | 1 | 3.6 |
+| 4 | crash (out of memory) | 83 s wall | 204,751 [B] | 7,567 | crash (out of memory) | 55 s wall | 1 | 3.7 |
 | 5 | not run |  | 118,713 [B] | 5,319 | not run |  | 1 | 3.9 |
 | 6 | not run |  | 239,471 [B] | 11,422 | not run |  | 1 | 4.5 |
 | 8 | not run |  | 92,431 [B] | 6,522 | not run |  | 1 | 4.1 |
@@ -690,8 +703,8 @@ Ill-typed: div_branch with an unrelated equality A == B in scope. Intended verdi
 |---|---|---|---|---|---|
 | base | too few points (2); per-step factors 81.8 | too few points (2); per-step factors 28.9 | n^6.35 (R² 1.000) / 81.80^n (R² 1.000); last local exponents 6.4; last per-step factors 81.80 | – | crash (exit 134) at n=3 |
 | FIX | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-1.73 (R² 0.829) / 0.91^n (R² 0.841); last local exponents -3.1, 2.1, -2.8; last per-step factors 0.73, 1.16, 0.89 | – | completed; fitted on n=3..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
-| MIN5 | too few points (2); per-step factors 81.8 | too few points (2); per-step factors 91.4 | n^6.35 (R² 1.000) / 81.80^n (R² 1.000); last local exponents 6.4; last per-step factors 81.80 | – | timeout (>20 s) at n=3 |
-| FULL | flat | below 50 ms throughout | – | `solver.goalSteps`: 6n + 6 (exact) | completed |
+| MIN5 | too few points (2); per-step factors 81.8 | too few points (2); per-step factors 91.4 | n^6.35 (R² 1.000) / 81.80^n (R² 1.000); last local exponents 6.4; last per-step factors 81.80 | – | crash (exit 134) at n=3 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 6n + 6 (exact) | completed |
 | FULL-absmodel | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^0.28 (R² 0.024) / 1.08^n (R² 0.045); last local exponents 0.8, -2.4, 3.8; last per-step factors 1.27, 0.58, 2.02 | – | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 72 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | FULL-absquotient | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^0.28 (R² 0.024) / 1.08^n (R² 0.045); last local exponents 0.8, -2.4, 3.8; last per-step factors 1.27, 0.58, 2.02 | – | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 79 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 
@@ -715,8 +728,8 @@ Ill-typed: div_branch with base facts S_j<S_j<Xi>> is P (deeper than the model's
 | 1 | 1,369 | 30.4 | 1,369 | 35.6 | 39 | 1.4 | 39 | 2.8 |
 | 2 | 113,517 | 2,047 | 113,517 | 2,369 | 6,137 | 231 | 6,137 | 260 |
 | 3 | crash (out of memory) | 102 s wall | 166,137 [B] | 4,586 | 236,191 | 12,397 | 118,093 [B] | 7,230 |
-| 4 | crash (out of memory) | 84 s wall | 212,941 [B] | 8,465 | not run |  | 87,377 [B] | 5,611 |
-| 5 | not run |  | 124,961 [B] | 6,541 | not run |  | 78,121 [B] | 6,880 |
+| 4 | crash (out of memory) | 84 s wall | 212,941 [B] | 8,465 | crash (out of memory) | 61 s wall | 87,377 [B] | 5,611 |
+| 5 | not run |  | 124,961 [B] | 6,541 | crash (out of memory) | 62 s wall | 78,121 [B] | 6,880 |
 | 6 | not run |  | 42,477 [B] | 2,341 | not run |  | 223,945 [B] | 20,185 |
 | 8 | not run |  | 100,621 [B] | 8,045 | not run |  | 149,793 [B] | 18,758 |
 | 12 | not run |  | 29,517 [B] | 3,615 | not run |  | 90,481 [B] | 14,434 |
@@ -727,7 +740,7 @@ Ill-typed: div_branch with base facts S_j<S_j<Xi>> is P (deeper than the model's
 |---|---|---|---|---|---|
 | base | too few points (2); per-step factors 82.9 | too few points (2); per-step factors 67.4 | n^6.37 (R² 1.000) / 82.92^n (R² 1.000); last local exponents 6.4; last per-step factors 82.92 | – | crash (exit 134) at n=3 |
 | FIX | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-1.60 (R² 0.807) / 0.91^n (R² 0.820); last local exponents -3.0, 2.2, -2.7; last per-step factors 0.74, 1.17, 0.89 | – | completed; fitted on n=3..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
-| MIN5 | too few points (3); per-step factors 157, 38.5 | too few points (3); per-step factors 170, 53.8 | n^7.86 (R² 0.997) / 77.82^n (R² 0.991); last local exponents 7.3, 9.0; last per-step factors 157.36, 38.49 | – | stopped before n=4: predicted timeout: 12 s at n=3, power-law extrapolation gives 209 s at n=4 |
+| MIN5 | too few points (3); per-step factors 157, 38.5 | too few points (3); per-step factors 170, 53.8 | n^7.86 (R² 0.997) / 77.82^n (R² 0.991); last local exponents 7.3, 9.0; last per-step factors 157.36, 38.49 | – | crash (exit 134) at n=4 |
 | FULL | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-2.40 (R² 0.863) / 0.78^n (R² 0.931); last local exponents -1.4, -1.2, -5.7; last per-step factors 0.82, 0.88, 0.66 | – | crash (exit 134) at n=32; fitted on n=3..16 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | FULL-absmodel | too few points (2); per-step factors 157 | too few points (2); per-step factors 39.3 | n^7.30 (R² 1.000) / 157.36^n (R² 1.000); last local exponents 7.3; last per-step factors 157.36 | – | stopped before n=4: predicted timeout: 13 s at n=3, power-law extrapolation gives 154 s at n=4; fitted on n=1..2 (rejected); resource bound (`budget`) hit from n=3 |
 
@@ -751,7 +764,7 @@ Ill-typed: div_branch with b = 2; the size is the depth bound HYLO_TC_MAXDEPTH =
 | 10 | 110,449 | 1,953 | 110,449 | 2,241 | 3,069 | 179 | 1 | 1.9 |
 | 12 | 442,225 | 8,442 | 294,769 [B] | 5,115 | 12,285 | 1,405 | 1 | 2.0 |
 | 14 | 1,769,329 | 57,932 | 294,769 [B] | 5,758 | 49,149 | 4,208 | 1 | 3.2 |
-| 16 | not run |  | 294,769 [B] | 5,599 | timeout | >20 s | 1 | 1.9 |
+| 16 | not run |  | 294,769 [B] | 5,599 | 196,605 | 23,108 | 1 | 1.9 |
 | 20 | not run |  | 294,769 [B] | 5,345 | not run |  | 1 | 2.2 |
 | 24 | not run |  | 294,769 [B] | 5,346 | not run |  | 1 | 3.4 |
 | 32 | not run |  | 294,769 [B] | 5,407 | not run |  | 1 | 2.0 |
@@ -761,8 +774,8 @@ Ill-typed: div_branch with b = 2; the size is the depth bound HYLO_TC_MAXDEPTH =
 |---|---|---|---|---|---|
 | base | 2.01^n (rms 0.01) | undecided: n^8.6 (rms 0.36) or 2.21^n (rms 0.22) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=16: predicted timeout: 58 s at n=14, power-law extrapolation gives 307 s at n=16 |
 | FIX | too few points (4); per-step factors 2.04, 2.02, 2 | too few points (4); per-step factors 3.47, 1.62, 2.57 | n^5.44 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.9, 4.9, 6.2; last per-step factors 2.04, 2.02, 2.00 | – | completed; fitted on n=5..10 (rejected); resource bound (`budget`) hit from n=12 |
-| MIN5 | 2.01^n (rms 0.01) | undecided: n^6.7 (rms 0.43) or 2.12^n (rms 0.39) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | timeout (>20 s) at n=16 |
-| FULL | flat | below 50 ms throughout | – | – | completed |
+| MIN5 | 2.00^n (rms 0.01) | undecided: n^7.9 (rms 0.52) or 2.12^n (rms 0.36) | n^8.82 (R² 0.995) / 2.00^n (R² 1.000); last local exponents 7.6, 9.0, 10.4; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=20: predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed |
 | FULL-absmodel | 2.01^n (rms 0.01) | too small a range (2.8x); n^8.6 fits (rms 0.07) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | timeout (>20 s) at n=16 |
 
 Leave-one-out configurations (same counter):
@@ -789,7 +802,7 @@ Ill-typed: div_trunc with b = 2; the size is the depth bound HYLO_TC_MAXDEPTH = 
 | 10 | 113,517 | 2,556 | 113,517 | 3,576 | 6,137 | 228 | 6,137 | 195 |
 | 12 | 454,509 | 11,472 | 302,957 [B] | 7,634 | 24,569 | 1,128 | 24,569 | 902 |
 | 14 | 1,818,477 | 61,027 | 302,957 [B] | 7,944 | 98,297 | 5,660 | 98,297 | 6,874 |
-| 16 | not run |  | 302,957 [B] | 7,453 | timeout | >20 s | 262,137 [B] | 13,304 |
+| 16 | not run |  | 302,957 [B] | 7,453 | 393,209 | 25,978 | 262,137 [B] | 13,304 |
 | 20 | not run |  | 302,957 [B] | 6,904 | not run |  | 262,137 [B] | 17,736 |
 | 24 | not run |  | 302,957 [B] | 7,038 | not run |  | 262,137 [B] | 17,945 |
 | 32 | not run |  | 302,957 [B] | 6,719 | not run |  | 262,137 [B] | 14,815 |
@@ -799,7 +812,7 @@ Ill-typed: div_trunc with b = 2; the size is the depth bound HYLO_TC_MAXDEPTH = 
 |---|---|---|---|---|---|
 | base | 2.01^n (rms 0.01) | undecided: n^8.9 (rms 0.16) or 2.31^n (rms 0.19) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=16: predicted timeout: 61 s at n=14, power-law extrapolation gives 260 s at n=16 |
 | FIX | too few points (4); per-step factors 2.04, 2.02, 2 | too few points (4); per-step factors 1.42, 1.94, 2.65 | n^5.44 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.9, 4.9, 6.2; last per-step factors 2.04, 2.02, 2.00 | – | completed; fitted on n=5..10 (rejected); resource bound (`budget`) hit from n=12 |
-| MIN5 | 2.01^n (rms 0.01) | undecided: n^8.2 (rms 0.23) or 2.11^n (rms 0.16) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | timeout (>20 s) at n=16 |
+| MIN5 | 2.01^n (rms 0.01) | 2.14^n (rms 0.15) | n^8.82 (R² 0.995) / 2.00^n (R² 1.000); last local exponents 7.6, 9.0, 10.4; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=20: predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20 |
 | FULL | 2.01^n (rms 0.01) | 2.34^n (rms 0.13) | n^8.22 (R² 0.998) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | completed; fitted on n=5..14 (rejected); resource bound (`budget`) hit from n=16 |
 
 ### div-valid
@@ -821,8 +834,8 @@ Valid: two growing givens; Xi is P holds through S1^d<Xi> is P (a derivation of 
 |---|---|---|---|---|---|
 | base | 2.04^n for n ≥ 2 (rms 0.02) | undecided: n^4.2 (rms 0.25) or 1.90^n (rms 0.25) | n^4.44 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.02, 2.01, 2.00 | – | completed |
 | FIX | 2.04^n for n ≥ 2 (rms 0.02) | undecided: n^4.1 (rms 0.21) or 2.05^n (rms 0.24) | n^4.44 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.02, 2.01, 2.00 | – | completed |
-| MIN5 | 2.03^n for n ≥ 2 (rms 0.01) | undecided: n^4.3 (rms 0.18) or 2.10^n (rms 0.11) | n^4.43 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.01, 2.01, 2.00 | – | completed |
-| FULL | 2.03^n for n ≥ 2 (rms 0.01) | undecided: n^3.6 (rms 0.23) or 1.85^n (rms 0.18) | n^4.43 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.01, 2.01, 2.00 | – | completed |
+| MIN5 | 2.03^n for n ≥ 2 (rms 0.01) | below 200 ms throughout (not fitted) | n^4.43 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.01, 2.01, 2.00 | – | completed |
+| FULL | 2.03^n for n ≥ 2 (rms 0.01) | below 200 ms throughout (not fitted) | n^4.43 (R² 0.995) / 2.01^n (R² 1.000); last local exponents 3.8, 4.5, 5.2; last per-step factors 2.01, 2.01, 2.00 | – | completed |
 
 ### div-valid-deep
 
@@ -837,14 +850,14 @@ Valid: two growing givens; Xi is P holds through S1^d<Xi> is P (a derivation of 
 | 10 | 149,432 | 3,730 | 149,432 | 2,525 | 6,142 | 228 | 6,142 | 398 |
 | 12 | 597,944 | 13,388 | 298,863 ✗ [B] | 5,857 | 24,574 | 1,435 | 24,574 | 1,521 |
 | 14 | 2,391,992 | 74,240 | 298,863 ✗ [B] | 6,004 | 98,302 | 6,524 | 98,302 | 7,854 |
-| 16 | not run |  | 298,863 ✗ [B] | 5,595 | timeout | >20 s | 393,211 ✗ [B] | 30,469 |
+| 16 | not run |  | 298,863 ✗ [B] | 5,595 | 393,214 | 38,320 | 393,211 ✗ [B] | 30,469 |
 | 20 | not run |  | 298,863 ✗ [B] | 5,551 | not run |  | not run |  |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 2.02^n (rms 0.03) | 2.03^n (rms 0.12) | n^7.40 (R² 0.993) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=16: predicted timeout: 74 s at n=14, power-law extrapolation gives 327 s at n=16 |
 | FIX | 2.03^n (rms 0.03) | undecided: n^4.8 (rms 0.08) or 1.93^n (rms 0.05) | n^5.41 (R² 0.995) / 2.00^n (R² 1.000); last local exponents 3.5, 4.8, 6.2; last per-step factors 2.02, 2.01, 2.00 | – | completed; fitted on n=2..10 (accepted); resource bound (`budget`) hit from n=12; verdict differs from the intended one at n=12..20 |
-| MIN5 | 2.01^n (rms 0.02) | 2.16^n (rms 0.13) | n^7.40 (R² 0.993) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | timeout (>20 s) at n=16 |
+| MIN5 | 2.01^n (rms 0.02) | 2.24^n for n ≥ 4 (rms 0.13) | n^8.82 (R² 0.995) / 2.00^n (R² 1.000); last local exponents 7.6, 9.0, 10.4; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=20: predicted timeout: 38 s at n=16, power-law extrapolation gives 739 s at n=20 |
 | FULL | 2.01^n (rms 0.02) | 2.24^n (rms 0.09) | n^7.40 (R² 0.993) / 2.00^n (R² 1.000); last local exponents 6.2, 7.6, 9.0; last per-step factors 2.00, 2.00, 2.00 | – | stopped before n=20: predicted timeout: 30 s at n=16, power-law extrapolation gives 294 s at n=20; fitted on n=2..14 (accepted); resource bound (`budget`) hit from n=16; verdict differs from the intended one at n=16 |
 
 ### cyc-ring
@@ -867,9 +880,9 @@ Ill-typed: a ring of n givens A{i+1} is P => A{i} is P with no base case. Intend
 |---|---|---|---|---|---|
 | base | 19n + 1,331 (exact) | undecided: n^1.9 (rms 0.20) or 1.03^n (rms 0.22) | n^0.26 (R² 0.960) / 1.01^n (R² 0.995); last local exponents 0.2, 0.2, 0.4; last per-step factors 1.01, 1.01, 1.01 | – | completed |
 | FIX | 19n + 1,331 (exact) | undecided: n^1.1 (rms 0.11) or 1.03^n (rms 0.15) | n^0.26 (R² 0.960) / 1.01^n (R² 0.995); last local exponents 0.2, 0.2, 0.4; last per-step factors 1.01, 1.01, 1.01 | – | completed |
-| MIN5 | 19n + 1 (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.04^n (R² 0.930); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.07, 1.04, 1.02 | – | completed |
-| FULL | flat | below 50 ms throughout | – | `solver.goalSteps`: 4n + 6 (exact) | completed |
-| FULL-absmodel | 19n + 1 (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.04^n (R² 0.930); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.07, 1.04, 1.02 | – | completed |
+| MIN5 | 19n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.04^n (R² 0.930); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.07, 1.04, 1.02 | – | completed |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 4n + 6 (exact) | completed |
+| FULL-absmodel | 19n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.04^n (R² 0.930); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.07, 1.04, 1.02 | – | completed |
 
 Leave-one-out configurations (same counter):
 
@@ -894,8 +907,8 @@ Ill-typed: n types, A{j} is P => A{i} is P for every i != j (branching n - 1), n
 | 2 | 1,369 | 43.7 | 1,369 | 26.6 | 39 | 5.1 | 1 | 1.9 |
 | 3 | 116,585 | 2,789 | 116,585 | 2,082 | 9,205 | 63.6 | 1 | 2.5 |
 | 4 | crash (out of memory) | 100 s wall | 179,253 [B] | 5,313 | 472,381 | 3,975 | 1 | 2.7 |
-| 5 | crash (out of memory) | 107 s wall | 245,701 [B] | 7,931 | not run |  | 1 | 2.6 |
-| 6 | not run |  | 156,201 [B] | 5,715 | not run |  | 1 | 7.9 |
+| 5 | crash (out of memory) | 107 s wall | 245,701 [B] | 7,931 | crash (out of memory) | 36 s wall | 1 | 2.6 |
+| 6 | not run |  | 156,201 [B] | 5,715 | crash (out of memory) | 19 s wall | 1 | 7.9 |
 | 8 | not run |  | 100,801 [B] | 6,209 | not run |  | 1 | 5.3 |
 | 12 | not run |  | 53,733 [B] | 4,499 | not run |  | 1 | 11.9 |
 | 16 | not run |  | 149,421 [B] | 18,384 | not run |  | 1 | 14.2 |
@@ -904,9 +917,9 @@ Ill-typed: n types, A{j} is P => A{i} is P for every i != j (branching n - 1), n
 |---|---|---|---|---|---|
 | base | too few points (2); per-step factors 85.2 | too few points (2); per-step factors 63.8 | n^10.96 (R² 1.000) / 85.16^n (R² 1.000); last local exponents 11.0; last per-step factors 85.16 | – | crash (exit 134) at n=4 |
 | FIX | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^0.43 (R² 0.084) / 1.05^n (R² 0.146); last local exponents -1.5, -1.6, 3.6; last per-step factors 0.80, 0.85, 1.29 | – | completed; fitted on n=4..16 (rejected, resource bound hit); resource bound (`budget`) hit from n=4 |
-| MIN5 | too few points (3); per-step factors 236, 51.3 | too few points (3); per-step factors 12.6, 62.5 | n^13.56 (R² 1.000) / 110.06^n (R² 0.991); last local exponents 13.5, 13.7; last per-step factors 236.03, 51.32 | – | stopped before n=5: predicted timeout: 4 s at n=4, power-law extrapolation gives 98 s at n=5 |
-| FULL | flat | below 50 ms throughout | – | `solver.goalSteps`: 4n^2 − 4n + 6 (exact) | completed |
-| FULL-absmodel | too few points (2); per-step factors 236 | too few points (2); per-step factors 65.3 | n^13.48 (R² 1.000) / 236.03^n (R² 1.000); last local exponents 13.5; last per-step factors 236.03 | – | stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4 |
+| MIN5 | too few points (3); per-step factors 236, 51.3 | too few points (3); per-step factors 12.6, 62.5 | n^13.56 (R² 1.000) / 110.06^n (R² 0.991); last local exponents 13.5, 13.7; last per-step factors 236.03, 51.32 | – | crash (exit 134) at n=5 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 4n^2 − 4n + 6 (exact) | completed |
+| FULL-absmodel | too few points (2); per-step factors 236 | below 200 ms throughout (not fitted) | n^13.48 (R² 1.000) / 236.03^n (R² 1.000); last local exponents 13.5; last per-step factors 236.03 | – | stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4 |
 
 Leave-one-out configurations (same counter):
 
@@ -933,9 +946,9 @@ Valid: n extensions over n/10 types, 20 member lookups. Intended verdict: accept
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 40n + 160 (exact) | n^0.52 (rms 0.15) | n^0.99 (R² 1.000) / 1.00^n (R² 0.922); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.00, 1.00, 1.00 | – | completed |
-| FIX | flat | undecided: n^0.6 (rms 0.44) or 1.01^n (rms 1.13) | – | – | completed |
-| MIN5 | flat | n^0.63 for n ≥ 80 (rms 0.28) | – | – | completed |
-| FULL | flat | n^1.77 (rms 0.06) | – | – | completed |
+| FIX | flat | below 200 ms throughout (not fitted) | – | – | completed |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | – | completed |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed |
 
 ### members-use
 
@@ -955,8 +968,8 @@ Valid: 100 extensions over 10 types, m member lookups. Intended verdict: accepte
 |---|---|---|---|---|---|
 | base | 208n (exact) | n^1.35 (rms 0.28) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 | FIX | n (exact) | undecided: n^8.9 (rms 0.32) or 1.01^n (rms 0.32) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| MIN5 | n (exact) | n^0.93 for n ≥ 40 (rms 0.23) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| FULL | n (exact) | n^1.60 for n ≥ 40 (rms 0.05) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| MIN5 | n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| FULL | n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 
 ### members-both
 
@@ -976,7 +989,7 @@ Valid: n extensions over n/10 types and n member lookups. Intended verdict: acce
 | base | 2n^2 + 8n (exact) | n^1.42 (rms 0.10) | n^1.99 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.02, 1.01, 1.00 | – | completed |
 | FIX | n (exact) | n^1.49 (rms 0.11) | n^1.00 (R² 1.000) / 1.00^n (R² 0.964); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 | MIN5 | n (exact) | n^1.98 for n ≥ 40 (rms 0.32) | n^1.00 (R² 1.000) / 1.00^n (R² 0.964); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| FULL | n (exact) | n^1.09 (rms 0.18) | n^1.00 (R² 1.000) / 1.00^n (R² 0.964); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| FULL | n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.00^n (R² 0.964); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 
 ### condext
 
@@ -996,8 +1009,8 @@ Valid: n conditional extensions of Box<T> (each needs T is P{i}), 8 member looku
 |---|---|---|---|---|---|
 | base | 16n + 64 (exact) | n^2.18 for n ≥ 4 (rms 0.08) | n^0.91 (R² 0.999) / 1.02^n (R² 0.933); last local exponents 0.8, 0.9, 1.0; last per-step factors 1.04, 1.02, 1.01 | `summon.matches`: n^2 + 105n + 2,444 (exact) | completed |
 | FIX | flat | n^1.11 for n ≥ 8 (rms 0.13) | – | `solver.goalSteps`: 6n + 104 (exact) | completed |
-| MIN5 | flat | below 50 ms throughout | – | `memberskip.settled`: 16n + 24 (exact) | completed |
-| FULL | flat | below 50 ms throughout | – | `absmodel.facts`: n + 63 (exact) | completed |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | `memberskip.settled`: 16n + 24 (exact) | completed |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `absmodel.facts`: n + 63 (exact) | completed |
 
 ### ovl-calls
 
@@ -1017,13 +1030,13 @@ Valid: one expression with k calls, each choosing among 4 overloads by argument 
 | 10 | 15,396 | 42,112 | 15,396 | 1,686 | 15,396 | 1,780 | 15,396 | 815 |
 | 12 | not run |  | 59,820 | 7,026 | 59,820 | 7,093 | 59,820 | 6,367 |
 | 14 | not run |  | 246,632 | 35,007 | 246,632 | 19,059 | 246,632 | 17,915 |
-| 16 | not run |  | timeout | >120 s | not run |  | 1,190,192 | 112,532 |
+| 16 | not run |  | timeout | >120 s | timeout | >120 s | 1,190,192 | 112,532 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | undecided: n^6.6 (rms 0.09) or 2.69^n (rms 0.17); leaning polynomial: the per-step factor falls while the local exponent stays near 7.1 | undecided: n^8.0 (rms 0.24) or 3.16^n (rms 0.33) | n^6.94 (R² 1.000) / 2.42^n (R² 0.996); last local exponents 7.0, 7.1, 7.1; last per-step factors 2.55, 2.30, 2.10 | – | stopped before n=12: predicted timeout: 42 s at n=10, power-law extrapolation gives 319 s at n=12 |
 | FIX | undecided: n^7.2 (rms 0.12) or 2.41^n (rms 0.39) | undecided: n^7.6 (rms 0.17) or 2.15^n (rms 0.14) | n^7.54 (R² 0.997) / 2.10^n (R² 0.997); last local exponents 7.1, 7.4, 9.2; last per-step factors 2.10, 1.97, 2.03 | `summon.matches`: 1.95^n (rms 0.19) | timeout (>120 s) at n=16 |
-| MIN5 | undecided: n^7.2 (rms 0.12) or 2.41^n (rms 0.39) | undecided: n^7.1 (rms 0.15) or 2.22^n (rms 0.36) | n^7.54 (R² 0.997) / 2.10^n (R² 0.997); last local exponents 7.1, 7.4, 9.2; last per-step factors 2.10, 1.97, 2.03 | `summon.matches`: 2.20^n (rms 0.13) | stopped before n=16: predicted timeout: 19 s at n=14, power-law extrapolation gives 45 s at n=16 |
+| MIN5 | undecided: n^7.2 (rms 0.12) or 2.41^n (rms 0.39) | undecided: n^7.1 (rms 0.15) or 2.22^n (rms 0.36) | n^7.54 (R² 0.997) / 2.10^n (R² 0.997); last local exponents 7.1, 7.4, 9.2; last per-step factors 2.10, 1.97, 2.03 | `summon.matches`: 2.20^n (rms 0.13) | timeout (>120 s) at n=16 |
 | FULL | undecided: n^7.8 (rms 0.22) or 2.29^n (rms 0.36); leaning exponential: the per-step factor stays near 2.2 while the local exponent rises | 2.32^n (rms 0.17) | n^8.10 (R² 0.991) / 2.10^n (R² 0.998); last local exponents 7.4, 9.2, 11.8; last per-step factors 1.97, 2.03, 2.20 | – | stopped before n=20: predicted timeout: 113 s at n=16, power-law extrapolation gives 2426 s at n=20 |
 
 ### ovl-width
@@ -1043,9 +1056,9 @@ Valid: one expression with 4 calls, each choosing among m overloads by argument 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | n^2 + 7n (exact, n ≥ 3) | undecided: n^3.3 (rms 0.16) or 1.28^n (rms 0.14) | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
-| FIX | n^2 + 7n (exact, n ≥ 3) | undecided: n^0.9 (rms 0.08) or 1.10^n (rms 0.11) | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
-| MIN5 | n^2 + 7n (exact, n ≥ 3) | below 50 ms throughout | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
-| FULL | n^2 + 7n (exact, n ≥ 3) | below 50 ms throughout | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
+| FIX | n^2 + 7n (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
+| MIN5 | n^2 + 7n (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
+| FULL | n^2 + 7n (exact, n ≥ 3) | below 200 ms throughout (not fitted) | n^1.58 (R² 1.000) / 1.17^n (R² 0.988); last local exponents 1.5, 1.6, 1.7; last per-step factors 1.24, 1.17, 1.13 | – | completed |
 
 ### ovl-stmts
 
@@ -1064,9 +1077,9 @@ Valid: k separate statements, each one call choosing among 4 overloads. Intended
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 4n (exact) | n^0.62 (rms 0.10) | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
-| FIX | 4n (exact) | undecided: n^0.3 (rms 0.16) or 1.02^n (rms 0.25) | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
-| MIN5 | 4n (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
-| FULL | 4n (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
+| FIX | 4n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
+| MIN5 | 4n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
+| FULL | 4n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.04^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.09, 1.04, 1.02 | – | completed |
 
 ### ovr-args
 
@@ -1084,13 +1097,13 @@ Valid: g(h(), ..., h()) with n arguments; h has 3 overloads differing in return 
 | 8 | 9,840 | 620 | 9,840 | 264 | 9,840 | 509 | 9,840 | 158 |
 | 9 | 29,523 | 1,888 | 29,523 | 1,047 | 29,523 | 1,714 | 29,523 | 533 |
 | 10 | 88,572 | 4,877 | 88,572 | 3,544 | 88,572 | 3,975 | 88,572 | 1,987 |
-| 12 | 797,160 | 38,460 | 797,160 | 46,073 | timeout | >20 s | 797,160 | 34,237 |
+| 12 | 797,160 | 38,460 | 797,160 | 46,073 | 797,160 | 29,838 | 797,160 | 34,237 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 3.02^n for n ≥ 2 (rms 0.03) | undecided: n^9.6 (rms 0.13) or 2.87^n (rms 0.09) | n^9.46 (R² 0.988) / 3.00^n (R² 1.000); last local exponents 9.3, 10.4, 12.1; last per-step factors 3.00, 3.00, 3.00 | – | completed |
 | FIX | 3.02^n for n ≥ 2 (rms 0.03) | undecided: n^11.7 (rms 0.28) or 3.64^n (rms 0.26) | n^9.46 (R² 0.988) / 3.00^n (R² 1.000); last local exponents 9.3, 10.4, 12.1; last per-step factors 3.00, 3.00, 3.00 | – | completed |
-| MIN5 | 3.03^n for n ≥ 2 (rms 0.03) | undecided: n^8.7 (rms 0.57) or 3.24^n (rms 0.42) | n^8.58 (R² 0.994) / 3.00^n (R² 1.000); last local exponents 8.2, 9.3, 10.4; last per-step factors 3.00, 3.00, 3.00 | – | timeout (>20 s) at n=12 |
+| MIN5 | 3.02^n for n ≥ 2 (rms 0.03) | undecided: n^10.1 (rms 0.10) or 3.27^n (rms 0.31) | n^9.46 (R² 0.988) / 3.00^n (R² 1.000); last local exponents 9.3, 10.4, 12.1; last per-step factors 3.00, 3.00, 3.00 | – | completed |
 | FULL | 3.02^n for n ≥ 2 (rms 0.03) | 3.56^n for n ≥ 2 (rms 0.14) | n^9.46 (R² 0.988) / 3.00^n (R² 1.000); last local exponents 9.3, 10.4, 12.1; last per-step factors 3.00, 3.00, 3.00 | – | completed |
 
 ### ovr-width
@@ -1128,13 +1141,16 @@ Valid: S<S<...<Z>>> is P at depth d through `T is P => S<T> is P`. Intended verd
 | 6 | 505 | 42.0 | 505 | 18.7 | 15 | 0.7 | 15 | 2.5 |
 | 7 | 577 | 47.4 | 577 | 24.9 | 17 | 4.9 | 17 | 3.0 |
 | 8 | 649 | 46.2 | 649 | 25.1 | 19 | 0.8 | 19 | 2.3 |
+| 9 | 1,369 ✗(depth) | 50.0 | 1,369 ✗(depth) | 36.5 | 39 ✗(depth) | 6.4 | 39 ✗(depth) | 6.6 |
+| 10 | 1,369 ✗(depth) | 49.6 | 1,369 ✗(depth) | 57.9 | 39 ✗(depth) | 5.9 | 39 ✗(depth) | 6.7 |
+| 12 | 1,369 ✗(depth) | 62.5 | 1,369 ✗(depth) | 42.4 | 39 ✗(depth) | 1.6 | 39 ✗(depth) | 7.2 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | 72n + 73 (exact) | below 50 ms throughout | n^0.86 (R² 1.000) / 1.14^n (R² 0.996); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.17, 1.14, 1.12 | – | completed |
-| FIX | 72n + 73 (exact) | below 50 ms throughout | n^0.86 (R² 1.000) / 1.14^n (R² 0.996); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.17, 1.14, 1.12 | – | completed |
-| MIN5 | 2n + 3 (exact) | below 50 ms throughout | n^0.81 (R² 1.000) / 1.13^n (R² 0.997); last local exponents 0.8, 0.8, 0.8; last per-step factors 1.15, 1.13, 1.12 | – | completed |
-| FULL | 2n + 3 (exact) | below 50 ms throughout | n^0.81 (R² 1.000) / 1.13^n (R² 0.997); last local exponents 0.8, 0.8, 0.8; last per-step factors 1.15, 1.13, 1.12 | – | completed |
+| base | 72n + 73 (exact) | below 200 ms throughout (not fitted) | n^0.86 (R² 1.000) / 1.14^n (R² 0.996); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.17, 1.14, 1.12 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12 |
+| FIX | 72n + 73 (exact) | below 200 ms throughout (not fitted) | n^0.86 (R² 1.000) / 1.14^n (R² 0.996); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.17, 1.14, 1.12 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12 |
+| MIN5 | 2n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.81 (R² 1.000) / 1.13^n (R² 0.997); last local exponents 0.8, 0.8, 0.8; last per-step factors 1.15, 1.13, 1.12 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12 |
+| FULL | 2n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.81 (R² 1.000) / 1.13^n (R² 0.997); last local exponents 0.8, 0.8, 0.8; last per-step factors 1.15, 1.13, 1.12 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..12 |
 
 ### nest-deep
 
@@ -1152,9 +1168,9 @@ Valid: S<S<...<Z>>> is P at depth d through `T is P => S<T> is P`. Intended verd
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 72n + 73 (exact) | undecided: n^1.5 (rms 0.08) or 1.01^n (rms 0.08) | n^0.98 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| FIX | 72n + 73 (exact) | n^0.89 for n ≥ 8 (rms 0.20) | n^0.98 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| MIN5 | 2n + 3 (exact) | below 50 ms throughout | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| FULL | 2n + 3 (exact) | below 50 ms throughout | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| FIX | 72n + 73 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| MIN5 | 2n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| FULL | 2n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
 
 ### nest-neg
 
@@ -1173,9 +1189,9 @@ Ill-typed: like nest but the leaf Y is not P. Intended verdict: rejected. Primar
 |---|---|---|---|---|---|
 | base | 144n + 145 (exact) | n^0.83 (rms 0.06) | n^0.98 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
 | FIX | 144n + 145 (exact) | n^1.30 (rms 0.07) | n^0.98 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| MIN5 | 4n + 5 (exact) | below 50 ms throughout | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| FULL | 4n + 1 (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| FULL-absmodel | 4n + 5 (exact) | below 50 ms throughout | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| MIN5 | 4n + 5 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| FULL | 4n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.01^n (R² 0.965); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| FULL-absmodel | 4n + 5 (exact) | below 200 ms throughout (not fitted) | n^0.98 (R² 1.000) / 1.01^n (R² 0.966); last local exponents 0.9, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
 
 Leave-one-out configurations (same counter):
 
@@ -1213,8 +1229,8 @@ Valid: S<T> is P and S<T> is Q each need T is P and T is Q (2^d subgoals without
 |---|---|---|---|---|---|
 | base | 2.05^n for n ≥ 2 (rms 0.02) | undecided: n^4.6 (rms 0.15) or 2.12^n (rms 0.16) | n^4.48 (R² 0.995) / 2.02^n (R² 1.000); last local exponents 3.9, 4.6, 5.3; last per-step factors 2.03, 2.02, 2.02 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
 | FIX | 2.05^n for n ≥ 2 (rms 0.02) | undecided: n^3.5 (rms 0.23) or 2.04^n (rms 0.26) | n^4.48 (R² 0.995) / 2.02^n (R² 1.000); last local exponents 3.9, 4.6, 5.3; last per-step factors 2.03, 2.02, 2.02 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
-| MIN5 | 2.28^n for n ≥ 2 (rms 0.03) | undecided: n^6.4 (rms 0.21) or 3.03^n (rms 0.23) | n^5.09 (R² 0.996) / 2.22^n (R² 1.000); last local exponents 4.4, 5.2, 5.9; last per-step factors 2.25, 2.22, 2.20 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
-| FULL | 2.28^n for n ≥ 2 (rms 0.03) | undecided: n^5.8 (rms 0.25) or 2.48^n (rms 0.26) | n^5.09 (R² 0.996) / 2.22^n (R² 1.000); last local exponents 4.4, 5.2, 5.9; last per-step factors 2.25, 2.22, 2.20 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
+| MIN5 | 2.28^n for n ≥ 2 (rms 0.03) | below 200 ms throughout (not fitted) | n^5.09 (R² 0.996) / 2.22^n (R² 1.000); last local exponents 4.4, 5.2, 5.9; last per-step factors 2.25, 2.22, 2.20 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
+| FULL | 2.28^n for n ≥ 2 (rms 0.03) | below 200 ms throughout (not fitted) | n^5.09 (R² 0.996) / 2.22^n (R² 1.000); last local exponents 4.4, 5.2, 5.9; last per-step factors 2.25, 2.22, 2.20 | – | completed; fitted on n=1..8 (accepted); verdict differs from the intended one at n=9..20 |
 
 ### nest-diamond-default
 
@@ -1236,10 +1252,10 @@ Valid: S<T> is P and S<T> is Q each need T is P and T is Q (2^d subgoals without
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | flat | no clear growth (within a factor 2.5) | – | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
-| FIX | flat | no clear growth (within a factor 2.5) | – | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
-| MIN5 | undecided: n^0.1 (rms 0.07) or 1.01^n (rms 0.08) | below 50 ms throughout | n^0.01 (R² 0.382) / 1.00^n (R² 0.202); last local exponents 0.0, 0.0, 0.0; last per-step factors 1.00, 1.00, 1.00 | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
-| FULL | undecided: n^0.1 (rms 0.07) or 1.01^n (rms 0.08) | below 50 ms throughout | n^0.01 (R² 0.382) / 1.00^n (R² 0.202); last local exponents 0.0, 0.0, 0.0; last per-step factors 1.00, 1.00, 1.00 | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
+| base | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
+| FIX | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
+| MIN5 | undecided: n^0.1 (rms 0.07) or 1.01^n (rms 0.08) | below 200 ms throughout (not fitted) | n^0.01 (R² 0.382) / 1.00^n (R² 0.202); last local exponents 0.0, 0.0, 0.0; last per-step factors 1.00, 1.00, 1.00 | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
+| FULL | undecided: n^0.1 (rms 0.07) or 1.01^n (rms 0.08) | below 200 ms throughout (not fitted) | n^0.01 (R² 0.382) / 1.00^n (R² 0.202); last local exponents 0.0, 0.0, 0.0; last per-step factors 1.00, 1.00, 1.00 | `solver.goalSteps`: 2n + 26 (exact) | completed; fitted on n=3..64 (rejected); verdict differs from the intended one at n=3..64 |
 
 ### nest-diamond-neg
 
@@ -1262,11 +1278,11 @@ Ill-typed: nest_diamond whose leaf Z is P but not Q. Intended verdict: rejected.
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | n^2 + 147n + 147 (exact) | undecided: n^0.6 (rms 0.10) or 1.06^n (rms 0.15) | n^1.01 (R² 1.000) / 1.08^n (R² 0.985); last local exponents 1.0, 1.0, 1.1; last per-step factors 1.08, 1.07, 1.06 | – | completed |
+| base | n^2 + 147n + 147 (exact) | below 200 ms throughout (not fitted) | n^1.01 (R² 1.000) / 1.08^n (R² 0.985); last local exponents 1.0, 1.0, 1.1; last per-step factors 1.08, 1.07, 1.06 | – | completed |
 | FIX | n^2 + 147n + 147 (exact) | undecided: n^1.7 (rms 0.18) or 1.10^n (rms 0.19) | n^1.01 (R² 1.000) / 1.08^n (R² 0.985); last local exponents 1.0, 1.0, 1.1; last per-step factors 1.08, 1.07, 1.06 | – | completed |
-| MIN5 | n^2 + 3n + 5 (exact) | below 50 ms throughout | n^1.76 (R² 1.000) / 1.14^n (R² 0.985); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.15, 1.13, 1.11 | – | completed |
-| FULL | flat | below 50 ms throughout | – | `solver.goalSteps`: 2n + 24 (exact) | completed |
-| FULL-absmodel | n^2 + 3n + 5 (exact) | below 50 ms throughout | n^1.76 (R² 1.000) / 1.14^n (R² 0.985); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.15, 1.13, 1.11 | – | completed |
+| MIN5 | n^2 + 3n + 5 (exact) | below 200 ms throughout (not fitted) | n^1.76 (R² 1.000) / 1.14^n (R² 0.985); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.15, 1.13, 1.11 | – | completed |
+| FULL | flat | below 200 ms throughout (not fitted) | – | `solver.goalSteps`: 2n + 24 (exact) | completed |
+| FULL-absmodel | n^2 + 3n + 5 (exact) | below 200 ms throughout (not fitted) | n^1.76 (R² 1.000) / 1.14^n (R² 0.985); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.15, 1.13, 1.11 | – | completed |
 
 Leave-one-out configurations (same counter):
 
@@ -1302,10 +1318,10 @@ Valid: T is Q{n} where Q{i} refines Q{i-1} ... refines P; the goal is T is P. In
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | n^2 + 72n + 73 (exact) | no clear growth (within a factor 2.5) | n^0.94 (R² 1.000) / 1.16^n (R² 0.997); last local exponents 0.9, 0.9, 1.0; last per-step factors 1.18, 1.16, 1.14 | – | completed |
-| FIX | n^2 + 72n + 73 (exact) | undecided: n^2.0 (rms 0.24) or 1.26^n (rms 0.24) | n^0.94 (R² 1.000) / 1.16^n (R² 0.997); last local exponents 0.9, 0.9, 1.0; last per-step factors 1.18, 1.16, 1.14 | – | completed |
-| MIN5 | n + 3 (exact) | below 50 ms throughout | n^0.68 (R² 0.999) / 1.11^n (R² 0.998); last local exponents 0.6, 0.7, 0.7; last per-step factors 1.12, 1.11, 1.10 | – | completed |
-| FULL | n + 3 (exact) | below 50 ms throughout | n^0.68 (R² 0.999) / 1.11^n (R² 0.998); last local exponents 0.6, 0.7, 0.7; last per-step factors 1.12, 1.11, 1.10 | – | completed |
+| base | n^2 + 72n + 73 (exact) | below 200 ms throughout (not fitted) | n^0.94 (R² 1.000) / 1.16^n (R² 0.997); last local exponents 0.9, 0.9, 1.0; last per-step factors 1.18, 1.16, 1.14 | – | completed |
+| FIX | n^2 + 72n + 73 (exact) | below 200 ms throughout (not fitted) | n^0.94 (R² 1.000) / 1.16^n (R² 0.997); last local exponents 0.9, 0.9, 1.0; last per-step factors 1.18, 1.16, 1.14 | – | completed |
+| MIN5 | n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.68 (R² 0.999) / 1.11^n (R² 0.998); last local exponents 0.6, 0.7, 0.7; last per-step factors 1.12, 1.11, 1.10 | – | completed |
+| FULL | n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.68 (R² 0.999) / 1.11^n (R² 0.998); last local exponents 0.6, 0.7, 0.7; last per-step factors 1.12, 1.11, 1.10 | – | completed |
 
 ### refine-deep
 
@@ -1323,8 +1339,8 @@ Valid: T is Q{n} where Q{i} refines Q{i-1} ... refines P; the goal is T is P. In
 |---|---|---|---|---|---|
 | base | n^2 + 72n + 73 (exact) | undecided: n^2.4 (rms 0.15) or 1.05^n (rms 0.11) | n^1.28 (R² 0.999) / 1.04^n (R² 0.977); last local exponents 1.1, 1.2, 1.4; last per-step factors 1.10, 1.05, 1.03 | – | completed |
 | FIX | n^2 + 72n + 73 (exact) | n^2.12 (rms 0.07) | n^1.28 (R² 0.999) / 1.04^n (R² 0.977); last local exponents 1.1, 1.2, 1.4; last per-step factors 1.10, 1.05, 1.03 | – | completed |
-| MIN5 | n + 3 (exact) | below 50 ms throughout | n^0.91 (R² 1.000) / 1.03^n (R² 0.971); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.07, 1.04, 1.02 | – | completed |
-| FULL | n + 3 (exact) | below 50 ms throughout | n^0.91 (R² 1.000) / 1.03^n (R² 0.971); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.07, 1.04, 1.02 | – | completed |
+| MIN5 | n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.91 (R² 1.000) / 1.03^n (R² 0.971); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.07, 1.04, 1.02 | – | completed |
+| FULL | n + 3 (exact) | below 200 ms throughout (not fitted) | n^0.91 (R² 1.000) / 1.03^n (R² 0.971); last local exponents 0.8, 0.9, 0.9; last per-step factors 1.07, 1.04, 1.02 | – | completed |
 
 ### nestwide
 
@@ -1343,8 +1359,8 @@ Valid: n traits each declaring a nested given; n lookups, one per nested given. 
 |---|---|---|---|---|---|
 | base | 4n^2 + 142n (exact) | n^2.18 (rms 0.12) | n^1.48 (R² 0.999) / 1.04^n (R² 0.976); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.11, 1.06, 1.03 | – | completed |
 | FIX | 4n^2 + 142n (exact) | n^1.96 for n ≥ 4 (rms 0.15) | n^1.48 (R² 0.999) / 1.04^n (R² 0.976); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.11, 1.06, 1.03 | – | completed |
-| MIN5 | n^2 + 3n (exact) | undecided: n^2.1 (rms 0.14) or 1.05^n (rms 0.22) | n^1.91 (R² 1.000) / 1.05^n (R² 0.967); last local exponents 1.8, 1.9, 1.9; last per-step factors 1.17, 1.08, 1.04 | – | completed |
-| FULL | n^2 + 3n (exact) | n^0.97 for n ≥ 4 (rms 0.10) | n^1.91 (R² 1.000) / 1.05^n (R² 0.967); last local exponents 1.8, 1.9, 1.9; last per-step factors 1.17, 1.08, 1.04 | – | completed |
+| MIN5 | n^2 + 3n (exact) | below 200 ms throughout (not fitted) | n^1.91 (R² 1.000) / 1.05^n (R² 0.967); last local exponents 1.8, 1.9, 1.9; last per-step factors 1.17, 1.08, 1.04 | – | completed |
+| FULL | n^2 + 3n (exact) | below 200 ms throughout (not fitted) | n^1.91 (R² 1.000) / 1.05^n (R² 0.967); last local exponents 1.8, 1.9, 1.9; last per-step factors 1.17, 1.08, 1.04 | – | completed |
 
 ### open-chain
 
@@ -1363,17 +1379,17 @@ Valid: pick<T, U where U is Q, T == U>(x) with U inferred; A0 == ... == A{n}, A{
 | 16 | 114,781 | 4,568 | 91 | 45.2 | 114,781 | 4,272 | 91 | 8.4 |
 | 24 | 220,909 | 11,460 | 99 | 40.5 | 220,909 | 8,208 | 99 | 5.8 |
 | 32 | 370,429 | 16,008 | 107 | 36.9 | 370,429 | 14,854 | 107 | 8.5 |
-| 64 | crash (out of memory) | 69 s wall | 139 | 77.9 | not run |  | 139 | 6.5 |
-| 128 | crash (out of memory) | 97 s wall | 203 | 70.7 | not run |  | 203 | 17.1 |
+| 64 | crash (out of memory) | 69 s wall | 139 | 77.9 | crash (out of memory) | 47 s wall | 139 | 6.5 |
+| 128 | crash (out of memory) | 97 s wall | 203 | 70.7 | crash (out of memory) | 51 s wall | 203 | 17.1 |
 | 256 | not run |  | 331 | 37.0 | not run |  | 331 | 23.0 |
 | 512 | not run |  | 587 | 50.7 | not run |  | 587 | 37.5 |
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | 2n^3 + 195n^2 + 3,034n + 8,125 (exact, n ≥ 3) | n^1.77 for n ≥ 3 (rms 0.07) | n^1.43 (R² 0.992) / 1.10^n (R² 0.980); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.11, 1.09, 1.07 | – | crash (exit 134) at n=64 |
-| FIX | n + 75 (exact) | undecided: n^0.1 (rms 0.28) or 1.01^n (rms 0.38) | n^0.50 (R² 0.954) / 1.00^n (R² 0.939); last local exponents 0.5, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| MIN5 | 2n^3 + 195n^2 + 3,034n + 8,125 (exact, n ≥ 3) | n^1.83 for n ≥ 3 (rms 0.06) | n^1.43 (R² 0.992) / 1.10^n (R² 0.980); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.11, 1.09, 1.07 | – | stopped before n=64: predicted timeout: 15 s at n=32, power-law extrapolation gives 62 s at n=64 |
-| FULL | n + 75 (exact) | below 50 ms throughout | n^0.50 (R² 0.954) / 1.00^n (R² 0.939); last local exponents 0.5, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| FIX | n + 75 (exact) | below 200 ms throughout (not fitted) | n^0.50 (R² 0.954) / 1.00^n (R² 0.939); last local exponents 0.5, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| MIN5 | 2n^3 + 195n^2 + 3,034n + 8,125 (exact, n ≥ 3) | n^1.83 for n ≥ 3 (rms 0.06) | n^1.43 (R² 0.992) / 1.10^n (R² 0.980); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.11, 1.09, 1.07 | – | crash (exit 134) at n=64 |
+| FULL | n + 75 (exact) | below 200 ms throughout (not fitted) | n^0.50 (R² 0.954) / 1.00^n (R² 0.939); last local exponents 0.5, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 | FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.56 (R² 0.085) / 0.99^n (R² 0.038); last local exponents 1.8, -6.7, 1.4; last per-step factors 1.10, 0.79, 1.03 | – | timeout (>20 s) at n=128; fitted on n=8..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=4..64 |
 
 Leave-one-out configurations (same counter):
@@ -1400,8 +1416,8 @@ Ill-typed: open_chain without any conformance to Q. Intended verdict: rejected. 
 
 | n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
 |---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 1 | crash (out of memory) | 42 s wall | 73 | 10.5 | timeout | >20 s | 2 | 4.3 |
-| 2 | crash (out of memory) | 40 s wall | 74 | 10.1 | not run |  | 2 | 3.9 |
+| 1 | crash (out of memory) | 42 s wall | 73 | 10.5 | crash (out of memory) | 39 s wall | 2 | 4.3 |
+| 2 | crash (out of memory) | 40 s wall | 74 | 10.1 | crash (out of memory) | 41 s wall | 2 | 3.9 |
 | 3 | not run |  | 75 | 14.1 | not run |  | 2 | 4.0 |
 | 4 | not run |  | 76 | 10.4 | not run |  | 2 | 5.8 |
 | 5 | not run |  | 77 | 10.4 | not run |  | 2 | 5.5 |
@@ -1419,9 +1435,9 @@ Ill-typed: open_chain without any conformance to Q. Intended verdict: rejected. 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
 | base | – | – | – | – | crash (exit 134) at n=1 |
-| FIX | n + 72 (exact) | undecided: n^2.2 (rms 0.29) or 1.01^n (rms 0.35) | n^0.51 (R² 0.955) / 1.00^n (R² 0.937); last local exponents 0.6, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| MIN5 | – | – | – | – | timeout (>20 s) at n=1 |
-| FULL | flat | below 50 ms throughout | – | – | completed |
+| FIX | n + 72 (exact) | below 200 ms throughout (not fitted) | n^0.51 (R² 0.955) / 1.00^n (R² 0.937); last local exponents 0.6, 0.7, 0.8; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| MIN5 | – | – | – | – | crash (exit 134) at n=1 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed |
 
 ### open-wide
 
@@ -1432,8 +1448,8 @@ Valid: pick has n inferred arguments U{i}, each with U{i} is Q and T == U{i}. In
 | 1 | 289 | 90.3 | 73 | 16.3 | 219 | 4.9 | 3 | 3.9 |
 | 2 | 4,857 | 193 | 219 | 20.3 | 4,577 | 115 | 79 | 4.4 |
 | 3 | 154,231 | 4,182 | 1,911 | 79.4 | 151,711 | 4,355 | 1,351 | 9.9 |
-| 4 | crash (out of memory) | 49 s wall | 28,201 | 749 | not run |  | 24,281 | 226 |
-| 5 | crash (out of memory) | 64 s wall | 93,136 ✗ [B] | 3,615 | not run |  | 93,136 ✗ [B] | 1,335 |
+| 4 | crash (out of memory) | 49 s wall | 28,201 | 749 | crash (out of memory) | 37 s wall | 24,281 | 226 |
+| 5 | crash (out of memory) | 64 s wall | 93,136 ✗ [B] | 3,615 | crash (out of memory) | 36 s wall | 93,136 ✗ [B] | 1,335 |
 | 6 | not run |  | 48,436 ✗ [B] | 2,198 | not run |  | 48,436 ✗ [B] | 1,010 |
 | 8 | not run |  | 105,372 ✗ [B] | 6,223 | not run |  | 105,372 ✗ [B] | 3,492 |
 | 12 | not run |  | 70,731 ✗ [B] | 3,277 | not run |  | 70,731 ✗ [B] | 2,412 |
@@ -1443,7 +1459,7 @@ Valid: pick has n inferred arguments U{i}, each with U{i} is Q and T == U{i}. In
 |---|---|---|---|---|---|
 | base | too few points (3); per-step factors 16.8, 31.8 | too few points (3); per-step factors 2.13, 21.7 | n^5.54 (R² 0.957) / 23.10^n (R² 0.997); last local exponents 4.1, 8.5; last per-step factors 16.81, 31.75 | – | crash (exit 134) at n=4 |
 | FIX | too few points (4); per-step factors 3, 8.73, 14.8 | too few points (4); per-step factors 1.24, 3.92, 9.43 | n^6.90 (R² 0.975) / 11.35^n (R² 0.996); last local exponents 1.6, 5.3, 9.4; last per-step factors 3.00, 8.73, 14.76 | – | completed; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..16 |
-| MIN5 | too few points (3); per-step factors 20.9, 33.1 | too few points (3); per-step factors 23.6, 37.9 | n^5.78 (R² 0.964) / 26.32^n (R² 0.998); last local exponents 4.4, 8.6; last per-step factors 20.90, 33.15 | – | stopped before n=4: predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4 |
+| MIN5 | too few points (3); per-step factors 20.9, 33.1 | too few points (3); per-step factors 23.6, 37.9 | n^5.78 (R² 0.964) / 26.32^n (R² 0.998); last local exponents 4.4, 8.6; last per-step factors 20.90, 33.15 | – | crash (exit 134) at n=4 |
 | FULL | too few points (4); per-step factors 26.3, 17.1, 18 | too few points (4); per-step factors 1.12, 2.26, 22.8 | n^8.18 (R² 0.989) / 17.53^n (R² 1.000); last local exponents 4.7, 7.0, 10.0; last per-step factors 26.33, 17.10, 17.97 | – | completed; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..16 |
 
 ### open-wide-nobudget
@@ -1455,8 +1471,8 @@ Valid: pick has n inferred arguments U{i}, each with U{i} is Q and T == U{i}. In
 | 1 | 289 | 34.9 | 73 | 17.6 | 219 | 3.8 | 3 | 8.1 |
 | 2 | 4,857 | 252 | 219 | 26.5 | 4,577 | 81.7 | 79 | 7.9 |
 | 3 | 154,231 | 4,773 | 1,911 | 64.8 | 151,711 | 4,092 | 1,351 | 30.9 |
-| 4 | crash (out of memory) | 54 s wall | 28,201 | 639 | not run |  | 24,281 | 314 |
-| 5 | crash (out of memory) | 63 s wall | 232,660 ✗(depth) | 5,876 | not run |  | 232,660 ✗(depth) | 3,724 |
+| 4 | crash (out of memory) | 54 s wall | 28,201 | 639 | crash (out of memory) | 33 s wall | 24,281 | 314 |
+| 5 | crash (out of memory) | 63 s wall | 232,660 ✗(depth) | 5,876 | crash (out of memory) | 43 s wall | 232,660 ✗(depth) | 3,724 |
 | 6 | not run |  | 642,047 ✗(depth) | 23,679 | not run |  | 642,047 ✗(depth) | 13,902 |
 | 7 | not run |  | 1,297,200 ✗(depth) | 44,099 | not run |  | 1,297,200 ✗(depth) | 35,154 |
 | 8 | not run |  | crash (out of memory) | 56 s wall | not run |  | crash (out of memory) | 35 s wall |
@@ -1465,7 +1481,7 @@ Valid: pick has n inferred arguments U{i}, each with U{i} is Q and T == U{i}. In
 |---|---|---|---|---|---|
 | base | too few points (3); per-step factors 16.8, 31.8 | too few points (3); per-step factors 7.23, 18.9 | n^5.54 (R² 0.957) / 23.10^n (R² 0.997); last local exponents 4.1, 8.5; last per-step factors 16.81, 31.75 | – | crash (exit 134) at n=4 |
 | FIX | too few points (4); per-step factors 3, 8.73, 14.8 | too few points (4); per-step factors 1.5, 2.45, 9.86 | n^6.90 (R² 0.975) / 11.35^n (R² 0.996); last local exponents 1.6, 5.3, 9.4; last per-step factors 3.00, 8.73, 14.76 | – | crash (exit 134) at n=8; fitted on n=1..4 (accepted); verdict differs from the intended one at n=5..7 |
-| MIN5 | too few points (3); per-step factors 20.9, 33.1 | too few points (3); per-step factors 21.5, 50.1 | n^5.78 (R² 0.964) / 26.32^n (R² 0.998); last local exponents 4.4, 8.6; last per-step factors 20.90, 33.15 | – | stopped before n=4: predicted timeout: 4 s at n=3, power-law extrapolation gives 66 s at n=4 |
+| MIN5 | too few points (3); per-step factors 20.9, 33.1 | too few points (3); per-step factors 21.5, 50.1 | n^5.78 (R² 0.964) / 26.32^n (R² 0.998); last local exponents 4.4, 8.6; last per-step factors 20.90, 33.15 | – | crash (exit 134) at n=4 |
 | FULL | too few points (4); per-step factors 26.3, 17.1, 18 | too few points (4); per-step factors 0.98, 3.89, 10.2 | n^8.18 (R² 0.989) / 17.53^n (R² 1.000); last local exponents 4.7, 7.0, 10.0; last per-step factors 26.33, 17.10, 17.97 | – | crash (exit 134) at n=8; fitted on n=1..4 (accepted); verdict differs from the intended one at n=5..7 |
 
 ### req-traits
@@ -1489,10 +1505,10 @@ Valid: f<T where T is P1..Pn> calls g<T> with the same n requirements. Intended 
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | 1.5n^2 + 69.5n + 1 (exact) | no clear growth (within a factor 2.5) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| FIX | 1.5n^2 + 69.5n + 1 (exact) | below 50 ms throughout | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| MIN5 | 0.5n^2 + 0.5n + 1 (exact) | below 50 ms throughout | n^1.76 (R² 1.000) / 1.34^n (R² 0.998); last local exponents 1.5, 1.8, 1.8; last per-step factors 1.66, 1.35, 1.24 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| FULL | 0.5n^2 + 0.5n + 1 (exact) | below 50 ms throughout | n^1.76 (R² 1.000) / 1.34^n (R² 0.998); last local exponents 1.5, 1.8, 1.8; last per-step factors 1.66, 1.35, 1.24 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| base | 1.5n^2 + 69.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| FIX | 1.5n^2 + 69.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| MIN5 | 0.5n^2 + 0.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.76 (R² 1.000) / 1.34^n (R² 0.998); last local exponents 1.5, 1.8, 1.8; last per-step factors 1.66, 1.35, 1.24 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| FULL | 0.5n^2 + 0.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.76 (R² 1.000) / 1.34^n (R² 0.998); last local exponents 1.5, 1.8, 1.8; last per-step factors 1.66, 1.35, 1.24 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
 
 ### req-params
 
@@ -1515,10 +1531,10 @@ Valid: f<T1..Tn where Ti is P> calls g<T1, ..., Tn> with the same n requirements
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | 1.5n^2 + 69.5n + 1 (exact) | undecided: n^3.4 (rms 0.12) or 1.53^n (rms 0.14) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| FIX | 1.5n^2 + 69.5n + 1 (exact) | below 50 ms throughout | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| MIN5 | 1.5n^2 − 0.5n + 1 (exact) | below 50 ms throughout | n^2.02 (R² 1.000) / 1.40^n (R² 0.997); last local exponents 1.9, 2.0, 2.0; last per-step factors 1.96, 1.42, 1.27 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
-| FULL | 1.5n^2 − 0.5n + 1 (exact) | below 50 ms throughout | n^2.02 (R² 1.000) / 1.40^n (R² 0.997); last local exponents 1.9, 2.0, 2.0; last per-step factors 1.96, 1.42, 1.27 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| base | 1.5n^2 + 69.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| FIX | 1.5n^2 + 69.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.11 (R² 1.000) / 1.20^n (R² 0.997); last local exponents 1.1, 1.1, 1.2; last per-step factors 1.44, 1.21, 1.15 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| MIN5 | 1.5n^2 − 0.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^2.02 (R² 1.000) / 1.40^n (R² 0.997); last local exponents 1.9, 2.0, 2.0; last per-step factors 1.96, 1.42, 1.27 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
+| FULL | 1.5n^2 − 0.5n + 1 (exact) | below 200 ms throughout (not fitted) | n^2.02 (R² 1.000) / 1.40^n (R² 0.997); last local exponents 1.9, 2.0, 2.0; last per-step factors 1.96, 1.42, 1.27 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..128 |
 
 ### req-eq
 
@@ -1529,8 +1545,8 @@ Valid: f<T1..Tn, U1..Un where Ti == Ui> calls g with the same n equality require
 | 1 | 72 | 40.1 | 2 | 5.6 | 72 | 1.4 | 2 | 0.8 |
 | 2 | 296 | 18.9 | 3 | 10.8 | 296 | 3.7 | 3 | 0.8 |
 | 4 | 6,818 | 176 | 5 | 14.9 | 6,818 | 212 | 5 | 0.9 |
-| 8 | crash (out of memory) | 55 s wall | 9 | 11.1 | timeout | >20 s | 9 | 1.5 |
-| 9 | crash (out of memory) | 57 s wall | 10 | 7.7 | not run |  | 10 | 1.6 |
+| 8 | crash (out of memory) | 55 s wall | 9 | 11.1 | crash (out of memory) | 44 s wall | 9 | 1.5 |
+| 9 | crash (out of memory) | 57 s wall | 10 | 7.7 | crash (out of memory) | 39 s wall | 10 | 1.6 |
 | 10 | not run |  | 20 ✗(depth) | 17.5 | not run |  | 20 ✗(depth) | 3.1 |
 | 11 | not run |  | 21 ✗(depth) | 17.5 | not run |  | 21 ✗(depth) | 7.2 |
 | 12 | not run |  | 22 ✗(depth) | 9.8 | not run |  | 22 ✗(depth) | 2.8 |
@@ -1543,10 +1559,10 @@ Valid: f<T1..Tn, U1..Un where Ti == Ui> calls g with the same n equality require
 
 | Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
 |---|---|---|---|---|---|
-| base | too few points (3); per-step factors 4.11, 4.8 | too few points (3); per-step factors 0.471, 3.05 | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | crash (exit 134) at n=8 |
-| FIX | n + 1 (exact) | below 50 ms throughout | n^0.85 (R² 1.000) / 1.15^n (R² 0.998); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.29, 1.16, 1.11 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512 |
-| MIN5 | too few points (3); per-step factors 4.11, 4.8 | too few points (3); per-step factors 2.6, 7.61 | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | timeout (>20 s) at n=8 |
-| FULL | n + 1 (exact) | below 50 ms throughout | n^0.85 (R² 1.000) / 1.15^n (R² 0.998); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.29, 1.16, 1.11 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512 |
+| base | too few points (3); per-step factors 4.11, 4.8 | below 200 ms throughout (not fitted) | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | crash (exit 134) at n=8 |
+| FIX | n + 1 (exact) | below 200 ms throughout (not fitted) | n^0.85 (R² 1.000) / 1.15^n (R² 0.998); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.29, 1.16, 1.11 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512 |
+| MIN5 | too few points (3); per-step factors 4.11, 4.8 | too few points (3); per-step factors 2.6, 7.61 | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | crash (exit 134) at n=8 |
+| FULL | n + 1 (exact) | below 200 ms throughout (not fitted) | n^0.85 (R² 1.000) / 1.15^n (R² 0.998); last local exponents 0.7, 0.8, 0.9; last per-step factors 1.29, 1.16, 1.11 | – | completed; fitted on n=1..9 (accepted); verdict differs from the intended one at n=10..512 |
 
 ### req-traits-deep
 
@@ -1603,7 +1619,7 @@ Valid: f<T1..Tn, U1..Un where Ti == Ui> calls g with the same n equality require
 | 1 | 72 | 39.8 | 2 | 9.5 | 72 | 1.1 | 2 | 0.9 |
 | 2 | 296 | 49.1 | 3 | 4.9 | 296 | 2.8 | 3 | 0.9 |
 | 4 | 6,818 | 241 | 5 | 21.9 | 6,818 | 155 | 5 | 0.9 |
-| 8 | crash (out of memory) | 45 s wall | 9 | 15.7 | timeout | >20 s | 9 | 1.4 |
+| 8 | crash (out of memory) | 45 s wall | 9 | 15.7 | crash (out of memory) | 40 s wall | 9 | 1.4 |
 | 16 | crash (out of memory) | 43 s wall | 17 | 16.1 | not run |  | 17 | 6.6 |
 | 32 | not run |  | 33 | 26.8 | not run |  | 33 | 15.2 |
 | 64 | not run |  | 65 | 52.9 | not run |  | 65 | 27.2 |
@@ -1614,7 +1630,7 @@ Valid: f<T1..Tn, U1..Un where Ti == Ui> calls g with the same n equality require
 |---|---|---|---|---|---|
 | base | too few points (3); per-step factors 4.11, 4.8 | too few points (3); per-step factors 1.23, 2.22 | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | crash (exit 134) at n=8 |
 | FIX | n + 1 (exact) | n^2.15 for n ≥ 8 (rms 0.07) | n^0.98 (R² 1.000) / 1.01^n (R² 0.876); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
-| MIN5 | too few points (3); per-step factors 4.11, 4.8 | too few points (3); per-step factors 2.65, 7.38 | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | timeout (>20 s) at n=8 |
+| MIN5 | too few points (3); per-step factors 4.11, 4.8 | below 200 ms throughout (not fitted) | n^3.28 (R² 0.954) / 4.59^n (R² 0.999); last local exponents 2.0, 4.5; last per-step factors 4.11, 4.80 | – | crash (exit 134) at n=8 |
 | FULL | n + 1 (exact) | n^1.95 for n ≥ 16 (rms 0.13) | n^0.98 (R² 1.000) / 1.01^n (R² 0.876); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
 | FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^0.02 (R² 0.001) / 1.01^n (R² 0.049); last local exponents -1.3, 1.4; last per-step factors 0.89, 1.06 | – | timeout (>20 s) at n=64; fitted on n=8..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=8..32 |
 
@@ -1649,9 +1665,9 @@ Ill-typed: req_traits where the caller lacks the last requirement. Intended verd
 |---|---|---|---|---|---|
 | base | n^2 + 71n + 69 (exact) | n^1.69 for n ≥ 8 (rms 0.10) | n^1.38 (R² 0.997) / 1.02^n (R² 0.948); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.05, 1.03, 1.02 | – | completed |
 | FIX | n^2 + 71n + 69 (exact) | n^2.43 for n ≥ 4 (rms 0.09) | n^1.38 (R² 0.997) / 1.02^n (R² 0.948); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.05, 1.03, 1.02 | – | completed |
-| MIN5 | 2n − 1 (exact) | below 50 ms throughout | n^1.01 (R² 1.000) / 1.02^n (R² 0.918); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.05, 1.02, 1.01 | – | completed |
-| FULL | n (exact) | below 50 ms throughout | n^1.00 (R² 1.000) / 1.02^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
-| FULL-absmodel | 2n − 1 (exact) | below 50 ms throughout | n^1.01 (R² 1.000) / 1.02^n (R² 0.918); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.05, 1.02, 1.01 | – | completed |
+| MIN5 | 2n − 1 (exact) | below 200 ms throughout (not fitted) | n^1.01 (R² 1.000) / 1.02^n (R² 0.918); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.05, 1.02, 1.01 | – | completed |
+| FULL | n (exact) | below 200 ms throughout (not fitted) | n^1.00 (R² 1.000) / 1.02^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.04, 1.02, 1.01 | – | completed |
+| FULL-absmodel | 2n − 1 (exact) | below 200 ms throughout (not fitted) | n^1.01 (R² 1.000) / 1.02^n (R² 0.918); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.05, 1.02, 1.01 | – | completed |
 
 Leave-one-out configurations (same counter):
 

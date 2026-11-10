@@ -1,0 +1,12 @@
+rust-flatten.hylo base exit -11
+rust-flatten.hylo FIX rejected (1)
+rust-flatten.hylo FULL rejected (1)
+generated/rust-flatten.neg.hylo base exit -11
+generated/rust-flatten.neg.hylo FIX rejected (4)
+generated/rust-flatten.neg.hylo FULL rejected (4)
+generated/rust-flatten.control.hylo base exit -11
+generated/rust-flatten.control.hylo FIX rejected (3)
+generated/rust-flatten.control.hylo FULL rejected (3)
+swift-collection-signature.hylo base accepted
+swift-collection-signature.hylo FIX accepted
+swift-collection-signature.hylo FULL accepted

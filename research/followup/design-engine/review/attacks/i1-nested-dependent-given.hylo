@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is P>() {}
+fun g<U where U is P, U.X is Q>() { f<Box<U>>() }

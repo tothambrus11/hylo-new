@@ -1,0 +1,6 @@
+// abstractstrict: a nested given about a type built from the associated type (given Box<X> is Q). Valid.
+trait Q {}
+struct Box<T> { public memberwise init }
+trait P { type X ; given Box<X> is Q }
+fun needQ<T where T is Q>() {}
+fun f<T where T is P>(t: T) { needQ<Box<T.X>>() }

@@ -1,0 +1,91 @@
+997 programs; verdict changes: 88 ; violations: 1 ; selfcheck verdict differs: 1
+   accept -> reject  ../report/test-programs/cycles-and-crashes/e2-abs-qual-distinct-conf.h no coercion from '(U::P).X' to '(Self::P).X'
+   reject -> accept  ../report/test-programs/declaration-order/al1.hylo                     definition of 'X' refers to itself
+   reject -> accept  ../report/test-programs/declaration-order/al3.hylo                     type 'X' has no static member 'Me'
+   reject -> accept  ../report/test-programs/declaration-order/n04-order-a.hylo             type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/n04-order-b.hylo             circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-n02_reverse_poison_noe circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-n03_reverse_poison.hyl type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-n04_reverse_poison_min type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-n11_poison_via_summon. type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-n12_poison_via_summon_ type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-t02_names_worse.hylo   circular extension: the extendee of this extension depends on a lookup of 'V', w
+   reject -> accept  ../report/test-programs/declaration-order/names-t03_names_worse.hylo   type 'B' has no static member 'V'
+   reject -> accept  ../report/test-programs/declaration-order/names-t09_cycle_extendee.hyl circular extension: the extendee of this extension depends on a lookup of 'Y', w
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v1_noea circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v2_swap circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v3_nous type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v4_noC. circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v5_earl circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-1-v6_summ type 'Inner' has no static member 'Foo'
+   reject -> accept  ../report/test-programs/declaration-order/names-verify-names-2-v01_ext type 'Int' has no member 'g'
+   reject -> accept  ../report/test-programs/declaration-order/r2_bare.hylo                 circular extension: the extendee of this extension depends on a lookup of 'Eleme
+   reject -> accept  ../report/test-programs/declaration-order/v2_noearly.hylo              circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/v4-swapped.hylo              circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/declaration-order/v4-use-first.hylo            circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   reject -> accept  ../report/test-programs/equalities/assoc-eq-call-incomplete.hylo       no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() 
+   accept -> reject  ../report/test-programs/equalities/eq-unsound-v-abs-7.hylo             no coercion from '((Self::P).X ~ U) ==> [Void]() let -> Void' to '[Void]() let -
+   accept -> reject  ../report/test-programs/equalities/v-abs-1.hylo                        no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void](
+   accept -> reject  ../report/test-programs/equalities/v-abs-2.hylo                        cannot pass value of type '(Self::P).X' to parameter '(T::P).X'
+   accept -> reject  ../report/test-programs/equalities/v-abs-3.hylo                        no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void](
+   accept -> reject  ../report/test-programs/equalities/v-abs-4.hylo                        no coercion from '((Self::P).X ~ (T::P).X) ==> [Void]() let -> Void' to '[Void](
+   accept -> reject  ../report/test-programs/equalities/v-abs-7.hylo                        no coercion from '((Self::P).X ~ U) ==> [Void]() let -> Void' to '[Void]() let -
+   reject -> accept  ../report/test-programs/equalities/x10-ext-where-assoc.hylo            type 'Box<Bag>' has no member 'first'
+   reject -> accept  ../report/test-programs/performance/extsame-16.hylo                    circular extension: the extendee of this extension depends on a lookup of 'Y', w
+   reject -> accept  ../report/test-programs/performance/extsame-8.hylo                     circular extension: the extendee of this extension depends on a lookup of 'Y', w
+   reject -> accept  ../report/test-programs/unsimplified-projections/min.hylo              no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() 
+   reject -> accept  ../report/test-programs/unsimplified-projections/t1.hylo               no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() 
+   reject -> accept  ../report/test-programs/unsimplified-projections/t12-assoc-in-body-gen cannot pass value of type '(U::P).X' to parameter '(U::P).X'
+   reject -> accept  ../report/test-programs/unsimplified-projections/t3-param.hylo         cannot pass value of type 'B' to parameter '(A::P).X'
+   reject -> accept  ../report/test-programs/unsimplified-projections/t6-ret.hylo           no coercion from '(A::P).X' to 'B'
+   reject -> accept  ../report/test-programs/unsimplified-projections/t8-cond-call.hylo     no coercion from '(P<Box<B>>, ((Box<B>::P).X ~ B)) ==> [Void]() let -> Void' to 
+   reject -> accept  ../report/test-programs/unsimplified-projections/v3-param.hylo         cannot pass value of type 'B' to parameter '(A::P).X'
+   reject -> accept  ../report/test-programs/unsimplified-projections/v7-ret.hylo           no coercion from '(A::P).X' to 'B'
+   reject -> accept  design-order/tests/01-alias-used-by-given.hylo                         definition of 'X' refers to itself
+   reject -> accept  design-order/tests/02-alias-and-extension-of-alias.hylo                definition of 'X' refers to itself
+   reject -> accept  design-order/tests/04-extension-of-alias-declares-looked-up-name.hylo  definition of 'X' refers to itself
+   reject -> accept  design-order/tests/05-mutually-dependent-extensions.hylo               circular extension: the extendee of this extension depends on a lookup of 'Foo',
+   accept -> reject  design-order/tests/09b-two-readings-swapped.hylo                       the type of this declaration depends on a name lookup or an implicit resolution 
+   reject -> accept  design-engine/tests/s1-gain-chain.hylo                                 no coercion from '(P<U>, P<(U::P).X>, Q<((U::P).X::P).X>) ==> [Void]() let -> Vo
+   reject -> accept  design-engine/tests/s1-gain-conformance-concrete.hylo                  no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-gain-conformance-generic.hylo                   no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-gain-conformance-two.hylo                       no coercion from '(P<U>, Q<(U::P).X>, R<(U::P).X>) ==> [Void]() let -> Void' to 
+   reject -> accept  design-engine/tests/s1-gain-equality-concrete.hylo                     no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() 
+   reject -> accept  design-engine/tests/s1-gain-extension-concrete.hylo                    type 'Box<Bag>' has no member 'first'
+   reject -> accept  design-engine/tests/s1-gain-extension.hylo                             type 'Box<U>' has no member 'first'
+   reject -> accept  design-engine/tests/s1-gain-given.hylo                                 no coercion from 'Q<Box<U>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   reject -> accept  design-engine/tests/s1-gain-middle.hylo                                no coercion from '(P<U>, Q<(U::P).X>, R<U>) ==> [Void]() let -> Void' to '[Void]
+   reject -> accept  design-engine/tests/s1-open-ambiguous-dependency.hylo                  no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-open-parameter-type.hylo                        cannot pass value of type '(U::P).X' to parameter '(U::P).X'
+   accept -> reject  design-eqnorm/tests/attack-01-alias-given-skipped-by-index.hylo        no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](l
+   accept -> timeout design-eqnorm/tests/attack-04-budget-beyond-depth.hylo                 
+   reject -> accept  design-eqnorm/tests/attack-06-return-position.hylo                     no coercion from 'P<W<U0, U1, U2, U3, U4, U5, U6, U7>> ==> [Void]() let -> R' to
+   reject -> accept  design-eqnorm/tests/gain-01-wide-given.hylo                            no coercion from 'P<W<U0, U1, U2, U3, U4, U5, U6, U7>> ==> [Void]() let -> Void'
+   reject -> accept  design-eqnorm/tests/gain-02-wide-value.hylo                            cannot pass value of type 'W<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>' to paramet
+   accept -> reject  design-eqnorm/tests/keep-12-self-projection.hylo                       no coercion from '((Self::P).X ~ U) ==> [Void]() let -> Void' to '[Void]() let -
+   reject -> accept  headsubst/tests/h1-concrete-parameter.hylo                             no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Voi
+   reject -> accept  headsubst/tests/h10-nested-projection.hylo                             no coercion from '<T> P<T> ==> [Void](let T, let Box<(T::P).X>) let -> Void' to 
+   reject -> accept  headsubst/tests/h11-two-requirements.hylo                              no coercion from '<T> (P<T>, Q<T>) ==> [Void](let T, let (T::P).X, let (T::Q).Y)
+   reject -> accept  headsubst/tests/h2-concrete-result.hylo                                no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) 
+   reject -> accept  headsubst/tests/h3-generic-caller.hylo                                 cannot pass value of type '(U::P).X' to parameter '(U::P).X'
+   reject -> accept  headsubst/tests/h6-generic-conformance.hylo                            no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Voi
+   reject -> accept  headsubst/tests/h8-equality-on-projection.hylo                         cannot pass value of type 'B' to parameter '(U::P).X'
+   reject -> accept  headsubst/tests/h9-chain.hylo                                          no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Voi
+   reject -> accept  sigrounds/tests/06b-chain-through-alias.hylo                           definition of 'X' refers to itself
+   accept -> reject  reference/hand/blanket-1.hylo                                          no coercion from '(T ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   accept -> reject  reference/hand/blanket-2.hylo                                          cannot pass value of type 'T' to parameter 'U'
+   accept -> reject  reference/hand/blanket-3.hylo                                          no coercion from '(St2<T> ~ St2<U>) ==> [Void]() let -> Void' to '[Void]() let -
+   reject -> accept  reference/hand/blanket-4.hylo                                          no coercion from '(X1 ~ T) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   accept -> reject  reference/hand/blanket-5.hylo                                          cannot pass value of type 'St0' to parameter 'St1'
+   accept -> reject  reference/hand/self/cast-only.hylo                                     no coercion from '(T::P).X' to '(Self::P).X'
+   accept -> reject  reference/hand/self/cast-two.hylo                                      no coercion from '(T::P).X' to '(Self::P).X'
+   reject -> accept  reference/hand/self/confusion-3.hylo                                   no coercion from '(A::P).X' to 'C'
+   accept -> reject  reference/hand/self/launder-5-def.hylo                                 no coercion from '(U ~ (Self::P).X) ==> [Void](let U) let -> (Self::P).X' to '[V
+   accept -> reject  reference/hand/self/launder-5.hylo                                     no coercion from '(U ~ (Self::P).X) ==> [Void](let U) let -> (Self::P).X' to '[V
+   accept -> reject  reference/hand/self/launder-6.hylo                                     no coercion from '(U ~ (Self::P).X) ==> [Void](let U) let -> (Self::P).X' to '[V
+   accept -> reject  reference/minimized/unsound-blanket.hylo                               cannot pass value of type 'T0' to parameter 'St1'
+   accept -> reject  reference/judge/p/u1-confusion-box.hylo                                cannot pass value of type 'Box<St0>' to parameter 'Box<St1>'
+   accept -> reject  reference/judge/p/u1-confusion.hylo                                    cannot pass value of type 'St0' to parameter 'St1'
+   accept -> reject  reference/judge/p/u2-b.hylo                                            no coercion from '(U ~ (Self::P).X) ==> [Void](let U) let -> (Self::P).X' to '[V
+  VIOLATION design-eqnorm/tests/attack-01-alias-given-skipped-by-index.hylo the index skipped a for B, which matches
+finished

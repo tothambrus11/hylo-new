@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Assigns every violating variant found under FULL to one of the causes of the README (D1..D8,
-L1, L2), by relation, kind of variant, verdicts and error messages, and prints the number of
+L1..L3), by relation, kind of variant, verdicts and error messages, and prints the number of
 variants and of programs per cause. A violation that matches no rule is printed as `?`."""
 import collections, json, os
 from common import HERE
@@ -25,6 +25,7 @@ def cause(r):
         if "generic-member" in r["file"]: return "D7"        # a non-generic alias of `A<Void>`
         if kind == "intro-all-top": return "D1"
         return "D8"
+    if rel == "r8" and r["kind"].startswith(("conf", "gconf")): return "L3"
     return "?"
 
 

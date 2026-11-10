@@ -1,0 +1,6 @@
+// Control of b03, well typed: the facts are not crossed.
+trait P { type X }
+trait Q {}
+trait R {}
+fun f<T, U where T is P, U is P, T.X is Q, U.X is R>() {}
+fun g<V, W where V is P, W is P, V.X is Q, W.X is R>() { f<V, W>() }

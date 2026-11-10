@@ -107,7 +107,25 @@ public fun main() {
 }
 '''
 
-A2 = ('Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand. ')
+ALIAS_CYCLE = '''fun test(b: B) { let y = f(b).m() }
+struct A { public memberwise init }
+struct B {
+  public memberwise init
+  public fun m() -> X { B() }
+}
+struct C {
+  public memberwise init
+  public fun m() -> Y { C() }
+}
+fun f(x: A) -> C { C() }
+fun f(x: B) -> B { x }
+type X = Y
+type Y = X
+public fun main() {}
+'''
+
+A2 = ('Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand; the outcome '
+      'with the flags was observed on the implementation (binary eq25, DESIGN.md 9.2). ')
 
 TESTS = [
     ('a01-forcing-accepted',
@@ -181,7 +199,8 @@ TESTS = [
      THREE % 'A1'),
     ('a10-twin-spotless',
      'as today (accepted, and the same declaration bound to `m`: compare the dump of step 0); '
-     'solver.forks=2 and solver.twinsReused=1 with `twins` alone',
+     'solver.forks=2 and solver.twinsReused=1 with `twins` alone once rule T4 is in (3 forks and '
+     'no reuse with rules T1 to T3 only, as in commit 9dc04d7)',
      'As a09 with the argument that the two candidates of the same type accept. The member is '
      'explored under best = worst without any failure, so its result holds under any bound '
      '(rule T4); the requirement reuses it although best is now 0. Checks that the rebinding '
@@ -196,6 +215,16 @@ TESTS = [
      '(deeper, where best is already 0). The model of the existing solver predicts the '
      '136 forks and 51 sets of the binary.',
      OVER_ERRORS),
+    ('a12-alias-cycle-diagnostic',
+     'with `twins` alone: as today. With `cleanfirst`: still rejected, but the first '
+     'diagnostic becomes "definition of \'X\' refers to itself" (line of `type X`) instead '
+     'of \'Y\', in base, in FULL and with `sigrounds`: a known change of diagnostics',
+     A2 + 'X and Y are defined by each other, so the program is ill-formed in every reading. '
+     'Which alias is blamed depends on which one is entered first. Today the fork of the wrong '
+     'candidate f(x: A) looks `m` up in C and enters Y; `cleanfirst` cancels that fork, and '
+     'the first lookup, of `m` in B, enters X. Unlike a01 to a08 this one is not removed by '
+     '`sigrounds`, which settles the signatures of extensions and givens, not aliases.',
+     ALIAS_CYCLE),
 ]
 
 

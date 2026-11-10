@@ -1,0 +1,134 @@
+eqchain            n=64    MIN5  crash    t=None wall=98.45 matches=None forks=None applies=None 
+eqchain            n=128   MIN5  timeout  t=None wall=120.23 matches=None forks=None applies=None 
+eqchain            n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=128
+eqchain            n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=128
+eqchain            n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=128
+eqchain-conf       n=64    MIN5  ok       t=49830.42 wall=51.2 matches=817045 forks=None applies=None 
+eqchain-conf       n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128
+eqchain-conf       n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128
+eqchain-conf       n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128
+eqchain-conf       n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 50 s at n=64, power-law extrapolation gives 562 s at n=128
+eqchain-neg        n=64    MIN5  ok       t=38477.17 wall=40.06 matches=789913 forks=None applies=None 
+eqchain-neg        n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128
+eqchain-neg        n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128
+eqchain-neg        n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128
+eqchain-neg        n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 38 s at n=64, power-law extrapolation gives 359 s at n=128
+eqchain-goals      n=16    MIN5  ok       t=42767.9 wall=45.3 matches=969997 forks=None applies=None 
+eqchain-goals      n=24    MIN5  ok       t=106882.58 wall=112.62 matches=2796557 forks=None applies=None 
+eqchain-goals      n=32    MIN5  timeout  t=None wall=120.27 matches=None forks=None applies=None 
+eqchain-goals      n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=32
+eqchain-goals      n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=32
+eqchain-goals      n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=32
+eqchain-goals      n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=32
+eqchain-goals      n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=32
+assoceq            n=24    MIN5  ok       t=41286.05 wall=43.26 matches=878198 forks=None applies=192 
+assoceq            n=32    MIN5  crash    t=None wall=37.6 matches=None forks=None applies=None 
+assoceq            n=48    MIN5  crash    t=None wall=41.43 matches=None forks=None applies=None 
+assoceq            n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=96    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=160   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=192   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assoceq            n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=24    MIN5  ok       t=29948.08 wall=31.84 matches=815767 forks=None applies=184 
+assocneg           n=32    MIN5  crash    t=None wall=43.79 matches=None forks=None applies=None 
+assocneg           n=48    MIN5  crash    t=None wall=49.04 matches=None forks=None applies=None 
+assocneg           n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=96    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=160   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=192   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+assocneg           n=1024  MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=48 (exit 134)
+div-branch         n=4     MIN5  crash    t=None wall=40.32 matches=None forks=None applies=None 
+div-branch         n=5     MIN5  crash    t=None wall=34.44 matches=None forks=None applies=None 
+div-branch         n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-branch         n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-branch         n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-branch         n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-branch         n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-branch-eq      n=3     MIN5  crash    t=None wall=50.21 matches=None forks=None applies=None 
+div-branch-eq      n=4     MIN5  crash    t=None wall=55.23 matches=None forks=None applies=None 
+div-branch-eq      n=5     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-branch-eq      n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-branch-eq      n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-branch-eq      n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-branch-eq      n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-branch-eq      n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=4 (exit 134)
+div-trunc          n=4     MIN5  crash    t=None wall=61.07 matches=None forks=None applies=None 
+div-trunc          n=5     MIN5  crash    t=None wall=62.11 matches=None forks=None applies=None 
+div-trunc          n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-trunc          n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-trunc          n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-trunc          n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-trunc          n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+div-depth          n=16    MIN5  err      t=23108.11 wall=25.28 matches=196605 forks=None applies=None div-depth-16.hylo:8.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let
+div-depth          n=20    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20
+div-depth          n=24    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20
+div-depth          n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20
+div-depth          n=40    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 23 s at n=16, power-law extrapolation gives 398 s at n=20
+div-trunc-depth    n=16    MIN5  err      t=25978.19 wall=28.25 matches=393209 forks=None applies=None div-trunc-depth-16.hylo:11.21-25: error: no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void
+div-trunc-depth    n=20    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20
+div-trunc-depth    n=24    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20
+div-trunc-depth    n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20
+div-trunc-depth    n=40    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 26 s at n=16, power-law extrapolation gives 332 s at n=20
+div-valid-deep     n=16    MIN5  ok       t=38320.14 wall=41.5 matches=393214 forks=None applies=None 
+div-valid-deep     n=20    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 38 s at n=16, power-law extrapolation gives 739 s at n=20
+cyc-clique         n=5     MIN5  crash    t=None wall=36.47 matches=None forks=None applies=None 
+cyc-clique         n=6     MIN5  crash    t=None wall=18.77 matches=None forks=None applies=None 
+cyc-clique         n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=6 (exit 134)
+cyc-clique         n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=6 (exit 134)
+cyc-clique         n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=6 (exit 134)
+ovl-calls          n=16    MIN5  timeout  t=None wall=120.0 matches=None forks=None applies=None 
+ovl-calls          n=20    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=16
+ovr-args           n=12    MIN5  ok       t=29837.64 wall=30.29 matches=682360 forks=797160 applies=None 
+open-chain         n=64    MIN5  crash    t=None wall=46.51 matches=None forks=None applies=None 
+open-chain         n=128   MIN5  crash    t=None wall=50.78 matches=None forks=None applies=None 
+open-chain         n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=128 (exit 134)
+open-chain         n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=128 (exit 134)
+open-neg           n=1     MIN5  crash    t=None wall=38.71 matches=None forks=None applies=None 
+open-neg           n=2     MIN5  crash    t=None wall=41.36 matches=None forks=None applies=None 
+open-neg           n=3     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=4     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=5     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=24    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-neg           n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=2 (exit 134)
+open-wide          n=4     MIN5  crash    t=None wall=37.37 matches=None forks=None applies=None 
+open-wide          n=5     MIN5  crash    t=None wall=36.1 matches=None forks=None applies=None 
+open-wide          n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide          n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide          n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide          n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide-nobudget n=4     MIN5  crash    t=None wall=32.77 matches=None forks=None applies=None 
+open-wide-nobudget n=5     MIN5  crash    t=None wall=42.59 matches=None forks=None applies=None 
+open-wide-nobudget n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide-nobudget n=7     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+open-wide-nobudget n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=5 (exit 134)
+req-eq             n=8     MIN5  crash    t=None wall=44.1 matches=None forks=None applies=None 
+req-eq             n=9     MIN5  crash    t=None wall=38.98 matches=None forks=None applies=None 
+req-eq             n=10    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=11    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq             n=512   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=9 (exit 134)
+req-eq-deep        n=8     MIN5  crash    t=None wall=39.96 matches=None forks=None applies=None 
+req-eq-deep        n=16    MIN5  crash    t=None wall=27.87 matches=None forks=None applies=None 
+req-eq-deep        n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)
+req-eq-deep        n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None two crashes, last at n=16 (exit 134)

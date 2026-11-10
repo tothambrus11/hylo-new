@@ -1,0 +1,6 @@
+// abstractstrict + premsubst: an extension of the conforming types that requires T.X == S0,
+// used in the body of the trait where Self.X == S0 is given. Valid.
+struct S0 { public memberwise init }
+trait P { type X
+  fun m<Z where Self.X == S0>(z: Z) { self.special() } }
+extension <T where T is P, T.X == S0> T { fun special() {} }

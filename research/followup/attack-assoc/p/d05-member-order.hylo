@@ -1,0 +1,17 @@
+// assocsubst: the associated type is declared after the methods that use it. ok valid; bad invalid (1 error expected).
+trait P {
+  fun get() -> X
+  fun put(x: X)
+  type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  fun get() -> X { self.t }
+  fun put(x: X) {}
+  type X = T }
+fun check<T>(x: T) {}
+fun ok(a: Box<S0>) { check<S0>(a.get())
+  a.put(S0()) }
+fun bad(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

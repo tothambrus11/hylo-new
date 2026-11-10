@@ -1,0 +1,9 @@
+// Control of b04v: the result is assigned to a W.X. Well typed under design question 4.
+trait P { type X
+  fun get() -> X }
+trait Q {}
+fun f<T where T is P, T.X is Q>(t: T) -> T.X { t.get() }
+fun g<V, W where V == W, V is P, W is P, W.X is Q>(v: V, y: W.X) {
+  var x = y
+  x = f<V>(v)
+}

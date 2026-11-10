@@ -497,7 +497,16 @@ def main():
     hp = os.path.join(HERE, "README.head.md")
     if os.path.exists(hp):
         with open(os.path.join(HERE, "README.md"), "w") as f:
-            f.write(open(hp).read().rstrip("\n").replace("COMPLETION_NOTE", note) + "\n\n" + body)
+            from collections import Counter
+            st = Counter(r["status"] for r in pts.values())
+            ran = st["ok"] + st["err"] + st["timeout"] + st["crash"]
+            npass = sum(1 for l in open(path) if l.strip() and json.loads(l).get("pass", 0) > 0)
+            stats = (f"In total {ran:,} points were run: {st['ok'] + st['err']:,} completed, "
+                     f"{st['timeout']} timed out, {st['crash']} crashed (out of memory); "
+                     f"{st['skipped']} larger sizes were not run for the reasons above.")
+            text = open(hp).read().rstrip("\n").replace("COMPLETION_NOTE", note)
+            text = text.replace("RUN_STATS", stats).replace("PASS1_COUNT", f"{npass:,}")
+            f.write(text + "\n\n" + body)
     with open(os.path.join(HERE, "fits.json"), "w") as f:
         json.dump(fits, f, indent=1, default=float)
     print("\n".join(head))

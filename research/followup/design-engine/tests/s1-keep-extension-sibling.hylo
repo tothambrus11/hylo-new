@@ -1,0 +1,14 @@
+//! stage:typing no-std
+// review: a member of a conditional extension calls a sibling. The extension's own requirements are
+// in scope, so today the premises match as written; with premsubst 'T is P' must be discharged by the
+// extension's requirement (the capture rule of 3.4 demands exactly this).
+// expected (premsubst): accepted, as today.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base accepted (subgoals=7 matches=511); FULL accepted (subgoals=3 matches=75)
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> {
+  fun a() {}
+  fun b() { self.a() }
+}

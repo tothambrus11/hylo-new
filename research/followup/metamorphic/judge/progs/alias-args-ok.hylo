@@ -1,0 +1,6 @@
+struct K {}
+struct A<U> {
+  public fun f(x: U) {}
+  public fun g() -> U { self.g() }
+}
+fun use(a: A<K>, b: A<K>) { a.f(b.g()) }

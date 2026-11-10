@@ -1,5 +1,6 @@
 //! stage:typing no-std
 // expected (premsubst, step 2): accepted. Two requirements mention the same earlier requirement.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=2); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base rejected (subgoals=16 matches=1169): no coercion from '(P<U>, Q<(U::P).X>, R<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=8 matches=293): no coercion from '(P<U>, Q<(U::P).X>, R<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }
 trait Q {}

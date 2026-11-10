@@ -1,6 +1,7 @@
 //! stage:typing no-std
 // expected (premsubst, step 2): accepted. The dependent requirement is neither first nor last:
 // `T is R` is discharged first (last in, first out), `T.X is Q` waits for `T is P`.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base rejected (subgoals=11 matches=803): no coercion from '(P<U>, Q<(U::P).X>, R<U>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=7 matches=151): no coercion from '(P<U>, Q<(U::P).X>, R<U>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }
 trait Q {}

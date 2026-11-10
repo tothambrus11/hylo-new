@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// GAP: a conformance with a parameter that only an equality determines, and a condition on that parameter.
+// Rust: `impl<I, U> Iterator for Flatten<I> where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator`,
+// with the nested associated types flattened into one trait so that no other gap interferes.
+// EXPECTED: accepted (instantiate the conformance with the `U` of the function; its four conditions are the four givens).
+// OBSERVED: base overflows the stack; FIX and FULL reject after the equality unifier has run (eqmgu.solved > 0).
+trait Iterator { type Item }
+trait NestedIterator { type Item; type InnerIter; type InnerItem }
+struct Flatten<I> { public memberwise init }
+given <I, U where I is NestedIterator, U is Iterator, I.InnerIter == U, I.InnerItem == U.Item> => Flatten<I> is Iterator { type Item = U.Item }
+fun needIterator<T where T is Iterator>() {}
+fun f<I, U where I is NestedIterator, U is Iterator, I.InnerIter == U, I.InnerItem == U.Item>() { needIterator<Flatten<I>>() }

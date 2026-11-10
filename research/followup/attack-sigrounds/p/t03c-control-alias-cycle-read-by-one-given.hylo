@@ -1,0 +1,5 @@
+// Control of t03: only one given reads the cycle, so there is one way in.
+trait P {}
+type X = Y
+type Y = X
+given X is P {}

@@ -18,9 +18,14 @@ KEYS = R.KEYS + ["premsubst.binders", "premsubst.bound", "premsubst.deferred",
                  "premsubst.released", "premsubst.normalized", "premsubst.stuck"]
 
 
+# NEW is the configuration of ../BRIEF2.md: FULL plus the mechanisms of the follow-up.
+CONFIGS = dict(R.CONFIGS, NEW=R.CONFIGS["FULL"]
+               + ",sigrounds,assocsubst,eqindex,eqeager,premsubst,headsubst,abstractstrict")
+
+
 def flags(config):
     parts = config.split("+")
-    return ",".join(x for x in [R.CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)
+    return ",".join(x for x in [CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)
 
 
 def run(binid, path, config, depth=None, trace=False, timeout=60):

@@ -1,0 +1,7 @@
+// Control of d02, ILL TYPED: g knows U.X is R, not U.X is Q.
+trait P { type X }
+trait Q {}
+trait R {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> { fun first() {} }
+fun g<U where U is P, U.X is R>(b: Box<U>) { b.first() }

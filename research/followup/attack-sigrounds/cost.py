@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Generates chains of dependent declarations and measures the cost of sigrounds on them.
 
-usage: cost.py [N ...]      (default: 2 4 6 8 10 12 16 24 32)
+usage: [SHAPES=given,ext,...] cost.py [N ...]      (default: 2 4 6 8 10 12 16 24 32)
 
 Shapes (written to cost/SHAPE-N.hylo):
   given   N givens, each with a subject that is an alias through the previous given (tests/33).
   ext     N extensions, each extending the member type declared by the previous one.
   wide    one dependency of depth 1 and N unrelated generic givens with a where clause.
   flip    the unstable pair of tests/29 followed by a chain of N extensions that hang on it.
+  mixed   the chain of 8 givens of `given` together with the N generic givens of `wide`.
 Each program is run under FULL, NEW and NEW+selfcheck, one process at a time; the verdict, the
 sigrounds counters, summon.calls, summon.matches, names.appliesCalls and the time of the user
 module (indicative only) are appended to cost.jsonl and printed."""
@@ -43,6 +44,12 @@ def flip(n):
         s += [f"extension {'A.M0' if i == 0 else f'S{i-1}.M{i}'} {{ type M{i+1} = S{i+1} }}"]
     return "\n".join(s) + "\n"
 
+def mixed(n):
+    """The chain of 8 givens followed by the n generic givens of `wide`, with their own traits."""
+    w = [re.sub(r"\b([PQE])\b", r"\g<1>2", l) for l in wide(n).split("\n")[5:]]
+    return given(8) + "\n".join(["trait P2 { type E2 }", "trait Q2 {}", "given A is P2 { type E2 = Int }",
+                                 "given Int is Q2 {}"] + w) + "\n"
+
 def run(config, path):
     p = subprocess.run([B, "--count", path], env=dict(os.environ, HYLO_TC_EXPERIMENTS=tcrun.flags(config)),
                        capture_output=True, text=True, timeout=300)
@@ -58,7 +65,9 @@ def run(config, path):
 if __name__ == "__main__":
     ns = [int(x) for x in sys.argv[1:]] or [2, 4, 6, 8, 10, 12, 16, 24, 32]
     out = open(os.path.join(HERE, "cost.jsonl"), "a")
-    for shape in (given, ext, wide, flip):
+    shapes = [given, ext, wide, flip, mixed]
+    if os.environ.get("SHAPES"): shapes = [x for x in shapes if x.__name__ in os.environ["SHAPES"].split(",")]
+    for shape in shapes:
         for n in ns:
             path = os.path.join(HERE, "cost", f"{shape.__name__}-{n:02}.hylo")
             open(path, "w").write(shape(n))

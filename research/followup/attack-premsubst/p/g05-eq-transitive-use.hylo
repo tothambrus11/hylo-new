@@ -1,0 +1,6 @@
+// The caller's equality is not the callee's but implies it. Well typed: U.X == B and B == C' is
+// not available, so use two steps: U.X == V and V == B give U.X == B.
+trait P { type X }
+struct B { public memberwise init }
+fun f<T where T is P, T.X == B>() {}
+fun g<U, V where U is P, U.X == V, V == B>() { f<U>() }

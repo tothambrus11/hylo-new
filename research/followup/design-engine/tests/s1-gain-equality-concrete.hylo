@@ -1,6 +1,7 @@
 //! stage:typing no-std
 // expected (premsubst, step 3): accepted, by reflexivity once `A.X` is read through the conformance.
 // (research/report/test-programs/unsimplified-projections/min.hylo)
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1 normalized=1); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base timeout; FULL rejected (subgoals=379 matches=10316 depthExhausted=1 premises=1): no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }
 struct A {}

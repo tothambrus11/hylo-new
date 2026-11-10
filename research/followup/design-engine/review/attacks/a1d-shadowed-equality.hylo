@@ -1,0 +1,7 @@
+//! stage:typing no-std
+trait P { type X }
+struct A {}
+struct B { public memberwise init }
+given A is P { type X = B }
+fun f<T where T is P, T.X == B>() {}
+fun g<where A is P>() { f<A>() }

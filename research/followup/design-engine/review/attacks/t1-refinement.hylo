@@ -1,0 +1,6 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q refines P {}
+trait K {}
+fun f<T where T is P, T.X is K>() {}
+fun g<U where U is Q, U.X is K>() { f<U>() }

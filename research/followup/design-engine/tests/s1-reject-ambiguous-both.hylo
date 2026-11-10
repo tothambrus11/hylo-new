@@ -1,0 +1,17 @@
+//! stage:typing no-std
+// review: 'A is P' has two witnesses of equal rank and both make 'A.X is Q' hold: two results, an
+// ambiguity under either reading.
+// expected (premsubst): rejected.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=2 normalized=2); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=6 matches=453): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=83): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+given B is Q {}
+given C is Q {}
+given A is P { type X = B }
+given A is P { type X = C }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<A>() }

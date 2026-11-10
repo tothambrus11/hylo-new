@@ -2,18 +2,18 @@ Programs: 801; skipped: {'syntax error in the original': 32, 'slow': 4, 'large':
 
 | Relation | Programs with a variant | Variants | Invalid variants | Programs with a verdict change | Variants with a verdict change | Programs with only messages changed | Variants with only messages changed |
 |---|---:|---:|---:|---:|---:|---:|---:|
-| 1 order of top-level declarations | 619 | 3586 | 0 | 7 | 82 | 37 | 369 |
+| 1 order of top-level declarations | 727 | 3782 | 0 | 7 | 82 | 39 | 372 |
 | 2 order of requirements and generic parameters | 341 | 1787 | 0 | 39 | 84 | 109 | 216 |
 | 3 order of members | 120 | 197 | 0 | 0 | 0 | 0 | 0 |
 | 4 tautology or unused parameter | 648 | 3087 | 0 | 105 | 125 | 128 | 271 |
 | 5 type alias | 410 | 1790 | 0 | 47 | 61 | 142 | 379 |
-| 6 renaming | 727 | 1424 | 0 | 1 | 2 | 0 | 0 |
+| 6 renaming | 727 | 1424 | 0 | 0 | 0 | 0 | 0 |
 | 7 forms of an equality | 314 | 1619 | 0 | 4 | 10 | 33 | 81 |
-| 8 unrelated declaration | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| 8 unrelated declaration | 760 | 1520 | 0 | 8 | 8 | 0 | 0 |
 
 | Relation | Kind of variant | Variants | Verdict changes | Message-only changes |
 |---|---|---:|---:|---:|
-| r1 | permute | 3586 | 82 | 369 |
+| r1 | permute | 3782 | 82 | 372 |
 | r2 | params | 490 | 0 | 6 |
 | r2 | reqs | 579 | 83 | 102 |
 | r2 | reqs-dep | 263 | 1 | 7 |
@@ -30,12 +30,15 @@ Programs: 801; skipped: {'syntax error in the original': 32, 'slow': 4, 'large':
 | r5 | intro-all-top | 601 | 21 | 174 |
 | r5 | intro-generic | 158 | 27 | 32 |
 | r5 | intro-one | 285 | 0 | 14 |
-| r6 | all | 697 | 1 | 0 |
+| r6 | all | 697 | 0 | 0 |
 | r6 | one | 30 | 0 | 0 |
-| r6 | reverse | 697 | 1 | 0 |
+| r6 | reverse | 697 | 0 | 0 |
 | r7 | dup | 538 | 1 | 29 |
 | r7 | dup-sym | 540 | 4 | 28 |
 | r7 | sym | 541 | 5 | 24 |
+| r8 | conf | 332 | 8 | 0 |
+| r8 | struct-top | 760 | 0 | 0 |
+| r8 | trait | 428 | 0 | 0 |
 
 Groups of violations (same relation, kind, verdicts and error messages with the names blanked), with what FIX and base
 give for the members that were run under them (`same`: the same pair of verdicts as FULL; otherwise the pair):
@@ -48,15 +51,15 @@ give for the members that were run under them (`same`: the same pair of verdicts
 | r2 | reqs | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 1 | 1 | same: 1 | timeout -> timeout: 1 |
 | r2 | reqs | accept -> reject | type '_' has no static member '_' | 81 | 37 | same: 81 | accept -> crash:-6: 1, accept -> timeout: 4, same: 55 |
 | r2 | reqs | reject -> accept | cannot pass value of type '_' to parameter '_' | 1 | 1 | same: 1 | same: 1 |
-| r2 | reqs-dep | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 1 | 1 | not run | not run |
-| r4 | taut-app | accept -> reject | no coercion from '_' to '_' | 2 | 1 | same: 2 | not run |
+| r2 | reqs-dep | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 1 | 1 | same: 1 | timeout -> timeout: 1 |
+| r4 | taut-app | accept -> reject | no coercion from '_' to '_' | 2 | 1 | same: 2 | accept -> timeout: 1 |
 | r4 | taut-assoc | accept -> reject | type '_' has no static member '_' | 16 | 16 | same: 16 | reject -> reject: 2, same: 12 |
 | r4 | taut-ground | accept -> reject | no coercion from '_' to '_' | 2 | 1 | same: 2 | not run |
 | r4 | taut-ground | reject -> accept | ambiguous use of '_' | 4 | 2 | same: 4 | same: 4 |
 | r4 | taut-ground | reject -> accept | no coercion from '_' to '_' | 4 | 2 | same: 4 | same: 4 |
 | r4 | taut-param | accept -> reject | T expects 1 type argument(s) | 1 | 1 | same: 1 | same: 1 |
-| r4 | taut-param | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 3 | 1 | same: 3 | timeout -> crash:-6: 1 |
-| r4 | taut-param | accept -> reject | no coercion from '_' to '_' | 3 | 3 | same: 3 | same: 2 |
+| r4 | taut-param | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 3 | 1 | same: 3 | timeout -> crash:-6: 1, timeout -> timeout: 2 |
+| r4 | taut-param | accept -> reject | no coercion from '_' to '_' | 3 | 3 | same: 3 | accept -> timeout: 1, same: 2 |
 | r4 | unused-param | accept -> reject | not enough context to infer a type | 90 | 84 | same: 28 | same: 12 |
 | r5 | expand | reject -> accept | definition of '_' refers to itself | 1 | 1 | same: 1 | same: 1 |
 | r5 | expand | reject -> accept | type '_' has no static member '_' | 2 | 2 | same: 2 | same: 2 |
@@ -74,14 +77,14 @@ give for the members that were run under them (`same`: the same pair of verdicts
 | r5 | intro-generic | accept -> reject | type '_' has no member '_' | 6 | 6 | same: 6 | same: 6 |
 | r5 | intro-generic | accept -> reject | type '_' has no static member '_' | 2 | 2 | same: 2 | same: 2 |
 | r5 | intro-generic | reject -> accept | cannot pass value of type '_' to parameter '_' | 2 | 2 | same: 2 | crash:-11 -> accept: 2 |
-| r6 | all | accept -> reject | no candidate matches the argument list | 1 | 1 | accept -> accept: 1 | accept -> accept: 1 |
-| r6 | reverse | accept -> reject | no candidate matches the argument list | 1 | 1 | accept -> accept: 1 | accept -> accept: 1 |
-| r7 | dup | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 1 | 1 | same: 1 | not run |
-| r7 | dup-sym | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 2 | 1 | same: 2 | not run |
+| r7 | dup | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 1 | 1 | same: 1 | timeout -> timeout: 1 |
+| r7 | dup-sym | accept -> reject | implicit resolution is too complex: more than 100000 candidate derivations; conside | 2 | 1 | same: 2 | timeout -> timeout: 2 |
 | r7 | dup-sym | accept -> reject | no coercion from '_' to '_' | 1 | 1 | same: 1 | same: 1 |
 | r7 | dup-sym | reject -> accept | no coercion from '_' to '_' | 1 | 1 | same: 1 | same: 1 |
 | r7 | sym | accept -> reject | no coercion from '_' to '_' | 2 | 1 | same: 2 | same: 2 |
 | r7 | sym | reject -> accept | no coercion from '_' to '_' | 3 | 2 | same: 3 | same: 3 |
+| r8 | conf | accept -> reject | no coercion from '_' to '_' | 1 | 1 | same: 1 | not run |
+| r8 | conf | reject -> accept | no coercion from '_' to '_' | 7 | 7 | same: 7 | crash:-11 -> accept: 6 |
 
 Violating variants under FULL, with the verdicts original -> variant under each configuration:
 
@@ -107,12 +110,11 @@ Violating variants under FULL, with the verdicts original -> variant under each 
 | r4 | Tests/CompilerTests/positive/implicit-qualification.hylo | unused-param:12 | accept -> reject | accept -> reject | accept -> reject |
 | r5 | Tests/CompilerTests/positive/implicit-qualification.hylo | intro-generic:0 | accept -> reject | accept -> reject | accept -> reject |
 | r4 | Tests/CompilerTests/positive/inlining-existentialized.hylo | unused-param:5 | accept -> reject | accept -> reject | not run |
-| r6 | Tests/CompilerTests/positive/integer-conversions.hylo | all | accept -> reject | accept -> accept | accept -> accept |
-| r6 | Tests/CompilerTests/positive/integer-conversions.hylo | reverse | accept -> reject | accept -> accept | accept -> accept |
 | r4 | Tests/CompilerTests/positive/metatype.hylo | unused-param:0 | accept -> reject | accept -> reject | not run |
 | r4 | Tests/CompilerTests/positive/nested-given-1.hylo | unused-param:4 | accept -> reject | accept -> reject | not run |
 | r4 | Tests/CompilerTests/positive/nullary-conformance.hylo | unused-param:2 | accept -> reject | accept -> reject | not run |
 | r4 | Tests/CompilerTests/positive/nullary-conformance.hylo | unused-param:3 | accept -> reject | accept -> reject | not run |
+| r8 | Tests/CompilerTests/positive/nullary-conformance.hylo | conf:0 | accept -> reject | accept -> reject | not run |
 | r5 | Tests/CompilerTests/positive/overload-priority.hylo | intro-generic:0 | accept -> reject | accept -> reject | accept -> reject |
 | r4 | Tests/CompilerTests/positive/refinement.hylo | unused-param:7 | accept -> reject | accept -> reject | not run |
 | r4 | Tests/CompilerTests/positive/remote-binding.hylo | unused-param:0 | accept -> reject | accept -> reject | not run |
@@ -129,12 +131,19 @@ Violating variants under FULL, with the verdicts original -> variant under each 
 | r4 | cycles-and-crashes/a5-env-var-goal-ctrl.hylo | unused-param:1 | accept -> reject | not run | not run |
 | r5 | cycles-and-crashes/b1c-method-cycle-ctrl.hylo | intro-generic:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
 | r5 | cycles-and-crashes/b1d-method-env-cycle.hylo | intro-generic:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
+| r8 | cycles-and-crashes/cyclic-query-segfault.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
 | r4 | cycles-and-crashes/e2-abs-qual-distinct-conf.hylo | taut-assoc:2:1:first | accept -> reject | accept -> reject | accept -> reject |
 | r4 | cycles-and-crashes/e3-env-implicit.hylo | unused-param:0 | accept -> reject | not run | not run |
+| r8 | cycles-and-crashes/n1-nested-occurs.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
+| r8 | cycles-and-crashes/n1-nested.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
+| r8 | cycles-and-crashes/n2-nested2.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
 | r4 | cycles-and-crashes/o1-value-ctx.hylo | unused-param:2 | accept -> reject | not run | not run |
 | r4 | cycles-and-crashes/o1-value-ctx.hylo | unused-param:3 | accept -> reject | not run | not run |
 | r5 | cycles-and-crashes/o1-value-ctx.hylo | intro-generic:0 | accept -> reject | accept -> reject | accept -> reject |
+| r8 | cycles-and-crashes/o2-toplevel-occurs.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
+| r8 | cycles-and-crashes/o4-toplevel-occurs-full.hylo | conf:0 | reject -> accept | reject -> accept | crash:-11 -> accept |
 | r4 | cycles-and-crashes/q2-open-eq-amb.hylo | unused-param:0 | accept -> reject | not run | not run |
+| r8 | cycles-and-crashes/variant-swapped.hylo | conf:0 | reject -> accept | reject -> accept | not run |
 | r1 | declaration-order/al1.hylo | perm:0,2,1,4,3,5 | reject -> accept | reject -> accept | not run |
 | r1 | declaration-order/al1.hylo | perm:0,2,4,1,3,5 | reject -> accept | reject -> accept | not run |
 | r1 | declaration-order/al1.hylo | perm:0,4,5,2,3,1 | reject -> accept | reject -> accept | not run |
@@ -404,15 +413,15 @@ Violating variants under FULL, with the verdicts original -> variant under each 
 | r4 | performance/open-wide-1.hylo | unused-param:1 | accept -> reject | not run | not run |
 | r4 | performance/open-wide-2.hylo | unused-param:1 | accept -> reject | not run | not run |
 | r4 | performance/open-wide-3.hylo | unused-param:1 | accept -> reject | not run | not run |
-| r2 | performance/open-wide-4.hylo | reqs-dep:1:76543210 | accept -> reject | not run | not run |
+| r2 | performance/open-wide-4.hylo | reqs-dep:1:76543210 | accept -> reject | accept -> reject | timeout -> timeout |
 | r2 | performance/open-wide-4.hylo | reqs:1:76543210 | accept -> reject | accept -> reject | timeout -> timeout |
-| r4 | performance/open-wide-4.hylo | taut-param:1:0:last | accept -> reject | accept -> reject | not run |
-| r4 | performance/open-wide-4.hylo | taut-param:1:2:last | accept -> reject | accept -> reject | not run |
+| r4 | performance/open-wide-4.hylo | taut-param:1:0:last | accept -> reject | accept -> reject | timeout -> timeout |
+| r4 | performance/open-wide-4.hylo | taut-param:1:2:last | accept -> reject | accept -> reject | timeout -> timeout |
 | r4 | performance/open-wide-4.hylo | taut-param:1:3:last | accept -> reject | accept -> reject | timeout -> crash:-6 |
 | r4 | performance/open-wide-4.hylo | unused-param:1 | accept -> reject | not run | not run |
-| r7 | performance/open-wide-4.hylo | dup-sym:1:3 | accept -> reject | accept -> reject | not run |
-| r7 | performance/open-wide-4.hylo | dup-sym:1:5 | accept -> reject | accept -> reject | not run |
-| r7 | performance/open-wide-4.hylo | dup:1:3 | accept -> reject | accept -> reject | not run |
+| r7 | performance/open-wide-4.hylo | dup-sym:1:3 | accept -> reject | accept -> reject | timeout -> timeout |
+| r7 | performance/open-wide-4.hylo | dup-sym:1:5 | accept -> reject | accept -> reject | timeout -> timeout |
+| r7 | performance/open-wide-4.hylo | dup:1:3 | accept -> reject | accept -> reject | timeout -> timeout |
 | r5 | unsimplified-projections/t14-generic-conf-call.hylo | intro-generic:0 | accept -> reject | accept -> reject | not run |
 | r2 | unsimplified-projections/t4-generic-caller.hylo | reqs:4:10 | accept -> reject | accept -> reject | not run |
 | r2 | unsimplified-projections/t4-generic-caller.hylo | reqs:5:10 | accept -> reject | accept -> reject | not run |
@@ -422,11 +431,11 @@ Violating variants under FULL, with the verdicts original -> variant under each 
 | r4 | unsimplified-projections/v6-refl.hylo | taut-assoc:7:1:first | accept -> reject | accept -> reject | not run |
 | r4 | research/workloads/chain3.hylo | unused-param:4 | accept -> reject | not run | not run |
 | r5 | research/workloads/chain3.hylo | intro-generic:0 | accept -> reject | accept -> reject | not run |
-| r4 | research/workloads/chain8.hylo | taut-app:4:1:last | accept -> reject | accept -> reject | not run |
+| r4 | research/workloads/chain8.hylo | taut-app:4:1:last | accept -> reject | accept -> reject | accept -> timeout |
 | r4 | research/workloads/chain8.hylo | taut-app:5:4:last | accept -> reject | accept -> reject | not run |
 | r4 | research/workloads/chain8.hylo | taut-ground:3:0:last | accept -> reject | accept -> reject | not run |
 | r4 | research/workloads/chain8.hylo | taut-ground:5:8:last | accept -> reject | accept -> reject | not run |
-| r4 | research/workloads/chain8.hylo | taut-param:4:0:last | accept -> reject | accept -> reject | not run |
+| r4 | research/workloads/chain8.hylo | taut-param:4:0:last | accept -> reject | accept -> reject | accept -> timeout |
 | r4 | research/workloads/chain8.hylo | unused-param:4 | accept -> reject | not run | not run |
 | r5 | research/workloads/chain8.hylo | intro-generic:0 | accept -> reject | accept -> reject | not run |
 | r2 | research/workloads/round3/assoceq-2.hylo | reqs:3:04213 | accept -> reject | accept -> reject | not run |
@@ -452,5 +461,5 @@ Violating variants under FULL, with the verdicts original -> variant under each 
 | r4 | research/workloads/round3/refine-5.hylo | unused-param:6 | accept -> reject | not run | not run |
 | r4 | research/workloads/round3/refine-8.hylo | unused-param:9 | accept -> reject | not run | not run |
 
-Under FIX (only the programs with a FULL violation were run): 387 variants, 299 verdict changes in 130 programs.
-Under base (only the programs with a FULL violation were run): 158 variants, 152 verdict changes in 96 programs.
+Under FIX (only the programs with a FULL violation were run): 396 variants, 308 verdict changes in 137 programs.
+Under base (only the programs with a FULL violation were run): 172 variants, 160 verdict changes in 103 programs.

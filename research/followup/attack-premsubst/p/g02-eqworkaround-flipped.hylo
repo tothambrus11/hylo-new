@@ -1,0 +1,6 @@
+// As g01 with the equality written the other way round in the callee and the caller. Well typed.
+trait P { type X }
+struct B { public memberwise init }
+fun f<T where T is P, B == T.X>() {}
+fun g<U where U is P, U.X == B>() { f<U>() }
+fun h<U where U is P, B == U.X>() { f<U>() }

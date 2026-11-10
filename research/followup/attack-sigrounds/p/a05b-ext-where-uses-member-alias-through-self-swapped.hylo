@@ -1,0 +1,8 @@
+// a05 with its last two declarations swapped.
+trait Q {}
+trait R {}
+struct A {}
+struct Foo<T> {}
+given <U> => Foo<U> is Q {}
+given A.LA is R {}
+extension <where Foo<LA> is Q> A { type LA = Self }

@@ -1,0 +1,251 @@
+base  reject    violations/r1/al1--perm-0-2-1-4-3-5/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r1/al1--perm-0-2-1-4-3-5/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r1/al1--perm-0-2-1-4-3-5/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r1/al1--perm-0-2-1-4-3-5/b.hylo
+FIX   accept    violations/r1/al1--perm-0-2-1-4-3-5/b.hylo
+FULL  accept    violations/r1/al1--perm-0-2-1-4-3-5/b.hylo
+base  accept    violations/r1/al2--perm-0-1-5-4-2-3/a.hylo
+FIX   accept    violations/r1/al2--perm-0-1-5-4-2-3/a.hylo
+FULL  accept    violations/r1/al2--perm-0-1-5-4-2-3/a.hylo
+base  reject    violations/r1/al2--perm-0-1-5-4-2-3/b.hylo
+        error: L3: definition of 'X' refers to itself
+FIX   reject    violations/r1/al2--perm-0-1-5-4-2-3/b.hylo
+        error: L3: definition of 'X' refers to itself
+FULL  reject    violations/r1/al2--perm-0-1-5-4-2-3/b.hylo
+        error: L3: definition of 'X' refers to itself
+base  reject    violations/r1/al3--perm-0-3-1-4-5-2/a.hylo
+        error: L3: type 'X' has no static member 'Me'
+        error: L6: definition of 'X' refers to itself
+FIX   reject    violations/r1/al3--perm-0-3-1-4-5-2/a.hylo
+        error: L3: type 'X' has no static member 'Me'
+        error: L6: definition of 'X' refers to itself
+FULL  reject    violations/r1/al3--perm-0-3-1-4-5-2/a.hylo
+        error: L3: type 'X' has no static member 'Me'
+        error: L6: definition of 'X' refers to itself
+base  accept    violations/r1/al3--perm-0-3-1-4-5-2/b.hylo
+FIX   accept    violations/r1/al3--perm-0-3-1-4-5-2/b.hylo
+FULL  accept    violations/r1/al3--perm-0-3-1-4-5-2/b.hylo
+base  accept    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/a.hylo
+FIX   reject    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/a.hylo
+        error: L10: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+        error: L11: type 'Int' has no static member 'Inner'
+        error: L9: type 'Inner' has no static member 'Foo'
+FULL  reject    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/a.hylo
+        error: L10: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+        error: L11: type 'Int' has no static member 'Inner'
+        error: L9: type 'Inner' has no static member 'Foo'
+base  accept    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/b.hylo
+FIX   accept    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/b.hylo
+FULL  accept    violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0/b.hylo
+base  reject    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/a.hylo
+        error: L7: type 'Inner' has no static member 'Foo'
+FIX   reject    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/a.hylo
+        error: L6: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+        error: L7: type 'Inner' has no static member 'Foo'
+FULL  reject    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/a.hylo
+        error: L6: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+        error: L7: type 'Inner' has no static member 'Foo'
+base  accept    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/b.hylo
+FIX   accept    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/b.hylo
+FULL  accept    violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6/b.hylo
+base  reject    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/b.hylo
+FIX   accept    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/b.hylo
+FULL  accept    violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3/b.hylo
+base  accept    violations/r2/a08-assoc-generic--reqs-4-10/a.hylo
+FIX   accept    violations/r2/a08-assoc-generic--reqs-4-10/a.hylo
+FULL  accept    violations/r2/a08-assoc-generic--reqs-4-10/a.hylo
+base  reject    violations/r2/a08-assoc-generic--reqs-4-10/b.hylo
+        error: L5: type 'T' has no static member 'X'
+FIX   reject    violations/r2/a08-assoc-generic--reqs-4-10/b.hylo
+        error: L5: type 'T' has no static member 'X'
+FULL  reject    violations/r2/a08-assoc-generic--reqs-4-10/b.hylo
+        error: L5: type 'T' has no static member 'X'
+base  accept    violations/r2/absinst-ok--reqs-3-10/a.hylo
+FIX   accept    violations/r2/absinst-ok--reqs-3-10/a.hylo
+FULL  accept    violations/r2/absinst-ok--reqs-3-10/a.hylo
+base  reject    violations/r2/absinst-ok--reqs-3-10/b.hylo
+        error: L5: type 'V' has no static member 'X'
+FIX   reject    violations/r2/absinst-ok--reqs-3-10/b.hylo
+        error: L5: type 'V' has no static member 'X'
+FULL  reject    violations/r2/absinst-ok--reqs-3-10/b.hylo
+        error: L5: type 'V' has no static member 'X'
+base  accept    violations/r2/assoceq-1--reqs-3-210/a.hylo
+FIX   accept    violations/r2/assoceq-1--reqs-3-210/a.hylo
+FULL  accept    violations/r2/assoceq-1--reqs-3-210/a.hylo
+base  reject    violations/r2/assoceq-1--reqs-3-210/b.hylo
+        error: L3: type 'T0' has no static member 'X'
+        error: L3: type 'T1' has no static member 'X'
+FIX   reject    violations/r2/assoceq-1--reqs-3-210/b.hylo
+        error: L3: type 'T0' has no static member 'X'
+        error: L3: type 'T1' has no static member 'X'
+FULL  reject    violations/r2/assoceq-1--reqs-3-210/b.hylo
+        error: L3: type 'T0' has no static member 'X'
+        error: L3: type 'T1' has no static member 'X'
+base  accept    violations/r2/assoceq-2--reqs-3-43210/a.hylo
+FIX   accept    violations/r2/assoceq-2--reqs-3-43210/a.hylo
+FULL  accept    violations/r2/assoceq-2--reqs-3-43210/a.hylo
+base  reject    violations/r2/assoceq-2--reqs-3-43210/b.hylo
+        error: L3: type 'T1' has no static member 'X'
+        error: L3: type 'T2' has no static member 'X'
+FIX   reject    violations/r2/assoceq-2--reqs-3-43210/b.hylo
+        error: L3: type 'T1' has no static member 'X'
+        error: L3: type 'T2' has no static member 'X'
+FULL  reject    violations/r2/assoceq-2--reqs-3-43210/b.hylo
+        error: L3: type 'T1' has no static member 'X'
+        error: L3: type 'T2' has no static member 'X'
+base  accept    violations/r2/assoceq-3--reqs-3-6543210/a.hylo
+FIX   accept    violations/r2/assoceq-3--reqs-3-6543210/a.hylo
+FULL  accept    violations/r2/assoceq-3--reqs-3-6543210/a.hylo
+base  reject    violations/r2/assoceq-3--reqs-3-6543210/b.hylo
+        error: L3: type 'T2' has no static member 'X'
+        error: L3: type 'T3' has no static member 'X'
+FIX   reject    violations/r2/assoceq-3--reqs-3-6543210/b.hylo
+        error: L3: type 'T2' has no static member 'X'
+        error: L3: type 'T3' has no static member 'X'
+FULL  reject    violations/r2/assoceq-3--reqs-3-6543210/b.hylo
+        error: L3: type 'T2' has no static member 'X'
+        error: L3: type 'T3' has no static member 'X'
+base  accept    violations/r2/assoceq-4--reqs-3-876543210/a.hylo
+FIX   accept    violations/r2/assoceq-4--reqs-3-876543210/a.hylo
+FULL  accept    violations/r2/assoceq-4--reqs-3-876543210/a.hylo
+base  reject    violations/r2/assoceq-4--reqs-3-876543210/b.hylo
+        error: L3: type 'T3' has no static member 'X'
+        error: L3: type 'T4' has no static member 'X'
+FIX   reject    violations/r2/assoceq-4--reqs-3-876543210/b.hylo
+        error: L3: type 'T3' has no static member 'X'
+        error: L3: type 'T4' has no static member 'X'
+FULL  reject    violations/r2/assoceq-4--reqs-3-876543210/b.hylo
+        error: L3: type 'T3' has no static member 'X'
+        error: L3: type 'T4' has no static member 'X'
+base  accept    violations/r2/cong-1--reqs-3-120/a.hylo
+FIX   accept    violations/r2/cong-1--reqs-3-120/a.hylo
+FULL  accept    violations/r2/cong-1--reqs-3-120/a.hylo
+base  reject    violations/r2/cong-1--reqs-3-120/b.hylo
+        error: L3: type 'U' has no static member 'X'
+FIX   reject    violations/r2/cong-1--reqs-3-120/b.hylo
+        error: L3: type 'U' has no static member 'X'
+FULL  reject    violations/r2/cong-1--reqs-3-120/b.hylo
+        error: L3: type 'U' has no static member 'X'
+base  timeout   violations/r2/open-wide-4--reqs-1-76543210/a.hylo
+FIX   accept    violations/r2/open-wide-4--reqs-1-76543210/a.hylo
+FULL  accept    violations/r2/open-wide-4--reqs-1-76543210/a.hylo
+base  timeout   violations/r2/open-wide-4--reqs-1-76543210/b.hylo
+FIX   reject    violations/r2/open-wide-4--reqs-1-76543210/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U4), Q<U4>, (T ~ U3), Q<U3>, (T ~ U2), Q<U2>, (T ~ U1), Q<U1>) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+FULL  reject    violations/r2/open-wide-4--reqs-1-76543210/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U4), Q<U4>, (T ~ U3), Q<U3>, (T ~ U2), Q<U2>, (T ~ U1), Q<U1>) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+base  timeout   violations/r2/open-wide-4--reqs-dep-1-76543210/a.hylo
+FIX   accept    violations/r2/open-wide-4--reqs-dep-1-76543210/a.hylo
+FULL  accept    violations/r2/open-wide-4--reqs-dep-1-76543210/a.hylo
+base  crash:-6  violations/r2/open-wide-4--reqs-dep-1-76543210/b.hylo
+FIX   reject    violations/r2/open-wide-4--reqs-dep-1-76543210/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U4), Q<U4>, (T ~ U3), Q<U3>, (T ~ U2), Q<U2>, (T ~ U1), Q<U1>) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+FULL  reject    violations/r2/open-wide-4--reqs-dep-1-76543210/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U4), Q<U4>, (T ~ U3), Q<U3>, (T ~ U2), Q<U2>, (T ~ U1), Q<U1>) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+base  accept    violations/r2/r2_where_assoc--reqs-4-10/a.hylo
+FIX   accept    violations/r2/r2_where_assoc--reqs-4-10/a.hylo
+FULL  accept    violations/r2/r2_where_assoc--reqs-4-10/a.hylo
+base  reject    violations/r2/r2_where_assoc--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+FIX   reject    violations/r2/r2_where_assoc--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+FULL  reject    violations/r2/r2_where_assoc--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+base  accept    violations/r2/r2_where_assoc_ctrl--reqs-4-10/a.hylo
+FIX   accept    violations/r2/r2_where_assoc_ctrl--reqs-4-10/a.hylo
+FULL  accept    violations/r2/r2_where_assoc_ctrl--reqs-4-10/a.hylo
+base  reject    violations/r2/r2_where_assoc_ctrl--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+FIX   reject    violations/r2/r2_where_assoc_ctrl--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+FULL  reject    violations/r2/r2_where_assoc_ctrl--reqs-4-10/b.hylo
+        error: L3: type 'T' has no static member 'Element'
+base  reject    violations/r2/v-abs-9--reqs-3-021/a.hylo
+        error: L5: cannot pass value of type 'U' to parameter '(Self::P).X'
+FIX   reject    violations/r2/v-abs-9--reqs-3-021/a.hylo
+        error: L5: cannot pass value of type 'U' to parameter '(Self::P).X'
+FULL  reject    violations/r2/v-abs-9--reqs-3-021/a.hylo
+        error: L5: cannot pass value of type 'U' to parameter '(Self::P).X'
+base  accept    violations/r2/v-abs-9--reqs-3-021/b.hylo
+FIX   accept    violations/r2/v-abs-9--reqs-3-021/b.hylo
+FULL  accept    violations/r2/v-abs-9--reqs-3-021/b.hylo
+base  accept    violations/r4/chain8--taut-app-4-1-last/a.hylo
+FIX   accept    violations/r4/chain8--taut-app-4-1-last/a.hylo
+FULL  accept    violations/r4/chain8--taut-app-4-1-last/a.hylo
+base  crash:-6  violations/r4/chain8--taut-app-4-1-last/b.hylo
+FIX   reject    violations/r4/chain8--taut-app-4-1-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/chain8--taut-app-4-1-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/chain8--taut-ground-3-0-last/a.hylo
+FIX   accept    violations/r4/chain8--taut-ground-3-0-last/a.hylo
+FULL  accept    violations/r4/chain8--taut-ground-3-0-last/a.hylo
+base  reject    violations/r4/chain8--taut-ground-3-0-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r4/chain8--taut-ground-3-0-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/chain8--taut-ground-3-0-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/chain8--taut-param-4-0-last/a.hylo
+FIX   accept    violations/r4/chain8--taut-param-4-0-last/a.hylo
+FULL  accept    violations/r4/chain8--taut-param-4-0-last/a.hylo
+base  timeout   violations/r4/chain8--taut-param-4-0-last/b.hylo
+FIX   reject    violations/r4/chain8--taut-param-4-0-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/chain8--taut-param-4-0-last/b.hylo
+        error: L7: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/e06-elab-change--taut-param-3-0-first/a.hylo
+FIX   accept    violations/r4/e06-elab-change--taut-param-3-0-first/a.hylo
+FULL  accept    violations/r4/e06-elab-change--taut-param-3-0-first/a.hylo
+base  reject    violations/r4/e06-elab-change--taut-param-3-0-first/b.hylo
+        error: L13: no coercion from '((A ~ A), P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r4/e06-elab-change--taut-param-3-0-first/b.hylo
+        error: L13: no coercion from '((A ~ A), P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/e06-elab-change--taut-param-3-0-first/b.hylo
+        error: L13: no coercion from '((A ~ A), P<A>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/a.hylo
+FIX   accept    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/a.hylo
+FULL  accept    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/a.hylo
+base  reject    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/b.hylo
+        error: L4: type 'U' has no static member 'X'
+        error: L4: type 'U' has no static member 'X'
+FIX   reject    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/b.hylo
+        error: L4: type 'U' has no static member 'X'
+        error: L4: type 'U' has no static member 'X'
+FULL  reject    violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/b.hylo
+        error: L4: type 'U' has no static member 'X'
+        error: L4: type 'U' has no static member 'X'
+base  reject    violations/r4/g_dup0--taut-ground-3-0-last/a.hylo
+        error: L6: no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r4/g_dup0--taut-ground-3-0-last/a.hylo
+        error: L6: no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/g_dup0--taut-ground-3-0-last/a.hylo
+        error: L6: no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/g_dup0--taut-ground-3-0-last/b.hylo
+FIX   accept    violations/r4/g_dup0--taut-ground-3-0-last/b.hylo
+FULL  accept    violations/r4/g_dup0--taut-ground-3-0-last/b.hylo
+base  reject    violations/r4/gz0--taut-ground-4-0-last/a.hylo
+        error: L6: ambiguous use of 'Y'
+        error: L6: expression does not denote a type
+FIX   reject    violations/r4/gz0--taut-ground-4-0-last/a.hylo
+        error: L6: ambiguous use of 'Y'
+        error: L6: expression does not denote a type
+FULL  reject    violations/r4/gz0--taut-ground-4-0-last/a.hylo
+        error: L6: ambiguous use of 'Y'
+        error: L6: expression does not denote a type
+base  accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo
+FIX   accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo
+FULL  accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo

@@ -1,0 +1,24 @@
+//! stage:typing no-std
+// review: the dependent requirement relates the associated type to a parameter V of the given that
+// its head does not determine. 'V is Q' is discharged first and enumerates the four conformances to Q;
+// only V = B survives the equality. See s1-gain-open-variable-b for the other order.
+// expected (premsubst, step 3): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=4 normalized=4); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base timeout; FULL rejected (subgoals=7 matches=92): no coercion from 'R<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct C1 {}
+struct C2 {}
+struct C3 {}
+struct Box<T> { public memberwise init }
+given A is P { type X = B }
+given B is Q {}
+given C1 is Q {}
+given C2 is Q {}
+given C3 is Q {}
+given <T, V where T is P, V is Q, T.X == V> => Box<T> is R {}
+fun need<T where T is R>() {}
+public fun main() { need<Box<A>>() }

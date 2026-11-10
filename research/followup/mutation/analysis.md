@@ -138,6 +138,25 @@ Rejected mutants (plus timeouts and crashes under base): 687. More than 10× und
 | tests/repl-typearg/007 | repl-typearg in `equality.hylo`:4 `T` → `Void` | None | crash | crash | crash | 5 (0.83×) | – | – / – / – / 10 |
 | workloads/del-where-req/016 | del-where-req in `orig-coerc-cache.hylo`:14 `T == U, ` → `` | None | crash | crash | crash | 153 (1.94×) | – | – / – / – / 10 |
 
+### Ill-typed mutants that base accepts (rejected by FULL): 29
+
+They are not in the tables of rejected mutants. Their cost relative to the unmutated source:
+
+| config | n | median ratio | max ratio | more than 2× | more than 10× |
+|---|---:|---:|---:|---:|---:|
+| base | 29 | 0.88 | 97.2 | 12 | 5 |
+| min5 | 29 | 0.88 | 116 | 12 | 5 |
+| min5abs | 29 | 0.88 | 116 | 12 | 5 |
+| full | 29 | 0.98 | 15.9 | 2 | 2 |
+
+| mutant | mutation | base: matches (×orig) | MIN5 | MIN5+abs | FULL | ms base / MIN5 / MIN5+abs / FULL |
+|---|---|---:|---:|---:|---:|---|
+| corpus/repl-typearg/033 | repl-typearg in `v-congr-5.hylo`:5 `U.X` → `Void` | 77913 (80.1×) | 77761 (116×) | 77761 (116×) | 221 (0.75×) | 2187 / 1206 / 1712 / 22 |
+| corpus/repl-typearg/019 | repl-typearg in `e1-sym-proof.hylo`:4 `B` → `Bool` | 21084 (97.2×) | 21084 (97.2×) | 21084 (97.2×) | 1 (0.50×) | 601 / 703 / 327 / 1 |
+| tests/del-where-req/016 | del-where-req in `equality.hylo`:10 `, U == V` → `` | 69302 (59.4×) | 69302 (59.4×) | 69302 (59.4×) | 5 (0.83×) | 1655 / 1498 / 1167 / 2 |
+| corpus/repl-typearg/025 | repl-typearg in `v-abs-7.hylo`:5 `X` → `Bool` | 27193 (28.0×) | 27193 (28.0×) | 27193 (28.0×) | 74 (0.99×) | 991 / 677 / 641 / 13 |
+| tests/del-where-req/001 | del-where-req in `equality.hylo`:10 `T == U, ` → `` | 23520 (20.2×) | 23520 (20.2×) | 23520 (20.2×) | 5 (0.83×) | 839 / 687 / 749 / 5 |
+
 ## 4. Effect of the abstract model on rejected mutants (MIN5 versus MIN5 + absmodel,absquotient)
 
 Rejected mutants: 670; with both runs completed: 670; one of the two runs failed or timed out: 0.

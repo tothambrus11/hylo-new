@@ -3,6 +3,7 @@
 // that conformance is `Flag` by definition, so the second requirement of the extension holds by
 // reflexivity and `first` is a member of `Box<Bag>`.
 // (research/report/test-programs/equalities/x10-ext-where-assoc.hylo)
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1 normalized=1); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base timeout; FULL rejected (subgoals=7 matches=362 premises=1): type 'Box<Bag>' has no member 'first'
 trait Collection { type Element }
 struct Box<T> { public memberwise init }

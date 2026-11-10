@@ -1,28 +1,25 @@
-// The ordinary shape of generic library code, with a refinement, a conditional conformance, a
-// conditional extension, a member selected through a requirement, and uses.
-trait Equatable { fun eq(_ other: Self) -> Bool }
-trait Collection { type Element; fun first() -> Element }
+// The ordinary shape of generic library code: a refinement, conditional conformances, a
+// conditional extension, members selected through requirements, and uses.
+trait Equatable { fun eq(other: Self) -> Bool }
+trait Collection { type Element }
 trait Sorted refines Collection {}
 struct IntArray { public memberwise init }
-struct Wrapper<C> { public var base: C; public memberwise init }
-given Int is Equatable { public fun eq(_ other: Int) -> Bool { true } }
-given IntArray is Collection { type Element = Int; public fun first() -> Int { 0 } }
+struct Wrapper<C> { public memberwise init }
+given Int is Equatable { public fun eq(other: Int) -> Bool { true } }
+given IntArray is Collection { type Element = Int }
 given IntArray is Sorted {}
-given <C where C is Collection> => Wrapper<C> is Collection {
-  type Element = C.Element
-  public fun first() -> C.Element { self.base.first() }
-}
+given <C where C is Collection> => Wrapper<C> is Collection { type Element = C.Element }
 given <C where C is Collection, C.Element is Equatable> => Wrapper<C> is Equatable {
-  public fun eq(_ other: Wrapper<C>) -> Bool { true }
+  public fun eq(other: Wrapper<C>) -> Bool { true }
 }
 extension <C where C is Sorted, C.Element is Equatable> Wrapper<C> {
-  public fun smallest() -> C.Element { self.base.first() }
+  public fun smallest() {}
 }
-fun same<T where T is Equatable>(_ a: T, _ b: T) -> Bool { a.eq(b) }
+fun same<T where T is Equatable>(a: T, b: T) -> Bool { a.eq(b) }
+type WI = Wrapper<IntArray>
+fun takes(x: WI.Element) -> Int { x }
 public fun main() {
-  let w = Wrapper<IntArray>(base: IntArray())
-  let x: Int = w.smallest()
-  let y: Int = w.first()
+  let w = Wrapper<IntArray>()
+  w.smallest()
   let _ = same(w, w)
-  let _ = same(x, y)
 }

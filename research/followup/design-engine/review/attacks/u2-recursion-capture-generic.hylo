@@ -1,0 +1,12 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+trait R {}
+struct B {}
+struct W<T> {}
+given B is Q {}
+given W<B> is R {}
+given <T> => T is P { type X = B }
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  f<T, W<T.X>>()
+}

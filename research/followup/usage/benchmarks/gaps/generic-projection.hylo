@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// GAP: an associated type defined by a generic conformance is not reduced.
+// Rust: `impl<T> Iterator for IntoIter<T> { type Item = T; }`, then `<IntoIter<A> as Iterator>::Item` is `A`.
+// EXPECTED: one error (the call with `z`).  OBSERVED: two errors; `(VecIter<A>::Iterator).Item` is not `A`.
+// The syntax `VecIter<A>.Item` is also rejected ("expression does not denote a type").
+trait Iterator { type Item }
+struct VecIter<T> { public memberwise init }
+struct A { public memberwise init }
+struct Zz { public memberwise init }
+given <T> => VecIter<T> is Iterator { type Item = T }
+fun item<T where T is Iterator>(x: T.Item) {}
+fun f(a: A, z: Zz) { item<VecIter<A>>(a); item<VecIter<A>>(z) }

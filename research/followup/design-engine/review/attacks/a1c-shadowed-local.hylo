@@ -1,0 +1,13 @@
+//! stage:typing no-std
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+given B is Q {}
+given A is P { type X = B }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() {
+  given A is P { type X = C }
+  f<A>()
+}

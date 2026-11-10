@@ -1,0 +1,18 @@
+// A chain inside a function body: a local alias through a top-level conformance, a local
+// extension of that alias, a local alias through the local extension, and a local conformance
+// of it. The function has no where clause. Every order of the four local declarations must give
+// the same verdict.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given A is P { type X = B }
+fun need<T where T is Q>(x: T) {}
+fun h(y: Int) {
+  type LA = A.X
+  extension LA { type M = Int }
+  type LB = B.M
+  given LB is Q {}
+  let z: LB = y
+  need(z)
+}

@@ -1,0 +1,48 @@
+trait P { type E }
+struct A {}
+struct Foo<T> {}
+given A is P { type E = A }
+type X0 = A.E
+type F0 = Foo<X0>
+given F0 is P { type E = F0 }
+type X1 = F0.E
+type F1 = Foo<X1>
+given F1 is P { type E = F1 }
+type X2 = F1.E
+type F2 = Foo<X2>
+given F2 is P { type E = F2 }
+type X3 = F2.E
+type F3 = Foo<X3>
+given F3 is P { type E = F3 }
+type X4 = F3.E
+type F4 = Foo<X4>
+given F4 is P { type E = F4 }
+type X5 = F4.E
+type F5 = Foo<X5>
+given F5 is P { type E = F5 }
+type X6 = F5.E
+type F6 = Foo<X6>
+given F6 is P { type E = F6 }
+type X7 = F6.E
+fun f(x: X7) {}
+trait P2 { type E2 }
+trait Q2 {}
+given A is P2 { type E2 = Int }
+given Int is Q2 {}
+struct W0<C> {}
+given <C where C is P2, C.E2 is Q2> => W0<C> is Q2 {}
+struct W1<C> {}
+given <C where C is P2, C.E2 is Q2> => W1<C> is Q2 {}
+struct W2<C> {}
+given <C where C is P2, C.E2 is Q2> => W2<C> is Q2 {}
+struct W3<C> {}
+given <C where C is P2, C.E2 is Q2> => W3<C> is Q2 {}
+struct W4<C> {}
+given <C where C is P2, C.E2 is Q2> => W4<C> is Q2 {}
+struct W5<C> {}
+given <C where C is P2, C.E2 is Q2> => W5<C> is Q2 {}
+struct W6<C> {}
+given <C where C is P2, C.E2 is Q2> => W6<C> is Q2 {}
+struct W7<C> {}
+given <C where C is P2, C.E2 is Q2> => W7<C> is Q2 {}
+

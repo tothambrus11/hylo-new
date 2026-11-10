@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// attack (review): as s1-attack-coerced-witness, but the caller states its requirement on U.X, the
+// projection the callee asks for, and is still rejected: the caller's U.X is (V::$r).X after name
+// resolution, the callee's is (U::coerce($r)).X.
+// expected (premsubst with step 3 removing coercions, 3.7): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=29 matches=1101): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=7 matches=368 proved=2): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U, V where U == V, V is P, U.X is Q>() { f<U>() }

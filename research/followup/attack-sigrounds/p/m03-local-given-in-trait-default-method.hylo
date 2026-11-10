@@ -1,10 +1,10 @@
-// A conformance in the body of a default method of a trait; its subject is `Self.X`.
+// A conformance in the body of a default method of a trait; its subject is the associated type.
+trait Q {}
+fun need<T where T is Q>(x: T) {}
 trait P {
   type X
   fun f(x: X) {
-    given Self.X is Q {}
+    given X is Q {}
     need(x)
   }
 }
-trait Q {}
-fun need<T where T is Q>(x: T) {}

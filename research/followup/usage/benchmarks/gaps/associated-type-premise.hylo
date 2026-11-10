@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// GAP: a conditional conformance whose condition constrains an associated type of its parameter cannot be used.
+// Swift: `extension Range: Sequence where Bound: Strideable, Bound.Stride: SignedInteger`.
+// Rust:  `impl<I> Iterator for Flatten<I> where I: Iterator<Item: IntoIterator>`.
+// EXPECTED: accepted.  OBSERVED: both calls rejected ("no coercion from 'Q<W<I>> ==> ...'").
+trait It { type Item }
+trait Q {}
+struct W<I> { public memberwise init }
+struct A { public memberwise init }
+struct B { public memberwise init }
+given A is It { type Item = B }
+given B is Q {}
+given <I where I is It, I.Item is Q> => W<I> is Q {}
+fun needQ<T where T is Q>() {}
+fun abstract<I where I is It, I.Item is Q>() { needQ<W<I>>() }
+fun concrete() { needQ<W<A>>() }

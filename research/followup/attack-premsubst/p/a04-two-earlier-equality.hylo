@@ -1,0 +1,5 @@
+// A requirement that mentions two earlier ones: T.X == U.Y. Generic caller. Well typed.
+trait P { type X }
+trait R { type Y }
+fun f<T, U where T is P, U is R, T.X == U.Y>() {}
+fun g<V, W where V is P, W is R, V.X == W.Y>() { f<V, W>() }

@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 """Groups the violations found under FULL by signature (relation, kind of variant, pair of
 verdicts, error messages with the quoted names blanked), reduces the smallest programs of each
-group (at most PER_GROUP), and writes violations/index.jsonl, which lists every group with its
-members. Restartable: a reduction whose directory already holds info.json is not repeated.
+group (at most MM_PER_GROUP, default 1), and writes violations/index.jsonl, which lists every
+group with its members and with every reduction that exists for one of its members.
+Restartable: a reduction whose directory already holds info.json is not repeated. With
+MM_PER_GROUP=0 nothing is reduced and the index is only rebuilt.
 
 usage: reduce_all.py [REL...]"""
 import json, os, re, sys
@@ -44,15 +46,14 @@ def main():
         rs.sort(key=lambda r: (os.path.getsize(os.path.join(ROOT, r["file"])), r["file"], r["vid"]))
         entry = {"rel": sig[0], "kind": sig[1], "original": sig[2], "variant": sig[3], "errors": list(sig[4]),
                  "members": [[r["file"], r["vid"]] for r in rs], "programs": len({r["file"] for r in rs}), "reduced": []}
-        done_files = set()
+        done_files, new = set(), 0
         for r in rs:
-            if len(entry["reduced"]) >= PER_GROUP: break
-            if r["file"] in done_files: continue
-            done_files.add(r["file"])
             path = os.path.join(ROOT, r["file"])
             name = os.path.basename(path)[:-5] + "--" + re.sub(r"[^A-Za-z0-9]+", "-", r["vid"]).strip("-")
             out = os.path.join(HERE, "violations", r["rel"], name)
             if not os.path.exists(os.path.join(out, "info.json")):
+                if new >= PER_GROUP or entry["reduced"] or r["file"] in done_files: continue
+                done_files.add(r["file"]); new += 1
                 try:
                     # Relation 1: only whole declarations are deleted (the inner step would
                     # try every permutation again for each candidate deletion).

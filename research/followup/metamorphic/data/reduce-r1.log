@@ -1,6 +1,0 @@
-violations/r1/al2--perm-0-1-5-4-2-3 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 19
-violations/r1/names-verify-names-2-v01_ext_declares_foo--perm-0-2-1-3 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 16
-violations/r1/al1--perm-0-2-1-4-3-5 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 47
-violations/r1/al3--perm-0-3-1-4-5-2 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 47
-violations/r1/names-verify-names-1-v6_summon_swapped--perm-0-2-1-4-3-5-6 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 47
-violations/r1/names-n12_poison_via_summon_noearly--perm-1-4-7-3-2-5-6-0 {'base': 'accept/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 47

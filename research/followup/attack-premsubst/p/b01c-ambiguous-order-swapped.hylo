@@ -1,0 +1,14 @@
+// b01 with the two conformances of A swapped (ORDER check: same verdict as b01 expected).
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given B is Q { fun use() {} }
+given A is P { type X = C
+  fun get() -> C { C() } }
+given A is P { type X = B
+  fun get() -> B { B() } }
+fun f<T where T is P, T.X is Q>(t: T) { t.get().use() }
+public fun main() { f<A>(A()) }

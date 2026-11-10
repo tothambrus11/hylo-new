@@ -1,6 +1,7 @@
 //! stage:typing no-std
 // expected (premsubst, step 3): accepted. `A is P` is found first; `A.X` through that conformance
 // is `B` by definition, and `B is Q`.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1 normalized=1); +selfcheck same; +assocsubst accepted; NEW accepted
 // currently: base rejected (subgoals=6 matches=441): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=78): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }
 trait Q {}
