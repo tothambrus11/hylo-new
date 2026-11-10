@@ -1196,3 +1196,11 @@ open-chain         n=2     FULL  ok       t=4.42 wall=0.46 matches=77 forks=None
 open-chain         n=3     FULL  ok       t=14.19 wall=0.49 matches=78 forks=None applies=None 
 open-chain         n=4     FULL  ok       t=7.73 wall=0.62 matches=79 forks=None applies=None 
 open-chain         n=5     FULL  ok       t=8.72 wall=0.5 matches=80 forks=None applies=None 
+open-chain         n=6     FULL  ok       t=7.15 wall=0.62 matches=81 forks=None applies=None 
+open-chain         n=8     FULL  ok       t=14.74 wall=0.49 matches=83 forks=None applies=None 
+open-chain         n=12    FULL  ok       t=13.29 wall=0.65 matches=87 forks=None applies=None 
+open-chain         n=16    FULL  ok       t=9.67 wall=0.52 matches=91 forks=None applies=None 
+open-chain         n=24    FULL  ok       t=10.01 wall=0.54 matches=99 forks=None applies=None 
+open-chain         n=32    FULL  ok       t=10.21 wall=0.55 matches=107 forks=None applies=None 
+open-chain         n=64    FULL  ok       t=15.85 wall=0.61 matches=139 forks=None applies=None 
+open-chain         n=128   FULL  ok       t=17.1 wall=0.57 matches=203 forks=None applies=None 

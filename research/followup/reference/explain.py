@@ -14,6 +14,15 @@ derivable goal with the hypotheses that predict a rejection:
                 by part, so a declaration for Box<a> is not found for a parameter U with
                 Box<T> == U (falls under DECOMP/PREFILTER at the head).
 
+Two more hypotheses concern associated types, and come from observation (hand/p04.hylo,
+hand/blanket-*.hylo), not from the source:
+
+    BLANKET     The associated type of a conformance declared for a bare parameter
+                (given <A where ...> => A is P { type X = ... A ... }) is not instantiated: it is
+                one opaque type, the same for every instance.
+    PROJ-APP    `T.X` is not found when T's conformance comes from a declaration for a generic
+                type that T is equal to (T == Box<U>).
+
 `tags(world, query)` returns the set of tags; the empty set predicts "accepted". report.py
 tabulates the prediction against the compiler's verdicts, which tests the hypotheses.
 """
@@ -66,8 +75,34 @@ def coercion_tags(scope, sides, a, b, pattern_params=()):
     return tags, binding
 
 
+def projection_tags(world, scope, query):
+    out = set()
+    types = [t for r in query["reqs"] + [query["goal"]] for t in r[1:] if isinstance(t, tuple)]
+    for t in types:
+        for s in reference.subterms(t):
+            if s[0] != "proj":
+                continue
+            try:
+                d = scope.select(s[2], scope.elaborate(s[1]))
+            except reference.IllFormed:
+                continue
+            if d[0] != "conf":
+                continue
+            c = world["confs"][d[1]]
+            if c["type"][0] == "var" and c["impl"] is not None and reference.variables(c["impl"]):
+                out.add("BLANKET")
+            if c["type"][0] == "app" and c["type"][2]:
+                out.add("PROJ-APP")
+    return out
+
+
 def tags(world, query):
+    """The set of predicted causes of rejection for a derivable goal (empty: accepted)."""
     scope = Scope(world, query["reqs"])
+    return projection_tags(world, scope, query) | other_tags(world, scope, query)
+
+
+def other_tags(world, scope, query):
     reqs = [scope.elaborated[i] for i in range(len(query["reqs"]))]
     sides = set()
     for r in reqs:

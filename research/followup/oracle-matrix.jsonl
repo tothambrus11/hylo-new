@@ -40,3 +40,4 @@
 {"file": "../Tests/CompilerTests/positive/generic-constructor.hylo", "base": true, "diff": {}}
 {"file": "../Tests/CompilerTests/positive/generic-extension.hylo", "base": true, "diff": {}}
 {"file": "../Tests/CompilerTests/positive/generic-given.hylo", "base": true, "diff": {}}
+{"file": "../Tests/CompilerTests/positive/generic-member.hylo", "base": true, "diff": {}}
