@@ -16,7 +16,7 @@ These four techniques do not change the algorithm; they remove overhead.
 
 ## Substitute shared terms once (`reifymemo`)
 
-**How.** Substituting the solved unknowns into a type walks it recursively. Solutions often share structure: `?a1 := P<?a2, ?a2>`, `?a2 := P<?a3, ?a3>`, … Walked as a tree, this is exponential. Each call now remembers the result for every subterm.
+**How.** Substituting the solved unification variables into a type walks it recursively. Solutions often share structure: `?a1 := P<?a2, ?a2>`, `?a2 := P<?a3, ?a3>`, … Walked as a tree, this is exponential. Each call now remembers the result for every subterm.
 
 **Correct because:** within one call, the substitution is fixed, so the result depends only on the subterm.
 

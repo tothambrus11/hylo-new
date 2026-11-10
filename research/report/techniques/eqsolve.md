@@ -4,7 +4,7 @@
 
 ## Problem
 
-The checker proves equalities between types the same way it proves conformances: by searching, here through the built-in reflexivity, symmetry and transitivity rules and the equality facts in scope. Symmetry and transitivity each open new goals with unknown middle types, so proving `T0 == T3` from a chain `T0 == T1, T1 == T2, T2 == T3` is exponential in the length of the chain. It also needs about two search steps per link, so from five links on the 10-step cap is exceeded and valid programs are rejected:
+The checker proves equalities between types the same way it proves conformances: by searching, here through the built-in reflexivity, symmetry and transitivity rules and the equality facts in scope. Symmetry and transitivity each open new goals whose middle types are fresh unification variables, so proving `T0 == T3` from a chain `T0 == T1, T1 == T2, T2 == T3` is exponential in the length of the chain. It also needs about two search steps per link, so from five links on the 10-step cap is exceeded and valid programs are rejected:
 
 ```hylo
 fun f<T0, T1, T2, T3 where T0 == T1, T1 == T2, T2 == T3, T0 is P>(x: T3.X) {
@@ -17,20 +17,20 @@ With eight links this takes 1.1 s.
 
 ## How it works
 
-When a goal is an equality `A ~ B` with no unknowns:
+When a goal is an equality `A ~ B` with no unification variables:
 
 1. **Facts.** Collect the equality facts in force: those assumed in the current proof, then those visible from the scope. Each fact records the penalty the search would charge for using it.
 2. **Shortcut.** If `A` and `B` are identical after expanding aliases, answer with reflexivity.
 3. **Term graph.** Every subterm of the goal and the facts becomes a node. A compound node records its constructor and attributes: arity, function style and effects, parameter labels and access. Its children are its parts.
 4. **Congruence closure.** Merge the two sides of each fact, then repeatedly merge any two compound nodes whose constructors agree and whose children are already merged (`Box<A>` and `Box<B>` once `A` and `B` are). A signature table and use lists make this `O(n log n)` (Nelson–Oppen, Downey–Sethi–Tarjan).
 5. **Associated types.** These need two additional rules, described below.
-6. **Answer.** If `A` and `B` are in different classes, the goal fails immediately. Otherwise a proof is built from the cheapest path between them in the graph. It uses the facts, symmetry for facts used backwards, transitivity to chain them, and a coercion for each congruence step. Edges are weighted with the penalties the search would charge, so when several proofs exist, the checker chooses among them as it did before.
+6. **Answer.** If `A` and `B` are in different classes, the goal fails immediately. Otherwise a derivation is reconstructed from a minimal-cost path between them in the graph. It uses the facts, symmetry for facts used backwards, transitivity to chain them, and a coercion for each congruence step. Edges are weighted with the penalties the search would charge, so when several proofs exist, the checker chooses among them as it did before.
 
 ### Associated types
 
 **Through a concrete conformance.** A type like `(T::w).X`, the associated type `X` of `T` through the conformance `w`, is an atom. It equals another type only through facts.
 
-**Abstract (`Self.X`).** Inside a trait, `Self.X` is the trait's own, abstract associated type. Two rules of the language pull in different directions:
+**Abstract (`Self.X`).** Inside a trait, `Self.X` is the trait's own, abstract associated type. Two rules of the language conflict:
 - `Self.X` equals `T.X` when `T == Self` (accepted test `v-abs-7`);
 - `T.X` and `U.X` from two different conformances are different, even if `T == U` (negative test `associated-type-inequality`).
 
@@ -38,7 +38,7 @@ Applying the first rule freely gives `T.X == Self.X == U.X` whenever `T == Self`
 
 **Through a requirement not yet proved.** A caller may meet `T.Element` through a callee's requirement `T is Collection` that has not been proved yet; such requirements are proved in reverse order. That `T.Element` is identified with the one through the witness that *will* prove the requirement, under two conditions:
 - resolving `T is Collection` in the environment where the requirement will be proved has exactly one answer;
-- nothing involved is still unknown.
+- nothing involved still contains unification variables.
 
 Resolution is deterministic, so that answer is the witness that will actually be used. If the condition does not hold, the projection stays an atom, and a "not equal" verdict that depends on it is not trusted: the search decides instead.
 
@@ -47,7 +47,7 @@ Resolution is deterministic, so that answer is the witness that will actually be
 **Decidability.** Equality of closed terms under finitely many closed equations is decidable, and congruence closure decides it. The search uses no injectivity rule (`Box<A> == Box<B>` does not give `A == B`), and the procedure uses none either, so it decides exactly the theory the search explores, up to the depth cap.
 
 **Undecidable or expensive cases are left to the search**, which behaves as before:
-- the goal has unknowns (rigid E-unification);
+- the goal has unification variables (rigid E-unification);
 - an equality given is generic or conditional (the word problem);
 - a given could prove anything.
 

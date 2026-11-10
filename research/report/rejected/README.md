@@ -14,7 +14,7 @@ Each of these is faster, and each changes results, so none is used. They are rec
 
 **Idea.** In a smallest proof, no goal repeats one of its ancestors, since the ancestor could use the repeated goal's proof directly (Bol, Apt and Klop, 1991). So repeated goals could be pruned.
 
-**Why it fails.** The argument assumes plain logic-programming search. Hylo lets the pending requirements of a given serve as assumptions for its other requirements, ranks proofs by search layer and penalty, and reports ties as ambiguity. With a pending requirement in play, the repeated goal can be *cheaper* than its ancestor. Pruning it changed the chosen proof, lost proofs found within the depth cap, and hid ambiguities.
+**Why it fails.** The argument assumes plain logic-programming search. Hylo lets the pending requirements of a given serve as assumptions for its other requirements, ranks proofs by search layer and penalty, and reports ties as ambiguity. In the presence of a pending requirement, the repeated goal can have a *lower cost* than its ancestor. Pruning it changed the chosen proof, lost proofs found within the depth cap, and hid ambiguities.
 
 **What works instead.** The abstract model (`absmodel`) handles every looping case without that assumption.
 
@@ -30,7 +30,7 @@ Each of these is faster, and each changes results, so none is used. They are rec
 
 **Idea.** Put the types related by equality facts into classes, and reject an equality between two types of different classes.
 
-**Why it fails.** It rejected a valid program: inside a trait, `Self.X` is equal to `T.X` when `T == Self`, through the trait's own associated type, which simple grouping cannot see. Congruence closure, with the rule for `Self` described in `techniques/eqsolve.md`, handles it.
+**Why it fails.** It rejected a valid program: inside a trait, `Self.X` is equal to `T.X` when `T == Self`, through the trait's own associated type, which grouping into classes cannot capture. Congruence closure, with the rule for `Self` described in `techniques/eqsolve.md`, handles it.
 
 ## Undo every result computed during a cyclic lookup
 
@@ -42,4 +42,4 @@ Each of these is faster, and each changes results, so none is used. They are rec
 
 **Idea.** Remember whether a coercion can be derived, also when the current proof has assumptions, keyed by those assumptions.
 
-**Result.** Correct, but no faster. The cached checks were already cheap, and the cost of equality reasoning was in the search itself, which `eqsolve` removes.
+**Result.** Correct, but no faster. The cached checks were already inexpensive, and the cost of equality reasoning was in the search itself, which `eqsolve` removes.

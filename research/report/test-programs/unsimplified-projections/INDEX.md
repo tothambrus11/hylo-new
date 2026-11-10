@@ -1,6 +1,6 @@
 # Test programs: unsimplified projections
 
-Verdicts of the old checker and of the new one with all techniques enabled (30 s limit). A difference is either an ill-typed program that is now rejected, a crash or timeout that now gets an answer, or a case discussed in the reports.
+Verdicts of the existing implementation ("Old") and of the revised implementation with all techniques enabled ("New"), with a 30 s limit. Each difference is an ill-typed program that is now rejected, an abnormal termination or timeout that is now resolved, or a case discussed in the accompanying documents.
 
 | Program | Old | New | First error (new) |
 |---|---|---|---|

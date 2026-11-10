@@ -17,7 +17,7 @@ fun g<T where T is Collection, T.Element == Flag>(b: Box<T>) {
 }
 ```
 
-The old checker accepts this after a slow search (1.4 s). Similar programs, such as generic callers of functions whose parameter types mention `T.X`, are rejected or exhaust memory.
+The existing implementation accepts this program after an expensive search (1.4 s). Similar programs, such as generic callers of functions whose parameter types mention `T.X`, are rejected or exhaust memory.
 
 ## Cause
 
@@ -25,7 +25,7 @@ To check that the extension applies to `Box<T>`, the checker proves the extensio
 
 ## Fix
 
-Before deciding such an equality, `eqsolve` resolves the pending requirement in the environment in which it will later be proved, that is, under the assumptions made before it. If that resolution has exactly one answer `w`, and nothing involved is still unknown, the requirement's `T.Element` is identified with `T.Element` through `w`. Resolution is deterministic, so `w` is the witness that will actually be used. The example then takes 17 ms.
+Before deciding such an equality, `eqsolve` resolves the pending requirement in the environment in which it will later be proved, that is, under the assumptions made before it. If that resolution has exactly one answer `w`, and nothing involved still contains unification variables, the requirement's `T.Element` is identified with `T.Element` through `w`. Resolution is deterministic, so `w` is the witness that will actually be used. The example then takes 17 ms.
 
 If the condition does not hold, the projection is left as it is. A "not equal" answer that depends on it is not trusted, and the search decides instead, as before. The verdict therefore never depends on how deeply the query happens to be nested.
 

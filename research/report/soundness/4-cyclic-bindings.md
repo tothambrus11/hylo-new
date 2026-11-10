@@ -11,14 +11,14 @@ fun needR<T where T is R>() {}
 public fun main() { needR() }
 ```
 
-The compiler overflows its stack, with exit code 139. Closures and method references whose environment mentions the unknown, and method bundles, crash the same way. Small programs can also hit the same cycle through ordinary expression inference.
+The compiler overflows its stack, with exit code 139. Closures and method references whose environment mentions the unification variable, and method bundles, crash the same way. Small programs can also hit the same cycle through ordinary expression inference.
 
 ## Cause
 
 Unification has no occurs check, so it can bind `?y := S<?y>`. Substituting that solution never terminates.
 
-Two further omissions hid unknowns from the check:
-- the "contains unknowns" property of a function type ignored its environment;
+Two further omissions hid unification variables from the check:
+- the "contains unification variables" property of a function type ignored its environment;
 - the check did not look inside method bundles.
 
 ## Fix

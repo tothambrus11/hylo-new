@@ -20,7 +20,7 @@ This program has no consistent reading:
 - if `Z.O` is `T`, then `T` has two `P` conformances, so `T.Y`, and hence `Z`, is ambiguous;
 - otherwise `Z = T.Y = U` and `Z.O = U.O = T`, a contradiction.
 
-The old checker accepts it in one order and rejects it in the other.
+The existing implementation accepts it in one order and rejects it in the other.
 
 Extensions whose extended type depends on members of other extensions behave the same way:
 
@@ -52,7 +52,7 @@ Two kinds of hiding are deliberate scoping rules, and they are not checked:
 
 ## Why the verdict no longer depends on order
 
-The checks use only the final types. They examine every lookup of a cycle group, not just the one that happened to close the cycle, so the verdict is the same whichever member is computed first. If no hidden declaration could have taken part, every skip was exact, and the program is accepted with the same meaning as before.
+The checks use only the final types. They examine every lookup of a cycle group, not only the one that closed the cycle, so the verdict is the same whichever member is computed first. If no hidden declaration could have taken part, every skip was exact, and the program is accepted with the same meaning as before.
 
 ## Limitation
 
@@ -65,4 +65,4 @@ extension A.Inner { type Foo = Int }
 fun use(x: Int.Inner) {}
 ```
 
-The old checker accepted this only when the declarations happened to be computed in a favourable order. Accepting it in every order would need a fixed-point computation, with the ability to undo remembered results.
+The existing implementation accepts this program only when the declarations are computed in a favourable order. Accepting it in every order would need a fixed-point computation, with the ability to undo remembered results.

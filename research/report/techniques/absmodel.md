@@ -6,7 +6,7 @@
 
 The checker rejects an unprovable goal only after exploring every alternative up to its depth cap of 10 steps. With branching or looping givens, that exploration is exponential. A function with an unsatisfiable requirement, like `fun f<T where T is P>()` called with a type that is not `P`, can take seconds to reject.
 
-The question that started this work: is there a cheap, sound test that tells in advance that resolution will fail?
+The question that motivated this work is whether there is an inexpensive, sound test that establishes in advance that resolution will fail.
 
 ## How it works
 
@@ -55,7 +55,7 @@ Failing and looping resolutions:
 | 20 looping goals | 191 ms | 16 ms (12×) |
 | standard library | 1.0 s | 0.79 s (1.3×) |
 
-With the model, the cost of a refutable failure no longer depends on the depth cap: in the branching program, raising the cap from 10 to 14 takes the old checker from 2.3 s to 44.5 s, and the model from 3 ms to 3 ms.
+With the model, the cost of a refutable failure no longer depends on the depth cap: in the branching program, raising the cap from 10 to 14 increases the time of the existing implementation from 2.3 s to 44.5 s, whereas with the model it remains 3 ms.
 
 **Limit.** A fact deeper than the cut-off makes the model derive `P(⊤)`, after which no `P` goal can be refuted. The search is still pruned inside, but it stays exponential in the cap. `budget` bounds what remains.
 

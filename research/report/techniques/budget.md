@@ -23,4 +23,4 @@ Abandoning a resolution can only make a goal fail. A failed resolution could, in
 
 ## Cost
 
-A valid program that genuinely needs a larger search is rejected; the old checker ran out of memory on it. With the abstract model enabled, none of the test programs reaches the limit, except programs that are rejected anyway. The limit is a tunable, not a rule of the language; a stronger abstract model would make it unnecessary.
+A valid program that genuinely needs a larger search is rejected; the existing implementation exhausts memory on it. With the abstract model enabled, none of the test programs reaches the limit, except programs that are rejected anyway. The limit is a configurable parameter, not a rule of the language; a stronger abstract model would make it unnecessary.

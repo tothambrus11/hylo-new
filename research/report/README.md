@@ -1,6 +1,6 @@
 # Hylo Type-Checker Optimizations
 
-Techniques that make Hylo's type checker 4× faster on the standard library and 10–1000× faster on hard cases, together with fixes for five soundness problems of the existing checker.
+Techniques that make Hylo's type checker 4.1× faster on the standard library and up to three orders of magnitude faster on workloads designed to stress resolution, together with fixes for five soundness problems of the existing implementation.
 
 **Start with `report.html`.** It is the complete overview, readable in any browser in about 20 minutes. The rest of this folder gives the details behind it.
 
@@ -8,11 +8,12 @@ Techniques that make Hylo's type checker 4× faster on the standard library and 
 |---|---|
 | `report.html` | The overview: background, results, every technique, the soundness fixes, limitations, validation and related work |
 | `techniques/` | One document per technique: the problem, how it works, why it is correct, what it speeds up, what it costs |
-| `soundness/` | One document per soundness problem of the existing checker: symptom with an example, cause, fix, what remains |
+| `soundness/` | One document per soundness problem of the existing implementation: symptom with an example, cause, fix, what remains |
 | `rejected/` | Approaches that are faster but change results, and why |
 | `validation/` | Test-suite comparison, adversarial test results and timings, with raw data |
 | `test-programs/` | About 540 small programs, grouped by topic, each folder with an index of old and new verdicts |
 | `patches/` | The implementation as a patch series, with instructions to build and run it |
+| `papers/` | The cited papers available in PDF form, linked from the references of `report.html` |
 
 ## Techniques
 

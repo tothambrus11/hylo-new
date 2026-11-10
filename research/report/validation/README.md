@@ -2,7 +2,7 @@
 
 ## Identical results on the test suite
 
-A semantic dump records every expression type, name binding (including implicit and witness arguments), conformance table and diagnostic. It is compared with the old checker's on the compiler's 192 tests and 24 workloads:
+A semantic dump records every expression type, name binding (including implicit and witness arguments), conformance table and diagnostic. It is compared with that of the existing implementation on the compiler's 192 tests and 24 workloads:
 
 | Configuration | Identical files |
 |---|---|
@@ -13,14 +13,14 @@ A semantic dump records every expression type, name binding (including implicit 
 
 The 520 adversarial programs in `../test-programs/` (which also holds a few minimal reproducers) were written to break each technique: unsound acceptance, crashes, order dependence, slow cases. Each runs with a 30 s limit.
 
-| Outcome | Old checker | Fixes only | All techniques |
+| Outcome | Existing implementation | Fixes only | All techniques |
 |---|---|---|---|
 | accepted | 233 | 246 | 248 |
 | rejected | 224 | 273 | 271 |
 | timeout | 42 | 1 | 1 |
 | crash | 21 | 0 | 0 |
 
-The only timeout of the new checker is a return-type overload, a known limitation. Every changed verdict falls into one of these groups:
+The only timeout of the revised implementation is a return-type overload, a known limitation. Every changed verdict falls into one of these groups:
 - an ill-typed program that is now rejected;
 - a crash or timeout that now gets an answer;
 - the mutually recursive extensions discussed in `../soundness/5-declaration-order.md`.
@@ -31,7 +31,7 @@ Each folder of `../test-programs/` has an `INDEX.md` with the verdict of every p
 
 Typing time in ms, best of three runs, one core of a 4-core machine. Differences under about 10% are noise.
 
-| Program | Old checker | Fixes only | All techniques |
+| Program | Existing implementation | Fixes only | All techniques |
 |---|---:|---:|---:|
 | standard library | 616.0 | 388.7 | 151.4 |
 | 2,000 extensions, 1,000 lookups | 13,171.6 | 543.9 | 355.7 |
