@@ -1,0 +1,16 @@
+trait P {}
+struct S0 {}
+trait R0 { given S0 is P }
+struct S1 {}
+trait R1 { given S1 is P }
+struct S2 {}
+trait R2 { given S2 is P }
+struct S3 {}
+trait R3 { given S3 is P }
+fun use<T>(x: T) {}
+fun f<T is R0 & R1 & R2 & R3>() {
+  use(summon[P<S0>])
+  use(summon[P<S1>])
+  use(summon[P<S2>])
+  use(summon[P<S3>])
+}

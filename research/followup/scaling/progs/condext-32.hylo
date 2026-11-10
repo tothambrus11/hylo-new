@@ -1,0 +1,108 @@
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+trait P0 {}
+given A is P0 {}
+extension <T where T is P0> Box<T> { fun m0() {} }
+trait P1 {}
+given A is P1 {}
+extension <T where T is P1> Box<T> { fun m1() {} }
+trait P2 {}
+given A is P2 {}
+extension <T where T is P2> Box<T> { fun m2() {} }
+trait P3 {}
+given A is P3 {}
+extension <T where T is P3> Box<T> { fun m3() {} }
+trait P4 {}
+given A is P4 {}
+extension <T where T is P4> Box<T> { fun m4() {} }
+trait P5 {}
+given A is P5 {}
+extension <T where T is P5> Box<T> { fun m5() {} }
+trait P6 {}
+given A is P6 {}
+extension <T where T is P6> Box<T> { fun m6() {} }
+trait P7 {}
+given A is P7 {}
+extension <T where T is P7> Box<T> { fun m7() {} }
+trait P8 {}
+given A is P8 {}
+extension <T where T is P8> Box<T> { fun m8() {} }
+trait P9 {}
+given A is P9 {}
+extension <T where T is P9> Box<T> { fun m9() {} }
+trait P10 {}
+given A is P10 {}
+extension <T where T is P10> Box<T> { fun m10() {} }
+trait P11 {}
+given A is P11 {}
+extension <T where T is P11> Box<T> { fun m11() {} }
+trait P12 {}
+given A is P12 {}
+extension <T where T is P12> Box<T> { fun m12() {} }
+trait P13 {}
+given A is P13 {}
+extension <T where T is P13> Box<T> { fun m13() {} }
+trait P14 {}
+given A is P14 {}
+extension <T where T is P14> Box<T> { fun m14() {} }
+trait P15 {}
+given A is P15 {}
+extension <T where T is P15> Box<T> { fun m15() {} }
+trait P16 {}
+given A is P16 {}
+extension <T where T is P16> Box<T> { fun m16() {} }
+trait P17 {}
+given A is P17 {}
+extension <T where T is P17> Box<T> { fun m17() {} }
+trait P18 {}
+given A is P18 {}
+extension <T where T is P18> Box<T> { fun m18() {} }
+trait P19 {}
+given A is P19 {}
+extension <T where T is P19> Box<T> { fun m19() {} }
+trait P20 {}
+given A is P20 {}
+extension <T where T is P20> Box<T> { fun m20() {} }
+trait P21 {}
+given A is P21 {}
+extension <T where T is P21> Box<T> { fun m21() {} }
+trait P22 {}
+given A is P22 {}
+extension <T where T is P22> Box<T> { fun m22() {} }
+trait P23 {}
+given A is P23 {}
+extension <T where T is P23> Box<T> { fun m23() {} }
+trait P24 {}
+given A is P24 {}
+extension <T where T is P24> Box<T> { fun m24() {} }
+trait P25 {}
+given A is P25 {}
+extension <T where T is P25> Box<T> { fun m25() {} }
+trait P26 {}
+given A is P26 {}
+extension <T where T is P26> Box<T> { fun m26() {} }
+trait P27 {}
+given A is P27 {}
+extension <T where T is P27> Box<T> { fun m27() {} }
+trait P28 {}
+given A is P28 {}
+extension <T where T is P28> Box<T> { fun m28() {} }
+trait P29 {}
+given A is P29 {}
+extension <T where T is P29> Box<T> { fun m29() {} }
+trait P30 {}
+given A is P30 {}
+extension <T where T is P30> Box<T> { fun m30() {} }
+trait P31 {}
+given A is P31 {}
+extension <T where T is P31> Box<T> { fun m31() {} }
+public fun main() {
+  Box<A>().m0()
+  Box<A>().m13()
+  Box<A>().m26()
+  Box<A>().m7()
+  Box<A>().m20()
+  Box<A>().m1()
+  Box<A>().m14()
+  Box<A>().m27()
+}

@@ -10,6 +10,6 @@ fun check<X>(x: X) {}
 fun q0<T0, T1, T2, T3>() { needTr0<St2<T1>>() }
 fun q1<T0, T1, T2, T3>() { needTr0<T1>() }
 fun q2<T0, T1 where T0 is Tr0, T1 is Tr0>() { needTr0<St2<T1.X0>>() }
-fun q3<T0, T1 where T0 is Tr0, T1 is Tr0>() { needEq<St0, St1>() }
-fun q4<T0, T1, T2, T3, T4 where T3 is Tr0, T2 is Tr0, T4 is Tr0>() { needTr0<St2<T2.X0>>() }
-fun q5<T0, T1, T2, T3, T4 where T3 is Tr0, T2 is Tr0, T4 is Tr0>() { needTr0<St4<St2<T1>>>() }
+fun q3<T0, T1 where T0 is Tr0, T1 is Tr0>() { needTr0<St1>() }
+fun q4<T0, T1, T2, T3 where T3 == T2, T1 is Tr0, St4<T1> is Tr0, T1.X0 == St2<T1>, T3 is Tr0, T3.X0 is Tr0, T3.X0 == St0>() { needTr0<T1.X0>() }
+fun q5<T0, T1, T2, T3 where T3 == T2, T1 is Tr0, St4<T1> is Tr0, T1.X0 == St2<T1>, T3 is Tr0, T3.X0 is Tr0, T3.X0 == St0>() { needEq<T2, St4<T3.X0>>() }

@@ -38,6 +38,6 @@ self_, incl = collections.Counter(), collections.Counter()
 for s in typing:
     self_[short(s[0])] += 1
     for n in {short(f) for f in s}: incl[n] += 1
-json.dump({"samples": len(stacks), "typing": len(typing), "self": self_.most_common(60), "inclusive": incl.most_common(120)}, open(out, "w"), indent=1)
+json.dump({"stacks": [[short(f) for f in s] for s in typing], "samples": len(stacks), "typing": len(typing), "self": self_.most_common(60), "inclusive": incl.most_common(120)}, open(out, "w"), indent=1)
 print(len(stacks), "samples,", len(typing), "in the type checker")
 for n, c in incl.most_common(45): print(f"{100*c/max(1,len(typing)):5.1f}%  {n}")

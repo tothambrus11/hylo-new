@@ -1,0 +1,35 @@
+trait P {}
+trait Q1 refines P {}
+trait Q2 refines Q1 {}
+trait Q3 refines Q2 {}
+trait Q4 refines Q3 {}
+trait Q5 refines Q4 {}
+trait Q6 refines Q5 {}
+trait Q7 refines Q6 {}
+trait Q8 refines Q7 {}
+trait Q9 refines Q8 {}
+trait Q10 refines Q9 {}
+trait Q11 refines Q10 {}
+trait Q12 refines Q11 {}
+trait Q13 refines Q12 {}
+trait Q14 refines Q13 {}
+trait Q15 refines Q14 {}
+trait Q16 refines Q15 {}
+trait Q17 refines Q16 {}
+trait Q18 refines Q17 {}
+trait Q19 refines Q18 {}
+trait Q20 refines Q19 {}
+trait Q21 refines Q20 {}
+trait Q22 refines Q21 {}
+trait Q23 refines Q22 {}
+trait Q24 refines Q23 {}
+trait Q25 refines Q24 {}
+trait Q26 refines Q25 {}
+trait Q27 refines Q26 {}
+trait Q28 refines Q27 {}
+trait Q29 refines Q28 {}
+trait Q30 refines Q29 {}
+trait Q31 refines Q30 {}
+trait Q32 refines Q31 {}
+fun use<T>(x: T) {}
+fun f<T is Q32>() { use(summon[P<T>]) }

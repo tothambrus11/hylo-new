@@ -39,12 +39,12 @@ def key(world, config, path, twin=False):
     if r["status"] == "invalid":
         return None
     if r["status"] != "ok":
-        return (a["verdict"], (a["count"] or 0) >= 2, r["status"].upper())
+        return (a["verdict"], (a["count"] or 0) >= 2, a["sem"], r["status"].upper())
     v = r["verdicts"][0]
     k = harness.classify(a, v)
     if twin and (a["count"] or 0) >= 2:
         k = "agree" if v == "reject" else "AMBIGUITY-MISSED"
-    return (a["verdict"], (a["count"] or 0) >= 2, k)
+    return (a["verdict"], (a["count"] or 0) >= 2, a["sem"], k)
 
 
 def shrink_type(t):
@@ -147,7 +147,7 @@ def minimize(world, config, name, twin=False):
     os.makedirs(OUT, exist_ok=True)
     path = os.path.join(OUT, name + ".hylo")
     target = key(world, config, path, twin)
-    assert target is not None and target[2] != "agree", "nothing to minimize: %r" % (target,)
+    assert target is not None and target[-1] != "agree", "nothing to minimize: %r" % (target,)
     runs = 1
     changed = True
     while changed:
@@ -166,7 +166,7 @@ def minimize(world, config, name, twin=False):
     with open(path, "w") as f:
         f.write(text)
     with open(os.path.join(OUT, name + ".json"), "w") as f:
-        json.dump({"config": config, "class": target[2], "reference": a, "world": world,
+        json.dump({"config": config, "class": target[-1], "reference": a, "world": world,
                    "compiler_runs": runs}, f)
     return world, target, a
 

@@ -1,5 +1,5 @@
 //! stage:typing no-std
-// expected: accepted at every stage; from stage 1, index.fallback=0 and summon.matches close to the
+// expected: accepted at every stage; from stage 1 (eqindex), index.fallback=0 and summon.matches close to the
 // figure without the where clause (1640 under FULL), instead of 4480. Today any equality in scope
 // switches the index of givens off for every goal of the scope.
 // currently: base accepted (summon.subgoals=40 summon.matches=4480); FULL accepted (summon.subgoals=40 summon.matches=4480 index.fallback=40).

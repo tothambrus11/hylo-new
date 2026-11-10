@@ -1,0 +1,5 @@
+trait Tr0 {}
+trait Tr1 { type X1 }
+given <A where A is Tr0> => A is Tr1 { type X1 = A }
+fun check<X>(x: X) {}
+fun q1<T, U where T is Tr0, U is Tr0>(x: T.X1) { check<U.X1>(x) }

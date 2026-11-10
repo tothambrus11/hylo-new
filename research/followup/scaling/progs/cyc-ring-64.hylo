@@ -1,0 +1,131 @@
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+struct A32 {}
+struct A33 {}
+struct A34 {}
+struct A35 {}
+struct A36 {}
+struct A37 {}
+struct A38 {}
+struct A39 {}
+struct A40 {}
+struct A41 {}
+struct A42 {}
+struct A43 {}
+struct A44 {}
+struct A45 {}
+struct A46 {}
+struct A47 {}
+struct A48 {}
+struct A49 {}
+struct A50 {}
+struct A51 {}
+struct A52 {}
+struct A53 {}
+struct A54 {}
+struct A55 {}
+struct A56 {}
+struct A57 {}
+struct A58 {}
+struct A59 {}
+struct A60 {}
+struct A61 {}
+struct A62 {}
+struct A63 {}
+given <where A1 is P> => A0 is P {}
+given <where A2 is P> => A1 is P {}
+given <where A3 is P> => A2 is P {}
+given <where A4 is P> => A3 is P {}
+given <where A5 is P> => A4 is P {}
+given <where A6 is P> => A5 is P {}
+given <where A7 is P> => A6 is P {}
+given <where A8 is P> => A7 is P {}
+given <where A9 is P> => A8 is P {}
+given <where A10 is P> => A9 is P {}
+given <where A11 is P> => A10 is P {}
+given <where A12 is P> => A11 is P {}
+given <where A13 is P> => A12 is P {}
+given <where A14 is P> => A13 is P {}
+given <where A15 is P> => A14 is P {}
+given <where A16 is P> => A15 is P {}
+given <where A17 is P> => A16 is P {}
+given <where A18 is P> => A17 is P {}
+given <where A19 is P> => A18 is P {}
+given <where A20 is P> => A19 is P {}
+given <where A21 is P> => A20 is P {}
+given <where A22 is P> => A21 is P {}
+given <where A23 is P> => A22 is P {}
+given <where A24 is P> => A23 is P {}
+given <where A25 is P> => A24 is P {}
+given <where A26 is P> => A25 is P {}
+given <where A27 is P> => A26 is P {}
+given <where A28 is P> => A27 is P {}
+given <where A29 is P> => A28 is P {}
+given <where A30 is P> => A29 is P {}
+given <where A31 is P> => A30 is P {}
+given <where A32 is P> => A31 is P {}
+given <where A33 is P> => A32 is P {}
+given <where A34 is P> => A33 is P {}
+given <where A35 is P> => A34 is P {}
+given <where A36 is P> => A35 is P {}
+given <where A37 is P> => A36 is P {}
+given <where A38 is P> => A37 is P {}
+given <where A39 is P> => A38 is P {}
+given <where A40 is P> => A39 is P {}
+given <where A41 is P> => A40 is P {}
+given <where A42 is P> => A41 is P {}
+given <where A43 is P> => A42 is P {}
+given <where A44 is P> => A43 is P {}
+given <where A45 is P> => A44 is P {}
+given <where A46 is P> => A45 is P {}
+given <where A47 is P> => A46 is P {}
+given <where A48 is P> => A47 is P {}
+given <where A49 is P> => A48 is P {}
+given <where A50 is P> => A49 is P {}
+given <where A51 is P> => A50 is P {}
+given <where A52 is P> => A51 is P {}
+given <where A53 is P> => A52 is P {}
+given <where A54 is P> => A53 is P {}
+given <where A55 is P> => A54 is P {}
+given <where A56 is P> => A55 is P {}
+given <where A57 is P> => A56 is P {}
+given <where A58 is P> => A57 is P {}
+given <where A59 is P> => A58 is P {}
+given <where A60 is P> => A59 is P {}
+given <where A61 is P> => A60 is P {}
+given <where A62 is P> => A61 is P {}
+given <where A63 is P> => A62 is P {}
+given <where A0 is P> => A63 is P {}
+fun need<where A0 is P>() {}
+public fun main() { need() }

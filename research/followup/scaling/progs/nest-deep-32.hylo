@@ -1,0 +1,7 @@
+trait P {}
+struct S<T> {}
+struct Z {}
+given Z is P {}
+given <T where T is P> => S<T> is P {}
+fun need<where S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> is P>() {}
+public fun main() { need() }

@@ -1,0 +1,43 @@
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+fun f(x: A3) -> A3 { x }
+fun g(x: A0) {}
+public fun main() {
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+  g(f(A0()))
+}

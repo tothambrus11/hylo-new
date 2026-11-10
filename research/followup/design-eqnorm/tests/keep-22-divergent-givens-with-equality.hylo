@@ -1,6 +1,6 @@
 //! stage:typing no-std
 // expected: rejected at every stage, quickly (absmodel.refuted > 0 under FULL). The abstract model
-// must stay usable in a scope with an equality (absquotient), now fed by the shared closure.
+// must stay usable in a scope with an equality (absquotient).
 // currently: base rejected (summon.subgoals=21 summon.matches=1450 summon.depthExhausted=2); FULL rejected (summon.subgoals=2 summon.matches=1 absmodel.refuted=2). FULL says: no coercion from 'P<S<Z>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P {}
 struct S<X> {}

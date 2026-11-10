@@ -1,0 +1,19 @@
+trait Tr0 {}
+trait Tr1 {}
+trait Tr2 {}
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+struct St2<E0> { public memberwise init }
+given St2<St0> is Tr1 {}
+given <A where A == St1> => St2<A> is Tr2 {}
+fun needTr0<W where W is Tr0>() {}
+fun needTr1<W where W is Tr1>() {}
+fun needTr2<W where W is Tr2>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T0, T1, T2, T3 where St0 == T2>(x: St2<St2<St0>>) { check<St2<St2<T2>>>(x) }
+fun q1<T0, T1, T2, T3>(x: St2<St2<St0>>) { check<St2<St2<T2>>>(x) }
+fun q2<T0, T1, T2, T3 where T2 is Tr0, St2<T2> == St2<St0>, T1 is Tr2, St2<T3> == St2<T2>, T2 is Tr2>(x: St2<St2<T3>>) { check<St2<St2<St0>>>(x) }
+fun q3<T0, T1, T2, T3 where T2 is Tr0, T1 is Tr2, St2<T3> == St2<T2>, T2 is Tr2>(x: St2<St2<T3>>) { check<St2<St2<St0>>>(x) }
+fun q4<T0, T1, T2, T3 where T2 is Tr0, St2<T2> == St2<St0>, T1 is Tr2, St2<T3> == St2<T2>, T2 is Tr2>() { needEq<St0, T2>() }
+fun q5<T0, T1, T2, T3, T4 where St2<T4> == St2<T1>, {T4, T2} == {T2, T4}, T2 is Tr2, T2 == T3>(x: St2<T4>) { check<St2<T1>>(x) }

@@ -1,0 +1,3 @@
+trait P { type X }
+trait Q {}
+fun f<T where T.X is Q, T is P>() {}

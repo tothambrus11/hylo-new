@@ -1,5 +1,5 @@
 //! stage:typing no-std
-// expected: accepted from stage 4. The usual form in generic code: an associated type is stated equal
+// expected: accepted from stage 3 (eqclass). The usual form in generic code: an associated type is stated equal
 // to a concrete type, and a conformance of that concrete type is needed. Rejected by base and FULL.
 // currently: base rejected (summon.subgoals=8 summon.matches=590); FULL rejected (summon.subgoals=4 summon.matches=292 index.fallback=4). FULL says: no coercion from 'P<(T::Collection).Element> ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P {}

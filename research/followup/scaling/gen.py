@@ -169,6 +169,11 @@ def div_depth(d):
     return div_branch(2)
 
 
+def div_trunc_depth(d):
+    """Ill-typed: div_trunc with b = 2; the size is the depth bound HYLO_TC_MAXDEPTH = d."""
+    return div_trunc(2)
+
+
 def div_valid(d):
     """Valid: two growing givens; Xi is P holds through S1^d<Xi> is P (a derivation of depth d)."""
     out = ["trait P {}", "struct Xi {}"] + _div_rules(2)
@@ -452,14 +457,16 @@ FAMILIES = {
     "div-branch-eq":  (div_branch_eq,  [1, 2, 3, 4, 5, 6, 8, 12, 16, 32], "err", {}, M),
     "div-trunc":      (div_trunc,      [1, 2, 3, 4, 5, 6, 8, 12, 16, 32], "err", {}, M),
     "div-depth":      (div_depth,      [5, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40], "err", {"HYLO_TC_MAXDEPTH": "{n}"}, M),
+    "div-trunc-depth": (div_trunc_depth, [5, 6, 8, 10, 12, 14, 16, 20, 24, 32, 40], "err", {"HYLO_TC_MAXDEPTH": "{n}"}, M),
     "div-valid":      (div_valid,      [1, 2, 3, 4, 5, 6, 7, 8], "ok", {}, M),
+    "div-valid-deep": (div_valid,      [2, 4, 6, 8, 10, 12, 14, 16, 20], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "cyc-ring":       (cyc_ring,       [2, 3, 4, 6, 8, 12, 16, 32, 64], "err", {}, M),
     "cyc-clique":     (cyc_clique,     [2, 3, 4, 5, 6, 8, 12, 16], "err", {}, M),
     "members-ext":    (members_ext,    [20, 40, 80, 160, 320, 640, 1280], "ok", {}, "names.appliesCalls"),
     "members-use":    (members_use,    [10, 20, 40, 80, 160, 320, 640], "ok", {}, "names.appliesCalls"),
     "members-both":   (members_both,   [20, 40, 80, 160, 320, 640], "ok", {}, "names.appliesCalls"),
     "condext":        (condext,        [2, 4, 8, 16, 32, 64, 128], "ok", {}, "names.appliesCalls"),
-    "ovl-calls":      (ovl_calls,      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12], "ok", {}, "solver.forks"),
+    "ovl-calls":      (ovl_calls,      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 20], "ok", {}, "solver.forks"),
     "ovl-width":      (ovl_width,      [2, 3, 4, 6, 8, 12, 16], "ok", {}, "solver.forks"),
     "ovl-stmts":      (ovl_stmts,      [1, 2, 4, 8, 16, 32, 64], "ok", {}, "solver.forks"),
     "ovr-args":       (ovr_args,       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12], "ok", {}, "solver.forks"),

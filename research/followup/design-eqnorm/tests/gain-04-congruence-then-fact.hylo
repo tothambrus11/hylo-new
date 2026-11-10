@@ -1,5 +1,5 @@
 //! stage:typing no-std
-// expected: accepted from stage 2. C == Box<A> == Box<B> by a fact and a congruence, but
+// expected: accepted from stage 2 (eqclosure). C == Box<A> == Box<B> by a fact and a congruence, but
 // canDeriveCoercions refuses the pair (C, Box<B>) because Box<B> is not a side of any equality.
 // Rejected by base and FULL.
 // currently: base rejected (summon.matches=1); FULL rejected (summon.matches=1). FULL says: cannot pass value of type 'C' to parameter 'Box<B>'

@@ -1,8 +1,8 @@
 //! stage:typing no-std
-// expected: accepted in stages 1 and 2, choosing `Pair<A, D> is P`. Both givens match through
+// expected: accepted in stages 1 to 3, choosing `Pair<A, D> is P`. Both givens match through
 // equalities; today the one with a single differing argument finishes one search step earlier and
 // wins. Stage 1 must reproduce that timing (the `delay` of the design); without it both finish
-// together with penalty 0 and the call becomes ambiguous. Stage 3 makes it ambiguous on purpose.
+// together with penalty 0 and the call becomes ambiguous. Stage 4 (eqrank) makes it ambiguous on purpose.
 // currently: base accepted (summon.subgoals=8 summon.matches=229); FULL accepted (summon.subgoals=4 summon.matches=80 eqsolve.proved=3 index.fallback=1).
 trait P {}
 struct Pair<X, Y> {}

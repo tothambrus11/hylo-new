@@ -1,0 +1,4 @@
+{"seed": 1, "summary": {"systems": 50000, "clean": 19444, "nonclean": 30556, "none": 0, "fallbacks": 23257, "mismatches": 0, "baseline_forks": 555063, "proposed_forks": 631047, "with_overloads": 42195}}
+{"seed": 2, "summary": {"systems": 50000, "clean": 19471, "nonclean": 30529, "none": 0, "fallbacks": 23175, "mismatches": 0, "baseline_forks": 561310, "proposed_forks": 636692, "with_overloads": 42106}}
+{"seed": 3, "summary": {"systems": 50000, "clean": 19516, "nonclean": 30484, "none": 0, "fallbacks": 23299, "mismatches": 0, "baseline_forks": 558306, "proposed_forks": 636472, "with_overloads": 42120}}
+{"seed": 4, "summary": {"systems": 50000, "clean": 19334, "nonclean": 30666, "none": 0, "fallbacks": 23313, "mismatches": 0, "baseline_forks": 556923, "proposed_forks": 634900, "with_overloads": 42071}}

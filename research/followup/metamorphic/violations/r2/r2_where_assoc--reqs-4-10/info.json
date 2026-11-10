@@ -1,0 +1,44 @@
+{
+ "file": "research/report/test-programs/declaration-order/r2_where_assoc.hylo",
+ "rel": "r2",
+ "vid": "reqs:4:10",
+ "kind": "reqs",
+ "desc": "requirements of `extension extension <T where T is` in order [1, 0]",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: type 'T' has no static member 'Element'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'Element'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'Element'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'Element'"
+   ]
+  }
+ }
+}

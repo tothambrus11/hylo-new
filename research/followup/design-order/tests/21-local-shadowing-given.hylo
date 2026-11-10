@@ -1,0 +1,9 @@
+trait P { type E }
+struct A {}
+given A is P { type E = Int }
+fun need(x: Bool) {}
+fun h(y: Bool) {
+  given A is P { type E = Bool }
+  let z: A.E = y
+  need(z)
+}

@@ -1,0 +1,36 @@
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+trait P0 {}
+given A is P0 {}
+extension <T where T is P0> Box<T> { fun m0() {} }
+trait P1 {}
+given A is P1 {}
+extension <T where T is P1> Box<T> { fun m1() {} }
+trait P2 {}
+given A is P2 {}
+extension <T where T is P2> Box<T> { fun m2() {} }
+trait P3 {}
+given A is P3 {}
+extension <T where T is P3> Box<T> { fun m3() {} }
+trait P4 {}
+given A is P4 {}
+extension <T where T is P4> Box<T> { fun m4() {} }
+trait P5 {}
+given A is P5 {}
+extension <T where T is P5> Box<T> { fun m5() {} }
+trait P6 {}
+given A is P6 {}
+extension <T where T is P6> Box<T> { fun m6() {} }
+trait P7 {}
+given A is P7 {}
+extension <T where T is P7> Box<T> { fun m7() {} }
+public fun main() {
+  Box<A>().m0()
+  Box<A>().m5()
+  Box<A>().m2()
+  Box<A>().m7()
+  Box<A>().m4()
+  Box<A>().m1()
+  Box<A>().m6()
+  Box<A>().m3()
+}

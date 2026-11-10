@@ -1,0 +1,170 @@
+struct T0 { public memberwise init }
+struct T1 { public memberwise init }
+struct T2 { public memberwise init }
+struct T3 { public memberwise init }
+struct T4 { public memberwise init }
+struct T5 { public memberwise init }
+struct T6 { public memberwise init }
+struct T7 { public memberwise init }
+extension T0 { fun m0() {} }
+extension T1 { fun m1() {} }
+extension T2 { fun m2() {} }
+extension T3 { fun m3() {} }
+extension T4 { fun m4() {} }
+extension T5 { fun m5() {} }
+extension T6 { fun m6() {} }
+extension T7 { fun m7() {} }
+extension T0 { fun m8() {} }
+extension T1 { fun m9() {} }
+extension T2 { fun m10() {} }
+extension T3 { fun m11() {} }
+extension T4 { fun m12() {} }
+extension T5 { fun m13() {} }
+extension T6 { fun m14() {} }
+extension T7 { fun m15() {} }
+extension T0 { fun m16() {} }
+extension T1 { fun m17() {} }
+extension T2 { fun m18() {} }
+extension T3 { fun m19() {} }
+extension T4 { fun m20() {} }
+extension T5 { fun m21() {} }
+extension T6 { fun m22() {} }
+extension T7 { fun m23() {} }
+extension T0 { fun m24() {} }
+extension T1 { fun m25() {} }
+extension T2 { fun m26() {} }
+extension T3 { fun m27() {} }
+extension T4 { fun m28() {} }
+extension T5 { fun m29() {} }
+extension T6 { fun m30() {} }
+extension T7 { fun m31() {} }
+extension T0 { fun m32() {} }
+extension T1 { fun m33() {} }
+extension T2 { fun m34() {} }
+extension T3 { fun m35() {} }
+extension T4 { fun m36() {} }
+extension T5 { fun m37() {} }
+extension T6 { fun m38() {} }
+extension T7 { fun m39() {} }
+extension T0 { fun m40() {} }
+extension T1 { fun m41() {} }
+extension T2 { fun m42() {} }
+extension T3 { fun m43() {} }
+extension T4 { fun m44() {} }
+extension T5 { fun m45() {} }
+extension T6 { fun m46() {} }
+extension T7 { fun m47() {} }
+extension T0 { fun m48() {} }
+extension T1 { fun m49() {} }
+extension T2 { fun m50() {} }
+extension T3 { fun m51() {} }
+extension T4 { fun m52() {} }
+extension T5 { fun m53() {} }
+extension T6 { fun m54() {} }
+extension T7 { fun m55() {} }
+extension T0 { fun m56() {} }
+extension T1 { fun m57() {} }
+extension T2 { fun m58() {} }
+extension T3 { fun m59() {} }
+extension T4 { fun m60() {} }
+extension T5 { fun m61() {} }
+extension T6 { fun m62() {} }
+extension T7 { fun m63() {} }
+extension T0 { fun m64() {} }
+extension T1 { fun m65() {} }
+extension T2 { fun m66() {} }
+extension T3 { fun m67() {} }
+extension T4 { fun m68() {} }
+extension T5 { fun m69() {} }
+extension T6 { fun m70() {} }
+extension T7 { fun m71() {} }
+extension T0 { fun m72() {} }
+extension T1 { fun m73() {} }
+extension T2 { fun m74() {} }
+extension T3 { fun m75() {} }
+extension T4 { fun m76() {} }
+extension T5 { fun m77() {} }
+extension T6 { fun m78() {} }
+extension T7 { fun m79() {} }
+public fun main() {
+  T0().m0()
+  T5().m13()
+  T2().m26()
+  T7().m39()
+  T4().m52()
+  T1().m65()
+  T6().m78()
+  T3().m11()
+  T0().m24()
+  T5().m37()
+  T2().m50()
+  T7().m63()
+  T4().m76()
+  T1().m9()
+  T6().m22()
+  T3().m35()
+  T0().m48()
+  T5().m61()
+  T2().m74()
+  T7().m7()
+  T4().m20()
+  T1().m33()
+  T6().m46()
+  T3().m59()
+  T0().m72()
+  T5().m5()
+  T2().m18()
+  T7().m31()
+  T4().m44()
+  T1().m57()
+  T6().m70()
+  T3().m3()
+  T0().m16()
+  T5().m29()
+  T2().m42()
+  T7().m55()
+  T4().m68()
+  T1().m1()
+  T6().m14()
+  T3().m27()
+  T0().m40()
+  T5().m53()
+  T2().m66()
+  T7().m79()
+  T4().m12()
+  T1().m25()
+  T6().m38()
+  T3().m51()
+  T0().m64()
+  T5().m77()
+  T2().m10()
+  T7().m23()
+  T4().m36()
+  T1().m49()
+  T6().m62()
+  T3().m75()
+  T0().m8()
+  T5().m21()
+  T2().m34()
+  T7().m47()
+  T4().m60()
+  T1().m73()
+  T6().m6()
+  T3().m19()
+  T0().m32()
+  T5().m45()
+  T2().m58()
+  T7().m71()
+  T4().m4()
+  T1().m17()
+  T6().m30()
+  T3().m43()
+  T0().m56()
+  T5().m69()
+  T2().m2()
+  T7().m15()
+  T4().m28()
+  T1().m41()
+  T6().m54()
+  T3().m67()
+}

@@ -30,7 +30,9 @@ WORK = os.path.join(HERE, "work")
 SEED = 20261110
 # kind -> number of worlds
 PLAN = {"conf": 500, "eq-param": 550, "eq-app": 550, "chain": 450, "cond": 500, "assoc": 650,
-        "twin": 200}
+        "twin": 200, "blanket": 250}
+# "blanket" is "assoc" with, in every world, a conformance declared for a bare parameter
+# (given <A where A is Tr0> => A is Tr1 { type X1 = ... A ... }).
 
 
 # --------------------------------------------------------------------------------------------
@@ -38,10 +40,15 @@ PLAN = {"conf": 500, "eq-param": 550, "eq-app": 550, "chain": 450, "cond": 500, 
 
 
 def gen_declarations(rng, kind):
-    ntraits = rng.randint(1, 3)
+    blanket = kind == "blanket"
+    if blanket:
+        kind = "assoc"
+    ntraits = rng.randint(2, 3) if blanket else rng.randint(1, 3)
     traits = {}
     for i in range(ntraits):
         has = kind == "assoc" and (i == 0 or rng.random() < 0.5)
+        if blanket:
+            has = i == 1 or rng.random() < 0.4
         traits["Tr%d" % i] = "X%d" % i if has else None
     structs = {"St0": 0, "St1": 0, "St2": 1}
     if rng.random() < 0.7:
@@ -52,6 +59,14 @@ def gen_declarations(rng, kind):
 
     used = set()
     nullary = [s for s, n in structs.items() if n == 0]
+    if blanket:
+        used.add(("Tr1", "*"))
+        leaves = [var("A")] + [app(s) for s in nullary]
+        impl = rand_type(rng, structs, leaves, rng.choice([0, 0, 1]))
+        if rng.random() < 0.8 and "A" not in variables(impl):
+            impl = var("A")
+        world["confs"].append({"params": ["A"], "premises": [("conf", var("A"), "Tr0")],
+                               "type": var("A"), "trait": "Tr1", "impl": impl})
     for _ in range(rng.randint(1, 5)):
         trait = rng.choice(list(traits))
         ti = int(trait[2:])
@@ -110,6 +125,9 @@ def rand_type(rng, structs, leaves, depth, tuples=False):
 
 
 def gen_context(rng, world, kind):
+    blanket = kind == "blanket"
+    if blanket:
+        kind = "assoc"
     structs, traits = world["structs"], list(world["traits"])
     nullary = [s for s, n in structs.items() if n == 0]
     unary = [s for s, n in structs.items() if n == 1]
@@ -196,6 +214,14 @@ def gen_context(rng, world, kind):
         with_assoc = [(r[1], r[2]) for r in reqs if r[0] == "conf" and r[1][0] == "var"
                       and world["traits"][r[2]]]
         bases = with_assoc[:]
+        if blanket:
+            # Parameters that get the associated type through the blanket conformance.
+            for _ in range(rng.randint(1, 3)):
+                p = rng.choice(P)
+                if ("conf", p, "Tr0") not in seen:
+                    seen.add(("conf", p, "Tr0"))
+                    reqs.append(("conf", p, "Tr0"))
+                bases.append((p, "Tr1"))
         # A parameter without requirement may still have the projection through an equality.
         for p in P:
             for tr in traits:
@@ -278,6 +304,9 @@ def at(t, path):
 
 def gen_goals(rng, world, params, reqs, scope, kind):
     """Candidate goals for a context: some built to be derivable, some mutated."""
+    blanket = kind == "blanket"
+    if blanket:
+        kind = "assoc"
     structs, traits = world["structs"], list(world["traits"])
     nullary = [app(s) for s, n in structs.items() if n == 0]
     pool = [var(p) for p in params] + nullary
@@ -360,6 +389,15 @@ def gen_goals(rng, world, params, reqs, scope, kind):
             if rng.random() < 0.3:
                 a, b = b, a
             out.append((rng.choice(["eq", "coerce"]), a, b))
+    if blanket:
+        # Two associated types through the blanket conformance, possibly under a constructor.
+        ps = [t for t in pool if t[0] == "proj" and t[2] == "Tr1"] + [var(p) for p in params]
+        for _ in range(8):
+            a, b = rng.choice(ps), rng.choice(ps)
+            if a != b:
+                if rng.random() < 0.3:
+                    a, b = app("St2", a), app("St2", b)
+                out.append((rng.choice(["eq", "coerce"]), a, b))
     return out
 
 
@@ -400,7 +438,7 @@ def gen_queries(rng, world, kind, want=6):
             continue
         try:
             scope = Scope(world, reqs)
-            if kind == "assoc" and rng.random() < 0.85:
+            if kind in ("assoc", "blanket") and rng.random() < 0.85:
                 # Write the requirements in an order in which each one only uses associated
                 # types made available by the previous ones (the compiler requires it).
                 reqs = [reqs[i] for i in scope.order]
@@ -423,6 +461,9 @@ def gen_queries(rng, world, kind, want=6):
             def score(x):
                 g = x[0]["goal"]
                 bonus = 2 if any(reference.has_proj(t) for t in g[1:] if isinstance(t, tuple)) else 0
+                if kind == "blanket":
+                    bonus += 2 * sum(1 for t in g[1:] if isinstance(t, tuple)
+                                     for u in subterms(t) if u[0] == "proj" and u[2] == "Tr1")
                 return interest(x[1]) + bonus
             pos.sort(key=lambda x: -score(x))
             top = [x for x in pos if score(x) == score(pos[0])]
@@ -440,13 +481,21 @@ def gen_queries(rng, world, kind, want=6):
                     a2 = label(world, q2)
                     if a2["verdict"] == "underivable":
                         chosen.append((q2, a2))
+        if kind == "blanket":
+            # Prefer underivable goals that compare two associated types of the blanket trait.
+            def two(x):
+                g = x[0]["goal"]
+                return sum(1 for t in g[1:] if isinstance(t, tuple)
+                           for u in subterms(t) if u[0] == "proj" and u[2] == "Tr1") >= 2
+            if any(two(x) for x in neg) and rng.random() < 0.7:
+                neg = [x for x in neg if two(x)]
         if neg and (len(chosen) < 2 or rng.random() < 0.3):
             # Prefer underivable goals in a scope that has equalities, and that are valid with
             # injectivity (they separate the specification from stronger theories).
             def with_proj(x):
                 g = x[0]["goal"]
                 return any(reference.has_proj(t) for t in g[1:] if isinstance(t, tuple))
-            if kind == "assoc" and rng.random() < 0.6 and any(with_proj(x) for x in neg):
+            if kind in ("assoc", "blanket") and rng.random() < 0.6 and any(with_proj(x) for x in neg):
                 neg = [x for x in neg if with_proj(x)]
             neg.sort(key=lambda x: (x[1]["sem"] != "valid", x[1]["verdict"] != "underivable"))
             pick = neg[0] if neg[0][1]["sem"] == "valid" and rng.random() < 0.7 else rng.choice(neg)
@@ -546,6 +595,45 @@ def load_problems():
     return out
 
 
+def run_alone(args, out, p, c):
+    """Runs one world alone; if the run fails, runs each of its queries alone."""
+    path = os.path.join(WORK, p["id"] + ".hylo")
+    limits = dict(harness.TIMEOUT)
+    if args.timeout:
+        limits[c] = args.timeout
+    if args.isolate:
+        r = {"status": "split", "code": 0, "verdicts": {}, "messages": {}}
+    else:
+        r = harness.run_world(p["world"], path, configs=(c,), timeouts=limits)[c]
+    rows = [{"id": p["id"], "config": c, "isolated": None, **r}]
+    if r["status"] in ("crash", "timeout", "split"):
+        for i in range(len(p["world"]["queries"])):
+            ipath = os.path.join(WORK, "%s-q%d.hylo" % (p["id"], i))
+            ri = harness.run_world(p["world"], ipath, configs=(c,), only=[i], timeouts=limits)[c]
+            rows.append({"id": p["id"], "config": c, "isolated": i, **ri})
+    for row in rows:
+        out.write(json.dumps(row) + "\n")
+    out.flush()
+
+
+def cmd_confirm(args):
+    """Reruns alone every world that has a disagreement in a batch run."""
+    import report
+    problems, runs = report.load()
+    todo = set()
+    for r in report.rows(problems, runs, configs=args.configs):
+        if r["class"] != "agree" and runs[(r["id"], r["config"])]["world"].get("batch"):
+            todo.add((r["id"], r["config"]))
+    print("to confirm:", len(todo))
+    ps = {p["id"]: p for p in load_problems()}
+    args.isolate, args.timeout = False, None
+    with open(RESULTS, "a") as out:
+        for n, (pid, c) in enumerate(sorted(todo)):
+            run_alone(args, out, ps[pid], c)
+            if n % 50 == 0:
+                print("confirmed", n, flush=True)
+
+
 def cmd_run(args):
     os.makedirs(WORK, exist_ok=True)
     done = set()
@@ -565,24 +653,33 @@ def cmd_run(args):
             if per[p["kind"]] <= args.limit:
                 kept.append(p)
         problems = kept
+    # Interleave the kinds, so that a partial run covers all of them.
+    problems.sort(key=lambda p: (int(p["id"].rsplit("-", 1)[1]), p["kind"]))
     n = 0
     with open(RESULTS, "a") as out:
+        for c in args.configs if args.batch > 1 else []:
+            # Several worlds per compiler run, with disjoint names. A world that is part of a
+            # failed batch is run alone below.
+            todo = [p for p in problems if (p["id"], c) not in done]
+            for k in range(0, len(todo), args.batch):
+                group = todo[k:k + args.batch]
+                path = os.path.join(WORK, "batch-%s-%s.hylo" % (c, group[0]["id"]))
+                rs = harness.run_batch([p["world"] for p in group], path, c)
+                if rs is None:
+                    continue
+                for p, r in zip(group, rs):
+                    out.write(json.dumps({"id": p["id"], "config": c, "isolated": None,
+                                          "batch": group[0]["id"], **r}) + "\n")
+                    done.add((p["id"], c))
+                out.flush()
+                n += 1
+                if n % 20 == 0:
+                    print("ran", n, "batches;", group[0]["id"], c, flush=True)
         for p in problems:
             for c in args.configs:
                 if (p["id"], c) in done:
                     continue
-                path = os.path.join(WORK, p["id"] + ".hylo")
-                r = harness.run_world(p["world"], path, configs=(c,))[c]
-                rows = [{"id": p["id"], "config": c, "isolated": None, **r}]
-                if r["status"] in ("crash", "timeout"):
-                    # Rerun each query alone to find which one fails.
-                    for i in range(len(p["world"]["queries"])):
-                        ipath = os.path.join(WORK, "%s-q%d.hylo" % (p["id"], i))
-                        ri = harness.run_world(p["world"], ipath, configs=(c,), only=[i])[c]
-                        rows.append({"id": p["id"], "config": c, "isolated": i, **ri})
-                for row in rows:
-                    out.write(json.dumps(row) + "\n")
-                out.flush()
+                run_alone(args, out, p, c)
                 n += 1
                 if n % 50 == 0:
                     print("ran", n, p["id"], c, flush=True)
@@ -598,5 +695,10 @@ if __name__ == "__main__":
     r.add_argument("configs", nargs="+")
     r.add_argument("--kinds")
     r.add_argument("--limit", type=int)
+    r.add_argument("--isolate", action="store_true")
+    r.add_argument("--timeout", type=int)
+    r.add_argument("--batch", type=int, default=1, help="worlds per compiler run")
+    c = sub.add_parser("confirm")
+    c.add_argument("configs", nargs="+")
     a = ap.parse_args()
-    {"gen": cmd_gen, "run": cmd_run}[a.cmd](a)
+    {"gen": cmd_gen, "run": cmd_run, "confirm": cmd_confirm}[a.cmd](a)

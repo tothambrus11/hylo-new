@@ -1,0 +1,8 @@
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+fun g(x0: A0, x1: A1, x2: A2, x3: A0) {}
+public fun main() { g(f(A0()), f(A1()), f(A2()), f(A0())) }

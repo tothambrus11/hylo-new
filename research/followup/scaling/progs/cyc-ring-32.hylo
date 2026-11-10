@@ -1,0 +1,67 @@
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+struct A16 {}
+struct A17 {}
+struct A18 {}
+struct A19 {}
+struct A20 {}
+struct A21 {}
+struct A22 {}
+struct A23 {}
+struct A24 {}
+struct A25 {}
+struct A26 {}
+struct A27 {}
+struct A28 {}
+struct A29 {}
+struct A30 {}
+struct A31 {}
+given <where A1 is P> => A0 is P {}
+given <where A2 is P> => A1 is P {}
+given <where A3 is P> => A2 is P {}
+given <where A4 is P> => A3 is P {}
+given <where A5 is P> => A4 is P {}
+given <where A6 is P> => A5 is P {}
+given <where A7 is P> => A6 is P {}
+given <where A8 is P> => A7 is P {}
+given <where A9 is P> => A8 is P {}
+given <where A10 is P> => A9 is P {}
+given <where A11 is P> => A10 is P {}
+given <where A12 is P> => A11 is P {}
+given <where A13 is P> => A12 is P {}
+given <where A14 is P> => A13 is P {}
+given <where A15 is P> => A14 is P {}
+given <where A16 is P> => A15 is P {}
+given <where A17 is P> => A16 is P {}
+given <where A18 is P> => A17 is P {}
+given <where A19 is P> => A18 is P {}
+given <where A20 is P> => A19 is P {}
+given <where A21 is P> => A20 is P {}
+given <where A22 is P> => A21 is P {}
+given <where A23 is P> => A22 is P {}
+given <where A24 is P> => A23 is P {}
+given <where A25 is P> => A24 is P {}
+given <where A26 is P> => A25 is P {}
+given <where A27 is P> => A26 is P {}
+given <where A28 is P> => A27 is P {}
+given <where A29 is P> => A28 is P {}
+given <where A30 is P> => A29 is P {}
+given <where A31 is P> => A30 is P {}
+given <where A0 is P> => A31 is P {}
+fun need<where A0 is P>() {}
+public fun main() { need() }

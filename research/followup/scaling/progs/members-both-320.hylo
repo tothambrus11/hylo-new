@@ -1,0 +1,674 @@
+struct T0 { public memberwise init }
+struct T1 { public memberwise init }
+struct T2 { public memberwise init }
+struct T3 { public memberwise init }
+struct T4 { public memberwise init }
+struct T5 { public memberwise init }
+struct T6 { public memberwise init }
+struct T7 { public memberwise init }
+struct T8 { public memberwise init }
+struct T9 { public memberwise init }
+struct T10 { public memberwise init }
+struct T11 { public memberwise init }
+struct T12 { public memberwise init }
+struct T13 { public memberwise init }
+struct T14 { public memberwise init }
+struct T15 { public memberwise init }
+struct T16 { public memberwise init }
+struct T17 { public memberwise init }
+struct T18 { public memberwise init }
+struct T19 { public memberwise init }
+struct T20 { public memberwise init }
+struct T21 { public memberwise init }
+struct T22 { public memberwise init }
+struct T23 { public memberwise init }
+struct T24 { public memberwise init }
+struct T25 { public memberwise init }
+struct T26 { public memberwise init }
+struct T27 { public memberwise init }
+struct T28 { public memberwise init }
+struct T29 { public memberwise init }
+struct T30 { public memberwise init }
+struct T31 { public memberwise init }
+extension T0 { fun m0() {} }
+extension T1 { fun m1() {} }
+extension T2 { fun m2() {} }
+extension T3 { fun m3() {} }
+extension T4 { fun m4() {} }
+extension T5 { fun m5() {} }
+extension T6 { fun m6() {} }
+extension T7 { fun m7() {} }
+extension T8 { fun m8() {} }
+extension T9 { fun m9() {} }
+extension T10 { fun m10() {} }
+extension T11 { fun m11() {} }
+extension T12 { fun m12() {} }
+extension T13 { fun m13() {} }
+extension T14 { fun m14() {} }
+extension T15 { fun m15() {} }
+extension T16 { fun m16() {} }
+extension T17 { fun m17() {} }
+extension T18 { fun m18() {} }
+extension T19 { fun m19() {} }
+extension T20 { fun m20() {} }
+extension T21 { fun m21() {} }
+extension T22 { fun m22() {} }
+extension T23 { fun m23() {} }
+extension T24 { fun m24() {} }
+extension T25 { fun m25() {} }
+extension T26 { fun m26() {} }
+extension T27 { fun m27() {} }
+extension T28 { fun m28() {} }
+extension T29 { fun m29() {} }
+extension T30 { fun m30() {} }
+extension T31 { fun m31() {} }
+extension T0 { fun m32() {} }
+extension T1 { fun m33() {} }
+extension T2 { fun m34() {} }
+extension T3 { fun m35() {} }
+extension T4 { fun m36() {} }
+extension T5 { fun m37() {} }
+extension T6 { fun m38() {} }
+extension T7 { fun m39() {} }
+extension T8 { fun m40() {} }
+extension T9 { fun m41() {} }
+extension T10 { fun m42() {} }
+extension T11 { fun m43() {} }
+extension T12 { fun m44() {} }
+extension T13 { fun m45() {} }
+extension T14 { fun m46() {} }
+extension T15 { fun m47() {} }
+extension T16 { fun m48() {} }
+extension T17 { fun m49() {} }
+extension T18 { fun m50() {} }
+extension T19 { fun m51() {} }
+extension T20 { fun m52() {} }
+extension T21 { fun m53() {} }
+extension T22 { fun m54() {} }
+extension T23 { fun m55() {} }
+extension T24 { fun m56() {} }
+extension T25 { fun m57() {} }
+extension T26 { fun m58() {} }
+extension T27 { fun m59() {} }
+extension T28 { fun m60() {} }
+extension T29 { fun m61() {} }
+extension T30 { fun m62() {} }
+extension T31 { fun m63() {} }
+extension T0 { fun m64() {} }
+extension T1 { fun m65() {} }
+extension T2 { fun m66() {} }
+extension T3 { fun m67() {} }
+extension T4 { fun m68() {} }
+extension T5 { fun m69() {} }
+extension T6 { fun m70() {} }
+extension T7 { fun m71() {} }
+extension T8 { fun m72() {} }
+extension T9 { fun m73() {} }
+extension T10 { fun m74() {} }
+extension T11 { fun m75() {} }
+extension T12 { fun m76() {} }
+extension T13 { fun m77() {} }
+extension T14 { fun m78() {} }
+extension T15 { fun m79() {} }
+extension T16 { fun m80() {} }
+extension T17 { fun m81() {} }
+extension T18 { fun m82() {} }
+extension T19 { fun m83() {} }
+extension T20 { fun m84() {} }
+extension T21 { fun m85() {} }
+extension T22 { fun m86() {} }
+extension T23 { fun m87() {} }
+extension T24 { fun m88() {} }
+extension T25 { fun m89() {} }
+extension T26 { fun m90() {} }
+extension T27 { fun m91() {} }
+extension T28 { fun m92() {} }
+extension T29 { fun m93() {} }
+extension T30 { fun m94() {} }
+extension T31 { fun m95() {} }
+extension T0 { fun m96() {} }
+extension T1 { fun m97() {} }
+extension T2 { fun m98() {} }
+extension T3 { fun m99() {} }
+extension T4 { fun m100() {} }
+extension T5 { fun m101() {} }
+extension T6 { fun m102() {} }
+extension T7 { fun m103() {} }
+extension T8 { fun m104() {} }
+extension T9 { fun m105() {} }
+extension T10 { fun m106() {} }
+extension T11 { fun m107() {} }
+extension T12 { fun m108() {} }
+extension T13 { fun m109() {} }
+extension T14 { fun m110() {} }
+extension T15 { fun m111() {} }
+extension T16 { fun m112() {} }
+extension T17 { fun m113() {} }
+extension T18 { fun m114() {} }
+extension T19 { fun m115() {} }
+extension T20 { fun m116() {} }
+extension T21 { fun m117() {} }
+extension T22 { fun m118() {} }
+extension T23 { fun m119() {} }
+extension T24 { fun m120() {} }
+extension T25 { fun m121() {} }
+extension T26 { fun m122() {} }
+extension T27 { fun m123() {} }
+extension T28 { fun m124() {} }
+extension T29 { fun m125() {} }
+extension T30 { fun m126() {} }
+extension T31 { fun m127() {} }
+extension T0 { fun m128() {} }
+extension T1 { fun m129() {} }
+extension T2 { fun m130() {} }
+extension T3 { fun m131() {} }
+extension T4 { fun m132() {} }
+extension T5 { fun m133() {} }
+extension T6 { fun m134() {} }
+extension T7 { fun m135() {} }
+extension T8 { fun m136() {} }
+extension T9 { fun m137() {} }
+extension T10 { fun m138() {} }
+extension T11 { fun m139() {} }
+extension T12 { fun m140() {} }
+extension T13 { fun m141() {} }
+extension T14 { fun m142() {} }
+extension T15 { fun m143() {} }
+extension T16 { fun m144() {} }
+extension T17 { fun m145() {} }
+extension T18 { fun m146() {} }
+extension T19 { fun m147() {} }
+extension T20 { fun m148() {} }
+extension T21 { fun m149() {} }
+extension T22 { fun m150() {} }
+extension T23 { fun m151() {} }
+extension T24 { fun m152() {} }
+extension T25 { fun m153() {} }
+extension T26 { fun m154() {} }
+extension T27 { fun m155() {} }
+extension T28 { fun m156() {} }
+extension T29 { fun m157() {} }
+extension T30 { fun m158() {} }
+extension T31 { fun m159() {} }
+extension T0 { fun m160() {} }
+extension T1 { fun m161() {} }
+extension T2 { fun m162() {} }
+extension T3 { fun m163() {} }
+extension T4 { fun m164() {} }
+extension T5 { fun m165() {} }
+extension T6 { fun m166() {} }
+extension T7 { fun m167() {} }
+extension T8 { fun m168() {} }
+extension T9 { fun m169() {} }
+extension T10 { fun m170() {} }
+extension T11 { fun m171() {} }
+extension T12 { fun m172() {} }
+extension T13 { fun m173() {} }
+extension T14 { fun m174() {} }
+extension T15 { fun m175() {} }
+extension T16 { fun m176() {} }
+extension T17 { fun m177() {} }
+extension T18 { fun m178() {} }
+extension T19 { fun m179() {} }
+extension T20 { fun m180() {} }
+extension T21 { fun m181() {} }
+extension T22 { fun m182() {} }
+extension T23 { fun m183() {} }
+extension T24 { fun m184() {} }
+extension T25 { fun m185() {} }
+extension T26 { fun m186() {} }
+extension T27 { fun m187() {} }
+extension T28 { fun m188() {} }
+extension T29 { fun m189() {} }
+extension T30 { fun m190() {} }
+extension T31 { fun m191() {} }
+extension T0 { fun m192() {} }
+extension T1 { fun m193() {} }
+extension T2 { fun m194() {} }
+extension T3 { fun m195() {} }
+extension T4 { fun m196() {} }
+extension T5 { fun m197() {} }
+extension T6 { fun m198() {} }
+extension T7 { fun m199() {} }
+extension T8 { fun m200() {} }
+extension T9 { fun m201() {} }
+extension T10 { fun m202() {} }
+extension T11 { fun m203() {} }
+extension T12 { fun m204() {} }
+extension T13 { fun m205() {} }
+extension T14 { fun m206() {} }
+extension T15 { fun m207() {} }
+extension T16 { fun m208() {} }
+extension T17 { fun m209() {} }
+extension T18 { fun m210() {} }
+extension T19 { fun m211() {} }
+extension T20 { fun m212() {} }
+extension T21 { fun m213() {} }
+extension T22 { fun m214() {} }
+extension T23 { fun m215() {} }
+extension T24 { fun m216() {} }
+extension T25 { fun m217() {} }
+extension T26 { fun m218() {} }
+extension T27 { fun m219() {} }
+extension T28 { fun m220() {} }
+extension T29 { fun m221() {} }
+extension T30 { fun m222() {} }
+extension T31 { fun m223() {} }
+extension T0 { fun m224() {} }
+extension T1 { fun m225() {} }
+extension T2 { fun m226() {} }
+extension T3 { fun m227() {} }
+extension T4 { fun m228() {} }
+extension T5 { fun m229() {} }
+extension T6 { fun m230() {} }
+extension T7 { fun m231() {} }
+extension T8 { fun m232() {} }
+extension T9 { fun m233() {} }
+extension T10 { fun m234() {} }
+extension T11 { fun m235() {} }
+extension T12 { fun m236() {} }
+extension T13 { fun m237() {} }
+extension T14 { fun m238() {} }
+extension T15 { fun m239() {} }
+extension T16 { fun m240() {} }
+extension T17 { fun m241() {} }
+extension T18 { fun m242() {} }
+extension T19 { fun m243() {} }
+extension T20 { fun m244() {} }
+extension T21 { fun m245() {} }
+extension T22 { fun m246() {} }
+extension T23 { fun m247() {} }
+extension T24 { fun m248() {} }
+extension T25 { fun m249() {} }
+extension T26 { fun m250() {} }
+extension T27 { fun m251() {} }
+extension T28 { fun m252() {} }
+extension T29 { fun m253() {} }
+extension T30 { fun m254() {} }
+extension T31 { fun m255() {} }
+extension T0 { fun m256() {} }
+extension T1 { fun m257() {} }
+extension T2 { fun m258() {} }
+extension T3 { fun m259() {} }
+extension T4 { fun m260() {} }
+extension T5 { fun m261() {} }
+extension T6 { fun m262() {} }
+extension T7 { fun m263() {} }
+extension T8 { fun m264() {} }
+extension T9 { fun m265() {} }
+extension T10 { fun m266() {} }
+extension T11 { fun m267() {} }
+extension T12 { fun m268() {} }
+extension T13 { fun m269() {} }
+extension T14 { fun m270() {} }
+extension T15 { fun m271() {} }
+extension T16 { fun m272() {} }
+extension T17 { fun m273() {} }
+extension T18 { fun m274() {} }
+extension T19 { fun m275() {} }
+extension T20 { fun m276() {} }
+extension T21 { fun m277() {} }
+extension T22 { fun m278() {} }
+extension T23 { fun m279() {} }
+extension T24 { fun m280() {} }
+extension T25 { fun m281() {} }
+extension T26 { fun m282() {} }
+extension T27 { fun m283() {} }
+extension T28 { fun m284() {} }
+extension T29 { fun m285() {} }
+extension T30 { fun m286() {} }
+extension T31 { fun m287() {} }
+extension T0 { fun m288() {} }
+extension T1 { fun m289() {} }
+extension T2 { fun m290() {} }
+extension T3 { fun m291() {} }
+extension T4 { fun m292() {} }
+extension T5 { fun m293() {} }
+extension T6 { fun m294() {} }
+extension T7 { fun m295() {} }
+extension T8 { fun m296() {} }
+extension T9 { fun m297() {} }
+extension T10 { fun m298() {} }
+extension T11 { fun m299() {} }
+extension T12 { fun m300() {} }
+extension T13 { fun m301() {} }
+extension T14 { fun m302() {} }
+extension T15 { fun m303() {} }
+extension T16 { fun m304() {} }
+extension T17 { fun m305() {} }
+extension T18 { fun m306() {} }
+extension T19 { fun m307() {} }
+extension T20 { fun m308() {} }
+extension T21 { fun m309() {} }
+extension T22 { fun m310() {} }
+extension T23 { fun m311() {} }
+extension T24 { fun m312() {} }
+extension T25 { fun m313() {} }
+extension T26 { fun m314() {} }
+extension T27 { fun m315() {} }
+extension T28 { fun m316() {} }
+extension T29 { fun m317() {} }
+extension T30 { fun m318() {} }
+extension T31 { fun m319() {} }
+public fun main() {
+  T0().m0()
+  T13().m13()
+  T26().m26()
+  T7().m39()
+  T20().m52()
+  T1().m65()
+  T14().m78()
+  T27().m91()
+  T8().m104()
+  T21().m117()
+  T2().m130()
+  T15().m143()
+  T28().m156()
+  T9().m169()
+  T22().m182()
+  T3().m195()
+  T16().m208()
+  T29().m221()
+  T10().m234()
+  T23().m247()
+  T4().m260()
+  T17().m273()
+  T30().m286()
+  T11().m299()
+  T24().m312()
+  T5().m5()
+  T18().m18()
+  T31().m31()
+  T12().m44()
+  T25().m57()
+  T6().m70()
+  T19().m83()
+  T0().m96()
+  T13().m109()
+  T26().m122()
+  T7().m135()
+  T20().m148()
+  T1().m161()
+  T14().m174()
+  T27().m187()
+  T8().m200()
+  T21().m213()
+  T2().m226()
+  T15().m239()
+  T28().m252()
+  T9().m265()
+  T22().m278()
+  T3().m291()
+  T16().m304()
+  T29().m317()
+  T10().m10()
+  T23().m23()
+  T4().m36()
+  T17().m49()
+  T30().m62()
+  T11().m75()
+  T24().m88()
+  T5().m101()
+  T18().m114()
+  T31().m127()
+  T12().m140()
+  T25().m153()
+  T6().m166()
+  T19().m179()
+  T0().m192()
+  T13().m205()
+  T26().m218()
+  T7().m231()
+  T20().m244()
+  T1().m257()
+  T14().m270()
+  T27().m283()
+  T8().m296()
+  T21().m309()
+  T2().m2()
+  T15().m15()
+  T28().m28()
+  T9().m41()
+  T22().m54()
+  T3().m67()
+  T16().m80()
+  T29().m93()
+  T10().m106()
+  T23().m119()
+  T4().m132()
+  T17().m145()
+  T30().m158()
+  T11().m171()
+  T24().m184()
+  T5().m197()
+  T18().m210()
+  T31().m223()
+  T12().m236()
+  T25().m249()
+  T6().m262()
+  T19().m275()
+  T0().m288()
+  T13().m301()
+  T26().m314()
+  T7().m7()
+  T20().m20()
+  T1().m33()
+  T14().m46()
+  T27().m59()
+  T8().m72()
+  T21().m85()
+  T2().m98()
+  T15().m111()
+  T28().m124()
+  T9().m137()
+  T22().m150()
+  T3().m163()
+  T16().m176()
+  T29().m189()
+  T10().m202()
+  T23().m215()
+  T4().m228()
+  T17().m241()
+  T30().m254()
+  T11().m267()
+  T24().m280()
+  T5().m293()
+  T18().m306()
+  T31().m319()
+  T12().m12()
+  T25().m25()
+  T6().m38()
+  T19().m51()
+  T0().m64()
+  T13().m77()
+  T26().m90()
+  T7().m103()
+  T20().m116()
+  T1().m129()
+  T14().m142()
+  T27().m155()
+  T8().m168()
+  T21().m181()
+  T2().m194()
+  T15().m207()
+  T28().m220()
+  T9().m233()
+  T22().m246()
+  T3().m259()
+  T16().m272()
+  T29().m285()
+  T10().m298()
+  T23().m311()
+  T4().m4()
+  T17().m17()
+  T30().m30()
+  T11().m43()
+  T24().m56()
+  T5().m69()
+  T18().m82()
+  T31().m95()
+  T12().m108()
+  T25().m121()
+  T6().m134()
+  T19().m147()
+  T0().m160()
+  T13().m173()
+  T26().m186()
+  T7().m199()
+  T20().m212()
+  T1().m225()
+  T14().m238()
+  T27().m251()
+  T8().m264()
+  T21().m277()
+  T2().m290()
+  T15().m303()
+  T28().m316()
+  T9().m9()
+  T22().m22()
+  T3().m35()
+  T16().m48()
+  T29().m61()
+  T10().m74()
+  T23().m87()
+  T4().m100()
+  T17().m113()
+  T30().m126()
+  T11().m139()
+  T24().m152()
+  T5().m165()
+  T18().m178()
+  T31().m191()
+  T12().m204()
+  T25().m217()
+  T6().m230()
+  T19().m243()
+  T0().m256()
+  T13().m269()
+  T26().m282()
+  T7().m295()
+  T20().m308()
+  T1().m1()
+  T14().m14()
+  T27().m27()
+  T8().m40()
+  T21().m53()
+  T2().m66()
+  T15().m79()
+  T28().m92()
+  T9().m105()
+  T22().m118()
+  T3().m131()
+  T16().m144()
+  T29().m157()
+  T10().m170()
+  T23().m183()
+  T4().m196()
+  T17().m209()
+  T30().m222()
+  T11().m235()
+  T24().m248()
+  T5().m261()
+  T18().m274()
+  T31().m287()
+  T12().m300()
+  T25().m313()
+  T6().m6()
+  T19().m19()
+  T0().m32()
+  T13().m45()
+  T26().m58()
+  T7().m71()
+  T20().m84()
+  T1().m97()
+  T14().m110()
+  T27().m123()
+  T8().m136()
+  T21().m149()
+  T2().m162()
+  T15().m175()
+  T28().m188()
+  T9().m201()
+  T22().m214()
+  T3().m227()
+  T16().m240()
+  T29().m253()
+  T10().m266()
+  T23().m279()
+  T4().m292()
+  T17().m305()
+  T30().m318()
+  T11().m11()
+  T24().m24()
+  T5().m37()
+  T18().m50()
+  T31().m63()
+  T12().m76()
+  T25().m89()
+  T6().m102()
+  T19().m115()
+  T0().m128()
+  T13().m141()
+  T26().m154()
+  T7().m167()
+  T20().m180()
+  T1().m193()
+  T14().m206()
+  T27().m219()
+  T8().m232()
+  T21().m245()
+  T2().m258()
+  T15().m271()
+  T28().m284()
+  T9().m297()
+  T22().m310()
+  T3().m3()
+  T16().m16()
+  T29().m29()
+  T10().m42()
+  T23().m55()
+  T4().m68()
+  T17().m81()
+  T30().m94()
+  T11().m107()
+  T24().m120()
+  T5().m133()
+  T18().m146()
+  T31().m159()
+  T12().m172()
+  T25().m185()
+  T6().m198()
+  T19().m211()
+  T0().m224()
+  T13().m237()
+  T26().m250()
+  T7().m263()
+  T20().m276()
+  T1().m289()
+  T14().m302()
+  T27().m315()
+  T8().m8()
+  T21().m21()
+  T2().m34()
+  T15().m47()
+  T28().m60()
+  T9().m73()
+  T22().m86()
+  T3().m99()
+  T16().m112()
+  T29().m125()
+  T10().m138()
+  T23().m151()
+  T4().m164()
+  T17().m177()
+  T30().m190()
+  T11().m203()
+  T24().m216()
+  T5().m229()
+  T18().m242()
+  T31().m255()
+  T12().m268()
+  T25().m281()
+  T6().m294()
+  T19().m307()
+}

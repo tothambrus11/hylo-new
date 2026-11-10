@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/equalities/absinst-ok.hylo",
+ "rel": "r2",
+ "vid": "reqs:3:10",
+ "kind": "reqs",
+ "desc": "requirements of `fun caller` in order [1, 0]",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'",
+   "error: type 'V' has no static member 'X'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'V' has no static member 'X'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'V' has no static member 'X'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'V' has no static member 'X'"
+   ]
+  }
+ }
+}

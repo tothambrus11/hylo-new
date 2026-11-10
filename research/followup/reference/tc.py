@@ -42,7 +42,7 @@ if __name__ == "__main__":
     for f in sys.argv[1:]:
         row = []
         for c in os.environ.get("TCC", "base,FIX,FULL").split(","):
-            r = run(f, c)
+            r = run(f, c, timeout=20 if c == "base" else 60)
             if r["status"] != "ok":
                 row.append(f"{c}={r['status']}({r['code']})")
             else:

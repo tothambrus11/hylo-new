@@ -1,0 +1,8 @@
+trait P { type E }
+trait Q {}
+struct A {}
+given A is P { type E = Int }
+given A.E is Q {}
+given A.E is P { type E = Bool }
+fun need<T where T is Q>(x: T) {}
+fun use(x: Int) { need(x) }

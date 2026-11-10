@@ -1,0 +1,19 @@
+trait Tr0 {}
+trait Tr1 {}
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+struct St2<E0> { public memberwise init }
+struct St4<E0> { public memberwise init }
+given St1 is Tr0 {}
+given St0 is Tr0 {}
+given <A where A is Tr0> => St2<A> is Tr1 {}
+fun needTr0<W where W is Tr0>() {}
+fun needTr1<W where W is Tr1>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0() { needTr1<St2<St1>>() }
+fun q1() { needTr0<St2<St1>>() }
+fun q2() { needTr0<St0>() }
+fun q3() { needTr0<St2<St4<St0>>>() }
+fun q4<T0, T1, T2>() { needTr0<St1>() }
+fun q5<T0, T1, T2>() { needTr0<T1>() }

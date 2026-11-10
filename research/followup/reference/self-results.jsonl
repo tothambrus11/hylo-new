@@ -1,0 +1,27 @@
+{"program": "a01-self-trait.hylo", "expect": "accept", "why": "T == Self and Self.X == U are facts", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "e09-trait-self-assoc.hylo", "expect": "accept", "why": "X == Y and Y == U are facts", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "absleak-0.hylo", "expect": "accept", "why": "t.get() instantiates Self's witness with T's requirement", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "absinst-ok.hylo", "expect": "accept", "why": "V.X == Bool is a fact", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-1.hylo", "expect": "reject", "why": "T is P is a second witness: T.X is not Self.X", "runs": {"base": "reject", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-2.hylo", "expect": "reject", "why": "same", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-3.hylo", "expect": "reject", "why": "same", "runs": {"base": "reject", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-4.hylo", "expect": "reject", "why": "same, through T == U == Self", "runs": {"base": "reject", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-5.hylo", "expect": "reject", "why": "U == T.X, and T.X is not Self.X", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "v-abs-6.hylo", "expect": "reject", "why": "same", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "v-abs-7.hylo", "expect": "reject", "why": "same (equality goal)", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "v-abs-8.hylo", "expect": "reject", "why": "same, in an extension of the trait", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "v-abs-9.hylo", "expect": "reject", "why": "same", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-0.hylo", "expect": "reject", "why": "T.X and U.X are two witnesses", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-1.hylo", "expect": "reject", "why": "same", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-2.hylo", "expect": "reject", "why": "same", "runs": {"base": "accept", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-3.hylo", "expect": "reject", "why": "same", "runs": {"base": "accept", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-4.hylo", "expect": "reject", "why": "same", "runs": {"base": "timeout", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-trans-5.hylo", "expect": "reject", "why": "same", "runs": {"base": "timeout", "FIX": "reject", "FULL": "reject"}}
+{"program": "absleak-1.hylo", "expect": "reject", "why": "t.get() has type T.X, not U.X", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "absinst-0.hylo", "expect": "reject", "why": "V.X == Bool is not known, only W.X == Bool", "runs": {"base": "accept", "FIX": "reject", "FULL": "reject"}}
+{"program": "abs-launder.hylo", "expect": "reject", "why": "the body of cast needs T.X == Self.X", "runs": {"base": "reject", "FIX": "reject", "FULL": "reject"}}
+{"program": "cast-only.hylo", "expect": "reject", "why": "the body of cast needs T.X == Self.X", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "cast-two.hylo", "expect": "reject", "why": "same, with two other witnesses", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "launder-5-def.hylo", "expect": "reject", "why": "conv<U, X> needs U == Self.X; only U == T.X is known", "runs": {"base": "accept", "FIX": "accept", "FULL": "accept"}}
+{"program": "launder-5.hylo", "expect": "reject", "why": "converts W.X to V.X: the conversion that associated-type-inequality.hylo forbids", "runs": {"base": "timeout", "FIX": "accept", "FULL": "accept"}}
+{"program": "launder-6.hylo", "expect": "reject", "why": "same", "runs": {"base": "timeout", "FIX": "accept", "FULL": "accept"}}

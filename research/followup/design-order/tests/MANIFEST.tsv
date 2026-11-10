@@ -1,0 +1,24 @@
+# file	fixed-prefix	expected-after-change
+01-alias-used-by-given.hylo	3	accept
+02-alias-and-extension-of-alias.hylo	2	accept
+03-given-and-extension.hylo	2	accept
+04-extension-of-alias-declares-looked-up-name.hylo	1	accept
+05-mutually-dependent-extensions.hylo	1	accept
+06-chain-of-aliases-and-givens.hylo	5	accept
+07-contradiction.hylo	4	reject
+08-extension-applies-to-its-own-lookup.hylo	1	reject
+09-two-readings.hylo	9	reject
+09b-two-readings-swapped.hylo	9	reject
+10-alias-cycle.hylo	0	reject
+11-requirement-order-in-where-clause.hylo	3	reject
+12-requirement-order-in-where-clause-ok.hylo	3	accept
+13-given-whose-subject-needs-a-resolution.hylo	3	accept
+14-given-needs-itself.hylo	2	reject
+15-local-given-uses-context-of-function.hylo	4	accept
+16-corpus-typealiases.hylo	0	accept
+17-corpus-self-where-clause.hylo	3	accept
+18-corpus-local-given.hylo	4	accept
+19-corpus-generic-extension.hylo	0	accept
+20-corpus-trait-refinement.hylo	0	reject
+21-local-shadowing-given.hylo	2	accept
+22-ambiguous-member-through-alias.hylo	1	reject

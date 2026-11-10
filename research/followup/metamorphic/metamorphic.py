@@ -130,13 +130,36 @@ def cmd_run(rels, config, only=None, files=None):
                 o_done.write(json.dumps(row) + "\n"); o_done.flush()
 
 
-def cmd_attribute():
-    bad = {}
-    for r in load(os.path.join(DATA, "done-FULL.jsonl")):
-        if r.get("verdict_changes"): bad.setdefault(r["rel"], set()).add(r["file"])
+def cmd_attribute(only_violating=("r2", "r4")):
+    """Runs FIX and base on the programs that show a violation under FULL: every variant that was
+    checked under FULL, except for the relations in `only_violating` (many programs, one cause),
+    where only the violating variants are run."""
+    full = {}
+    for row in load(os.path.join(DATA, "rows-FULL.jsonl")):
+        full[(row["file"], row["rel"], row["vid"])] = row
+    bad = {(f, r) for (f, r, _), row in full.items() if row.get("violation")}
+    todo = {}
+    for (f, r, vid), row in full.items():
+        if (f, r) in bad and (row.get("violation") or r not in only_violating):
+            todo.setdefault((f, r), []).append(vid)
     for config in ("FIX", "base"):
-        for r, fs in sorted(bad.items()):
-            cmd_run([r], config, files=fs)
+        have = {(x["file"], x["rel"], x["vid"]) for x in load(os.path.join(DATA, "rows-%s.jsonl" % config))}
+        with open(os.path.join(DATA, "rows-%s.jsonl" % config), "a") as o:
+            for (f, r), vids in sorted(todo.items()):
+                if all((f, r, v) in have for v in vids): continue
+                path = os.path.join(ROOT, f)
+                src = open(path).read()
+                F, vs = variants_of(path, r, src)
+                a = check(src, config)
+                for v in vs:
+                    if v.vid not in vids or (f, r, v.vid) in have: continue
+                    b = check(v.render(F), config)
+                    row = {"file": f, "rel": r, "vid": v.vid, "kind": v.kind, "desc": v.desc, "config": config,
+                           "verdict": b["verdict"], "sha": b["sha"], "base_verdict": a["verdict"],
+                           "errors": b["errors"], "base_errors": a["errors"]}
+                    if b["verdict"] != a["verdict"]: row["violation"] = True
+                    elif not same_messages(a["errors"], b["errors"], v.rename): row["messages_differ"] = True
+                    o.write(json.dumps(row) + "\n"); o.flush()
 
 
 def cmd_show(path, r, vid=None):

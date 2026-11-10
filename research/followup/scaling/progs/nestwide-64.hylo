@@ -1,0 +1,196 @@
+trait P {}
+struct S0 {}
+trait R0 { given S0 is P }
+struct S1 {}
+trait R1 { given S1 is P }
+struct S2 {}
+trait R2 { given S2 is P }
+struct S3 {}
+trait R3 { given S3 is P }
+struct S4 {}
+trait R4 { given S4 is P }
+struct S5 {}
+trait R5 { given S5 is P }
+struct S6 {}
+trait R6 { given S6 is P }
+struct S7 {}
+trait R7 { given S7 is P }
+struct S8 {}
+trait R8 { given S8 is P }
+struct S9 {}
+trait R9 { given S9 is P }
+struct S10 {}
+trait R10 { given S10 is P }
+struct S11 {}
+trait R11 { given S11 is P }
+struct S12 {}
+trait R12 { given S12 is P }
+struct S13 {}
+trait R13 { given S13 is P }
+struct S14 {}
+trait R14 { given S14 is P }
+struct S15 {}
+trait R15 { given S15 is P }
+struct S16 {}
+trait R16 { given S16 is P }
+struct S17 {}
+trait R17 { given S17 is P }
+struct S18 {}
+trait R18 { given S18 is P }
+struct S19 {}
+trait R19 { given S19 is P }
+struct S20 {}
+trait R20 { given S20 is P }
+struct S21 {}
+trait R21 { given S21 is P }
+struct S22 {}
+trait R22 { given S22 is P }
+struct S23 {}
+trait R23 { given S23 is P }
+struct S24 {}
+trait R24 { given S24 is P }
+struct S25 {}
+trait R25 { given S25 is P }
+struct S26 {}
+trait R26 { given S26 is P }
+struct S27 {}
+trait R27 { given S27 is P }
+struct S28 {}
+trait R28 { given S28 is P }
+struct S29 {}
+trait R29 { given S29 is P }
+struct S30 {}
+trait R30 { given S30 is P }
+struct S31 {}
+trait R31 { given S31 is P }
+struct S32 {}
+trait R32 { given S32 is P }
+struct S33 {}
+trait R33 { given S33 is P }
+struct S34 {}
+trait R34 { given S34 is P }
+struct S35 {}
+trait R35 { given S35 is P }
+struct S36 {}
+trait R36 { given S36 is P }
+struct S37 {}
+trait R37 { given S37 is P }
+struct S38 {}
+trait R38 { given S38 is P }
+struct S39 {}
+trait R39 { given S39 is P }
+struct S40 {}
+trait R40 { given S40 is P }
+struct S41 {}
+trait R41 { given S41 is P }
+struct S42 {}
+trait R42 { given S42 is P }
+struct S43 {}
+trait R43 { given S43 is P }
+struct S44 {}
+trait R44 { given S44 is P }
+struct S45 {}
+trait R45 { given S45 is P }
+struct S46 {}
+trait R46 { given S46 is P }
+struct S47 {}
+trait R47 { given S47 is P }
+struct S48 {}
+trait R48 { given S48 is P }
+struct S49 {}
+trait R49 { given S49 is P }
+struct S50 {}
+trait R50 { given S50 is P }
+struct S51 {}
+trait R51 { given S51 is P }
+struct S52 {}
+trait R52 { given S52 is P }
+struct S53 {}
+trait R53 { given S53 is P }
+struct S54 {}
+trait R54 { given S54 is P }
+struct S55 {}
+trait R55 { given S55 is P }
+struct S56 {}
+trait R56 { given S56 is P }
+struct S57 {}
+trait R57 { given S57 is P }
+struct S58 {}
+trait R58 { given S58 is P }
+struct S59 {}
+trait R59 { given S59 is P }
+struct S60 {}
+trait R60 { given S60 is P }
+struct S61 {}
+trait R61 { given S61 is P }
+struct S62 {}
+trait R62 { given S62 is P }
+struct S63 {}
+trait R63 { given S63 is P }
+fun use<T>(x: T) {}
+fun f<T is R0 & R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15 & R16 & R17 & R18 & R19 & R20 & R21 & R22 & R23 & R24 & R25 & R26 & R27 & R28 & R29 & R30 & R31 & R32 & R33 & R34 & R35 & R36 & R37 & R38 & R39 & R40 & R41 & R42 & R43 & R44 & R45 & R46 & R47 & R48 & R49 & R50 & R51 & R52 & R53 & R54 & R55 & R56 & R57 & R58 & R59 & R60 & R61 & R62 & R63>() {
+  use(summon[P<S0>])
+  use(summon[P<S1>])
+  use(summon[P<S2>])
+  use(summon[P<S3>])
+  use(summon[P<S4>])
+  use(summon[P<S5>])
+  use(summon[P<S6>])
+  use(summon[P<S7>])
+  use(summon[P<S8>])
+  use(summon[P<S9>])
+  use(summon[P<S10>])
+  use(summon[P<S11>])
+  use(summon[P<S12>])
+  use(summon[P<S13>])
+  use(summon[P<S14>])
+  use(summon[P<S15>])
+  use(summon[P<S16>])
+  use(summon[P<S17>])
+  use(summon[P<S18>])
+  use(summon[P<S19>])
+  use(summon[P<S20>])
+  use(summon[P<S21>])
+  use(summon[P<S22>])
+  use(summon[P<S23>])
+  use(summon[P<S24>])
+  use(summon[P<S25>])
+  use(summon[P<S26>])
+  use(summon[P<S27>])
+  use(summon[P<S28>])
+  use(summon[P<S29>])
+  use(summon[P<S30>])
+  use(summon[P<S31>])
+  use(summon[P<S32>])
+  use(summon[P<S33>])
+  use(summon[P<S34>])
+  use(summon[P<S35>])
+  use(summon[P<S36>])
+  use(summon[P<S37>])
+  use(summon[P<S38>])
+  use(summon[P<S39>])
+  use(summon[P<S40>])
+  use(summon[P<S41>])
+  use(summon[P<S42>])
+  use(summon[P<S43>])
+  use(summon[P<S44>])
+  use(summon[P<S45>])
+  use(summon[P<S46>])
+  use(summon[P<S47>])
+  use(summon[P<S48>])
+  use(summon[P<S49>])
+  use(summon[P<S50>])
+  use(summon[P<S51>])
+  use(summon[P<S52>])
+  use(summon[P<S53>])
+  use(summon[P<S54>])
+  use(summon[P<S55>])
+  use(summon[P<S56>])
+  use(summon[P<S57>])
+  use(summon[P<S58>])
+  use(summon[P<S59>])
+  use(summon[P<S60>])
+  use(summon[P<S61>])
+  use(summon[P<S62>])
+  use(summon[P<S63>])
+}

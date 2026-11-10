@@ -1,7 +1,7 @@
 //! stage:typing no-std
-// expected: accepted from stage 2. Today each of the 8 differing arguments becomes a hypothesis that
+// expected: accepted from stage 1 (eqeager). Today each of the 8 differing arguments becomes a hypothesis that
 // costs one search step, and the 10-step bound is exceeded (summon.depthExhausted=1 under FULL; base
-// runs out of memory). With the closure consulted inside `match`, the 8 pairs cost no step.
+// runs out of memory). Decided inside `match`, the 8 pairs cost no step.
 // currently: base out of memory; FULL rejected (summon.subgoals=18 summon.matches=176 summon.depthExhausted=1 eqsolve.proved=16 index.fallback=2). FULL says: no coercion from 'P<W<U0, U1, U2, U3, U4, U5, U6, U7>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P {}
 struct W<X0, X1, X2, X3, X4, X5, X6, X7> {}

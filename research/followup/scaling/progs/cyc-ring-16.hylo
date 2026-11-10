@@ -1,0 +1,35 @@
+trait P {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct A7 {}
+struct A8 {}
+struct A9 {}
+struct A10 {}
+struct A11 {}
+struct A12 {}
+struct A13 {}
+struct A14 {}
+struct A15 {}
+given <where A1 is P> => A0 is P {}
+given <where A2 is P> => A1 is P {}
+given <where A3 is P> => A2 is P {}
+given <where A4 is P> => A3 is P {}
+given <where A5 is P> => A4 is P {}
+given <where A6 is P> => A5 is P {}
+given <where A7 is P> => A6 is P {}
+given <where A8 is P> => A7 is P {}
+given <where A9 is P> => A8 is P {}
+given <where A10 is P> => A9 is P {}
+given <where A11 is P> => A10 is P {}
+given <where A12 is P> => A11 is P {}
+given <where A13 is P> => A12 is P {}
+given <where A14 is P> => A13 is P {}
+given <where A15 is P> => A14 is P {}
+given <where A0 is P> => A15 is P {}
+fun need<where A0 is P>() {}
+public fun main() { need() }

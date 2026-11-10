@@ -1,5 +1,5 @@
 //! stage:typing no-std
-// expected: accepted from stage 2. `match` descends to the innermost mismatch (A, B), which is not
+// expected: accepted from stage 2 (eqclosure). `match` descends to the innermost mismatch (A, B), which is not
 // provable (no injectivity), and never tries the enclosing pair (Box<A>, Box<B>), which is a fact.
 // Rejected by base and FULL.
 // currently: base rejected (summon.subgoals=2 summon.matches=145); FULL rejected (summon.subgoals=2 summon.matches=145 index.fallback=2). FULL says: no coercion from 'P<Box<B>> ==> [Void]() let -> Void' to '[Void]() let -> Void'

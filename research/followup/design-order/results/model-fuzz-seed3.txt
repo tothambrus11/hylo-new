@@ -1,0 +1,11 @@
+      5  max rounds
+     11  order-dependent, checked: order-dependent / rounds: accept
+     10  order-dependent, checked: stable-accept / rounds: accept
+      1  order-dependent, checked: stable-reject / rounds: accept
+      8  order-dependent, checked: stable-reject / rounds: reject
+    319  stable-accept, checked: stable-accept / rounds: accept same types
+      3  stable-accept, checked: stable-reject / rounds: reject
+      1  stable-reject, checked: order-dependent / rounds: accept
+      2  stable-reject, checked: stable-accept / rounds: accept
+      2  stable-reject, checked: stable-reject / rounds: accept
+   5643  stable-reject, checked: stable-reject / rounds: reject

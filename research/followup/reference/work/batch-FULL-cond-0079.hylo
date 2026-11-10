@@ -1,0 +1,99 @@
+trait W0Tr0 {}
+trait W0Tr1 {}
+trait W0Tr2 {}
+struct W0St0 { public memberwise init }
+struct W0St1 { public memberwise init }
+struct W0St2<E0> { public memberwise init }
+struct W0St3<E0, E1> { public memberwise init }
+given W0St1 is W0Tr0 {}
+given <A, B where B is W0Tr0, A is W0Tr1> => W0St3<A, B> is W0Tr0 {}
+given W0St0 is W0Tr2 {}
+fun needW0Tr0<W where W is W0Tr0>() {}
+fun needW0Tr1<W where W is W0Tr1>() {}
+fun needW0Tr2<W where W is W0Tr2>() {}
+trait W1Tr0 {}
+struct W1St0 { public memberwise init }
+struct W1St1 { public memberwise init }
+struct W1St2<E0> { public memberwise init }
+struct W1St3<E0, E1> { public memberwise init }
+given W1St1 is W1Tr0 {}
+given W1St0 is W1Tr0 {}
+fun needW1Tr0<W where W is W1Tr0>() {}
+trait W2Tr0 {}
+struct W2St0 { public memberwise init }
+struct W2St1 { public memberwise init }
+struct W2St2<E0> { public memberwise init }
+struct W2St3<E0, E1> { public memberwise init }
+given W2St1 is W2Tr0 {}
+given W2St2<W2St0> is W2Tr0 {}
+given W2St0 is W2Tr0 {}
+given <A, B where A is W2Tr0> => W2St3<A, B> is W2Tr0 {}
+fun needW2Tr0<W where W is W2Tr0>() {}
+trait W3Tr0 {}
+struct W3St0 { public memberwise init }
+struct W3St1 { public memberwise init }
+struct W3St2<E0> { public memberwise init }
+struct W3St3<E0, E1> { public memberwise init }
+struct W3St4<E0> { public memberwise init }
+given <A where A is W3Tr0> => W3St4<A> is W3Tr0 {}
+given W3St0 is W3Tr0 {}
+given <A, B> => W3St3<A, B> is W3Tr0 {}
+given W3St2<W3St0> is W3Tr0 {}
+fun needW3Tr0<W where W is W3Tr0>() {}
+trait W4Tr0 { type W4X0 }
+trait W4Tr1 {}
+trait W4Tr2 { type W4X2 }
+struct W4St0 { public memberwise init }
+struct W4St1 { public memberwise init }
+struct W4St2<E0> { public memberwise init }
+struct W4St3<E0, E1> { public memberwise init }
+given <A where A is W4Tr1> => W4St2<A> is W4Tr1 {}
+given <A> => W4St2<A> is W4Tr2 { type W4X2 = W4St3<W4St0, W4St1> }
+fun needW4Tr0<W where W is W4Tr0>() {}
+fun needW4Tr1<W where W is W4Tr1>() {}
+fun needW4Tr2<W where W is W4Tr2>() {}
+trait W5Tr0 {}
+trait W5Tr1 {}
+struct W5St0 { public memberwise init }
+struct W5St1 { public memberwise init }
+struct W5St2<E0> { public memberwise init }
+struct W5St3<E0, E1> { public memberwise init }
+given W5St0 is W5Tr0 {}
+fun needW5Tr0<W where W is W5Tr0>() {}
+fun needW5Tr1<W where W is W5Tr1>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun w0q0<T0, T1, T2, T3 where T0 == T1, T3 is W0Tr1, T1 is W0Tr0>() { needW0Tr0<W0St3<T3, T1>>() }
+fun w0q1<T0, T1, T2, T3 where T0 == T1, T3 is W0Tr1, T1 is W0Tr0>() { needW0Tr0<W0St3<T2, T3>>() }
+fun w0q2<T0, T1, T2, T3 where T2 is W0Tr0, T3 == T1>() { needEq<W0St2<T3>, W0St2<T1>>() }
+fun w0q3<T0, T1, T2, T3 where T2 is W0Tr0>() { needEq<W0St2<T3>, W0St2<T1>>() }
+fun w0q4<T0, T1, T2, T3 where T2 is W0Tr0, T3 == T1>() { needW0Tr1<T3>() }
+fun w0q5<T0, T1, T2 where T0 is W0Tr1, T1 is W0Tr2, T2 == T1, T1 is W0Tr0, W0St2<T2> is W0Tr1, T1 == T0>(x: W0St3<W0St3<T1, T0>, W0St3<T2, W0St1>>) { check<W0St3<W0St3<T1, T1>, W0St3<T1, W0St1>>>(x) }
+fun w1q0<T0, T1, T2, T3 where W1St2<T1> == T3, T1 is W1Tr0>(x: W1St3<W1St2<T3>, W1St2<T2>>) { check<W1St3<W1St2<W1St2<T1>>, W1St2<T2>>>(x) }
+fun w1q1<T0, T1, T2, T3 where W1St2<T1> == T3, T1 is W1Tr0>() { needW1Tr0<W1St2<W1St2<T2>>>() }
+fun w1q2<T0, T1, T2, T3 where W1St2<T0> == W1St2<T2>, T3 is W1Tr0, {T1, T2} == {T0, T1}, T0 is W1Tr0>(x: {W1St2<T0>, {T0, T1}}) { check<{W1St2<T2>, {T1, T2}}>(x) }
+fun w1q3<T0, T1, T2, T3 where W1St2<T0> == W1St2<T2>, T3 is W1Tr0, {T1, T2} == {T0, T1}, T0 is W1Tr0>() { needW1Tr0<T2>() }
+fun w1q4<T0, T1, T2 where {T2, T1} == {T1, T1}>() { needW1Tr0<W1St1>() }
+fun w1q5<T0, T1, T2 where {T2, T1} == {T1, T1}>() { needW1Tr0<T0>() }
+fun w2q0<T0, T1, T2, T3 where T3 == T0>(x: W2St3<T0, T2>) { check<W2St3<T3, T2>>(x) }
+fun w2q1<T0, T1, T2, T3>(x: W2St3<T0, T2>) { check<W2St3<T3, T2>>(x) }
+fun w2q2<T0, T1, T2 where T2 is W2Tr0, T1 is W2Tr0, T0 == T2, T2 == T1>() { needEq<W2St3<T0, W2St1>, W2St3<T2, W2St1>>() }
+fun w2q3<T0, T1, T2 where T2 is W2Tr0, T1 is W2Tr0, T0 == T2, T2 == T1>() { needW2Tr0<W2St2<W2St1>>() }
+fun w2q4<T0, T1 where T0 is W2Tr0, T1 is W2Tr0, T0 == T1>() { needW2Tr0<W2St3<T1, W2St1>>() }
+fun w2q5<T0, T1 where T0 is W2Tr0, T1 is W2Tr0, T0 == T1>() { needEq<{W2St0, W2St1}, {W2St1, W2St1}>() }
+fun w3q0<T0, T1, T2, T0b, T2b where T0b == T1, T1 == T2b, T1 == T0, T2b == T0b, T0 == T2, T2 == T1, T0 is W3Tr0, T0b is W3Tr0>() { needW3Tr0<T1>() }
+fun w3q1<T0, T1, T1b where W3St4<T1b> is W3Tr0, T1 is W3Tr0, T0 == T1, W3St4<T1> is W3Tr0, T0 == T1b, T1b is W3Tr0>() { needW3Tr0<T0>() }
+fun w3q2<T0, T1, T0b where T0 is W3Tr0, T0b == T1, T0b is W3Tr0, T1 == T0, W3St4<T1> is W3Tr0>() { needW3Tr0<T1>() }
+fun w3q3<T0, T1, T2, T3, T0b, T1b, T3b where T2 == T0, T2 == T3, T1b == T3b, T3b == T2, T3 is W3Tr0, T3b is W3Tr0, T0b == T2, T1 == T3>() { needW3Tr0<T2>() }
+fun w4q0<T0, T1>() { needW4Tr2<W4St2<T0>>() }
+fun w4q1<T0, T1>() { needW4Tr2<T1>() }
+fun w4q2<T0, T1, T2, T3 where W4St2<T2> is W4Tr0, T2 == T3, T3 is W4Tr0, T1 is W4Tr0>() { needEq<W4St3<W4St2<T3>, T0>, W4St3<W4St2<T2>, T0>>() }
+fun w4q3<T0, T1, T2, T3 where W4St2<T2> is W4Tr0, T2 == T3, T3 is W4Tr0, T1 is W4Tr0>(x: W4St3<W4St1.W4X2, W4St1>) { check<W4St3<W4St1.W4X2, W4St1>>(x) }
+fun w4q4<T0, T1, T2, T3, T4 where W4St2<T3> is W4Tr2, T1 is W4Tr1, T4 is W4Tr1>() { needW4Tr2<W4St2<T3>>() }
+fun w4q5<T0, T1, T2, T3, T4 where W4St2<T3> is W4Tr2, T1 is W4Tr1, T4 is W4Tr1>() { needW4Tr1<W4St1>() }
+fun w5q0<T0, T1, T2 where W5St2<T0> == W5St2<T2>, T0 is W5Tr0, T1 == T2>(x: W5St3<W5St0, W5St2<T0>>) { check<W5St3<W5St0, W5St2<T1>>>(x) }
+fun w5q1<T0, T1, T2 where W5St2<T0> == W5St2<T2>, T0 is W5Tr0>(x: W5St3<W5St0, W5St2<T0>>) { check<W5St3<W5St0, W5St2<T1>>>(x) }
+fun w5q2<T0, T1 where T1 is W5Tr1, T0 == T1>(x: W5St3<T0, W5St0>) { check<W5St3<T1, W5St0>>(x) }
+fun w5q3<T0, T1 where T1 is W5Tr1, T0 == T1>() { needW5Tr0<W5St1>() }
+fun w5q4<T0, T1, T2, T3, T4 where T4 is W5Tr0, T0 == T4, T4 == T3, T2 == T1, T0 == T1>(x: W5St3<T2, T2>) { check<W5St3<T2, T3>>(x) }
+fun w5q5<T0, T1, T2, T3, T4 where T4 is W5Tr0, T0 == T4, T4 == T3, T2 == T1, T0 == T1>() { needW5Tr0<W5St2<T3>>() }

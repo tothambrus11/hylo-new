@@ -8,6 +8,7 @@ import collections
 import json
 import os
 
+import explain
 import harness
 import reference
 import to_hylo
@@ -22,9 +23,17 @@ def load():
         problems[p["id"]] = p
     runs = collections.defaultdict(dict)       # (id, config) -> world row, isolated rows
     for l in open(os.path.join(HERE, "results.jsonl")):
-        r = json.loads(l)
+        try:
+            r = json.loads(l)
+        except ValueError:
+            continue
         key = (r["id"], r["config"])
         if r["isolated"] is None:
+            # A world run alone overrides its row from a batch run.
+            if "world" in runs[key] and r.get("batch") and not runs[key]["world"].get("batch"):
+                continue
+            if "world" in runs[key] and runs[key]["world"].get("batch") and not r.get("batch"):
+                runs[key]["confirmed"] = runs[key]["world"]
             runs[key]["world"] = r
         else:
             runs[key].setdefault("isolated", {})[r["isolated"]] = r
@@ -63,7 +72,10 @@ def rows(problems, runs, configs=("base", "FIX", "FULL")):
                     if a.get("twin"):
                         k = "agree" if v == "reject" else "AMBIGUITY-MISSED"
                     if v == "reject" and "too complex" in msg:
-                        k = "BUDGET"
+                        # The resource bound of `budget` was reached.
+                        k = "BUDGET-" + ("agree" if k == "agree" else k)
+                    if k == "INCOMPLETE" and a.get("ordered") is False and "no static member" in msg:
+                        k = "WHERE-ORDER"
                 else:
                     k = v.upper()
                 yield {"id": pid, "q": i, "kind": p["kind"], "config": c, "verdict": v,
@@ -76,15 +88,29 @@ def main():
     ap.add_argument("--config")
     ap.add_argument("--kind")
     ap.add_argument("-n", type=int, default=10)
+    ap.add_argument("--tags", help="with --list: only rows whose explanation is this (e.g. '' or DECOMP)")
     args = ap.parse_args()
     problems, runs = load()
     rs = list(rows(problems, runs))
+    worlds = {}
+
+    def tags_of(r):
+        if r["id"] not in worlds:
+            worlds[r["id"]] = reference.load_world(problems[r["id"]]["world"])
+        w = worlds[r["id"]]
+        key = (r["id"], r["q"])
+        if key not in tag_memo:
+            tag_memo[key] = "+".join(sorted(explain.tags(w, w["queries"][r["q"]])))
+        return tag_memo[key]
+    tag_memo = {}
 
     if args.list:
         n = 0
         for r in rs:
             if r["class"] != args.list or (args.config and r["config"] != args.config) \
                     or (args.kind and r["kind"] != args.kind):
+                continue
+            if args.tags is not None and tags_of(r) != args.tags:
                 continue
             w = reference.load_world(problems[r["id"]]["world"])
             a = r["answer"]
@@ -130,6 +156,25 @@ def main():
             acc, rej = t[(key, c, "accept")], t[(key, c, "reject")]
             cells.append("%s=%d/%d" % (c, acc, acc + rej))
         print("conf steps=%d equalities=%d congruence=%-5s" % key, "  ".join(cells))
+    print()
+    explanation_table(rs, tags_of)
+
+
+
+
+def explanation_table(rs, tags_of, configs=("FIX", "FULL")):
+    """Tests the hypotheses of explain.py on the goals with exactly one derivation."""
+    t = collections.Counter()
+    for r in rs:
+        a = r["answer"]
+        if r["config"] not in configs or a["verdict"] != "derivable" or (a["count"] or 0) >= 2:
+            continue
+        if r["verdict"] not in ("accept", "reject") or r["class"] == "WHERE-ORDER":
+            continue
+        t[(tags_of(r) or "(none)", r["config"], r["verdict"])] += 1
+    print("## explanation of rejections (explain.py): predicted cause, accepted / rejected")
+    for k in sorted({k for (k, c, v) in t}):
+        print("%-28s" % k, "  ".join("%s=%d/%d" % (c, t[(k, c, "accept")], t[(k, c, "reject")]) for c in configs))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,3 @@
+trait P { type E }
+struct A {}
+given A.E is P { type E = A }

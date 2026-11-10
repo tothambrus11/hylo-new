@@ -1,0 +1,34 @@
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+struct A4 { public memberwise init }
+struct A5 { public memberwise init }
+struct A6 { public memberwise init }
+struct A7 { public memberwise init }
+struct A8 { public memberwise init }
+struct A9 { public memberwise init }
+struct A10 { public memberwise init }
+struct A11 { public memberwise init }
+struct A12 { public memberwise init }
+struct A13 { public memberwise init }
+struct A14 { public memberwise init }
+struct A15 { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+fun f(x: A3) -> A3 { x }
+fun f(x: A4) -> A4 { x }
+fun f(x: A5) -> A5 { x }
+fun f(x: A6) -> A6 { x }
+fun f(x: A7) -> A7 { x }
+fun f(x: A8) -> A8 { x }
+fun f(x: A9) -> A9 { x }
+fun f(x: A10) -> A10 { x }
+fun f(x: A11) -> A11 { x }
+fun f(x: A12) -> A12 { x }
+fun f(x: A13) -> A13 { x }
+fun f(x: A14) -> A14 { x }
+fun f(x: A15) -> A15 { x }
+fun g(x0: A0, x1: A1, x2: A2, x3: A3) {}
+public fun main() { g(f(A0()), f(A1()), f(A2()), f(A3())) }

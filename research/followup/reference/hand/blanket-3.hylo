@@ -1,0 +1,6 @@
+trait Tr0 {}
+trait Tr1 { type X1 }
+struct St2<E0> { public memberwise init }
+given <A where A is Tr0> => A is Tr1 { type X1 = St2<A> }
+fun needEq<X, Y where X == Y>() {}
+fun q0<T, U where T is Tr0, U is Tr0>() { needEq<T.X1, U.X1>() }

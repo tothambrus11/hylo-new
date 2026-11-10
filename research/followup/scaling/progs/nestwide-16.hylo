@@ -1,0 +1,52 @@
+trait P {}
+struct S0 {}
+trait R0 { given S0 is P }
+struct S1 {}
+trait R1 { given S1 is P }
+struct S2 {}
+trait R2 { given S2 is P }
+struct S3 {}
+trait R3 { given S3 is P }
+struct S4 {}
+trait R4 { given S4 is P }
+struct S5 {}
+trait R5 { given S5 is P }
+struct S6 {}
+trait R6 { given S6 is P }
+struct S7 {}
+trait R7 { given S7 is P }
+struct S8 {}
+trait R8 { given S8 is P }
+struct S9 {}
+trait R9 { given S9 is P }
+struct S10 {}
+trait R10 { given S10 is P }
+struct S11 {}
+trait R11 { given S11 is P }
+struct S12 {}
+trait R12 { given S12 is P }
+struct S13 {}
+trait R13 { given S13 is P }
+struct S14 {}
+trait R14 { given S14 is P }
+struct S15 {}
+trait R15 { given S15 is P }
+fun use<T>(x: T) {}
+fun f<T is R0 & R1 & R2 & R3 & R4 & R5 & R6 & R7 & R8 & R9 & R10 & R11 & R12 & R13 & R14 & R15>() {
+  use(summon[P<S0>])
+  use(summon[P<S1>])
+  use(summon[P<S2>])
+  use(summon[P<S3>])
+  use(summon[P<S4>])
+  use(summon[P<S5>])
+  use(summon[P<S6>])
+  use(summon[P<S7>])
+  use(summon[P<S8>])
+  use(summon[P<S9>])
+  use(summon[P<S10>])
+  use(summon[P<S11>])
+  use(summon[P<S12>])
+  use(summon[P<S13>])
+  use(summon[P<S14>])
+  use(summon[P<S15>])
+}

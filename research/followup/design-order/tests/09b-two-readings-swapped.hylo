@@ -1,0 +1,13 @@
+trait P { type E }
+trait Q { type F }
+struct A {}
+struct C {}
+given A is P { type E = Int }
+given A is Q { type F = Int }
+extension Int { type T = A }
+extension Bool { type T = C }
+fun h() {
+  given A.E.T is Q { type F = Bool }
+  given A.F.T is P { type E = Bool }
+  let z: A.E = true
+}

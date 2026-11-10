@@ -1,0 +1,10 @@
+trait P { type E }
+trait Q {}
+struct A {}
+struct Box<T> {}
+given A is P { type E = Int }
+fun need<T where T is Q>(x: T) {}
+fun f<T where T is P>(x: Box<T>) {
+  given Box<T> is Q {}
+  need(x)
+}

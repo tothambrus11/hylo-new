@@ -1,0 +1,338 @@
+struct T0 { public memberwise init }
+struct T1 { public memberwise init }
+struct T2 { public memberwise init }
+struct T3 { public memberwise init }
+struct T4 { public memberwise init }
+struct T5 { public memberwise init }
+struct T6 { public memberwise init }
+struct T7 { public memberwise init }
+struct T8 { public memberwise init }
+struct T9 { public memberwise init }
+struct T10 { public memberwise init }
+struct T11 { public memberwise init }
+struct T12 { public memberwise init }
+struct T13 { public memberwise init }
+struct T14 { public memberwise init }
+struct T15 { public memberwise init }
+extension T0 { fun m0() {} }
+extension T1 { fun m1() {} }
+extension T2 { fun m2() {} }
+extension T3 { fun m3() {} }
+extension T4 { fun m4() {} }
+extension T5 { fun m5() {} }
+extension T6 { fun m6() {} }
+extension T7 { fun m7() {} }
+extension T8 { fun m8() {} }
+extension T9 { fun m9() {} }
+extension T10 { fun m10() {} }
+extension T11 { fun m11() {} }
+extension T12 { fun m12() {} }
+extension T13 { fun m13() {} }
+extension T14 { fun m14() {} }
+extension T15 { fun m15() {} }
+extension T0 { fun m16() {} }
+extension T1 { fun m17() {} }
+extension T2 { fun m18() {} }
+extension T3 { fun m19() {} }
+extension T4 { fun m20() {} }
+extension T5 { fun m21() {} }
+extension T6 { fun m22() {} }
+extension T7 { fun m23() {} }
+extension T8 { fun m24() {} }
+extension T9 { fun m25() {} }
+extension T10 { fun m26() {} }
+extension T11 { fun m27() {} }
+extension T12 { fun m28() {} }
+extension T13 { fun m29() {} }
+extension T14 { fun m30() {} }
+extension T15 { fun m31() {} }
+extension T0 { fun m32() {} }
+extension T1 { fun m33() {} }
+extension T2 { fun m34() {} }
+extension T3 { fun m35() {} }
+extension T4 { fun m36() {} }
+extension T5 { fun m37() {} }
+extension T6 { fun m38() {} }
+extension T7 { fun m39() {} }
+extension T8 { fun m40() {} }
+extension T9 { fun m41() {} }
+extension T10 { fun m42() {} }
+extension T11 { fun m43() {} }
+extension T12 { fun m44() {} }
+extension T13 { fun m45() {} }
+extension T14 { fun m46() {} }
+extension T15 { fun m47() {} }
+extension T0 { fun m48() {} }
+extension T1 { fun m49() {} }
+extension T2 { fun m50() {} }
+extension T3 { fun m51() {} }
+extension T4 { fun m52() {} }
+extension T5 { fun m53() {} }
+extension T6 { fun m54() {} }
+extension T7 { fun m55() {} }
+extension T8 { fun m56() {} }
+extension T9 { fun m57() {} }
+extension T10 { fun m58() {} }
+extension T11 { fun m59() {} }
+extension T12 { fun m60() {} }
+extension T13 { fun m61() {} }
+extension T14 { fun m62() {} }
+extension T15 { fun m63() {} }
+extension T0 { fun m64() {} }
+extension T1 { fun m65() {} }
+extension T2 { fun m66() {} }
+extension T3 { fun m67() {} }
+extension T4 { fun m68() {} }
+extension T5 { fun m69() {} }
+extension T6 { fun m70() {} }
+extension T7 { fun m71() {} }
+extension T8 { fun m72() {} }
+extension T9 { fun m73() {} }
+extension T10 { fun m74() {} }
+extension T11 { fun m75() {} }
+extension T12 { fun m76() {} }
+extension T13 { fun m77() {} }
+extension T14 { fun m78() {} }
+extension T15 { fun m79() {} }
+extension T0 { fun m80() {} }
+extension T1 { fun m81() {} }
+extension T2 { fun m82() {} }
+extension T3 { fun m83() {} }
+extension T4 { fun m84() {} }
+extension T5 { fun m85() {} }
+extension T6 { fun m86() {} }
+extension T7 { fun m87() {} }
+extension T8 { fun m88() {} }
+extension T9 { fun m89() {} }
+extension T10 { fun m90() {} }
+extension T11 { fun m91() {} }
+extension T12 { fun m92() {} }
+extension T13 { fun m93() {} }
+extension T14 { fun m94() {} }
+extension T15 { fun m95() {} }
+extension T0 { fun m96() {} }
+extension T1 { fun m97() {} }
+extension T2 { fun m98() {} }
+extension T3 { fun m99() {} }
+extension T4 { fun m100() {} }
+extension T5 { fun m101() {} }
+extension T6 { fun m102() {} }
+extension T7 { fun m103() {} }
+extension T8 { fun m104() {} }
+extension T9 { fun m105() {} }
+extension T10 { fun m106() {} }
+extension T11 { fun m107() {} }
+extension T12 { fun m108() {} }
+extension T13 { fun m109() {} }
+extension T14 { fun m110() {} }
+extension T15 { fun m111() {} }
+extension T0 { fun m112() {} }
+extension T1 { fun m113() {} }
+extension T2 { fun m114() {} }
+extension T3 { fun m115() {} }
+extension T4 { fun m116() {} }
+extension T5 { fun m117() {} }
+extension T6 { fun m118() {} }
+extension T7 { fun m119() {} }
+extension T8 { fun m120() {} }
+extension T9 { fun m121() {} }
+extension T10 { fun m122() {} }
+extension T11 { fun m123() {} }
+extension T12 { fun m124() {} }
+extension T13 { fun m125() {} }
+extension T14 { fun m126() {} }
+extension T15 { fun m127() {} }
+extension T0 { fun m128() {} }
+extension T1 { fun m129() {} }
+extension T2 { fun m130() {} }
+extension T3 { fun m131() {} }
+extension T4 { fun m132() {} }
+extension T5 { fun m133() {} }
+extension T6 { fun m134() {} }
+extension T7 { fun m135() {} }
+extension T8 { fun m136() {} }
+extension T9 { fun m137() {} }
+extension T10 { fun m138() {} }
+extension T11 { fun m139() {} }
+extension T12 { fun m140() {} }
+extension T13 { fun m141() {} }
+extension T14 { fun m142() {} }
+extension T15 { fun m143() {} }
+extension T0 { fun m144() {} }
+extension T1 { fun m145() {} }
+extension T2 { fun m146() {} }
+extension T3 { fun m147() {} }
+extension T4 { fun m148() {} }
+extension T5 { fun m149() {} }
+extension T6 { fun m150() {} }
+extension T7 { fun m151() {} }
+extension T8 { fun m152() {} }
+extension T9 { fun m153() {} }
+extension T10 { fun m154() {} }
+extension T11 { fun m155() {} }
+extension T12 { fun m156() {} }
+extension T13 { fun m157() {} }
+extension T14 { fun m158() {} }
+extension T15 { fun m159() {} }
+public fun main() {
+  T0().m0()
+  T13().m13()
+  T10().m26()
+  T7().m39()
+  T4().m52()
+  T1().m65()
+  T14().m78()
+  T11().m91()
+  T8().m104()
+  T5().m117()
+  T2().m130()
+  T15().m143()
+  T12().m156()
+  T9().m9()
+  T6().m22()
+  T3().m35()
+  T0().m48()
+  T13().m61()
+  T10().m74()
+  T7().m87()
+  T4().m100()
+  T1().m113()
+  T14().m126()
+  T11().m139()
+  T8().m152()
+  T5().m5()
+  T2().m18()
+  T15().m31()
+  T12().m44()
+  T9().m57()
+  T6().m70()
+  T3().m83()
+  T0().m96()
+  T13().m109()
+  T10().m122()
+  T7().m135()
+  T4().m148()
+  T1().m1()
+  T14().m14()
+  T11().m27()
+  T8().m40()
+  T5().m53()
+  T2().m66()
+  T15().m79()
+  T12().m92()
+  T9().m105()
+  T6().m118()
+  T3().m131()
+  T0().m144()
+  T13().m157()
+  T10().m10()
+  T7().m23()
+  T4().m36()
+  T1().m49()
+  T14().m62()
+  T11().m75()
+  T8().m88()
+  T5().m101()
+  T2().m114()
+  T15().m127()
+  T12().m140()
+  T9().m153()
+  T6().m6()
+  T3().m19()
+  T0().m32()
+  T13().m45()
+  T10().m58()
+  T7().m71()
+  T4().m84()
+  T1().m97()
+  T14().m110()
+  T11().m123()
+  T8().m136()
+  T5().m149()
+  T2().m2()
+  T15().m15()
+  T12().m28()
+  T9().m41()
+  T6().m54()
+  T3().m67()
+  T0().m80()
+  T13().m93()
+  T10().m106()
+  T7().m119()
+  T4().m132()
+  T1().m145()
+  T14().m158()
+  T11().m11()
+  T8().m24()
+  T5().m37()
+  T2().m50()
+  T15().m63()
+  T12().m76()
+  T9().m89()
+  T6().m102()
+  T3().m115()
+  T0().m128()
+  T13().m141()
+  T10().m154()
+  T7().m7()
+  T4().m20()
+  T1().m33()
+  T14().m46()
+  T11().m59()
+  T8().m72()
+  T5().m85()
+  T2().m98()
+  T15().m111()
+  T12().m124()
+  T9().m137()
+  T6().m150()
+  T3().m3()
+  T0().m16()
+  T13().m29()
+  T10().m42()
+  T7().m55()
+  T4().m68()
+  T1().m81()
+  T14().m94()
+  T11().m107()
+  T8().m120()
+  T5().m133()
+  T2().m146()
+  T15().m159()
+  T12().m12()
+  T9().m25()
+  T6().m38()
+  T3().m51()
+  T0().m64()
+  T13().m77()
+  T10().m90()
+  T7().m103()
+  T4().m116()
+  T1().m129()
+  T14().m142()
+  T11().m155()
+  T8().m8()
+  T5().m21()
+  T2().m34()
+  T15().m47()
+  T12().m60()
+  T9().m73()
+  T6().m86()
+  T3().m99()
+  T0().m112()
+  T13().m125()
+  T10().m138()
+  T7().m151()
+  T4().m4()
+  T1().m17()
+  T14().m30()
+  T11().m43()
+  T8().m56()
+  T5().m69()
+  T2().m82()
+  T15().m95()
+  T12().m108()
+  T9().m121()
+  T6().m134()
+  T3().m147()
+}

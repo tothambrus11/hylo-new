@@ -1,0 +1,4 @@
+trait P { type Element }
+struct Box<T> { }
+extension <T where T is P, T.Element == Int> Box<T> {
+}

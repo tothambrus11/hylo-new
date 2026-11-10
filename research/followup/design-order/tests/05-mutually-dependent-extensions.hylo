@@ -1,0 +1,4 @@
+struct A { struct Inner {} }
+extension A.Inner.Foo { type Inner = Bool }
+extension A.Inner { type Foo = Int }
+fun use(x: Int.Inner) {}

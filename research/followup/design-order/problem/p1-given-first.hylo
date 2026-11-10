@@ -1,0 +1,6 @@
+trait P { type E }
+struct A {}
+struct Foo<T> {}
+given A is P { type E = Int }
+given Foo<X> is P { type E = Bool }
+type X = A.E

@@ -90,5 +90,17 @@
  [
   "research/workloads/round3/transneg-8.hylo",
   "not accepted by every configuration"
+ ],
+ [
+  "research/report/test-programs/performance/cc-chain-k8-w10-m1.hylo",
+  "slow"
+ ],
+ [
+  "research/report/test-programs/performance/occurs-dag-18.hylo",
+  "slow"
+ ],
+ [
+  "research/report/test-programs/performance/ovl-ret-9.hylo",
+  "slow"
  ]
 ]

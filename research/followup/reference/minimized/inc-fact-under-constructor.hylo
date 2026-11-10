@@ -1,0 +1,4 @@
+struct St3<E0, E1> { public memberwise init }
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T0, T2 where {T0, T0} == {T2, T0}>(x: St3<{T2, T0}, T2>) { check<St3<{T0, T0}, T2>>(x) }

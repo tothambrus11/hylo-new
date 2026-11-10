@@ -81,30 +81,40 @@ def _rms(y, model):
     return float(np.sqrt(np.mean((np.log(y) - np.log(model)) ** 2)))
 
 
-def fit_poly(n, y):
-    best = (math.inf, None, None, None)
-    for p in np.arange(0.05, 14.001, 0.05):
-        f = (n / n.max()) ** p
+def _search(make, grid, y):
+    """Minimizes the log-rms of y ~ a + c*make(v) over v: a grid search, then a local refinement."""
+    def err(v):
+        f = make(v)
         s = _wls(f, y)
-        if s is None:
-            continue
-        e = _rms(y, s[0] + s[1] * f)
-        if e < best[0] - 1e-12:
-            best = (e, float(p), s[0], s[1])
-    return best
+        return (math.inf, None) if s is None else (_rms(y, s[0] + s[1] * f), s)
+    es = [err(v)[0] for v in grid]
+    i = int(np.argmin(es))
+    if not math.isfinite(es[i]):
+        return (math.inf, None, None, None)
+    lo, hi = grid[max(0, i - 1)], grid[min(len(grid) - 1, i + 1)]
+    for _ in range(60):                       # ternary search inside the bracketing interval
+        m1, m2 = lo + (hi - lo) / 3, hi - (hi - lo) / 3
+        if err(m1)[0] <= err(m2)[0]:
+            hi = m2
+        else:
+            lo = m1
+    v = (lo + hi) / 2
+    e, s_ = err(v)
+    if not e <= es[i]:
+        v, (e, s_) = grid[i], err(grid[i])
+    return (e, float(v), s_[0], s_[1])
+
+
+def fit_poly(n, y):
+    """y ~ a + c*n^p: returns (rms, p, a, c)."""
+    return _search(lambda p: (n / n.max()) ** p, np.arange(0.05, 14.001, 0.05), y)
 
 
 def fit_exp(n, y):
-    best = (math.inf, None, None, None)
-    for lr in np.linspace(math.log(1.01), math.log(40), 500):
-        f = np.exp(lr * (n - n.max()))
-        s = _wls(f, y)
-        if s is None:
-            continue
-        e = _rms(y, s[0] + s[1] * f)
-        if e < best[0] - 1e-12:
-            best = (e, float(math.exp(lr)), s[0], s[1])
-    return best
+    """y ~ a + c*r^n: returns (rms, r, a, c)."""
+    e, lr, a, c = _search(lambda lr: np.exp(lr * (n - n.max())),
+                          np.linspace(math.log(1.01), math.log(40), 500), y)
+    return (e, math.exp(lr) if lr is not None else None, a, c)
 
 
 def linreg(x, y):
@@ -215,7 +225,7 @@ def classify(ns, ys, noisy=False):
         cands.append((start, ep, p, ee, r, ns_, ys_))
         if min(ep, ee) < good:
             break
-    start, ep, p, ee, r, ns_, ys_ = min(cands, key=lambda c: (min(c[1], c[3]) >= good, c[0]))         if any(min(c[1], c[3]) < good for c in cands) else cands[0]
+    start, ep, p, ee, r, ns_, ys_ = min(cands, key=lambda c: (min(c[1], c[3]) >= good, c[0]))         if any(min(c[1], c[3]) < good for c in cands) else min(cands, key=lambda c: min(c[1], c[3]))
     span = float(ns_.max() / ns_.min())
     ratio = float(ys_.max() / ys_.min())
     out.update(poly_rms=ep, poly_p=p, exp_rms=ee, exp_r=r, fit_from=float(ns_.min()), fit_span=span)
@@ -230,8 +240,9 @@ def classify(ns, ys, noisy=False):
     elif exp_ok and not poly_ok:
         out.update(kind="exp", law=f"{r:.2f}^n{frm} ({q(ee)})", base=r)
     else:
-        out.update(kind="undecided",
-                   law=f"undecided: n^{p:.1f} ({q(ep)}) or {r:.2f}^n ({q(ee)})")
+        ptxt = f"n^{p:.1f} ({q(ep)})" if p is not None and math.isfinite(ep) else "no polynomial"
+        etxt = f"{r:.2f}^n ({q(ee)})" if r is not None and math.isfinite(ee) else "no exponential"
+        out.update(kind="undecided", law=f"undecided: {ptxt} or {etxt}")
     return out
 
 
@@ -262,13 +273,15 @@ def cell(r, counter, intended):
     if s == "skipped":
         return "not run", ""
     c = r["counters"].get(counter, 0)
-    mark = ""
+    mark = " [B]" if r["counters"].get("summon.budgetExhausted") else ""
     if s != intended:
         c_ = r["counters"]
         why = "depth" if c_.get("summon.depthExhausted") else ""
         if c_.get("summon.budgetExhausted"):
             why = "budget"
         mark = (" ✗" + (f"({why})" if why else "")) if intended == "ok" else " (accepted!)"
+        if why == "budget":
+            mark = " ✗ [B]"
     return fmt_count(c) + mark, fmt_ms(r["time_ms"])
 
 
@@ -310,8 +323,8 @@ def main():
             fc = classify(ns, [r["counters"].get(counter, 0) for n, r in good])
             ft = classify(ns, [r["time_ms"] for n, r in good], noisy=True)
             # Times below a few milliseconds are dominated by fixed costs and noise.
-            if ft.get("ymax", 0) < 20 and ft["kind"] not in ("none",):
-                ft["law"] = f"below 20 ms throughout ({ft['law']})" if ft["kind"] != "flat" else "flat (below 20 ms)"
+            if ft.get("ymax", 0) < 50 and ft["kind"] not in ("none",):
+                ft["law"] = "below 50 ms throughout"
                 ft["kind"] = "small"
             # other counters
             names = sorted({k for n, r in good for k in r["counters"]} - {counter, "absmodel.micros"})
@@ -338,6 +351,9 @@ def main():
                 end = f"stopped before n={r['n']}: {r['why']}"
             verd = [r["status"] for n, r in good]
             flips = [n for n, r in good if r["status"] != intended]
+            budg = [n for n, r in good if r["counters"].get("summon.budgetExhausted")]
+            if budg:
+                end += f"; resource bound (`budget`) hit from n={budg[0]}"
             if flips:
                 wrong.append((fam, c, intended, flips, good))
                 end += f"; verdict differs from the intended one at n={flips[0]}" + ("" if len(flips) == 1 else f"..{flips[-1]}")
@@ -349,7 +365,7 @@ def main():
                                   "other": other, "sizes": ns}
             short = lambda f: {"flat": "flat", "poly": (f"n^{f.get('exponent', 0):.0f} exact" if f.get("exact") else f"n^{f.get('exponent', 0):.1f}"),
                                "exp": f"{f.get('base', 0):.1f}^n", "few": "too few",
-                               "undecided": "undecided", "none": "–", "small": "<20 ms"}[f["kind"]]
+                               "undecided": "undecided", "none": "–", "small": "<50 ms"}[f["kind"]]
             tail = ""
             if bad:
                 tail = " †" if bad[0]["status"] == "timeout" else " ‡"
@@ -357,6 +373,8 @@ def main():
                 tail = " †"
             if flips:
                 tail += " ✗"
+            if budg:
+                tail += " [B]"
             if c in CONFIGS:
                 srow.append(f"{short(fc)} / {short(ft)}{tail}")
             else:
@@ -382,7 +400,8 @@ def main():
         head.append("| " + " | ".join(s) + " |")
     head.append("")
     head.append("† the series ends with a timeout (or was stopped because a timeout was predicted); "
-                "‡ it ends with a crash; ✗ at some size the verdict differs from the intended one.\n")
+                "‡ it ends with a crash; ✗ at some size the verdict differs from the intended one; "
+                "[B] the resource bound of `budget` stopped a resolution, so the count is capped.\n")
     if xsummary:
         head += ["## Summary: leave-one-out configurations\n", "| Family | Configuration | Growth (counter / time) | Ends with |", "|---|---|---|---|"]
         head += ["| " + " | ".join(x) + " |" for x in xsummary]

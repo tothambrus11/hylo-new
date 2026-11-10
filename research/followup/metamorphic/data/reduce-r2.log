@@ -1,0 +1,3 @@
+violations/r2/open-wide-4--reqs-1-76543210 {'base': 'timeout/timeout', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r2/cong-1--reqs-3-120 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 81
+violations/r2/v-abs-9--reqs-3-021 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 1

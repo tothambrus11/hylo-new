@@ -1,0 +1,86 @@
+struct T0 { public memberwise init }
+struct T1 { public memberwise init }
+struct T2 { public memberwise init }
+struct T3 { public memberwise init }
+extension T0 { fun m0() {} }
+extension T1 { fun m1() {} }
+extension T2 { fun m2() {} }
+extension T3 { fun m3() {} }
+extension T0 { fun m4() {} }
+extension T1 { fun m5() {} }
+extension T2 { fun m6() {} }
+extension T3 { fun m7() {} }
+extension T0 { fun m8() {} }
+extension T1 { fun m9() {} }
+extension T2 { fun m10() {} }
+extension T3 { fun m11() {} }
+extension T0 { fun m12() {} }
+extension T1 { fun m13() {} }
+extension T2 { fun m14() {} }
+extension T3 { fun m15() {} }
+extension T0 { fun m16() {} }
+extension T1 { fun m17() {} }
+extension T2 { fun m18() {} }
+extension T3 { fun m19() {} }
+extension T0 { fun m20() {} }
+extension T1 { fun m21() {} }
+extension T2 { fun m22() {} }
+extension T3 { fun m23() {} }
+extension T0 { fun m24() {} }
+extension T1 { fun m25() {} }
+extension T2 { fun m26() {} }
+extension T3 { fun m27() {} }
+extension T0 { fun m28() {} }
+extension T1 { fun m29() {} }
+extension T2 { fun m30() {} }
+extension T3 { fun m31() {} }
+extension T0 { fun m32() {} }
+extension T1 { fun m33() {} }
+extension T2 { fun m34() {} }
+extension T3 { fun m35() {} }
+extension T0 { fun m36() {} }
+extension T1 { fun m37() {} }
+extension T2 { fun m38() {} }
+extension T3 { fun m39() {} }
+public fun main() {
+  T0().m0()
+  T1().m13()
+  T2().m26()
+  T3().m39()
+  T0().m12()
+  T1().m25()
+  T2().m38()
+  T3().m11()
+  T0().m24()
+  T1().m37()
+  T2().m10()
+  T3().m23()
+  T0().m36()
+  T1().m9()
+  T2().m22()
+  T3().m35()
+  T0().m8()
+  T1().m21()
+  T2().m34()
+  T3().m7()
+  T0().m20()
+  T1().m33()
+  T2().m6()
+  T3().m19()
+  T0().m32()
+  T1().m5()
+  T2().m18()
+  T3().m31()
+  T0().m4()
+  T1().m17()
+  T2().m30()
+  T3().m3()
+  T0().m16()
+  T1().m29()
+  T2().m2()
+  T3().m15()
+  T0().m28()
+  T1().m1()
+  T2().m14()
+  T3().m27()
+}
