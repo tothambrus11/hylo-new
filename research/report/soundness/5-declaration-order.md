@@ -96,7 +96,7 @@ The semantic dump (types, name bindings, witness tables, diagnostics, elaborated
 ## Limits
 
 - The fixed point is computed from the empty table. A program can have a consistent reading that this iteration does not reach, and it is then rejected; a second reading that is not reachable from the empty table is never seen. Lookup is not monotone (a new candidate can make an answer ambiguous, or shadow another), so no stronger statement holds.
-- The message of a rejected cyclic program can name a different declaration of the cycle depending on the order, for cycles between type aliases only (`design-order/tests/10-alias-cycle.hylo`): the verdict is the same.
+- The message of a rejected cyclic program can name a different declaration of the cycle depending on the order, for cycles between type aliases (`design-order/tests/10-alias-cycle.hylo`) and between named givens that refer to each other by name (`attack-sigrounds/p/t02-named-givens-cycle-by-name.hylo`): the verdict is the same.
 - Type aliases are still computed on demand. No program is known whose verdict depends on the order through an alias alone once the four rules are in place, but nothing proves that none exists; the self-check is the safeguard.
 - Whether a self-supporting reading is found can depend on how many rounds an intermediate table lasts (`attack-sigrounds/p/h01`, `h02`): both verdicts are the same in every order.
 - Whether a program whose signatures depend on each other *should* be accepted when a stable table exists is a question for the language designers (`follow-up/designs/order.md`, section 7). A stricter rule can be added as a check on the stable table.

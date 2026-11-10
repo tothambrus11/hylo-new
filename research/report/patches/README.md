@@ -76,5 +76,6 @@ Dependencies between flags:
 | 0025 | `hidecache`, `aliasargs`; owner before member in `sigrounds` |
 | 0026 | `coeset`, `stackscan` |
 | 0027–0030 | memoized scans; `dedup`; corrections to `headsubst` and `aliasargs` |
+| 0031 | the self-checking mode follows a thread whose head is bound to a premise for one more step |
 
 Patches 0005 and 0007 also contain rejected experiments (`coercememo`, `eqrefute`, `cyclecut`), still behind flags that are off by default. They can be dropped when merging, as can `extorder`'s cycle rule, `givencheck` and `memberskip` once `sigrounds` is adopted.

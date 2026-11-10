@@ -1,0 +1,49 @@
+From 1cbe8d03344cd08d39adb4e79fec73d9ee00a758 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 21:50:31 +0000
+Subject: [PATCH] Typer: the self-check follows a head-bound thread for one
+ more step
+
+A thread whose head is bound to a premise decides the premise in its first
+step and compares the constructors in the second, so the check of the givens
+left out by the index must look at both. Messages about the error type are
+compared without their position in the check of the signature rounds.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 284deaf..3a156a2 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -312,6 +312,8 @@ public struct Typer {
+     func normalized(_ d: Diagnostic) -> String {
+       let m = d.description
+       for k in ["refers to itself"] where m.contains(k) { return k }
++      // A message about the error type follows from the one above.
++      if m.contains("#!"), let r = m.range(of: ": error: ") { return String(m[r.upperBound...]) }
+       return m
+     }
+     let final = (
+@@ -5957,7 +5959,14 @@ public struct Typer {
+         let th = formThread(
+           matching: expression(referringTo: e.given), to: u, in: environment, then: continuation,
+           penalties: 0, ancestors: ancestors)
+-        if case .next(let next) = match(th, in: scopeOfUse), next.isEmpty {
++        var step = match(th, in: scopeOfUse)
++        // A head bound to a premise takes one step to decide the premise (`headsubst`).
++        if th.environment.headBound, case .next(let next) = step, let n = next.uniqueElement,
++          !n.environment.headBound
++        {
++          step = match(n, in: scopeOfUse)
++        }
++        if case .next(let next) = step, next.isEmpty {
+           TyperCounters.bump("selfcheck.index.confirmed")
+         } else {
+           selfCheckViolation(
+-- 
+2.43.0
+
