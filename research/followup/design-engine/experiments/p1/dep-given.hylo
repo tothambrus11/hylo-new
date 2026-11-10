@@ -1,0 +1,6 @@
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+given <T where T is P, T.X is Q> => Box<T> is Q {}
+fun need<T where T is Q>() {}
+fun g<U where U is P, U.X is Q>() { need<Box<U>>() }

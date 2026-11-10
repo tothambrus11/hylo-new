@@ -1,0 +1,18 @@
+//! stage:typing no-std
+// 4 premises `A is P`, each with derivations of every size (the looping given).
+// The premise `C is P` is discharged last and fails, so every combination of derivations of the
+// other premises that fits in the bound is explored.
+trait P {}
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => T is P {}
+struct D {}
+given S<S<S<D>>> is P {}
+given <T where S<T> is P> => T is P {}
+given <where C is P, A is P, A is P, A is P, A is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

@@ -1,0 +1,15 @@
+//! stage:typing no-std
+// Two alternatives for the root goal pose the same premise `Z5 is P`; the first fails after it.
+trait P {}
+trait Q {}
+trait R {}
+struct B {}
+struct Z {}
+struct S<T> {}
+given Z is P {}
+given <T where T is P> => S<T> is P {}
+struct N {}
+given <where N is R, S<S<S<S<Z>>>> is P> => B is Q {}
+given <where Z is P, S<S<S<S<Z>>>> is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

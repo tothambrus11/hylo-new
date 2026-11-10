@@ -1,0 +1,4 @@
+type Alq = A.Inner
+struct B {}
+struct A { type Inner = B }
+extension Alq { fun Inner() {} }

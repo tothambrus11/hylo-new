@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Fits growth laws to results.jsonl and writes tables.md and fits.json.
+"""Fits growth laws to results.jsonl; writes README.md (README.head.md followed by the generated
+summary and per-family tables), tables.md (the generated part alone) and fits.json.
 
 For each (family, configuration) and each quantity (the family's primary counter, type.user
 time, and every other counter), the completed points (n_i, y_i) are fitted with two models, each
@@ -191,8 +192,14 @@ def classify(ns, ys, noisy=False):
     s, out["semilog_r2"] = linreg(nu, np.log(yu))
     out["semilog_r"] = math.exp(s) if s is not None else None
     out["last_p"] = float(math.log(y[-1] / y[-2]) / math.log(n[-1] / n[-2])) if y[-2] > 0 else None
-    if out["ratio"] <= (1.6 if noisy else 1.25):
-        out.update(kind="flat", law="flat")
+    # Growth factor per unit of size over the last intervals: constant for an exponential,
+    # falling towards 1 for a polynomial.
+    out["step_factors"] = [float((y[i + 1] / y[i]) ** (1 / (n[i + 1] - n[i])))
+                           for i in range(max(0, len(n) - 4), len(n) - 1)]
+    out["local_exponents"] = [float(math.log(y[i + 1] / y[i]) / math.log(n[i + 1] / n[i]))
+                              for i in range(max(0, len(n) - 4), len(n) - 1)]
+    if out["ratio"] <= (2.5 if noisy else 1.25):
+        out.update(kind="flat", law="no clear growth (within a factor 2.5)" if noisy else "flat")
         return out
     if len(pts) < 4:
         out.update(kind="few", law=f"too few points ({len(pts)})")
@@ -216,7 +223,7 @@ def classify(ns, ys, noisy=False):
         ns_, ys_ = n[start:], y[start:]
         if start > 0 and (len(ns_) < 5 or ns_.max() / ns_.min() < 4):
             break
-        if ys_.max() / ys_.min() <= (1.6 if noisy else 1.25):
+        if ys_.max() / ys_.min() <= (2.5 if noisy else 1.25):
             break
         ep, p, ap, cp = fit_poly(ns_, ys_)
         ee, r, ae, ce = fit_exp(ns_, ys_)
@@ -231,6 +238,10 @@ def classify(ns, ys, noisy=False):
     out.update(poly_rms=ep, poly_p=p, exp_rms=ee, exp_r=r, fit_from=float(ns_.min()), fit_span=span)
     frm = f" for n ≥ {int(ns_.min())}" if start > 0 else ""
     poly_ok = ep < lim and (ep <= 0.6 * ee or (ep < 0.02 and ee > 0.03))
+    # A high exponent is claimed only on a close fit: a product n^a * r^n looks like n^7 over a
+    # short range.
+    if poly_ok and p >= 5 and ep >= (0.10 if noisy else 0.05):
+        poly_ok = False
     exp_ok = ee < lim and (ee <= 0.6 * ep or (ee < 0.02 and ep > 0.03)) and ratio >= 8
     if poly_ok and not exp_ok:
         if span < 4:
@@ -310,15 +321,32 @@ def main():
             for c in CONFIGS:
                 a, b = cell(rows[n][c], counter, intended)
                 cs += [a, b]
-            if any(cs):
+            if any(x and x != "not run" for x in cs):
                 md.append(f"| {n} | " + " | ".join(cs) + " |")
         md.append("")
-        md.append("| Configuration | Counter growth | Time growth | Log-log exponent / semi-log base "
-                  "(counter, upper half) | Fastest other counter | Ends with |")
+        md.append("| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit "
+                  "(upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |")
         md.append("|---|---|---|---|---|---|")
         srow = [fam]
         for c in CONFIGS + extra:
             good = [(n, rows[n][c]) for n in sizes if rows[n][c] and rows[n][c]["status"] in ("ok", "err")]
+            allgood = good
+            # Fit only the longest run of sizes with one verdict (the later run on a tie): a
+            # change of verdict is a change of regime (for example the depth bound is reached).
+            runs = []
+            for n, r in good:
+                key = (r["status"], bool(r["counters"].get("summon.budgetExhausted")))
+                if runs and runs[-1][0] == key:
+                    runs[-1][1].append((n, r))
+                else:
+                    runs.append((key, [(n, r)]))
+            regime = ""
+            if len(runs) > 1:
+                best = max(range(len(runs)), key=lambda i: (
+                    runs[i][0] == (intended, False) and len(runs[i][1]) >= 4, len(runs[i][1]), i))
+                good = runs[best][1]
+                what = {"ok": "accepted", "err": "rejected"}[runs[best][0][0]] + (", resource bound hit" if runs[best][0][1] else "")
+                regime = f"fitted on n={good[0][0]}..{good[-1][0]} ({what})"
             ns = [n for n, r in good]
             fc = classify(ns, [r["counters"].get(counter, 0) for n, r in good])
             ft = classify(ns, [r["time_ms"] for n, r in good], noisy=True)
@@ -327,7 +355,7 @@ def main():
                 ft["law"] = "below 50 ms throughout"
                 ft["kind"] = "small"
             # other counters
-            names = sorted({k for n, r in good for k in r["counters"]} - {counter, "absmodel.micros"})
+            names = sorted(k for k in {k for n, r in good for k in r["counters"]} - {counter, "absmodel.micros"} if not k.endswith(("skipped", "skippedExtensions", "refuted", "prunedChoices", "cacheHits")))
             worst = None
             for k in names:
                 fk = classify(ns, [r["counters"].get(k, 0) for n, r in good])
@@ -349,17 +377,20 @@ def main():
             elif any(r["status"] == "skipped" for r in last):
                 r = [r for r in last if r["status"] == "skipped"][0]
                 end = f"stopped before n={r['n']}: {r['why']}"
-            verd = [r["status"] for n, r in good]
-            flips = [n for n, r in good if r["status"] != intended]
-            budg = [n for n, r in good if r["counters"].get("summon.budgetExhausted")]
+            flips = [n for n, r in allgood if r["status"] != intended]
+            budg = [n for n, r in allgood if r["counters"].get("summon.budgetExhausted")]
+            if regime:
+                end += "; " + regime
             if budg:
                 end += f"; resource bound (`budget`) hit from n={budg[0]}"
             if flips:
-                wrong.append((fam, c, intended, flips, good))
+                wrong.append((fam, c, intended, flips, allgood))
                 end += f"; verdict differs from the intended one at n={flips[0]}" + ("" if len(flips) == 1 else f"..{flips[-1]}")
             ll = "–"
-            if fc.get("loglog_p") is not None:
-                ll = f"n^{fc['loglog_p']:.2f} (R² {fc['loglog_r2']:.3f}) / {fc['semilog_r']:.2f}^n (R² {fc['semilog_r2']:.3f})"
+            if fc.get("loglog_p") is not None and fc["kind"] != "flat":
+                ll = (f"n^{fc['loglog_p']:.2f} (R² {fc['loglog_r2']:.3f}) / {fc['semilog_r']:.2f}^n (R² {fc['semilog_r2']:.3f}); "
+                      f"last local exponents {', '.join(f'{x:.1f}' for x in fc['local_exponents'])}; "
+                      f"last per-step factors {', '.join(f'{x:.2f}' for x in fc['step_factors'])}")
             md.append(f"| {c} | {fc['law']} | {ft['law']} | {ll} | {other} | {end} |")
             fits[f"{fam}/{c}"] = {"counter": counter, "counter_fit": fc, "time_fit": ft, "end": end,
                                   "other": other, "sizes": ns}
@@ -390,7 +421,7 @@ def main():
                 for c in extra:
                     a, b = cell(rows[n][c], counter, intended)
                     cs += [a, b]
-                if any(cs):
+                if any(x and x != "not run" for x in cs):
                     md.append(f"| {n} | " + " | ".join(cs) + " |")
             md.append("")
 
@@ -406,8 +437,19 @@ def main():
         head += ["## Summary: leave-one-out configurations\n", "| Family | Configuration | Growth (counter / time) | Ends with |", "|---|---|---|---|"]
         head += ["| " + " | ".join(x) + " |" for x in xsummary]
         head.append("")
+    legend = ("In the tables, *count* is the family's primary counter in the user module and *ms* is the "
+              "`type.user` time (one measurement, indicative). `timeout`: no answer within the stated "
+              "time; `not run`: a smaller size of the series already timed out, crashed twice, or "
+              "predicted a timeout; `✗`: a valid program was rejected (`(depth)`: the depth bound was "
+              "reached); `[B]`: the resource bound of `budget` stopped a resolution; `(accepted!)`: an "
+              "ill-typed program was accepted.\n")
+    body = "\n".join(head) + "\n## Tables per family\n\n" + legend + "\n" + "\n".join(md) + "\n"
     with open(os.path.join(HERE, "tables.md"), "w") as f:
-        f.write("\n".join(head) + "\n## Tables per family\n\n" + "\n".join(md) + "\n")
+        f.write(body)
+    hp = os.path.join(HERE, "README.head.md")
+    if os.path.exists(hp):
+        with open(os.path.join(HERE, "README.md"), "w") as f:
+            f.write(open(hp).read().rstrip("\n") + "\n\n" + body)
     with open(os.path.join(HERE, "fits.json"), "w") as f:
         json.dump(fits, f, indent=1, default=float)
     print("\n".join(head))

@@ -1,0 +1,7 @@
+trait Tr1 { type X1 }
+struct St1 { public memberwise init }
+given <A> => A is Tr1 { type X1 = A }
+fun needTr1<W where W is Tr1>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T0>(x: T0.X1) { check<St1.X1>(x) }

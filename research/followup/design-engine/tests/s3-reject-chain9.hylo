@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected (heightbound, H = 9): rejected, as today. The derivation is a single branch of 10 givens
+// below the call: its height is over the bound too. Whether such a chain should be accepted is a
+// question for the language designers (it is accepted from a bound of 12 steps).
+// currently: base rejected (subgoals=20 matches=1369 depthExhausted=1): no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=20 matches=39 depthExhausted=1): no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+struct S<T> {}
+struct Z {}
+given Z is P {}
+given <T where T is P> => S<T> is P {}
+fun need<where S<S<S<S<S<S<S<S<S<Z>>>>>>>>> is P>() {}
+public fun main() { need() }

@@ -54,7 +54,9 @@ def main():
             out = os.path.join(HERE, "violations", r["rel"], name)
             if not os.path.exists(os.path.join(out, "info.json")):
                 try:
-                    reduce(path, r["rel"], r["vid"], "FULL", out)
+                    # Relation 1: only whole declarations are deleted (the inner step would
+                    # try every permutation again for each candidate deletion).
+                    reduce(path, r["rel"], r["vid"], "FULL", out, inner=r["rel"] != "r1")
                 except SystemExit as e:
                     print("skipped", r["file"], r["vid"], e, flush=True); continue
             info = json.load(open(os.path.join(out, "info.json")))

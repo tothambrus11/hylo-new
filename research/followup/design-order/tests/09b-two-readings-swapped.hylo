@@ -1,3 +1,6 @@
+// Expected after the change: rejected.
+// Reason: Same program as 09 with the two local givens swapped; the verdict must be the same.
+// Currently: base accepts it; FULL accepts it.
 trait P { type E }
 trait Q { type F }
 struct A {}

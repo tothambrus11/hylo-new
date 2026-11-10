@@ -1,0 +1,21 @@
+//! stage:typing no-std
+// expected (heightbound): rejected, with an error (plain failure or "too complex"), within the work
+// budget. Three premises `A is P` have derivations of every size; `C is P` is discharged last and
+// fails without being refuted by the abstract model. Every combination of derivations of the
+// premises that fits in the bound is explored: this is the program whose cost a height bound
+// lets grow, and that tabling (s2-*) makes cheap. Watch summon.subgoals.
+// currently: base rejected (subgoals=22065 matches=790528 depthExhausted=2): no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=22065 matches=52477 depthExhausted=2): no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => T is P {}
+struct D {}
+given S<S<S<D>>> is P {}
+given <T where S<T> is P> => T is P {}
+given <where C is P, A is P, A is P, A is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

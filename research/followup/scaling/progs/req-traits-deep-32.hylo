@@ -1,0 +1,34 @@
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+trait P17 {}
+trait P18 {}
+trait P19 {}
+trait P20 {}
+trait P21 {}
+trait P22 {}
+trait P23 {}
+trait P24 {}
+trait P25 {}
+trait P26 {}
+trait P27 {}
+trait P28 {}
+trait P29 {}
+trait P30 {}
+trait P31 {}
+trait P32 {}
+fun g<T where T is P1, T is P2, T is P3, T is P4, T is P5, T is P6, T is P7, T is P8, T is P9, T is P10, T is P11, T is P12, T is P13, T is P14, T is P15, T is P16, T is P17, T is P18, T is P19, T is P20, T is P21, T is P22, T is P23, T is P24, T is P25, T is P26, T is P27, T is P28, T is P29, T is P30, T is P31, T is P32>() {}
+fun f<T where T is P1, T is P2, T is P3, T is P4, T is P5, T is P6, T is P7, T is P8, T is P9, T is P10, T is P11, T is P12, T is P13, T is P14, T is P15, T is P16, T is P17, T is P18, T is P19, T is P20, T is P21, T is P22, T is P23, T is P24, T is P25, T is P26, T is P27, T is P28, T is P29, T is P30, T is P31, T is P32>() { g<T>() }

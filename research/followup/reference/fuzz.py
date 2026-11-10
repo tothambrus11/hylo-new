@@ -1,14 +1,19 @@
 """Generates random problems, labels them with the reference, and runs the compiler on them.
 
-    python3 fuzz.py gen                 writes problems.jsonl (deterministic, fixed seeds)
-    python3 fuzz.py run FIX FULL        runs the configurations named; restartable
-    python3 fuzz.py run base --kinds conf --limit 100
+    python3 fuzz.py gen                          writes problems.jsonl (deterministic, fixed seeds)
+    python3 fuzz.py run FULL FIX --batch 6       runs the configurations named; restartable
+    python3 fuzz.py confirm FULL FIX             reruns alone the problems that disagree in a batch
+    python3 fuzz.py run base --kinds conf --limit 100 --timeout 8
+    python3 fuzz.py run base --kinds chain --limit 5 --isolate --timeout 8    one run per query
 
 A problem ("world") is a set of declarations and a handful of queries. Every query has its own
-generic function, so one compiler run gives one verdict per query. When a run crashes or times
-out, each query of the world is rerun alone to find the culprit.
+generic function, so one compiler run gives one verdict per query. With --batch N, N problems
+are printed in one program under disjoint names. When a run crashes or times out, each query of
+the world is rerun alone to find the culprit.
 
-Rows of results.jsonl: {"id", "config", "status", "verdicts", "messages", "isolated"}.
+Rows of results.jsonl: {"id", "config", "status", "verdicts", "messages", "isolated", "batch"}.
+"isolated" is the index of the query when the row is the run of one query alone; "batch" names
+the batch when the row comes from a batch run.
 """
 
 import argparse
@@ -623,12 +628,15 @@ def cmd_confirm(args):
     todo = set()
     for r in report.rows(problems, runs, configs=args.configs):
         if r["class"] != "agree" and runs[(r["id"], r["config"])]["world"].get("batch"):
-            todo.add((r["id"], r["config"]))
+            if not args.classes or r["class"] in args.classes.split(","):
+                todo.add((r["id"], r["config"]))
     print("to confirm:", len(todo))
     ps = {p["id"]: p for p in load_problems()}
     args.isolate, args.timeout = False, None
     with open(RESULTS, "a") as out:
-        for n, (pid, c) in enumerate(sorted(todo)):
+        # Interleave the kinds, so that a partial confirmation covers all of them.
+        order = sorted(todo, key=lambda x: (int(x[0].rsplit("-", 1)[1]), x[0], x[1]))
+        for n, (pid, c) in enumerate(order):
             run_alone(args, out, ps[pid], c)
             if n % 50 == 0:
                 print("confirmed", n, flush=True)
@@ -700,5 +708,6 @@ if __name__ == "__main__":
     r.add_argument("--batch", type=int, default=1, help="worlds per compiler run")
     c = sub.add_parser("confirm")
     c.add_argument("configs", nargs="+")
+    c.add_argument("--classes", help="only problems with a disagreement of one of these classes")
     a = ap.parse_args()
     {"gen": cmd_gen, "run": cmd_run, "confirm": cmd_confirm}[a.cmd](a)

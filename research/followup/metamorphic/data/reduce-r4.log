@@ -1,0 +1,9 @@
+violations/r4/chain8--taut-app-4-1-last {'base': 'accept/timeout', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 2
+violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 16
+violations/r4/chain8--taut-ground-3-0-last {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 2
+violations/r4/gz0--taut-ground-4-0-last {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 4
+violations/r4/g_dup0--taut-ground-3-0-last {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 4
+violations/r4/higher-kinded--taut-param-4-0-last {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r4/open-wide-4--taut-param-1-0-last {'base': 'accept/timeout', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 3
+violations/r4/chain8--taut-param-4-0-last {'base': 'accept/timeout', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 3
+violations/r4/use-before-init--unused-param-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 81

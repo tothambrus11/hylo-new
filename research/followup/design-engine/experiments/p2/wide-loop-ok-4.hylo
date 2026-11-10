@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// 4 premises `A is P`, each with derivations of every size (the looping given).
+trait P {}
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => T is P {}
+given <where A is P, A is P, A is P, A is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

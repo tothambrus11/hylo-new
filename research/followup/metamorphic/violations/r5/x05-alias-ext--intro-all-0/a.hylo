@@ -1,0 +1,8 @@
+//! stage:typing no-std
+struct List {
+  struct Node { }
+}
+type Node = List.Node
+extension Node {
+  type Node = List.Node
+}

@@ -1,0 +1,41 @@
+== p1-alias-first.hylo base: rejected (1 errors)
+   counters: names.appliesCalls=4 solver.goalSteps=6 solver.systems=2 summon.calls=2 summon.layers=7 summon.matchOK=3 summon.matches=220 summon.subgoals=3
+   5.6-7: error: definition of 'X' refers to itself
+== p1-alias-first.hylo FULL: rejected (1 errors)
+   counters: coesrc.skipped=1156 index.fallback=1 index.unavailable=19 solver.goalSteps=6 solver.systems=2 summon.calls=2 summon.layers=1 summon.matchOK=1 summon.matches=72 summon.subgoals=1
+   5.6-7: error: definition of 'X' refers to itself
+== p1-given-first.hylo base: accepted
+   counters: names.appliesCalls=4 solver.goalSteps=6 solver.systems=2 summon.calls=2 summon.layers=7 summon.matchOK=3 summon.matches=217 summon.subgoals=3
+== p1-given-first.hylo FULL: accepted
+   counters: index.fallback=1 index.unavailable=68 solver.goalSteps=6 solver.systems=2 summon.calls=2 summon.layers=1 summon.matchOK=1 summon.matches=71 summon.subgoals=1
+== p2-alias-first.hylo base: rejected (1 errors)
+   counters: names.appliesCalls=6 summon.layers=7 summon.matchOK=2 summon.matches=145 summon.subgoals=2
+   4.6-7: error: definition of 'X' refers to itself
+== p2-alias-first.hylo FULL: rejected (1 errors)
+   counters: names.appliesCalls=2 summon.layers=1 summon.matches=1
+   4.6-7: error: definition of 'X' refers to itself
+== p2-extension-first.hylo base: accepted
+   counters: names.appliesCalls=5 summon.layers=6 summon.matchOK=2 summon.matches=144 summon.subgoals=2
+== p2-extension-first.hylo FULL: accepted
+   counters: extorder.cycles=1 names.appliesCalls=1
+== p3-extension-first.hylo base: rejected (1 errors)
+   counters: names.appliesCalls=15 solver.goalSteps=4 solver.systems=2 summon.layers=24 summon.matchOK=9 summon.matches=648 summon.subgoals=9
+   5.15-18: error: type 'Inner' has no static member 'Foo'
+== p3-extension-first.hylo FULL: rejected (2 errors)
+   counters: coesrc.skipped=1139 extorder.cycles=1 index.fallback=2 index.unavailable=87 names.appliesCalls=2 solver.goalSteps=4 solver.systems=2 summon.layers=4 summon.matchOK=2 summon.matches=143 summon.subgoals=2
+   4.1-10: error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+   5.15-18: error: type 'Inner' has no static member 'Foo'
+== p3-given-first.hylo base: accepted
+   counters: names.appliesCalls=17 solver.goalSteps=4 solver.systems=2 summon.layers=25 summon.matchOK=9 summon.matches=646 summon.subgoals=9
+== p3-given-first.hylo FULL: accepted
+   counters: index.fallback=2 index.unavailable=136 names.appliesCalls=3 solver.goalSteps=4 solver.systems=2 summon.layers=4 summon.matchOK=2 summon.matches=142 summon.subgoals=2
+== p4-chain.hylo base: rejected (3 errors)
+   counters: names.appliesCalls=8 solver.goalSteps=13 solver.systems=4 summon.calls=4 summon.layers=12 summon.matchOK=5 summon.matches=299 summon.subgoals=4
+   7.6-7: error: definition of 'X' refers to itself
+   9.10-18: error: expression does not denote a type
+   9.17-18: error: type 'Foo<#!>' has no static member 'F'
+== p4-chain.hylo FULL: rejected (3 errors)
+   counters: coesrc.skipped=1224 index.fallback=2 index.unavailable=89 solver.goalSteps=13 solver.systems=4 summon.calls=4 summon.layers=2 summon.matchOK=2 summon.matches=145 summon.subgoals=2
+   7.6-7: error: definition of 'X' refers to itself
+   9.10-18: error: expression does not denote a type
+   9.17-18: error: type 'Foo<#!>' has no static member 'F'

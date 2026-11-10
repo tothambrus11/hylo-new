@@ -1,3 +1,6 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: No consistent reading: if `extension X` applies to `A`, `A.Me` is ambiguous; if it does not, `X` is `A` and it applies. The signatures never become stable.
+// Currently: base accepts it in 3 of 6 orders; FULL rejects it in all 6 orders tried.
 struct A {}
 extension X { type Me = Int }
 extension A { type Me = A }

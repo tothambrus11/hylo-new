@@ -1,0 +1,10 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/t16_literal_as_bool.hylo.
+// currently (base): rejected, 2 diagnostic(s): 9.11-12: error: ambiguous use of 'f'; 9.11-15: error: no conversion from 'Int' to 'Bool'; solver.forks=3 solver.overloads=1
+// currently (FULL): rejected, 2 diagnostic(s): 9.11-12: error: ambiguous use of 'f'; 9.11-15: error: no conversion from 'Int' to 'Bool'; solver.forks=3 solver.overloads=1
+fun f(x: Int8) -> Int8 { x }
+fun f(x: Int) -> Int { x }
+fun f(x: Int32) -> Bool { true }
+public fun main() {
+  let c = f(3) as Bool
+}

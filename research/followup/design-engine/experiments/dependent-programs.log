@@ -1,0 +1,152 @@
+c1-cycle-plus-coercion.hylo              FULL          d=10  rejected  calls=2 subgoals=4 matches=294 layers=5 | no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c1-cycle-plus-coercion.hylo              base          d=10  rejected  calls=2 subgoals=18 matches=818 layers=20 | not enough context to infer a type
+c2-control.hylo                          FULL          d=10  rejected  calls=2 subgoals=5 matches=296 layers=7 proved=1 | not enough context to infer a type
+c2-control.hylo                          base          d=10  rejected  calls=2 subgoals=18 matches=818 layers=20 | not enough context to infer a type
+c3-accept-change.hylo                    FULL          d=10  rejected  calls=3 subgoals=6 matches=442 layers=7 | no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c3-accept-change.hylo                    base          d=10  rejected  calls=2 subgoals=18 matches=818 layers=20 | not enough context to infer a type
+c4-control.hylo                          FULL          d=10  rejected  calls=2 subgoals=5 matches=296 layers=7 proved=1 | not enough context to infer a type
+c4-control.hylo                          base          d=10  rejected  calls=2 subgoals=18 matches=818 layers=20 | not enough context to infer a type
+c5-order1.hylo                           FULL          d=10  rejected  calls=3 subgoals=8 matches=450 layers=7 refuted=2 | no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c5-order1.hylo                           base          d=10  rejected  calls=3 subgoals=12 matches=902 layers=21 | no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c5-order2.hylo                           FULL          d=10  rejected  calls=3 subgoals=4 matches=149 layers=3 refuted=2 | no coercion from 'R<Z> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c5-order2.hylo                           base          d=10  rejected  calls=2 subgoals=43 matches=1451 layers=21 | not enough context to infer a type
+names-n16_cycle_via_where.hylo           FULL          d=10  rejected  subgoals=1 matches=3 layers=3 | type 'Inner' has no member 'f'
+names-n16_cycle_via_where.hylo           base          d=10  rejected  subgoals=13 matches=949 layers=39 | type 'Inner' has no member 'f'
+r2_bare.hylo                             FULL          d=10  rejected  calls=1 subgoals=1 matches=71 layers=1 | circular extension: the extendee of this extension depends on a lookup of 'Element', which this exte
+r2_bare.hylo                             base          d=10  accepted  calls=1 subgoals=3 matches=217 layers=7 | 
+r2_where_assoc.hylo                      FULL          d=10  accepted  calls=1 subgoals=1 matches=71 layers=1 | 
+r2_where_assoc.hylo                      base          d=10  accepted  calls=1 subgoals=3 matches=217 layers=7 | 
+r2_where_assoc_ctrl.hylo                 FULL          d=10  accepted  calls=1 subgoals=1 matches=71 layers=1 | 
+r2_where_assoc_ctrl.hylo                 base          d=10  accepted  calls=1 subgoals=3 matches=217 layers=7 | 
+r2_where_trait.hylo                      FULL          d=10  SYNTAX?    | expected '{'
+r2_where_trait.hylo                      base          d=10  SYNTAX?    | expected '{'
+a01-self-trait.hylo                      FULL          d=10  accepted  calls=1 subgoals=4 matches=79 layers=7 proved=3 | 
+a01-self-trait.hylo                      base          d=10  accepted  calls=1 subgoals=20 matches=592 layers=14 | 
+a08-assoc-generic.hylo                   FULL          d=10  accepted  calls=8 subgoals=10 matches=303 layers=16 proved=6 | 
+a08-assoc-generic.hylo                   base          d=10  accepted  calls=8 subgoals=236 matches=5937 layers=71 | 
+absinst-0.hylo                           FULL          d=10  rejected  calls=3 subgoals=4 matches=146 layers=3 | no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'
+absinst-0.hylo                           base          d=10  accepted  calls=2 subgoals=1219 matches=24317 layers=21 | 
+absinst-1.hylo                           FULL          d=10  rejected  calls=3 subgoals=4 matches=148 layers=3 | no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void'
+absinst-1.hylo                           base          d=10  accepted  calls=2 subgoals=4406 matches=83943 layers=27 | 
+absinst-ok.hylo                          FULL          d=10  accepted  calls=2 subgoals=3 matches=145 layers=4 proved=1 | 
+absinst-ok.hylo                          base          d=10  accepted  calls=2 subgoals=9 matches=510 layers=16 | 
+absleak-3.hylo                           FULL          d=10  rejected  calls=6 subgoals=7 matches=446 layers=7 | no coercion from '(T::P).X' to '(U::P).X'
+absleak-3.hylo                           base          d=10  timeout    | 
+absleak-4.hylo                           FULL          d=10  rejected  calls=7 subgoals=8 matches=445 layers=7 | no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+absleak-4.hylo                           base          d=10  timeout    | 
+assoc-eq-call-incomplete.hylo            FULL          d=10  rejected  calls=5 subgoals=379 matches=10604 layers=14 depthExhausted=1 | no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+assoc-eq-call-incomplete.hylo            base          d=10  timeout    | 
+assoceq-1.hylo                           FULL          d=10  accepted  calls=4 subgoals=5 matches=293 layers=6 proved=1 | 
+assoceq-1.hylo                           base          d=10  accepted  calls=4 subgoals=22 matches=1110 layers=31 | 
+assoceq-2.hylo                           FULL          d=10  accepted  calls=6 subgoals=7 matches=447 layers=8 proved=1 | 
+assoceq-2.hylo                           base          d=10  accepted  calls=6 subgoals=167 matches=4423 layers=47 | 
+assoceq-3.hylo                           FULL          d=10  accepted  calls=8 subgoals=9 matches=607 layers=10 proved=1 | 
+assoceq-3.hylo                           base          d=10  accepted  calls=8 subgoals=3152 matches=60438 layers=63 | 
+assoceq-4.hylo                           FULL          d=10  accepted  calls=10 subgoals=11 matches=773 layers=12 proved=1 | 
+assoceq-4.hylo                           base          d=10  accepted  calls=10 subgoals=3939 matches=75042 layers=77 | 
+assoceq-5.hylo                           FULL          d=10  accepted  calls=12 subgoals=13 matches=945 layers=14 proved=1 | 
+assoceq-5.hylo                           base          d=10  accepted  calls=12 subgoals=4831 matches=91512 layers=91 | 
+assoceq-6.hylo                           FULL          d=10  accepted  calls=14 subgoals=15 matches=1123 layers=16 proved=1 | 
+assoceq-6.hylo                           base          d=10  accepted  calls=14 subgoals=5837 matches=109938 layers=105 | 
+assoceq-8.hylo                           FULL          d=10  accepted  calls=18 subgoals=19 matches=1497 layers=20 proved=1 | 
+assoceq-8.hylo                           base          d=10  accepted  calls=18 subgoals=8215 matches=153018 layers=133 | 
+assocneg-2.hylo                          FULL          d=10  rejected  calls=4 subgoals=4 matches=295 layers=5 | cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg-2.hylo                          base          d=10  rejected  calls=4 subgoals=12 matches=899 layers=29 | cannot pass value of type '(T2::P).X' to parameter '(T0::P).X'
+assocneg-3.hylo                          FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(T3::P).X' to parameter '(T0::P).X'
+assocneg-3.hylo                          base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+assocneg-4.hylo                          FULL          d=10  rejected  calls=8 subgoals=9 matches=614 layers=9 | cannot pass value of type '(T4::P).X' to parameter '(T0::P).X'
+assocneg-4.hylo                          base          d=10  accepted  calls=8 subgoals=3116 matches=60817 layers=63 | 
+assocneg-5.hylo                          FULL          d=10  rejected  calls=10 subgoals=11 matches=782 layers=11 | cannot pass value of type '(T5::P).X' to parameter '(T0::P).X'
+assocneg-5.hylo                          base          d=10  accepted  calls=10 subgoals=3934 matches=75969 layers=77 | 
+assocneg-6.hylo                          FULL          d=10  rejected  calls=12 subgoals=13 matches=956 layers=13 | cannot pass value of type '(T6::P).X' to parameter '(T0::P).X'
+assocneg-6.hylo                          base          d=10  accepted  calls=12 subgoals=4826 matches=92611 layers=91 | 
+assocneg-8.hylo                          FULL          d=10  rejected  calls=16 subgoals=17 matches=1322 layers=17 | cannot pass value of type '(T8::P).X' to parameter '(T0::P).X'
+assocneg-8.hylo                          base          d=10  accepted  calls=16 subgoals=6960 matches=131895 layers=119 | 
+ate.hylo                                 FULL          d=10  accepted  calls=9 subgoals=11 matches=526 layers=15 proved=4 | 
+ate.hylo                                 base          d=10  accepted  calls=9 subgoals=73 matches=2929 layers=74 | 
+bug-assoc-eq-two-links.hylo              FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+bug-assoc-eq-two-links.hylo              base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+c04-single-assoc-call.hylo               FULL          d=10  rejected  calls=5 subgoals=6 matches=295 layers=5 | no coercion from '((D::P).X ~ (A::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+c04-single-assoc-call.hylo               base          d=10  accepted  calls=4 subgoals=1101 matches=22855 layers=35 | 
+c07-single-assoc-arg.hylo                FULL          d=10  rejected  calls=7 subgoals=7 matches=298 layers=7 proved=1 | no coercion from '((D::P).X ~ (A::P).X) ==> [Void](let (D::P).X) let -> (A::P).X' to '[Void](let (D:
+c07-single-assoc-arg.hylo                base          d=10  accepted  calls=6 subgoals=1108 matches=23232 layers=49 | 
+cong-1.hylo                              FULL          d=10  accepted  calls=2 subgoals=4 matches=150 layers=6 proved=2 | 
+cong-1.hylo                              base          d=10  accepted  calls=2 subgoals=12 matches=591 layers=18 | 
+cong-2.hylo                              FULL          d=10  accepted  calls=2 subgoals=4 matches=150 layers=6 proved=2 | 
+cong-2.hylo                              base          d=10  accepted  calls=2 subgoals=20 matches=741 layers=19 | 
+e07-refine.hylo                          FULL          d=10  rejected  calls=5 subgoals=14 matches=600 layers=15 | no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+e07-refine.hylo                          base          d=10  rejected  calls=5 subgoals=24 matches=1567 layers=45 | no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+e09-trait-self-assoc.hylo                FULL          d=10  accepted  calls=4 subgoals=6 matches=293 layers=8 proved=2 | 
+e09-trait-self-assoc.hylo                base          d=10  accepted  calls=4 subgoals=94 matches=2659 layers=36 | 
+eq-regress-judge-x10b-ext-where-assoc.hylo FULL          d=10  accepted  calls=6 subgoals=7 matches=433 layers=9 proved=1 | 
+eq-regress-judge-x10b-ext-where-assoc.hylo base          d=10  accepted  calls=6 subgoals=4860 matches=91425 layers=38 | 
+eq-unsound-v-abs-7.hylo                  FULL          d=10  accepted  calls=1 subgoals=2 matches=75 layers=3 proved=1 | 
+eq-unsound-v-abs-7.hylo                  base          d=10  accepted  calls=1 subgoals=34 matches=971 layers=11 | 
+eqbug-1.hylo                             FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+eqbug-1.hylo                             base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+eqbug-2.hylo                             FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(C::P).X' to parameter '(B::P).X'
+eqbug-2.hylo                             base          d=10  accepted  calls=6 subgoals=2501 matches=48859 layers=49 | 
+eqbug-3.hylo                             FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(D::Q).Y' to parameter '(A::P).X'
+eqbug-3.hylo                             base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+eqbug-4.hylo                             FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | no coercion from '(D::P).X' to '(A::P).X'
+eqbug-4.hylo                             base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+eqbug-5.hylo                             FULL          d=10  accepted  calls=6 subgoals=7 matches=453 layers=8 proved=1 | 
+eqbug-5.hylo                             base          d=10  accepted  calls=6 subgoals=29 matches=1608 layers=45 | 
+eqbug1-plain.hylo                        FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=7 | cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+eqbug1-plain.hylo                        base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=49 | 
+eqchain-fix-assoceq-2.hylo               FULL          d=10  accepted  calls=6 subgoals=7 matches=447 layers=8 proved=1 | 
+eqchain-fix-assoceq-2.hylo               base          d=10  accepted  calls=6 subgoals=167 matches=4423 layers=47 | 
+eqchain-fix-assoceq-3.hylo               FULL          d=10  accepted  calls=8 subgoals=9 matches=607 layers=10 proved=1 | 
+eqchain-fix-assoceq-3.hylo               base          d=10  accepted  calls=8 subgoals=3152 matches=60438 layers=63 | 
+eqchain-fix-assoceq-4.hylo               FULL          d=10  accepted  calls=10 subgoals=11 matches=773 layers=12 proved=1 | 
+eqchain-fix-assoceq-4.hylo               base          d=10  accepted  calls=10 subgoals=3939 matches=75042 layers=77 | 
+eqchain-fix-assoceq-5.hylo               FULL          d=10  accepted  calls=12 subgoals=13 matches=945 layers=14 proved=1 | 
+eqchain-fix-assoceq-5.hylo               base          d=10  accepted  calls=12 subgoals=4831 matches=91512 layers=91 | 
+eqchain-fix-assoceq-6.hylo               FULL          d=10  accepted  calls=14 subgoals=15 matches=1123 layers=16 proved=1 | 
+eqchain-fix-assoceq-6.hylo               base          d=10  accepted  calls=14 subgoals=5837 matches=109938 layers=105 | 
+n-nested-1.hylo                          FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=8 | cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'
+n-nested-1.hylo                          base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=50 | 
+n-three-1.hylo                           FULL          d=10  rejected  calls=8 subgoals=9 matches=622 layers=9 | cannot pass value of type '(F::P).X' to parameter '(A::P).X'
+n-three-1.hylo                           base          d=10  accepted  calls=8 subgoals=3106 matches=61503 layers=63 | 
+n-tuple-1.hylo                           FULL          d=10  rejected  calls=8 subgoals=9 matches=529 layers=10 proved=1 | cannot pass value of type '{(D::P).X, (B::P).X}' to parameter '{(A::P).X, (A::P).X}'
+n-tuple-1.hylo                           base          d=10  timeout    | 
+v-abs-5.hylo                             FULL          d=10  rejected  calls=1 subgoals=1 matches=74 layers=2 | cannot pass value of type '(Self::P).X' to parameter 'U'
+v-abs-5.hylo                             base          d=10  rejected  calls=1 subgoals=3 matches=224 layers=8 | cannot pass value of type '(Self::P).X' to parameter 'U'
+v-abs-6.hylo                             FULL          d=10  rejected  calls=1 subgoals=1 matches=74 layers=2 | cannot pass value of type 'U' to parameter '(Self::P).X'
+v-abs-6.hylo                             base          d=10  rejected  calls=1 subgoals=3 matches=224 layers=8 | cannot pass value of type 'U' to parameter '(Self::P).X'
+v-abs-7.hylo                             FULL          d=10  accepted  calls=1 subgoals=2 matches=75 layers=3 proved=1 | 
+v-abs-7.hylo                             base          d=10  accepted  calls=1 subgoals=34 matches=971 layers=11 | 
+v-abs-8.hylo                             FULL          d=10  rejected  calls=1 subgoals=2 matches=146 layers=3 | no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+v-abs-8.hylo                             base          d=10  rejected  calls=1 subgoals=4 matches=295 layers=10 | no coercion from '(#! ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+v-abs-9.hylo                             FULL          d=10  rejected  calls=1 subgoals=1 matches=74 layers=2 | cannot pass value of type 'U' to parameter '(Self::P).X'
+v-abs-9.hylo                             base          d=10  rejected  calls=1 subgoals=3 matches=224 layers=8 | cannot pass value of type 'U' to parameter '(Self::P).X'
+v-chain3-assoc.hylo                      FULL          d=10  accepted  calls=8 subgoals=9 matches=607 layers=10 proved=1 | 
+v-chain3-assoc.hylo                      base          d=10  accepted  calls=8 subgoals=3152 matches=60438 layers=63 | 
+v-congr-5.hylo                           FULL          d=10  accepted  calls=4 subgoals=5 matches=296 layers=6 proved=1 | 
+v-congr-5.hylo                           base          d=10  accepted  calls=4 subgoals=15 matches=973 layers=30 | 
+v-def-4.hylo                             FULL          d=10  accepted  calls=3 subgoals=4 matches=220 layers=5 proved=1 | 
+v-def-4.hylo                             base          d=10  accepted  calls=3 subgoals=19 matches=889 layers=24 | 
+v01-single.hylo                          FULL          d=10  rejected  calls=4 subgoals=4 matches=295 layers=5 | cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+v01-single.hylo                          base          d=10  rejected  calls=4 subgoals=12 matches=899 layers=29 | cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+v03-box.hylo                             FULL          d=10  rejected  calls=6 subgoals=7 matches=452 layers=8 | cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'
+v03-box.hylo                             base          d=10  accepted  calls=6 subgoals=2429 matches=47781 layers=50 | 
+x10-ext-where-assoc.hylo                 FULL          d=10  rejected  calls=9 subgoals=7 matches=362 layers=7 | type 'Box<Bag>' has no member 'first'
+x10-ext-where-assoc.hylo                 base          d=10  timeout    | 
+x10b-ext-where-assoc.hylo                FULL          d=10  accepted  calls=6 subgoals=7 matches=433 layers=9 proved=1 | 
+x10b-ext-where-assoc.hylo                base          d=10  accepted  calls=6 subgoals=4860 matches=91425 layers=38 | 
+min.hylo                                 FULL          d=10  rejected  calls=5 subgoals=379 matches=10316 layers=14 depthExhausted=1 | no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+min.hylo                                 base          d=10  timeout    | 
+t1.hylo                                  FULL          d=10  rejected  calls=5 subgoals=379 matches=10316 layers=14 depthExhausted=1 | no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+t1.hylo                                  base          d=10  timeout    | 
+t2-swapped.hylo                          FULL          d=10  rejected  calls=3 subgoals=4 matches=146 layers=5 | type 'T' has no static member 'X'
+t2-swapped.hylo                          base          d=10  rejected  calls=3 subgoals=6 matches=432 layers=11 | type 'T' has no static member 'X'
+t4-generic-caller.hylo                   FULL          d=10  accepted  calls=2 subgoals=5 matches=288 layers=6 proved=1 | 
+t4-generic-caller.hylo                   base          d=10  accepted  calls=2 subgoals=4854 matches=90983 layers=22 | 
+t8-cond-call.hylo                        FULL          d=10  rejected  calls=5 subgoals=381 matches=10462 layers=16 depthExhausted=1 | no coercion from '(P<Box<B>>, ((Box<B>::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Voi
+t8-cond-call.hylo                        base          d=10  timeout    | 
+v2-swapped.hylo                          FULL          d=10  rejected  calls=3 subgoals=4 matches=146 layers=5 | type 'T' has no static member 'X'
+v2-swapped.hylo                          base          d=10  rejected  calls=3 subgoals=6 matches=432 layers=11 | type 'T' has no static member 'X'
+v5-generic.hylo                          FULL          d=10  accepted  calls=2 subgoals=5 matches=292 layers=6 proved=1 | 
+v5-generic.hylo                          base          d=10  accepted  calls=2 subgoals=4854 matches=92203 layers=22 | 
+v6-refl.hylo                             FULL          d=10  accepted  calls=2 subgoals=4 matches=147 layers=5 proved=1 | 
+v6-refl.hylo                             base          d=10  accepted  calls=2 subgoals=17 matches=729 layers=17 | 

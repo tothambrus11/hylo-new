@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/declaration-order/r1_selfname.hylo",
+ "rel": "r5",
+ "vid": "intro-all-top:1",
+ "kind": "intro-all-top",
+ "desc": "`A.Foo` named Alq everywhere (1 places), alias declared first",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: definition of 'Alq' refers to itself",
+   "error: type 'B' has no static member 'Foo'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  }
+ }
+}

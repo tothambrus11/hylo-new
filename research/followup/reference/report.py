@@ -89,6 +89,7 @@ def main():
     ap.add_argument("--kind")
     ap.add_argument("-n", type=int, default=10)
     ap.add_argument("--tags", help="with --list: only rows whose explanation is this (e.g. '' or DECOMP)")
+    ap.add_argument("--markdown", action="store_true", help="tables for the README")
     args = ap.parse_args()
     problems, runs = load()
     rs = list(rows(problems, runs))
@@ -123,6 +124,10 @@ def main():
             n += 1
             if n >= args.n:
                 break
+        return
+
+    if args.markdown:
+        markdown(problems, runs, rs, tags_of)
         return
 
     configs = ("base", "FIX", "FULL")
@@ -175,6 +180,115 @@ def explanation_table(rs, tags_of, configs=("FIX", "FULL")):
     print("## explanation of rejections (explain.py): predicted cause, accepted / rejected")
     for k in sorted({k for (k, c, v) in t}):
         print("%-28s" % k, "  ".join("%s=%d/%d" % (c, t[(k, c, "accept")], t[(k, c, "reject")]) for c in configs))
+
+
+def markdown(problems, runs, rs, tags_of):
+    configs = ("base", "FIX", "FULL")
+    kinds = ["conf", "eq-param", "eq-app", "chain", "cond", "assoc", "blanket", "twin"]
+
+    def table(header, lines):
+        print("| " + " | ".join(header) + " |")
+        print("|" + "|".join("---" if i == 0 else "---:" for i in range(len(header))) + "|")
+        for l in lines:
+            print("| " + " | ".join(str(x) for x in l) + " |")
+        print()
+
+    print("### Problems and queries checked\n")
+    nw = collections.Counter((problems[i]["kind"], c) for (i, c) in runs if "world" in runs[(i, c)])
+    nq = collections.Counter((r["kind"], r["config"]) for r in rs)
+    gen_w = collections.Counter(p["kind"] for p in problems.values())
+    gen_q = collections.Counter()
+    for p in problems.values():
+        gen_q[p["kind"]] += len(p["answers"])
+    lines = [[k, gen_w[k], gen_q[k]] + ["%d / %d" % (nw[(k, c)], nq[(k, c)]) for c in configs] for k in kinds]
+    lines.append(["total", sum(gen_w.values()), sum(gen_q.values())] +
+                 ["%d / %d" % (sum(nw[(k, c)] for k in kinds), sum(nq[(k, c)] for k in kinds)) for c in configs])
+    table(["Kind", "Problems", "Queries"] + ["%s: problems / queries" % c for c in configs], lines)
+
+    print("### Reference answers of the generated queries\n")
+    t = collections.Counter()
+    for p in problems.values():
+        for a in p["answers"]:
+            v = a["verdict"]
+            if v == "derivable":
+                v = "derivable, several derivations" if (a["count"] or 0) >= 2 else "derivable, one derivation"
+            elif v == "underivable":
+                v = "underivable, " + {"invalid": "invalid in the model", "valid": "valid with injectivity",
+                                        "vacuous": "scope has no solution"}[a["sem"]]
+            t[(v, p["kind"])] += 1
+    vs = sorted({v for (v, k) in t})
+    table(["Reference answer"] + kinds + ["total"],
+          [[v] + [t[(v, k)] for k in kinds] + [sum(t[(v, k)] for k in kinds)] for v in vs])
+
+    print("### Classes by configuration\n")
+    t = collections.Counter((r["class"], r["config"]) for r in rs)
+    classes = sorted({r["class"] for r in rs}, key=lambda k: (k == "agree", k))
+    table(["Class"] + list(configs), [[k] + [t[(k, c)] for c in configs] for k in classes])
+
+    print("### Classes by kind (FIX / FULL)\n")
+    t = collections.Counter((r["class"], r["kind"], r["config"]) for r in rs)
+    table(["Class"] + kinds, [[k] + ["%d / %d" % (t[(k, kind, "FIX")], t[(k, kind, "FULL")]) for kind in kinds]
+                              for k in classes])
+
+    print("### Goals with exactly one derivation: accepted / total, by size of the smallest derivation\n")
+    t = collections.Counter()
+    for r in rs:
+        a = r["answer"]
+        if a["verdict"] == "derivable" and not (a["count"] or 0) >= 2 and r["verdict"] in ("accept", "reject") \
+                and r["class"] != "WHERE-ORDER":
+            key = (min(a["size"], 3), min(a["eq_needed"], 3), "yes" if a["congruence"] else "no")
+            t[(key, r["config"], r["verdict"])] += 1
+    keys = sorted({k for (k, c, v) in t})
+    lines = []
+    for key in keys:
+        cells = []
+        for c in configs:
+            acc, rej = t[(key, c, "accept")], t[(key, c, "reject")]
+            cells.append("%d / %d" % (acc, acc + rej) if acc + rej else "")
+        lines.append(["%s%d" % ("≥" if key[0] == 3 else "", key[0]), "%s%d" % ("≥" if key[1] == 3 else "", key[1]), key[2]] + cells)
+    table(["Conformance steps", "Equalities needed", "Congruence needed"] + list(configs), lines)
+
+    print("### Predicted cause of rejection (explain.py) against the verdict, goals with one derivation\n")
+    t = collections.Counter()
+    for r in rs:
+        a = r["answer"]
+        if r["config"] == "base" or a["verdict"] != "derivable" or (a["count"] or 0) >= 2:
+            continue
+        if r["verdict"] not in ("accept", "reject") or r["class"] == "WHERE-ORDER":
+            continue
+        t[(tags_of(r) or "none (predicted: accepted)", r["config"], r["verdict"])] += 1
+    ks = sorted({k for (k, c, v) in t}, key=lambda k: (not k.startswith("none"), k))
+    table(["Predicted cause", "FIX accepted", "FIX rejected", "FULL accepted", "FULL rejected"],
+          [[k, t[(k, "FIX", "accept")], t[(k, "FIX", "reject")], t[(k, "FULL", "accept")], t[(k, "FULL", "reject")]]
+           for k in ks])
+
+    print("### FIX against FULL, and base against FIX\n")
+    by = collections.defaultdict(dict)
+    for r in rs:
+        by[(r["id"], r["q"])][r["config"]] = r
+    d = collections.Counter()
+    for key, m in by.items():
+        if "FIX" in m and "FULL" in m:
+            d[("FIX/FULL", m["FIX"]["verdict"], m["FULL"]["verdict"])] += 1
+        if "FIX" in m and "base" in m:
+            a = m["FIX"]["answer"]
+            ref = a["verdict"] if a["verdict"] != "derivable" else \
+                ("derivable (several)" if (a["count"] or 0) >= 2 else "derivable (one)")
+            d[("base/FIX", ref, m["base"]["verdict"], m["FIX"]["verdict"])] += 1
+    table(["FIX verdict", "FULL verdict", "Queries"],
+          [[k[1], k[2], n] for k, n in sorted(d.items()) if k[0] == "FIX/FULL"])
+    table(["Reference", "base verdict", "FIX verdict", "Queries"],
+          [[k[1], k[2], k[3], n] for k, n in sorted(d.items()) if k[0] == "base/FIX"])
+
+    print("### Batch runs confirmed alone\n")
+    n = same = 0
+    for key, run in runs.items():
+        if "confirmed" in run and run["world"]["status"] == "ok":
+            n += 1
+            same += {str(k): v for k, v in run["confirmed"]["verdicts"].items()} == \
+                {str(k): v for k, v in run["world"]["verdicts"].items()}
+    print("%d (problem, configuration) pairs with a disagreement in a batch were rerun alone; "
+          "%d gave the same verdicts for every query.\n" % (n, same))
 
 
 if __name__ == "__main__":

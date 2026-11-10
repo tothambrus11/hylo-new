@@ -1,3 +1,6 @@
+// Expected after the change: rejected.
+// Reason: A requirement of a where clause cannot use the requirements after it. This rule is deliberate and must not change.
+// Currently: base rejects it; FULL rejects it.
 trait P { type X }
 trait Q {}
 fun f<T where T.X is Q, T is P>() {}

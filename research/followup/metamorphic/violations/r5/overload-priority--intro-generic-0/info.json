@@ -1,0 +1,52 @@
+{
+ "file": "Tests/CompilerTests/positive/overload-priority.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`A<...>` spelled `AlqA<...>` (3 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type '#!' to parameter 'Void'",
+   "error: no coercion from '#!' to 'A<Void>'",
+   "error: no conversion from '#!' to 'A<Void>'",
+   "error: type 'A<Void>' has no member 'f'",
+   "error: type 'A<Void>' has no member 'f'",
+   "error: type 'A<Void>' has no member 'f'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no conversion from '#!' to 'A<Void>'",
+    "error: type 'A<Void>' has no member 'f'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no conversion from '#!' to 'A<Void>'",
+    "error: type 'A<Void>' has no member 'f'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no conversion from '#!' to 'A<Void>'",
+    "error: type 'A<Void>' has no member 'f'"
+   ]
+  }
+ }
+}

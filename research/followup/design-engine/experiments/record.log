@@ -1,0 +1,26 @@
+s1-gain-chain.hylo | base rejected (subgoals=22 matches=1609): no coercion from '(P<U>, P<(U::P).X>, Q<((U::P).X::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=10 matche
+s1-gain-conformance-concrete.hylo | base rejected (subgoals=6 matches=441): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=78): no coercion from
+s1-gain-conformance-generic.hylo | base rejected (subgoals=9 matches=652): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=147): no coercion fro
+s1-gain-conformance-two.hylo | base rejected (subgoals=16 matches=1169): no coercion from '(P<U>, Q<(U::P).X>, R<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=8 matches=293): 
+s1-gain-equality-concrete.hylo | base timeout; FULL rejected (subgoals=379 matches=10316 depthExhausted=1 premises=1): no coercion from '(P<A>, ((A::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+s1-gain-extension.hylo | base rejected (subgoals=9 matches=657): type 'Box<U>' has no member 'first'; FULL rejected (subgoals=3 matches=145): type 'Box<U>' has no member 'first'
+s1-gain-given.hylo | base rejected (subgoals=10 matches=732): no coercion from 'Q<Box<U>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=6 matches=154): no coercion from 'Q<Box<
+s1-gain-middle.hylo | base rejected (subgoals=11 matches=803): no coercion from '(P<U>, Q<(U::P).X>, R<U>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=7 matches=151): no coerc
+s1-keep-equality-generic.hylo | base accepted (subgoals=4854 matches=90983); FULL accepted (subgoals=5 matches=288 proved=1 premises=1)
+s1-keep-hypothesis.hylo | base accepted (subgoals=4 matches=291); FULL accepted (subgoals=4 matches=7)
+s1-keep-recursion.hylo | base accepted (subgoals=5 matches=363); FULL accepted (subgoals=3 matches=75)
+s1-open-parameter-type.hylo | base rejected (subgoals=7 matches=507): cannot pass value of type '(U::P).X' to parameter '(U::P).X'; FULL rejected (subgoals=3 matches=5): cannot pass value of type '(U::P).X' to parame
+s1-reject-concrete-mismatch.hylo | base rejected (subgoals=6 matches=441): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=78): no coercion from
+s1-reject-missing-requirement.hylo | base rejected (subgoals=6 matches=432): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=73 refuted=2): no coe
+s1-reject-other-conformance.hylo | base rejected (subgoals=9 matches=664): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=368): no coercion fro
+s2-keep-shared-premise.hylo | base accepted (subgoals=14 matches=1047); FULL accepted (subgoals=14 matches=37 refuted=1)
+s2-keep-wide-loop-ok.hylo | base accepted (subgoals=286 matches=7482); FULL accepted (subgoals=286 matches=310)
+s3-cost-div-branch.hylo | base rejected (subgoals=3070 matches=110449 depthExhausted=2): no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=2 matches=1 refuted=2)
+s3-cost-wide-loop-fail.hylo | base rejected (subgoals=22065 matches=790528 depthExhausted=2): no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=22065 matches=52477 de
+s3-gain-three-requirements-nostd.hylo | base rejected (subgoals=34 matches=2458 depthExhausted=1): no coercion from '(P<S<S<S<X>>>>, P<S<S<S<Y>>>>, P<S<S<S<Z>>>>) ==> [Void]() let -> Void' to '[Void]() let -> ; FULL rejected (
+s3-gain-three-requirements.hylo | base rejected (subgoals=48 matches=3280 depthExhausted=1): no coercion from '(Copyable<{Bool, Int}>, Copyable<{Int, Bool}>, Copyable<{Int, Int}>) ==> [Void]() let -> Voi; FULL rejected (
+s3-gain-tuple5.hylo | base rejected (subgoals=304 matches=8889 depthExhausted=2): no coercion from 'Copyable<{Bool, Bool, Bool, Bool, Bool}> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected 
+s3-gain-where-order-b.hylo | base rejected (subgoals=21 matches=1549 depthExhausted=1): no coercion from '(Q<S<C>>, P<C>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=21 matches=121 d
+s3-keep-tuple4.hylo | base accepted (subgoals=46 matches=3254); FULL accepted (subgoals=46 matches=310)
+s3-keep-where-order-a.hylo | base accepted (subgoals=13 matches=931); FULL accepted (subgoals=13 matches=75)
+s3-reject-chain9.hylo | base rejected (subgoals=20 matches=1369 depthExhausted=1): no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=

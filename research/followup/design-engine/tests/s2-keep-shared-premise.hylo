@@ -1,0 +1,18 @@
+//! stage:typing no-std
+// expected (subgoal table): accepted, with the same witness. Two givens conclude `B is Q`; both need
+// `S<S<S<S<Z>>>> is P` (5 steps), and the first then fails on `N is R`. The premise is derived once
+// per alternative today.
+// currently: base accepted (subgoals=14 matches=1047); FULL accepted (subgoals=14 matches=37 refuted=1)
+trait P {}
+trait Q {}
+trait R {}
+struct B {}
+struct Z {}
+struct N {}
+struct S<T> {}
+given Z is P {}
+given <T where T is P> => S<T> is P {}
+given <where N is R, S<S<S<S<Z>>>> is P> => B is Q {}
+given <where Z is P, S<S<S<S<Z>>>> is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

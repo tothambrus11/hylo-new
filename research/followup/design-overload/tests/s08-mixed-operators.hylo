@@ -1,0 +1,10 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 8 with `cleanfirst,twins`
+// reason: Eight operators on Int values, not all in one chain.
+// currently (base): accepted; solver.forks=510 solver.overloads=255
+// currently (FULL): accepted; solver.forks=510 solver.overloads=255
+public fun main() {
+  let a = 1
+  let b = 2
+  let t = (a + b) * (a - b) + a * b == a + b + a
+}

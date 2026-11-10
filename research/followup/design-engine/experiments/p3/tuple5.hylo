@@ -1,0 +1,4 @@
+// A tuple of five copyable elements is copyable: 2 steps per element, 1 for the empty tail, 1 for
+// the call = 12 steps. The derivation has height 6.
+fun need<T where T is Copyable>() {}
+public fun main() { need<{Bool, Bool, Bool, Bool, Bool}>() }

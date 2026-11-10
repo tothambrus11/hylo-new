@@ -1,0 +1,4 @@
+type Alq = A.Foo
+struct B {}
+struct A { type Foo = B }
+extension Alq { type Foo = Int }

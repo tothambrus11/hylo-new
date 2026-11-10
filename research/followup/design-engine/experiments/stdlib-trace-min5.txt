@@ -1,0 +1,739 @@
+[trace] resolve Self: 1 layers, 0 done, 0 minimal
+[trace] resolve Self: 1 layers, 0 done, 0 minimal
+[trace] resolve Self: 1 layers, 0 done, 0 minimal
+[trace] resolve Self: 3 layers, 0 done, 0 minimal
+[trace] DONE $<abstract given>
+[trace] resolve Comparable<Self>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<abstract given>
+[trace] resolve ExpressibleByIntegerLiteral<Pointer<TypeWitnessHeader>>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Pointer<TypeWitnessHeader>>: 1 layers, 0 done, 0 minimal
+[trace] resolve Pointer<TypeWitnessHeader>: 1 layers, 0 done, 0 minimal
+[trace] resolve Pointer<TypeWitnessHeader>: 1 layers, 0 done, 0 minimal
+[trace] resolve Pointer<TypeWitnessHeader>: 1 layers, 0 done, 0 minimal
+[trace] resolve Pointer<TypeWitnessHeader>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ExtensionDeclaration at OffsetOfMember:6.1>
+[trace] resolve Size: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ExtensionDeclaration at OffsetOfMember:6.1>
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Bool:3.23>
+[trace] DONE $<ConformanceDeclaration at Bool:3.23>
+[trace] resolve Deinitializable<Bool>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Bool:3.23>
+[trace] DONE $<ConformanceDeclaration at Bool:43.8>
+[trace] resolve Movable<Bool>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Bool:43.8>
+[trace] resolve Bool: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Bool:45.8>
+[trace] resolve Copyable<Bool>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Bool:45.8>
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Movable:24.8>
+[trace]   goal Movable<Void> <- try $<ConformanceDeclaration at Movable:24.8> : Movable<Void>
+[trace] resolve Movable<Void>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Movable:24.8>
+[trace] resolve Void: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Copyable:12.8>
+[trace] resolve Copyable<Void>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Copyable:12.8>
+[trace] DONE $i
+[trace]   goal Movable<{T, ...U}> <- try $<ConformanceDeclaration at Movable:27.8> : <T, U> (Movable<T>, Movable<U>) ==> Movable<{T, ...U}>
+[trace]     solved with $<ConformanceDeclaration at Movable:27.8><T, U>($<assumed given 0>)($<assumed given 1>); now prove $1: Movable<%5p> [pending: $0: Movable<%5o>]
+[trace]   goal Movable<U> <- try $<nested given>($<ConformanceDeclaration at Copyable:3.31>) : <Self> Copyable<Self> ==> Movable<Self>
+[trace]     solved with $<nested given>($<ConformanceDeclaration at Copyable:3.31>)<U>($<assumed given 2>); now prove $2: Copyable<%6d> [pending: $0: Movable<%5o>]
+[trace]   goal Copyable<U> <- try $p : Copyable<U>
+[trace]     solved with $p; now prove $0: Movable<%5o> [pending: ]
+[trace]   goal Movable<T> <- try $<nested given>($<ConformanceDeclaration at Copyable:3.31>) : <Self> Copyable<Self> ==> Movable<Self>
+[trace]     solved with $<nested given>($<ConformanceDeclaration at Copyable:3.31>)<T>($<assumed given 3>); now prove $3: Copyable<%79> [pending: ]
+[trace]   goal Copyable<T> <- try $i : Copyable<T>
+[trace] resolve Movable<{T, ...U}>: 5 layers, 1 done, 1 minimal
+[trace]   penalty 6: $<ConformanceDeclaration at Movable:27.8><T, U>($<nested given>($<ConformanceDeclaration at Copyable:3.31>)<T>($i))($<nested given>($<ConformanceDeclaration at Copyable:3.31>)<U>($p))
+[trace] resolve {T, ...U}: 1 layers, 0 done, 0 minimal
+[trace] DONE $i
+[trace]     solved with $<ConformanceDeclaration at Copyable:15.8><T, U>($<assumed given 0>)($<assumed given 1>); now prove $1: Copyable<%86> [pending: $0: Copyable<%85>]
+[trace]     solved with $p; now prove $0: Copyable<%85> [pending: ]
+[trace] resolve Copyable<{T, ...U}>: 3 layers, 1 done, 1 minimal
+[trace]   penalty 2: $<ConformanceDeclaration at Copyable:15.8><T, U>($i)($p)
+[trace] DONE $i
+[trace] resolve Copyable<T>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $i
+[trace] DONE $p
+[trace] resolve Copyable<U>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $p
+[trace] DONE $<abstract given>
+[trace] resolve Equatable<Self>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<abstract given>
+[trace] resolve ExpressibleByIntegerLiteral<Pointer<Pointee>>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Pointer<Pointee>>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Pointer:2.35><Pointee>
+[trace] DONE $<ConformanceDeclaration at Pointer:2.35><Pointee>
+[trace] resolve Deinitializable<Pointer<Pointee>>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Pointer:2.35><Pointee>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2970.8>
+[trace] resolve Equatable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2970.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2968.8>
+[trace] resolve Copyable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2968.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2645.8>
+[trace]   goal ExpressibleByIntegerLiteral<UInt64> <- try $<ConformanceDeclaration at Generated:2645.8> : ExpressibleByIntegerLiteral<UInt64>
+[trace] resolve ExpressibleByIntegerLiteral<UInt64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2645.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt64>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Size>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Size>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Alignment>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Alignment>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Pointer<TypeWitnessHeader>>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Pointer<TypeWitnessHeader>>: 1 layers, 0 done, 0 minimal
+[trace] resolve Pointer<TypeWitnessHeader>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2976.8>
+[trace]   goal Numeric<Size> <- try $<ConformanceDeclaration at Generated:2976.8> : Numeric<Int>
+[trace] resolve Numeric<Size>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2976.8>
+[trace] resolve ExpressibleByIntegerLiteral<Pointer<Int>>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Pointer<Int>>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve W: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ExtensionDeclaration at OffsetOfMember:43.1>
+[trace] resolve W: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ExtensionDeclaration at OffsetOfMember:43.1>
+[trace] resolve W: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Alignment>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve W: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Size>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve W: 1 layers, 0 done, 0 minimal
+[trace] resolve W: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ExtensionDeclaration at OffsetOfMember:43.1>
+[trace] resolve W: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ExtensionDeclaration at OffsetOfMember:43.1>
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Float32>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Float32:106.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Float32:106.8>
+[trace] DONE $<ConformanceDeclaration at Float32:3.26>
+[trace] DONE $<ConformanceDeclaration at Float32:3.26>
+[trace] resolve Deinitializable<Float32>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:3.26>
+[trace] DONE $<ConformanceDeclaration at Float32:106.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:106.8>
+[trace] DONE $<ConformanceDeclaration at Float32:108.8>
+[trace] resolve Movable<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:108.8>
+[trace] resolve Float32: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Float32:110.8>
+[trace] resolve Copyable<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:110.8>
+[trace] DONE $<ConformanceDeclaration at Float32:112.8>
+[trace] resolve Equatable<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:112.8>
+[trace] DONE $<ConformanceDeclaration at Float32:114.8>
+[trace] resolve Comparable<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:114.8>
+[trace] DONE $<ConformanceDeclaration at Float32:116.8>
+[trace] resolve AdditiveArithmetic<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:116.8>
+[trace] DONE $<ConformanceDeclaration at Float32:118.8>
+[trace] resolve Numeric<Float32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float32:118.8>
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Float64>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Float64:106.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Float64:106.8>
+[trace] DONE $<ConformanceDeclaration at Float64:3.26>
+[trace] DONE $<ConformanceDeclaration at Float64:3.26>
+[trace] resolve Deinitializable<Float64>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:3.26>
+[trace] DONE $<ConformanceDeclaration at Float64:106.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:106.8>
+[trace] DONE $<ConformanceDeclaration at Float64:108.8>
+[trace] resolve Movable<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:108.8>
+[trace] resolve Float64: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Float64:110.8>
+[trace] resolve Copyable<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:110.8>
+[trace] DONE $<ConformanceDeclaration at Float64:112.8>
+[trace] resolve Equatable<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:112.8>
+[trace] DONE $<ConformanceDeclaration at Float64:114.8>
+[trace] resolve Comparable<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:114.8>
+[trace] DONE $<ConformanceDeclaration at Float64:116.8>
+[trace] resolve AdditiveArithmetic<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:116.8>
+[trace] DONE $<ConformanceDeclaration at Float64:118.8>
+[trace] resolve Numeric<Float64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Float64:118.8>
+[trace] DONE $<ConformanceDeclaration at Deinitializable:12.8>
+[trace] resolve Deinitializable<Void>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Deinitializable:12.8>
+[trace] DONE $c
+[trace]     solved with $<ConformanceDeclaration at Deinitializable:15.8><T, U>($<assumed given 0>)($<assumed given 1>); now prove $1: Deinitializable<%ko> [pending: $0: Deinitializable<%kn>]
+[trace]     solved with $j; now prove $0: Deinitializable<%kn> [pending: ]
+[trace] resolve Deinitializable<{T, ...U}>: 3 layers, 1 done, 1 minimal
+[trace]   penalty 2: $<ConformanceDeclaration at Deinitializable:15.8><T, U>($c)($j)
+[trace] DONE $c
+[trace] resolve Deinitializable<T>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $c
+[trace] DONE $j
+[trace] resolve Deinitializable<U>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $j
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $e
+[trace] resolve Movable<T>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $e
+[trace] DONE $<ConformanceDeclaration at Movable:24.8>
+[trace] resolve Movable<Void>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Movable:24.8>
+[trace] DONE $1g
+[trace]     solved with $<ConformanceDeclaration at Movable:27.8><T, U>($<assumed given 0>)($<assumed given 1>); now prove $1: Movable<%lp> [pending: $0: Movable<%lo>]
+[trace]     solved with $1n; now prove $0: Movable<%lo> [pending: ]
+[trace] resolve Movable<{T, ...U}>: 3 layers, 1 done, 1 minimal
+[trace]   penalty 2: $<ConformanceDeclaration at Movable:27.8><T, U>($1g)($1n)
+[trace] DONE $1g
+[trace] resolve Movable<T>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $1g
+[trace] DONE $1n
+[trace] resolve Movable<U>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $1n
+[trace] DONE $a
+[trace]     solved with $<ConformanceDeclaration at Optional:13.8><T>($<assumed given 0>); now prove $0: Deinitializable<%mf> [pending: ]
+[trace] resolve Deinitializable<Optional<T>>: 2 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Optional:13.8><T>($a)
+[trace] DONE $a
+[trace]     solved with $<ConformanceDeclaration at Deinitializable:15.8><T, Void>($<assumed given 0>)($<assumed given 1>); now prove $1: Deinitializable<%mq> [pending: $0: Deinitializable<%mp>]
+[trace]     solved with $<ConformanceDeclaration at Deinitializable:12.8>; now prove $0: Deinitializable<%mp> [pending: ]
+[trace] resolve Deinitializable<{T}>: 3 layers, 1 done, 1 minimal
+[trace]   penalty 5: $<ConformanceDeclaration at Deinitializable:15.8><T, Void>($a)($<ConformanceDeclaration at Deinitializable:12.8>)
+[trace] DONE $<ConformanceDeclaration at Deinitializable:12.8>
+[trace] resolve Deinitializable<Void>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 2: $<ConformanceDeclaration at Deinitializable:12.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace]   goal Comparable<Int> <- try $<ConformanceDeclaration at Generated:2972.8> : Comparable<Int>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace]   goal ExpressibleByIntegerLiteral<Int> <- try $<ConformanceDeclaration at Generated:2964.8> : ExpressibleByIntegerLiteral<Int>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace]   goal AdditiveArithmetic<Int> <- try $<ConformanceDeclaration at Generated:2974.8> : AdditiveArithmetic<Int>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:332.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:332.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int8>: 1 layers, 0 done, 0 minimal
+[trace] resolve Comparable<Int8>: 1 layers, 0 done, 0 minimal
+[trace] resolve AdditiveArithmetic<Int8>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<Int8>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<Int8>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:3.23>
+[trace] DONE $<ConformanceDeclaration at Generated:3.23>
+[trace] resolve Deinitializable<Int8>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:3.23>
+[trace] DONE $<ConformanceDeclaration at Generated:332.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:332.8>
+[trace] DONE $<ConformanceDeclaration at Generated:334.8>
+[trace] resolve Movable<Int8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:334.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:659.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:659.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt8>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:332.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:332.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int8>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<UInt8>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<UInt8>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<UInt8>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:338.24>
+[trace] DONE $<ConformanceDeclaration at Generated:338.24>
+[trace] resolve Deinitializable<UInt8>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:338.24>
+[trace] DONE $<ConformanceDeclaration at Generated:659.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:659.8>
+[trace] DONE $<ConformanceDeclaration at Generated:661.8>
+[trace] resolve Movable<UInt8>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:661.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace]   goal Comparable<Int> <- try $<ConformanceDeclaration at Generated:2972.8> : Comparable<Int>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace]   goal ExpressibleByIntegerLiteral<Int> <- try $<ConformanceDeclaration at Generated:2964.8> : ExpressibleByIntegerLiteral<Int>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace]   goal AdditiveArithmetic<Int> <- try $<ConformanceDeclaration at Generated:2974.8> : AdditiveArithmetic<Int>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:994.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:994.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int16>: 1 layers, 0 done, 0 minimal
+[trace] resolve Comparable<Int16>: 1 layers, 0 done, 0 minimal
+[trace] resolve AdditiveArithmetic<Int16>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<Int16>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<Int16>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:665.24>
+[trace] DONE $<ConformanceDeclaration at Generated:665.24>
+[trace] resolve Deinitializable<Int16>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:665.24>
+[trace] DONE $<ConformanceDeclaration at Generated:994.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:994.8>
+[trace] DONE $<ConformanceDeclaration at Generated:996.8>
+[trace] resolve Movable<Int16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:996.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1321.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:1321.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt16>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:994.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:994.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int16>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<UInt16>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<UInt16>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<UInt16>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1000.25>
+[trace] DONE $<ConformanceDeclaration at Generated:1000.25>
+[trace] resolve Deinitializable<UInt16>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1000.25>
+[trace] DONE $<ConformanceDeclaration at Generated:1321.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1321.8>
+[trace] DONE $<ConformanceDeclaration at Generated:1323.8>
+[trace] resolve Movable<UInt16>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1323.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace]   goal Comparable<Int> <- try $<ConformanceDeclaration at Generated:2972.8> : Comparable<Int>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace]   goal ExpressibleByIntegerLiteral<Int> <- try $<ConformanceDeclaration at Generated:2964.8> : ExpressibleByIntegerLiteral<Int>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace]   goal AdditiveArithmetic<Int> <- try $<ConformanceDeclaration at Generated:2974.8> : AdditiveArithmetic<Int>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1656.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:1656.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int32>: 1 layers, 0 done, 0 minimal
+[trace] resolve Comparable<Int32>: 1 layers, 0 done, 0 minimal
+[trace] resolve AdditiveArithmetic<Int32>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<Int32>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<Int32>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1327.24>
+[trace] DONE $<ConformanceDeclaration at Generated:1327.24>
+[trace] resolve Deinitializable<Int32>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1327.24>
+[trace] DONE $<ConformanceDeclaration at Generated:1656.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1656.8>
+[trace] DONE $<ConformanceDeclaration at Generated:1658.8>
+[trace] resolve Movable<Int32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1658.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1983.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:1983.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt32>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:1656.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:1656.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int32>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<UInt32>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<UInt32>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<UInt32>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1662.25>
+[trace] DONE $<ConformanceDeclaration at Generated:1662.25>
+[trace] resolve Deinitializable<UInt32>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1662.25>
+[trace] DONE $<ConformanceDeclaration at Generated:1983.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1983.8>
+[trace] DONE $<ConformanceDeclaration at Generated:1985.8>
+[trace] resolve Movable<UInt32>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1985.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace]   goal Comparable<Int> <- try $<ConformanceDeclaration at Generated:2972.8> : Comparable<Int>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace]   goal ExpressibleByIntegerLiteral<Int> <- try $<ConformanceDeclaration at Generated:2964.8> : ExpressibleByIntegerLiteral<Int>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace]   goal AdditiveArithmetic<Int> <- try $<ConformanceDeclaration at Generated:2974.8> : AdditiveArithmetic<Int>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2318.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2318.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int64>: 1 layers, 0 done, 0 minimal
+[trace] resolve Comparable<Int64>: 1 layers, 0 done, 0 minimal
+[trace] resolve AdditiveArithmetic<Int64>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<Int64>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<Int64>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:1989.24>
+[trace] DONE $<ConformanceDeclaration at Generated:1989.24>
+[trace] resolve Deinitializable<Int64>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:1989.24>
+[trace] DONE $<ConformanceDeclaration at Generated:2318.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2318.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2320.8>
+[trace] resolve Movable<Int64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2320.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2645.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2645.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt64>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2318.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2318.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int64>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<UInt64>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<UInt64>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<UInt64>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2324.25>
+[trace] DONE $<ConformanceDeclaration at Generated:2324.25>
+[trace] resolve Deinitializable<UInt64>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2324.25>
+[trace] DONE $<ConformanceDeclaration at Generated:2645.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2645.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2647.8>
+[trace] resolve Movable<UInt64>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2647.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2976.8>
+[trace] resolve Numeric<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2976.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2970.8>
+[trace] resolve Equatable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2970.8>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2651.22>
+[trace] DONE $<ConformanceDeclaration at Generated:2651.22>
+[trace] resolve Deinitializable<Int>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2651.22>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2964.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2966.8>
+[trace] resolve Movable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2966.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2968.8>
+[trace] resolve Copyable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2968.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2970.8>
+[trace] resolve Equatable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2970.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2974.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2976.8>
+[trace] resolve Numeric<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2976.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2972.8>
+[trace] resolve Comparable<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2972.8>
+[trace] DONE $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByIntegerLiteral<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2964.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<Int>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:3294.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:3294.8>
+[trace] resolve ExpressibleByFloatingPointLiteral<UInt>: 1 layers, 0 done, 0 minimal
+[trace] DONE $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<Int>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 1: $<ConformanceDeclaration at Generated:2974.8>
+[trace] resolve AdditiveArithmetic<UInt>: 2 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByIntegerLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] resolve ExpressibleByFloatingPointLiteral<Bool>: 1 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] resolve Numeric<UInt>: 1 layers, 0 done, 0 minimal
+[trace] resolve Equatable<UInt>: 3 layers, 0 done, 0 minimal
+[trace] DONE Builtin.trap()<Void>
+[trace] resolve Void: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: Builtin.trap()<Void>
+[trace] DONE $<ConformanceDeclaration at Generated:2980.23>
+[trace] DONE $<ConformanceDeclaration at Generated:2980.23>
+[trace] resolve Deinitializable<UInt>: 1 layers, 2 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:2980.23>
+[trace] DONE $<ConformanceDeclaration at Generated:3294.8>
+[trace] resolve ExpressibleByIntegerLiteral<UInt>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:3294.8>
+[trace] DONE $<ConformanceDeclaration at Generated:3296.8>
+[trace] resolve Movable<UInt>: 1 layers, 1 done, 1 minimal
+[trace]   penalty 0: $<ConformanceDeclaration at Generated:3296.8>
+counters.stdlib: coerced.slowPath=54 index.fallback=35 index.skipped=17872 index.unavailable=888 memberskip.settled=2413 memberskip.skipped=7296 names.appliesCalls=36 solver.forks=316 solver.goalSteps=9484 solver.overloads=158 solver.refreshScans=63 solver.systems=798 summon.cacheHits=1293 summon.calls=3158 summon.layers=347 summon.matchOK=304 summon.matches=4083 summon.subgoals=329
+counters.user:   
+diagnostics: 0
+parse    107.98 ms
+scope      5.53 ms
+type.stdlib    474.92 ms
+type.user      0.07 ms

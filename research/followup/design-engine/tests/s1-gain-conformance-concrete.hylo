@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected (premsubst, step 3): accepted. `A is P` is found first; `A.X` through that conformance
+// is `B` by definition, and `B is Q`.
+// currently: base rejected (subgoals=6 matches=441): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=78): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given B is Q {}
+given A is P { type X = B }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<A>() }

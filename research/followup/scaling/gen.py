@@ -439,6 +439,31 @@ fun f<T{w}>() {{ g<T>() }}
 """
 
 
+# ---------------------------------------------------------------- controls
+
+def ctrl_goals(n):
+    """Valid control for eqchain-goals: n + 1 type parameters and n calls, no equality at all."""
+    ps = ", ".join(f"T{i}" for i in range(n + 1))
+    calls = "\n".join(f"  need<T0, T{i}>()" for i in range(1, n + 1))
+    return f"""fun need<A, B>() {{}}
+fun f<{ps}>() {{
+{calls}
+}}
+"""
+
+
+def ctrl_assoc(n):
+    """Valid control for assoceq: n + 1 parameters with T{i} is P, no equality; x: T0.X is checked against T0.X."""
+    ps = ", ".join(f"T{i}" for i in range(n + 1))
+    confs = ", ".join(f"T{i} is P" for i in range(n + 1))
+    return f"""trait P {{ type X }}
+fun check<T>(x: T) {{}}
+fun f<{ps} where {confs}>(x: T0.X) {{
+  check<T0.X>(x)
+}}
+"""
+
+
 # ---------------------------------------------------------------- registry
 
 M = "summon.matches"
@@ -448,8 +473,10 @@ FAMILIES = {
     "eqchain-conf":   (eqchain_conf,   [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
     "eqchain-neg":    (eqchain_neg,    [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512, 1024], "err", {}, M),
     "eqchain-goals":  (eqchain_goals,  [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
-    "assoceq":        (assoceq,        [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
-    "assocneg":       (assocneg,       [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512, 1024], "err", {}, M),
+    "assoceq":        (assoceq,        [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 512, 1024], "ok", {}, M),
+    "assocneg":       (assocneg,       [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, 160, 192, 256, 512, 1024], "err", {}, M),
+    "ctrl-goals":     (ctrl_goals,     [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
+    "ctrl-assoc":     (ctrl_assoc,     [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {}, M),
     "breadth-traits": (breadth_traits, [8, 16, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
     "breadth-types":  (breadth_types,  [8, 16, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
     "breadth-square": (breadth_square, [4, 6, 8, 12, 16, 24, 32, 40, 48], "ok", {}, M),
@@ -474,7 +501,8 @@ FAMILIES = {
     "nest":           (nest,           [1, 2, 3, 4, 5, 6, 7, 8], "ok", {}, M),
     "nest-deep":      (nest,           [4, 8, 16, 32, 64, 128], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "nest-neg":       (nest_neg,       [4, 8, 16, 32, 64, 128], "err", {"HYLO_TC_MAXDEPTH": "1000"}, M),
-    "nest-diamond":   (nest_diamond,   [1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 20], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
+    "nest-diamond":   (nest_diamond,   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 20], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
+    "nest-diamond-default": (nest_diamond, [1, 2, 3, 4, 5, 6, 8, 12, 16, 32, 64], "ok", {}, M),
     "nest-diamond-neg": (nest_diamond_neg, [1, 2, 3, 4, 5, 6, 8, 10, 12, 14, 16, 20], "err", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "refine":         (refine,         [1, 2, 3, 4, 5, 6, 7, 8], "ok", {}, M),
     "refine-deep":    (refine,         [4, 8, 16, 32, 64], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
@@ -482,9 +510,13 @@ FAMILIES = {
     "open-chain":     (open_chain,     [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512], "ok", {}, M),
     "open-neg":       (open_neg,       [1, 2, 3, 4, 5, 6, 8, 12, 16, 24, 32, 64, 128, 256, 512], "err", {}, M),
     "open-wide":      (open_wide,      [1, 2, 3, 4, 5, 6, 8, 12, 16], "ok", {}, M),
-    "req-traits":     (req_traits,     [1, 2, 4, 8, 16, 32, 64, 128], "ok", {}, M),
-    "req-params":     (req_params,     [1, 2, 4, 8, 16, 32, 64, 128], "ok", {}, M),
-    "req-eq":         (req_eq,         [1, 2, 4, 8, 16, 32, 64, 128, 256, 512], "ok", {}, M),
+    "open-wide-nobudget": (open_wide,  [1, 2, 3, 4, 5, 6, 7, 8], "ok", {"HYLO_TC_BUDGET": "1000000000"}, M),
+    "req-traits":     (req_traits,     [1, 2, 4, 8, 9, 10, 11, 12, 16, 32, 64, 128], "ok", {}, M),
+    "req-params":     (req_params,     [1, 2, 4, 8, 9, 10, 11, 12, 16, 32, 64, 128], "ok", {}, M),
+    "req-eq":         (req_eq,         [1, 2, 4, 8, 9, 10, 11, 12, 16, 32, 64, 128, 256, 512], "ok", {}, M),
+    "req-traits-deep": (req_traits,    [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
+    "req-params-deep": (req_params,    [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
+    "req-eq-deep":    (req_eq,         [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "req-neg":        (req_neg,        [1, 2, 4, 8, 16, 32, 64, 128], "err", {}, M),
 }
 

@@ -1,0 +1,9 @@
+// Same as hyp-used with the two requirements swapped: no hypothesis is available for `S<A> is Q`.
+trait P {}
+trait Q {}
+struct A {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where S<A> is Q, A is P>() {}
+public fun main() { f() }

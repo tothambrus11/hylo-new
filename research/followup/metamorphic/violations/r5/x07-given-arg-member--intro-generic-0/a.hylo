@@ -1,0 +1,11 @@
+//! stage:typing no-std
+trait Container { }
+struct Wrapper<T> { public memberwise init }
+struct List { type Element = Bool }
+given Wrapper<List.Element> is Container {
+}
+fun first<C where C is Container>(c: C) {}
+public fun main() {
+  let w = Wrapper<Bool>()
+  first(w)
+}

@@ -1,0 +1,30 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (rejected,
+//   two ambiguities)
+// reason: The same call as m06, after an overload set S.a with two candidates of the same type.
+//   For the first one, f -> B is dropped as in m06. For the second one a clean solution is
+//   already known, so f -> B stays viable and makes f ambiguous; and the second candidate of
+//   S.a is the preferred one. Tests the rule that a twin may reuse a result of the clean-first
+//   pass only if nothing was dropped while computing it.
+// currently (base): rejected, 2 diagnostic(s): 29.14-15: error: ambiguous use of 'f'; 29.14-19: error: ambiguous use of 'n'; solver.forks=10 solver.overloads=5
+// currently (FULL): rejected, 2 diagnostic(s): 29.14-15: error: ambiguous use of 'f'; 29.14-19: error: ambiguous use of 'n'; solver.forks=10 solver.overloads=5
+struct C { public memberwise init }
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct S {
+  public memberwise init
+  public static fun a() -> C { C() }
+}
+fun f() -> B { B() }
+fun f() -> A { A() }
+fun two(x: C, y: A) {}
+public fun main() {
+  extension S { static fun a() -> C { C() } }
+  two(S.a(), f().n())
+}

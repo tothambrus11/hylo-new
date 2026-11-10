@@ -1,3 +1,6 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: A cycle of aliases; the diagnostic must stay "definition of 'X' refers to itself" for this order.
+// Currently: base rejects it in all 6 orders tried; FULL rejects it in all 6 orders tried.
 type X = Y
 type Y = Z
 type Z = X

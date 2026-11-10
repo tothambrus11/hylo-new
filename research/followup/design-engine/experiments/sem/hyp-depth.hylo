@@ -1,0 +1,20 @@
+// `C is P` needs 8 steps. With `C is P` first it is a hypothesis for `S<C> is Q`: 1 + 8 + 2 steps.
+trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct C {}
+struct S<T> {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given <where A0 is P, A1 is P, A2 is P, A3 is P> => C is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where C is P, S<C> is Q>() {}
+public fun main() { f() }

@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected (premsubst, step 2): accepted. The requirement `T.X is Q` of `f` mentions the requirement
+// `T is P`. Once `U is P` is found for the latter, the former reads `U.X is Q` through that witness,
+// which is the requirement of `g`.
+// currently: base rejected (subgoals=9 matches=652): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=147): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

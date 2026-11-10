@@ -1,5 +1,7 @@
 //! stage:typing no-std
-
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: Copy of Tests/CompilerTests/positive/typealiases.hylo.
+// Currently: base accepts it in all 24 orders tried; FULL accepts it in all 120 orders tried.
 struct A {
   struct B {}
 }

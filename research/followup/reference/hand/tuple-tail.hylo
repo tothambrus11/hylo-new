@@ -1,0 +1,6 @@
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<A, B, C, D, E where {B, C} == {D, E}>() { needEq<{A, B, C}, {A, D, E}>() }
+fun q1<A, B, C, D, E where {B, C} == {D, E}>(x: {A, B, C}) { check<{A, D, E}>(x) }
+fun q2<A, B, C, D, E where {B, C} == {D, E}>() { needEq<{B, C, A}, {D, E, A}>() }
+fun q3<A, B, C, D, E where {B, C} == {D, E}>() { needEq<{A, {B, C}}, {A, {D, E}}>() }

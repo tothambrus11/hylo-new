@@ -1,0 +1,26 @@
+eqchain-goals      n=1024  FULL  ok       t=23171.79 wall=24.45 matches=2048 forks=None applies=None 
+assoceq            n=256   FULL  timeout  t=None wall=120.01 matches=None forks=None applies=None 
+assoceq            n=512   FULL  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+assoceq            n=1024  FULL  skipped  t=None wall=None matches=None forks=None applies=None timeout (120 s) at n=256
+assocneg           n=256   FULL  err      t=116179.05 wall=116.86 matches=232706 forks=None applies=None assocneg-256.hylo:4.15-16: error: cannot pass value of type '(T256::P).X' to parameter '(T0::P).X'
+assocneg           n=512   FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 116 s at n=256, power-law extrapolation gives 813 s at n=512
+assocneg           n=1024  FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 116 s at n=256, power-law extrapolation gives 813 s at n=512
+div-trunc          n=4     FULL  err      t=5610.8 wall=6.32 matches=87377 forks=None applies=None div-trunc-4.hylo:1.1-18:1: error: implicit resolution is too complex: more than 100000 candidate der
+div-trunc          n=5     FULL  err      t=6879.57 wall=7.7 matches=78121 forks=None applies=None div-trunc-5.hylo:1.1-21:1: error: implicit resolution is too complex: more than 100000 candidate der
+div-trunc          n=6     FULL  err      t=20185.38 wall=22.01 matches=223945 forks=None applies=None div-trunc-6.hylo:1.1-24:1: error: implicit resolution is too complex: more than 100000 candidate der
+div-trunc          n=8     FULL  err      t=18757.52 wall=20.37 matches=149793 forks=None applies=None div-trunc-8.hylo:1.1-30:1: error: implicit resolution is too complex: more than 100000 candidate der
+div-trunc          n=12    FULL  err      t=14433.57 wall=15.76 matches=90481 forks=None applies=None div-trunc-12.hylo:1.1-42:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-trunc          n=16    FULL  err      t=3411.73 wall=3.91 matches=17473 forks=None applies=None div-trunc-16.hylo:1.1-54:1: error: implicit resolution is too complex: more than 100000 candidate de
+div-trunc          n=32    FULL  crash    t=None wall=45.2 matches=None forks=None applies=None 
+div-trunc-depth    n=16    FULL  err      t=13304.08 wall=14.42 matches=262137 forks=None applies=None div-trunc-depth-16.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candid
+div-trunc-depth    n=20    FULL  err      t=17736.47 wall=18.95 matches=262137 forks=None applies=None div-trunc-depth-20.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candid
+div-trunc-depth    n=24    FULL  err      t=17944.64 wall=19.01 matches=262137 forks=None applies=None div-trunc-depth-24.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candid
+div-trunc-depth    n=32    FULL  err      t=14814.55 wall=15.73 matches=262137 forks=None applies=None div-trunc-depth-32.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candid
+div-trunc-depth    n=40    FULL  err      t=13867.67 wall=14.98 matches=262137 forks=None applies=None div-trunc-depth-40.hylo:1.1-12:1: error: implicit resolution is too complex: more than 100000 candid
+div-valid-deep     n=16    FULL  err      t=30468.95 wall=32.43 matches=393211 forks=None applies=None div-valid-deep-16.hylo:1.1-10:1: error: implicit resolution is too complex: more than 100000 candida
+div-valid-deep     n=20    FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 30 s at n=16, power-law extrapolation gives 294 s at n=20
+ovl-calls          n=16    FULL  ok       t=112531.9 wall=112.93 matches=1459742 forks=1190192 applies=None 
+ovl-calls          n=20    FULL  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 113 s at n=16, power-law extrapolation gives 2426 s at n=20
+ovr-args           n=12    FULL  ok       t=34237.48 wall=34.86 matches=682324 forks=797160 applies=None 
+open-wide-nobudget n=7     FULL  err      t=35154.08 wall=38.05 matches=1297200 forks=None applies=None open-wide-nobudget-7.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7> (Q<U1>, 
+open-wide-nobudget n=8     FULL  crash    t=None wall=35.04 matches=None forks=None applies=None 

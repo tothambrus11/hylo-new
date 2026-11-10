@@ -1,0 +1,3 @@
+trait Q {}
+fun pick<T, U1, U2, U3, U4, U5 where U1 is Q, T == U1, U2 is Q, T == U2, U3 is Q, T == U3, U4 is Q, T == U4, U5 is Q, T == U5>(x: T) {}
+fun f<A0 where A0 is Q>(x: A0) { pick(x) }

@@ -1,0 +1,7 @@
+[absmodel,absquotient,arrowenv,budget,coesrc,eqmgu,eqsolve,extorder,fixsubst,givencheck,index,memberskip,occurs,reifymemo,symindex,traitindex,typevec,unify] 215/216 identical
+  MISMATCH research/workloads/breadth80.hylo
+      baseline=timeout config=ok
+[absmodel,absquotient,arrowenv,budget,coesrc,eqeager,eqindex,eqmgu,eqsolve,extorder,fixsubst,givencheck,index,memberskip,occurs,reifymemo,symindex,traitindex,typevec,unify] 215/216 identical
+  MISMATCH research/workloads/breadth80.hylo
+      baseline=timeout config=ok
+finished

@@ -1,0 +1,5 @@
+trait P { type X }
+trait Q {}
+trait R {}
+fun f<T where T is P, T.X is Q, T.X is R>() {}
+fun g<U where U is P, U.X is Q, U.X is R>() { f<U>() }

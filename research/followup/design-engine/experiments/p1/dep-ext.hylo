@@ -1,0 +1,5 @@
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> { fun first() {} }
+fun g<U where U is P, U.X is Q>(b: Box<U>) { b.first() }

@@ -1,0 +1,16 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 36 with `cleanfirst,lookahead`
+// reason: round3/soundness/review2/perf/ovl-ret-9.hylo. Takes about 15 s today: run with a 120
+//   s limit.
+// currently (base): accepted; solver.forks=349524 solver.overloads=87381
+// currently (FULL): accepted; solver.forks=349524 solver.overloads=87381
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+fun h() -> A0 { A0() }
+fun h() -> A1 { A1() }
+fun h() -> A2 { A2() }
+fun h() -> A3 { A3() }
+fun g(x0: A0, x1: A1, x2: A2, x3: A3, x4: A0, x5: A1, x6: A2, x7: A3, x8: A0) {}
+public fun main() { g(h(), h(), h(), h(), h(), h(), h(), h(), h()) }

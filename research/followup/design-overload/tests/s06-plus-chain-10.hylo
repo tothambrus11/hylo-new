@@ -1,0 +1,11 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 10 with `cleanfirst,twins`
+// reason: Each + on Int has two candidates of the same type (the member of Int and the
+//   requirement of AdditiveArithmetic), and every combination is a solution. Twins share one
+//   exploration.
+// currently (base): accepted; solver.forks=2046 solver.overloads=1023
+// currently (FULL): accepted; solver.forks=2046 solver.overloads=1023
+public fun main() {
+  let a = 1
+  let x = a + a + a + a + a + a + a + a + a + a + a
+}

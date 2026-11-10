@@ -1,0 +1,6 @@
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+fun g<T where T is P1, T is P2, T is P3, T is P4>() {}
+fun f<T where T is P1, T is P2, T is P3>() { g<T>() }

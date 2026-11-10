@@ -1,0 +1,5 @@
+//! stage:typing no-std
+
+struct A<T> {
+}
+fun g<T :: * -> *, U where T == T>(x: T<U>) -> T<A<U>> { Builtin.trap() }

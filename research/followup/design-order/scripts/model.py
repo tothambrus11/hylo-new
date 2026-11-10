@@ -165,8 +165,7 @@ class Checker:
         self.decls, self.table, self.checked, self.skips = decls, table, checked, []
         self.errors, self.memo, self.stack = [], {}, []
         self.hidden_candidate_seen = False
-        self.types = {"Int": {"kind": "struct", "name": "Int", "members": {}, "params": 0},
-                      "Bool": {"kind": "struct", "name": "Bool", "members": {}, "params": 0}}
+        self.types = {n: {"kind": "struct", "name": n, "members": {}, "params": 0} for n in ("Int", "Bool", "Void")}
         self.exts, self.traits, self.top_givens = [], {}, []
         for d in decls:
             if d["kind"] in ("struct", "alias"): self.types[d["name"]] = d

@@ -1,0 +1,15 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (one
+//   diagnostic; v: X)
+// reason: Two clean candidates that are not comparable: an ambiguity is reported and the
+//   solution of the candidate declared first is kept, so takeX(v) is not an error.
+// currently (base): rejected, 1 diagnostic(s): 13.11-12: error: ambiguous use of 'a'; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 1 diagnostic(s): 13.11-12: error: ambiguous use of 'a'; solver.forks=2 solver.overloads=1
+struct X { public memberwise init }
+struct Y { public memberwise init }
+fun a() -> X { X() }
+fun a() -> Y { Y() }
+fun takeX(x: X) {}
+public fun main() {
+  let v = a()
+  takeX(v)
+}

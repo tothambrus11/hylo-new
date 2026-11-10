@@ -1,0 +1,26 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/t13_three_sets.hylo.
+// currently (base): accepted; solver.forks=30 solver.overloads=13
+// currently (FULL): accepted; solver.forks=30 solver.overloads=13
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct Z { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> X { X() }
+  public static fun b() -> Y { Y() }
+  public static fun c() -> Z { Z() }
+}
+fun j<V>(x: V, y: V, z: V) {}
+fun main() {
+  extension S {
+    static fun a() -> Y { Y() }
+    static fun b() -> Z { Z() }
+    static fun c() -> X { X() }
+  }
+  extension <T> T {
+    static fun a() -> Z { Z() }
+    static fun b() -> X { X() }
+  }
+  j(S.a(), S.b(), S.c())
+}

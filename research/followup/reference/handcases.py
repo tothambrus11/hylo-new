@@ -248,4 +248,60 @@ query [] Box<A> is P                                      # expect: D2
 query [T] Box<T> is P                                     # expect: D
 query [T: T == A, T is P] T is P                          # expect: D2
 """),
+    ("goal-agreement", None, """
+struct Box 1
+query [A B C: Box<A> == C, A == B] C == Box<B>            # expect: D
+query [A B C: Box<A> == C, A == B] C -> Box<B>            # expect: D
+query [A B: Box<A> == Box<B>] Box<Box<A>> == Box<Box<B>>  # expect: D
+query [A B: Box<A> == Box<B>] Box<Box<A>> -> Box<Box<B>>  # expect: D
+"""),
+    ("tuple-tail", None, """
+query [A B C D E: {B, C} == {D, E}] {A, B, C} == {A, D, E}    # expect: U
+query [A B C D E: {B, C} == {D, E}] {A, B, C} -> {A, D, E}    # expect: U
+query [A B C D E: {B, C} == {D, E}] {B, C, A} == {D, E, A}    # expect: U
+query [A B C D E: {B, C} == {D, E}] {A, {B, C}} == {A, {D, E}}    # expect: D
+"""),
+    ("blanket", None, """
+trait Q
+trait P X
+struct S
+struct R
+given S is Q
+given R is Q
+given [A: A is Q] A is P = A
+query [T U: T is Q, U is Q] T.X == U.X                    # expect: U
+query [T U: T is Q, U is Q] T.X -> U.X                    # expect: U
+query [] S.X -> R.X                                       # expect: U
+query [T: T is Q] T.X == T                                # expect: D
+query [] S.X == S                                         # expect: D
+query [T: T is Q] T.X -> T.X                              # expect: D
+"""),
+    ("where-order", None, """
+trait P X
+struct S
+query [T: T is P, T.X == S] T.X == S                      # expect: D
+query [T: T.X == S, T is P] T.X == S                      # expect: D
+query [T: T is P, T.X is P] T.X is P                      # expect: D
+query [T: T.X is P, T is P] T.X is P                      # expect: D
+"""),
+    ("budget", None, """
+trait P
+struct S0
+struct S1
+struct S3 2
+given S1 is P
+given [A: A == S0, A is P] S3<S0, A> is P
+query [T U: U == T] S3<U, S0> is P                        # expect: U
+query [T U] S3<U, S0> is P                                # expect: U
+query [] S3<S0, S0> is P                                  # expect: U
+"""),
+    ("proj-through-application", None, """
+trait P X
+struct S
+struct Box 1
+given [A] Box<A> is P = A
+query [T U: T == Box<U>] T.X == U                         # expect: D
+query [T: T == Box<S>] T.X == S                           # expect: D
+query [T U: T == Box<U>] T is P                           # expect: D
+"""),
 ]

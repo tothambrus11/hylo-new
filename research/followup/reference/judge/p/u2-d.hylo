@@ -1,0 +1,8 @@
+trait P {
+  type X
+  fun cast<T where T is P, T == Self>(x: T.X) -> X { x }
+}
+fun check<T>(x: T) {}
+fun f0<V, W where W is P, V is P, W == V>(v: V, x: W.X) {
+  check<V.X>(v.cast<W>(x))
+}

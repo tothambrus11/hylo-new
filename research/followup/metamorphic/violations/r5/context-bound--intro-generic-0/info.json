@@ -1,0 +1,44 @@
+{
+ "file": "Tests/CompilerTests/positive/context-bound.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`A<...>` spelled `AlqA<...>` (1 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: type 'T' has no member 'f'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no member 'f'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no member 'f'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no member 'f'"
+   ]
+  }
+ }
+}

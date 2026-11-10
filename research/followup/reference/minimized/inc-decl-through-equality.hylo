@@ -4,4 +4,4 @@ given <A> => St4<A> is Tr1 {}
 fun needTr1<W where W is Tr1>() {}
 fun needEq<X, Y where X == Y>() {}
 fun check<X>(x: X) {}
-fun q0<T0 where T0 == St4<T0>>() { needTr1<T0>() }
+fun q0<T0, T1 where T0 == St4<T1>>() { needTr1<T0>() }

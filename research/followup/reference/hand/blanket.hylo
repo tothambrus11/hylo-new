@@ -1,0 +1,17 @@
+trait Q {}
+trait P { type X }
+struct S { public memberwise init }
+struct R { public memberwise init }
+given S is Q {}
+given R is Q {}
+given <A where A is Q> => A is P { type X = A }
+fun needQ<W where W is Q>() {}
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T, U where T is Q, U is Q>() { needEq<T.X, U.X>() }
+fun q1<T, U where T is Q, U is Q>(x: T.X) { check<U.X>(x) }
+fun q2(x: S.X) { check<R.X>(x) }
+fun q3<T where T is Q>() { needEq<T.X, T>() }
+fun q4() { needEq<S.X, S>() }
+fun q5<T where T is Q>(x: T.X) { check<T.X>(x) }

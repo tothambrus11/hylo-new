@@ -1,0 +1,42 @@
+{
+ "file": "research/workloads/chain8.hylo",
+ "rel": "r4",
+ "vid": "taut-param:4:0:last",
+ "kind": "taut-param",
+ "desc": "`T == T` added last to `given <T where T is`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "timeout",
+   "a_errors": [],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  }
+ }
+}

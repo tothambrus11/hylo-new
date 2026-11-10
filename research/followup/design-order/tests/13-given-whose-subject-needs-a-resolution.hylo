@@ -1,3 +1,6 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: Both givens with subject `A.E` are givens for `Int`; neither can match `P<A>`.
+// Currently: base accepts it in all 24 orders tried; FULL accepts it in all 120 orders tried.
 trait P { type E }
 trait Q {}
 struct A {}

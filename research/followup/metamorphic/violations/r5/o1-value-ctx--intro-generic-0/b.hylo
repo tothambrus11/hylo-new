@@ -1,0 +1,10 @@
+//! stage:typing no-std
+trait P {}
+struct Box<T> {}
+given <X > => AlqBox<X> is P {}
+fun g<T >() {}
+fun h<T where T is P>() {}
+public fun main() {
+  h<AlqBox<Void>>()
+}
+type AlqBox<Tq0> = Box<Tq0>

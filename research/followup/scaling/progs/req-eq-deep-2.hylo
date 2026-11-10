@@ -1,0 +1,2 @@
+fun g<T1, T2, U1, U2 where T1 == U1, T2 == U2>() {}
+fun f<T1, T2, U1, U2 where T1 == U1, T2 == U2>() { g<T1, T2, U1, U2>() }

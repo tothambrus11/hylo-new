@@ -1,0 +1,15 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (two
+//   diagnostics)
+// reason: As m02 but v is used as a Y: the kept solution is still that of the first candidate,
+//   so the use is a second error.
+// currently (base): rejected, 2 diagnostic(s): 13.11-12: error: ambiguous use of 'a'; 14.9-10: error: cannot pass value of type 'X' to parameter 'Y'; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 2 diagnostic(s): 13.11-12: error: ambiguous use of 'a'; 14.9-10: error: cannot pass value of type 'X' to parameter 'Y'; solver.forks=2 solver.overloads=1
+struct X { public memberwise init }
+struct Y { public memberwise init }
+fun a() -> X { X() }
+fun a() -> Y { Y() }
+fun takeY(x: Y) {}
+public fun main() {
+  let v = a()
+  takeY(v)
+}

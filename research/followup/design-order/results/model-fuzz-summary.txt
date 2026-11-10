@@ -1,0 +1,12 @@
+22000 random programs (fuzz_model.py, seeds 1 to 4); largest number of rounds: 6
+on-demand verdict over all orders, plain / with the checks  ->  verdict of the round semantics
+     42  order-dependent, checked: order-dependent / rounds: accept
+     40  order-dependent, checked: stable-accept / rounds: accept
+      1  order-dependent, checked: stable-reject / rounds: accept
+     32  order-dependent, checked: stable-reject / rounds: reject
+   1262  stable-accept, checked: stable-accept / rounds: accept same types
+     37  stable-accept, checked: stable-reject / rounds: reject
+      3  stable-reject, checked: order-dependent / rounds: accept
+      4  stable-reject, checked: stable-accept / rounds: accept
+      3  stable-reject, checked: stable-reject / rounds: accept
+  20576  stable-reject, checked: stable-reject / rounds: reject

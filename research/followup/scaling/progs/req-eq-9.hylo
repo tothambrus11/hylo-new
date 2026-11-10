@@ -1,0 +1,2 @@
+fun g<T1, T2, T3, T4, T5, T6, T7, T8, T9, U1, U2, U3, U4, U5, U6, U7, U8, U9 where T1 == U1, T2 == U2, T3 == U3, T4 == U4, T5 == U5, T6 == U6, T7 == U7, T8 == U8, T9 == U9>() {}
+fun f<T1, T2, T3, T4, T5, T6, T7, T8, T9, U1, U2, U3, U4, U5, U6, U7, U8, U9 where T1 == U1, T2 == U2, T3 == U3, T4 == U4, T5 == U5, T6 == U6, T7 == U7, T8 == U8, T9 == U9>() { g<T1, T2, T3, T4, T5, T6, T7, T8, T9, U1, U2, U3, U4, U5, U6, U7, U8, U9>() }

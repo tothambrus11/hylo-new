@@ -1,3 +1,6 @@
+// Expected after the change: rejected.
+// Reason: Two consistent readings (each local given can shadow the top-level one that the other needs); neither is reached from the empty table, so the signatures never become stable.
+// Currently: base rejects it; FULL rejects it.
 trait P { type E }
 trait Q { type F }
 struct A {}

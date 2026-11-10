@@ -1,0 +1,9 @@
+// The premise `A is P` is still pending when `S<A> is Q` is proved: is it used as a hypothesis?
+trait P {}
+trait Q {}
+struct A {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where A is P, S<A> is Q>() {}
+public fun main() { f() }

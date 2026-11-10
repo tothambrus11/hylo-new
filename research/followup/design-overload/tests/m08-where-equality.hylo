@@ -1,0 +1,11 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (accepted)
+// reason: review/solver/s18_where_eq_reject.hylo. Accepted only if the overload is resolved
+//   before the arguments of k are coerced.
+// currently (base): accepted; solver.forks=2 solver.overloads=1
+// currently (FULL): accepted; solver.forks=2 solver.overloads=1
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = k(x, g(y)) as U
+}

@@ -1,3 +1,6 @@
+// Expected after the change: accepted.
+// Reason: The same requirements as 11 in the order that the rule allows.
+// Currently: base accepts it; FULL accepts it.
 trait P { type X }
 trait Q {}
 fun f<T where T is P, T.X is Q>() {}

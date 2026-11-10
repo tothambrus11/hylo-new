@@ -1,0 +1,13 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (accepted)
+// reason: A pending argument whose type is closed and differs from the parameter type as an
+//   identity (X is an alias of A1), but coerces to it. The look-ahead must ask `coerced`, not
+//   compare identities.
+// currently (base): accepted; solver.forks=6 solver.overloads=3
+// currently (FULL): accepted; solver.forks=6 solver.overloads=3
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+type X = A1
+fun h() -> A0 { A0() }
+fun h() -> X { A1() }
+fun g(x: A1, y: A1) {}
+public fun main() { g(h(), h()) }

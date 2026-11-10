@@ -1,3 +1,6 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: One consistent reading: `A.Inner` is the struct, `A.Inner.Foo` is `Int`, the given is `Int is P`, which does not make `A` a `P`. Same shape as n11, n12 and v6.
+// Currently: base accepts it in 13 of 24 orders; FULL accepts it in 16 of 24 orders.
 trait P {}
 struct A { struct Inner {} }
 extension <T where T is P> T { type Inner = Bool }

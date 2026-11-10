@@ -1,0 +1,11 @@
+trait Tr1 { type X1 }
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+struct Box<E> { public memberwise init }
+given <A> => Box<A> is Tr1 { type X1 = A }
+type B0 = Box<St0>
+type B1 = Box<St1>
+fun check<X>(x: X) {}
+fun q0(x: B0.X1) { check<B1.X1>(x) }
+fun q1(x: B0.X1) { check<St0>(x) }
+fun q2(x: B0.X1) { check<St1>(x) }

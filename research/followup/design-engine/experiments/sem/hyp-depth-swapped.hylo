@@ -1,0 +1,20 @@
+// Same as hyp-depth with the requirements swapped: `C is P` is derived twice: 1 + 5 + 6 steps.
+trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+struct A6 {}
+struct C {}
+struct S<T> {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given <where A0 is P, A1 is P, A2 is P, A3 is P> => C is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where S<C> is Q, C is P>() {}
+public fun main() { f() }

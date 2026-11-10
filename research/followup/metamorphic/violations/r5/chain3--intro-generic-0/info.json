@@ -1,0 +1,44 @@
+{
+ "file": "research/workloads/chain3.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`S<...>` spelled `AlqS<...>` (4 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  }
+ }
+}

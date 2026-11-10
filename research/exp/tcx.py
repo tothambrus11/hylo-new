@@ -116,6 +116,7 @@ def invoke(spec, key, wl, inner=None):
 # Semantic dumps (the soundness oracle)
 
 NORMALIZE = re.compile(r"\(erased: [0-9]+\)")
+VARIABLE = re.compile(r"%[0-9a-z]+")
 
 def dump(bid, env, key, path, timeout=300):
     """Returns (status, sha, text) of the semantic dump of `path` under configuration `key`."""
@@ -128,6 +129,11 @@ def dump(bid, env, key, path, timeout=300):
         if p.returncode != 0 or not os.path.exists(out):
             return ("crash", f"exit{p.returncode}", p.stderr[-2000:])
         text = NORMALIZE.sub("(erased: _)", open(out).read())
+        # Elaborated witnesses are compared with equality proofs erased (`syn.norm` lines); the
+        # verbatim terms (`syn.raw`) legitimately differ when equality proofs are built
+        # differently. Names of leftover unification variables depend on allocation order.
+        text = "\n".join(VARIABLE.sub("%_", l) if " syn.norm " in l else l
+                         for l in text.split("\n") if " syn.raw " not in l)
         return ("ok", hashlib.sha256(text.encode()).hexdigest()[:16], text)
     except subprocess.TimeoutExpired:
         return ("timeout", "timeout", "")

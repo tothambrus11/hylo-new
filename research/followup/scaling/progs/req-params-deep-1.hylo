@@ -1,0 +1,3 @@
+trait P {}
+fun g<T1 where T1 is P>() {}
+fun f<T1 where T1 is P>() { g<T1>() }

@@ -1,0 +1,44 @@
+{
+ "file": "research/report/test-programs/equalities/x10b-ext-where-assoc.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`Box<...>` spelled `AlqBox<...>` (1 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: type 'AlqBox<T>' has no member 'first'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqBox<T>' has no member 'first'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqBox<T>' has no member 'first'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqBox<T>' has no member 'first'"
+   ]
+  }
+ }
+}

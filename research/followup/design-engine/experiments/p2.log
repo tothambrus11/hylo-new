@@ -1,0 +1,43 @@
+shared-premise.hylo                      base          d=10  accepted  subgoals=14 matches=1047 layers=8 | 
+shared-premise.hylo                      FULL          d=10  accepted  subgoals=14 matches=37 layers=8 refuted=1 | 
+shared-premise.hylo                      FULL-absmodel d=10  accepted  subgoals=14 matches=37 layers=8 | 
+wide-loop-fail-2.hylo                    base          d=10  rejected  calls=2 subgoals=7434 matches=275731 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-2.hylo                    FULL          d=10  rejected  calls=2 subgoals=7434 matches=17569 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-2.hylo                    FULL-absmodel d=10  rejected  calls=2 subgoals=7434 matches=17569 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-3.hylo                    base          d=10  rejected  calls=2 subgoals=22065 matches=790528 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-3.hylo                    FULL          d=10  rejected  calls=2 subgoals=22065 matches=52477 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-3.hylo                    FULL-absmodel d=10  rejected  calls=2 subgoals=22065 matches=52477 layers=20 depthExhausted=2 | no coercion from 'Q<B> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+wide-loop-fail-4.hylo                    base          d=10  timeout    | 
+wide-loop-fail-4.hylo                    FULL          d=10  rejected  calls=2 subgoals=75780 matches=175327 layers=20 depthExhausted=1 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-fail-4.hylo                    FULL-absmodel d=10  rejected  calls=2 subgoals=75780 matches=175327 layers=20 depthExhausted=1 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-fail-5.hylo                    base          d=10  timeout    | 
+wide-loop-fail-5.hylo                    FULL          d=10  rejected  calls=2 subgoals=62502 matches=128169 layers=17 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-fail-5.hylo                    FULL-absmodel d=10  rejected  calls=2 subgoals=62502 matches=128169 layers=17 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-ok-2.hylo                      base          d=10  accepted  subgoals=10 matches=368 layers=4 | 
+wide-loop-ok-2.hylo                      FULL          d=10  accepted  subgoals=10 matches=12 layers=4 | 
+wide-loop-ok-2.hylo                      FULL-absmodel d=10  accepted  subgoals=10 matches=12 layers=4 | 
+wide-loop-ok-3.hylo                      base          d=10  accepted  subgoals=47 matches=1403 layers=5 | 
+wide-loop-ok-3.hylo                      FULL          d=10  accepted  subgoals=47 matches=53 layers=5 | 
+wide-loop-ok-3.hylo                      FULL-absmodel d=10  accepted  subgoals=47 matches=53 layers=5 | 
+wide-loop-ok-4.hylo                      base          d=10  accepted  subgoals=286 matches=7482 layers=6 | 
+wide-loop-ok-4.hylo                      FULL          d=10  accepted  subgoals=286 matches=310 layers=6 | 
+wide-loop-ok-4.hylo                      FULL-absmodel d=10  accepted  subgoals=286 matches=310 layers=6 | 
+wide-loop-ok-5.hylo                      base          d=10  accepted  subgoals=2102 matches=50219 layers=7 | 
+wide-loop-ok-5.hylo                      FULL          d=10  accepted  subgoals=2102 matches=2222 layers=7 | 
+wide-loop-ok-5.hylo                      FULL-absmodel d=10  accepted  subgoals=2102 matches=2222 layers=7 | 
+shared-premise.hylo                      base          d=14  accepted  subgoals=14 matches=1047 layers=8 | 
+shared-premise.hylo                      FULL          d=14  accepted  subgoals=14 matches=37 layers=8 refuted=1 | 
+shared-premise.hylo                      FULL-absmodel d=14  accepted  subgoals=14 matches=37 layers=8 | 
+wide-loop-fail-2.hylo                    base          d=14  timeout    | 
+wide-loop-fail-2.hylo                    FULL          d=14  rejected  calls=2 subgoals=122426 matches=293265 layers=28 depthExhausted=1 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-fail-2.hylo                    FULL-absmodel d=14  rejected  calls=2 subgoals=122426 matches=293265 layers=28 depthExhausted=1 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-ok-2.hylo                      FULL          d=14  accepted  subgoals=10 matches=12 layers=4 | 
+wide-loop-ok-3.hylo                      FULL          d=14  accepted  subgoals=47 matches=53 layers=5 | 
+wide-loop-ok-4.hylo                      FULL          d=14  accepted  subgoals=286 matches=310 layers=6 | 
+wide-loop-ok-5.hylo                      FULL          d=14  accepted  subgoals=2102 matches=2222 layers=7 | 
+wide-loop-fail-3.hylo                    FULL          d=14  rejected  calls=2 subgoals=126458 matches=307985 layers=25 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit
+wide-loop-ok-2.hylo                      FULL          d=20  accepted  subgoals=10 matches=12 layers=4 | 
+wide-loop-ok-3.hylo                      FULL          d=20  accepted  subgoals=47 matches=53 layers=5 | 
+wide-loop-ok-4.hylo                      FULL          d=20  accepted  subgoals=286 matches=310 layers=6 | 
+wide-loop-ok-5.hylo                      FULL          d=20  accepted  subgoals=2102 matches=2222 layers=7 | 
+wide-loop-fail-3.hylo                    FULL          d=20  rejected  calls=2 subgoals=126458 matches=307985 layers=25 | implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit

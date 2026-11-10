@@ -1,5 +1,7 @@
 //! stage:typing no-std
-
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: Copy of Tests/CompilerTests/positive/self-where-clause.hylo (`Self` in the extension's own where clause).
+// Currently: base accepts it in all 6 orders tried; FULL accepts it in all 6 orders tried.
 trait P {}
 trait Q<U> {}
 

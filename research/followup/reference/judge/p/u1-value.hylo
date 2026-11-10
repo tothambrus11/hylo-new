@@ -1,0 +1,16 @@
+trait Tr1 {
+  type X1
+  fun get() -> X1
+}
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+given <A> => A is Tr1 {
+  type X1 = A
+  fun get() -> A { self }
+}
+fun check<X>(x: X) {}
+fun q0(a: St0) { check<St1.X1>(a.get()) }
+fun q1(a: St0) { check<St0>(a.get()) }
+fun q2(a: St0) { check<St1>(a.get()) }
+fun q3(a: St0, b: St1) { check<St1.X1>(a.get())
+  check<St0.X1>(b.get()) }

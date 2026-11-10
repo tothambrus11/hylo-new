@@ -96,7 +96,7 @@ EQ-GOAL ──────────────────────      
 
 Both goals are accepted *exactly* when `A == B` is derivable. In particular an equality goal and a coercion between the same two types must have the same verdict.
 
-**[GUESS 2]** A tuple is a constructor of fixed arity. The implementation represents `{A, B, C}` as a list, `A` followed by `{B, C}`, so its congruence also derives `{A, B, C} == {A, D, E}` from `{B, C} == {D, E}`. That conclusion holds in every model of section 6, but it is not derivable here.
+**[GUESS 2]** A tuple is a constructor of fixed arity. The implementation represents `{A, B, C}` as a list, `A` followed by `{B, C}`, so its congruence also derives `{A, B, C} == {A, D, E}` from `{B, C} == {D, E}` (observed: FIX and FULL accept that equality goal, `hand/tuple-tail.hylo`). That conclusion holds in every model of section 6, but it is not derivable here.
 
 ## 4. Conformance
 
@@ -162,7 +162,7 @@ PROJ-DECL ───────────────────────�
 PROJ-REQ  X(req(i)) is an atom: a type about which nothing is known but the requirements of Γ.
 ```
 
-- `PROJ-DECL`: with `given A is P { type X = B }`, `X(decl) == B`; with `given <a> => Box<a> is P { type X = a }`, the associated type of the instance `a := T` is `T`.
+- `PROJ-DECL`: with `given A is P { type X = B }`, `X(decl) == B`; with `given <a> => Box<a> is P { type X = a }`, the associated type of the instance `a := T` is `T`. The same holds when the head is a bare parameter: with `given <a where a is Q> => a is P { type X = a }`, `T.X == T` for every `T` that is `Q`. (All three configurations of the compiler fail this last case, in both directions: README, U1 and I5.)
 - `PROJ-REQ`: for `T is P` in a where clause, `X(req)` is opaque. It is equal to itself, and to whatever the where clause equates it with (`T.X == U`), through `FACT`.
 - **No other rule.** In particular there is no rule concluding `X(d) == X(d')` for two different derivations, *even when they witness the conformance of equal types*. This is `associated-type-inequality.hylo`:
 
@@ -195,6 +195,8 @@ A consequence worth stating: with `given S is P { type X = Bool }`, the function
 
 The requirements of a where clause may mention associated types whose meaning depends on other requirements of the same clause (`T == U, T is P, U.X == V`). **[GUESS 7] (rule SCOPE)** The scope is built in stages: a requirement enters the scope as soon as every `A.X` it mentions denotes a type in the scope built so far; this is repeated until all requirements have entered. The where clause is well formed only if all requirements enter, and if every `A.X` denotes the same type in the final scope as at the stage at which it was given its meaning. `reference.py` answers "unspecified" otherwise, and the generator discards such problems.
 
+The order in which the requirements are written does not matter under this rule. The implementation is stricter (observed, `hand/where-order.hylo`): it gives requirements their meaning from left to right, so `where T.X == S, T is P` is rejected with "type 'T' has no static member 'X'" while `where T is P, T.X == S` is accepted. The reference records, for every query, whether its where clause is written in such an order (field `ordered`).
+
 ### 5.4 `Self.X` inside a trait
 
 Inside `trait P { type X ... }`, `Self` is a rigid parameter and the scope contains the requirement `Self is P`, the trait's own witness; `X` and `Self.X` denote `X(self)` by rule DIRECT. Under the rules above, a method
@@ -204,7 +206,21 @@ trait P { type X
   fun f<T where T == Self, T is P>() { needEq<Self.X, T.X>() } }
 ```
 
-is **rejected**: `T is P` is a second witness, exactly as in `associated-type-inequality.hylo` with `Self` in place of `U`. **[GUESS 8]** The implementation disagrees: its unifier lets `Self.X` match any `T.X` with `T == Self`, and the equality procedure of `eqsolve` equates them when the scope has exactly one other conformance of a type equal to `Self`. That rule is not derivable from the others, and it is not monotone in the scope (adding the requirement `U is P` with `U == Self` withdraws the equality). This specification keeps the uniform rule; the programs `v-abs-*.hylo` and `abs-trans-*.hylo` of the test programs are where the two differ (README, "Self.X").
+is **rejected**: `T is P` is a second witness, exactly as in `associated-type-inequality.hylo` with `Self` in place of `U`. **[GUESS 8]** The implementation disagrees: its unifier lets `Self.X` match any `T.X` with `T == Self`, and the equality procedure of `eqsolve` equates them when the scope has exactly one other conformance of a type equal to `Self`. That rule is not derivable from the others, and it is not monotone in the scope (adding the requirement `U is P` with `U == Self` withdraws the equality). It is also unsound in the model of section 6, because the caller of the method chooses the witness of `T is P` independently of the witness of `Self`. The following program is accepted by FIX and FULL (`hand/self/launder-5.hylo`), and it performs exactly the conversion that `associated-type-inequality.hylo` forbids:
+
+```hylo
+fun conv<A, B where A == B>(x: A) -> B { x }
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun cast<T, U where T == Self, T is P, T.X == U>(x: U) -> X { conv<U, X>(x) }   // needs T.X == Self.X
+}
+fun f0<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.cast<W, W.X>(x))                                                 // W.X used as V.X
+}
+```
+
+This specification keeps the uniform rule, under which the body of `cast` is rejected. The programs `v-abs-*.hylo` and `abs-trans-*.hylo` of the test programs are where the two rules differ (README, "Self.X").
 
 The fragment tested by `fuzz.py` has no trait bodies; this rule is covered by hand-written cases only.
 
@@ -259,11 +275,11 @@ Conformance derivations are searched exhaustively to height 12; a problem on whi
 
 1. **Injectivity and uncallable functions (GUESS 1).** Should `Box<A> == Box<B>` give `A == B`? Every model says yes; the implementation and this specification say no. Should a where clause with no solution (`Box<A> == Pair<B, C>`, `T == Box<T>`) be an error at the declaration? Today it is accepted, and the body is checked as if it were callable.
 2. **How complete must the checker be (GUESS 3)?** The rules derive `U is P` from `Box<T> == U`, `T is P` and the conditional conformance of `Box`, and `C` coerces to `Box<B>` from `Box<A> == C`, `A == B`. A checker that looks only at the syntactic parts of the goal rejects both. Is the checker required to accept everything derivable by congruence, or may it reject when the needed term is not written in the scope? If the latter, the language needs a rule stating which uses are accepted, because the current behaviour is not symmetric (README, incompleteness classes).
-3. **Ranking and ambiguity (GUESS 5).** When a conformance goal has several derivations, which one is selected, and when is it an error? The specification needs a ranking that does not depend on the orientation of `==` or on the order of requirements.
+3. **Ranking and ambiguity (GUESS 5).** When a conformance goal has several derivations, which one is selected, and when is it an error? The specification needs a ranking that does not depend on the orientation of `==` or on the order of requirements. Observed today: a requirement of the where clause wins over a declaration; a requirement on the goal's own type wins over one that needs a coercion; and between two requirements that both need a coercion, the outcome depends on how the equalities are written (README, "Ambiguity").
 4. **The preference for a requirement stated on the type itself (GUESS 6).** Is `T.X`, with `T == U, T is P, U is P`, the associated type of `T`'s requirement (as the negative test assumes), or ambiguous? Does the same preference apply to conformance goals (`need<T>()` in that scope), and does a requirement win over a declaration (`T == S, T is P`, with `given S is P`)?
 5. **Identity of derivations (GUESS 4).** Are two instances of a generic conformance at equal types the same witness? At types whose equality is not derivable but whose heads are (`Box<A> == Box<B>`)?
-6. **`Self.X` (GUESS 8).** Inside a trait, is `Self.X` equal to `T.X` when `T == Self` and `T is P`? The uniform answer is no. The implementation says yes in some scopes.
-7. **Staging of the where clause (GUESS 7).** In which order do requirements acquire their meaning? May a requirement added later change the meaning of an `A.X` written earlier?
+6. **`Self.X` (GUESS 8).** Inside a trait, is `Self.X` equal to `T.X` when `T == Self` and `T is P`? The uniform answer is no. The implementation says yes in some scopes, and section 5.4 shows a program in which that answer defeats `associated-type-inequality.hylo`.
+7. **Staging of the where clause (GUESS 7).** In which order do requirements acquire their meaning? May a requirement added later change the meaning of an `A.X` written earlier? Is the left-to-right rule of the implementation (section 5.3) intended? It makes the order of requirements significant, which no other rule does.
 8. **Tuples (GUESS 2).** Is congruence on the tail of a tuple intended?
 9. **The depth bound.** The implementation abandons a search after 10 steps. Is the bound part of the language? This specification has none; `fuzz.py` keeps derivations small so that the bound should not matter, and records the size.
 10. **Where `A.X` is looked up.** `U.X` with `Box<T> == U` and a conformance of `Box` denotes a type by rule PROJ. The implementation reports "type 'U' has no static member 'X'": member lookup does not use resolution modulo equality. Which is intended?

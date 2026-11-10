@@ -1,0 +1,12 @@
+trait P {}
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct S3<E0, E1> { public memberwise init }
+given S1 is P {}
+given <A where A == S0, A is P> => S3<S0, A> is P {}
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T, U where U == T>() { needP<S3<U, S0>>() }
+fun q1<T, U>() { needP<S3<U, S0>>() }
+fun q2() { needP<S3<S0, S0>>() }

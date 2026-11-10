@@ -1,0 +1,3 @@
+struct B {}
+struct A { type Inner = B }
+extension A.Inner { fun Inner() {} }

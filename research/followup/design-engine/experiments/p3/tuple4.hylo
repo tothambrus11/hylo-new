@@ -1,0 +1,3 @@
+// Four elements: 10 steps, exactly the bound.
+fun need<T where T is Copyable>() {}
+public fun main() { need<{Bool, Bool, Bool, Bool}>() }

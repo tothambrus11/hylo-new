@@ -1,0 +1,28 @@
+violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 1
+violations/r5/al1--expand-0 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 2
+violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 1
+violations/r5/al1--expand-drop-0 {'base': 'reject/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 2
+violations/r5/generic-member--intro-all-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r5/x05-alias-ext--intro-all-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r5/names-verify-names-1-v4_noC--intro-all-0 {'base': 'accept/reject', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 5
+violations/r5/generic-member--intro-all-top-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r5/r1_selfname_fun--intro-all-top-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 16
+violations/r5/r1_selfname--intro-all-top-1 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 4
+violations/r5/decomp-1--intro-generic-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r5/overload-priority--intro-generic-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 1
+violations/r5/chain3--intro-generic-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 15
+violations/r5/context-bound--intro-generic-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 6
+violations/r5/generic-member--intro-generic-0 {'base': 'accept/reject', 'FIX': 'accept/reject', 'FULL': 'accept/reject'} group of 2
+violations/r5/b1d-method-env-cycle--intro-generic-0 {'base': 'crash:-11/accept', 'FIX': 'reject/accept', 'FULL': 'reject/accept'} group of 2
+done ../../../Tests/CompilerTests/positive/generic-member.hylo intro-all:0
+done ../../report/test-programs/equalities/decomp-1.hylo intro-generic:0
+done ../../../Tests/CompilerTests/positive/context-bound.hylo intro-generic:0
+done ../../../Tests/CompilerTests/positive/implicit-qualification.hylo intro-generic:0
+done ../../../Tests/CompilerTests/positive/overload-priority.hylo intro-generic:0
+done ../../report/test-programs/equalities/x01-ext-arg-member.hylo intro-generic:0
+done ../../report/test-programs/cycles-and-crashes/o1-value-ctx.hylo intro-generic:0
+done ../../report/test-programs/abstract-model/probe1.hylo intro-generic:0
+done ../../report/test-programs/equalities/x10b-ext-where-assoc.hylo intro-generic:0
+done ../../report/test-programs/declaration-order/red2.hylo intro-all-top:0
+done ../../report/test-programs/equalities/x05-alias-ext.hylo intro-all:0
+done ../../report/test-programs/equalities/x07-given-arg-member.hylo intro-generic:0

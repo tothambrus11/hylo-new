@@ -1,0 +1,9 @@
+trait Tr1 { type X1 }
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+given <A> => A is Tr1 { type X1 = A }
+fun take<T where T is Tr1>(w: T, x: T.X1) {}
+fun q0(b: St0, x: St0) { take<St0>(b, x) }
+fun q1(b: St0, x: St1) { take<St0>(b, x) }
+fun q2(b: St0, x: St0) { take(b, x) }
+fun q3(b: St0, x: St1) { take(b, x) }

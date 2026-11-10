@@ -1,0 +1,11 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/t19_where_outer_choice.hylo.
+// currently (base): accepted; solver.forks=6 solver.overloads=3
+// currently (FULL): accepted; solver.forks=6 solver.overloads=3
+fun g<W>(w: W) -> W { w }
+fun g(w: Bool) -> Bool { w }
+fun k<V>(a: V, b: V) -> V { a }
+fun h<T, U where T == U>(x: T, y: U) {
+  let p = (k(x, g(y)) as U, k(x, g(y)))
+  let q = k(k(x, g(y)), y) as U
+}

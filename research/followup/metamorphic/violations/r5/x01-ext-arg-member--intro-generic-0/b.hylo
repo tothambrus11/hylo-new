@@ -1,0 +1,12 @@
+//! stage:typing no-std
+struct Wrapper<T> { public memberwise init }
+struct List { type Element = Bool }
+extension AlqWrapper<List.Element> {
+  type Element = List.Element
+  fun first() -> Element { true }
+}
+public fun main() {
+  let w = Wrapper<Bool>()
+  let x: Bool = w.first()
+}
+type AlqWrapper<Tq0> = Wrapper<Tq0>

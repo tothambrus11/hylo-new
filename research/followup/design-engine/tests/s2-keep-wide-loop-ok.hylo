@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// expected (subgoal table): accepted, with the same witness and penalty. Four premises `A is P`;
+// each but the first is proved from a pending one (a hypothesis), which is why the key of a table
+// entry must contain the pending premises and not only the goal.
+// currently: base accepted (subgoals=286 matches=7482); FULL accepted (subgoals=286 matches=310)
+trait P {}
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => T is P {}
+given <where A is P, A is P, A is P, A is P> => B is Q {}
+fun need<where B is Q>() {}
+public fun main() { need() }

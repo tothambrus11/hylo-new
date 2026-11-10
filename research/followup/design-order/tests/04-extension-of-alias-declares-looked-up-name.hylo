@@ -1,3 +1,6 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: `X` is `Int`, so `extension X` extends `Int` and cannot affect the lookup of `Foo` in `A`. Same shape as v01.
+// Currently: base accepts it in 4 of 6 orders; FULL accepts it in 4 of 6 orders.
 struct A { type Foo = Int }
 type X = A.Foo
 extension X { type Foo = Bool }

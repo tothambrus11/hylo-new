@@ -1,0 +1,48 @@
+{
+ "file": "research/report/test-programs/declaration-order/gz0.hylo",
+ "rel": "r4",
+ "vid": "taut-ground:4:0:last",
+ "kind": "taut-ground",
+ "desc": "`T == T` added last to `given T is P`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: ambiguous use of 'Y'",
+   "error: expression does not denote a type"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: ambiguous use of 'Y'",
+    "error: expression does not denote a type"
+   ],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: ambiguous use of 'Y'",
+    "error: expression does not denote a type"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: ambiguous use of 'Y'",
+    "error: expression does not denote a type"
+   ],
+   "b_errors": []
+  }
+ }
+}

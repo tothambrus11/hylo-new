@@ -1,0 +1,18 @@
+trait P1 {}
+trait P2 {}
+trait P3 {}
+trait P4 {}
+trait P5 {}
+trait P6 {}
+trait P7 {}
+trait P8 {}
+trait P9 {}
+trait P10 {}
+trait P11 {}
+trait P12 {}
+trait P13 {}
+trait P14 {}
+trait P15 {}
+trait P16 {}
+fun g<T where T is P1, T is P2, T is P3, T is P4, T is P5, T is P6, T is P7, T is P8, T is P9, T is P10, T is P11, T is P12, T is P13, T is P14, T is P15, T is P16>() {}
+fun f<T where T is P1, T is P2, T is P3, T is P4, T is P5, T is P6, T is P7, T is P8, T is P9, T is P10, T is P11, T is P12, T is P13, T is P14, T is P15>() { g<T>() }

@@ -1,8 +1,8 @@
 """Cost of selected mutants as a function of the search depth bound HYLO_TC_MAXDEPTH.
 
-Usage: python3 depth.py MUTANT-ID ...     (appends to depth.jsonl; pairs already there are skipped)
-For each mutant: configurations base, min5, min5abs at depths 10, 12, 14, for the mutant and for
-the unmutated source.
+Usage: python3 depth.py [--depths 6,8] MUTANT-ID ...     (appends to depth.jsonl; pairs already there are skipped)
+For each mutant: configurations base, min5, min5abs at depths 10, 12, 14 (or --depths a,b,c), for the
+mutant and for the unmutated source. Memory cap 1 GB, timeout 120 s.
 """
 import json, os, sys
 import tc, run
@@ -12,7 +12,11 @@ DEPTHS = [10, 12, 14]
 CFGS = ["base", "min5", "min5abs"]
 
 def main():
+    global DEPTHS
     ids = sys.argv[1:]
+    if ids and ids[0] == "--depths":
+        DEPTHS = [int(x) for x in ids[1].split(",")]; ids = ids[2:]
+    os.environ.setdefault("TCX_MEM_LIMIT_KB", "1000000")   # blow-ups are detected at 1 GB
     done = set()
     if os.path.exists(OUT):
         for ln in open(OUT):

@@ -1204,3 +1204,279 @@ open-chain         n=24    FULL  ok       t=10.01 wall=0.54 matches=99 forks=Non
 open-chain         n=32    FULL  ok       t=10.21 wall=0.55 matches=107 forks=None applies=None 
 open-chain         n=64    FULL  ok       t=15.85 wall=0.61 matches=139 forks=None applies=None 
 open-chain         n=128   FULL  ok       t=17.1 wall=0.57 matches=203 forks=None applies=None 
+open-neg           n=1     base  timeout  t=None wall=20.17 matches=None forks=None applies=None 
+open-neg           n=2     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=3     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=4     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=5     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=6     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=8     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=12    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=16    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=24    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=64    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=1     FIX   err      t=10.52 wall=0.64 matches=73 forks=None applies=None open-neg-1.hylo:3.39-43: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=2     FIX   err      t=10.13 wall=0.43 matches=74 forks=None applies=None open-neg-2.hylo:3.53-57: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=3     FIX   err      t=14.05 wall=0.72 matches=75 forks=None applies=None open-neg-3.hylo:3.67-71: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=4     FIX   err      t=10.43 wall=0.64 matches=76 forks=None applies=None open-neg-4.hylo:3.81-85: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=5     FIX   err      t=10.37 wall=0.54 matches=77 forks=None applies=None open-neg-5.hylo:3.95-99: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=6     FIX   err      t=10.31 wall=0.41 matches=78 forks=None applies=None open-neg-6.hylo:3.109-113: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> 
+open-neg           n=8     FIX   err      t=11.24 wall=0.68 matches=80 forks=None applies=None open-neg-8.hylo:3.137-141: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> 
+open-neg           n=12    FIX   err      t=18.86 wall=0.68 matches=84 forks=None applies=None open-neg-12.hylo:3.201-205: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=16    FIX   err      t=12.6 wall=0.69 matches=88 forks=None applies=None open-neg-16.hylo:3.269-273: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=24    FIX   err      t=30.87 wall=0.86 matches=96 forks=None applies=None open-neg-24.hylo:3.405-409: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=32    FIX   err      t=31.38 wall=0.66 matches=104 forks=None applies=None open-neg-32.hylo:3.541-545: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=64    FIX   err      t=16.67 wall=0.71 matches=136 forks=None applies=None open-neg-64.hylo:3.1085-1089: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let 
+open-neg           n=128   FIX   err      t=18.14 wall=0.86 matches=200 forks=None applies=None open-neg-128.hylo:3.2259-2263: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let
+open-neg           n=1     MIN5  timeout  t=None wall=20.15 matches=None forks=None applies=None 
+open-neg           n=2     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=3     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=4     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=5     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=24    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=1
+open-neg           n=1     FULL  err      t=4.26 wall=0.34 matches=2 forks=None applies=None open-neg-1.hylo:3.39-43: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=2     FULL  err      t=4.55 wall=0.43 matches=2 forks=None applies=None open-neg-2.hylo:3.53-57: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=3     FULL  err      t=8.08 wall=0.35 matches=2 forks=None applies=None open-neg-3.hylo:3.67-71: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=4     FULL  err      t=5.8 wall=0.33 matches=2 forks=None applies=None open-neg-4.hylo:3.81-85: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=5     FULL  err      t=11.78 wall=0.38 matches=2 forks=None applies=None open-neg-5.hylo:3.95-99: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Vo
+open-neg           n=6     FULL  err      t=4.51 wall=0.6 matches=2 forks=None applies=None open-neg-6.hylo:3.109-113: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> 
+open-neg           n=8     FULL  err      t=4.47 wall=0.28 matches=2 forks=None applies=None open-neg-8.hylo:3.137-141: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> 
+open-neg           n=12    FULL  err      t=6.29 wall=0.27 matches=2 forks=None applies=None open-neg-12.hylo:3.201-205: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=16    FULL  err      t=4.65 wall=0.34 matches=2 forks=None applies=None open-neg-16.hylo:3.269-273: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=24    FULL  err      t=13.14 wall=0.55 matches=2 forks=None applies=None open-neg-24.hylo:3.405-409: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=32    FULL  err      t=3.92 wall=0.36 matches=2 forks=None applies=None open-neg-32.hylo:3.541-545: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let ->
+open-neg           n=64    FULL  err      t=10.05 wall=0.53 matches=2 forks=None applies=None open-neg-64.hylo:3.1085-1089: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let 
+open-neg           n=128   FULL  err      t=13.76 wall=0.43 matches=2 forks=None applies=None open-neg-128.hylo:3.2259-2263: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let
+open-wide          n=1     base  ok       t=90.28 wall=1.31 matches=289 forks=None applies=None 
+open-wide          n=2     base  ok       t=192.58 wall=1.37 matches=4857 forks=None applies=None 
+open-wide          n=3     base  ok       t=4182.15 wall=5.25 matches=154231 forks=None applies=None 
+open-wide          n=4     base  timeout  t=None wall=20.06 matches=None forks=None applies=None 
+open-wide          n=5     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=4
+open-wide          n=6     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=4
+open-wide          n=8     base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=4
+open-wide          n=12    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=4
+open-wide          n=16    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=4
+open-wide          n=1     FIX   ok       t=16.32 wall=0.9 matches=73 forks=None applies=None 
+open-wide          n=2     FIX   ok       t=20.27 wall=0.65 matches=219 forks=None applies=None 
+open-wide          n=3     FIX   ok       t=79.4 wall=1.13 matches=1911 forks=None applies=None 
+open-wide          n=4     FIX   ok       t=748.86 wall=1.71 matches=28201 forks=None applies=None 
+open-wide          n=5     FIX   err      t=3614.6 wall=4.75 matches=93136 forks=None applies=None open-wide-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, 
+open-wide          n=6     FIX   err      t=2197.57 wall=3.47 matches=48436 forks=None applies=None open-wide-6.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6> (Q<U1>, (T ~ U1), Q<U
+open-wide          n=8     FIX   err      t=6223.11 wall=7.78 matches=105372 forks=None applies=None open-wide-8.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8> (Q<U1>, (T ~ 
+open-wide          n=12    FIX   err      t=3277.43 wall=4.36 matches=70731 forks=None applies=None open-wide-12.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11
+open-wide          n=16    FIX   err      t=853.6 wall=2.0 matches=11051 forks=None applies=None open-wide-16.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11
+open-wide          n=1     MIN5  ok       t=4.87 wall=0.6 matches=219 forks=None applies=None 
+open-wide          n=2     MIN5  ok       t=114.81 wall=0.76 matches=4577 forks=None applies=None 
+open-wide          n=3     MIN5  ok       t=4355.38 wall=5.08 matches=151711 forks=None applies=None 
+open-wide          n=4     MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=5     MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=6     MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=8     MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=12    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None predicted timeout: 4 s at n=3, power-law extrapolation gives 57 s at n=4
+open-wide          n=1     FULL  ok       t=5.83 wall=0.38 matches=3 forks=None applies=None 
+open-wide          n=2     FULL  ok       t=4.4 wall=0.56 matches=79 forks=None applies=None 
+open-wide          n=3     FULL  ok       t=9.93 wall=0.36 matches=1351 forks=None applies=None 
+open-wide          n=4     FULL  ok       t=226.17 wall=0.64 matches=24281 forks=None applies=None 
+open-wide          n=5     FULL  err      t=1334.95 wall=1.79 matches=93136 forks=None applies=None open-wide-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, 
+open-wide          n=6     FULL  err      t=1010.45 wall=1.55 matches=48436 forks=None applies=None open-wide-6.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6> (Q<U1>, (T ~ U1), Q<U
+open-wide          n=8     FULL  err      t=3492.24 wall=4.25 matches=105372 forks=None applies=None open-wide-8.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8> (Q<U1>, (T ~ 
+open-wide          n=12    FULL  err      t=2433.57 wall=3.09 matches=70731 forks=None applies=None open-wide-12.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11
+open-wide          n=16    FULL  err      t=869.38 wall=1.68 matches=11051 forks=None applies=None open-wide-16.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5, U6, U7, U8, U9, U10, U11
+req-traits         n=1     base  ok       t=71.29 wall=1.83 matches=72 forks=None applies=None 
+req-traits         n=2     base  ok       t=61.08 wall=1.86 matches=146 forks=None applies=None 
+req-traits         n=4     base  ok       t=64.82 wall=1.49 matches=303 forks=None applies=None 
+req-traits         n=8     base  ok       t=90.12 wall=1.2 matches=653 forks=None applies=None 
+req-traits         n=16    base  err      t=100.34 wall=1.26 matches=2250 forks=None applies=None req-traits-16.hylo:18.170-174: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=32    base  err      t=310.77 wall=1.64 matches=4426 forks=None applies=None req-traits-32.hylo:34.330-334: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=64    base  err      t=668.45 wall=1.78 matches=10314 forks=None applies=None req-traits-64.hylo:66.650-654: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=128   base  err      t=3861.79 wall=4.81 matches=28234 forks=None applies=None req-traits-128.hylo:130.1319-1323: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T
+req-traits         n=1     FIX   ok       t=15.41 wall=1.0 matches=72 forks=None applies=None 
+req-traits         n=2     FIX   ok       t=27.95 wall=0.76 matches=146 forks=None applies=None 
+req-traits         n=4     FIX   ok       t=18.43 wall=0.91 matches=303 forks=None applies=None 
+req-traits         n=8     FIX   ok       t=46.78 wall=0.82 matches=653 forks=None applies=None 
+req-traits         n=16    FIX   err      t=82.99 wall=0.99 matches=2250 forks=None applies=None req-traits-16.hylo:18.170-174: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=32    FIX   err      t=280.3 wall=1.21 matches=4426 forks=None applies=None req-traits-32.hylo:34.330-334: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=64    FIX   err      t=987.53 wall=2.08 matches=10314 forks=None applies=None req-traits-64.hylo:66.650-654: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=128   FIX   err      t=4743.23 wall=5.63 matches=28234 forks=None applies=None req-traits-128.hylo:130.1319-1323: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T
+req-traits         n=1     MIN5  ok       t=7.96 wall=0.65 matches=2 forks=None applies=None 
+req-traits         n=2     MIN5  ok       t=2.49 wall=0.71 matches=4 forks=None applies=None 
+req-traits         n=4     MIN5  ok       t=6.77 wall=0.56 matches=11 forks=None applies=None 
+req-traits         n=8     MIN5  ok       t=3.13 wall=0.58 matches=37 forks=None applies=None 
+req-traits         n=16    MIN5  err      t=8.48 wall=0.61 matches=125 forks=None applies=None req-traits-16.hylo:18.170-174: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=32    MIN5  err      t=7.47 wall=0.54 matches=285 forks=None applies=None req-traits-32.hylo:34.330-334: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=64    MIN5  err      t=50.46 wall=0.66 matches=605 forks=None applies=None req-traits-64.hylo:66.650-654: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=128   MIN5  err      t=147.03 wall=0.74 matches=1245 forks=None applies=None req-traits-128.hylo:130.1319-1323: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T
+req-traits         n=1     FULL  ok       t=7.88 wall=0.68 matches=2 forks=None applies=None 
+req-traits         n=2     FULL  ok       t=3.93 wall=0.5 matches=4 forks=None applies=None 
+req-traits         n=4     FULL  ok       t=8.0 wall=0.32 matches=11 forks=None applies=None 
+req-traits         n=8     FULL  ok       t=8.35 wall=0.59 matches=37 forks=None applies=None 
+req-traits         n=16    FULL  err      t=9.44 wall=0.56 matches=125 forks=None applies=None req-traits-16.hylo:18.170-174: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=32    FULL  err      t=8.35 wall=0.54 matches=285 forks=None applies=None req-traits-32.hylo:34.330-334: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=64    FULL  err      t=13.27 wall=0.53 matches=605 forks=None applies=None req-traits-64.hylo:66.650-654: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P
+req-traits         n=128   FULL  err      t=30.19 wall=0.56 matches=1245 forks=None applies=None req-traits-128.hylo:130.1319-1323: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T
+req-params         n=1     base  ok       t=36.11 wall=1.15 matches=72 forks=None applies=None 
+req-params         n=2     base  ok       t=35.66 wall=1.33 matches=146 forks=None applies=None 
+req-params         n=4     base  ok       t=32.8 wall=0.99 matches=303 forks=None applies=None 
+req-params         n=8     base  ok       t=89.6 wall=1.17 matches=653 forks=None applies=None 
+req-params         n=16    base  err      t=153.9 wall=1.22 matches=2250 forks=None applies=None req-params-16.hylo:3.238-310: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=32    base  err      t=192.24 wall=1.31 matches=4426 forks=None applies=None req-params-32.hylo:3.478-630: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=64    base  err      t=823.35 wall=2.23 matches=10314 forks=None applies=None req-params-64.hylo:3.958-1270: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P
+req-params         n=128   base  err      t=4690.52 wall=5.75 matches=28234 forks=None applies=None req-params-128.hylo:3.1976-2637: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>,
+req-params         n=1     FIX   ok       t=28.37 wall=1.1 matches=72 forks=None applies=None 
+req-params         n=2     FIX   ok       t=19.8 wall=0.8 matches=146 forks=None applies=None 
+req-params         n=4     FIX   ok       t=16.32 wall=0.69 matches=303 forks=None applies=None 
+req-params         n=8     FIX   ok       t=40.16 wall=0.82 matches=653 forks=None applies=None 
+req-params         n=16    FIX   err      t=58.15 wall=1.14 matches=2250 forks=None applies=None req-params-16.hylo:3.238-310: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=32    FIX   err      t=190.13 wall=1.11 matches=4426 forks=None applies=None req-params-32.hylo:3.478-630: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=64    FIX   err      t=972.53 wall=2.14 matches=10314 forks=None applies=None req-params-64.hylo:3.958-1270: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P
+req-params         n=128   FIX   err      t=4044.81 wall=4.96 matches=28234 forks=None applies=None req-params-128.hylo:3.1976-2637: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>,
+req-params         n=1     MIN5  ok       t=2.18 wall=0.57 matches=2 forks=None applies=None 
+req-params         n=2     MIN5  ok       t=7.09 wall=0.71 matches=6 forks=None applies=None 
+req-params         n=4     MIN5  ok       t=6.49 wall=0.64 matches=23 forks=None applies=None 
+req-params         n=8     MIN5  ok       t=3.31 wall=0.57 matches=93 forks=None applies=None 
+req-params         n=16    MIN5  err      t=9.83 wall=0.65 matches=500 forks=None applies=None req-params-16.hylo:3.238-310: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=32    MIN5  err      t=28.92 wall=0.62 matches=1556 forks=None applies=None req-params-32.hylo:3.478-630: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=64    MIN5  err      t=106.05 wall=0.57 matches=5204 forks=None applies=None req-params-64.hylo:3.958-1270: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P
+req-params         n=128   MIN5  err      t=162.44 wall=0.79 matches=18644 forks=None applies=None req-params-128.hylo:3.1976-2637: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>,
+req-params         n=1     FULL  ok       t=7.48 wall=0.58 matches=2 forks=None applies=None 
+req-params         n=2     FULL  ok       t=7.21 wall=0.67 matches=6 forks=None applies=None 
+req-params         n=4     FULL  ok       t=9.34 wall=0.55 matches=23 forks=None applies=None 
+req-params         n=8     FULL  ok       t=8.32 wall=0.58 matches=93 forks=None applies=None 
+req-params         n=16    FULL  err      t=14.83 wall=0.59 matches=500 forks=None applies=None req-params-16.hylo:3.238-310: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=32    FULL  err      t=18.79 wall=0.68 matches=1556 forks=None applies=None req-params-32.hylo:3.478-630: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<
+req-params         n=64    FULL  err      t=40.76 wall=0.59 matches=5204 forks=None applies=None req-params-64.hylo:3.958-1270: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P
+req-params         n=128   FULL  err      t=156.62 wall=0.74 matches=18644 forks=None applies=None req-params-128.hylo:3.1976-2637: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>,
+req-eq             n=1     base  ok       t=40.13 wall=1.47 matches=72 forks=None applies=None 
+req-eq             n=2     base  ok       t=18.9 wall=1.28 matches=296 forks=None applies=None 
+req-eq             n=4     base  ok       t=176.14 wall=1.37 matches=6818 forks=None applies=None 
+req-eq             n=8     base  timeout  t=None wall=20.09 matches=None forks=None applies=None 
+req-eq             n=16    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=32    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=64    base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=1     FIX   ok       t=5.64 wall=0.52 matches=2 forks=None applies=None 
+req-eq             n=2     FIX   ok       t=10.83 wall=0.85 matches=3 forks=None applies=None 
+req-eq             n=4     FIX   ok       t=14.89 wall=0.79 matches=5 forks=None applies=None 
+req-eq             n=8     FIX   ok       t=11.08 wall=0.89 matches=9 forks=None applies=None 
+req-eq             n=16    FIX   err      t=17.77 wall=0.97 matches=26 forks=None applies=None req-eq-16.hylo:2.332-475: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 
+req-eq             n=32    FIX   err      t=20.16 wall=0.76 matches=42 forks=None applies=None req-eq-32.hylo:2.684-987: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 
+req-eq             n=64    FIX   err      t=48.83 wall=0.65 matches=74 forks=None applies=None req-eq-64.hylo:2.1388-2011: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T
+req-eq             n=128   FIX   err      t=60.74 wall=0.75 matches=138 forks=None applies=None req-eq-128.hylo:2.2912-4233: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (
+req-eq             n=256   FIX   err      t=462.65 wall=1.59 matches=266 forks=None applies=None req-eq-256.hylo:2.6240-9097: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (
+req-eq             n=1     MIN5  ok       t=1.41 wall=0.59 matches=72 forks=None applies=None 
+req-eq             n=2     MIN5  ok       t=3.66 wall=0.34 matches=296 forks=None applies=None 
+req-eq             n=4     MIN5  ok       t=212.01 wall=0.66 matches=6818 forks=None applies=None 
+req-eq             n=8     MIN5  timeout  t=None wall=20.16 matches=None forks=None applies=None 
+req-eq             n=16    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=32    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=64    MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=8
+req-eq             n=1     FULL  ok       t=1.01 wall=0.7 matches=2 forks=None applies=None 
+req-eq             n=2     FULL  ok       t=0.86 wall=0.56 matches=3 forks=None applies=None 
+req-eq             n=4     FULL  ok       t=0.96 wall=0.64 matches=5 forks=None applies=None 
+req-eq             n=8     FULL  ok       t=1.98 wall=0.52 matches=9 forks=None applies=None 
+req-eq             n=16    FULL  err      t=9.12 wall=0.46 matches=26 forks=None applies=None req-eq-16.hylo:2.332-475: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 
+req-eq             n=32    FULL  err      t=19.08 wall=0.5 matches=42 forks=None applies=None req-eq-32.hylo:2.684-987: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 
+req-eq             n=64    FULL  err      t=25.6 wall=0.62 matches=74 forks=None applies=None req-eq-64.hylo:2.1388-2011: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T
+req-eq             n=128   FULL  err      t=113.07 wall=0.68 matches=138 forks=None applies=None req-eq-128.hylo:2.2912-4233: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (
+req-eq             n=256   FULL  err      t=368.9 wall=0.96 matches=266 forks=None applies=None req-eq-256.hylo:2.6240-9097: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (
+req-neg            n=1     base  err      t=30.77 wall=1.45 matches=141 forks=None applies=None req-neg-1.hylo:3.14-18: error: no coercion from 'P1<T> ==> [Void]() let -> Void' to '[Void]() let ->
+req-neg            n=2     base  err      t=51.57 wall=1.57 matches=215 forks=None applies=None req-neg-2.hylo:4.28-32: error: no coercion from '(P1<T>, P2<T>) ==> [Void]() let -> Void' to '[Void]
+req-neg            n=4     base  err      t=64.91 wall=1.38 matches=369 forks=None applies=None req-neg-4.hylo:6.46-50: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>) ==> [Void]() let -> Vo
+req-neg            n=8     base  err      t=38.1 wall=1.2 matches=701 forks=None applies=None req-neg-8.hylo:10.82-86: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, 
+req-neg            n=16    base  err      t=139.54 wall=1.18 matches=1461 forks=None applies=None req-neg-16.hylo:18.160-164: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=32    base  err      t=386.43 wall=1.99 matches=3365 forks=None applies=None req-neg-32.hylo:34.320-324: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=64    base  err      t=1097.84 wall=2.72 matches=8709 forks=None applies=None req-neg-64.hylo:66.640-644: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=128   base  err      t=4590.63 wall=6.21 matches=25541 forks=None applies=None req-neg-128.hylo:130.1308-1312: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, 
+req-neg            n=1     FIX   err      t=17.07 wall=1.03 matches=141 forks=None applies=None req-neg-1.hylo:3.14-18: error: no coercion from 'P1<T> ==> [Void]() let -> Void' to '[Void]() let ->
+req-neg            n=2     FIX   err      t=16.28 wall=0.88 matches=215 forks=None applies=None req-neg-2.hylo:4.28-32: error: no coercion from '(P1<T>, P2<T>) ==> [Void]() let -> Void' to '[Void]
+req-neg            n=4     FIX   err      t=26.93 wall=0.77 matches=369 forks=None applies=None req-neg-4.hylo:6.46-50: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>) ==> [Void]() let -> Vo
+req-neg            n=8     FIX   err      t=34.01 wall=0.82 matches=701 forks=None applies=None req-neg-8.hylo:10.82-86: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, 
+req-neg            n=16    FIX   err      t=57.12 wall=1.1 matches=1461 forks=None applies=None req-neg-16.hylo:18.160-164: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=32    FIX   err      t=125.96 wall=0.74 matches=3365 forks=None applies=None req-neg-32.hylo:34.320-324: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=64    FIX   err      t=638.51 wall=2.01 matches=8709 forks=None applies=None req-neg-64.hylo:66.640-644: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=128   FIX   err      t=3407.35 wall=4.19 matches=25541 forks=None applies=None req-neg-128.hylo:130.1308-1312: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, 
+req-neg            n=1     MIN5  err      t=1.33 wall=0.46 matches=1 forks=None applies=None req-neg-1.hylo:3.14-18: error: no coercion from 'P1<T> ==> [Void]() let -> Void' to '[Void]() let ->
+req-neg            n=2     MIN5  err      t=2.6 wall=0.32 matches=3 forks=None applies=None req-neg-2.hylo:4.28-32: error: no coercion from '(P1<T>, P2<T>) ==> [Void]() let -> Void' to '[Void]
+req-neg            n=4     MIN5  err      t=3.1 wall=0.42 matches=7 forks=None applies=None req-neg-4.hylo:6.46-50: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>) ==> [Void]() let -> Vo
+req-neg            n=8     MIN5  err      t=7.68 wall=0.49 matches=15 forks=None applies=None req-neg-8.hylo:10.82-86: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, 
+req-neg            n=16    MIN5  err      t=3.37 wall=0.36 matches=31 forks=None applies=None req-neg-16.hylo:18.160-164: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=32    MIN5  err      t=5.64 wall=0.7 matches=63 forks=None applies=None req-neg-32.hylo:34.320-324: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=64    MIN5  err      t=19.1 wall=0.64 matches=127 forks=None applies=None req-neg-64.hylo:66.640-644: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=128   MIN5  err      t=39.95 wall=0.43 matches=255 forks=None applies=None req-neg-128.hylo:130.1308-1312: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, 
+req-neg            n=1     FULL  err      t=3.19 wall=0.66 matches=1 forks=None applies=None req-neg-1.hylo:3.14-18: error: no coercion from 'P1<T> ==> [Void]() let -> Void' to '[Void]() let ->
+req-neg            n=2     FULL  err      t=8.36 wall=0.48 matches=2 forks=None applies=None req-neg-2.hylo:4.28-32: error: no coercion from '(P1<T>, P2<T>) ==> [Void]() let -> Void' to '[Void]
+req-neg            n=4     FULL  err      t=4.49 wall=0.46 matches=4 forks=None applies=None req-neg-4.hylo:6.46-50: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>) ==> [Void]() let -> Vo
+req-neg            n=8     FULL  err      t=5.39 wall=0.41 matches=8 forks=None applies=None req-neg-8.hylo:10.82-86: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, 
+req-neg            n=16    FULL  err      t=8.38 wall=0.44 matches=16 forks=None applies=None req-neg-16.hylo:18.160-164: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=32    FULL  err      t=6.53 wall=0.49 matches=32 forks=None applies=None req-neg-32.hylo:34.320-324: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=64    FULL  err      t=8.58 wall=0.36 matches=64 forks=None applies=None req-neg-64.hylo:66.640-644: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T
+req-neg            n=128   FULL  err      t=25.89 wall=0.45 matches=128 forks=None applies=None req-neg-128.hylo:130.1308-1312: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, 
+eqchain-conf       n=1     base  ok       t=38.69 wall=1.11 matches=146 forks=None applies=None 
+eqchain-conf       n=2     base  ok       t=45.18 wall=1.5 matches=964 forks=None applies=None 
+eqchain-conf       n=3     base  ok       t=412.4 wall=1.89 matches=14712 forks=None applies=None 
+eqchain-conf       n=4     base  ok       t=356.05 wall=1.65 matches=17425 forks=None applies=None 
+eqchain-conf       n=5     base  ok       t=655.18 wall=1.74 matches=20368 forks=None applies=None 
+eqchain-conf       n=6     base  ok       t=670.33 wall=2.42 matches=23547 forks=None applies=None 
+eqchain-conf       n=8     base  ok       t=807.91 wall=1.78 matches=30637 forks=None applies=None 
+eqchain-conf       n=12    base  ok       t=1344.99 wall=2.3 matches=47913 forks=None applies=None 
+eqchain-conf       n=16    base  ok       t=1814.8 wall=2.72 matches=69637 forks=None applies=None 
+eqchain-conf       n=24    base  ok       t=3680.87 wall=4.61 matches=127965 forks=None applies=None 
+eqchain-conf       n=32    base  ok       t=6480.52 wall=7.42 matches=208693 forks=None applies=None 
+eqchain-conf       n=64    base  timeout  t=None wall=20.07 matches=None forks=None applies=None 
+eqchain-conf       n=128   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-conf       n=256   base  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-conf       n=1     FIX   ok       t=13.35 wall=0.79 matches=75 forks=None applies=None 
+eqchain-conf       n=2     FIX   ok       t=13.12 wall=0.66 matches=76 forks=None applies=None 
+eqchain-conf       n=3     FIX   ok       t=12.44 wall=0.69 matches=77 forks=None applies=None 
+eqchain-conf       n=4     FIX   ok       t=35.73 wall=0.92 matches=78 forks=None applies=None 
+eqchain-conf       n=5     FIX   ok       t=17.71 wall=0.71 matches=79 forks=None applies=None 
+eqchain-conf       n=6     FIX   ok       t=10.67 wall=0.62 matches=80 forks=None applies=None 
+eqchain-conf       n=8     FIX   ok       t=12.49 wall=0.81 matches=82 forks=None applies=None 
+eqchain-conf       n=12    FIX   ok       t=28.68 wall=0.7 matches=86 forks=None applies=None 
+eqchain-conf       n=16    FIX   ok       t=16.29 wall=0.86 matches=90 forks=None applies=None 
+eqchain-conf       n=24    FIX   ok       t=18.39 wall=0.62 matches=98 forks=None applies=None 
+eqchain-conf       n=32    FIX   ok       t=22.33 wall=0.7 matches=106 forks=None applies=None 
+eqchain-conf       n=64    FIX   ok       t=13.29 wall=0.73 matches=138 forks=None applies=None 
+eqchain-conf       n=128   FIX   ok       t=25.02 wall=0.64 matches=202 forks=None applies=None 
+eqchain-conf       n=256   FIX   ok       t=42.92 wall=0.81 matches=330 forks=None applies=None 
+eqchain-conf       n=1     MIN5  ok       t=2.83 wall=0.45 matches=146 forks=None applies=None 
+eqchain-conf       n=2     MIN5  ok       t=10.66 wall=0.49 matches=964 forks=None applies=None 
+eqchain-conf       n=3     MIN5  ok       t=216.95 wall=0.48 matches=14712 forks=None applies=None 
+eqchain-conf       n=4     MIN5  ok       t=237.22 wall=0.72 matches=17425 forks=None applies=None 
+eqchain-conf       n=5     MIN5  ok       t=266.78 wall=0.65 matches=20368 forks=None applies=None 
+eqchain-conf       n=6     MIN5  ok       t=452.61 wall=0.84 matches=23547 forks=None applies=None 
+eqchain-conf       n=8     MIN5  ok       t=504.52 wall=0.99 matches=30637 forks=None applies=None 
+eqchain-conf       n=12    MIN5  ok       t=929.54 wall=1.38 matches=47913 forks=None applies=None 
+eqchain-conf       n=16    MIN5  ok       t=1239.4 wall=1.65 matches=69637 forks=None applies=None 
+eqchain-conf       n=24    MIN5  ok       t=2591.21 wall=3.0 matches=127965 forks=None applies=None 
+eqchain-conf       n=32    MIN5  ok       t=4417.78 wall=4.92 matches=208693 forks=None applies=None 
+eqchain-conf       n=64    MIN5  timeout  t=None wall=20.09 matches=None forks=None applies=None 
+eqchain-conf       n=128   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-conf       n=256   MIN5  skipped  t=None wall=None matches=None forks=None applies=None timeout (20 s) at n=64
+eqchain-conf       n=1     FULL  ok       t=8.47 wall=0.38 matches=75 forks=None applies=None 
+eqchain-conf       n=2     FULL  ok       t=4.22 wall=0.51 matches=76 forks=None applies=None 
+eqchain-conf       n=3     FULL  ok       t=8.79 wall=0.47 matches=77 forks=None applies=None 
+eqchain-conf       n=4     FULL  ok       t=5.25 wall=0.31 matches=78 forks=None applies=None 
+eqchain-conf       n=5     FULL  ok       t=5.03 wall=0.5 matches=79 forks=None applies=None 
+eqchain-conf       n=6     FULL  ok       t=4.3 wall=0.3 matches=80 forks=None applies=None 
+eqchain-conf       n=8     FULL  ok       t=4.37 wall=0.3 matches=82 forks=None applies=None 
+eqchain-conf       n=12    FULL  ok       t=6.0 wall=0.51 matches=86 forks=None applies=None 
+eqchain-conf       n=16    FULL  ok       t=8.25 wall=0.53 matches=90 forks=None applies=None 
+eqchain-conf       n=24    FULL  ok       t=9.42 wall=0.46 matches=98 forks=None applies=None 
+eqchain-conf       n=32    FULL  ok       t=8.92 wall=0.48 matches=106 forks=None applies=None 
+eqchain-conf       n=64    FULL  ok       t=10.13 wall=0.62 matches=138 forks=None applies=None 
+eqchain-conf       n=128   FULL  ok       t=30.31 wall=0.53 matches=202 forks=None applies=None 
+eqchain-conf       n=256   FULL  ok       t=39.83 wall=0.48 matches=330 forks=None applies=None 

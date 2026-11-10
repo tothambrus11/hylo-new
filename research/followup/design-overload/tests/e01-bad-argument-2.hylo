@@ -1,0 +1,14 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (three
+//   diagnostics, two of them ambiguities)
+// reason: One argument has no matching candidate. The existing solver also reports an ambiguity
+//   for the first call, whose two candidates end with equally bad scores. The clean-first pass
+//   finds no clean candidate and must fall back to the existing search.
+// currently (base): rejected, 3 diagnostic(s): 14.23-24: error: ambiguous use of 'h'; 14.28-29: error: ambiguous use of 'h'; 14.28-31: error: cannot pass value of type 'A0' to parameter 'Z'; solver.forks=6 solver.overloads=3
+// currently (FULL): rejected, 3 diagnostic(s): 14.23-24: error: ambiguous use of 'h'; 14.28-29: error: ambiguous use of 'h'; 14.28-31: error: cannot pass value of type 'A0' to parameter 'Z'; solver.forks=6 solver.overloads=3
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct Z { public memberwise init }
+fun h() -> A0 { A0() }
+fun h() -> A1 { A1() }
+fun g(x0: A0, z: Z) {}
+public fun main() { g(h(), h()) }

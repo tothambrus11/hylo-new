@@ -45,7 +45,7 @@ def main():
     if os.path.exists(OUT):
         for ln in open(OUT):
             r = json.loads(ln); done.add((r["program"], r["config"], r["depth"]))
-    cases = [(s, h, n) for s in ("opt", "list") for h in (1, 2, 4, 6) for n in (2, 4, 6, 8)]
+    cases = [(s, h, n) for s in ("opt", "list") for h in (1, 2, 4) for n in (2, 4, 8)]
     with open(OUT, "a") as out:
         for (s, h, n) in cases:
             for valid in (True, False):
@@ -54,9 +54,9 @@ def main():
                 open(path, "w").write(program(s, h, n, valid))
                 for c in tc.CONFIGS:
                     for depth in ((10,) if valid else (10, 14)):
-                        if c == "full" and depth != 10: continue
+                        if c in ("full", "base") and depth != 10: continue
                         if (name, c, depth) in done: continue
-                        r = tc.run(path, tc.CONFIGS[c], timeout=120, env_extra={"HYLO_TC_MAXDEPTH": str(depth)})
+                        r = tc.run(path, tc.CONFIGS[c], timeout=60, env_extra={"HYLO_TC_MAXDEPTH": str(depth)})
                         row = {"program": name, "shape": s, "h": h, "n": n, "valid": valid, "config": c, "depth": depth}
                         row.update(tc.summarize(r, "user"))
                         out.write(json.dumps(row) + "\n"); out.flush()

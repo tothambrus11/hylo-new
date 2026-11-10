@@ -1,5 +1,7 @@
 //! no-std
-
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: Copy of Tests/CompilerTests/negative/trait-refinement.hylo; the two diagnostics must not change.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 120 orders tried.
 trait Base {
   fun f()
 }

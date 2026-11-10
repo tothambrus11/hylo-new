@@ -1,0 +1,46 @@
+{
+ "file": "Tests/CompilerTests/positive/generic-member.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`A<...>` spelled `AlqA<...>` (2 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type 'Void' to parameter 'U'",
+   "error: type 'A<Void>' has no static member 'sh'",
+   "error: type 'AlqA<Void>' has no member 'g'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqA<Void>' has no member 'g'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqA<Void>' has no member 'g'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'AlqA<Void>' has no member 'g'"
+   ]
+  }
+ }
+}

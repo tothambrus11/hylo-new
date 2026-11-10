@@ -1,0 +1,20 @@
+//! stage:typing no-std
+// expected (heightbound): accepted, as today. `C is P` needs 5 steps. It is listed first, so it is
+// still pending when `S<C> is Q` is proved, and serves as a hypothesis for it: 1 + 2 + 5 = 8 steps.
+// currently: base accepted (subgoals=13 matches=931); FULL accepted (subgoals=13 matches=75)
+trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct C {}
+struct S<T> {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given <where A0 is P, A1 is P, A2 is P, A3 is P> => C is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where C is P, S<C> is Q>() {}
+public fun main() { f() }

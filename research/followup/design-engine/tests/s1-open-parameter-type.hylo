@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected (premsubst): rejected, as today: NOT fixed by this change. The parameter type `T.X` is in
+// the head of the callee's type, which the constraint solver opens before the requirement is
+// resolved (section 3.8 of DESIGN.md). (unsimplified-projections/t12-assoc-in-body-generic.hylo)
+// currently: base rejected (subgoals=7 matches=507): cannot pass value of type '(U::P).X' to parameter '(U::P).X'; FULL rejected (subgoals=3 matches=5): cannot pass value of type '(U::P).X' to parameter '(U::P).X'
+trait P { type X }
+fun h<T where T is P>(x: T.X) {}
+fun g<U where U is P>(y: U.X) { h<U>(y) }

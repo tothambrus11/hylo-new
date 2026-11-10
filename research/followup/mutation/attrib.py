@@ -1,7 +1,7 @@
 """Which technique removes a blow-up? Runs selected mutants under MIN5 plus individual fixes.
 
 Usage: python3 attrib.py MUTANT-ID ...   (appends to attrib.jsonl; restartable)
-The memory cap is lowered to 1 GB so that a blow-up is detected quickly.
+The memory cap is lowered to 600 MB and the timeout to 60 s so that a blow-up is detected quickly.
 """
 import json, os, sys
 import tc, run
@@ -12,18 +12,14 @@ FULL_FLAGS = tc.FULL.split(",")
 def without(*xs): return ",".join(f for f in FULL_FLAGS if f not in xs)
 CONFIGS = {
     "min5+budget": M + ",budget",
-    "min5+occurs": M + ",occurs",
-    "min5+occurs,fixsubst": M + ",occurs,fixsubst",
     "min5+eqsolve": M + ",eqsolve",
     "min5+occurs,fixsubst,eqsolve": M + ",occurs,fixsubst,eqsolve",
-    "min5+eqmgu": M + ",eqmgu",
-    "min5+unify": M + ",unify",
     "fix": tc.FIX,
+    "fix-budget": ",".join(f for f in tc.FIX.split(",") if f != "budget"),
+    "fix-eqsolve": ",".join(f for f in tc.FIX.split(",") if f != "eqsolve"),
     "full-absmodel,absquotient": without("absmodel", "absquotient"),
     "full-budget": without("budget"),
     "full-eqsolve": without("eqsolve"),
-    "full-occurs": without("occurs"),
-    "full-unify": without("unify"),
 }
 
 def main():
@@ -33,7 +29,7 @@ def main():
         for ln in open(OUT):
             r = json.loads(ln); done.add((r["id"], r["config"]))
     mutants = {m["id"]: m for m in run.load_mutants()}
-    os.environ["TCX_MEM_LIMIT_KB"] = "1000000"
+    os.environ["TCX_MEM_LIMIT_KB"] = "600000"
     with open(OUT, "a") as out:
         for mid in ids:
             m = mutants[mid]

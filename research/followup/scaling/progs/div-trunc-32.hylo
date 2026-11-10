@@ -1,0 +1,101 @@
+trait P {}
+struct Xi {}
+struct Yb {}
+struct S1<T> {}
+given <T where S1<T> is P> => T is P {}
+given S1<S1<Xi>> is P {}
+struct S2<T> {}
+given <T where S2<T> is P> => T is P {}
+given S2<S2<Xi>> is P {}
+struct S3<T> {}
+given <T where S3<T> is P> => T is P {}
+given S3<S3<Xi>> is P {}
+struct S4<T> {}
+given <T where S4<T> is P> => T is P {}
+given S4<S4<Xi>> is P {}
+struct S5<T> {}
+given <T where S5<T> is P> => T is P {}
+given S5<S5<Xi>> is P {}
+struct S6<T> {}
+given <T where S6<T> is P> => T is P {}
+given S6<S6<Xi>> is P {}
+struct S7<T> {}
+given <T where S7<T> is P> => T is P {}
+given S7<S7<Xi>> is P {}
+struct S8<T> {}
+given <T where S8<T> is P> => T is P {}
+given S8<S8<Xi>> is P {}
+struct S9<T> {}
+given <T where S9<T> is P> => T is P {}
+given S9<S9<Xi>> is P {}
+struct S10<T> {}
+given <T where S10<T> is P> => T is P {}
+given S10<S10<Xi>> is P {}
+struct S11<T> {}
+given <T where S11<T> is P> => T is P {}
+given S11<S11<Xi>> is P {}
+struct S12<T> {}
+given <T where S12<T> is P> => T is P {}
+given S12<S12<Xi>> is P {}
+struct S13<T> {}
+given <T where S13<T> is P> => T is P {}
+given S13<S13<Xi>> is P {}
+struct S14<T> {}
+given <T where S14<T> is P> => T is P {}
+given S14<S14<Xi>> is P {}
+struct S15<T> {}
+given <T where S15<T> is P> => T is P {}
+given S15<S15<Xi>> is P {}
+struct S16<T> {}
+given <T where S16<T> is P> => T is P {}
+given S16<S16<Xi>> is P {}
+struct S17<T> {}
+given <T where S17<T> is P> => T is P {}
+given S17<S17<Xi>> is P {}
+struct S18<T> {}
+given <T where S18<T> is P> => T is P {}
+given S18<S18<Xi>> is P {}
+struct S19<T> {}
+given <T where S19<T> is P> => T is P {}
+given S19<S19<Xi>> is P {}
+struct S20<T> {}
+given <T where S20<T> is P> => T is P {}
+given S20<S20<Xi>> is P {}
+struct S21<T> {}
+given <T where S21<T> is P> => T is P {}
+given S21<S21<Xi>> is P {}
+struct S22<T> {}
+given <T where S22<T> is P> => T is P {}
+given S22<S22<Xi>> is P {}
+struct S23<T> {}
+given <T where S23<T> is P> => T is P {}
+given S23<S23<Xi>> is P {}
+struct S24<T> {}
+given <T where S24<T> is P> => T is P {}
+given S24<S24<Xi>> is P {}
+struct S25<T> {}
+given <T where S25<T> is P> => T is P {}
+given S25<S25<Xi>> is P {}
+struct S26<T> {}
+given <T where S26<T> is P> => T is P {}
+given S26<S26<Xi>> is P {}
+struct S27<T> {}
+given <T where S27<T> is P> => T is P {}
+given S27<S27<Xi>> is P {}
+struct S28<T> {}
+given <T where S28<T> is P> => T is P {}
+given S28<S28<Xi>> is P {}
+struct S29<T> {}
+given <T where S29<T> is P> => T is P {}
+given S29<S29<Xi>> is P {}
+struct S30<T> {}
+given <T where S30<T> is P> => T is P {}
+given S30<S30<Xi>> is P {}
+struct S31<T> {}
+given <T where S31<T> is P> => T is P {}
+given S31<S31<Xi>> is P {}
+struct S32<T> {}
+given <T where S32<T> is P> => T is P {}
+given S32<S32<Xi>> is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

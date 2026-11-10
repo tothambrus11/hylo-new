@@ -1,3 +1,6 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: No cycle: `X` needs `A is P`, `Foo<X> is Q` needs `X`, `Y` needs `Foo<X> is Q`, `Bar<Y> is P` needs `Y`.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 120 orders tried.
 trait P { type E }
 trait Q { type F }
 struct A {}
