@@ -39,8 +39,8 @@ All six branches are pushed:
 
 **Read `round3/soundness.md` § "Final configuration" first.**
 
-- **Patches.** `impl/0001`–`0011` on `tc/research`. The worktree used was `/home/user/hylo-impl`, branch `tc/impl-wip`.
-- **Final binary.** `eq7-3bbd2b60cb89`, frozen with `tcx.py freeze`.
+- **Patches.** `impl/0001`–`0012` on `tc/research`. The worktree used was `/home/user/hylo-impl`, branch `tc/impl-wip`.
+- **Final binary.** `eq8-acc8f2fdf588`, frozen with `tcx.py freeze`. Patch 0012 holds the fixes of the soundness re-check (`round3/soundness/recheck3/README.md`).
 - **FIX** = `occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget`: semantic fixes only.
 - **FULL** = FIX + `symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo`.
 - **Oracle.** Both are 216/216 identical to the baseline on the corpus.

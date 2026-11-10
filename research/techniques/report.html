@@ -82,6 +82,14 @@ dd { margin: 0; min-width: 0; }
 }
 .legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.88rem; color: var(--muted); align-items: center; }
 footer { font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
+
+.refs { display: grid; gap: 8px; font-size: 0.9rem; padding-left: 2.2em; margin: 0; }
+.refs li { padding-left: 0.2em; }
+.refs .v { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.lit { display: grid; gap: 10px; }
+.lit h3 { margin-top: 8px; }
+.lit .para { display: grid; gap: 6px; }
+sup.c { font-family: var(--font-mono); font-size: 0.72em; color: var(--accent); }
 a { color: var(--accent); }
 a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 </style>
@@ -93,8 +101,8 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <p class="lede">This report covers the techniques that make the type checker faster, why each one is sound, what it speeds up and what it costs. It also covers the fixes needed to make the faster checker correct, and the ideas that were tried and retired.</p>
     <div class="meta">
       <span>Branch <code>claude/stoic-bell-b2molq</code></span>
-      <span>Patches <code>research/impl/0001–0011</code></span>
-      <span>Binary <code>eq7-3bbd2b60cb89</code></span>
+      <span>Patches <code>research/impl/0001–0012</code></span>
+      <span>Binary <code>eq8-acc8f2fdf588</code></span>
       <span>November 2026</span>
     </div>
   </header>
@@ -108,8 +116,9 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     </div>
     <ul>
       <li><strong>Same output as the baseline on the corpus.</strong> Both configurations produce identical types, name bindings, witnesses and diagnostics on all 216 corpus files (192 compiler tests and 24 workloads).</li>
+      <li><strong>Grounded in prior work.</strong> Most techniques adapt known results: depth-k abstraction of logic programs, congruence closure, head-symbol indexing, and sound scheduling of name queries (see the literature survey).</li>
       <li><strong>No crashes.</strong> On the 520 programs written by two rounds of adversarial reviewers, the baseline crashes on 21 and times out on 43. FULL crashes on none and times out on 1.</li>
-      <li><strong>Faster.</strong> Standard-library typing is 3.8× faster, and the stress workloads are 10× to 700× faster. Several programs that ran out of memory now finish in milliseconds.</li>
+      <li><strong>Faster.</strong> Standard-library typing is 4× faster, and the stress workloads are 10× to 1000× faster. Several programs that ran out of memory now finish in milliseconds.</li>
     </ul>
   </section>
 
@@ -120,25 +129,25 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <table>
         <thead><tr><th>Workload</th><th>What it stresses</th><th class="num">Baseline</th><th class="num">FIX</th><th class="num">FULL</th><th class="num">Speed-up</th></tr></thead>
         <tbody>
-          <tr><td>stdlib</td><td>standard library</td><td class="num">735</td><td class="num">444</td><td class="num">191</td><td class="num x">3.8×</td></tr>
-          <tr><td>members-big</td><td>2000 extensions, 1000 lookups</td><td class="num">15,321</td><td class="num">761</td><td class="num">486</td><td class="num x">32×</td></tr>
-          <tr><td>breadth40</td><td>many givens in scope</td><td class="num">4,881</td><td class="num">4,872</td><td class="num">55</td><td class="num x">88×</td></tr>
-          <tr><td>div-loop-20</td><td>looping givens</td><td class="num">136</td><td class="num">135</td><td class="num">3.6</td><td class="num x">38×</td></tr>
-          <tr><td>div-branch</td><td>branching failure</td><td class="num">1,609</td><td class="num">1,634</td><td class="num">2.2</td><td class="num x">738×</td></tr>
-          <tr><td>wide-tuple-5</td><td>structural conformance</td><td class="num">62</td><td class="num">55</td><td class="num">4.1</td><td class="num x">15×</td></tr>
-          <tr><td>trans-8</td><td>equality chain of 8</td><td class="num">1,247</td><td class="num">8.7</td><td class="num">3.8</td><td class="num x">330×</td></tr>
-          <tr><td>assoceq-8</td><td>associated-type equalities</td><td class="num">3,635</td><td class="num">143</td><td class="num">116</td><td class="num x">31×</td></tr>
-          <tr><td>orig-coerc-cache</td><td>coercion derivability</td><td class="num">2,696</td><td class="num">12</td><td class="num">4.4</td><td class="num x">608×</td></tr>
-          <tr><td>assocneg-8</td><td>ill-typed equalities</td><td class="num">3,064 <span class="pill no">wrongly accepted</span></td><td class="num">109</td><td class="num">100</td><td class="num fixd">fixed</td></tr>
-          <tr><td>refine-8</td><td>trait refinement</td><td class="num">49</td><td class="num">33</td><td class="num">4.4</td><td class="num x">11×</td></tr>
-          <tr><td>nestwide-8</td><td>nested givens</td><td class="num">66</td><td class="num">48</td><td class="num">6.8</td><td class="num x">10×</td></tr>
-          <tr><td>ovl-4-8</td><td>overloads</td><td class="num">4,693</td><td class="num">233</td><td class="num">182</td><td class="num x">26×</td></tr>
-          <tr><td>ovr-3-8</td><td>return-type overloads</td><td class="num">279</td><td class="num">276</td><td class="num">219</td><td class="num x">1.3×</td></tr>
-          <tr><td>x10b</td><td>conditional extension with <code>T.Element == Flag</code></td><td class="num">1,779</td><td class="num">23</td><td class="num">17</td><td class="num x">105×</td></tr>
-          <tr><td>open-wide-4</td><td>open equality premises</td><td class="num">out of memory</td><td class="num">496</td><td class="num">202</td><td class="num fixd">fixed</td></tr>
-          <tr><td>div-eq-ovl-b3-1</td><td>divergence plus one equality</td><td class="num">out of memory</td><td class="num">3,301 <span class="pill neutral">budget</span></td><td class="num">4.2</td><td class="num fixd">fixed</td></tr>
-          <tr><td>occurs-dag-16</td><td>shared substitutions</td><td class="num">2,860</td><td class="num">2,872</td><td class="num">3.3</td><td class="num x">870×</td></tr>
-          <tr><td>p02-cc-big</td><td>31 tuple equalities</td><td class="num">out of memory</td><td class="num">82</td><td class="num">63</td><td class="num fixd">fixed</td></tr>
+          <tr><td>stdlib</td><td>standard library</td><td class="num">616</td><td class="num">389</td><td class="num">151</td><td class="num x">4.1×</td></tr>
+          <tr><td>members-big</td><td>2000 extensions, 1000 lookups</td><td class="num">13,172</td><td class="num">544</td><td class="num">356</td><td class="num x">37×</td></tr>
+          <tr><td>breadth40</td><td>many givens in scope</td><td class="num">4,617</td><td class="num">4,937</td><td class="num">38</td><td class="num x">121×</td></tr>
+          <tr><td>div-loop-20</td><td>looping givens</td><td class="num">131</td><td class="num">91</td><td class="num">2.6</td><td class="num x">51×</td></tr>
+          <tr><td>div-branch</td><td>branching failure</td><td class="num">1,350</td><td class="num">1,333</td><td class="num">1.8</td><td class="num x">734×</td></tr>
+          <tr><td>wide-tuple-5</td><td>structural conformance</td><td class="num">51</td><td class="num">53</td><td class="num">3.0</td><td class="num x">17×</td></tr>
+          <tr><td>trans-8</td><td>equality chain of 8</td><td class="num">1,076</td><td class="num">7.5</td><td class="num">3.5</td><td class="num x">306×</td></tr>
+          <tr><td>assoceq-8</td><td>associated-type equalities</td><td class="num">2,750</td><td class="num">92</td><td class="num">74</td><td class="num x">37×</td></tr>
+          <tr><td>orig-coerc-cache</td><td>coercion derivability</td><td class="num">2,165</td><td class="num">12.2</td><td class="num">3.9</td><td class="num x">552×</td></tr>
+          <tr><td>assocneg-8</td><td>ill-typed equalities</td><td class="num">2,487 <span class="pill no">wrongly accepted</span></td><td class="num">79</td><td class="num">66</td><td class="num fixd">fixed</td></tr>
+          <tr><td>refine-8</td><td>trait refinement</td><td class="num">44</td><td class="num">24</td><td class="num">4.0</td><td class="num x">11×</td></tr>
+          <tr><td>nestwide-8</td><td>nested givens</td><td class="num">60</td><td class="num">40</td><td class="num">5.0</td><td class="num x">12×</td></tr>
+          <tr><td>ovl-4-8</td><td>overloads</td><td class="num">3,880</td><td class="num">158</td><td class="num">118</td><td class="num x">33×</td></tr>
+          <tr><td>ovr-3-8</td><td>return-type overloads</td><td class="num">236</td><td class="num">226</td><td class="num">141</td><td class="num x">1.7×</td></tr>
+          <tr><td>x10b</td><td>conditional extension with <code>T.Element == Flag</code></td><td class="num">1,406</td><td class="num">16.6</td><td class="num">14.5</td><td class="num x">97×</td></tr>
+          <tr><td>open-wide-4</td><td>open equality premises</td><td class="num">out of memory</td><td class="num">344</td><td class="num">189</td><td class="num fixd">fixed</td></tr>
+          <tr><td>div-eq-ovl-b3-1</td><td>divergence plus one equality</td><td class="num">out of memory</td><td class="num">3,096 <span class="pill neutral">budget</span></td><td class="num">3.1</td><td class="num fixd">fixed</td></tr>
+          <tr><td>occurs-dag-16</td><td>shared substitutions</td><td class="num">2,324</td><td class="num">2,164</td><td class="num">2.3</td><td class="num x">1019×</td></tr>
+          <tr><td>p02-cc-big</td><td>31 tuple equalities</td><td class="num">out of memory</td><td class="num">64</td><td class="num">63</td><td class="num fixd">fixed</td></tr>
         </tbody>
       </table>
     </div>
@@ -180,8 +189,8 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     <div class="tech">
       <div class="tech-head"><h3><code>absquotient</code></h3><span class="area">Extends absmodel to scopes with equalities</span><span class="pill perf">sound</span></div>
       <dl>
-        <dt>How</dt><dd>Before this flag, a single <code>where A == B</code> switched the model off. Now, when every equality in scope is ground, every type in a non-trivial equality class is abstracted as <code>⊤</code>, so the model stays usable.</dd>
-        <dt>Why sound</dt><dd>Two types that are equal in the congruence closure differ only at positions in non-trivial classes, so their abstractions unify. A derivation that uses coercions maps to an abstract derivation that does not need them.</dd>
+        <dt>How</dt><dd>Before this flag, a single <code>where A == B</code> switched the model off. Now, when every equality in scope is ground, the model stays usable: every application of a constructor that builds a member of a non-trivial equality class is abstracted as <code>⊤</code>. For <code>A == B</code> those constructors are just <code>A</code> and <code>B</code>; for <code>Box&lt;X&gt; == Opt&lt;Y&gt;</code> they are every <code>Box</code> and every <code>Opt</code>.</dd>
+        <dt>Why sound</dt><dd>Two equal types first differ at a subterm whose constructor builds a member of a non-trivial class, so both abstract to <code>⊤</code> there and unify. The abstraction depends only on constructors, so it commutes with substitution and covers every instance of a generic clause. Goals posed under assumed givens are covered because those assumptions must themselves be derived from the scope before a thread completes. The first version abstracted per <em>type</em>, which missed congruent types and clause instances; the re-check below fixed it.</dd>
         <dt>Speeds up</dt><dd>Divergent givens in generic code with equality requirements: div-eq-ovl-b3-1 goes from 45 s (or out of memory) to 4 ms.</dd>
         <dt>Costs</dt><dd>Scopes with equalities build their model from scratch. More opaque types mean fewer refutations.</dd>
       </dl>
@@ -276,11 +285,11 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
       <dl>
         <dt>How</dt><dd>A closed equality goal is decided by a congruence closure over the ground equality facts (a signature table with use lists, <code>O(n log n)</code>) instead of a search through symmetry and transitivity. Two refinements:
           <ul>
-            <li>An abstract projection <code>(Self::P).X</code> is merged only with a <em>unique</em> concrete projection class.</li>
-            <li>Projections through premises that are not discharged yet are resolved ahead of time when their resolution is unique.</li>
+            <li>An abstract projection <code>(Self::P).X</code> is merged with <code>(T::w).X</code> only if <code>w</code> is the scope's <em>only</em> conformance to <code>P</code> for a type equal to <code>Self</code>. This is decided from the scope alone, so it is the same in every context.</li>
+            <li>Projections through premises that are not discharged yet are resolved ahead of time when their resolution is unique and the environment is closed. A refutation that depends on an unresolved one is left to search.</li>
           </ul>
           Proofs are rebuilt from the cheapest path and carry the penalty search would have given them.</dd>
-        <dt>Why sound</dt><dd>Without injectivity, congruence closure decides exactly the theory that search explores. Open goals, and quantified or conditional equalities, are left to search. The uniqueness rule for abstract projections keeps <code>v-abs-7</code> valid and <code>associated-type-inequality</code> rejected.</dd>
+        <dt>Why sound</dt><dd>Equality of ground terms under ground equations is decidable, and without injectivity congruence closure decides exactly the theory that search explores. The undecidable cases (open goals, which are rigid E-unification; quantified equalities, which are the word problem) are left to search. Assumed equalities are hypotheses that must be discharged, so using them is resolving in that context. The scope-level rule for abstract projections keeps <code>v-abs-7</code> valid and <code>associated-type-inequality</code> rejected, and never retracts a conclusion when more is assumed.</dd>
         <dt>Speeds up</dt><dd>Equality reasoning, which was the one pattern no earlier flag helped: trans-8 330×, assoceq-8 31×, coerc-cache 600×. It also turns wrong acceptances into fast rejections.</dd>
         <dt>Costs</dt><dd>The graph is rebuilt for each closed equality goal (cheap). A premise projection costs one nested resolution.</dd>
       </dl>
@@ -335,6 +344,24 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   </section>
 
   <section>
+    <h2>Soundness re-check: context and undecidability</h2>
+    <p>A last pass asked whether each argument holds <em>per context</em>: the same goal can be posed under different assumed givens, in different generic instantiations, and at different points of the evaluation order. It found five defects, all fixed in patch 0012. The corpus is still 216/216 identical, and no verdict changed on the 520 review programs.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Technique</th><th>Defect</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td><code>absquotient</code></td><td>Opacity per type missed types congruent to class members, and instances of generic clauses. Not reachable with today's search, which never coerces between two different constructors, but the argument depended on that.</td><td>opacity per constructor</td></tr>
+          <tr><td><code>absquotient</code></td><td>A nested scope with a non-ground equality fell back to the file-level model, which ignores local givens.</td><td>nested scopes never reuse it</td></tr>
+          <tr><td><code>eqsolve</code></td><td>The abstract-projection rule was computed from the goal and the assumed givens, so it was context-dependent and non-monotone.</td><td>decided from the scope alone</td></tr>
+          <tr><td><code>eqsolve</code></td><td>Premise projections could be resolved with open variables, and an unresolved one could still cause a refutation.</td><td>closed environments only; such refutations go to search</td></tr>
+          <tr><td><code>givencheck</code></td><td>The post-check ignored the skipped resolution's assumed givens, so it could miss a cycle.</td><td>the environment is recorded</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">Kept as a deliberate choice: <code>eqmgu</code> binds <code>?v := X</code> canonically. The baseline sometimes bound <code>?v</code> to another member of <code>X</code>'s class, which is equal in the theory but differs syntactically. Full analysis: <code>soundness/recheck/README.md</code>.</p>
+  </section>
+
+  <section>
     <h2>Tried and retired</h2>
     <div class="scroll">
       <table>
@@ -349,6 +376,97 @@ a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         </tbody>
       </table>
     </div>
+  </section>
+
+  <section>
+    <h2>Literature survey</h2>
+    <p>Two literature studies (about 60 sources, <code>research/lit-resolution.md</code> and <code>research/lit-solver-names.md</code>) came before the implementation. Most techniques here are adaptations of known results to Hylo's resolution engine. That engine is SLD resolution with breadth-first search and a depth cap, smallest-proof selection by penalties, and coercions between equal types. The citations are grouped by the question each line of work answered. The reference list records how each source was checked.</p>
+    <div class="lit">
+      <h3>Implicit resolution as Horn-clause proving</h3>
+      <div class="para">Read as clauses, givens are definite Horn clauses <code>H :- A₁…Aₙ</code>, and resolution is goal-directed proof search. For ground clauses, derivability is linear-time Horn satisfiability<sup class="c">[1]</sup>, and its goal-directed form is a local least fixpoint<sup class="c">[2]</sup>. With quantified givens, the least model is infinite and derivability is undecidable in general. A finite over-approximation is therefore needed. The work on success-set approximation of logic programs supplies one:
+        <ul>
+          <li>depth-k truncation<sup class="c">[3]</sup>, which is what <code>absmodel</code> uses;</li>
+          <li>set-based and regular-type approximations<sup class="c">[4, 5, 6]</sup>;</li>
+          <li>tree-automata refinement for Horn clauses<sup class="c">[7, 8]</sup>.</li>
+        </ul>
+        Non-failure analysis<sup class="c">[9]</sup> is the closest prior use of such models to prove that a call cannot succeed. The retired <code>loopcheck</code> came from the loop-checking literature<sup class="c">[10]</sup>. Its soundness proof assumes pure SLD resolution, and that assumption breaks under Hylo's use of pending premises as hypotheses.</div>
+
+      <h3>Smallest derivations and ambiguity</h3>
+      <div class="para">Hylo picks the cheapest derivation and reports ties as ambiguity. That is the lightest-derivation problem, generalized from shortest paths by Knuth<sup class="c">[11]</sup> and framed as weighted deduction<sup class="c">[12, 13]</sup>. Ambiguity is the counting instance of semiring parsing<sup class="c">[14]</sup>. <code>eqsolve</code> uses this view: its proofs are rebuilt as cheapest paths (Dijkstra) over edges weighted by the penalties search would charge, so derivations rank as they do under search.</div>
+
+      <h3>Type-class and trait resolution in other compilers</h3>
+      <div class="para">Other compilers handle the same problems in their own ways:
+        <ul>
+          <li><strong>Repeated work and cycles.</strong> Lean 4 uses tabled resolution<sup class="c">[15]</sup>, and Rust's next-generation solver caches canonicalized goals and runs coinductive fixpoints<sup class="c">[16]</sup>.</li>
+          <li><strong>Divergence.</strong> Scala 3 bounds it with a dominance check<sup class="c">[18]</sup>, and GHC with syntactic termination conditions<sup class="c">[19]</sup>. <code>budget</code> is a cruder relative of these: it bounds work instead of proving termination, and reports an error.</li>
+          <li><strong>Coherence.</strong> The argument that equally good results must elaborate to equivalent programs follows Bottu et al.<sup class="c">[20]</sup> and COCHIS<sup class="c">[21]</sup>. Local quantified givens make resolution hereditary Harrop rather than Horn<sup class="c">[22]</sup>, which is why such givens make the abstract model inconclusive.</li>
+          <li><strong>Equivalence of type terms.</strong> Swift decides it with a rewrite system completed by Knuth–Bendix (the Requirement Machine)<sup class="c">[17]</sup>, an alternative to the congruence closure used here.</li>
+        </ul></div>
+
+      <h3>Equality constraints</h3>
+      <div class="para"><code>eqsolve</code> rests on the classical decision procedure for ground equations: congruence closure<sup class="c">[26, 27]</sup>, with union-find<sup class="c">[28]</sup>. Its boundaries follow the decidability landscape:
+        <ul>
+          <li>ground equations are decidable in <code>O(n log n)</code>;</li>
+          <li>equations with variables in the goal are rigid E-unification, which is NP-complete<sup class="c">[31]</sup>, so <code>eqmgu</code> handles only the bare-variable case and leaves the rest to search;</li>
+          <li>quantified equations raise the word problem, which is undecidable<sup class="c">[32]</sup>, so <code>eqsolve</code> gives up on them.</li>
+        </ul>
+        The occurs check, whose absence crashed the baseline, is part of syntactic unification from the start<sup class="c">[29, 30]</sup>.</div>
+
+      <h3>Indexing candidates</h3>
+      <div class="para">Bucketing givens by the head constructor of their conclusion (<code>index</code>, and in spirit <code>traitindex</code> and <code>memberskip</code>) is the first level of discrimination-tree and substitution-tree indexing from automated reasoning<sup class="c">[23, 24]</sup>. Lean's <code>DiscrTree</code><sup class="c">[25]</sup> and GHC's rough-match keys<sup class="c">[19]</sup> apply the same idea to instance lookup, including the rule that heads which can reduce (aliases, type families) are wildcards.</div>
+
+      <h3>Overload resolution</h3>
+      <div class="para">Overload resolution with return-type overloading is NP-complete<sup class="c">[34]</sup>. Ada showed polynomial cases<sup class="c">[35]</sup>, and constraint-satisfaction techniques (arc consistency, forward checking, fail-first)<sup class="c">[36]</sup> prune the rest. Swift's solver<sup class="c">[33]</sup> combines a constraint graph, connected components and disjunction pruning. The retired <code>solver</code> flag was an attempt in that direction. It failed on soundness because it changed the order in which the baseline ranks overloads, and that order is part of Hylo's semantics.</div>
+
+      <h3>Name resolution and evaluation order</h3>
+      <div class="para">The order-dependence bugs fixed by <code>extorder</code> and <code>givencheck</code> are an instance of a known problem: a type checker that answers a name query before all the binding information is known can give an answer that is later invalidated. Scope-graph work formalizes name resolution<sup class="c">[37]</sup> and gives sound scheduling criteria for when a query may be answered<sup class="c">[38, 39]</sup>. The deferred "record, then check on final types" design here is a lightweight version of that idea. The memoization arguments behind <code>memberskip</code> and <code>coesrc</code> (skip only work whose inputs are settled) follow the build-system view of incremental computation<sup class="c">[41, 40]</sup>.</div>
+    </div>
+
+    <h3>References</h3>
+    <ol class="refs">
+      <li>W. F. Dowling, J. H. Gallier. Linear-time algorithms for testing the satisfiability of propositional Horn formulae. <i>J. Logic Programming</i> 1(3):267–284, 1984. doi:10.1016/0743-1066(84)90014-1 <span class="v">[bib verified]</span></li>
+      <li>X. Liu, S. A. Smolka. Simple linear-time algorithms for minimal fixed points. ICALP 1998, LNCS 1443:53–66. doi:10.1007/BFb0055040 <span class="v">[bib verified]</span></li>
+      <li>T. Sato, H. Tamaki. Enumeration of success patterns in logic programs. <i>TCS</i> 34(1–2):227–240, 1984. doi:10.1016/0304-3975(84)90119-1 <span class="v">[bib verified]</span></li>
+      <li>N. Heintze, J. Jaffar. A finite presentation theorem for approximating logic programs. POPL 1990, 197–209. doi:10.1145/96709.96729 <span class="v">[bib verified]</span></li>
+      <li>T. Frühwirth, E. Shapiro, M. Y. Vardi, E. Yardeni. Logic programs as types for logic programs. LICS 1991, 300–309. doi:10.1109/LICS.1991.151654 <span class="v">[read]</span></li>
+      <li>J. P. Gallagher, G. Puebla. Abstract interpretation over non-deterministic finite tree automata for set-based analysis of logic programs. PADL 2002, LNCS 2257:243–261. doi:10.1007/3-540-45587-6_16 <span class="v">[read]</span></li>
+      <li>B. Kafle, J. P. Gallagher. Tree automata-based refinement with application to Horn clause verification. VMCAI 2015, LNCS 8931:209–226. doi:10.1007/978-3-662-46081-8_12 <span class="v">[read]</span></li>
+      <li>Y. Kostyukov, D. Mordvinov, G. Fedyukovich. Beyond the elementary representations of program invariants over algebraic data types. PLDI 2021, 451–465. doi:10.1145/3453483.3454055 <span class="v">[read]</span></li>
+      <li>S. K. Debray, P. López-García, M. Hermenegildo. Non-failure analysis for logic programs. ICLP 1997, 48–62. <span class="v">[abstract read]</span></li>
+      <li>R. N. Bol, K. R. Apt, J. W. Klop. An analysis of loop checking mechanisms for logic programs. <i>TCS</i> 86(1):35–79, 1991. doi:10.1016/0304-3975(91)90004-L <span class="v">[bib verified]</span></li>
+      <li>D. E. Knuth. A generalization of Dijkstra's algorithm. <i>Information Processing Letters</i> 6(1):1–5, 1977. doi:10.1016/0020-0190(77)90002-3 <span class="v">[via [12, 13]]</span></li>
+      <li>M.-J. Nederhof. Weighted deductive parsing and Knuth's algorithm. <i>Computational Linguistics</i> 29(1):135–143, 2003. doi:10.1162/089120103321337467 <span class="v">[read]</span></li>
+      <li>P. F. Felzenszwalb, D. McAllester. The generalized A* architecture. <i>JAIR</i> 29:153–190, 2007. doi:10.1613/jair.2187 <span class="v">[read]</span></li>
+      <li>J. Goodman. Semiring parsing. <i>Computational Linguistics</i> 25(4):573–606, 1999. <span class="v">[read via thesis]</span></li>
+      <li>D. Selsam, S. Ullrich, L. de Moura. Tabled typeclass resolution. arXiv:2001.04301, 2020. <span class="v">[read]</span></li>
+      <li>The Rust compiler team. <i>rustc-dev-guide</i>: the next-generation trait solver (caching, coinduction). rustc-dev-guide.rust-lang.org/solve/ <span class="v">[docs read]</span></li>
+      <li>S. Pestov. <i>Compiling Swift Generics</i> (the Requirement Machine, Knuth–Bendix completion). Swift project documentation, 2023–2025. <span class="v">[bib verified]</span></li>
+      <li>Scala 3 reference: Changes in implicit resolution; SIP-31, by-name implicits and the divergence check. docs.scala-lang.org <span class="v">[docs read]</span></li>
+      <li>GHC User's Guide: instance termination rules (Paterson conditions); <code>GHC.Core.RoughMap</code>. <span class="v">[docs and source read]</span></li>
+      <li>G.-J. Bottu, N. Xie, K. Marntirosian, T. Schrijvers. Coherence of type class resolution. <i>PACMPL</i> 3(ICFP):91, 2019. doi:10.1145/3341695 <span class="v">[read]</span></li>
+      <li>T. Schrijvers, B. C. d. S. Oliveira, P. Wadler, K. Marntirosian. COCHIS: stable and coherent implicits. <i>JFP</i> 29:e3, 2019. doi:10.1017/S0956796818000242 <span class="v">[read]</span></li>
+      <li>G.-J. Bottu, G. Karachalias, T. Schrijvers, B. C. d. S. Oliveira, P. Wadler. Quantified class constraints. Haskell Symposium 2017, 148–161. doi:10.1145/3122955.3122967 <span class="v">[bib verified]</span></li>
+      <li>W. McCune. Experiments with discrimination-tree indexing and path indexing for term retrieval. <i>JAR</i> 9(2):147–167, 1992. doi:10.1007/BF00245458 <span class="v">[bib verified]</span></li>
+      <li>P. Graf. Substitution tree indexing. RTA 1995, LNCS 914. doi:10.1007/3-540-59200-8_52 <span class="v">[bib verified]</span></li>
+      <li>Lean 4 source: <code>Lean.Meta.DiscrTree</code> and <code>SynthInstance</code>; Lean reference manual, instance synthesis. <span class="v">[source read]</span></li>
+      <li>G. Nelson, D. C. Oppen. Fast decision procedures based on congruence closure. <i>JACM</i> 27(2):356–364, 1980. <span class="v">[standard reference]</span></li>
+      <li>P. J. Downey, R. Sethi, R. E. Tarjan. Variations on the common subexpression problem. <i>JACM</i> 27(4):758–771, 1980. <span class="v">[standard reference]</span></li>
+      <li>R. E. Tarjan. Efficiency of a good but not linear set union algorithm. <i>JACM</i> 22(2):215–225, 1975. <span class="v">[standard reference]</span></li>
+      <li>J. A. Robinson. A machine-oriented logic based on the resolution principle. <i>JACM</i> 12(1):23–41, 1965. <span class="v">[standard reference]</span></li>
+      <li>A. Martelli, U. Montanari. An efficient unification algorithm. <i>TOPLAS</i> 4(2):258–282, 1982. <span class="v">[standard reference]</span></li>
+      <li>J. Gallier, P. Narendran, D. Plaisted, W. Snyder. Rigid E-unification: NP-completeness and applications to equational matings. <i>Information and Computation</i> 87:129–195, 1990. <span class="v">[standard reference]</span></li>
+      <li>E. L. Post. Recursive unsolvability of a problem of Thue. <i>J. Symbolic Logic</i> 12(1):1–11, 1947. <span class="v">[standard reference]</span></li>
+      <li>Swift project. Type Checker Design and Implementation (<code>docs/TypeChecker.md</code>); S. Pestov, "Roadmap for improving the type checker" and "Recent improvements to the type checker", Swift Forums, 2025–2026. <span class="v">[read]</span></li>
+      <li>J. Palsberg. Overloading is NP-complete. In <i>Logic and Program Semantics</i>, LNCS 7230, Springer, 2012. <span class="v">[title and venue verified]</span></li>
+      <li>T. P. Baker. A one-pass algorithm for overload resolution in Ada. <i>TOPLAS</i> 4(4):601–614, 1982. <span class="v">[from the study]</span></li>
+      <li>A. Mackworth. Consistency in networks of relations. <i>Artificial Intelligence</i> 8(1), 1977; R. Haralick, G. Elliott. Increasing tree search efficiency for constraint satisfaction problems. <i>AI</i> 14(3), 1980. <span class="v">[from the study]</span></li>
+      <li>P. Néron, A. Tolmach, E. Visser, G. Wachsmuth. A theory of name resolution. ESOP 2015. doi:10.1007/978-3-662-46669-8_9 <span class="v">[read]</span></li>
+      <li>A. Rouvoet, H. van Antwerpen, C. Bach Poulsen, R. Krebbers, E. Visser. Knowing when to ask: sound scheduling of name resolution in type checkers derived from declarative specifications. <i>PACMPL</i> 4(OOPSLA), 2020. doi:10.1145/3428248 <span class="v">[read]</span></li>
+      <li>H. van Antwerpen, E. Visser. Scope states: guarding safety of name resolution in parallel type checkers. ECOOP 2021. doi:10.4230/LIPIcs.ECOOP.2021.1 <span class="v">[read]</span></li>
+      <li>A. Zwaan, H. van Antwerpen, E. Visser. Incremental type-checking for free. <i>PACMPL</i> 6(OOPSLA2), 2022. doi:10.1145/3563303 <span class="v">[read]</span></li>
+      <li>A. Mokhov, N. Mitchell, S. Peyton Jones. Build systems à la carte. ICFP 2018. doi:10.1145/3236774 <span class="v">[read]</span></li>
+    </ol>
+    <p class="muted">Check status: "read" means the source was read for the literature study. "bib verified" means the bibliographic record was checked, but the text was not read. "docs/source read" means project documentation or source code. "standard reference" means a classical result cited from general knowledge for the equality and unification work, and not re-read during this project.</p>
   </section>
 
   <section>

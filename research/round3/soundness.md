@@ -33,7 +33,14 @@ Every confirmed finding is fixed. Each fix is behind a flag, and each flag has a
 - **FIX** (semantic fixes only): `occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget`.
 - **FULL**: FIX plus `symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo`.
 
-**Results** (binary `eq7-3bbd2b60cb89`).
+**Soundness re-check.** A later pass looked for undecidability and context-dependent resolution (`soundness/recheck3/README.md`) and fixed four more defects (patch 0012):
+- `absquotient` opacity is now per constructor, not per type;
+- a nested scope no longer reuses the file-level abstract model;
+- `eqsolve` decides abstract projections from the scope alone, not from the goal or the assumed givens;
+- premise projections are resolved only in closed environments, and a refutation that depends on an unresolved projection is left to search;
+- `givencheck` checks in the recorded environment.
+
+**Results** (binary `eq8-acc8f2fdf588`; the sweep verdicts are the same as for `eq7`).
 - **Oracle.** FIX and FULL are 216/216 identical to the baseline on the 192 tests and 24 workloads (`soundness/oracle-final-config.txt`).
 - **All 520 review programs** of both reviews (`soundness/regress-final.md`): baseline 233 accepted / 223 rejected / 43 timeouts / 21 crashes; FIX 246 / 273 / 1 / 0; FULL 248 / 271 / 1 / 0. The one timeout is `perf/ovl-ret-12` (return-type overloads; the baseline times out too). 45 programs the baseline accepts are rejected. Each one was checked: 41 are bogus equality derivations, circular extensions or givens, and ambiguities. The other 4 are the mutual-extendee-cycle pattern of the limitation below (`names/n02`, `v1`, `v4_noC`, `v5`). FIX and FULL disagree only on the four `div-eq*-b3` programs, where FIX reaches the budget and FULL's `absmodel` decides.
 - **Speed** (`soundness/bench-final.md`):

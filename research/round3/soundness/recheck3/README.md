@@ -4,7 +4,7 @@ This note re-examines the final configuration against two concerns:
 - Implicit resolution is undecidable in general.
 - The same goal can resolve differently in different contexts: under different assumed givens, inside different generic instantiations, or at different points of the evaluation order.
 
-The question for each technique is whether its argument holds *per context* or only per scope. The re-check found four defects; all are fixed in binary `eq8-acc8f2fdf588` (patch 0012):
+The question for each technique is whether its argument holds *per context* or only per scope. The re-check found five defects; all are fixed in binary `eq8-acc8f2fdf588` (patch 0012):
 
 | Technique | Defect | Reachable today? | Fix |
 |---|---|---|---|

@@ -1,14 +1,14 @@
 # Regression sweep: every program of both adversarial reviews, final configuration
 
-Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget; FULL = FIX + symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo. Raw rows: regress-final.jsonl.
+Binary eq8-acc8f2fdf588, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget; FULL = FIX + symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo. Raw rows: regress-final.jsonl.
 
 520 programs.
 
 | outcome | baseline | FIX | FULL |
 |---|---|---|---|
 | accept | 233 | 246 | 248 |
-| reject | 223 | 273 | 271 |
-| timeout | 43 | 1 | 1 |
+| reject | 224 | 273 | 271 |
+| timeout | 42 | 1 | 1 |
 | OOM | 0 | 0 | 0 |
 | crash | 21 | 0 | 0 |
 
@@ -108,7 +108,6 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 | review2/eq-unsound/absinst-1.hylo | accept | reject(1) | reject(1) | no coercion from '((V::P).X ~ Bool) ==> [let V]() let -> Void' to '[let V]() let -> Void' |
 | review2/eq-unsound/absleak-3.hylo | timeout | reject(1) | reject(1) | no coercion from '(T::P).X' to '(U::P).X' |
 | review2/eq-unsound/absleak-4.hylo | timeout | reject(1) | reject(1) | no coercion from '((T::P).X ~ (U::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void' |
-| review2/eq-unsound/extwhere-2.hylo | timeout | reject(1) | reject(1) | no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<{B, B}>>) let -> |
 | review2/eq-unsound/nested-eq.hylo | timeout | reject(2) | reject(2) | expected 'is' |
 | review2/eq-unsound/pen-ref-3.hylo | reject(2) | accept | accept |  |
 | review2/eq-unsound/pend-1.hylo | timeout | reject(1) | reject(1) | no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<P<C>>) let -> yiel |
@@ -173,17 +172,16 @@ Binary eq7-3bbd2b60cb89, 30 s timeout. FIX = occurs,fixsubst,eqsolve,extorder,ar
 
 ## FIX/FULL runs over 2 s
 
-- review2/perf/div-eq-b3-0.hylo FIX: 3329 ms
-- review2/perf/div-eq-b3-1.hylo FIX: 3361 ms
-- review2/perf/div-eq-ovl-b3-0.hylo FIX: 3291 ms
-- review2/perf/div-eq-ovl-b3-1.hylo FIX: 3556 ms
-- review2/perf/div-trunc-b3.hylo FIX: 3575 ms
-- review2/perf/div-trunc-b3.hylo FULL: 6105 ms
-- review2/perf/div-trunc-b4.hylo FIX: 5770 ms
-- review2/perf/div-trunc-b4.hylo FULL: 4893 ms
-- review2/perf/occurs-dag-16.hylo FIX: 3090 ms
-- review2/perf/occurs-dag-18.hylo FIX: 11555 ms
-- review2/perf/ovl-ret-8.hylo FIX: 2523 ms
-- review2/perf/ovl-ret-8.hylo FULL: 2095 ms
-- review2/perf/ovl-ret-9.hylo FIX: 10527 ms
-- review2/perf/ovl-ret-9.hylo FULL: 8667 ms
+- review2/perf/div-eq-b3-0.hylo FIX: 3182 ms
+- review2/perf/div-eq-b3-1.hylo FIX: 3168 ms
+- review2/perf/div-eq-ovl-b3-0.hylo FIX: 2742 ms
+- review2/perf/div-eq-ovl-b3-1.hylo FIX: 2952 ms
+- review2/perf/div-trunc-b3.hylo FIX: 3075 ms
+- review2/perf/div-trunc-b3.hylo FULL: 5338 ms
+- review2/perf/div-trunc-b4.hylo FIX: 4932 ms
+- review2/perf/div-trunc-b4.hylo FULL: 4767 ms
+- review2/perf/occurs-dag-16.hylo FIX: 3079 ms
+- review2/perf/occurs-dag-18.hylo FIX: 10306 ms
+- review2/perf/ovl-ret-8.hylo FIX: 2025 ms
+- review2/perf/ovl-ret-9.hylo FIX: 8343 ms
+- review2/perf/ovl-ret-9.hylo FULL: 7471 ms
