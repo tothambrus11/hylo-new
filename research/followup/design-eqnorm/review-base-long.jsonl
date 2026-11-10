@@ -1,0 +1,2 @@
+{"program": "tests/gain-01-wide-given.hylo", "config": "base", "exit": -6, "verdict": "crash(-6)", "violations": [], "counters": {}}
+{"program": "tests/keep-16-pending-premise-wrong.hylo", "config": "base", "exit": 0, "verdict": "rejected", "diagnostics": 1, "errors": ["type 'Box<T>' has no member 'first'"], "violations": [], "counters": {"summon.subgoals": 60090, "summon.matches": 1065099, "summon.layers": 40, "summon.depthExhausted": 1, "names.appliesCalls": 19}}

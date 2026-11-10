@@ -1,0 +1,4 @@
+//! stage:typing no-std
+trait P { type X; type Y
+  given <where X is P> => X == Y
+}

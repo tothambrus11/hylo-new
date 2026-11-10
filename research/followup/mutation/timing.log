@@ -1,0 +1,15 @@
+workloads/del-bound/002 min5 2.71 min5abs 4.22
+workloads/del-bound/021 min5 7.66 min5abs 4.37
+corpus/del-given/011 min5 8.01 min5abs 8.18
+corpus/del-bound/022 min5 2.36 min5abs 7.0
+tests/del-bound/017 min5 3.28 min5abs 5.9
+tests/repl-typearg/018 min5 1.31 min5abs 2.68
+corpus/del-ext-member/003 min5 0.58 min5abs 1.58
+workloads/del-given/023 min5 1.5 min5abs 1.92
+corpus/del-type-member/022 min5 7.5 min5abs 7.88
+corpus/del-bound/012 min5 8.36 min5abs 3.73
+workloads/del-ext-member/001 min5 385.87 min5abs 413.78
+workloads/del-ext-member/002 min5 380.37 min5abs 385.57
+workloads/del-type-member/030 min5 608.73 min5abs 514.61
+stdlib/del-given/025 min5 574.68 min5abs 577.23
+workloads/repl-typearg/041 min5 612.72 min5abs 621.2

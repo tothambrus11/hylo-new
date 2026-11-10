@@ -1,0 +1,21 @@
+//! stage:typing no-std
+// ATTACK on stage 1b (eqeager). expected: accepted at every stage; never ambiguous.
+// Under FULL the first extension does not apply (9 parts: 11 layers) and the second does (8 parts:
+// 10 layers). With eqeager both apply. The call is still accepted, so member selection has a rule
+// for it, but which `m` is called may have changed from the second extension to the first: a
+// resolution that newly succeeds is not only "a rejected program accepted". Compare the witness of
+// this call site in the semantic dump before and after.
+// currently: base out of memory; FULL accepted (summon.subgoals=17 summon.matches=20 summon.depthExhausted=1 eqsolve.proved=17); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) accepted (summon.matches=4 summon.depthExhausted=1 eqsolve.proved=17 eqeager.matches=2). With selfcheck: no violation.
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+struct A4 { public memberwise init }
+struct A5 { public memberwise init }
+struct A6 { public memberwise init }
+struct A7 { public memberwise init }
+struct A8 { public memberwise init }
+struct W<X0, X1, X2, X3, X4, X5, X6, X7, X8> { public memberwise init }
+extension W<A0, A1, A2, A3, A4, A5, A6, A7, A8> { fun m() {} }
+extension <X8> W<A0, A1, A2, A3, A4, A5, A6, A7, X8> { fun m() {} }
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8 where T0 == A0, T1 == A1, T2 == A2, T3 == A3, T4 == A4, T5 == A5, T6 == A6, T7 == A7, T8 == A8>(x: W<T0, T1, T2, T3, T4, T5, T6, T7, T8>) { x.m() }

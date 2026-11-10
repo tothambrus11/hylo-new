@@ -1,0 +1,8 @@
+// Expected: accepted.
+trait P { type X }
+struct A { public memberwise init }
+struct C { public memberwise init }
+struct Box<T> { public memberwise init }
+given A is P { type X = C }
+fun wrap<T where T is P>(t: T, x: Box<T.X>) {}
+fun q(x: Box<C>) { wrap(A(), x) }

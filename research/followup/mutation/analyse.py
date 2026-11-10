@@ -32,7 +32,7 @@ def classify(rows):
     b = rows["base"]
     if b["status"] == "timeout": return "timeout"
     if b["status"] != "ok": return "crash"
-    if b["syntax"]: return "syntax"
+    if any(tc.SYNTAX_PAT.search(m) for m in b["msgs"]): return "syntax"
     return "equivalent" if b["diags"] == 0 else "rejected"
 
 
@@ -393,6 +393,83 @@ def main():
             return f"{x['matches']} ({x['ms']:.0f}) d{x['diags']}"
         for (mid, what), cells in d.items():
             P(f"| {mid} | {what} | " + " | ".join(dc(cells.get((c, dd))) for c in ("base", "min5", "min5abs") for dd in (10, 12, 14)) + " |")
+        P("")
+    # sources with and without equality requirements
+    import re, mutate
+    eqcache = {}
+    def has_eq(r):
+        m = mutants[r["id"]]
+        pth = os.path.join(tc.ORIG_STD, m["file"][len("stdlib:"):]) if m["group"] == "stdlib" else os.path.join(tc.ROOT, m["file"])
+        if pth not in eqcache:
+            eqcache[pth] = bool(re.search(r"where[^{}()\n]*==", mutate.mask(open(pth).read())))
+        return eqcache[pth]
+    P("## 12. Outcome under base by whether the source program has an equality requirement (`where ... ==`)\n")
+    P("`wrongly accepted` = accepted by base, rejected by FULL (each one inspected: all are ill-typed).\n")
+    P("| source has an equality requirement | group | mutants | rejected normally | memory exhausted | wrongly accepted | still valid | syntax error |")
+    P("|---|---|---:|---:|---:|---:|---:|---:|")
+    for eq in (True, False):
+        for g in ["all"] + groups:
+            sel = [r for r in rows if has_eq(r) == eq and (g == "all" or r["group"] == g)]
+            if not sel: continue
+            wrong = sum(r["cls"] == "equivalent" and r["full"]["status"] == "ok" and r["full"]["diags"] > 0 for r in sel)
+            c = collections.Counter(r["cls"] for r in sel)
+            P(f"| {'yes' if eq else 'no'} | {g} | {len(sel)} | {c['rejected']} | {c['crash'] + c['timeout']} | {wrong} | {c['equivalent'] - wrong} | {c['syntax']} |")
+    P("")
+    ap = os.path.join(tc.HERE, "attrib.jsonl")
+    if os.path.exists(ap):
+        P("## 9. Which technique removes the blow-ups\n")
+        P("Each mutant that exhausted memory under base, under MIN5 plus one or several fixes (memory cap 600 MB, 60 s). "
+          "`rej n: m` = rejected with n diagnostics after m candidate matches (typing ms, indicative); `oom` = memory exhausted; `to` = timeout.\n")
+        d = collections.defaultdict(dict)
+        cfgs = []
+        for ln in open(ap):
+            x = json.loads(ln); d[x["id"]][x["config"]] = x
+            if x["config"] not in cfgs: cfgs.append(x["config"])
+        def ac(x):
+            if x is None: return "–"
+            if x["status"] == "timeout": return "to"
+            if x["status"] != "ok": return "oom" if x["exit"] in (-6, 134) else f"crash {x['exit']}"
+            return (f"rej {x['diags']}" if x["diags"] else "acc") + f": {x['matches']} ({x['ms']:.0f})"
+        P("| mutant | " + " | ".join(("MIN5+" + c[5:] if c.startswith("min5+") else "FULL−" + c[5:] if c.startswith("full-") else "FIX−" + c[4:] if c.startswith("fix-") else c.upper()) for c in cfgs) + " |")
+        P("|---|" + "---|" * len(cfgs))
+        for mid, cells in d.items():
+            P(f"| {mid} | " + " | ".join(ac(cells.get(c)) for c in cfgs) + " |")
+        P("")
+        P("| configuration | mutants run | rejected normally | memory exhausted | timeout |")
+        P("|---|---:|---:|---:|---:|")
+        for c in cfgs:
+            xs = [cells[c] for cells in d.values() if c in cells]
+            P(f"| {c} | {len(xs)} | {sum(x['status'] == 'ok' and x['diags'] > 0 for x in xs)} | {sum(x['status'] == 'crash' for x in xs)} | {sum(x['status'] == 'timeout' for x in xs)} |")
+        P("")
+    rp = os.path.join(tc.HERE, "recheck.jsonl")
+    if os.path.exists(rp):
+        P("## 10. Blow-ups re-run with the default 2.5 GB memory cap (120 s)\n")
+        P("| mutant | config | result | wall time (s) |")
+        P("|---|---|---|---:|")
+        for ln in open(rp):
+            x = json.loads(ln)
+            st = "memory exhausted" if x["status"] == "crash" and x["exit"] in (-6, 134) else x["status"] if x["status"] != "ok" else f"rej {x['diags']}, {x['matches']} matches"
+            P(f"| {x['id']} | {x['config']} | {st} | {x['wall']:.0f} |")
+        P("")
+    sp = os.path.join(tc.HERE, "shapes.jsonl")
+    if os.path.exists(sp):
+        P("## 11. Library-shaped probe: one missing conformance under a trait hierarchy (shapes.py)\n")
+        P("h = number of refinement steps, n = nesting depth of the type in the failing goal. Cells: `summon.matches` (typing ms, indicative); "
+          "`to` = timeout at 60 s, `oom` = memory exhausted. `@14` = with HYLO_TC_MAXDEPTH=14.\n")
+        d = collections.defaultdict(dict)
+        for ln in open(sp):
+            x = json.loads(ln); d[(x["shape"], x["h"], x["n"])][(x["valid"], x["config"], x["depth"])] = x
+        def sc(x):
+            if x is None: return "–"
+            if x["status"] == "timeout": return "to"
+            if x["status"] != "ok": return "oom" if x["exit"] in (-6, 134) else f"crash {x['exit']}"
+            return f"{x['matches']} ({x['ms']:.0f})" + ("" if x["diags"] else " acc")
+        P("| shape | h | n | valid: base | valid: MIN5 | valid: MIN5+abs | valid: FULL | error: base | error: MIN5 | error: MIN5+abs | error: FULL | error: MIN5 @14 | error: MIN5+abs @14 |")
+        P("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+        for (shape, h, n), cells in sorted(d.items()):
+            row = [sc(cells.get((True, c, 10))) for c in CFGS] + [sc(cells.get((False, c, 10))) for c in CFGS] \
+                + [sc(cells.get((False, "min5", 14))), sc(cells.get((False, "min5abs", 14)))]
+            P(f"| {shape} | {h} | {n} | " + " | ".join(row) + " |")
         P("")
     open(os.path.join(tc.HERE, "analysis.md"), "w").write("\n".join(out) + "\n")
     print("\n".join(out))

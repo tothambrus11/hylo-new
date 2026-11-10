@@ -153,7 +153,9 @@ def stdlib_names():
                     nxt = ts[i + 1].text if i + 1 < len(ts) else ""
                     if prev in ("struct", "trait", "enum", "type", "fun", "subscript", "let", "var",
                                 "case", ".", "infix", "prefix", "postfix", "import", "given") \
-                            or (nxt == ":" and prev != "extension"):
+                            or (nxt == ":" and prev != "extension") \
+                            or (i + 2 < len(ts) and ts[i + 1].kind == "name" and ts[i + 2].text == ":" and prev in ("(", ",")):
+                        # (the last case is an argument label followed by a parameter name)
                         names.add(t.text)
         _stdnames = names | {"Self", "self", "main", "Builtin", "Hylo", "is", "memberwise", "Int",
                              "Bool", "Void", "Never", "Metatype", "refines", "indirect", "new", "any"}

@@ -3,7 +3,7 @@
 
 usage:
   metamorphic.py baseline [--config C]             original and re-printed verdict of every program
-  metamorphic.py run REL... [--config C] [--only SUBSTR] [--files LIST]
+  metamorphic.py run REL... [--config C] [--only SUBSTR] [--files LIST] [--force]
                                                    REL is r1..r8 or `all`
   metamorphic.py attribute                         base and FIX on every program with a FULL violation
   metamorphic.py show FILE REL [VID]               prints the variants of a program
@@ -109,7 +109,7 @@ def run_one(path, r, config, base, o_rows):
     return dict(n, file=rel(path), rel=r, config=config, base_verdict=a["verdict"], budget=budget(r, rel(path)))
 
 
-def cmd_run(rels, config, only=None, files=None):
+def cmd_run(rels, config, only=None, files=None, force=False):
     base = baselines("FULL")
     done = {}
     for row in load(os.path.join(DATA, "done-%s.jsonl" % config)):
@@ -121,7 +121,8 @@ def cmd_run(rels, config, only=None, files=None):
                 f = rel(path)
                 if only and only not in f: continue
                 if files is not None and f not in files: continue
-                if done.get((f, r), -1) >= budget(r, f) or f not in base or base[f].get("skip"): continue
+                if f not in base or base[f].get("skip"): continue
+                if done.get((f, r), -1) >= budget(r, f) and not force: continue
                 try:
                     row = run_one(path, r, config, base, o_rows)
                 except Exception as e:
@@ -130,18 +131,28 @@ def cmd_run(rels, config, only=None, files=None):
                 o_done.write(json.dumps(row) + "\n"); o_done.flush()
 
 
-def cmd_attribute(only_violating=("r2", "r4")):
-    """Runs FIX and base on the programs that show a violation under FULL: every variant that was
-    checked under FULL, except for the relations in `only_violating` (many programs, one cause),
-    where only the violating variants are run."""
+def cmd_attribute(all_variants=("r1",), per_group=8):
+    """Runs FIX and base on programs that show a violation under FULL. For relation 1, every
+    permutation that was checked under FULL is run again. For the other relations, the original
+    and the violating variants are run; violations are grouped by signature (as in
+    reduce_all.py: relation, kind, verdicts, error messages with the names blanked) and at most
+    `per_group` variants of a group are run, because the large groups have a single cause and
+    the existing checker needs up to a minute for some of their members."""
+    from reduce_all import signature
     full = {}
     for row in load(os.path.join(DATA, "rows-FULL.jsonl")):
         full[(row["file"], row["rel"], row["vid"])] = row
     bad = {(f, r) for (f, r, _), row in full.items() if row.get("violation")}
-    todo = {}
-    for (f, r, vid), row in full.items():
-        if (f, r) in bad and (row.get("violation") or r not in only_violating):
+    todo, used = {}, {}
+    already = {(x["file"], x["rel"], x["vid"]) for c in ("FIX", "base") for x in load(os.path.join(DATA, "rows-%s.jsonl" % c))}
+    for (f, r, vid), row in sorted(full.items(), key=lambda kv: ((kv[0] not in already), kv[0])):
+        if (f, r) not in bad: continue
+        if r in all_variants:
             todo.setdefault((f, r), []).append(vid)
+        elif row.get("violation"):
+            sig = signature(row)
+            used[sig] = used.get(sig, 0) + 1
+            if used[sig] <= per_group: todo.setdefault((f, r), []).append(vid)
     for config in ("FIX", "base"):
         have = {(x["file"], x["rel"], x["vid"]) for x in load(os.path.join(DATA, "rows-%s.jsonl" % config))}
         with open(os.path.join(DATA, "rows-%s.jsonl" % config), "a") as o:
@@ -171,6 +182,8 @@ def cmd_show(path, r, vid=None):
 
 def main():
     args = sys.argv[1:]
+    force = "--force" in args
+    if force: args.remove("--force")
     opt = {"--config": "FULL", "--only": None, "--files": None}
     for k in list(opt):
         if k in args:
@@ -181,7 +194,7 @@ def main():
     elif cmd == "run":
         rels = sorted(RELATIONS) if args == ["all"] else args
         files = set(open(opt["--files"]).read().split()) if opt["--files"] else None
-        cmd_run(rels, opt["--config"], opt["--only"], files)
+        cmd_run(rels, opt["--config"], opt["--only"], files, force)
     elif cmd == "attribute": cmd_attribute()
     elif cmd == "show": cmd_show(*args)
     else: sys.exit(__doc__)

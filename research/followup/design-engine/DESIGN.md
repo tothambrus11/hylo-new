@@ -8,11 +8,11 @@ This document is for the engineer who will change `Sources/FrontEnd` of `/home/u
 
 | Idea | What it fixes | Evidence that it matters | Size | Recommendation |
 |---|---|---|---|---|
-| 1. Substituting discharged premises (`premsubst`) | A requirement on an associated type of another requirement (`where T is P, T.X is Q`) can never be satisfied by a caller. | Six minimal programs of ordinary generic code are rejected by base and by FULL. No workaround exists in the language. | about 320 lines, one new field in `Implication` | **First.** Designed in sections 1 to 7. |
+| 1. Substituting discharged premises (`premsubst`) | A requirement on an associated type of another requirement (`where T is P, T.X is Q`) can never be satisfied by a caller. | Nine minimal programs of ordinary generic code are rejected by FULL, and rejected or not decided within 60 s by base. No workaround exists in the language. | about 330 lines, one new field in `Implication` and `ContextClause` | **First.** Designed in sections 1 to 7. |
 | 3. Height bound in place of the size bound | Valid programs with a derivation of more than 10 steps are rejected: copying a 5-tuple, calling a function with three requirements, and one program whose verdict depends on the order of its where clause. | Four minimal programs. No file of the compiler's tests reaches the bound, so the change is invisible there. | about 60 lines | Second. It needs a decision of the language designers and a work budget. Section 9. |
 | 2. Tabling of subgoals | Exponential cost when several premises each have several derivations. | Nothing to gain on the code available today: 96% of the resolutions of the standard library end after one step and none has more than 5. One synthetic family of valid programs is exponential today. | 250 to 400 lines | Last, and only together with idea 3, whose cost it bounds. Section 8. |
 
-The reason for the order is that idea 1 removes a rejection that every program of a certain ordinary shape meets, while ideas 2 and 3 concern programs near a limit. Idea 1 also removes the least robust part of the equality procedure (the ahead-of-time resolution of a pending premise, about 80 lines, whose correctness depends on resolving the same goal twice with the same answer).
+The reason for the order is that idea 1 removes a rejection that every program of a certain ordinary shape meets, while ideas 2 and 3 concern programs near a limit. Idea 1 also takes over from the least robust part of the equality procedure, the ahead-of-time resolution of a pending premise (about 80 lines, whose correctness depends on resolving the same goal twice with the same answer). That code stops firing for requirements and can be deleted once heads are handled too (section 3.8).
 
 ## 1. The problem
 
@@ -149,7 +149,7 @@ First requirement first, for all implications.
 
 A premise whose type mentions another premise is not put on the stack of hypotheses. It waits until the premises it mentions have witnesses, which are substituted into its type; then it enters the stack at the top. Everything else stays last in, first out.
 
-- Code: about 320 lines in five steps (section 6): 45 for the binders, 170 for the engine, 40 for projections through declared conformances, 40 for self-checks, 25 of preparatory refactoring.
+- Code: about 330 lines in five steps (section 6): 55 for the binders, 170 for the engine and its helpers, 40 for projections through declared conformances, 40 for self-checks, 25 of preparatory refactoring.
 - New invariants: I1 to I4 of section 4, each with an assertion.
 - Result-preserving by construction on every resolution without dependent requirements.
 
@@ -165,7 +165,7 @@ Represent the unknown witness of a premise as a variable inside types, extend un
 
 | Option | Code | Exactness |
 |---|---|---|
-| (a) `Implication` records, for each using, the declaration through which later usings refer to it (chosen) | about 45 lines in `Implication.swift`, `TypeStore.swift`, `Typer.introduce` | Exact. One corner (assumption A7). |
+| (a) `Implication` records, for each using, the declaration through which later usings refer to it (chosen) | about 55 lines in `Implication.swift`, `ContextClause.swift`, `TypeStore.swift`, `Typer.introduce` | Exact. One corner (assumption A7). |
 | (b) Recover it from the syntax: a reference to a declaration that is the *k*-th using of some context clause is bound by the *k*-th using of the implication being opened if the types agree | about 30 lines in `Typer.swift`, no change of representation | Same corner, plus confusion between two clauses whose *k*-th usings have the same type. |
 | (c) By type alone, as the workaround does | 0 new lines | Fails with two usings of the same type; cannot tell a callee's using from a visible one of the same type. |
 
@@ -232,7 +232,16 @@ becomes
         head: i.head)).erased
 ```
 
-`lifted(_: Implication.ID)` passes `self[a].binders`. `introduce(usings:into:)` gains a parameter `binders: [DeclarationIdentity?] = []`. `ContextClause` is not changed in the first steps: an implication rebuilt from a `ContextClause` (`contextAndHead` followed by `introduce`, for instance for the members of a generic type) loses its binders, and its dependent usings stay opaque as they are today. That is a loss of coverage, not of correctness.
+`lifted(_: Implication.ID)` passes `self[a].binders`. `introduce(usings:into:)` gains a parameter `binders: [DeclarationIdentity?] = []`.
+
+Several types are rebuilt from a `ContextClause`: `declaredType(of: FunctionBundleDeclaration.ID)` and the one for variants call `contextAndHead` and then `program.types.introduce(context, into: …)`. So `ContextClause` gets the same field, with a default so that existing initializers compile:
+
+```swift
+  /// For each using, the declaration through which later usings refer to it, if any (see `Implication`).
+  public let binders: [DeclarationIdentity?]       // init(parameters:usings:binders: = [])
+```
+
+`contextAndHead` collects it next to the usings (for an implication whose `binders` is empty it appends one `nil` per using, so that positions stay aligned when nested implications are flattened), and `introduce(_: ContextClause, into:)` passes it on. A type rebuilt through a path that drops the field has dependent usings that stay opaque, as they are today: a loss of coverage, not of correctness.
 
 `Typer.introduce(types:usings:into:)` is where the declarations are known. The existing lines
 
@@ -574,11 +583,16 @@ The parameter type is in the head of the callee's type. The constraint solver op
         CoercionConstraint(on: f, from: k.callee, to: callee, at: program[f].site))
 ```
 
-and checks the arguments against `callee`, whose parameter type still names the callee's own requirement. The result of the coercion (the witness for `U is P`) is never fed back into that type. Fixing it needs the solver to know which witness a parameter type depends on, which is option D. If the head were bound in `formThread` alone, the root match of every call to such a function would fail against the solver's unbound copy, and programs that are accepted today (a dependent parameter that is never constrained) would be rejected. So the first steps leave heads alone, for all threads.
+and checks the arguments against `callee`, whose parameter type still names the callee's own requirement. The result of the coercion (the witness for `U is P`) is never fed back into that type. Fixing it needs the solver to know which witness a parameter type depends on, which is option D. If the head were bound in `formThread` alone, the root match of every call to such a function would fail against the solver's unbound copy, and programs that are accepted today would be rejected: `tests/s1-keep-result-type.hylo` calls a function whose result type is `W<T.X>` without constraining the result, and is accepted by base and FULL. So the first steps leave heads alone, for all threads.
 
 A later, separate step can bind heads for the two kinds of thread where the solver is not involved: candidates of `summon` (givens such as `given <T where T is P> => Box<T.X> is Q`) and extension applicability (`applies`). The obstacle is known: the mismatching parts that `match` assumes would then mention assumed givens, `canDeriveCoercions` would have to let them through, and they would have to be deferred like usings. Invariant I1 no longer holds in that form. It should get its own flag, after the solver question is settled. Only then can the workaround of section 1.3 be deleted; until then it still serves projections that come from heads.
 
-Members of a generic type whose own where clause mentions a requirement of the enclosing type also stay opaque (the binders are lost through `ContextClause`, section 3.2).
+A requirement of a member that mentions a requirement of the enclosing extension or type also stays opaque: binders are computed per clause (section 3.2), and the reference crosses two clauses.
+
+### 3.9 Two side effects to know about
+
+- **Diagnostics.** When a callee coercion fails, `diagnoseInvalidCoercion` (in `Solver.swift`) resolves each using of the callee separately (`let ws = tp.summon(x, in: scopeOfUse)`) to say which one has no unique given. It does so on the unbound types, so for a clause with a dependent requirement it will keep blaming that requirement (`Q<(U::P).X>`) even when another one failed. This does not affect verdicts. The clean fix is to make that loop resolve the usings in order and substitute, with the functions of 3.3; it can wait until the tests pass.
+- **Serialized modules.** `Implication` and `ContextClause` are `@Archivable`. A new stored property changes the archive format, and a module typed without the flag has no binders: its generic declarations with dependent requirements behave as today when used from a module typed with the flag. `tc-bench` types the standard library in the same process, so the experiments are not affected.
 
 ## 4. Why it is correct
 
@@ -618,7 +632,7 @@ The workaround assumes that resolving a premise twice gives the same witness. He
 |---|---|---|
 | A1 | In the type of a using, a reference to an earlier using of the same clause is the witness `(.reference(r), type: T)`, where `r` is what `expression(referringTo:)` returns for the earlier using and `T` its declared type; possibly inside a coercion application. | In `Typer.introduce` under `selfcheck`: every witness `.reference(r)` with `r` among the clause's usings that occurs in a later using has type `us[k]`. `premsubst.binders` must be positive on `tests/s1-gain-*.hylo`. |
 | A2 | Substitution, reification and dealiasing apply the same transformation to a using and to the references to it, and keep `binders`. | In `formThread` under `selfcheck`: if `i.binders.first` is set and no later using was rewritten, report a violation. |
-| A3 | The witness recorded for a premise is syntactically the witness that name resolution used when the caller wrote the same projection, so that the substituted type is the *same type identity* as the caller's. | The `s1-gain-*` tests are accepted only if this holds. Under `selfcheck`: when the goal of a discharged premise was closed and it had no hypotheses, `summon(goal, in: scopeOfUse)` returns that witness. This is a check, not something the algorithm uses. |
+| A3 | The witness recorded for a premise is syntactically the witness that name resolution used when the caller wrote the same projection, so that the substituted type is the *same type identity* as the caller's. | The workaround already depends on it and passes: it builds `AssociatedType(declaration:qualification:)` from the reified result of a resolution and finds the caller's fact about that type (`s1-keep-equality-generic`: `eqsolve.proved=1`). The `s1-gain-*` tests are accepted only if it holds here too. Under `selfcheck`: when the goal of a discharged premise was closed and it had no hypotheses, compare with the witness that `summon(goal, in: scopeOfUse)` returns, and count the disagreements (`selfcheck.premsubst.otherWitness`). This is a measurement, not something the algorithm uses. |
 | A4 | For a reference to a non-generic conformance declaration, `typeOfImplementation` returns the metatype of the implementation, and its only effects are memoized declared types. | `s1-gain-conformance-concrete`, `s1-gain-equality-concrete`, `s1-reject-concrete-mismatch`. `expression(referringTo:)` already computes declared types inside resolution, so re-entrancy is not new. |
 | A5 | No `Environment` is built without copying the new fields. | After step 0, `Environment(` occurs only in `with`, `assuming`, `deferring` and `empty`. |
 | A6 | No later phase needs the types of inner nodes of a witness to mention the callee's own using. | They are rewritten to the caller's witnesses by 3.6; the semantic dump shows the difference, only in programs with dependent usings. |
@@ -672,12 +686,15 @@ Among the 76 research programs with a requirement on a projection (`experiments/
 | `s1-keep-equality-generic` | 2 | accepted, `eqsolve.premises=0` | accepted / accepted (`eqsolve.premises=1`) |
 | `s1-keep-extension-generic` | 2 | accepted, `eqsolve.premises=0` | accepted / accepted (`eqsolve.premises=1`) |
 | `s1-keep-recursion` | 2 | accepted, same witness | accepted / accepted |
+| `s1-keep-result-type` (a result type in the head, section 3.8) | 2 | accepted, same witness | accepted / accepted |
 | `s1-keep-hypothesis` | 2 | accepted, trace identical | accepted / accepted |
 | `s1-reject-missing-requirement` | 2 | rejected | rejected / rejected |
 | `s1-reject-other-conformance` | 2 | rejected | rejected / rejected |
 | `s1-reject-concrete-mismatch` | 3 | rejected | rejected / rejected |
 | `s1-open-parameter-type` | – | rejected (not fixed, section 3.8) | rejected / rejected |
 | `s1-open-ambiguous-dependency` | 3 | accepted as designed; question 4 | rejected / rejected |
+
+The programs `s2-*` and `s3-*` of the same directory belong to sections 8.3 and 9.1; they are recorded in the same way and must keep their current verdicts under `premsubst` (none has a dependent requirement).
 
 Beyond these:
 
@@ -694,7 +711,7 @@ Each step builds and is tested on its own. Lines are added or changed lines, est
 | Step | Change | Lines | Test |
 |---|---|---:|---|
 | 0 | `Environment.with(substitutions:givens:nextGivenIdentifier:)`; replace the hand-written copies. No flag. | 25 | Oracle identical on everything. Counters identical. |
-| 1 | Flag and counters. `Implication.binders`; `dropFirstRequirement`, `lifted`, `modified`, `introduce(usings:binders:into:)`; `Typer.introduce` computes binders when the flag is on; `rewritingWitnesses`, `mentions`. Nothing reads the binders yet. | 45 + 40 | Flag on: oracle identical on the 192 tests and on the research programs. `premsubst.binders > 0` on `s1-*`, `= 2` in `associated-type-equality.hylo` (the two requirements that `T.X == U.X` mentions), `= 0` elsewhere in the tests. |
+| 1 | Flag and counters. `Implication.binders`, `ContextClause.binders`; `dropFirstRequirement`, `lifted`, `modified`, `contextAndHead`, `introduce(usings:binders:into:)`; `Typer.introduce` computes binders when the flag is on; `rewritingWitnesses`, `mentions`. Nothing reads the binders yet. | 55 + 40 | Flag on: oracle identical on the 192 tests and on the research programs. `premsubst.binders > 0` on `s1-*`, `= 2` in `associated-type-equality.hylo` (the two requirements that `T.X == U.X` mentions), `= 0` elsewhere in the tests. |
 | 2 | `deferred`, `dependent`, `deferring(given:)`; the `formThread` block; the prologue and the two new branches of `threadContinuation`; `solvedWitnesses`; `withoutAssumed`; the assertions of I1 and I4. | 130 | The six generic `s1-gain-*` accepted; `s1-keep-*`; `s1-reject-*`; test plan items 1 to 3 and 5. |
 | 3 | `normalizingProjections(in:)` and its call in the release loop. | 40 | The three concrete `s1-gain-*` accepted; `s1-reject-concrete-mismatch` rejected; `s1-open-ambiguous-dependency` recorded. |
 | 4 | Self-checks: A1, A2, A3, I3. | 40 | Test plan item 4. |
@@ -704,7 +721,7 @@ Each step builds and is tested on its own. Lines are added or changed lines, est
 
 - Step 1: a semantic dump differs with the flag on in a program without dependent usings. Then recording binders changes a type identity that something compares. Fall back to option (b) of section 2 (no change of representation), which costs the exactness discussed there.
 - Step 2: an `s1-gain-*` program is still rejected because the substituted type is not the caller's type although they denote the same thing (A3 fails: for instance the two witnesses differ in a type annotation or in an alias). If making the two spellings agree needs more than a local fix (say 30 lines), the approach needs a normal form for witness expressions, and option D or the normalization design of `research/followup/design-eqnorm` should take over.
-- Step 2: `premsubst.stuck > 0` on any program. Invariant I2 is wrong; do not ship the fallback.
+- Step 2: `premsubst.stuck > 0` on any program. Then invariant I2 is wrong and the order of release must be re-derived before going on; failing the thread is only a safe way to find out.
 - Any step: a program of the research set that FULL accepts today is rejected with the flag and the reason is not one of items 2 and 3 of section 4.5 combined with the bound.
 
 ## 7. Open questions for the language designers
@@ -744,7 +761,7 @@ So: no potential on today's code; an exponential in a synthetic family of valid 
 
 ### 8.2 Is tabling compatible with the engine?
 
-Tabling as in Lean 4 (Selsam, Ullrich and de Moura) shares the answers of a subgoal between all its consumers and yields them in the order found. Four properties of this engine stand in the way.
+Tabling as in Lean 4 (Selsam, Ullrich and de Moura) shares the answers of a subgoal between all its consumers and yields them in the order found. Five properties of this engine stand in the way.
 
 | Property | Consequence |
 |---|---|
@@ -804,15 +821,16 @@ Two separate limits, for two separate purposes.
 1. **A bound on the height of a derivation**, per branch: a premise at level *ℓ* > *H* is not discharged. The premises of the root are at level 1; the premises of a candidate that matched a goal of level *ℓ*, and the equalities that `match` assumes for it, are at level *ℓ* + 1. This is what makes the search finite, and it is a property of the derivation (it does not depend on the order of requirements or on how many requirements a call has).
 2. **A work budget** per resolution, whose exhaustion is an *error* ("implicit resolution is too complex"), not a silent failure, as the `budget` flag already does for the size of the frontier. It protects against searches that are finite but huge.
 
-Implementation, behind a flag `heightbound`: the engine already threads the needed information for the abandoned loop check (`Environment.ancestry` maps an assumed given to the list of its ancestor goals; the level is its length plus one). Replace it by `levels: [Int: Int]`, give `formThread` the level of the goal being matched, set the level of the equalities assumed in `match`, and in `threadContinuation` kill the thread when the level of the popped premise exceeds *H*. In the loop, replace `depth < bound(work)` by the budget test. About 60 lines.
+Implementation, behind a flag `heightbound`: the engine already threads the needed information for the abandoned loop check (`Environment.ancestry` maps an assumed given to the list of its ancestor goals; the level is its length plus one). Replace it by `levels: [Int: Int]`, give `formThread` the level of the goal being matched, set the level of the equalities assumed in `match`, and in `threadContinuation` kill the thread when the level of the popped premise exceeds *H*. In the loop, replace `depth < bound(work)` by the budget test: the function already counts the candidates tried by the resolution (`matchCount - matchesAtEntry`), and no file of the compiler's tests tries more than 128,802 in total under base and 1,406 under FULL, so a limit of 1,000,000 (read from the environment like `HYLO_TC_BUDGET`) is far from anything observed. About 60 lines.
 
 *H = 9 preserves every result of today.* A premise at level *ℓ* exists only after *ℓ* steps and needs one more, so a derivation that completes within 10 steps has no premise above level 9. The frontier of the new search is therefore identical to today's through layer 10. Any resolution that today completes or runs out of threads within 10 layers gives the same results; only resolutions that today hit the bound (`summon.depthExhausted`) continue.
 
 ### 9.3 What it changes
 
 - **Compiler tests: nothing.** `scripts/corpus_scan.py` ran the 192 files under base and FULL with the bound at 10 and at 40 (`experiments/corpus-scan.jsonl`): `summon.depthExhausted = 0` in all 768 runs, and verdicts, diagnostics and `summon.matches` are identical at 10 and 40.
-- **The programs of 9.1**: the five with height at most 9 are accepted; `chain9` stays rejected with *H* = 9.
-- **Cost of failing searches.** Where every given has one premise, size and height coincide and nothing changes (`s3-cost-div-branch`: 110,449 matches under base either way; 1 under FULL, refuted by the abstract model). Where givens have several premises with several derivations, the search no longer stops at 10 steps: `wide-loop-fail-2` goes from 7,434 subgoals at bound 10 to the budget at bound 14. Such programs end in the budget error unless subgoals are shared (section 8). This is the reason the two ideas belong together.
+- **The programs of 9.1**: the four rejected ones with height at most 9 are accepted; `chain9` stays rejected with *H* = 9.
+- **Research test programs.** Under FULL, 6 of 538 reach the bound and 2 the frontier budget (`experiments/programs-scan.jsonl`). With the bound at 40 none becomes accepted (`experiments/reach-bound.jsonl`). Four of the six are the failing equality searches of section 1 (`min`, `t1`, `t8-cond-call`, `assoc-eq-call-incomplete`): at 40 they try 185,000 candidates instead of 10,300 and end in the budget error. Three of those four are valid programs that idea 1 accepts in a few steps, which is one more reason to do idea 1 first. The other two are `performance/div-trunc-b1` and `-b2`, divergent searches that the abstract model cannot refute.
+- **Cost of failing searches.** Where every given has one premise, size and height coincide and nothing changes (`s3-cost-div-branch`: 110,449 matches under base either way; 1 under FULL, refuted by the abstract model). Where givens have several premises with several derivations, the search no longer stops at 10 steps. The binary cannot bound the height, so the only measurement is with the size bound raised: `wide-loop-fail-2` goes from 7,434 subgoals at bound 10 to the budget at bound 14. Such programs end in the budget error unless subgoals are shared (section 8). This is the reason the two ideas belong together.
 - **A failed resolution is not always an error** (overload and extension selection use failures), so a resolution that fails today by reaching the bound and succeeds tomorrow can change which candidate is selected. None exists in the compiler's tests.
 
 ### 9.4 Interactions and questions
@@ -826,6 +844,6 @@ Implementation, behind a flag `heightbound`: the engine already threads the need
 ## 10. What was not established
 
 - No line of this design has been compiled. The Swift in section 3 is written against the source as read; names and signatures are quoted from it, but details such as the capture of non-escaping closures may need adjusting.
-- A3 (the substituted type is identical to the caller's) is argued from the traces, which print `(U::P).X through $r`, and from reading `typeOfImplementation` and `resolve(_:inheritedMemberOf:…)`. It is the assumption most likely to need a fix.
+- A3 (the substituted type is identical to the caller's) is supported by the behaviour of the workaround, which constructs the projection in the same way and succeeds on the binary, and by reading `typeOfImplementation` and `resolve(_:inheritedMemberOf:…)`. It was not observed for witnesses that are applications (a conditional conformance used as the witness of the first requirement); that is the case most likely to need a fix.
 - The numbers of section 8.1 for failing branches are totals (`summon.subgoals`); the binary cannot list the subgoals of failing branches, so the count of *distinct* keys in the synthetic family is an estimate from the shape of the programs.
-- The effect of a height bound on the research programs that reach the bound today is known only through the proxy "bound raised to 40" (`experiments/programs-scan.jsonl`, see README).
+- The effect of a height bound is known only through the proxy "size bound raised to 40", which explores a superset of what a height bound of 9 explores up to 40 steps and nothing beyond.

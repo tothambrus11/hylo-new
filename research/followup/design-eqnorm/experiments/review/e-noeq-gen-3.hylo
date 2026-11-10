@@ -1,0 +1,13 @@
+//! stage:typing no-std
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct R1 { public memberwise init }
+struct R2 { public memberwise init }
+struct W<X0, X1, X2> { public memberwise init }
+extension W<A0, A1, A2> { fun m() -> R1 { R1() } }
+extension <X0, X1, X2> W<X0, X1, X2> { fun m() -> R2 { R2() } }
+fun use1(x: R1) {}
+fun use2(x: R2) {}
+fun f(x: W<A0, A1, A2>) { let r = x.m()
+  use2(r) }

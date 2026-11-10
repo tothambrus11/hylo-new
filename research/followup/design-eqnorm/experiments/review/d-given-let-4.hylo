@@ -1,0 +1,9 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+struct B { public memberwise init }
+type AA = A
+given let a: AA = A()
+fun use<T>(x: T) {}
+fun f<T where T == A, T == B>() {
+  use(summon[B])
+}

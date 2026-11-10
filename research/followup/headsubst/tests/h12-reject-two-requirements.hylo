@@ -1,0 +1,10 @@
+// Expected: rejected. The arguments are swapped.
+trait P { type X }
+trait Q { type Y }
+struct A { public memberwise init }
+struct C { public memberwise init }
+struct D { public memberwise init }
+given A is P { type X = C }
+given A is Q { type Y = D }
+fun both<T where T is P, T is Q>(t: T, x: T.X, y: T.Y) {}
+fun q(x: C, y: D) { both(A(), y, x) }

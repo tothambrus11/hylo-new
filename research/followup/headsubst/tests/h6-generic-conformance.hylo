@@ -1,0 +1,7 @@
+// Expected: accepted. `Box<A>.X` is `A` (needs assocsubst).
+trait P { type X }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+fun take<T where T is P>(t: T, x: T.X) {}
+fun q(x: A) { take(Box<A>(), x) }

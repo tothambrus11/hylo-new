@@ -1,0 +1,22 @@
+//! stage:typing no-std
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Z0 {}
+struct Z1 {}
+struct S1<X> {}
+struct S2<X> {}
+struct S3<X> {}
+struct S4<X> {}
+struct S5<X> {}
+struct Wrap<X, Y> {}
+struct Holder<Y> { public memberwise init }
+given Wrap<A, S1<S1<Z0>>> is Q {}
+given <Y where Wrap<B, S1<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S2<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S3<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S4<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S5<Y>> is Q> => Wrap<A, Y> is Q {}
+extension <Y where Wrap<A, Y> is Q> Holder<Y> { fun m() {} }
+extension <Y> Holder<Y> { fun m() {} }
+fun f<T where T == A, T == B>(x: Holder<Z1>) { x.m() }

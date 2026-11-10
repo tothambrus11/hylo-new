@@ -1,0 +1,28 @@
+assoceq            n=48    FULL  ok       t=3036.21 wall=3.76 matches=14017 forks=None applies=None 
+assoceq            n=96    FULL  ok       t=11461.82 wall=12.03 matches=41713 forks=None applies=None 
+assoceq            n=160   FULL  ok       t=41913.87 wall=42.65 matches=100145 forks=None applies=None 
+assoceq            n=192   FULL  ok       t=51927.41 wall=52.62 matches=138577 forks=None applies=None 
+assocneg           n=48    FULL  err      t=2183.54 wall=2.55 matches=13682 forks=None applies=None assocneg-48.hylo:4.15-16: error: cannot pass value of type '(T48::P).X' to parameter '(T0::P).X'
+assocneg           n=96    FULL  err      t=12075.63 wall=12.45 matches=41186 forks=None applies=None assocneg-96.hylo:4.15-16: error: cannot pass value of type '(T96::P).X' to parameter '(T0::P).X'
+assocneg           n=160   FULL  err      t=33463.72 wall=33.8 matches=99362 forks=None applies=None assocneg-160.hylo:4.15-16: error: cannot pass value of type '(T160::P).X' to parameter '(T0::P).X'
+assocneg           n=192   FULL  err      t=50722.67 wall=51.28 matches=137666 forks=None applies=None assocneg-192.hylo:4.15-16: error: cannot pass value of type '(T192::P).X' to parameter '(T0::P).X'
+ctrl-goals         n=1     FULL  ok       t=0.22 wall=0.47 matches=None forks=None applies=None 
+ctrl-goals         n=2     FULL  ok       t=0.33 wall=0.35 matches=None forks=None applies=None 
+ctrl-goals         n=4     FULL  ok       t=0.39 wall=0.24 matches=None forks=None applies=None 
+ctrl-goals         n=8     FULL  ok       t=0.43 wall=0.5 matches=None forks=None applies=None 
+ctrl-goals         n=16    FULL  ok       t=0.64 wall=0.44 matches=None forks=None applies=None 
+ctrl-goals         n=32    FULL  ok       t=1.07 wall=0.48 matches=None forks=None applies=None 
+ctrl-goals         n=64    FULL  ok       t=1.68 wall=0.36 matches=None forks=None applies=None 
+ctrl-goals         n=128   FULL  ok       t=7.22 wall=0.52 matches=None forks=None applies=None 
+ctrl-goals         n=256   FULL  ok       t=10.69 wall=0.54 matches=None forks=None applies=None 
+ctrl-goals         n=512   FULL  ok       t=24.34 wall=0.52 matches=None forks=None applies=None 
+ctrl-goals         n=1024  FULL  ok       t=46.32 wall=0.71 matches=None forks=None applies=None 
+ctrl-assoc         n=1     FULL  ok       t=1.84 wall=0.54 matches=2 forks=None applies=None 
+ctrl-assoc         n=2     FULL  ok       t=1.96 wall=0.5 matches=3 forks=None applies=None 
+ctrl-assoc         n=4     FULL  ok       t=2.14 wall=0.45 matches=5 forks=None applies=None 
+ctrl-assoc         n=8     FULL  ok       t=2.75 wall=0.45 matches=9 forks=None applies=None 
+ctrl-assoc         n=16    FULL  ok       t=2.56 wall=0.45 matches=17 forks=None applies=None 
+ctrl-assoc         n=32    FULL  ok       t=2.93 wall=0.57 matches=33 forks=None applies=None 
+ctrl-assoc         n=64    FULL  ok       t=3.31 wall=0.4 matches=65 forks=None applies=None 
+ctrl-assoc         n=128   FULL  ok       t=10.33 wall=0.57 matches=129 forks=None applies=None 
+ctrl-assoc         n=256   FULL  ok       t=15.42 wall=0.42 matches=257 forks=None applies=None 

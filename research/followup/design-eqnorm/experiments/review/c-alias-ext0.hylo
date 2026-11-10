@@ -1,0 +1,5 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+type AA = A
+extension AA { fun bar() {} }
+fun f(x: A) { x.bar() }

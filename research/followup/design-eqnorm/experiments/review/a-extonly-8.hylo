@@ -1,0 +1,12 @@
+//! stage:typing no-std
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+struct A4 { public memberwise init }
+struct A5 { public memberwise init }
+struct A6 { public memberwise init }
+struct A7 { public memberwise init }
+struct W<X0, X1, X2, X3, X4, X5, X6, X7> { public memberwise init }
+extension W<A0, A1, A2, A3, A4, A5, A6, A7> { fun m() {} }
+fun f<T0, T1, T2, T3, T4, T5, T6, T7 where T0 == A0, T1 == A1, T2 == A2, T3 == A3, T4 == A4, T5 == A5, T6 == A6, T7 == A7>(x: W<T0, T1, T2, T3, T4, T5, T6, T7>) { x.m() }

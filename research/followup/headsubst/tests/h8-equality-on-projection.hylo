@@ -1,0 +1,5 @@
+// Expected: accepted. `b` is a `B` and `U.X == B`.
+trait P { type X }
+struct B { public memberwise init }
+fun h<T where T is P>(x: T.X) {}
+fun g<U where U is P, U.X == B>(b: B) { h<U>(b) }

@@ -70,7 +70,7 @@ def run(program, flags, timeout=120, env_extra=None, tc=TC):
         r["status"] = "ok"
     return r
 
-SYNTAX_PAT = re.compile(r"expected|is not a valid identifier|unexpected|unterminated")
+SYNTAX_PAT = re.compile(r"error: expected |is not a valid identifier|cannot apply access modifiers|unterminated")
 
 def summarize(r, part):
     """Flattens a run into the fields recorded for a mutant; `part` is 'user' or 'stdlib'."""

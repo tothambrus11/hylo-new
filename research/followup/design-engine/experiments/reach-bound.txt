@@ -1,0 +1,8 @@
+/home/user/hylo-new/research/report/test-programs/equalities/assoc-eq-call-incomplete.hylo
+/home/user/hylo-new/research/report/test-programs/performance/div-trunc-b1.hylo
+/home/user/hylo-new/research/report/test-programs/performance/div-trunc-b2.hylo
+/home/user/hylo-new/research/report/test-programs/unsimplified-projections/min.hylo
+/home/user/hylo-new/research/report/test-programs/unsimplified-projections/t1.hylo
+/home/user/hylo-new/research/report/test-programs/unsimplified-projections/t8-cond-call.hylo
+/home/user/hylo-new/research/report/test-programs/performance/div-trunc-b3.hylo
+/home/user/hylo-new/research/report/test-programs/performance/div-trunc-b4.hylo

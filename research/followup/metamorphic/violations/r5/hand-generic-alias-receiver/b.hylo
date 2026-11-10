@@ -1,0 +1,5 @@
+struct A {}
+struct Box<T> {}
+type AB<T> = Box<T>
+extension <T> Box<T> { fun first() {} }
+fun m(b: AB<A>) { b.first() }

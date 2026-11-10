@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// A callee whose result type mentions an associated type of its requirement; the result is not
+// constrained by the caller.
+trait P { type X }
+struct W<A> { public memberwise init }
+fun h<T where T is P>() -> W<T.X> { W<T.X>() }
+fun g<U where U is P>() { let _ = h<U>() }

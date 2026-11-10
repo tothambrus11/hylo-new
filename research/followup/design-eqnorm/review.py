@@ -15,7 +15,8 @@ Configurations:
 
 Appends one JSON line per (program, configuration) to the output file; pairs already there are
 skipped unless --force is given. `verify` mode (--verify) compares base and FULL with
-tests/current.jsonl and prints the differences.
+tests/current.jsonl and prints the differences. `record` mode (--record) rewrites the line
+"// currently:" of each program from the results of base, FULL, S1 and S1check.
 """
 import argparse, json, os, re, subprocess, sys
 
@@ -75,6 +76,36 @@ def run(path, config, trace=False, timeout=60, env_extra=None):
     return r
 
 
+SHOWN = ["summon.subgoals", "summon.matches", "summon.depthExhausted", "summon.budgetExhausted",
+         "eqsolve.proved", "eqsolve.refuted", "index.fallback", "eqeager.matches"]
+
+
+def record(path, rel, done):
+    """Rewrites the "// currently:" line of `path` from the results in `done`."""
+    names = {"base": "base", "FULL": "FULL", "S1": "stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager)"}
+    parts = []
+    for c in ("base", "FULL", "S1"):
+        r = done.get((rel, c))
+        if r is None:
+            continue
+        v = {"crash(-6)": "out of memory", "timeout": "out of time"}.get(r["verdict"], r["verdict"])
+        cs = " ".join("%s=%d" % (k, r["counters"][k]) for k in SHOWN if k in r.get("counters", {}))
+        parts.append("%s %s%s" % (names[c], v, " (%s)" % cs if cs else ""))
+    line = "// currently: " + "; ".join(parts) + "."
+    for c in ("FULL", "S1"):
+        r = done.get((rel, c))
+        if r and r.get("errors"):
+            line += " %s says: %s." % ("FULL" if c == "FULL" else "Stage 1", r["errors"][0][:110])
+            break
+    r = done.get((rel, "S1check"))
+    if r is not None:
+        line += " With selfcheck: " + (
+            "VIOLATION, " + r["violations"][0][:80] if r.get("violations") else "no violation") + "."
+    src = open(path).read().split("\n")
+    src = [line if l.startswith("// currently:") else l for l in src]
+    open(path, "w").write("\n".join(src))
+
+
 _STD = {}
 
 
@@ -93,6 +124,7 @@ def main():
     ap.add_argument("--trace", action="store_true")
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--verify", action="store_true")
+    ap.add_argument("--record", action="store_true")
     ap.add_argument("--timeout", type=int, default=60)
     ap.add_argument("--width", type=int, default=300)
     a = ap.parse_args()
@@ -137,6 +169,9 @@ def main():
             if r.get("_t"):
                 print(r["_t"])
             sys.stdout.flush()
+            done[(rel, c)] = r
+        if a.record:
+            record(f, rel, done)
 
 
 if __name__ == "__main__":

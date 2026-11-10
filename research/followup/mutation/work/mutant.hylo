@@ -1,6 +1,7 @@
 trait P { type X }
-struct Box<T> {  }
-fun check<T>(x: T) {}
-fun f<A, B where A == B, A is P>(x: Box<B.X>) {
-  check<Box<A.X>>(x)
-}
+struct A {}
+struct B { public memberwise init }
+given A is P { type X = B }
+fun f2<T where T is P, T.X == B>() {}
+fun h<U where U.X == B>() { f2<U>() }
+public fun main() { }

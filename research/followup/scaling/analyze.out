@@ -1,0 +1,171 @@
+## Summary: growth of the primary counter / of the time
+
+| Family | base | FIX | MIN5 | FULL |
+|---|---|---|---|---|
+| eqchain | n^3 exact / n^2.5 † | n^1 exact / n^1.5 | n^3 exact / n^1.5 † | n^1 exact / n^0.8 |
+| eqchain-conf | n^3 exact / n^2.6 † | n^1 exact / n^0.6 | n^3 exact / n^1.7 † | n^1 exact / n^1.5 |
+| eqchain-neg | n^3 exact / undecided † ✗ | n^1 exact / n^1.0 | n^3 exact / undecided † ✗ | n^1 exact / n^1.1 |
+| eqchain-goals | n^4 exact / n^2.8 † | n^1 exact / n^2.1 † | n^2.4 / n^2.4 † | n^1 exact / n^2.4 |
+| assoceq | n^3 exact / n^2.5 ‡ | n^2 exact / undecided † | n^3 exact / undecided † | n^2 exact / n^2.4 † |
+| assocneg | n^3 exact / undecided ‡ ✗ | n^2 exact / n^2.2 † | n^1.7 / n^1.8 † ✗ | n^2 exact / n^2.6 † |
+| ctrl-goals | – / undecided | – / – | – / – | – / <50 ms |
+| ctrl-assoc | n^1 exact / undecided | – / – | – / – | n^1 exact / <50 ms |
+| breadth-traits | n^1 exact / n^1.9 | n^1 exact / n^1.8 | flat / n^1.2 | flat / <50 ms |
+| breadth-types | n^1 exact / n^2.3 | n^1 exact / n^2.6 | n^1 exact / <50 ms | n^1 exact / n^1.3 |
+| breadth-square | n^3 exact / undecided | n^3 exact / n^3.6 | n^2 exact / undecided | n^2 exact / n^2.2 |
+| div-branch | too few / too few ‡ | capped / capped † [B] | too few / too few † | flat / <50 ms |
+| div-branch-eq | too few / too few ‡ | capped / capped † [B] | too few / too few † | flat / <50 ms |
+| div-trunc | too few / too few ‡ | capped / capped † [B] | too few / too few † | capped / capped ‡ [B] |
+| div-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / undecided † | flat / <50 ms |
+| div-trunc-depth | 2.0^n / undecided † | too few / too few [B] | 2.0^n / undecided † | 2.0^n / 2.3^n [B] |
+| div-valid | 2.0^n / undecided | 2.0^n / undecided | 2.0^n / undecided | 2.0^n / undecided |
+| div-valid-deep | 2.0^n / 2.0^n † | 2.0^n / undecided ✗ [B] | 2.0^n / 2.2^n † | 2.0^n / 2.2^n † ✗ [B] |
+| cyc-ring | n^1 exact / undecided | n^1 exact / undecided | n^1 exact / <50 ms | flat / <50 ms |
+| cyc-clique | too few / too few ‡ | too few / too few † | too few / too few † | flat / <50 ms |
+| members-ext | n^1 exact / n^0.5 | flat / undecided | flat / n^0.6 | flat / n^1.8 |
+| members-use | n^1 exact / n^1.3 | n^1 exact / undecided | n^1 exact / n^0.9 | n^1 exact / n^1.6 |
+| members-both | n^2 exact / n^1.4 | n^1 exact / n^1.5 | n^1 exact / n^2.0 | n^1 exact / n^1.1 |
+| condext | n^1 exact / n^2.2 | flat / n^1.1 | flat / <50 ms | flat / <50 ms |
+| ovl-calls | undecided (poly?) / undecided † | undecided (poly?) / undecided † | undecided / undecided † | undecided (exp?) / 2.3^n † |
+| ovl-width | n^2 exact / undecided | n^2 exact / undecided | n^2 exact / <50 ms | n^2 exact / <50 ms |
+| ovl-stmts | n^1 exact / n^0.6 | n^1 exact / undecided | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| ovr-args | 3.0^n / undecided | 3.0^n / undecided † | 3.0^n / undecided † | 3.0^n / 3.6^n |
+| ovr-width | n^4 exact / n^4.3 | n^4 exact / undecided | n^4 exact / n^3.9 | n^4 exact / n^3.7 |
+| nest | n^1 exact / <50 ms | n^1 exact / <50 ms | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| nest-deep | n^1 exact / undecided | n^1 exact / n^0.9 | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| nest-neg | n^1 exact / n^0.8 | n^1 exact / n^1.3 | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| nest-diamond | 2.1^n / undecided ✗ | 2.1^n / undecided ✗ | 2.3^n / undecided ✗ | 2.3^n / undecided ✗ |
+| nest-diamond-default | flat / flat ✗ | flat / flat ✗ | undecided / <50 ms ✗ | undecided / <50 ms ✗ |
+| nest-diamond-neg | n^2 exact / undecided | n^2 exact / undecided | n^2 exact / <50 ms | flat / <50 ms |
+| refine | n^2 exact / flat | n^2 exact / undecided | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| refine-deep | n^2 exact / undecided | n^2 exact / n^2.1 | n^1 exact / <50 ms | n^1 exact / <50 ms |
+| nestwide | n^2 exact / n^2.2 | n^2 exact / n^2.0 | n^2 exact / undecided | n^2 exact / n^1.0 |
+| open-chain | n^3 exact / n^1.8 ‡ | n^1 exact / undecided | n^3 exact / n^1.8 † | n^1 exact / <50 ms |
+| open-neg | – / – † | n^1 exact / undecided | – / – † | flat / <50 ms |
+| open-wide | too few / too few † | too few / too few ✗ [B] | too few / too few † | too few / too few ✗ [B] |
+| open-wide-nobudget | too few / too few † | too few / too few † ✗ | too few / too few † | too few / too few ‡ ✗ |
+| req-traits | n^2 exact / flat ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ |
+| req-params | n^2 exact / undecided ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ | n^2 exact / <50 ms ✗ |
+| req-eq | too few / too few † | n^1 exact / <50 ms ✗ | too few / too few † | n^1 exact / <50 ms ✗ |
+| req-traits-deep | n^2 exact / n^2.4 † | n^2 exact / n^2.8 † | n^2 exact / n^3.3 | n^2 exact / n^2.8 |
+| req-params-deep | n^2 exact / undecided † | n^2 exact / n^3.2 † | n^2 exact / n^3.3 | n^2 exact / n^2.6 |
+| req-eq-deep | too few / too few † | n^1 exact / n^2.2 | too few / too few † | n^1 exact / n^2.0 |
+| req-neg | n^2 exact / n^1.7 | n^2 exact / n^2.4 | n^1 exact / <50 ms | n^1 exact / <50 ms |
+
+† the series ends with a timeout (or was stopped because a timeout was predicted); ‡ it ends with a crash; ✗ at some size the verdict differs from the intended one; [B] the resource bound of `budget` stopped a resolution, so the count is capped.
+
+## Law of the primary counter
+
+An expression in `n` without qualification is exact: every measured size lies on it (from the stated size on, if one is given). `n^p` and `r^n` with a decimal are fits. The counter is `summon.matches` (candidate givens tried), `names.appliesCalls` (extension applicability tests) or `solver.forks`.
+
+| Family | Counter | base | FIX | MIN5 | FULL |
+|---|---|---|---|---|---|
+| eqchain | matches | 2n^3 + 206n^2 + 3,915n + 16,148 (n ≥ 3) † | 3n + 218 | 2n^3 + 206n^2 + 3,911n + 15,856 (n ≥ 3) † | 3n + 218 |
+| eqchain-conf | matches | n^3 + 103n^2 + 1,955n + 7,893 (n ≥ 3) † | n + 74 | n^3 + 103n^2 + 1,955n + 7,893 (n ≥ 3) † | n + 74 |
+| eqchain-neg | matches | n^3 + 100n^2 + 1,752n + 6,041 (n ≥ 5) † | 2n + 143 (n ≥ 3) | n^3 + 100n^2 + 1,752n + 6,041 (n ≥ 5) † | 2n + 143 (n ≥ 3) |
+| eqchain-goals | matches | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (n ≥ 3) † | 2n † | n^2.44 for n ≥ 3 † | 2n |
+| assoceq | matches | 15n^3 + 753n^2 + 8,778n + 26,922 (n ≥ 3) ‡ | 3n^2 + 145n + 145 † | 15n^3 + 753n^2 + 8,770n + 26,630 (n ≥ 3) † | 3n^2 + 145n + 145 † |
+| assocneg | matches | 15n^3 + 715n^2 + 7,412n + 19,159 (n ≥ 5) ‡ | 3n^2 + 141n + 2 (n ≥ 3) † | n^1.75 † | 3n^2 + 141n + 2 (n ≥ 3) † |
+| ctrl-goals | matches | – | – | – | – |
+| ctrl-assoc | matches | 5n + 363 | – | – | n + 1 |
+| breadth-traits | matches | n + 71 | n + 71 | flat | flat |
+| breadth-types | matches | n + 71 | n + 71 | n + 1 | n + 1 |
+| breadth-square | matches | n^3 + 71n | n^3 + 71n | n^2 + n | n^2 + n |
+| div-branch | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) † | too few points (3); per-step factors 153, 38.5 † | flat |
+| div-branch-eq | matches | too few points (2); per-step factors 81.8 ‡ | capped by the resource bound (not fitted) † | too few points (2); per-step factors 81.8 † | flat |
+| div-trunc | matches | too few points (2); per-step factors 82.9 ‡ | capped by the resource bound (not fitted) † | too few points (3); per-step factors 157, 38.5 † | capped by the resource bound (not fitted) ‡ |
+| div-depth | matches | 2.01^n † | too few points (4); per-step factors 2.04, 2.02, 2 | 2.01^n † | flat |
+| div-trunc-depth | matches | 2.01^n † | too few points (4); per-step factors 2.04, 2.02, 2 | 2.01^n † | 2.01^n |
+| div-valid | matches | 2.04^n for n ≥ 2 | 2.04^n for n ≥ 2 | 2.03^n for n ≥ 2 | 2.03^n for n ≥ 2 |
+| div-valid-deep | matches | 2.02^n † | 2.03^n | 2.01^n † | 2.01^n † |
+| cyc-ring | matches | 19n + 1,331 | 19n + 1,331 | 19n + 1 | flat |
+| cyc-clique | matches | too few points (2); per-step factors 85.2 ‡ | too few points (2); per-step factors 85.2 † | too few points (3); per-step factors 236, 51.3 † | flat |
+| members-ext | appliesCalls | 40n + 160 | flat | flat | flat |
+| members-use | appliesCalls | 208n | n | n | n |
+| members-both | appliesCalls | 2n^2 + 8n | n | n | n |
+| condext | appliesCalls | 16n + 64 | flat | flat | flat |
+| ovl-calls | forks | undecided: n^6.6 † | undecided: n^6.9 † | undecided: n^7.2 † | undecided: n^7.8 † |
+| ovl-width | forks | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) |
+| ovl-stmts | forks | 4n | 4n | 4n | 4n |
+| ovr-args | forks | 3.02^n for n ≥ 2 | 3.03^n for n ≥ 2 † | 3.03^n for n ≥ 2 † | 3.02^n for n ≥ 2 |
+| ovr-width | forks | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n | n^4 + n^3 + n^2 + n |
+| nest | matches | 72n + 73 | 72n + 73 | 2n + 3 | 2n + 3 |
+| nest-deep | matches | 72n + 73 | 72n + 73 | 2n + 3 | 2n + 3 |
+| nest-neg | matches | 144n + 145 | 144n + 145 | 4n + 5 | 4n + 1 |
+| nest-diamond | matches | 2.05^n for n ≥ 2 | 2.05^n for n ≥ 2 | 2.28^n for n ≥ 2 | 2.28^n for n ≥ 2 |
+| nest-diamond-default | matches | flat | flat | undecided: n^0.1 | undecided: n^0.1 |
+| nest-diamond-neg | matches | n^2 + 147n + 147 | n^2 + 147n + 147 | n^2 + 3n + 5 | flat |
+| refine | matches | n^2 + 72n + 73 | n^2 + 72n + 73 | n + 3 | n + 3 |
+| refine-deep | matches | n^2 + 72n + 73 | n^2 + 72n + 73 | n + 3 | n + 3 |
+| nestwide | matches | 4n^2 + 142n | 4n^2 + 142n | n^2 + 3n | n^2 + 3n |
+| open-chain | matches | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) ‡ | n + 75 | 2n^3 + 195n^2 + 3,034n + 8,125 (n ≥ 3) † | n + 75 |
+| open-neg | matches | – † | n + 72 | – † | flat |
+| open-wide | matches | too few points (3); per-step factors 16.8, 31.8 † | too few points (4); per-step factors 3, 8.73, 14.8 | too few points (3); per-step factors 20.9, 33.1 † | too few points (4); per-step factors 26.3, 17.1, 18 |
+| open-wide-nobudget | matches | too few points (3); per-step factors 16.8, 31.8 † | too few points (4); per-step factors 3, 8.73, 14.8 † | too few points (3); per-step factors 20.9, 33.1 † | too few points (4); per-step factors 26.3, 17.1, 18 ‡ |
+| req-traits | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 0.5n^2 + 0.5n + 1 | 0.5n^2 + 0.5n + 1 |
+| req-params | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 1.5n^2 − 0.5n + 1 | 1.5n^2 − 0.5n + 1 |
+| req-eq | matches | too few points (3); per-step factors 4.11, 4.8 † | n + 1 | too few points (3); per-step factors 4.11, 4.8 † | n + 1 |
+| req-traits-deep | matches | 1.5n^2 + 69.5n + 1 † | 1.5n^2 + 69.5n + 1 † | 0.5n^2 + 0.5n + 1 | 0.5n^2 + 0.5n + 1 |
+| req-params-deep | matches | 1.5n^2 + 69.5n + 1 † | 1.5n^2 + 69.5n + 1 † | 1.5n^2 − 0.5n + 1 | 1.5n^2 − 0.5n + 1 |
+| req-eq-deep | matches | too few points (3); per-step factors 4.11, 4.8 † | n + 1 | too few points (3); per-step factors 4.11, 4.8 † | n + 1 |
+| req-neg | matches | n^2 + 71n + 69 | n^2 + 71n + 69 | 2n − 1 | n |
+
+## Summary: leave-one-out configurations
+
+| Family | Configuration | Growth (counter / time) | Ends with |
+|---|---|---|---|
+| eqchain | FULL-eqsolve | too few / too few † ✗ [B] | timeout (>20 s) at n=128; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..64 |
+| eqchain-neg | FULL-eqsolve | capped / capped † [B] | timeout (>20 s) at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| eqchain-neg | FULL-absmodel | n^1 exact / undecided | completed |
+| eqchain-neg | FULL-absquotient | n^1 exact / n^1.6 | completed |
+| eqchain-goals | FULL-eqsolve | too few / too few † ✗ [B] | stopped before n=8: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..6 |
+| assoceq | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=128; fitted on n=4..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..64 |
+| assocneg | FULL-eqsolve | capped / capped † [B] | stopped before n=128: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| div-branch | FULL-absmodel | too few / too few † | timeout (>20 s) at n=3 |
+| div-branch-eq | FULL-absmodel | capped / capped † [B] | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 72 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| div-branch-eq | FULL-absquotient | capped / capped † [B] | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 79 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| div-trunc | FULL-absmodel | too few / too few † [B] | stopped before n=4: predicted timeout: 13 s at n=3, power-law extrapolation gives 154 s at n=4; fitted on n=1..2 (rejected); resource bound (`budget`) hit from n=3 |
+| div-depth | FULL-absmodel | 2.0^n / too few † | timeout (>20 s) at n=16 |
+| cyc-ring | FULL-absmodel | n^1 exact / <50 ms | completed |
+| cyc-clique | FULL-absmodel | too few / too few † [B] | stopped before n=5: predicted timeout: 3 s at n=4, power-law extrapolation gives 51 s at n=5; fitted on n=2..3 (rejected); resource bound (`budget`) hit from n=4 |
+| nest-neg | FULL-absmodel | n^1 exact / <50 ms | completed |
+| nest-diamond-neg | FULL-absmodel | n^2 exact / <50 ms | completed |
+| open-chain | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=128; fitted on n=8..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=4..64 |
+| req-eq-deep | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=64; fitted on n=8..32 (rejected, resource bound hit); resource bound (`budget`) hit from n=8; verdict differs from the intended one at n=8..32 |
+| req-neg | FULL-absmodel | n^1 exact / <50 ms | completed |
+
+
+Verdicts that differ from the intended one:
+  eqchain            FULL-eqsolve intended=ok differs at n=[5, 6, 8, 12, 16, 24, 32, 64] depthEx=None budgetEx=2 eqchain-5.hylo:4.101-102: error: type 'T5' has no static member 'X'
+  eqchain-neg        base  intended=err differs at n=[3, 4, 5, 6, 8, 12, 16, 24, 32, 64] depthEx=None budgetEx=None 
+  eqchain-neg        MIN5  intended=err differs at n=[3, 4, 5, 6, 8, 12, 16, 24, 32] depthEx=None budgetEx=None 
+  eqchain-goals      FULL-eqsolve intended=ok differs at n=[5, 6] depthEx=None budgetEx=2 eqchain-goals-5.hylo:2.5-6: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annota
+  assoceq            FULL-eqsolve intended=ok differs at n=[4, 5, 6, 8, 12, 16, 24, 32, 64] depthEx=None budgetEx=1 assoceq-4.hylo:3.5-6: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+  assocneg           base  intended=err differs at n=[3, 4, 5, 6, 8, 12, 16, 24] depthEx=None budgetEx=None 
+  assocneg           MIN5  intended=err differs at n=[3, 4, 5, 6, 8, 12, 16] depthEx=None budgetEx=None 
+  div-valid-deep     FIX   intended=ok differs at n=[12, 14, 16, 20] depthEx=None budgetEx=2 div-valid-deep-12.hylo:1.1-10:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or a
+  div-valid-deep     FULL  intended=ok differs at n=[16] depthEx=None budgetEx=2 div-valid-deep-16.hylo:1.1-10:1: error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or a
+  nest-diamond       base  intended=ok differs at n=[9, 10, 12, 14, 16, 20] depthEx=2 budgetEx=None nest-diamond-9.hylo:10.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond       FIX   intended=ok differs at n=[9, 10, 12, 14, 16, 20] depthEx=2 budgetEx=None nest-diamond-9.hylo:10.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond       MIN5  intended=ok differs at n=[9, 10, 12, 14, 16, 20] depthEx=2 budgetEx=None nest-diamond-9.hylo:10.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond       FULL  intended=ok differs at n=[9, 10, 12, 14, 16, 20] depthEx=2 budgetEx=None nest-diamond-9.hylo:10.21-25: error: no coercion from 'P<S<S<S<S<S<S<S<S<S<Z>>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond-default base  intended=ok differs at n=[3, 4, 5, 6, 8, 12, 16, 32, 64] depthEx=2 budgetEx=None nest-diamond-default-3.hylo:10.21-25: error: no coercion from 'P<S<S<S<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond-default FIX   intended=ok differs at n=[3, 4, 5, 6, 8, 12, 16, 32, 64] depthEx=2 budgetEx=None nest-diamond-default-3.hylo:10.21-25: error: no coercion from 'P<S<S<S<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond-default MIN5  intended=ok differs at n=[3, 4, 5, 6, 8, 12, 16, 32, 64] depthEx=2 budgetEx=None nest-diamond-default-3.hylo:10.21-25: error: no coercion from 'P<S<S<S<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  nest-diamond-default FULL  intended=ok differs at n=[3, 4, 5, 6, 8, 12, 16, 32, 64] depthEx=2 budgetEx=None nest-diamond-default-3.hylo:10.21-25: error: no coercion from 'P<S<S<S<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  open-chain         FULL-eqsolve intended=ok differs at n=[4, 5, 6, 8, 12, 16, 24, 32, 64] depthEx=1 budgetEx=None open-chain-4.hylo:3.90-94: error: no coercion from '<T, U> (Q<U>, (T ~ U)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+  open-wide          FIX   intended=ok differs at n=[5, 6, 8, 12, 16] depthEx=None budgetEx=1 open-wide-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), Q<U5>, (T ~ U5))
+  open-wide          FULL  intended=ok differs at n=[5, 6, 8, 12, 16] depthEx=None budgetEx=1 open-wide-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), Q<U5>, (T ~ U5))
+  open-wide-nobudget FIX   intended=ok differs at n=[5] depthEx=1 budgetEx=None open-wide-nobudget-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), Q<U5>, 
+  open-wide-nobudget FULL  intended=ok differs at n=[5, 6, 7] depthEx=1 budgetEx=None open-wide-nobudget-5.hylo:3.34-38: error: no coercion from '<T, U1, U2, U3, U4, U5> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), Q<U5>, 
+  req-traits         base  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-traits-10.hylo:12.110-114: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, P8<T>, P9<T>, P10<T>) ==> [Void]() let -> Void' to '[V
+  req-traits         FIX   intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-traits-10.hylo:12.110-114: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, P8<T>, P9<T>, P10<T>) ==> [Void]() let -> Void' to '[V
+  req-traits         MIN5  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-traits-10.hylo:12.110-114: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, P8<T>, P9<T>, P10<T>) ==> [Void]() let -> Void' to '[V
+  req-traits         FULL  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-traits-10.hylo:12.110-114: error: no coercion from '(P1<T>, P2<T>, P3<T>, P4<T>, P5<T>, P6<T>, P7<T>, P8<T>, P9<T>, P10<T>) ==> [Void]() let -> Void' to '[V
+  req-params         base  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-params-10.hylo:3.148-190: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<T7>, P<T8>, P<T9>, P<T10>) ==> [Void]() let -> Void' to '[Vo
+  req-params         FIX   intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-params-10.hylo:3.148-190: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<T7>, P<T8>, P<T9>, P<T10>) ==> [Void]() let -> Void' to '[Vo
+  req-params         MIN5  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-params-10.hylo:3.148-190: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<T7>, P<T8>, P<T9>, P<T10>) ==> [Void]() let -> Void' to '[Vo
+  req-params         FULL  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128] depthEx=1 budgetEx=None req-params-10.hylo:3.148-190: error: no coercion from '(P<T1>, P<T2>, P<T3>, P<T4>, P<T5>, P<T6>, P<T7>, P<T8>, P<T9>, P<T10>) ==> [Void]() let -> Void' to '[Vo
+  req-eq             FIX   intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128, 256, 512] depthEx=1 budgetEx=None req-eq-10.hylo:2.200-283: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 ~ U5), (T6 ~ U6), (T7 ~ U7), (T8 ~ U8), (T9 ~ U9), (T10 ~ U1
+  req-eq             FULL  intended=ok differs at n=[10, 11, 12, 16, 32, 64, 128, 256, 512] depthEx=1 budgetEx=None req-eq-10.hylo:2.200-283: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 ~ U5), (T6 ~ U6), (T7 ~ U7), (T8 ~ U8), (T9 ~ U9), (T10 ~ U1
+  req-eq-deep        FULL-eqsolve intended=ok differs at n=[8, 16, 32] depthEx=None budgetEx=1 req-eq-deep-8.hylo:2.160-225: error: no coercion from '((T1 ~ U1), (T2 ~ U2), (T3 ~ U3), (T4 ~ U4), (T5 ~ U5), (T6 ~ U6), (T7 ~ U7), (T8 ~ U8)) ==> [Void]() let

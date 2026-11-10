@@ -55,7 +55,8 @@ def load(path):
             r["time_ms"] = min(ts)
             r["time_n"] = len(ts)
             for (p, t, c, s) in times[k]:
-                if p != 0 and (c != r["counters"] or s != r["status"]):
+                strip = lambda d: {k: v for k, v in d.items() if k != "absmodel.micros"}   # a time
+                if p != 0 and (strip(c) != strip(r["counters"]) or s != r["status"]):
                     nondet.append(k)
     return pts, sorted(set(nondet))
 
@@ -93,7 +94,7 @@ def _search(make, grid, y):
     if not math.isfinite(es[i]):
         return (math.inf, None, None, None)
     lo, hi = grid[max(0, i - 1)], grid[min(len(grid) - 1, i + 1)]
-    for _ in range(60):                       # ternary search inside the bracketing interval
+    for _ in range(30):                       # ternary search inside the bracketing interval
         m1, m2 = lo + (hi - lo) / 3, hi - (hi - lo) / 3
         if err(m1)[0] <= err(m2)[0]:
             hi = m2
@@ -108,13 +109,13 @@ def _search(make, grid, y):
 
 def fit_poly(n, y):
     """y ~ a + c*n^p: returns (rms, p, a, c)."""
-    return _search(lambda p: (n / n.max()) ** p, np.arange(0.05, 14.001, 0.05), y)
+    return _search(lambda p: (n / n.max()) ** p, np.arange(0.1, 14.001, 0.1), y)
 
 
 def fit_exp(n, y):
     """y ~ a + c*r^n: returns (rms, r, a, c)."""
     e, lr, a, c = _search(lambda lr: np.exp(lr * (n - n.max())),
-                          np.linspace(math.log(1.01), math.log(40), 500), y)
+                          np.linspace(math.log(1.01), math.log(40), 200), y)
     return (e, math.exp(lr) if lr is not None else None, a, c)
 
 
@@ -168,7 +169,7 @@ def poly_text(co):
     return " ".join(ts).lstrip("+ ") if ts else "0"
 
 
-def classify(ns, ys, noisy=False):
+def classify(ns, ys, noisy=False, suffixes=True):
     """Returns a dict describing the growth of ys over ns.
 
     The models are fitted to the whole series and to its suffixes (dropping up to the first
@@ -201,8 +202,9 @@ def classify(ns, ys, noisy=False):
     if out["ratio"] <= (2.5 if noisy else 1.25):
         out.update(kind="flat", law="no clear growth (within a factor 2.5)" if noisy else "flat")
         return out
-    if len(pts) < 4:
-        out.update(kind="few", law=f"too few points ({len(pts)})")
+    if len(pts) < 5:
+        fs = ", ".join(f"{x:.3g}" for x in out["step_factors"])
+        out.update(kind="few", law=f"too few points ({len(pts)}); per-step factors {fs}")
         return out
     if not noisy:
         ex = exact_poly(n, y)
@@ -219,7 +221,7 @@ def classify(ns, ys, noisy=False):
     lim = 0.35 if noisy else 0.25
     q = lambda e: f"rms {e:.2f}" if e >= 0.005 else "rms <0.01"
     cands = []
-    for start in range(0, max(1, len(n) - 4)):
+    for start in range(0, max(1, len(n) - 4) if suffixes else 1):
         ns_, ys_ = n[start:], y[start:]
         if start > 0 and (len(ns_) < 5 or ns_.max() / ns_.min() < 4):
             break
@@ -253,7 +255,16 @@ def classify(ns, ys, noisy=False):
     else:
         ptxt = f"n^{p:.1f} ({q(ep)})" if p is not None and math.isfinite(ep) else "no polynomial"
         etxt = f"{r:.2f}^n ({q(ee)})" if r is not None and math.isfinite(ee) else "no exponential"
-        out.update(kind="undecided", law=f"undecided: {ptxt} or {etxt}")
+        lean = ""
+        le, sf = out["local_exponents"], out["step_factors"]
+        if not noisy and len(le) >= 3 and ratio >= 8:
+            if le[-1] > 1.1 * le[-2] > 1.21 * le[-3] and min(sf) > 1.5 and sf[-1] >= 0.97 * sf[-2]:
+                lean = f"; leaning exponential: the per-step factor stays near {sf[-1]:.1f} while the local exponent rises"
+                out["lean"] = "exp"
+            elif sf[-1] < sf[-2] < sf[-3] and abs(le[-1] - le[-3]) < 0.25 * le[-1]:
+                lean = f"; leaning polynomial: the per-step factor falls while the local exponent stays near {le[-1]:.1f}"
+                out["lean"] = "poly"
+        out.update(kind="undecided", law=f"undecided: {ptxt} or {etxt}{lean}")
     return out
 
 
@@ -303,6 +314,7 @@ def main():
     md = []
     summary = []
     xsummary = []
+    laws = []
     wrong = []
     for fam, (g, sizes, intended, env, counter) in gen.FAMILIES.items():
         rows = {n: {c: pts.get((fam, n, c)) for c in CONFIGS + EXTRA} for n in sizes}
@@ -328,6 +340,8 @@ def main():
                   "(upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |")
         md.append("|---|---|---|---|---|---|")
         srow = [fam]
+        lrow = [fam, counter.split(".")[1]]
+        laws.append(lrow)
         for c in CONFIGS + extra:
             good = [(n, rows[n][c]) for n in sizes if rows[n][c] and rows[n][c]["status"] in ("ok", "err")]
             allgood = good
@@ -350,6 +364,10 @@ def main():
             ns = [n for n, r in good]
             fc = classify(ns, [r["counters"].get(counter, 0) for n, r in good])
             ft = classify(ns, [r["time_ms"] for n, r in good], noisy=True)
+            capped = bool(good) and all(r["counters"].get("summon.budgetExhausted") for n, r in good)
+            if capped:   # every fitted point was cut short by the resource bound
+                for f_ in (fc, ft):
+                    f_.update(kind="capped", law="capped by the resource bound (not fitted)")
             # Times below a few milliseconds are dominated by fixed costs and noise.
             if ft.get("ymax", 0) < 50 and ft["kind"] not in ("none",):
                 ft["law"] = "below 50 ms throughout"
@@ -358,13 +376,13 @@ def main():
             names = sorted(k for k in {k for n, r in good for k in r["counters"]} - {counter, "absmodel.micros"} if not k.endswith(("skipped", "skippedExtensions", "refuted", "prunedChoices", "cacheHits")))
             worst = None
             for k in names:
-                fk = classify(ns, [r["counters"].get(k, 0) for n, r in good])
+                fk = classify(ns, [r["counters"].get(k, 0) for n, r in good], suffixes=False)
                 rank = {"exp": 100, "poly": fk.get("exponent", 0)}.get(fk["kind"], -1)
                 if worst is None or rank > worst[0]:
                     worst = (rank, k, fk)
             mine = {"exp": 100, "poly": fc.get("exponent", 0), "flat": 0}.get(fc["kind"], -1)
             other = "–"
-            if worst and worst[0] > 0 and (worst[0] > mine + 0.3 or mine < 0):
+            if worst and worst[0] > 0 and (worst[0] > mine + 0.3 or mine < 0) and not capped:
                 other = f"`{worst[1]}`: {worst[2]['law']}"
             # how the series ends
             last = [rows[n][c] for n in sizes if rows[n][c]]
@@ -396,7 +414,8 @@ def main():
                                   "other": other, "sizes": ns}
             short = lambda f: {"flat": "flat", "poly": (f"n^{f.get('exponent', 0):.0f} exact" if f.get("exact") else f"n^{f.get('exponent', 0):.1f}"),
                                "exp": f"{f.get('base', 0):.1f}^n", "few": "too few",
-                               "undecided": "undecided", "none": "–", "small": "<50 ms"}[f["kind"]]
+                               "undecided": "undecided" + {"exp": " (exp?)", "poly": " (poly?)"}.get(f.get("lean"), ""),
+                               "none": "–", "small": "<50 ms", "capped": "capped"}[f["kind"]]
             tail = ""
             if bad:
                 tail = " †" if bad[0]["status"] == "timeout" else " ‡"
@@ -408,6 +427,8 @@ def main():
                 tail += " [B]"
             if c in CONFIGS:
                 srow.append(f"{short(fc)} / {short(ft)}{tail}")
+                lrow.append(fc["law"].split(" (rms")[0].replace(" (exact)", "").replace("(exact, ", "(")
+                            + (" †" if "†" in tail else "") + (" ‡" if "‡" in tail else ""))
             else:
                 xsummary.append([fam, c, f"{short(fc)} / {short(ft)}{tail}", end])
         summary.append(srow)
@@ -433,6 +454,14 @@ def main():
     head.append("† the series ends with a timeout (or was stopped because a timeout was predicted); "
                 "‡ it ends with a crash; ✗ at some size the verdict differs from the intended one; "
                 "[B] the resource bound of `budget` stopped a resolution, so the count is capped.\n")
+    head += ["## Law of the primary counter\n",
+             "An expression in `n` without qualification is exact: every measured size lies on it "
+             "(from the stated size on, if one is given). `n^p` and `r^n` with a decimal are fits. "
+             "The counter is `summon.matches` (candidate givens tried), `names.appliesCalls` "
+             "(extension applicability tests) or `solver.forks`.\n",
+             "| Family | Counter | " + " | ".join(CONFIGS) + " |", "|---|---|" + "---|" * len(CONFIGS)]
+    head += ["| " + " | ".join(x) + " |" for x in laws]
+    head.append("")
     if xsummary:
         head += ["## Summary: leave-one-out configurations\n", "| Family | Configuration | Growth (counter / time) | Ends with |", "|---|---|---|---|"]
         head += ["| " + " | ".join(x) + " |" for x in xsummary]

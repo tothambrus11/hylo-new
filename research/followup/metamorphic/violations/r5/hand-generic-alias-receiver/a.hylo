@@ -1,0 +1,4 @@
+struct A {}
+struct Box<T> {}
+extension <T> Box<T> { fun first() {} }
+fun m(b: Box<A>) { b.first() }

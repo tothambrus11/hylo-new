@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected (premsubst): accepted, as today. The result type of `h` mentions an associated type of
+// its requirement, in the head of its type, which the change leaves alone (DESIGN.md, section 3.8).
+// If heads were bound inside resolution only, the match against the copy of the head that the
+// constraint solver opened would fail and this program would be rejected.
+// currently: base accepted (subgoals=10 matches=723); FULL accepted (subgoals=4 matches=73 refuted=2)
+trait P { type X }
+struct W<A> { public memberwise init }
+fun h<T where T is P>() -> W<T.X> { W<T.X>() }
+fun g<U where U is P>() { let _ = h<U>() }

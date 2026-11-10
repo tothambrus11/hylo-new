@@ -1,0 +1,5 @@
+struct A<U> {
+  public fun f(x: U) {}
+}
+type Alq = A<Void>
+fun use(a: Alq) { a.f(()) }

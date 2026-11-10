@@ -1,0 +1,6 @@
+//! stage:typing no-std
+fun use<T>(x: T) {}
+fun f<T, U>() {
+  given let w: T == U
+  use(summon[T == U])
+}

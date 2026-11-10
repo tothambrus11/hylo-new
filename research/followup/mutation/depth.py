@@ -2,7 +2,7 @@
 
 Usage: python3 depth.py [--depths 6,8] MUTANT-ID ...     (appends to depth.jsonl; pairs already there are skipped)
 For each mutant: configurations base, min5, min5abs at depths 10, 12, 14 (or --depths a,b,c), for the
-mutant and for the unmutated source. Memory cap 1 GB, timeout 120 s.
+mutant and for the unmutated source. Memory cap 1 GB, timeout 60 s.
 """
 import json, os, sys
 import tc, run
@@ -36,7 +36,7 @@ def main():
                     for c in CFGS:
                         for d in DEPTHS:
                             if (mid, what, c, d) in done: continue
-                            r = tc.run(prog, tc.CONFIGS[c], timeout=120, env_extra={"HYLO_TC_MAXDEPTH": str(d)})
+                            r = tc.run(prog, tc.CONFIGS[c], timeout=60, env_extra={"HYLO_TC_MAXDEPTH": str(d)})
                             row = {"id": mid, "what": what, "config": c, "depth": d}
                             row.update(tc.summarize(r, part))
                             out.write(json.dumps(row) + "\n"); out.flush()

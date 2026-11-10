@@ -1,0 +1,7 @@
+//! stage:typing no-std
+struct A { public memberwise init }
+fun use<T>(x: T) {}
+fun f() {
+  given let a: A = A()
+  use(summon[A])
+}
