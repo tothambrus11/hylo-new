@@ -1,0 +1,7 @@
+// v-abs-7 with the equality of the two selections stated (T.X == X): valid without assuming that
+// two witnesses are equal.
+fun need<A, B where A == B>() {}
+trait P {
+  type X
+  fun f<T, U where T == Self, T is P, T.X == U, T.X == X>() { need<X, U>() }
+}

@@ -1,0 +1,14 @@
+// assocsubst: X is a parameter U that does not occur in the head. The result of get() on the
+// same Box<S0> is bound as an S1 and then as an S0; no diagnostic is reported.
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T, U> => Box<T> is P { type X = U
+  fun get() -> U { self.get() } }
+fun q(a: Box<S0>) {
+  let y: S1 = a.get()
+  let z: S0 = a.get()
+}

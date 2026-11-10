@@ -1,0 +1,3 @@
+struct A { struct Inner {} }
+extension A.Inner { type Foo = Int }
+extension A.Inner.Foo { type Inner = Bool }

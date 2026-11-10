@@ -1,0 +1,10 @@
+// Expected after the change: rejected (no change): "type 'T' has no static member 'X'".
+// Reason: The deliberate rule on the order of requirements (tests/11) also holds when the later requirement is named. A named requirement has role `.given`; it is a context parameter, not a node (section 3.1).
+// Currently: base rejects it; FULL rejects it.
+// Review (attack 2): with the design as first written (binary eq17, FULL+sigrounds) it is accepted, because `let u: P<T>` enters the table and is read from it while `T.X is Q` is typed. Without the local given, the same function is rejected.
+trait P { type X }
+trait Q {}
+struct Foo<T> {}
+fun f<T where T.X is Q, let u: P<T>>() {
+  given Foo<T.X> is Q {}
+}

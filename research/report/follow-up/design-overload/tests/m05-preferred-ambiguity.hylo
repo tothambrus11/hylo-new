@@ -1,0 +1,23 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (rejected
+//   although S.f -> A is clean)
+// reason: review/solver/s27_baseline_viable_quirk.hylo. A solution with a nested ambiguity is
+//   kept next to a clean one found earlier, and wins because its candidate is preferred.
+// currently (base): rejected, 1 diagnostic(s): 22.11-18: error: ambiguous use of 'n'; solver.forks=4 solver.overloads=2
+// currently (FULL): rejected, 1 diagnostic(s): 22.11-18: error: ambiguous use of 'n'; solver.forks=4 solver.overloads=2
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  let x = S.f().n()
+}

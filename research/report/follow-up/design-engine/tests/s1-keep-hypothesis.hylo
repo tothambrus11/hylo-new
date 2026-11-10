@@ -1,0 +1,14 @@
+//! stage:typing no-std
+// expected (premsubst): accepted, with a trace identical to today's. No requirement mentions
+// another, so the order is unchanged: `S<A> is Q` is proved first, using the pending `A is P` as a
+// hypothesis (penalty 1; the derivation through the declared `A is P` has a higher penalty).
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted; +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base accepted (subgoals=4 matches=291); FULL accepted (subgoals=4 matches=7)
+trait P {}
+trait Q {}
+struct A {}
+struct S<T> {}
+given A is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where A is P, S<A> is Q>() {}
+public fun main() { f() }

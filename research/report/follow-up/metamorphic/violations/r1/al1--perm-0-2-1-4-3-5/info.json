@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/declaration-order/al1.hylo",
+ "rel": "r1",
+ "vid": "perm:0,2,1,4,3,5",
+ "kind": "permute",
+ "desc": "top-level order 0 2 1 4 3 5",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: definition of 'X' refers to itself",
+   "error: type 'X' has no static member 'Me'"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  }
+ }
+}

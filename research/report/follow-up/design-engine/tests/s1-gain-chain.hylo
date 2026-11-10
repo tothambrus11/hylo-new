@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected (premsubst, step 2): accepted. `T.X.X is Q` mentions `T.X is P`, which mentions `T is P`:
+// the three requirements are discharged in the order of the clause.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=2 released=2); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=22 matches=1609): no coercion from '(P<U>, P<(U::P).X>, Q<((U::P).X::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=10 matches=439): no coercion from '(P<U>, P<(U::P).X>, Q<((U::P).X::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is P, T.X.X is Q>() {}
+fun g<U where U is P, U.X is P, U.X.X is Q>() { f<U>() }

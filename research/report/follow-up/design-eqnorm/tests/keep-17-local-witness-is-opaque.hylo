@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected: rejected at every stage. T == A, but T.X is read through the local `T is P`, which is not
+// the global `A is P`; (T::w).X is an atom of the equality theory.
+// currently: base rejected (summon.subgoals=3 summon.matches=224); FULL rejected (summon.subgoals=1 summon.matches=74 index.fallback=1). FULL says: cannot pass value of type '(T::P).X' to parameter 'A'
+trait P { type X }
+struct A { public memberwise init }
+given A is P { type X = A }
+fun check<T>(x: T) {}
+fun f<T where T == A, T is P>(x: T.X) { check<A>(x) }

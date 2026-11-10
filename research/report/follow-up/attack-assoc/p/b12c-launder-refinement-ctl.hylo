@@ -1,0 +1,11 @@
+// Control of b12: the second conformance is to P itself; the body of `cast` is rejected.
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun get() -> X
+  fun cast<T where T == Self, T is P>(t: T) -> X { t.get() }
+}
+trait R refines P {}
+fun f0<V, W where V == W, V is P, W is P>(v: V, w: W) {
+  check<V.X>(v.cast<W>(w))
+}

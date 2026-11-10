@@ -1,0 +1,19 @@
+//! stage:typing no-std
+// review: control for s1-attack-capture-recursion. The same type argument passed to a function
+// without requirements: 'W<A.X> is R' does not hold in the body of f.
+// expected: rejected, with or without premsubst.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=8 matches=611): no coercion from 'R<W<(A::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=81): no coercion from 'R<W<(A::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct W<T> {}
+given A is P { type X = B }
+given B is Q {}
+given W<B> is R {}
+fun need<V where V is R>() {}
+fun f<V where A is P, A.X is Q, V is R>() {
+  need<W<A.X>>()
+}

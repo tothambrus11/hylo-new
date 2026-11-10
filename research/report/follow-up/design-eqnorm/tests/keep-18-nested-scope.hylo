@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// expected: accepted at every stage. The inner function adds C == A and B == C to the equalities of
+// the outer one; the closure of the inner scope must contain both sets.
+// currently: base accepted (summon.subgoals=191 summon.matches=3951); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1).
+trait P {}
+fun g<V where V is P>() {}
+fun check<T>(x: T) {}
+fun outer<A, B where A is P>() {
+  fun inner<C where C == A, B == C>(x: B) {
+    check<A>(x)
+    g<B>()
+  }
+}

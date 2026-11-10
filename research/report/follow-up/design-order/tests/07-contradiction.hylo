@@ -1,0 +1,12 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: No consistent reading (first example of soundness/5-declaration-order.md): the signatures never become stable.
+// Currently: base accepts it in 5 of 24 orders; FULL rejects it in all 120 orders tried.
+trait P { type Y }
+trait Q { type O }
+struct T {}
+struct U {}
+given T is P { type Y = U }
+given U is Q { type O = T }
+given Z.O is P { type Y = Int }
+type Z = T.Y
+fun k(z: Z) {}

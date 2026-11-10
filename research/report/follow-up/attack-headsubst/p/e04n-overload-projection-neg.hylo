@@ -1,0 +1,18 @@
+// Negative twin of e04. Correct verdict: rejected (both calls): the result of the only
+// applicable candidate has the other type.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun f<T where T is P>(t: T, x: T.X) -> S0 { S0() }
+fun f<T>(t: T, x: S1) -> S1 { S1() }
+fun q() {
+  wantS0(f(A(), S1()))
+  wantS1(f(A(), S0()))
+}

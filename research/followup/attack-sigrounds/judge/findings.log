@@ -1,0 +1,619 @@
+t03-alias-cycle-read-by-two-givens eq22 base              reject                                   [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq22 FULL              reject                                   [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq22 NOSIG22           reject                                   [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq22 NEW22             reject    nodes=2 rounds=1               [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [1] VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+                                                                      definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq38 FULL              reject                                   [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq38 NOSIG             reject                                   [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq38 NEW               reject    nodes=2 rounds=1               [1] definition of 'X' refers to itself
+t03-alias-cycle-read-by-two-givens eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 base              reject                                   [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 FULL              reject                                   [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 FULL+sigrounds    reject    nodes=1 rounds=1               [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 NOSIG22           reject                                   [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 NEW22             reject    nodes=1 rounds=1               [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq22 NEW22+selfcheck   reject    nodes=1 rounds=2               [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq38 FULL              reject                                   [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq38 NOSIG             reject                                   [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq38 NEW               reject    nodes=1 rounds=1               [1] definition of 'X' refers to itself
+t03c-control-alias-cycle-read-by-o eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] definition of 'X' refers to itself
+t02-named-givens-cycle-by-name.hyl eq22 base              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq22 FULL              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq22 NOSIG22           reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq22 NEW22             reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [2] VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+                                                                      declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq38 FULL              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq38 NOSIG             reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq38 NEW               reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+t02-named-givens-cycle-by-name.hyl eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [3] VIOLATION sigrounds: the last round reports other diagnostics in reverse order: /home/user/hylo-new/
+                                                                      type 'P<#!>' has no member 'X' | /home/user/hylo-new/research/followup/attack-sigrounds/p/t02-named-givens-cycle-by-name.hylo:5.14-15: error
+                                                                      declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+e01-extension-named-requirement-us eq22 base              reject                                   [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq22 FULL+sigrounds    accept    nodes=2 restores=2 rounds=3    
+e01-extension-named-requirement-us eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq22 NEW22             accept    nodes=2 restores=2 rounds=3    
+e01-extension-named-requirement-us eq22 NEW22+selfcheck   accept    nodes=2 restores=2 rounds=4    
+e01-extension-named-requirement-us eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq38 NEW               reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e01-extension-named-requirement-us eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 base              reject                                   [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 FULL+sigrounds    reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 NEW22             reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq22 NEW22+selfcheck   reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq38 NEW               reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e01c-control-unnamed-requirement-u eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq22 base              reject                                   [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq22 FULL+sigrounds    accept    nodes=2 restores=2 rounds=3    
+e02-conformance-named-requirement- eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq22 NEW22             accept    nodes=2 restores=2 rounds=3    
+e02-conformance-named-requirement- eq22 NEW22+selfcheck   accept    nodes=2 restores=2 rounds=4    
+e02-conformance-named-requirement- eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq38 NEW               reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e02-conformance-named-requirement- eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 base              reject                                   [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 FULL+sigrounds    reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 NEW22             reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq22 NEW22+selfcheck   reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq38 NEW               reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e02c-control-conformance-unnamed-r eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 base              reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 FULL+sigrounds    reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 NEW22             reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq22 NEW22+selfcheck   reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq38 NEW               reject                                   [1] type 'T' has no static member 'X'
+e03-function-named-requirement-use eq38 NEW+selfcheck     reject                                   [1] type 'T' has no static member 'X'
+e04-function-named-requirement-use eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq22 FULL+sigrounds    reject    nodes=4 restores=1 rounds=2    [1] no coercion from '(Q<(A::P).X>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq22 NEW22             reject    nodes=4 restores=1 rounds=2    [1] no coercion from '(Q<(A::P).X>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq22 NEW22+selfcheck   reject    nodes=4 restores=1 rounds=3    [1] no coercion from '(Q<(A::P).X>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq38 NEW               reject    nodes=2 rounds=1               [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e04-function-named-requirement-use eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [2] type 'T' has no static member 'X'
+                                                                      no coercion from '(Q<#!>, P<A>) ==> [Void]() let -> Int' to '[Void]() let -> Int'
+e05-named-requirement-forward-refe eq22 base              reject                                   [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq22 FULL              reject                                   [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq22 FULL+sigrounds    reject    nodes=4 restores=2 rounds=3    [1] type 'Box<A>' has no member 'g'
+e05-named-requirement-forward-refe eq22 NOSIG22           reject                                   [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq22 NEW22             reject    nodes=4 restores=2 rounds=3    [1] type 'Box<A>' has no member 'g'
+e05-named-requirement-forward-refe eq22 NEW22+selfcheck   reject    nodes=4 restores=2 rounds=4    [1] type 'Box<A>' has no member 'g'
+e05-named-requirement-forward-refe eq38 FULL              reject                                   [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq38 NOSIG             reject                                   [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq38 NEW               reject    nodes=3 restores=1 rounds=2    [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05-named-requirement-forward-refe eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [2] type 'Box<A>' has no member 'g'
+                                                                      type 'T' has no static member 'X'
+e05c-control-forward-reference-sat eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq22 FULL+sigrounds    reject    nodes=4 restores=2 rounds=3    [1] type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq22 NEW22             reject    nodes=4 restores=2 rounds=3    [1] type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq22 NEW22+selfcheck   reject    nodes=4 restores=2 rounds=4    [1] type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq38 NEW               reject    nodes=3 restores=1 rounds=2    [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e05c-control-forward-reference-sat eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [2] type 'T' has no static member 'X'
+                                                                      type 'Box<A>' has no member 'g'
+e06-conformance-forward-reference- eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq22 FULL+sigrounds    reject    nodes=4 restores=2 rounds=3    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq22 NEW22             reject    nodes=4 restores=2 rounds=3    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq22 NEW22+selfcheck   reject    nodes=4 restores=2 rounds=4    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq38 NEW               reject    nodes=3 restores=1 rounds=2    [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06-conformance-forward-reference- eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [2] type 'T' has no static member 'X'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06c-control-conformance-forward-r eq22 base              reject                                   [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq22 FULL              reject                                   [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq22 FULL+sigrounds    reject    nodes=4 restores=2 rounds=3    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06c-control-conformance-forward-r eq22 NOSIG22           reject                                   [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq22 NEW22             reject    nodes=4 restores=2 rounds=3    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06c-control-conformance-forward-r eq22 NEW22+selfcheck   reject    nodes=4 restores=2 rounds=4    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+e06c-control-conformance-forward-r eq38 FULL              reject                                   [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq38 NOSIG             reject                                   [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq38 NEW               reject    nodes=3 restores=1 rounds=2    [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+e06c-control-conformance-forward-r eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [2] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>) let -> Void'
+                                                                      type 'T' has no static member 'X'
+k23-inferred-given-in-lambda.hylo  eq22 base              accept                                   
+k23-inferred-given-in-lambda.hylo  eq22 FULL              accept                                   
+k23-inferred-given-in-lambda.hylo  eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [2] no coercion from 'A ==> [Void]() let -> Void' to '[Void]() let -> Void'
+                                                                      parameter declaration requires an ascription
+k23-inferred-given-in-lambda.hylo  eq22 NOSIG22           accept                                   
+k23-inferred-given-in-lambda.hylo  eq22 NEW22             reject    nodes=2 rounds=1               [2] no coercion from 'A ==> [Void]() let -> Void' to '[Void]() let -> Void'
+                                                                      parameter declaration requires an ascription
+k23-inferred-given-in-lambda.hylo  eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [2] no coercion from 'A ==> [Void]() let -> Void' to '[Void]() let -> Void'
+                                                                      parameter declaration requires an ascription
+k23-inferred-given-in-lambda.hylo  eq38 FULL              accept                                   
+k23-inferred-given-in-lambda.hylo  eq38 NOSIG             accept                                   
+k23-inferred-given-in-lambda.hylo  eq38 NEW               accept                                   
+k23-inferred-given-in-lambda.hylo  eq38 NEW+selfcheck     accept                                   
+k24-inferred-given-in-match.hylo   eq22 base              crash -4                                 
+k24-inferred-given-in-match.hylo   eq22 FULL              accept                                   
+k24-inferred-given-in-match.hylo   eq22 FULL+sigrounds    crash -4                                 
+k24-inferred-given-in-match.hylo   eq22 NOSIG22           accept                                   
+k24-inferred-given-in-match.hylo   eq22 NEW22             crash -4                                 
+k24-inferred-given-in-match.hylo   eq22 NEW22+selfcheck   crash -4                                 
+k24-inferred-given-in-match.hylo   eq38 FULL              accept                                   
+k24-inferred-given-in-match.hylo   eq38 NOSIG             accept                                   
+k24-inferred-given-in-match.hylo   eq38 NEW               accept                                   
+k24-inferred-given-in-match.hylo   eq38 NEW+selfcheck     accept                                   
+k25-named-context-parameter-order. eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq22 FULL+sigrounds    accept    nodes=2 ownerFirst=3 restores=2 rounds=3 
+k25-named-context-parameter-order. eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq22 NEW22             accept    nodes=2 ownerFirst=3 restores=2 rounds=3 
+k25-named-context-parameter-order. eq22 NEW22+selfcheck   accept    nodes=2 ownerFirst=4 restores=2 rounds=4 
+k25-named-context-parameter-order. eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq38 NEW               reject    nodes=1 restores=1 rounds=2    [1] type 'T' has no static member 'X'
+k25-named-context-parameter-order. eq38 NEW+selfcheck     reject    nodes=1 restores=1 rounds=4    [1] type 'T' has no static member 'X'
+k27-local-alias-in-where-clause.hy eq22 base              reject                                   [1] definition of 'LA' refers to itself
+k27-local-alias-in-where-clause.hy eq22 FULL              reject                                   [1] definition of 'LA' refers to itself
+k27-local-alias-in-where-clause.hy eq22 FULL+sigrounds    accept    nodes=2 ownerFirst=2 restores=1 rounds=2 
+k27-local-alias-in-where-clause.hy eq22 NOSIG22           reject                                   [1] definition of 'LA' refers to itself
+k27-local-alias-in-where-clause.hy eq22 NEW22             accept    nodes=2 ownerFirst=2 restores=1 rounds=2 
+k27-local-alias-in-where-clause.hy eq22 NEW22+selfcheck   accept    nodes=2 ownerFirst=3 restores=1 rounds=3 VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+k27-local-alias-in-where-clause.hy eq38 FULL              reject                                   [1] definition of 'LA' refers to itself
+k27-local-alias-in-where-clause.hy eq38 NOSIG             reject                                   [1] definition of 'LA' refers to itself
+k27-local-alias-in-where-clause.hy eq38 NEW               accept    nodes=2 restores=1 rounds=2    
+k27-local-alias-in-where-clause.hy eq38 NEW+selfcheck     accept    nodes=2 restores=1 rounds=4    
+k27b-local-alias-in-where-clause-s eq22 base              reject                                   [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq22 FULL              reject                                   [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq22 FULL+sigrounds    reject    nodes=2 ownerFirst=2 restores=1 rounds=2 [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq22 NOSIG22           reject                                   [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq22 NEW22             reject    nodes=2 ownerFirst=2 restores=1 rounds=2 [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq22 NEW22+selfcheck   reject    nodes=2 ownerFirst=3 restores=1 rounds=3 [1] VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+                                                                      definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq38 FULL              reject                                   [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq38 NOSIG             reject                                   [1] definition of 'LA' refers to itself
+k27b-local-alias-in-where-clause-s eq38 NEW               accept    nodes=2 restores=1 rounds=2    
+k27b-local-alias-in-where-clause-s eq38 NEW+selfcheck     accept    nodes=2 restores=1 rounds=4    
+k28-inferred-given-enters-function eq22 base              reject                                   [1] definition of 'LA' refers to itself
+k28-inferred-given-enters-function eq22 FULL              reject                                   [1] definition of 'LA' refers to itself
+k28-inferred-given-enters-function eq22 FULL+sigrounds    accept    nodes=4 restores=1 rounds=2    
+k28-inferred-given-enters-function eq22 NOSIG22           reject                                   [1] definition of 'LA' refers to itself
+k28-inferred-given-enters-function eq22 NEW22             accept    nodes=4 restores=1 rounds=2    
+k28-inferred-given-enters-function eq22 NEW22+selfcheck   accept    nodes=4 ownerFirst=1 restores=1 rounds=3 VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+k28-inferred-given-enters-function eq38 FULL              reject                                   [1] definition of 'LA' refers to itself
+k28-inferred-given-enters-function eq38 NOSIG             reject                                   [1] definition of 'LA' refers to itself
+k28-inferred-given-enters-function eq38 NEW               reject    inferredGivenSkipped=1 nodes=3 restores=1 rounds=2 [1] the type of this given must be written: it is visible to the implicit resolutions made by the signat
+k28-inferred-given-enters-function eq38 NEW+selfcheck     reject    inferredGivenSkipped=1 nodes=3 restores=1 rounds=4 [1] the type of this given must be written: it is visible to the implicit resolutions made by the signat
+b02-local-given-from-parameter.hyl eq22 base              accept                                   
+b02-local-given-from-parameter.hyl eq22 FULL              accept                                   
+b02-local-given-from-parameter.hyl eq22 FULL+sigrounds    accept    nodes=2 rounds=1               
+b02-local-given-from-parameter.hyl eq22 NOSIG22           accept                                   
+b02-local-given-from-parameter.hyl eq22 NEW22             accept    nodes=2 rounds=1               
+b02-local-given-from-parameter.hyl eq22 NEW22+selfcheck   accept    nodes=2 rounds=2               
+b02-local-given-from-parameter.hyl eq38 FULL              accept                                   
+b02-local-given-from-parameter.hyl eq38 NOSIG             accept                                   
+b02-local-given-from-parameter.hyl eq38 NEW               accept                                   
+b02-local-given-from-parameter.hyl eq38 NEW+selfcheck     accept                                   
+s01-inferred-given-initialized-fro eq22 base              reject                                   [1] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+s01-inferred-given-initialized-fro eq22 FULL              reject                                   [2] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'A' that it may satisfy
+s01-inferred-given-initialized-fro eq22 FULL+sigrounds    accept    nodes=2 restores=1 rounds=2    
+s01-inferred-given-initialized-fro eq22 NOSIG22           reject                                   [2] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'A' that it may satisfy
+s01-inferred-given-initialized-fro eq22 NEW22             accept    nodes=2 restores=1 rounds=2    
+s01-inferred-given-initialized-fro eq22 NEW22+selfcheck   accept    nodes=2 restores=1 rounds=3    
+s01-inferred-given-initialized-fro eq38 FULL              reject                                   [2] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'A' that it may satisfy
+s01-inferred-given-initialized-fro eq38 NOSIG             reject                                   [2] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'A' that it may satisfy
+s01-inferred-given-initialized-fro eq38 NEW               reject                                   [1] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+s01-inferred-given-initialized-fro eq38 NEW+selfcheck     reject                                   [1] no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+s02-ascribed-given-initialized-fro eq22 base              accept                                   
+s02-ascribed-given-initialized-fro eq22 FULL              accept                                   
+s02-ascribed-given-initialized-fro eq22 FULL+sigrounds    accept    nodes=2 rounds=1               
+s02-ascribed-given-initialized-fro eq22 NOSIG22           accept                                   
+s02-ascribed-given-initialized-fro eq22 NEW22             accept    nodes=2 rounds=1               
+s02-ascribed-given-initialized-fro eq22 NEW22+selfcheck   accept    nodes=2 rounds=2               
+s02-ascribed-given-initialized-fro eq38 FULL              accept                                   
+s02-ascribed-given-initialized-fro eq38 NOSIG             accept                                   
+s02-ascribed-given-initialized-fro eq38 NEW               accept    nodes=1 rounds=1               
+s02-ascribed-given-initialized-fro eq38 NEW+selfcheck     accept    nodes=1 rounds=2               
+h01-reading-reached-by-two-round-t eq22 base              reject                                   [1] type 'A' has no static member 'F'
+h01-reading-reached-by-two-round-t eq22 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h01-reading-reached-by-two-round-t eq22 FULL+sigrounds    accept    nodes=17 restores=4 rounds=5   
+h01-reading-reached-by-two-round-t eq22 NOSIG22           reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h01-reading-reached-by-two-round-t eq22 NEW22             accept    nodes=17 restores=4 rounds=5   
+h01-reading-reached-by-two-round-t eq22 NEW22+selfcheck   accept    nodes=17 restores=4 rounds=6   
+h01-reading-reached-by-two-round-t eq38 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h01-reading-reached-by-two-round-t eq38 NOSIG             reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h01-reading-reached-by-two-round-t eq38 NEW               accept    nodes=17 restores=4 rounds=5   
+h01-reading-reached-by-two-round-t eq38 NEW+selfcheck     accept    nodes=17 restores=4 rounds=10  
+h01r-reading-reached-by-two-round- eq22 base              reject                                   [1] type 'A' has no static member 'F'
+h01r-reading-reached-by-two-round- eq22 FULL              reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h01r-reading-reached-by-two-round- eq22 FULL+sigrounds    accept    nodes=17 restores=4 rounds=5   
+h01r-reading-reached-by-two-round- eq22 NOSIG22           reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h01r-reading-reached-by-two-round- eq22 NEW22             accept    nodes=17 restores=4 rounds=5   
+h01r-reading-reached-by-two-round- eq22 NEW22+selfcheck   accept    nodes=17 restores=4 rounds=6   
+h01r-reading-reached-by-two-round- eq38 FULL              reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h01r-reading-reached-by-two-round- eq38 NOSIG             reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h01r-reading-reached-by-two-round- eq38 NEW               accept    nodes=17 restores=4 rounds=5   
+h01r-reading-reached-by-two-round- eq38 NEW+selfcheck     accept    nodes=17 restores=4 rounds=10  
+h02-same-reading-missed-by-one-rou eq22 base              reject                                   [1] type 'A' has no static member 'F'
+h02-same-reading-missed-by-one-rou eq22 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h02-same-reading-missed-by-one-rou eq22 FULL+sigrounds    reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02-same-reading-missed-by-one-rou eq22 NOSIG22           reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h02-same-reading-missed-by-one-rou eq22 NEW22             reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02-same-reading-missed-by-one-rou eq22 NEW22+selfcheck   reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02-same-reading-missed-by-one-rou eq38 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h02-same-reading-missed-by-one-rou eq38 NOSIG             reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may sati
+                                                                      circular given: the type of this given depends on an implicit resolution of 'Q<A>' that it may satisfy
+                                                                      type 'A' has no static member 'F'
+h02-same-reading-missed-by-one-rou eq38 NEW               reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02-same-reading-missed-by-one-rou eq38 NEW+selfcheck     reject    nodes=17 restores=4 rounds=10 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02r-same-reading-missed-by-one-ro eq22 base              reject                                   [1] type 'A' has no static member 'F'
+h02r-same-reading-missed-by-one-ro eq22 FULL              reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h02r-same-reading-missed-by-one-ro eq22 FULL+sigrounds    reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02r-same-reading-missed-by-one-ro eq22 NOSIG22           reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h02r-same-reading-missed-by-one-ro eq22 NEW22             reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02r-same-reading-missed-by-one-ro eq22 NEW22+selfcheck   reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02r-same-reading-missed-by-one-ro eq38 FULL              reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h02r-same-reading-missed-by-one-ro eq38 NOSIG             reject                                   [2] type 'A' has no static member 'F'
+                                                                      circular given: the type of this given depends on an implicit resolution of 'P2<A>' that it may satisfy
+h02r-same-reading-missed-by-one-ro eq38 NEW               reject    nodes=17 restores=4 rounds=5 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+h02r-same-reading-missed-by-one-ro eq38 NEW+selfcheck     reject    nodes=17 restores=4 rounds=10 unstable=1 [2] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+q01-refinement-satisfied-by-itself eq22 base              reject                                   [3] no implementation of associated type requirement 'Assoc'
+                                                                      definition of 'Assoc' refers to itself
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq22 FULL              reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq22 FULL+sigrounds    reject    nodes=4 restores=1 rounds=2    [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq22 NOSIG22           reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq22 NEW22             reject    nodes=4 restores=1 rounds=2    [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq22 NEW22+selfcheck   reject    nodes=4 restores=1 rounds=3    [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq38 FULL              reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq38 NOSIG             reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq38 NEW               reject    nodes=4 restores=1 rounds=2    [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01-refinement-satisfied-by-itself eq38 NEW+selfcheck     reject    nodes=4 restores=1 rounds=4    [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 base              reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 FULL              reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 FULL+sigrounds    reject    nodes=3 rounds=1               [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 NOSIG22           reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 NEW22             reject    nodes=3 rounds=1               [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq22 NEW22+selfcheck   reject    nodes=3 rounds=2               [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq38 FULL              reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq38 NOSIG             reject                                   [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq38 NEW               reject    nodes=3 rounds=1               [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01c-control-refinement-missing-ba eq38 NEW+selfcheck     reject    nodes=3 rounds=2               [2] no implementation of associated type requirement 'Assoc'
+                                                                      expression does not denote a type
+q01d-control-refinement-missing-ba eq22 base              reject                                   [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq22 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq22 FULL+sigrounds    reject    nodes=3 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq22 NOSIG22           reject                                   [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq22 NEW22             reject    nodes=3 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq22 NEW22+selfcheck   reject    nodes=3 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq38 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq38 NEW               reject    nodes=3 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q01d-control-refinement-missing-ba eq38 NEW+selfcheck     reject    nodes=3 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q02-refinement-missing-base-plain. eq22 base              reject                                   [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq22 FULL              reject                                   [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq22 NOSIG22           reject                                   [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq22 NEW22             reject    nodes=2 rounds=1               [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq38 FULL              reject                                   [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq38 NOSIG             reject                                   [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B<T>>' in this scope
+q02-refinement-missing-base-plain. eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B<T>>' in this scope
+q03-refinement-satisfied-by-itself eq22 base              accept                                   
+q03-refinement-satisfied-by-itself eq22 FULL              accept                                   
+q03-refinement-satisfied-by-itself eq22 FULL+sigrounds    accept    nodes=2 rounds=1               
+q03-refinement-satisfied-by-itself eq22 NOSIG22           accept                                   
+q03-refinement-satisfied-by-itself eq22 NEW22             accept    nodes=2 rounds=1               
+q03-refinement-satisfied-by-itself eq22 NEW22+selfcheck   accept    nodes=2 rounds=2               
+q03-refinement-satisfied-by-itself eq38 FULL              accept                                   
+q03-refinement-satisfied-by-itself eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+q03-refinement-satisfied-by-itself eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q03-refinement-satisfied-by-itself eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 base              reject                                   [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 NOSIG22           reject                                   [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 NEW22             reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq38 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q03c-control-refinement-missing-ba eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q04-refinement-satisfied-by-itself eq22 base              accept                                   
+q04-refinement-satisfied-by-itself eq22 FULL              accept                                   
+q04-refinement-satisfied-by-itself eq22 FULL+sigrounds    accept    nodes=2 rounds=1               
+q04-refinement-satisfied-by-itself eq22 NOSIG22           accept                                   
+q04-refinement-satisfied-by-itself eq22 NEW22             accept    nodes=2 rounds=1               
+q04-refinement-satisfied-by-itself eq22 NEW22+selfcheck   accept    nodes=2 rounds=2               
+q04-refinement-satisfied-by-itself eq38 FULL              accept                                   
+q04-refinement-satisfied-by-itself eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+q04-refinement-satisfied-by-itself eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q04-refinement-satisfied-by-itself eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 base              reject                                   [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 NOSIG22           reject                                   [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 NEW22             reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq38 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+q04c-control-refinement-missing-ba eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+a03-half-typed-where-clause-hides- eq22 base              accept                                   
+a03-half-typed-where-clause-hides- eq22 FULL              accept                                   
+a03-half-typed-where-clause-hides- eq22 FULL+sigrounds    accept    nodes=4 restores=1 rounds=2    
+a03-half-typed-where-clause-hides- eq22 NOSIG22           accept                                   
+a03-half-typed-where-clause-hides- eq22 NEW22             accept    nodes=4 restores=1 rounds=2    
+a03-half-typed-where-clause-hides- eq22 NEW22+selfcheck   accept    nodes=4 restores=1 rounds=3    
+a03-half-typed-where-clause-hides- eq38 FULL              accept                                   
+a03-half-typed-where-clause-hides- eq38 NOSIG             accept                                   
+a03-half-typed-where-clause-hides- eq38 NEW               accept    nodes=4 restores=1 rounds=2    
+a03-half-typed-where-clause-hides- eq38 NEW+selfcheck     accept    nodes=4 restores=1 rounds=4    
+a03c-control-ambiguous-member-alia eq22 base              reject                                   [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq22 FULL              reject                                   [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq22 FULL+sigrounds    reject    nodes=4 rounds=1               [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq22 NOSIG22           reject                                   [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq22 NEW22             reject    nodes=4 rounds=1               [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq22 NEW22+selfcheck   reject    nodes=4 rounds=2               [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq38 FULL              reject                                   [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq38 NOSIG             reject                                   [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq38 NEW               reject    nodes=4 rounds=1               [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a03c-control-ambiguous-member-alia eq38 NEW+selfcheck     reject    nodes=4 rounds=2               [2] ambiguous use of 'X'
+                                                                      expression does not denote a type
+a07-conformance-where-member-alias eq22 base              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq22 FULL              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq22 FULL+sigrounds    reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq22 NOSIG22           reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq22 NEW22             reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq22 NEW22+selfcheck   reject    nodes=3 restores=1 rounds=3    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq38 FULL              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq38 NOSIG             reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq38 NEW               reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07-conformance-where-member-alias eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 base              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 FULL              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 FULL+sigrounds    reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 NOSIG22           reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 NEW22             reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq22 NEW22+selfcheck   reject    nodes=3 restores=1 rounds=3    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq38 FULL              reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq38 NOSIG             reject                                   [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq38 NEW               reject    nodes=3 restores=1 rounds=2    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a07b-conformance-where-member-alia eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [3] type 'A' has no static member 'Y'
+                                                                      declaration refers to itself
+                                                                      no implementation of associated type requirement 'Y'
+a08-generic-ext-where-member-alias eq22 base              reject                                   [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq22 FULL              reject                                   [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq22 FULL+sigrounds    reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq22 NOSIG22           reject                                   [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq22 NEW22             reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq22 NEW22+selfcheck   reject    nodes=3 restores=1 rounds=3    [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq38 FULL              reject                                   [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq38 NOSIG             reject                                   [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq38 NEW               reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08-generic-ext-where-member-alias eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 base              reject                                   [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 FULL              reject                                   [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 FULL+sigrounds    reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 NOSIG22           reject                                   [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 NEW22             reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq22 NEW22+selfcheck   reject    nodes=3 restores=1 rounds=3    [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq38 FULL              reject                                   [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq38 NOSIG             reject                                   [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq38 NEW               reject    nodes=3 restores=1 rounds=2    [1] type 'BA' has no static member 'LA'
+a08b-generic-ext-where-member-alia eq38 NEW+selfcheck     reject    nodes=3 restores=1 rounds=4    [1] type 'BA' has no static member 'LA'
+c02-alias-through-generic-conforma eq22 base              reject                                   [2] definition of 'Z' refers to itself
+                                                                      no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq22 FULL              reject                                   [2] definition of 'Z' refers to itself
+                                                                      no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq22 FULL+sigrounds    reject    nodes=3 restores=2 rounds=3    [1] no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq22 NOSIG22           reject                                   [2] definition of 'Z' refers to itself
+                                                                      no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq22 NEW22             reject    nodes=3 restores=2 rounds=3    [1] no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq22 NEW22+selfcheck   reject    nodes=3 ownerFirst=1 restores=2 rounds=4 [1] no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq38 FULL              reject                                   [2] definition of 'Z' refers to itself
+                                                                      no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq38 NOSIG             reject                                   [2] definition of 'Z' refers to itself
+                                                                      no coercion from '<T> Q<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c02-alias-through-generic-conforma eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+c02-alias-through-generic-conforma eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+c10-refinement-given-hidden-in-rou eq22 base              reject                                   [2] type 'BA' has no static member 'E'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq22 FULL              reject                                   [2] type 'BA' has no static member 'E'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq22 FULL+sigrounds    reject    nodes=5 restores=1 rounds=2    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq22 NOSIG22           reject                                   [2] type 'BA' has no static member 'E'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq22 NEW22             reject    nodes=5 restores=1 rounds=2    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq22 NEW22+selfcheck   reject    nodes=5 ownerFirst=1 restores=1 rounds=3 [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq38 FULL              reject                                   [2] type 'BA' has no static member 'E'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq38 NOSIG             reject                                   [2] type 'BA' has no static member 'E'
+                                                                      no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq38 NEW               reject    nodes=5 restores=1 rounds=2    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+c10-refinement-given-hidden-in-rou eq38 NEW+selfcheck     reject    nodes=5 restores=1 rounds=4    [1] no coercion from '<T> R<T> ==> [Void](let T) let -> Void' to '[Void](let Int) let -> Void'
+r03-generic-library-shape.hylo     eq22 base              reject                                   [3] no coercion from 'Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+                                                                      no coercion from '<T> Equatable<T> ==> [Void](let T, let T) let -> Bool' to '[Void](let Wrapper<IntArray>, let Wrapper<IntArray>) let -> Boo
+r03-generic-library-shape.hylo     eq22 FULL              reject                                   [3] no coercion from 'Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+                                                                      no coercion from '<T> Equatable<T> ==> [Void](let T, let T) let -> Bool' to '[Void](let Wrapper<IntArray>, let Wrapper<IntArray>) let -> Boo
+r03-generic-library-shape.hylo     eq22 FULL+sigrounds    reject    nodes=7 restores=1 rounds=2    [3] no coercion from 'Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+                                                                      no coercion from '<T> Equatable<T> ==> [Void](let T, let T) let -> Bool' to '[Void](let Wrapper<IntArray>, let Wrapper<IntArray>) let -> Boo
+r03-generic-library-shape.hylo     eq22 NOSIG22           reject                                   [2] no coercion from '(IntArray::Collection).Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+r03-generic-library-shape.hylo     eq22 NEW22             reject    nodes=7 restores=1 rounds=2    [2] no coercion from '(IntArray::Collection).Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+r03-generic-library-shape.hylo     eq22 NEW22+selfcheck   reject    nodes=7 restores=1 rounds=3    [2] no coercion from '(IntArray::Collection).Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+r03-generic-library-shape.hylo     eq38 FULL              reject                                   [3] no coercion from 'Element' to 'Int'
+                                                                      type 'Wrapper<IntArray>' has no member 'smallest'
+                                                                      no coercion from '<T> Equatable<T> ==> [Void](let T, let T) let -> Bool' to '[Void](let Wrapper<IntArray>, let Wrapper<IntArray>) let -> Boo
+r03-generic-library-shape.hylo     eq38 NOSIG             reject                                   [1] type 'Wrapper<IntArray>' has no member 'smallest'
+r03-generic-library-shape.hylo     eq38 NEW               reject    nodes=7 restores=2 rounds=3    [1] type 'Wrapper<IntArray>' has no member 'smallest'
+r03-generic-library-shape.hylo     eq38 NEW+selfcheck     reject    nodes=7 restores=2 rounds=6    [1] type 'Wrapper<IntArray>' has no member 'smallest'
+done

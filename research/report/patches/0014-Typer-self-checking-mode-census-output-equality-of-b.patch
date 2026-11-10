@@ -1,7 +1,7 @@
 From f4aa7603ec828bdc8ea063dab20643fb53343030 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 13:50:39 +0000
-Subject: [PATCH 14/27] Typer: self-checking mode, census output; equality of
+Subject: [PATCH 14/30] Typer: self-checking mode, census output; equality of
  bundle types; no crash on a case outside an enum
 
 Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>

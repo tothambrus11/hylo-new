@@ -1,0 +1,16 @@
+// j01 with values. f calls itself at the same T in the scope of a nearer conformance `T is P`
+// whose X = C is Q. Well typed (two consistent ways: the local conformance with `C is Q`, or f's
+// own two requirements). FULL accepts it. A rejection by NEW is a regression.
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct C { public memberwise init }
+given C is Q { fun use() {} }
+fun f<T where T is P, T.X is Q>(t: T) {
+  t.get().use()
+  if true {
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    f<T>(t)
+  }
+}

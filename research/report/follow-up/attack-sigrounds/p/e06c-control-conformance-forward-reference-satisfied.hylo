@@ -1,0 +1,11 @@
+// Control of e06: `Int is Q` is provided.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given Int is Q {}
+given <T where T.X is Q, let u: P<T>> => Box<T> is R {}
+fun need<T where T is R>(x: T) {}
+public fun main() { need(Box<A>()) }

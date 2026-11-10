@@ -1,0 +1,9 @@
+// Judge, variant A1 (given before extension): finding 1 with the member reached through a top-level alias instead of
+// directly in the subject of the given. Well-typed: AL is A, A is Q holds, the given is A is R.
+trait Q {}
+trait R {}
+struct A {}
+given A is Q {}
+type AL = A.LA
+given AL is R {}
+extension <where LA is Q> A { type LA = Self }

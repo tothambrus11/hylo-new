@@ -1,0 +1,11 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/t15_literal_tuple.hylo. Errors that only appear when stale coercions
+//   are turned into equalities, after the fresh goals are exhausted.
+// currently (base): rejected, 3 diagnostic(s): 10.12-13: error: ambiguous use of 'f'; 10.18-19: error: ambiguous use of 'f'; 10.20-21: error: cannot pass value of type 'Int' to parameter 'Int8'; solver.forks=12 solver.overloads=4
+// currently (FULL): rejected, 3 diagnostic(s): 10.12-13: error: ambiguous use of 'f'; 10.18-19: error: ambiguous use of 'f'; 10.20-21: error: cannot pass value of type 'Int' to parameter 'Int8'; solver.forks=12 solver.overloads=4
+fun f(x: Int8) -> Int8 { x }
+fun f(x: Int) -> Int { x }
+fun f(x: Int32) -> Bool { true }
+public fun main() {
+  let d = (f(4), f(5) as Int8)
+}

@@ -1,0 +1,9 @@
+//! stage:typing no-std
+trait P {}
+struct Box<T> {}
+given <X > => Box<X> is P {}
+fun g<T >() {}
+fun h<T where T is P>() {}
+public fun main() {
+  h<Box<Void>>()
+}

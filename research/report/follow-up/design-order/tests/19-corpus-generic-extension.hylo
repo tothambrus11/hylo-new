@@ -1,0 +1,17 @@
+//! stage:typing no-std
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: Copy of Tests/CompilerTests/positive/generic-extension.hylo.
+// Currently: base accepts it in all 24 orders tried; FULL accepts it in all 24 orders tried.
+trait P { fun f() }
+
+extension <T> {Void, T} {
+  fun f() {}
+}
+
+given {Void, Void} is P {
+  // Requirement satisfied by the extension.
+}
+
+fun main() {
+  ((), ()).f()
+}

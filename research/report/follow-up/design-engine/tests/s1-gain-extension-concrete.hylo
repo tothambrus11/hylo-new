@@ -1,0 +1,20 @@
+//! stage:typing no-std
+// expected (premsubst, step 3): accepted. `Bag is Collection` is found first; `Bag.Element` through
+// that conformance is `Flag` by definition, so the second requirement of the extension holds by
+// reflexivity and `first` is a member of `Box<Bag>`.
+// (research/report/test-programs/equalities/x10-ext-where-assoc.hylo)
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1 normalized=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base timeout; FULL rejected (subgoals=7 matches=362 premises=1): type 'Box<Bag>' has no member 'first'
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Bag { public memberwise init }
+struct Flag { public memberwise init }
+given Bag is Collection { type Element = Flag }
+extension <T where T is Collection, T.Element == Flag> Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+public fun main() {
+  let b = Box<Bag>()
+  let f: Flag = b.first()
+}

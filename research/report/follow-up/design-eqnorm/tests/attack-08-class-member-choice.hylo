@@ -1,0 +1,20 @@
+//! stage:typing no-std
+// ATTACK on stage 3 (eqclass), found in review. expected: rejected at every stage (today: P<C> has
+// no derivation; from stage 3: ambiguous, whatever the order of the where clause).
+// The class of C has two written members of the shape Box<_>, Box<A> and Box<B>, with A == B.
+// Matching Box<?t> against the class can bind ?t to A or to B. The premise `?t is Q` is then
+// answered by `A is Q` or by `B is Q`, which are different witnesses with different associated
+// types (keep-01). A rule that keeps "one member per tuple of argument classes" picks one of them
+// by the order of the where clause, or by which types were compared earlier in the scope: the
+// witness of P<C> then depends on that order, and once the associated types of a generic conformance
+// are instantiated (flag assocsubst, in progress) so does the verdict of this program: C.X is A.Y
+// with ?t := A and is not with ?t := B. The revised rule (5.4) makes every written member a
+// candidate; here two threads complete: ambiguous. Run it under every permutation of the where
+// clause and with the sides of each equality swapped: the verdict must not vary.
+// currently: base rejected (summon.subgoals=9 summon.matches=685); FULL rejected (summon.subgoals=3 summon.matches=225 index.fallback=3); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) rejected (summon.subgoals=3 summon.matches=82 eqsolve.proved=1 index.fallback=1 eqeager.matches=1). FULL says: type 'C' has no static member 'X'. With selfcheck: no violation.
+trait Q { type Y }
+trait P { type X }
+struct Box<X> { public memberwise init }
+given <T where T is Q> => Box<T> is P { type X = T.Y }
+fun check<T>(x: T) {}
+fun f<A, B, C where C == Box<A>, C == Box<B>, A == B, A is Q, B is Q>(x: C.X) { check<A.Y>(x) }

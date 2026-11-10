@@ -1,0 +1,9 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: `X` is `B`, so `extension X` extends `B` and cannot affect the lookup of `Me` in `A` that defines `X`. Same shape as al1, al2 and al3.
+// Currently: base accepts it in 8 of 24 orders; FULL accepts it in 8 of 24 orders.
+struct A {}
+struct B {}
+extension A { type Me = B }
+type X = A.Me
+extension X { type Me = Int }
+fun f(x: X.Me) {}

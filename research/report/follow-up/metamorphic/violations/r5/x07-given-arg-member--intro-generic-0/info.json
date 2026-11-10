@@ -1,0 +1,44 @@
+{
+ "file": "research/report/test-programs/equalities/x07-given-arg-member.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`Wrapper<...>` spelled `AlqWrapper<...>` (1 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'"
+   ]
+  }
+ }
+}

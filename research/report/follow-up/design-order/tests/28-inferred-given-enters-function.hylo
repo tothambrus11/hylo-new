@@ -1,0 +1,17 @@
+// Expected after the change: rejected, in every order of the top-level declarations: the given `w` has no ascription and is visible to a resolution made by a signature (section 3.1).
+// Reason: The initializer of `w` needs the signature of `f`. If `w` is a node, the order of `w` and `f` decides whether the signature of `f` is entered first or the local alias `LA` is (through the given in the body of `f`).
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 24 orders tried ("definition of 'LA' refers to itself").
+// Review (attack 3, at top level): with the design as first written (binary eq17, FULL+sigrounds) it is accepted in 12 of 24 orders, those with `w` before `f`, and rejected in the others; selfcheck reports a violation in all of them.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Foo<T> {}
+struct Bar<T> {}
+given A is P { type X = Int }
+given <U> => Foo<U> is Q {}
+given let w = f<A>()
+fun f<T where T is P, Foo<LA> is Q>() -> Int {
+  type LA = T.X
+  given Bar<LA> is P { type X = Int }
+  return 1
+}

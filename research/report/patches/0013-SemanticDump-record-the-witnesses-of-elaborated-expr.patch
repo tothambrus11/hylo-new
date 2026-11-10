@@ -1,7 +1,7 @@
 From 03bde9d49716aa0ddd61999dcf6920f674364f45 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 11:59:37 +0000
-Subject: [PATCH 13/27] SemanticDump: record the witnesses of elaborated
+Subject: [PATCH 13/30] SemanticDump: record the witnesses of elaborated
  expressions
 
 Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>

@@ -1,0 +1,16 @@
+// `LA = T.X` is ambiguous in the extension (`T is P` and `T is P2` both declare `X`), but the
+// where clause demands `LA` after its first requirement only, when `P2<T>` is still hidden.
+// Control a03c: without the second requirement.
+trait P { type X }
+trait P2 { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> {}
+struct Foo<T> {}
+given A is P { type X = Int }
+given A is P2 { type X = Bool }
+given <U> => Foo<U> is Q {}
+type BA = Box<A>
+extension <T where T is P, Foo<LA> is Q, T is P2> Box<T> { type LA = T.X }
+fun f(x: BA.LA) {}

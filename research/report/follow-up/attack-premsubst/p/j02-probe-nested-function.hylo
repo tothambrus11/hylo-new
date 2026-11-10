@@ -1,0 +1,11 @@
+// Probe: a nested function with a local given `T is P` calls the enclosing function. Well typed.
+trait P { type X }
+trait Q {}
+struct C {}
+given C is Q {}
+fun f<T where T is P, T.X is Q>() {
+  fun inner() {
+    given T is P { type X = C }
+    f<T>()
+  }
+}

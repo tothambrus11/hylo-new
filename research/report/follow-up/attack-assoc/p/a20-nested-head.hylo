@@ -1,0 +1,13 @@
+// assocsubst: the head is Box<Box<T>> and X = T. ok valid, bad invalid.
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<Box<T>> is P { type X = T
+  fun get() -> T { self.get() } }
+fun check<T>(x: T) {}
+fun ok(p: Box<Box<S0>>, q: Box<Box<Box<S1>>>) { check<S0>(p.get())
+  check<Box<S1>>(q.get()) }
+fun bad1(p: Box<Box<S0>>) { check<Box<S0>>(p.get()) }
+fun bad2(q: Box<Box<Box<S1>>>) { check<S1>(q.get()) }

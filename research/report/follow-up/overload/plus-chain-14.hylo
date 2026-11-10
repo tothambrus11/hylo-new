@@ -1,0 +1,4 @@
+public fun main() {
+  let a = 1
+  let b = a + a + a + a + a + a + a + a + a + a + a + a + a + a + a
+}

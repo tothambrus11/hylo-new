@@ -1,0 +1,18 @@
+// expected after the change: as today with every flag
+// reason: a05 with the two candidates of `f` swapped.
+// currently (base): rejected, 1 diagnostic(s): 17.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 1 diagnostic(s): 17.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+fun test(b: B) { let y = f(b).m() }
+struct A { public memberwise init }
+struct B {
+  public memberwise init
+  public fun m() -> X { B() }
+}
+struct C { public memberwise init }
+extension C { public fun m() -> Int { 0 } }
+fun f(x: B) -> B { x }
+fun f(x: A) -> C { C() }
+extension X { type Me = Int }
+extension A { type Me = B }
+type X = A.Me
+public fun main() {}

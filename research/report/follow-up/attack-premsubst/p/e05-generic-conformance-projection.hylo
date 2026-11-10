@@ -1,0 +1,12 @@
+// X of a conditional conformance is a projection through its own requirement: Box<T>.X = T.X.
+// Well typed: Box<A>.X = A.X = B is Q.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct Box<T> {}
+given B is Q {}
+given A is P { type X = B }
+given <T where T is P> => Box<T> is P { type X = T.X }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<Box<A>>() }

@@ -1,0 +1,19 @@
+// Judge, finding 1, variant B, control: the same flow through the requirements of the trait directly.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+fun mid<T where T == A, T is P>(w: T) {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  A().put(w.get())
+}
+fun h() {
+  given A is P { type X = S1
+    fun get() -> S1 { S1() }
+    fun put(x: S1) {} }
+  mid<A>(A())
+}

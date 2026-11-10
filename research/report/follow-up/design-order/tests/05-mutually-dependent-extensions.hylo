@@ -1,0 +1,7 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: One consistent reading: the first extension extends `Int`, the second `A.Inner`. This is the example under "Limitation" in soundness/5-declaration-order.md.
+// Currently: base accepts it in 3 of 6 orders; FULL rejects it in all 6 orders tried.
+struct A { struct Inner {} }
+extension A.Inner.Foo { type Inner = Bool }
+extension A.Inner { type Foo = Int }
+fun use(x: Int.Inner) {}

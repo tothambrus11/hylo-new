@@ -1,0 +1,8 @@
+struct A {
+  type Foo = Int
+}
+extension X {
+  type Foo = Bool
+  fun g() {}
+}
+type X = A.Foo

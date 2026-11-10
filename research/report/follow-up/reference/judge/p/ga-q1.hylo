@@ -1,0 +1,7 @@
+struct S { public memberwise init }
+struct Box<E0> { public memberwise init }
+trait P { type X }
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q1<A, B, C where Box<A> == C, A == B>(x: C) { check<Box<B>>(x) }

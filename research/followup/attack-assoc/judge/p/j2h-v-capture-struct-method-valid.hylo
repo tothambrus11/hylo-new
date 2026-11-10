@@ -1,0 +1,8 @@
+// Judge, finding 2, variant H, valid twin: the result of b.m<S0>(c) is a U.
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public fun first() -> T { self.first() }
+  public fun m<U>(b: Box<U>, c: Box<S0>) -> T {
+    let r: U = b.m<S0>(c, c)
+    return self.first() } }

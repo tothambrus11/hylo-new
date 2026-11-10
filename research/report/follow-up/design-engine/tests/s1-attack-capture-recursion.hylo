@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// attack (review): capture. Must be rejected: in the body of f, A.X is the associated type of f's
+// own requirement, about which nothing is known, so 'W<A.X> is R' does not hold (compare the same
+// argument passed to a function without requirements: rejected). The recursive call instantiates the
+// clause at itself, so the explicit type argument W<A.X> mentions the very declaration that the
+// clause's binder names. Binding by declaration and type (DESIGN.md 3.4) rewrites that free reference
+// too; the thread that proves 'A is P' with the module's conformance then checks 'W<B> is R' in place
+// of the argument's requirement and the call is accepted with an ill-typed witness.
+// expected (premsubst with the capture rule of 3.4): rejected.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=4 normalized=2); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=9 matches=689): no coercion from '(P<A>, Q<(A::P).X>, R<W<(A::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=85): no coercion from '(P<A>, Q<(A::P).X>, R<W<(A::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct W<T> {}
+given A is P { type X = B }
+given B is Q {}
+given W<B> is R {}
+fun f<V where A is P, A.X is Q, V is R>() {
+  f<W<A.X>>()
+}

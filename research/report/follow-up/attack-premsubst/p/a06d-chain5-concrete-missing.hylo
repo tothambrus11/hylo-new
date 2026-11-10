@@ -1,0 +1,17 @@
+// Control of a06c, ILL TYPED: A5 is not Q.
+trait P { type X }
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct A4 {}
+struct A5 {}
+given A0 is P { type X = A1 }
+given A1 is P { type X = A2 }
+given A2 is P { type X = A3 }
+given A3 is P { type X = A4 }
+given A4 is P { type X = A5 }
+given A4 is Q {}
+fun f<T where T is P, T.X is P, T.X.X is P, T.X.X.X is P, T.X.X.X.X is P, T.X.X.X.X.X is Q>() {}
+public fun main() { f<A0>() }

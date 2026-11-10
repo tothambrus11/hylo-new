@@ -1,0 +1,4 @@
+// Expected: accepted. The caller's `U.X` is the callee's `T.X` at `T = U`.
+trait P { type X }
+fun h<T where T is P>(x: T.X) {}
+fun g<U where U is P>(y: U.X) { h<U>(y) }

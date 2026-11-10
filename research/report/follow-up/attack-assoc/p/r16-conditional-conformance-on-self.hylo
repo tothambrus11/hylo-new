@@ -1,0 +1,7 @@
+// abstractstrict + assocsubst: the trait body uses a conditional conformance of Self whose associated type is T.X. Valid.
+trait Sink { type E
+  fun push(e: E) }
+trait P { type X
+  fun m(x: X) { self.push(x) } }
+given <T where T is P> => T is Sink { type E = T.X
+  fun push(e: T.X) {} }

@@ -1,0 +1,21 @@
+//! stage:typing no-std
+
+struct A<T> { public memberwise init }
+trait P {
+  type X
+  fun f() -> X
+}
+extension AlqA<Void> {
+}
+given AlqA<Void> is P {
+  type X = AlqA<Void>
+  fun f() -> X { A() }
+}
+fun use(x: Void) {}
+fun main() {
+  let a = A<Void>()
+
+
+  let z = a.f() as A<Void>
+}
+type AlqA<Tq0> = A<Tq0>

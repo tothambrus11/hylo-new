@@ -1,0 +1,13 @@
+// Expected after the change: accepted, in every order of the top-level declarations (no change), in 2 rounds.
+// Reason: The ordinary shape of generic library code: a where clause selects a member through an earlier requirement (`C.Element`). The resolution ignores the module's givens in round 1, so a second round is needed to confirm the table. Shows that "one round" holds only for code without such where clauses.
+// Currently: base accepts it in all 24 orders tried; FULL accepts it in all 24 orders tried.
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds) it is accepted in all 24 orders; `sigrounds.rounds=2 sigrounds.restores=1`.
+trait Collection { type Element }
+trait Equatable {}
+struct IntArray {}
+struct Wrapper<C> {}
+given IntArray is Collection { type Element = Int }
+given Int is Equatable {}
+given <C where C is Collection, C.Element is Equatable> => Wrapper<C> is Equatable {}
+extension <C where C is Collection, C.Element is Equatable> Wrapper<C> { fun eq() {} }
+fun f(x: Wrapper<IntArray>) {}

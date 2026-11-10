@@ -1,0 +1,14 @@
+// A conditional extension with a dependent requirement whose member returns T.X, one conformance.
+// Well typed: Box<A>.first() is a B.
+trait P { type X
+  fun get() -> X }
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { var t: T
+  public memberwise init }
+given B is Q {}
+given A is P { type X = B
+  fun get() -> B { B() } }
+extension <T where T is P, T.X is Q> Box<T> { fun first() -> T.X { self.t.get() } }
+public fun main() { let x: B = Box<A>(t: A()).first() }

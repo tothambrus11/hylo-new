@@ -1,0 +1,7 @@
+// X is defined as itself: type X = A.X. ILL TYPED; must be rejected without crash or timeout.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = A.X }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<A>() }

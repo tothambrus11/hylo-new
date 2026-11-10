@@ -1,0 +1,8 @@
+// Expected after the change: rejected, in every order of the top-level declarations.
+// Reason: A real ambiguity without any cycle: `X` is `A`, so `A` has two members `Me`.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 24 orders tried.
+struct A {}
+extension A { type Me = A }
+type X = A
+extension X { type Me = Int }
+fun f(x: A.Me) {}

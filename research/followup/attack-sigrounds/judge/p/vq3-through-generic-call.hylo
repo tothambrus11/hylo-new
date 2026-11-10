@@ -1,0 +1,9 @@
+// Judge, variant Q3: q04 where the body resolves Base<B> through a generic call, not a member lookup.
+// Ill-typed: nothing provides B is Base.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+given B is Derived { public fun g() { callBase(self) } }
+public fun main() { callDerived(B()) }

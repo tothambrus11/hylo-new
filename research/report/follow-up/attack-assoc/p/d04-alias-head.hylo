@@ -1,0 +1,12 @@
+// assocsubst: the head of the conformance is written with a generic alias. ok valid; bad invalid (1 error expected).
+trait P { type X
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+type Flip<A, B> = Pair<B, A>
+given <T, U> => Flip<T, U> is P { type X = U
+  fun get() -> U { self.get() } }
+fun check<T>(x: T) {}
+fun ok(p: Pair<S0, S1>) { check<S0>(p.get()) }
+fun bad(p: Pair<S0, S1>) { check<S1>(p.get()) }

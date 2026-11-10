@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// attack (review): assumption A3 is false for a witness that is a coercion. 'U is P' is proved by
+// coercing the requirement 'V is P' along U == V. Name resolution removes the coercion when it
+// selects X (typeOfImplementation, branch 'The witness is the result of a coercion?'), so the caller's
+// V.X is (V::$r).X, while the substituted premise is (U::coerce($r)).X. The two never match.
+// expected (premsubst with step 3 removing coercions, 3.7): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=19 matches=881): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=6 matches=366 proved=1): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U, V where U == V, V is P, V.X is Q>() { f<U>() }

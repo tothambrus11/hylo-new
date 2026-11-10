@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected (premsubst): accepted, as today, with the same witness. In the body of `f` the
+// requirement `T.X is Q` of the callee and the one in scope are the same term already.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base accepted (subgoals=5 matches=363); FULL accepted (subgoals=3 matches=75)
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() { f<T>() }

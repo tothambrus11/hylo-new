@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// GAP: the conformance of an associated type stated in the trait is not used to look up its members.
+// Swift: `S.Iterator.Element` for `S: Sequence`.
+// EXPECTED: accepted.  OBSERVED: `S.Iterator.Element` is the error type '#!' unless the function
+// restates `S.Iterator is IteratorProtocol` in its own where clause.
+trait IteratorProtocol { type Element }
+trait Sequence { type Element; type Iterator; given Iterator is IteratorProtocol }
+fun check<T>(x: T) {}
+fun f<S where S is Sequence, S.Iterator.Element == S.Element>(x: S.Iterator.Element) { check<S.Element>(x) }

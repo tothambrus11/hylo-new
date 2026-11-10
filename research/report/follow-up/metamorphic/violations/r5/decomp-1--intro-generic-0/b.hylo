@@ -1,0 +1,6 @@
+struct Box<T> { }
+fun check<T>(x: T) {}
+fun f<A, B where AlqBox<A> == AlqBox<B>>(x: AlqBox<A>) {
+  check<AlqBox<B>>(x)
+}
+type AlqBox<Tq0> = Box<Tq0>

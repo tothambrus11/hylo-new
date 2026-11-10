@@ -1,0 +1,11 @@
+// assocsubst: as c01 with the valid binding: the call returns a Box<U>.X, which is U.
+trait P { type X
+  fun get() -> X
+  fun m<U>(u: U, b: Box<U>) -> X {
+    let r: U = b.m<S0>(S0(), Box<S0>(t: S0()))
+    return self.get() } }
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }

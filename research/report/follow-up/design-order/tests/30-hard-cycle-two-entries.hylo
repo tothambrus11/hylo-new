@@ -1,0 +1,9 @@
+// Expected after the change: rejected, in every order of the top-level declarations, with the same diagnostics.
+// Reason: Once the table says that `extension X { type M = Self }` extends `A`, the alias `X` and that extension depend on each other through hard reads (`X` selects `M`, `M` is `Self`). The cycle can be entered at `X` (through the other extension of `X`) or at the extension; assumption A4 says the table does not depend on which.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 24 orders tried.
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds+selfcheck) all 24 orders give the same diagnostics and no selfcheck violation. A candidate with an erroneous type makes the lookup ambiguous; it is not dropped.
+struct A {}
+extension A { type M = A }
+extension X { fun g() {} }
+extension X { type M = Self }
+type X = A.M

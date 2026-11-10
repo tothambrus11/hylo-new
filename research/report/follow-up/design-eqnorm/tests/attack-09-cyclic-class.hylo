@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// ATTACK on termination (stages 2 and 3), found in review. expected: rejected in stage 1 (as
+// today: canDeriveCoercions refuses the pair, Box<Box<C>> is not a side of an equality); accepted
+// from stage 2 (eqclosure); no loop at any stage.
+// C == Box<C> puts C and Box<C> in one class: a class that contains a term built from itself. A
+// canonical form computed bottom-up would not terminate here (option A needs a representative of
+// minimal size). `decide` only adds nodes: Box<Box<C>> gets the signature of Box<C> and joins the
+// class, so C ~ Box<Box<C>> is decided true. Class matching (stage 3) recurses on the pattern,
+// which loses a constructor at each step.
+// currently: base rejected (summon.matches=1); FULL rejected (summon.matches=1); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) rejected (summon.matches=1). FULL says: cannot pass value of type 'C' to parameter 'Box<Box<C>>'. With selfcheck: no violation.
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<C where C == Box<C>>(x: C) { check<Box<Box<C>>>(x) }

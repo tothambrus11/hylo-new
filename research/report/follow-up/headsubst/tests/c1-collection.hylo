@@ -1,0 +1,23 @@
+// Expected: accepted. Every call needs one of the new mechanisms; the existing implementation
+// rejects each of them.
+trait Collection { type Element; fun first() -> Element }
+trait Showable {}
+struct Bag<T> { public memberwise init }
+struct Int8 { public memberwise init }
+given Int8 is Showable {}
+given <T> => Bag<T> is Collection {
+  type Element = T
+  fun first() -> T { trap() }
+}
+fun trap<T>() -> T { trap<T>() }
+fun head<C where C is Collection>(c: C) -> C.Element { c.first() }
+fun show<C where C is Collection, C.Element is Showable>(c: C) {}
+
+fun use(b: Bag<Int8>) {
+  let x: Int8 = head(b)
+  show(b)
+}
+fun generic<D where D is Collection, D.Element is Showable>(d: D) {
+  let y: D.Element = head(d)
+  show(d)
+}

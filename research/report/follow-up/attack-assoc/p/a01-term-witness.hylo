@@ -1,0 +1,14 @@
+// assocsubst: the associated type is defined by an associated type of the parameter (type X = T.Y);
+// the witness of the conditional conformance is a term application.
+trait Q { type Y }
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given A is Q { type Y = S0 }
+given <T where T is Q> => Box<T> is P { type X = T.Y }
+fun check<T>(x: T) {}
+type BA = Box<A>
+fun f(x: BA.X) { check<S0>(x) }
+fun g(x: S0) { check<BA.X>(x) }

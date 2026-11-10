@@ -1,0 +1,65 @@
+//! stage:typing no-std
+
+// SOURCE: Rust core library (rust-lang/rust, library/core/src/iter).
+//   traits/collect.rs:291      trait IntoIterator { type Item; type IntoIter: Iterator<Item = Self::Item>; }
+//   traits/collect.rs:317-319  impl<I: Iterator> IntoIterator for I { type Item = I::Item; type IntoIter = I; }
+//   adapters/flatten.rs        impl<I, U> Iterator for Flatten<I>
+//                              where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator,
+//                              { type Item = U::Item; ... }
+//                              (the same bound is repeated on 11 impls of Flatten and FlattenCompat)
+//
+// PATTERN: associated type bindings nested two deep, one of which defines a parameter of the impl
+// (`U` occurs only on the right of `I::Item::IntoIter == U`), and an equality between associated
+// types of different parameters (`I::Item::Item == U::Item`).  The census counts this as the
+// function scope with the most local givens in core::iter (4 equalities and 10 conformances for
+// the methods of FlattenCompat).
+//
+// TRANSLATION: `Tr<A = T>` on `X` becomes `X is Tr, X.A == T`.  The bound on the associated type
+// `IntoIter` cannot be stated in the trait, so it is restated where it is used.
+//
+// The original where clause lists `U: Iterator` after the binding that mentions `U::Item`; this
+// compiler resolves a where clause from left to right, so `U is Iterator` is moved forward (see
+// gaps/where-clause-order.hylo).  The concrete use of the impl (flattening an iterator of vectors)
+// is left out: it needs a feature this compiler lacks (gaps/generic-projection.hylo).
+//
+// EXPECTED: accepted.  OBSERVED: the last line of `flattenBody` is rejected by every configuration,
+// for two independent reasons (gaps/associated-type-premise.hylo and gaps/two-equality-conditions.hylo).
+//
+// Lines starting with `// NEG:` are plausible but false claims; `run_benchmarks.py` enables them
+// in a generated copy to measure the cost of rejecting.
+
+trait Iterator { type Item }
+
+trait IntoIterator {
+  type Item
+  type IntoIter
+}
+
+struct Flatten<I> { public memberwise init }
+
+fun need<X, Y where X == Y>() {}
+fun needIterator<T where T is Iterator>() {}
+fun check<T>(x: T) {}
+
+// impl<I, U> Iterator for Flatten<I> where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator
+given <I, U where
+  I is Iterator, U is Iterator, I.Item is IntoIterator, I.Item.IntoIter == U, I.Item.Item == U.Item
+> => Flatten<I> is Iterator {
+  type Item = U.Item
+}
+
+// A method body of that impl: the same givens, used.
+fun flattenBody<I, U where
+  I is Iterator, U is Iterator, I.Item is IntoIterator, I.Item.IntoIter == U, I.Item.Item == U.Item
+>(x: U.Item, y: I.Item.Item) {
+  need<I.Item.Item, Zz>()
+  need<U.Item, Zz>()
+  check<I.Item.Item>(x)
+  check<U.Item>(y)
+  needIterator<Flatten<I>>()               // the impl applies: `U` must be found from the equality
+  // NEG: need<I.Item, U>()
+  // NEG: need<I.Item, U.Item>()
+  // NEG: need<I.Item.IntoIter, I>()
+}
+
+struct Zz {}

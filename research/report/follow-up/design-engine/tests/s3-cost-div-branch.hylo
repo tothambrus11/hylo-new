@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected (heightbound): rejected, with the same number of matches as today under base. Every
+// given has one premise, so the size of a derivation equals its height and the two bounds coincide.
+// currently: base rejected (subgoals=3070 matches=110449 depthExhausted=2): no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=2 matches=1 refuted=2): no coercion from 'P<Yb> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+struct S<T> {}
+struct R<T> {}
+struct Yb {}
+given <T where S<T> is P> => T is P {}
+given <T where R<T> is P> => T is P {}
+fun need<where Yb is P>() {}
+public fun main() { need() }

@@ -1,0 +1,6 @@
+// Control of b10: the same flow with requirements on P itself is rejected.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+trait R refines P {}
+fun g<V, W where V == W, V is P, W is P>(v: V, w: W) { v.put(w.get()) }

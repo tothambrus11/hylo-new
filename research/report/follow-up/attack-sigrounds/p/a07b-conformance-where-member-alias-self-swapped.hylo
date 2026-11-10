@@ -1,0 +1,9 @@
+// a07 with its last two declarations swapped.
+trait Q {}
+trait R {}
+trait S { type Y }
+struct A {}
+struct Foo<T> {}
+given <U> => Foo<U> is Q {}
+given A.Y is R {}
+given <where Foo<Y> is Q> => A is S { type Y = Self }

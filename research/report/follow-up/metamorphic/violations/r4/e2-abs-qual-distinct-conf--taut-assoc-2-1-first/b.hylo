@@ -1,0 +1,5 @@
+//! stage:typing no-std
+trait P {
+  type X
+  fun f<U where U.X == U.X, U is P, U == Self>(x: U.X) -> X { x }
+}

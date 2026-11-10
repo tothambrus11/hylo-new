@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// GAP: a where clause is resolved from left to right.
+// Rust: `where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator` (flatten.rs).
+// EXPECTED: accepted.  OBSERVED: "type 'U' has no static member 'X'"; accepted when `U is P` comes first.
+trait P { type X }
+fun f<T, U where T == U.X, U is P>() {}

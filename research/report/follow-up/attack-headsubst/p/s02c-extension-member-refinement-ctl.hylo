@@ -1,0 +1,8 @@
+// Control of s02 with requirements on `P`. Correct verdict: rejected.
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) }
+}
+fun g<U, V where U is P, V is P>(u: U, v: V) { u.two(v.one()) }

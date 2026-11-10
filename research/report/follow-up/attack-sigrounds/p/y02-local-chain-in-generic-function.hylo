@@ -1,0 +1,15 @@
+// As y01 in a generic function whose where clause the local declarations use (but which does not
+// name them).
+trait P { type X }
+trait Q {}
+struct Foo<T> { public memberwise init }
+struct Bar<T> {}
+fun need<T where T is Q>(x: T) {}
+fun h<T where T is P>(y: Foo<T.X>) {
+  type LA = Foo<T.X>
+  extension LA { type M = Bar<T> }
+  type LB = LA.M
+  given LB is Q {}
+  given LA is Q {}
+  need(y)
+}

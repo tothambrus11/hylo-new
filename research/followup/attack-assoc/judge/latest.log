@@ -1,0 +1,330 @@
+eq38 e04-extension-twin-value.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e04-extension-twin-value.hylo        NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e04-extension-twin-value.hylo        NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e04-extension-twin-value.hylo        NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e04-extension-twin-value.hylo        NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e04-extension-twin-value.hylo        NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02-extension-twin.hylo              NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02c-extension-twin-ctl.hylo         NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 e02d-extension-no-equality.hylo      NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 c02-capture-value.hylo               FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq38 c02-capture-value.hylo               NEW                    reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 c02-capture-value.hylo               NEW+selfcheck          reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 c02-capture-value.hylo               NEW-assocsubst         reject   (2) no coercion from 'X' to 'S1'
+eq38 c02-capture-value.hylo               NEW-abstractstrict     reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 c02-capture-value.hylo               NEW-headsubst          reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 c01-capture.hylo                     FULL                   reject   (1) no coercion from 'X' to 'S0'
+eq38 c01-capture.hylo                     NEW                    reject   (1) no coercion from 'U' to 'S0'
+eq38 c01-capture.hylo                     NEW+selfcheck          reject   (1) no coercion from 'U' to 'S0'
+eq38 c01-capture.hylo                     NEW-assocsubst         reject   (1) no coercion from 'X' to 'S0'
+eq38 c01-capture.hylo                     NEW-abstractstrict     reject   (1) no coercion from 'U' to 'S0'
+eq38 c01-capture.hylo                     NEW-headsubst          reject   (1) no coercion from 'U' to 'S0'
+eq38 c01c-capture-ctl.hylo                FULL                   reject   (2) no coercion from 'X' to 'U'
+eq38 c01c-capture-ctl.hylo                NEW                    reject   (1) no coercion from 'U' to 'S0'
+eq38 c01c-capture-ctl.hylo                NEW+selfcheck          reject   (1) no coercion from 'U' to 'S0'
+eq38 c01c-capture-ctl.hylo                NEW-assocsubst         reject   (2) no coercion from 'X' to 'U'
+eq38 c01c-capture-ctl.hylo                NEW-abstractstrict     reject   (1) no coercion from 'U' to 'S0'
+eq38 c01c-capture-ctl.hylo                NEW-headsubst          reject   (1) no coercion from 'U' to 'S0'
+eq38 c01v-capture-valid.hylo              FULL                   reject   (1) no coercion from 'X' to 'U'
+eq38 c01v-capture-valid.hylo              NEW                    accept   
+eq38 c01v-capture-valid.hylo              NEW+selfcheck          accept   
+eq38 c01v-capture-valid.hylo              NEW-assocsubst         reject   (1) no coercion from 'X' to 'U'
+eq38 c01v-capture-valid.hylo              NEW-abstractstrict     accept   
+eq38 c01v-capture-valid.hylo              NEW-headsubst          accept   
+eq38 a04-nested-scopes.hylo               FULL                   accept   
+eq38 a04-nested-scopes.hylo               NEW                    reject   (1) cannot pass value of type 'Y' to parameter 'Y'
+eq38 a04-nested-scopes.hylo               NEW+selfcheck          reject   (1) cannot pass value of type 'Y' to parameter 'Y'
+eq38 a04-nested-scopes.hylo               NEW-assocsubst         accept   
+eq38 a04-nested-scopes.hylo               NEW-abstractstrict     reject   (1) cannot pass value of type 'Y' to parameter 'Y'
+eq38 a04-nested-scopes.hylo               NEW-headsubst          reject   (1) cannot pass value of type 'Y' to parameter 'Y'
+eq38 a04c-nested-scopes-ctl.hylo          FULL                   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a04c-nested-scopes-ctl.hylo          NEW                    reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a04c-nested-scopes-ctl.hylo          NEW+selfcheck          reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a04c-nested-scopes-ctl.hylo          NEW-assocsubst         reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a04c-nested-scopes-ctl.hylo          NEW-abstractstrict     reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a04c-nested-scopes-ctl.hylo          NEW-headsubst          reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq38 a02-term-witness-twin.hylo           FULL                   accept   
+eq38 a02-term-witness-twin.hylo           NEW                    reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a02-term-witness-twin.hylo           NEW+selfcheck          reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a02-term-witness-twin.hylo           NEW-assocsubst         accept   
+eq38 a02-term-witness-twin.hylo           NEW-abstractstrict     reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a02-term-witness-twin.hylo           NEW-headsubst          reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a03-value-crossing.hylo              FULL                   accept   
+eq38 a03-value-crossing.hylo              NEW                    reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a03-value-crossing.hylo              NEW+selfcheck          reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a03-value-crossing.hylo              NEW-assocsubst         accept   
+eq38 a03-value-crossing.hylo              NEW-abstractstrict     reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 a03-value-crossing.hylo              NEW-headsubst          reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq38 b11-refinement-twin-value.hylo       FULL                   accept   
+eq38 b11-refinement-twin-value.hylo       NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b11-refinement-twin-value.hylo       NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b11-refinement-twin-value.hylo       NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b11-refinement-twin-value.hylo       NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b11-refinement-twin-value.hylo       NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10-refinement-twin.hylo             FULL                   accept   
+eq38 b10-refinement-twin.hylo             NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10-refinement-twin.hylo             NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10-refinement-twin.hylo             NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10-refinement-twin.hylo             NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10-refinement-twin.hylo             NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10c-refinement-twin-ctl.hylo        NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     NEW-assocsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     NEW-abstractstrict     reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b10d-refinement-no-equality.hylo     NEW-headsubst          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 b12-launder-refinement.hylo          FULL                   accept   
+eq38 b12-launder-refinement.hylo          NEW                    reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12-launder-refinement.hylo          NEW+selfcheck          reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12-launder-refinement.hylo          NEW-assocsubst         reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12-launder-refinement.hylo          NEW-abstractstrict     accept   
+eq38 b12-launder-refinement.hylo          NEW-headsubst          reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12c-launder-refinement-ctl.hylo     FULL                   accept   
+eq38 b12c-launder-refinement-ctl.hylo     NEW                    reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12c-launder-refinement-ctl.hylo     NEW+selfcheck          reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12c-launder-refinement-ctl.hylo     NEW-assocsubst         reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 b12c-launder-refinement-ctl.hylo     NEW-abstractstrict     accept   
+eq38 b12c-launder-refinement-ctl.hylo     NEW-headsubst          reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq38 r22-method-on-assoc-value.hylo       FULL                   accept   
+eq38 r22-method-on-assoc-value.hylo       NEW                    accept   
+eq38 r22-method-on-assoc-value.hylo       NEW+selfcheck          accept   
+eq38 r22-method-on-assoc-value.hylo       NEW-assocsubst         accept   
+eq38 r22-method-on-assoc-value.hylo       NEW-abstractstrict     accept   
+eq38 r22-method-on-assoc-value.hylo       NEW-headsubst          accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  FULL                   accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  NEW                    accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  NEW+selfcheck          accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  NEW-assocsubst         accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  NEW-abstractstrict     accept   
+eq38 r22c-method-on-assoc-value-ctl.hylo  NEW-headsubst          accept   
+eq38 r01-nested-given.hylo                FULL                   accept   
+eq38 r01-nested-given.hylo                NEW                    accept   
+eq38 r01-nested-given.hylo                NEW+selfcheck          accept   
+eq38 r01-nested-given.hylo                NEW-assocsubst         accept   
+eq38 r01-nested-given.hylo                NEW-abstractstrict     accept   
+eq38 r01-nested-given.hylo                NEW-headsubst          accept   
+eq38 r01c-nested-given-ctl.hylo           FULL                   accept   
+eq38 r01c-nested-given-ctl.hylo           NEW                    accept   
+eq38 r01c-nested-given-ctl.hylo           NEW+selfcheck          accept   
+eq38 r01c-nested-given-ctl.hylo           NEW-assocsubst         accept   
+eq38 r01c-nested-given-ctl.hylo           NEW-abstractstrict     accept   
+eq38 r01c-nested-given-ctl.hylo           NEW-headsubst          accept   
+eq38 r13-nested-given-in-extension.hylo   FULL                   accept   
+eq38 r13-nested-given-in-extension.hylo   NEW                    accept   
+eq38 r13-nested-given-in-extension.hylo   NEW+selfcheck          accept   
+eq38 r13-nested-given-in-extension.hylo   NEW-assocsubst         accept   
+eq38 r13-nested-given-in-extension.hylo   NEW-abstractstrict     accept   
+eq38 r13-nested-given-in-extension.hylo   NEW-headsubst          accept   
+eq38 r25-nested-given-compound.hylo       FULL                   accept   
+eq38 r25-nested-given-compound.hylo       NEW                    accept   
+eq38 r25-nested-given-compound.hylo       NEW+selfcheck          accept   
+eq38 r25-nested-given-compound.hylo       NEW-assocsubst         accept   
+eq38 r25-nested-given-compound.hylo       NEW-abstractstrict     accept   
+eq38 r25-nested-given-compound.hylo       NEW-headsubst          accept   
+eq38 r05-trait-calls-extension.hylo       FULL                   accept   
+eq38 r05-trait-calls-extension.hylo       NEW                    accept   
+eq38 r05-trait-calls-extension.hylo       NEW+selfcheck          accept   
+eq38 r05-trait-calls-extension.hylo       NEW-assocsubst         accept   
+eq38 r05-trait-calls-extension.hylo       NEW-abstractstrict     accept   
+eq38 r05-trait-calls-extension.hylo       NEW-headsubst          reject   (1) cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'
+eq38 r07-other-self.hylo                  FULL                   accept   
+eq38 r07-other-self.hylo                  NEW                    accept   
+eq38 r07-other-self.hylo                  NEW+selfcheck          accept   
+eq38 r07-other-self.hylo                  NEW-assocsubst         accept   
+eq38 r07-other-self.hylo                  NEW-abstractstrict     accept   
+eq38 r07-other-self.hylo                  NEW-headsubst          accept   
+eq38 r26-extension-of-box-from-trait.hylo FULL                   accept   
+eq38 r26-extension-of-box-from-trait.hylo NEW                    accept   
+eq38 r26-extension-of-box-from-trait.hylo NEW+selfcheck          accept   
+eq38 r26-extension-of-box-from-trait.hylo NEW-assocsubst         accept   
+eq38 r26-extension-of-box-from-trait.hylo NEW-abstractstrict     accept   
+eq38 r26-extension-of-box-from-trait.hylo NEW-headsubst          reject   (1) cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'
+eq38 r11-conditional-given-on-assoc.hylo  FULL                   accept   
+eq38 r11-conditional-given-on-assoc.hylo  NEW                    accept   
+eq38 r11-conditional-given-on-assoc.hylo  NEW+selfcheck          accept   
+eq38 r11-conditional-given-on-assoc.hylo  NEW-assocsubst         accept   
+eq38 r11-conditional-given-on-assoc.hylo  NEW-abstractstrict     accept   
+eq38 r11-conditional-given-on-assoc.hylo  NEW-headsubst          reject   (1) no coercion from 'Q<Holder<(Self::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq38 r16-conditional-conformance-on-self. FULL                   reject   (1) cannot pass value of type '(Self::P).X' to parameter 'E'
+eq38 r16-conditional-conformance-on-self. NEW                    accept   
+eq38 r16-conditional-conformance-on-self. NEW+selfcheck          accept   
+eq38 r16-conditional-conformance-on-self. NEW-assocsubst         reject   (1) cannot pass value of type '(Self::P).X' to parameter 'E'
+eq38 r16-conditional-conformance-on-self. NEW-abstractstrict     accept   
+eq38 r16-conditional-conformance-on-self. NEW-headsubst          accept   
+eq38 a14d-member-alias-value.hylo         FULL                   accept   
+eq38 a14d-member-alias-value.hylo         NEW                    reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14d-member-alias-value.hylo         NEW+selfcheck          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14d-member-alias-value.hylo         NEW-assocsubst         accept   
+eq38 a14d-member-alias-value.hylo         NEW-abstractstrict     reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14d-member-alias-value.hylo         NEW-headsubst          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a15-alias-chain.hylo                 FULL                   reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq38 a15-alias-chain.hylo                 NEW                    reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a15-alias-chain.hylo                 NEW+selfcheck          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a15-alias-chain.hylo                 NEW-assocsubst         reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq38 a15-alias-chain.hylo                 NEW-abstractstrict     reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a15-alias-chain.hylo                 NEW-headsubst          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a13-struct-in-conformance.hylo       FULL                   accept   
+eq38 a13-struct-in-conformance.hylo       NEW                    accept   
+eq38 a13-struct-in-conformance.hylo       NEW+selfcheck          accept   
+eq38 a13-struct-in-conformance.hylo       NEW-assocsubst         accept   
+eq38 a13-struct-in-conformance.hylo       NEW-abstractstrict     accept   
+eq38 a13-struct-in-conformance.hylo       NEW-headsubst          accept   
+eq38 a14v-member-alias-valid.hylo         FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a14v-member-alias-valid.hylo         NEW                    accept   
+eq38 a14v-member-alias-valid.hylo         NEW+selfcheck          accept   
+eq38 a14v-member-alias-valid.hylo         NEW-assocsubst         reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a14v-member-alias-valid.hylo         NEW-abstractstrict     accept   
+eq38 a14v-member-alias-valid.hylo         NEW-headsubst          accept   
+eq38 a14c-member-alias-struct-only.hylo   FULL                   accept   
+eq38 a14c-member-alias-struct-only.hylo   NEW                    reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14c-member-alias-struct-only.hylo   NEW+selfcheck          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14c-member-alias-struct-only.hylo   NEW-assocsubst         reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14c-member-alias-struct-only.hylo   NEW-abstractstrict     reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a14c-member-alias-struct-only.hylo   NEW-headsubst          reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq38 a13c-struct-in-generic-struct.hylo   FULL                   accept   
+eq38 a13c-struct-in-generic-struct.hylo   NEW                    accept   
+eq38 a13c-struct-in-generic-struct.hylo   NEW+selfcheck          accept   
+eq38 a13c-struct-in-generic-struct.hylo   NEW-assocsubst         accept   
+eq38 a13c-struct-in-generic-struct.hylo   NEW-abstractstrict     accept   
+eq38 a13c-struct-in-generic-struct.hylo   NEW-headsubst          accept   
+eq38 a05e-param-not-in-head-lets.hylo     FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq38 a05e-param-not-in-head-lets.hylo     NEW                    accept   
+eq38 a05e-param-not-in-head-lets.hylo     NEW+selfcheck          accept   
+eq38 a05e-param-not-in-head-lets.hylo     NEW-assocsubst         reject   (2) no coercion from 'X' to 'S1'
+eq38 a05e-param-not-in-head-lets.hylo     NEW-abstractstrict     accept   
+eq38 a05e-param-not-in-head-lets.hylo     NEW-headsubst          accept   
+eq38 a05f-param-not-in-head-ctl.hylo      FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq38 a05f-param-not-in-head-ctl.hylo      NEW                    reject   (1) no coercion from 'S0' to 'S1'
+eq38 a05f-param-not-in-head-ctl.hylo      NEW+selfcheck          reject   (1) no coercion from 'S0' to 'S1'
+eq38 a05f-param-not-in-head-ctl.hylo      NEW-assocsubst         reject   (2) no coercion from 'X' to 'S1'
+eq38 a05f-param-not-in-head-ctl.hylo      NEW-abstractstrict     reject   (1) no coercion from 'S0' to 'S1'
+eq38 a05f-param-not-in-head-ctl.hylo      NEW-headsubst          reject   (1) no coercion from 'S0' to 'S1'
+eq38 a05-param-not-in-head.hylo           FULL                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq38 a05-param-not-in-head.hylo           NEW                    reject   (3) cannot pass value of type '#!' to parameter 'S1'
+eq38 a05-param-not-in-head.hylo           NEW+selfcheck          reject   (3) cannot pass value of type '#!' to parameter 'S1'
+eq38 a05-param-not-in-head.hylo           NEW-assocsubst         reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq38 a05-param-not-in-head.hylo           NEW-abstractstrict     reject   (3) cannot pass value of type '#!' to parameter 'S1'
+eq38 a05-param-not-in-head.hylo           NEW-headsubst          reject   (3) cannot pass value of type '#!' to parameter 'S1'
+eq38 a05b-param-not-in-head-pair.hylo     FULL                   accept   
+eq38 a05b-param-not-in-head-pair.hylo     NEW                    accept   
+eq38 a05b-param-not-in-head-pair.hylo     NEW+selfcheck          accept   
+eq38 a05b-param-not-in-head-pair.hylo     NEW-assocsubst         accept   
+eq38 a05b-param-not-in-head-pair.hylo     NEW-abstractstrict     accept   
+eq38 a05b-param-not-in-head-pair.hylo     NEW-headsubst          accept   
+eq38 a25-param-through-premise.hylo       FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a25-param-through-premise.hylo       NEW                    reject   (1) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a25-param-through-premise.hylo       NEW+selfcheck          reject   (1) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a25-param-through-premise.hylo       NEW-assocsubst         reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a25-param-through-premise.hylo       NEW-abstractstrict     reject   (1) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a25-param-through-premise.hylo       NEW-headsubst          reject   (1) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a26-param-through-trait-arg.hylo     FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq38 a26-param-through-trait-arg.hylo     NEW                    reject   (1) no coercion from 'S1' to 'S0'
+eq38 a26-param-through-trait-arg.hylo     NEW+selfcheck          reject   (1) no coercion from 'S1' to 'S0'
+eq38 a26-param-through-trait-arg.hylo     NEW-assocsubst         reject   (2) no coercion from 'X' to 'S1'
+eq38 a26-param-through-trait-arg.hylo     NEW-abstractstrict     reject   (1) no coercion from 'S1' to 'S0'
+eq38 a26-param-through-trait-arg.hylo     NEW-headsubst          reject   (1) no coercion from 'S1' to 'S0'
+eq38 a27-param-ambiguous-premise.hylo     FULL                   reject   (6) ambiguous use of 'get'
+eq38 a27-param-ambiguous-premise.hylo     NEW                    reject   (2) ambiguous use of 'get'
+eq38 a27-param-ambiguous-premise.hylo     NEW+selfcheck          reject   (2) ambiguous use of 'get'
+eq38 a27-param-ambiguous-premise.hylo     NEW-assocsubst         reject   (6) ambiguous use of 'get'
+eq38 a27-param-ambiguous-premise.hylo     NEW-abstractstrict     reject   (2) ambiguous use of 'get'
+eq38 a27-param-ambiguous-premise.hylo     NEW-headsubst          reject   (2) ambiguous use of 'get'
+eq38 a01-term-witness.hylo                FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a01-term-witness.hylo                NEW                    accept   
+eq38 a01-term-witness.hylo                NEW+selfcheck          accept   
+eq38 a01-term-witness.hylo                NEW-assocsubst         reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a01-term-witness.hylo                NEW-abstractstrict     accept   
+eq38 a01-term-witness.hylo                NEW-headsubst          accept   
+eq38 a17-recursive-conditional.hylo       FULL                   reject   (2) cannot pass value of type 'X' to parameter 'Box<S1>'
+eq38 a17-recursive-conditional.hylo       NEW                    reject   (1) cannot pass value of type 'Box<X>' to parameter 'Box<S0>'
+eq38 a17-recursive-conditional.hylo       NEW+selfcheck          reject   (1) cannot pass value of type 'Box<X>' to parameter 'Box<S0>'
+eq38 a17-recursive-conditional.hylo       NEW-assocsubst         reject   (2) cannot pass value of type 'X' to parameter 'Box<S1>'
+eq38 a17-recursive-conditional.hylo       NEW-abstractstrict     reject   (1) cannot pass value of type 'Box<X>' to parameter 'Box<S0>'
+eq38 a17-recursive-conditional.hylo       NEW-headsubst          reject   (1) cannot pass value of type 'Box<X>' to parameter 'Box<S0>'
+eq38 a22-bare-param-where.hylo            FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a22-bare-param-where.hylo            NEW                    reject   (2) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a22-bare-param-where.hylo            NEW+selfcheck          reject   (2) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a22-bare-param-where.hylo            NEW-assocsubst         reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq38 a22-bare-param-where.hylo            NEW-abstractstrict     reject   (2) cannot pass value of type 'Y' to parameter 'S1'
+eq38 a22-bare-param-where.hylo            NEW-headsubst          reject   (2) cannot pass value of type 'Y' to parameter 'S1'
+eq38 e05-extension-concrete.hylo          FULL                   reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq38 e05-extension-concrete.hylo          NEW                    accept   
+eq38 e05-extension-concrete.hylo          NEW+selfcheck          accept   
+eq38 e05-extension-concrete.hylo          NEW-assocsubst         reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq38 e05-extension-concrete.hylo          NEW-abstractstrict     accept   
+eq38 e05-extension-concrete.hylo          NEW-headsubst          reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq38 a18-pick.hylo                        FULL                   reject   (10) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq38 a18-pick.hylo                        NEW                    accept   
+eq38 a18-pick.hylo                        NEW+selfcheck          accept   
+eq38 a18-pick.hylo                        NEW-assocsubst         reject   (4) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq38 a18-pick.hylo                        NEW-abstractstrict     accept   
+eq38 a18-pick.hylo                        NEW-headsubst          reject   (10) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq38 e01-extension-from-generic.hylo      FULL                   reject   (2) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq38 e01-extension-from-generic.hylo      NEW                    accept   
+eq38 e01-extension-from-generic.hylo      NEW+selfcheck          accept   
+eq38 e01-extension-from-generic.hylo      NEW-assocsubst         accept   
+eq38 e01-extension-from-generic.hylo      NEW-abstractstrict     accept   
+eq38 e01-extension-from-generic.hylo      NEW-headsubst          reject   (2) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq38 r26b-extension-of-box-from-generic.h FULL                   reject   (1) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq38 r26b-extension-of-box-from-generic.h NEW                    accept   
+eq38 r26b-extension-of-box-from-generic.h NEW+selfcheck          accept   
+eq38 r26b-extension-of-box-from-generic.h NEW-assocsubst         accept   
+eq38 r26b-extension-of-box-from-generic.h NEW-abstractstrict     accept   
+eq38 r26b-extension-of-box-from-generic.h NEW-headsubst          reject   (1) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq38 k07-chain-2.hylo                     FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>
+eq38 k07-chain-2.hylo                     NEW                    accept   
+eq38 k07-chain-2.hylo                     NEW+selfcheck          accept   
+eq38 k07-chain-2.hylo                     NEW-assocsubst         reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>
+eq38 k07-chain-2.hylo                     NEW-abstractstrict     accept   
+eq38 k07-chain-2.hylo                     NEW-headsubst          reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>
+eq38 o02-dependent-premise.hylo           FULL                   reject   (1) no coercion from 'Q<Bag<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq38 o02-dependent-premise.hylo           NEW                    accept   
+eq38 o02-dependent-premise.hylo           NEW+selfcheck          accept   
+eq38 o02-dependent-premise.hylo           NEW-assocsubst         reject   (1) no coercion from 'Q<Bag<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq38 o02-dependent-premise.hylo           NEW-abstractstrict     accept   
+eq38 o02-dependent-premise.hylo           NEW-headsubst          accept   
+eq38 k08-chain-3.hylo                     FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq38 k08-chain-3.hylo                     NEW                    accept   
+eq38 k08-chain-3.hylo                     NEW+selfcheck          accept   
+eq38 k08-chain-3.hylo                     NEW-assocsubst         reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq38 k08-chain-3.hylo                     NEW-abstractstrict     accept   
+eq38 k08-chain-3.hylo                     NEW-headsubst          reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq38 k06-deep-chain.hylo                  FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq38 k06-deep-chain.hylo                  NEW                    accept   
+eq38 k06-deep-chain.hylo                  NEW+selfcheck          accept   
+eq38 k06-deep-chain.hylo                  NEW-assocsubst         reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq38 k06-deep-chain.hylo                  NEW-abstractstrict     accept   
+eq38 k06-deep-chain.hylo                  NEW-headsubst          reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq38 k09-chain-2-generic.hylo             FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U:
+eq38 k09-chain-2-generic.hylo             NEW                    accept   
+eq38 k09-chain-2-generic.hylo             NEW+selfcheck          accept   
+eq38 k09-chain-2-generic.hylo             NEW-assocsubst         accept   
+eq38 k09-chain-2-generic.hylo             NEW-abstractstrict     accept   
+eq38 k09-chain-2-generic.hylo             NEW-headsubst          reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U:
+eq38 k08b-chain-3-generic.hylo            FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq38 k08b-chain-3-generic.hylo            NEW                    accept   
+eq38 k08b-chain-3-generic.hylo            NEW+selfcheck          accept   
+eq38 k08b-chain-3-generic.hylo            NEW-assocsubst         accept   
+eq38 k08b-chain-3-generic.hylo            NEW-abstractstrict     accept   
+eq38 k08b-chain-3-generic.hylo            NEW-headsubst          reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'

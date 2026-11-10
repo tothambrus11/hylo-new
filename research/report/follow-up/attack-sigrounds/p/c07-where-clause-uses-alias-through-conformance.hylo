@@ -1,0 +1,12 @@
+// The where clause of a conformance uses an alias that is defined through another conformance.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given Int is Q {}
+type K = A.X
+given <T where K is Q> => Box<T> is R {}
+fun need<T where T is R>(x: T) {}
+fun use() { need(Box<A>()) }

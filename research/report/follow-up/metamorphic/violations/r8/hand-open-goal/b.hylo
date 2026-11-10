@@ -1,0 +1,5 @@
+trait R {}
+fun needR<T where T is R>() {}
+public fun main() { needR() }
+struct Nq {}
+given Nq is R {}

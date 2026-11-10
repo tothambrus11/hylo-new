@@ -1,0 +1,6 @@
+// The dependent requirement is written BEFORE the one it mentions. Either the declaration is
+// rejected (T.X cannot be resolved yet) or the program is accepted; no stuck premise.
+trait P { type X }
+trait Q {}
+fun f<T where T.X is Q, T is P>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

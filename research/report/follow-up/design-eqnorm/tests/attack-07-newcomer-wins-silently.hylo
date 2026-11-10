@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// ATTACK on stage 2 (eqclosure). expected: accepted at every stage, but the conformance selected
+// changes at stage 2, with no diagnostic.
+// Today only `Pair<Box<A>, D> is P` matches P<Pair<Box<B>, B>> (two parts: A ~ B and D ~ B).
+// `Pair<C, B> is P` does not: the pair (C, Box<B>) is refused by canDeriveCoercions. With the exact
+// test it matches with ONE part, finishes one layer earlier, and is selected instead. Unlike
+// rank-06 nothing is reported. If the two conformances had different associated types the program
+// would change meaning. To be listed in the differences of step 6 and shown to the designers.
+// currently: base accepted (summon.subgoals=19 summon.matches=385); FULL accepted (summon.subgoals=3 summon.matches=79 eqsolve.proved=2 index.fallback=1); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) accepted (summon.subgoals=1 summon.matches=7 eqsolve.proved=2 eqeager.matches=1). With selfcheck: no violation.
+trait P {}
+struct Box<T> { public memberwise init }
+struct Pair<X, Y> {}
+fun need<W where W is P>() {}
+fun f<A, B, C, D where Box<A> == C, A == B, D == B, Pair<Box<A>, D> is P, Pair<C, B> is P>() {
+  need<Pair<Box<B>, B>>()
+}

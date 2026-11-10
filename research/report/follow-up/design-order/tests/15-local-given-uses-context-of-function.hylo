@@ -1,0 +1,13 @@
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: A given declared in the body of a generic function uses the function's requirement. Checks that the signature of the enclosing function is computed before its usings are read.
+// Currently: base accepts it in all 6 orders tried; FULL accepts it in all 6 orders tried.
+trait P { type E }
+trait Q {}
+struct A {}
+struct Box<T> {}
+given A is P { type E = Int }
+fun need<T where T is Q>(x: T) {}
+fun f<T where T is P>(x: Box<T>) {
+  given Box<T> is Q {}
+  need(x)
+}

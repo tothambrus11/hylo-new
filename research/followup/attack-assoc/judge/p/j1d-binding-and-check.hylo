@@ -1,0 +1,13 @@
+// Judge, finding 1, variant D. The result of the extension member is bound with an annotation and
+// passed with an explicit type argument, instead of being passed to another member. Two errors expected.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun check<T>(x: T) {}
+fun f<V, W where V == W, V is P, W is P>(v: V, w: W) {
+  let x: V.X = w.one()
+  check<V.X>(w.one())
+}

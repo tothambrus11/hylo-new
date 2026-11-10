@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// CONTROL (not a gap): a conformance with a parameter that only an equality determines.
+// Rust: `impl<I, U> ... for Flatten<I> where I: Iterator<Item: IntoIterator<IntoIter = U, ...>>`: `U` is not in `Flatten<I>`.
+// EXPECTED and OBSERVED: accepted (FIX and FULL use the equality unifier: eqmgu.solved = 1).
+trait It { type Item }
+struct W<I> { public memberwise init }
+given <I, U where I is It, I.Item == U> => W<I> is It { type Item = U }
+fun needIt<T where T is It>() {}
+fun f<I, V where I is It, I.Item == V>() { needIt<W<I>>() }

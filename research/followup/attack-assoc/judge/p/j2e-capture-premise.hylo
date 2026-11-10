@@ -1,0 +1,16 @@
+// Judge, finding 2, variant E. The requirement has a context (U is Q) and the associated type is
+// defined through the premise of a conditional conformance (X = T.Y). b is a Box<U>, so
+// b.m<S0>(...) returns Box<U>.X, which is U.Y through the requirement of m, not S0.Y = S1. Invalid.
+trait Q { type Y }
+trait P { type X
+  fun get() -> X
+  fun m<U where U is Q>(b: Box<U>, c: Box<S0>) -> X {
+    let r: S1 = b.m<S0>(c, c)
+    return self.get() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given S0 is Q { type Y = S1 }
+given <T where T is Q> => Box<T> is P { type X = T.Y
+  fun get() -> T.Y { self.get() } }

@@ -1,0 +1,13 @@
+// Judge, finding 2, variant B. The captured parameter is inside the substituted type:
+// b is a Box<Box<U>>, so its X is Box<U>, and b.m<S0>(...) returns a Box<U>, not a Box<S0>. Invalid.
+trait P { type X
+  fun get() -> X
+  fun m<U>(b: Box<Box<U>>, c: Box<Box<S0>>) -> X {
+    let r: Box<S0> = b.m<S0>(c, c)
+    return self.get() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }

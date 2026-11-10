@@ -1,0 +1,33 @@
+// Tests: the leak of c01 without a higher-order function: the generic function is coerced to
+// a function type whose holes are left to inference.
+// Correct verdict: rejected (same crossing as c01), or rejected because `_` is not inferred.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+enum Opt<Z> { case none
+  case some(v: Z) }
+fun io<T where T is P>(t: T, x: Opt<T.X>) -> T.X {
+  match x {
+    case .none { }
+    case .some(let v) { t.put(v) }
+  }
+  return t.get()
+}
+fun outer() {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  let f: [](let A, let Opt<_>) -> _ = io
+  let v = f(A(), Opt.none)
+  if true {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    let g: [](let A, let Opt<_>) -> _ = io
+    let u = g(A(), Opt.some(v))
+  }
+}

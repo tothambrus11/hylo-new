@@ -1,0 +1,14 @@
+//! stage:typing no-std
+// expected: rejected at every stage. As keep-15, but the caller only knows T.Element == Other.
+// currently: base rejected (summon.subgoals=60090 summon.matches=1065099 summon.depthExhausted=1); FULL rejected (summon.subgoals=6 summon.matches=360 eqsolve.refuted=1 index.fallback=5). FULL says: type 'Box<T>' has no member 'first'
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Flag { public memberwise init }
+struct Other { public memberwise init }
+extension <T where T is Collection, T.Element == Flag> Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+fun g<T where T is Collection, T.Element == Other>(b: Box<T>) {
+  let f: Flag = b.first()
+}

@@ -1,0 +1,12 @@
+// Tests: a function whose where clause fixes its own projection (`T.X == S1`) calls itself with
+// explicit type arguments and an `S1`; the projection is both a parameter and the result.
+// Correct verdict: accepted (the existing checker accepts it: with explicit type arguments the
+// parameter is `T.X` through the function`s own requirement, and `S1` is coerced to it).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun rec<T where T is P, T.X == S1>(t: T, x: T.X) -> T.X { rec<T>(t, S1()) }

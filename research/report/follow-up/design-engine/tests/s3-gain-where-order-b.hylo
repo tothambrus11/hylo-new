@@ -1,0 +1,21 @@
+//! stage:typing no-std
+// expected (heightbound): accepted. The program is s3-keep-where-order-a.hylo with the two
+// requirements of `f` swapped. Now `C is P` is proved first and again below `S<C> is Q`:
+// 1 + 5 + 6 = 12 steps, over today's bound. The verdict depends on the order of a where clause.
+// currently: base rejected (subgoals=21 matches=1549 depthExhausted=1): no coercion from '(Q<S<C>>, P<C>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=21 matches=121 depthExhausted=1): no coercion from '(Q<S<C>>, P<C>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct C {}
+struct S<T> {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given <where A0 is P, A1 is P, A2 is P, A3 is P> => C is P {}
+given <T where T is P> => S<T> is Q {}
+fun f<where S<C> is Q, C is P>() {}
+public fun main() { f() }

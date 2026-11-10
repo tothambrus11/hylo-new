@@ -1,0 +1,5 @@
+// As l01 from a generic caller with the same requirements. Well typed.
+trait P { type X
+  fun get() -> X }
+fun f<T where T is P, T.X is P>(t: T) -> T.X.X { t.get().get() }
+fun g<U where U is P, U.X is P>(u: U) -> U.X.X { f<U>(u) }

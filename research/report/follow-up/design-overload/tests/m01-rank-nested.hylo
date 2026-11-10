@@ -1,0 +1,26 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (p: X, q: Y)
+// reason: Both (X, X) and (Y, Y) are clean. The set of the first argument is the outer one and
+//   only the outer set is ranked across both: p is X and q is Y. takeX and takeY make a wrong
+//   choice an error.
+// currently (base): accepted; solver.forks=12 solver.overloads=6
+// currently (FULL): accepted; solver.forks=12 solver.overloads=6
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> Y { Y() }
+  public static fun b() -> X { X() }
+}
+fun k<V>(x: V, y: V) -> V { x }
+fun takeX(x: X) {}
+fun takeY(y: Y) {}
+fun main() {
+  extension S {
+    static fun a() -> X { X() }
+    static fun b() -> Y { Y() }
+  }
+  let p = k(S.a(), S.b())
+  takeX(p)
+  let q = k(S.b(), S.a())
+  takeY(q)
+}

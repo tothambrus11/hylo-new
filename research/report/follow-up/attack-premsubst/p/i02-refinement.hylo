@@ -1,0 +1,6 @@
+// X is declared in P, the requirement is on the refining trait P2. Well typed.
+trait P { type X }
+trait P2 refines P {}
+trait Q {}
+fun f<T where T is P2, T.X is Q>() {}
+fun g<U where U is P2, U.X is Q>() { f<U>() }

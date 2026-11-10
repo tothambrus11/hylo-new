@@ -1,0 +1,5 @@
+// Ill-typed: two named givens whose subjects select a member through the other one by name.
+trait P { type X }
+struct A {}
+given wa: wb.X is P { type X = A }
+given wb: wa.X is P { type X = A }

@@ -1,0 +1,9 @@
+// The local binding `x` gets its type from a generic call; the given is inferred from it.
+struct A { public memberwise init }
+fun id<T>(t: sink T) -> T { t }
+fun need<where let u: A>() {}
+public fun main() {
+  let x = id(A())
+  given let g = x
+  need()
+}

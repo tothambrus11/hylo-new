@@ -1,0 +1,7 @@
+// The goal of r11 in a generic function instead of the trait body. Valid.
+trait Q {}
+trait P { type X }
+struct Holder<A> { public memberwise init }
+given <T where T is P> => Holder<T.X> is Q {}
+fun needQ<T where T is Q>() {}
+fun f<V where V is P>() { needQ<Holder<V.X>>() }

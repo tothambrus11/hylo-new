@@ -1,0 +1,6 @@
+struct A {}
+struct Box<T> { public memberwise init }
+type AB<T> = Box<T>
+fun takeAB(x: AB<A>) {}
+fun takeBox(x: Box<A>) {}
+fun m(b: Box<A>, c: AB<A>) { takeAB(b); takeBox(c) }

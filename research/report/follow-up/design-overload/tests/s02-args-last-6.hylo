@@ -1,0 +1,16 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 24 with `cleanfirst`
+// reason: The right candidate is the one declared last, the worst order for the existing
+//   solver.
+// currently (base): accepted; solver.forks=1932 solver.overloads=483
+// currently (FULL): accepted; solver.forks=1932 solver.overloads=483
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+fun f(x: A3) -> A3 { x }
+fun g(x0: A3, x1: A3, x2: A3, x3: A3, x4: A3, x5: A3) {}
+public fun main() { g(f(A3()), f(A3()), f(A3()), f(A3()), f(A3()), f(A3())) }

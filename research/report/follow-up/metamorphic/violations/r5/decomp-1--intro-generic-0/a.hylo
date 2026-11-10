@@ -1,0 +1,5 @@
+struct Box<T> { }
+fun check<T>(x: T) {}
+fun f<A, B where Box<A> == Box<B>>(x: Box<A>) {
+  check<Box<B>>(x)
+}

@@ -1,0 +1,9 @@
+trait P { type X }
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T, U where T is P, T.X == U>(x: T.X) { check<U>(x) }
+fun q1<T, U where T is P, T.X == U>(x: U) { check<T.X>(x) }
+fun q2<T, U where T is P, T.X == U>() { needEq<T.X, U>() }
+fun q3<T, U, V where T is P, T.X == U, U == V>(x: T.X) { check<V>(x) }
+fun q4<T, U where T is P>(x: T.X) { check<U>(x) }

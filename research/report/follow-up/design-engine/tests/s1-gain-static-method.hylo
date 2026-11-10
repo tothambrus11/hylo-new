@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// review: control for s1-attack-method: the same clause on a static function, whose type is not
+// adapted.
+// expected (premsubst, step 2): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=11 matches=800): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=147): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct S {
+  public memberwise init
+  public static fun m<T where T is P, T.X is Q>() {}
+}
+fun g<U where U is P, U.X is Q>() { S.m<U>() }

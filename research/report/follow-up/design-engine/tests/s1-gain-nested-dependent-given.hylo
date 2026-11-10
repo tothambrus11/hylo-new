@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// review: a conditional conformance with a dependent premise proves the first requirement of a
+// function with a dependent requirement; deferred premises of two levels are pending at once
+// (invariant I2). The projection goes through a generic conformance, so this needs assocsubst.
+// expected (premsubst + assocsubst): accepted, premsubst.stuck=0; (premsubst alone): rejected.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=9 released=3); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=13 matches=952): no coercion from '(P<Box<U>>, P<(Box<U>::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=7 matches=225): no coercion from '(P<Box<U>>, P<(Box<U>::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is P>() {}
+fun g<U where U is P, U.X is Q>() { f<Box<U>>() }

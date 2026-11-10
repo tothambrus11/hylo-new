@@ -1,0 +1,12 @@
+// Judge, finding 2, variant H, control: the called method m2 has its own parameter W, so nothing
+// can be captured. The same flow is rejected.
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public fun first() -> T { self.first() }
+  public fun m2<W>(c: Box<W>) -> T { self.first() }
+  public fun m<U>(b: Box<U>, c: Box<S0>) -> T {
+    takeS0(b.m2<S0>(c))
+    return self.first() } }
+fun takeS0(x: S0) {}

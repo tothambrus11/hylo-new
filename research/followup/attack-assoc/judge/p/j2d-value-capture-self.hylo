@@ -1,0 +1,18 @@
+// Judge, finding 2, variant D with concrete types and a guarded recursion. main calls m<S1>; inside,
+// b is a Box<S1> and b.m<S0>(c, c, false) returns b.me(), a Box<S1>, which is passed to takeBoxS0.
+trait P {
+  fun me() -> Self
+  fun m<U>(b: Box<U>, c: Box<S0>, again: Bool) -> Self {
+    if again { takeBoxS0(b.m<S0>(c, c, false)) }
+    return self.me() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  fun me() -> Box<T> { self.me() } }
+fun takeBoxS0(x: Box<S0>) {}
+public fun main() {
+  let a = Box<S1>(t: S1())
+  let r: Box<S1> = a.m<S1>(Box<S1>(t: S1()), Box<S0>(t: S0()), true)
+}

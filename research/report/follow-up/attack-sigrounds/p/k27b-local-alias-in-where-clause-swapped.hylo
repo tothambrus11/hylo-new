@@ -1,0 +1,12 @@
+// Expected after the change: accepted, and the same verdict as 27.
+// Reason: 27 with the two givens of the body swapped. The first given now enters `LA` before the signature of `f`; the hook of the first design then types the where clause of `f` inside `LA`, which the where clause needs: a cycle that the other order does not have.
+// Currently: base rejects it; FULL rejects it ("definition of 'LA' refers to itself").
+// Review (attack 3): with the design as first written (binary eq17, FULL+sigrounds) it is rejected ("definition of 'LA' refers to itself") while 27 is accepted.
+trait P { type X }
+trait Q {}
+struct Foo<T> {}
+fun f<T where T is P, LA is Q>() {
+  type LA = T.X
+  given Foo<LA> is P { type X = Int }
+  given Foo<T.X> is Q {}
+}

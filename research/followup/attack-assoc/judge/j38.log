@@ -1,0 +1,116 @@
+eq38 j1a-ext-of-box.hylo                  base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1a-ext-of-box.hylo                  FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1a-ext-of-box.hylo                  NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1a-ext-of-box.hylo                  NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1a-v-ext-of-box-valid.hylo          base                   accept   
+eq38 j1a-v-ext-of-box-valid.hylo          FULL                   accept   
+eq38 j1a-v-ext-of-box-valid.hylo          NEW                    accept   
+eq38 j1a-v-ext-of-box-valid.hylo          NEW+selfcheck          accept   
+eq38 j1b-c-one-param-direct.hylo          base                   reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1b-c-one-param-direct.hylo          FULL                   reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1b-c-one-param-direct.hylo          NEW                    reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1b-c-one-param-direct.hylo          NEW+selfcheck          reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1b-one-param-value.hylo             base                   reject   (1) cannot pass value of type '(T::P).X' to parameter '(A::P).X'
+eq38 j1b-one-param-value.hylo             FULL                   reject   (1) cannot pass value of type '(T::P).X' to parameter '(A::P).X'
+eq38 j1b-one-param-value.hylo             NEW                    reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1b-one-param-value.hylo             NEW+selfcheck          reject   (1) cannot pass value of type '(T::P).X' to parameter 'X'
+eq38 j1c-free-functions.hylo              base                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq38 j1c-free-functions.hylo              FULL                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq38 j1c-free-functions.hylo              NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1c-free-functions.hylo              NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1c-v-free-functions-valid.hylo      base                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq38 j1c-v-free-functions-valid.hylo      FULL                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq38 j1c-v-free-functions-valid.hylo      NEW                    accept   
+eq38 j1c-v-free-functions-valid.hylo      NEW+selfcheck          accept   
+eq38 j1d-binding-and-check.hylo           base                   reject   (2) no coercion from '(W::P).X' to '(V::P).X'
+eq38 j1d-binding-and-check.hylo           FULL                   reject   (2) no coercion from '(W::P).X' to '(V::P).X'
+eq38 j1d-binding-and-check.hylo           NEW                    reject   (2) no coercion from '(W::P).X' to '(V::P).X'
+eq38 j1d-binding-and-check.hylo           NEW+selfcheck          reject   (2) no coercion from '(W::P).X' to '(V::P).X'
+eq38 j1e-extension-alias.hylo             base                   accept   
+eq38 j1e-extension-alias.hylo             FULL                   accept   
+eq38 j1e-extension-alias.hylo             NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1e-extension-alias.hylo             NEW+selfcheck          reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1e-v-extension-alias-valid.hylo     base                   reject   (2) cannot pass value of type 'Elem' to parameter '(V::P).X'
+eq38 j1e-v-extension-alias-valid.hylo     FULL                   reject   (2) cannot pass value of type 'Elem' to parameter '(V::P).X'
+eq38 j1e-v-extension-alias-valid.hylo     NEW                    accept   
+eq38 j1e-v-extension-alias-valid.hylo     NEW+selfcheck          accept   
+eq38 j1f-ext-two-requirements.hylo        base                   reject   (1) type 'V' has no member 'two'
+eq38 j1f-ext-two-requirements.hylo        FULL                   reject   (1) type 'V' has no member 'two'
+eq38 j1f-ext-two-requirements.hylo        NEW                    reject   (1) cannot pass value of type '((W::P).X::P).X' to parameter '((V::P).X::P).X'
+eq38 j1f-ext-two-requirements.hylo        NEW+selfcheck          reject   (1) cannot pass value of type '((W::P).X::P).X' to parameter '((V::P).X::P).X'
+eq38 j1f-v-ext-two-requirements-valid.hyl base                   reject   (1) type 'V' has no member 'two'
+eq38 j1f-v-ext-two-requirements-valid.hyl FULL                   reject   (1) type 'V' has no member 'two'
+eq38 j1f-v-ext-two-requirements-valid.hyl NEW                    accept   
+eq38 j1f-v-ext-two-requirements-valid.hyl NEW+selfcheck          accept   
+eq38 j1v1-single-witness.hylo             base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1v1-single-witness.hylo             FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1v1-single-witness.hylo             NEW                    accept   
+eq38 j1v1-single-witness.hylo             NEW+selfcheck          accept   
+eq38 j1v1c-single-witness-direct.hylo     base                   accept   
+eq38 j1v1c-single-witness-direct.hylo     FULL                   accept   
+eq38 j1v1c-single-witness-direct.hylo     NEW                    accept   
+eq38 j1v1c-single-witness-direct.hylo     NEW+selfcheck          accept   
+eq38 j1v2-stated-equality.hylo            base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1v2-stated-equality.hylo            FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq38 j1v2-stated-equality.hylo            NEW                    accept   
+eq38 j1v2-stated-equality.hylo            NEW+selfcheck          accept   
+eq38 j1v2c-stated-equality-direct.hylo    base                   accept   
+eq38 j1v2c-stated-equality-direct.hylo    FULL                   accept   
+eq38 j1v2c-stated-equality-direct.hylo    NEW                    accept   
+eq38 j1v2c-stated-equality-direct.hylo    NEW+selfcheck          accept   
+eq38 j2a-capture-terminating.hylo         base                   reject   (2) no coercion from 'X' to 'S1'
+eq38 j2a-capture-terminating.hylo         FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq38 j2a-capture-terminating.hylo         NEW                    reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 j2a-capture-terminating.hylo         NEW+selfcheck          reject   (1) cannot pass value of type 'U' to parameter 'S0'
+eq38 j2b-capture-nested.hylo              base                   reject   (1) no coercion from 'X' to 'Box<S0>'
+eq38 j2b-capture-nested.hylo              FULL                   reject   (1) no coercion from 'X' to 'Box<S0>'
+eq38 j2b-capture-nested.hylo              NEW                    reject   (1) no coercion from 'Box<U>' to 'Box<S0>'
+eq38 j2b-capture-nested.hylo              NEW+selfcheck          reject   (1) no coercion from 'Box<U>' to 'Box<S0>'
+eq38 j2b-v-capture-nested-valid.hylo      base                   reject   (1) no coercion from 'X' to 'Box<U>'
+eq38 j2b-v-capture-nested-valid.hylo      FULL                   reject   (1) no coercion from 'X' to 'Box<U>'
+eq38 j2b-v-capture-nested-valid.hylo      NEW                    accept   
+eq38 j2b-v-capture-nested-valid.hylo      NEW+selfcheck          accept   
+eq38 j2c-capture-swap.hylo                base                   reject   (1) no coercion from 'X' to 'Pair<W, U>'
+eq38 j2c-capture-swap.hylo                FULL                   reject   (1) no coercion from 'X' to 'Pair<W, U>'
+eq38 j2c-capture-swap.hylo                NEW                    reject   (1) no coercion from 'Pair<U, W>' to 'Pair<W, U>'
+eq38 j2c-capture-swap.hylo                NEW+selfcheck          reject   (1) no coercion from 'Pair<U, W>' to 'Pair<W, U>'
+eq38 j2c-v-capture-swap-valid.hylo        base                   reject   (1) no coercion from 'X' to 'Pair<U, W>'
+eq38 j2c-v-capture-swap-valid.hylo        FULL                   reject   (1) no coercion from 'X' to 'Pair<U, W>'
+eq38 j2c-v-capture-swap-valid.hylo        NEW                    accept   
+eq38 j2c-v-capture-swap-valid.hylo        NEW+selfcheck          accept   
+eq38 j2d-capture-self.hylo                base                   accept   
+eq38 j2d-capture-self.hylo                FULL                   accept   
+eq38 j2d-capture-self.hylo                NEW                    reject   (1) no coercion from 'Box<U>' to 'Box<S0>'
+eq38 j2d-capture-self.hylo                NEW+selfcheck          reject   (1) no coercion from 'Box<U>' to 'Box<S0>'
+eq38 j2d-v-capture-self-valid.hylo        base                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2d-v-capture-self-valid.hylo        FULL                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2d-v-capture-self-valid.hylo        NEW                    accept   
+eq38 j2d-v-capture-self-valid.hylo        NEW+selfcheck          accept   
+eq38 j2d-value-capture-self.hylo          base                   accept   
+eq38 j2d-value-capture-self.hylo          FULL                   accept   
+eq38 j2d-value-capture-self.hylo          NEW                    reject   (1) cannot pass value of type 'Box<U>' to parameter 'Box<S0>'
+eq38 j2d-value-capture-self.hylo          NEW+selfcheck          reject   (1) cannot pass value of type 'Box<U>' to parameter 'Box<S0>'
+eq38 j2e-capture-premise.hylo             base                   reject   (1) no coercion from 'X' to 'S1'
+eq38 j2e-capture-premise.hylo             FULL                   reject   (1) no coercion from 'X' to 'S1'
+eq38 j2e-capture-premise.hylo             NEW                    reject   (1) no coercion from '(U::Q).Y' to 'S1'
+eq38 j2e-capture-premise.hylo             NEW+selfcheck          reject   (1) no coercion from '(U::Q).Y' to 'S1'
+eq38 j2e-v-capture-premise-valid.hylo     base                   reject   (1) no coercion from 'X' to '(U::Q).Y'
+eq38 j2e-v-capture-premise-valid.hylo     FULL                   reject   (1) no coercion from 'X' to '(U::Q).Y'
+eq38 j2e-v-capture-premise-valid.hylo     NEW                    accept   
+eq38 j2e-v-capture-premise-valid.hylo     NEW+selfcheck          accept   
+eq38 j2f-capture-struct-method.hylo       base                   accept   
+eq38 j2f-capture-struct-method.hylo       FULL                   accept   
+eq38 j2f-capture-struct-method.hylo       NEW                    accept   
+eq38 j2f-capture-struct-method.hylo       NEW+selfcheck          accept   
+eq38 j2f-v-capture-struct-method-valid.hy base                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2f-v-capture-struct-method-valid.hy FULL                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2f-v-capture-struct-method-valid.hy NEW                    reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2f-v-capture-struct-method-valid.hy NEW+selfcheck          reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2g-capture-extension-method.hylo    base                   accept   
+eq38 j2g-capture-extension-method.hylo    FULL                   accept   
+eq38 j2g-capture-extension-method.hylo    NEW                    accept   
+eq38 j2g-capture-extension-method.hylo    NEW+selfcheck          accept   
+eq38 j2g-v-capture-extension-method-valid base                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2g-v-capture-extension-method-valid FULL                   reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2g-v-capture-extension-method-valid NEW                    reject   (1) no coercion from 'Box<S0>' to 'Box<U>'
+eq38 j2g-v-capture-extension-method-valid NEW+selfcheck          reject   (1) no coercion from 'Box<S0>' to 'Box<U>'

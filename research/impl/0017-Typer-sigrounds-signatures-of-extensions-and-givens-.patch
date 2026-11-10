@@ -1,7 +1,7 @@
 From cdb3415dc6f6d0db46de0192aeb41eb68d3fe880 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 15:20:22 +0000
-Subject: [PATCH 17/27] Typer: sigrounds (signatures of extensions and givens
+Subject: [PATCH 17/30] Typer: sigrounds (signatures of extensions and givens
  computed in rounds), assocsubst (instantiate associated types of generic
  conformances)
 

@@ -1,0 +1,8 @@
+// abstractstrict: the requirements of P reached through a refinement R. w.get() is a W.X through
+// the witness of W is R, v.put expects a V.X through the witness of V is R. V == W does not make
+// them equal (negative/associated-type-inequality.hylo).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+trait R refines P {}
+fun g<V, W where V == W, V is R, W is R>(v: V, w: W) { v.put(w.get()) }

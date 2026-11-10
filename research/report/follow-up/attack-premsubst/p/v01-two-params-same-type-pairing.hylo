@@ -1,0 +1,23 @@
+// f<A, A>() with two conformances of A: X = B (B is Q only) and X = C (C is R only).
+// The only consistent instantiation passes the first conformance for T and the second for U.
+// `U is P` may also be proved by the pending hypothesis `T is P` (same type); that derivation
+// must fail (no X is both Q and R). Acceptable: accepted with (first, second) or rejected as
+// ambiguous at `A is P`. The body uses both requirements on values (check the pairing by trace).
+trait P { type X
+  fun get() -> X }
+trait Q { fun q() }
+trait R { fun r() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given B is Q { fun q() {} }
+given C is R { fun r() {} }
+given A is P { type X = B
+  fun get() -> B { B() } }
+given A is P { type X = C
+  fun get() -> C { C() } }
+fun f<T, U where T is P, U is P, T.X is Q, U.X is R>(t: T, u: U) {
+  t.get().q()
+  u.get().r()
+}
+public fun main() { f<A, A>(A(), A()) }

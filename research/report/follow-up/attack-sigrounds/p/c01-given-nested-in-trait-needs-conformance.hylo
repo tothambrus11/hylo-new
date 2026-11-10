@@ -1,0 +1,9 @@
+// A given nested in a trait whose subject is an associated type selected through a conformance of
+// the module; used through the trait's requirement.
+trait P { type E }
+trait Q {}
+struct A {}
+given A is P { type E = Int }
+trait R { given A.E is Q }
+fun need<T where T is Q>(x: T) {}
+fun f<T where T is R>(t: T, x: Int) { need(x) }

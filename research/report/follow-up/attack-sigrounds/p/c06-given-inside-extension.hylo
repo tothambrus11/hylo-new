@@ -1,0 +1,13 @@
+// A conformance declared in the body of an extension, used by a member alias that another
+// declaration reads.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+extension A {
+  given B is P { type X = Int }
+  type M = B.X
+}
+given A.M is Q {}
+fun need<T where T is Q>(x: T) {}
+fun use(x: Int) { need(x) }

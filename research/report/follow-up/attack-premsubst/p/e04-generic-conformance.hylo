@@ -1,0 +1,10 @@
+// X through a generic conformance: Box<T>.X = T. Well typed: Box<B>.X = B is Q.
+trait P { type X }
+trait Q {}
+struct B {}
+struct C {}
+struct Box<T> {}
+given B is Q {}
+given <T> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<Box<B>>() }

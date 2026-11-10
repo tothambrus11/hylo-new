@@ -1,0 +1,13 @@
+// Control of c09b: the nested function calls a copy of f (k) with the same type arguments.
+// ILL TYPED for the same reason (TX is the T.X of f's requirement; inner's facts are about the
+// T.X of inner's requirement). Its rejection shows that inner's `T.X is R` is not a fact about TX.
+trait P { type X }
+trait Q {}
+trait R {}
+fun k<T, V where T is P, T.X is Q, V is R>() {}
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  type TX = T.X
+  fun inner<where T is P, T.X is Q, T.X is R>() {
+    k<T, TX>()
+  }
+}

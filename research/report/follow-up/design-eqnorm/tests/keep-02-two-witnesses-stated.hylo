@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected: accepted at every stage (compiler test positive/associated-type-equality, f2). Resolving
+// `P<T>` must keep choosing the given spelled `T is P` over `U is P` seen through T == U.
+// currently: base accepted (summon.subgoals=36 summon.matches=1506); FULL accepted (summon.subgoals=6 summon.matches=300 eqsolve.proved=2 index.fallback=4).
+trait P { type X }
+fun check<T>(x: T) {}
+fun f2<T, U where T == U, T is P, U is P, T.X == U.X>(x: U.X) {
+  check<T.X>(x)
+  let y: T.X = x
+}

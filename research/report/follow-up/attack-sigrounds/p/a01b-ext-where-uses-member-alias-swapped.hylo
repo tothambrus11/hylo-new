@@ -1,0 +1,12 @@
+// a01 with its last two declarations swapped.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> {}
+struct Foo<T> {}
+given A is P { type X = Int }
+given <U> => Foo<U> is Q {}
+type BA = Box<A>
+given BA.LA is R {}
+extension <T where T is P, Foo<LA> is Q> Box<T> { type LA = T.X }

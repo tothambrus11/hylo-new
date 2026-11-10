@@ -1,0 +1,14 @@
+// abstractstrict + assocsubst: the nested given of r01 at an instance of a generic conformance. Valid.
+trait Q { fun q() }
+trait P { type X ; given X is Q
+  fun get() -> X }
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given S0 is Q { fun q() {} }
+given <T where T is Q> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }
+fun needQ<T where T is Q>() {}
+type B0 = Box<S0>
+fun f(b: Box<S0>) { b.get().q()
+  needQ<B0.X>() }

@@ -1,7 +1,7 @@
 From 152ac34fc609e3b29cd09b6e9e9d28752e4ea0e7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 21:25:08 +0000
-Subject: [PATCH 06/27] TypeStore: add typevec experiment (contiguous storage
+Subject: [PATCH 06/30] TypeStore: add typevec experiment (contiguous storage
  for projections)
 
 TypeStore never removes types, so a tree inserted into the StableSet lands

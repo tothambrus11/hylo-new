@@ -1,0 +1,5 @@
+fun conv<A, B where A == B>(x: A) -> B { x }
+trait P {
+  type X
+  fun cast<T, U where T == Self, T is P, T.X == U>(x: U) -> X { conv<U, X>(x) }
+}

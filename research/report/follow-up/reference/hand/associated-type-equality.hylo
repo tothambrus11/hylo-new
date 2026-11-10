@@ -1,0 +1,9 @@
+trait P { type X }
+struct V { public memberwise init }
+given V is P { type X = V }
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T where T == V>(x: T.X) { check<V>(x) }
+fun q1<T, U where T == U, T is P>(x: U.X) { check<T.X>(x) }
+fun q2<T, U where T == U, T is P, U is P, T.X == U.X>(x: U.X) { check<T.X>(x) }

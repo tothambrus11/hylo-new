@@ -1,0 +1,44 @@
+{
+ "file": "research/workloads/chain8.hylo",
+ "rel": "r4",
+ "vid": "taut-ground:3:0:last",
+ "kind": "taut-ground",
+ "desc": "`Z == Z` added last to `given Z is P`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<S<S<S<S<S<S<S<S<Z>>>>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  }
+ }
+}

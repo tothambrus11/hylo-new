@@ -1,0 +1,60 @@
+From 09bb6205c2829e2ad28a1eb49154b6a5afb16ab7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 18:14:43 +0000
+Subject: [PATCH 28/30] Typer: dedup (two derivations of the same witness are
+ one result)
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 16 +++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  6 ++++++
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index c1d99d1..f5ae64b 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -5507,7 +5507,21 @@ public struct Typer {
+       lastResolutionExhaustedDepth = true
+     }
+ 
+-    let result = done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
++    var result = done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
++    if TyperExperiments.dedup && (result.count > 1) {
++      // Derivations that differ only in the order of their steps build the same witness.
++      var unique: [SummonResult] = []
++      var witnesses: [WitnessExpression] = []
++      for r in result {
++        let w = program.types.reify(r.witness, applying: r.substitutions, withVariables: .kept)
++        if w.hasVariable || !witnesses.contains(where: { (x) in sameValue(x, w) }) {
++          unique.append(r)
++          witnesses.append(w)
++        }
++      }
++      if unique.count < result.count { TyperCounters.bump("dedup.merged") }
++      result = unique
++    }
+     if TyperExperiments.census && (selfCheck == .none), let q = threads.first?.queried {
+       let h = program.types.head(q)
+       let kind =
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 032da38..a2d03e0 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -178,6 +178,12 @@ public enum TyperExperiments {
+   /// `b: A<K>` written through aliases.
+   nonisolated(unsafe) public static var aliasargs: Bool = enabled.contains("aliasargs")
+ 
++  /// SEMANTIC FIX: two derivations of the same witness are one result. Without it a goal is
++  /// ambiguous when a requirement can be proved both by a given and by a pending requirement of
++  /// the same type (`f<A, A>()` for `f<T, U where T is P, U is P, …>`), and the verdict then
++  /// depends on the order of the where clause.
++  nonisolated(unsafe) public static var dedup: Bool = enabled.contains("dedup")
++
+   /// SEMANTIC FIX: the memoized result of an implicit resolution is not used while a given is
+   /// deliberately hidden (a conformance being checked against the traits it refines, a
+   /// requirement of a where clause being typed). Without it a conformance satisfies the trait it
+-- 
+2.43.0
+

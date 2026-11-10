@@ -1,0 +1,11 @@
+// As k01 with an alias of a generic type and a generic conformance. Well typed: BoxB = Box<B>,
+// Box<T>.X = T, B is Q.
+trait P { type X }
+trait Q {}
+struct B {}
+struct Box<T> {}
+given B is Q {}
+given <T> => Box<T> is P { type X = T }
+type BoxB = Box<B>
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<BoxB>() }

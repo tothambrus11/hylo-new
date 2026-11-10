@@ -1,0 +1,5 @@
+// The call of r26 from a generic function instead of the trait body. Valid.
+struct Box<T> { public memberwise init }
+trait P { type X }
+extension <T where T is P> Box<T> { fun store(x: T.X) {} }
+fun f<V where V is P>(b: Box<V>, x: V.X) { b.store(x) }

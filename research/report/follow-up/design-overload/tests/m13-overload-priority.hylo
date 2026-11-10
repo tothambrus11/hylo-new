@@ -1,0 +1,37 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: Tests/CompilerTests/positive/overload-priority.hylo, the compiler test that the
+//   earlier attempt changed.
+// currently (base): accepted; solver.forks=6 solver.overloads=3
+// currently (FULL): accepted; solver.forks=6 solver.overloads=3
+//! stage:typing no-std
+
+struct A<T> { public memberwise init }
+
+trait P {
+  type X
+  fun f() -> X
+}
+
+extension A<Void> {
+  fun f() { () }
+}
+
+given A<Void> is P {
+  type X = A<Void>
+  fun f() -> X { A() }
+}
+
+fun use(x: Void) {}
+
+fun main() {
+  let a = A<Void>()
+
+  // `x: Void` because members inherited by extension have priority for
+  // witnesses of equal size.
+  let x = a.f()
+  use(x)
+
+  // Members inherited by conformance can be selected with an expected type.
+  let y: A<Void> = a.f()
+  let z = a.f() as A<Void>
+}

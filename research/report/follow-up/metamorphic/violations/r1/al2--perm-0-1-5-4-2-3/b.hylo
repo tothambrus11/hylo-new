@@ -1,0 +1,5 @@
+struct A {}
+struct B {}
+type X = A.Me
+extension X { type Me = Int }
+extension A { type Me = B }

@@ -1,0 +1,18 @@
+// A released equality premise that is FALSE (C == B) is a hypothesis while the requirement
+// released after it (W<T.X> is R) is proved. Both calls are ILL TYPED (two errors expected):
+// f<A> needs C == B; need<W<C>> needs W<C> is R, and only W<B> is R. Nothing proved under the false
+// hypothesis may survive in a cache and make the second call acceptable.
+trait P { type X }
+trait R {}
+struct A {}
+struct B {}
+struct C {}
+struct W<T> {}
+given A is P { type X = C }
+given W<B> is R {}
+fun f<T where T is P, T.X == B, W<T.X> is R>() {}
+fun need<T where T is R>() {}
+public fun main() {
+  f<A>()
+  need<W<C>>()
+}

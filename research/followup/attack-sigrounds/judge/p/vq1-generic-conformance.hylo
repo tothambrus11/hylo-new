@@ -1,0 +1,9 @@
+// Judge, variant Q1: q04 with a generic conformance. Ill-typed: nothing provides Box<T> is Base.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is Derived { public fun g() { self.f() } }
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+public fun main() { callDerived(Box<A>()) }

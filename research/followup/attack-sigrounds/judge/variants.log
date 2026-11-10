@@ -1,0 +1,475 @@
+va1a-member-through-alias.hylo     eq22 base              reject                                   [1] definition of 'AL' refers to itself
+va1a-member-through-alias.hylo     eq22 FULL              reject                                   [1] definition of 'AL' refers to itself
+va1a-member-through-alias.hylo     eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+va1a-member-through-alias.hylo     eq22 NOSIG22           reject                                   [1] definition of 'AL' refers to itself
+va1a-member-through-alias.hylo     eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+va1a-member-through-alias.hylo     eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    VIOLATION sigrounds: the stable round computes another table in reverse order
+va1a-member-through-alias.hylo     eq38 FULL              reject                                   [1] definition of 'AL' refers to itself
+va1a-member-through-alias.hylo     eq38 NOSIG             reject                                   [1] definition of 'AL' refers to itself
+va1a-member-through-alias.hylo     eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va1a-member-through-alias.hylo     eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va1b-member-through-alias-swapped. eq22 base              reject                                   [1] definition of 'AL' refers to itself
+va1b-member-through-alias-swapped. eq22 FULL              reject                                   [1] definition of 'AL' refers to itself
+va1b-member-through-alias-swapped. eq22 FULL+sigrounds    reject    nodes=3 restores=2 rounds=3 unstable=1 [3] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va1b-member-through-alias-swapped. eq22 NOSIG22           reject                                   [1] definition of 'AL' refers to itself
+va1b-member-through-alias-swapped. eq22 NEW22             reject    nodes=3 restores=2 rounds=3 unstable=1 [3] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va1b-member-through-alias-swapped. eq22 NEW22+selfcheck   reject    nodes=3 restores=2 rounds=3 unstable=1 [3] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va1b-member-through-alias-swapped. eq38 FULL              reject                                   [1] definition of 'AL' refers to itself
+va1b-member-through-alias-swapped. eq38 NOSIG             reject                                   [1] definition of 'AL' refers to itself
+va1b-member-through-alias-swapped. eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va1b-member-through-alias-swapped. eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va2a-extension-of-member.hylo      eq22 base              accept                                   
+va2a-extension-of-member.hylo      eq22 FULL              accept                                   
+va2a-extension-of-member.hylo      eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+va2a-extension-of-member.hylo      eq22 NOSIG22           accept                                   
+va2a-extension-of-member.hylo      eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+va2a-extension-of-member.hylo      eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    VIOLATION sigrounds: the stable round computes another table in reverse order
+va2a-extension-of-member.hylo      eq38 FULL              accept                                   
+va2a-extension-of-member.hylo      eq38 NOSIG             accept                                   
+va2a-extension-of-member.hylo      eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va2a-extension-of-member.hylo      eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va2b-extension-of-member-swapped.h eq22 base              accept                                   
+va2b-extension-of-member-swapped.h eq22 FULL              accept                                   
+va2b-extension-of-member-swapped.h eq22 FULL+sigrounds    reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va2b-extension-of-member-swapped.h eq22 NOSIG22           accept                                   
+va2b-extension-of-member-swapped.h eq22 NEW22             reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va2b-extension-of-member-swapped.h eq22 NEW22+selfcheck   reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va2b-extension-of-member-swapped.h eq38 FULL              accept                                   
+va2b-extension-of-member-swapped.h eq38 NOSIG             accept                                   
+va2b-extension-of-member-swapped.h eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va2b-extension-of-member-swapped.h eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va3-two-owners-012.hylo            eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va3-two-owners-012.hylo            eq22 FULL              reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-012.hylo            eq22 FULL+sigrounds    reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-012.hylo            eq22 NOSIG22           reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-012.hylo            eq22 NEW22             reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-012.hylo            eq22 NEW22+selfcheck   reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-012.hylo            eq38 FULL              reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-012.hylo            eq38 NOSIG             reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-012.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-012.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va3-two-owners-021.hylo            eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va3-two-owners-021.hylo            eq22 FULL              reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-021.hylo            eq22 FULL+sigrounds    reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-021.hylo            eq22 NOSIG22           reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-021.hylo            eq22 NEW22             reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-021.hylo            eq22 NEW22+selfcheck   reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'B' has no static member 'LB'
+va3-two-owners-021.hylo            eq38 FULL              reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-021.hylo            eq38 NOSIG             reject                                   [2] type 'A' has no static member 'LA'
+                                                                      circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension may affect
+va3-two-owners-021.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-021.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va3-two-owners-102.hylo            eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va3-two-owners-102.hylo            eq22 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-102.hylo            eq22 FULL+sigrounds    accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-102.hylo            eq22 NOSIG22           reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-102.hylo            eq22 NEW22             accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-102.hylo            eq22 NEW22+selfcheck   accept    nodes=5 ownerFirst=1 restores=3 rounds=5 VIOLATION sigrounds: the stable round computes another table in reverse order
+va3-two-owners-102.hylo            eq38 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-102.hylo            eq38 NOSIG             reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-102.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-102.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va3-two-owners-120.hylo            eq22 base              accept                                   
+va3-two-owners-120.hylo            eq22 FULL              accept                                   
+va3-two-owners-120.hylo            eq22 FULL+sigrounds    reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-120.hylo            eq22 NOSIG22           accept                                   
+va3-two-owners-120.hylo            eq22 NEW22             reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-120.hylo            eq22 NEW22+selfcheck   reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-120.hylo            eq38 FULL              accept                                   
+va3-two-owners-120.hylo            eq38 NOSIG             accept                                   
+va3-two-owners-120.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-120.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va3-two-owners-201.hylo            eq22 base              accept                                   
+va3-two-owners-201.hylo            eq22 FULL              accept                                   
+va3-two-owners-201.hylo            eq22 FULL+sigrounds    reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-201.hylo            eq22 NOSIG22           accept                                   
+va3-two-owners-201.hylo            eq22 NEW22             reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-201.hylo            eq22 NEW22+selfcheck   reject    nodes=5 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va3-two-owners-201.hylo            eq38 FULL              accept                                   
+va3-two-owners-201.hylo            eq38 NOSIG             accept                                   
+va3-two-owners-201.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-201.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va3-two-owners-210.hylo            eq22 base              accept                                   
+va3-two-owners-210.hylo            eq22 FULL              accept                                   
+va3-two-owners-210.hylo            eq22 FULL+sigrounds    reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-210.hylo            eq22 NOSIG22           accept                                   
+va3-two-owners-210.hylo            eq22 NEW22             reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-210.hylo            eq22 NEW22+selfcheck   reject    nodes=5 ownerFirst=1 restores=3 rounds=4 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'B' has no static member 'LB'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va3-two-owners-210.hylo            eq38 FULL              accept                                   
+va3-two-owners-210.hylo            eq38 NOSIG             accept                                   
+va3-two-owners-210.hylo            eq38 NEW               accept    nodes=5 restores=3 rounds=4    
+va3-two-owners-210.hylo            eq38 NEW+selfcheck     accept    nodes=5 restores=3 rounds=8    
+va4a-entered-from-where-clause-of- eq22 base              accept                                   
+va4a-entered-from-where-clause-of- eq22 FULL              accept                                   
+va4a-entered-from-where-clause-of- eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+va4a-entered-from-where-clause-of- eq22 NOSIG22           accept                                   
+va4a-entered-from-where-clause-of- eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+va4a-entered-from-where-clause-of- eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    VIOLATION sigrounds: the stable round computes another table in reverse order
+va4a-entered-from-where-clause-of- eq38 FULL              accept                                   
+va4a-entered-from-where-clause-of- eq38 NOSIG             accept                                   
+va4a-entered-from-where-clause-of- eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va4a-entered-from-where-clause-of- eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va4b-entered-from-where-clause-of- eq22 base              accept                                   
+va4b-entered-from-where-clause-of- eq22 FULL              accept                                   
+va4b-entered-from-where-clause-of- eq22 FULL+sigrounds    reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va4b-entered-from-where-clause-of- eq22 NOSIG22           accept                                   
+va4b-entered-from-where-clause-of- eq22 NEW22             reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va4b-entered-from-where-clause-of- eq22 NEW22+selfcheck   reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va4b-entered-from-where-clause-of- eq38 FULL              accept                                   
+va4b-entered-from-where-clause-of- eq38 NOSIG             accept                                   
+va4b-entered-from-where-clause-of- eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va4b-entered-from-where-clause-of- eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va5a-entered-from-where-clause-of- eq22 base              accept                                   
+va5a-entered-from-where-clause-of- eq22 FULL              accept                                   
+va5a-entered-from-where-clause-of- eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+va5a-entered-from-where-clause-of- eq22 NOSIG22           accept                                   
+va5a-entered-from-where-clause-of- eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+va5a-entered-from-where-clause-of- eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    VIOLATION sigrounds: the stable round computes another table in reverse order
+va5a-entered-from-where-clause-of- eq38 FULL              accept                                   
+va5a-entered-from-where-clause-of- eq38 NOSIG             accept                                   
+va5a-entered-from-where-clause-of- eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va5a-entered-from-where-clause-of- eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va5b-entered-from-where-clause-of- eq22 base              accept                                   
+va5b-entered-from-where-clause-of- eq22 FULL              accept                                   
+va5b-entered-from-where-clause-of- eq22 FULL+sigrounds    reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va5b-entered-from-where-clause-of- eq22 NOSIG22           accept                                   
+va5b-entered-from-where-clause-of- eq22 NEW22             reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va5b-entered-from-where-clause-of- eq22 NEW22+selfcheck   reject    nodes=3 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va5b-entered-from-where-clause-of- eq38 FULL              accept                                   
+va5b-entered-from-where-clause-of- eq38 NOSIG             accept                                   
+va5b-entered-from-where-clause-of- eq38 NEW               accept    nodes=3 restores=2 rounds=3    
+va5b-entered-from-where-clause-of- eq38 NEW+selfcheck     accept    nodes=3 restores=2 rounds=6    
+va6a-second-implementation.hylo    eq22 base              reject                                   [1] type 'BA' has no static member 'Z'
+va6a-second-implementation.hylo    eq22 FULL              reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Z'
+va6a-second-implementation.hylo    eq22 FULL+sigrounds    accept    nodes=4 restores=2 rounds=3    
+va6a-second-implementation.hylo    eq22 NOSIG22           reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Z'
+va6a-second-implementation.hylo    eq22 NEW22             accept    nodes=4 restores=2 rounds=3    
+va6a-second-implementation.hylo    eq22 NEW22+selfcheck   accept    nodes=4 ownerFirst=1 restores=2 rounds=4 VIOLATION sigrounds: the stable round computes another table in reverse order
+va6a-second-implementation.hylo    eq38 FULL              reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Z'
+va6a-second-implementation.hylo    eq38 NOSIG             reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Z'
+va6a-second-implementation.hylo    eq38 NEW               accept    nodes=4 restores=2 rounds=3    
+va6a-second-implementation.hylo    eq38 NEW+selfcheck     accept    nodes=4 restores=2 rounds=6    
+va6b-second-implementation-swapped eq22 base              accept                                   
+va6b-second-implementation-swapped eq22 FULL              accept                                   
+va6b-second-implementation-swapped eq22 FULL+sigrounds    reject    nodes=4 ownerFirst=1 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BA' has no static member 'Z'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va6b-second-implementation-swapped eq22 NOSIG22           accept                                   
+va6b-second-implementation-swapped eq22 NEW22             reject    nodes=4 ownerFirst=1 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BA' has no static member 'Z'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va6b-second-implementation-swapped eq22 NEW22+selfcheck   reject    nodes=4 ownerFirst=1 restores=2 rounds=3 unstable=1 [3] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BA' has no static member 'Z'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va6b-second-implementation-swapped eq38 FULL              accept                                   
+va6b-second-implementation-swapped eq38 NOSIG             accept                                   
+va6b-second-implementation-swapped eq38 NEW               accept    nodes=4 restores=2 rounds=3    
+va6b-second-implementation-swapped eq38 NEW+selfcheck     accept    nodes=4 restores=2 rounds=6    
+va7-extension-and-conformance-012. eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq22 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq22 FULL+sigrounds    reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq22 NOSIG22           reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq22 NEW22             reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq38 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq38 NOSIG             reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-012. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-012. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+va7-extension-and-conformance-021. eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-021. eq22 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-021. eq22 FULL+sigrounds    reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-021. eq22 NOSIG22           reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-021. eq22 NEW22             reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-021. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] the type of this declaration depends on a name lookup or an implicit resolution that it changes; no 
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-021. eq38 FULL              reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-021. eq38 NOSIG             reject                                   [2] circular extension: the extendee of this extension depends on a lookup of 'LA', which this extension
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-021. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-021. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+va7-extension-and-conformance-102. eq22 base              reject                                   [2] type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq22 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq22 FULL+sigrounds    reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq22 NOSIG22           reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq22 NEW22             reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=4 [1] VIOLATION sigrounds: the stable round computes another table in reverse order
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq38 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq38 NOSIG             reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'BC' has no static member 'Y'
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-102. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-102. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+va7-extension-and-conformance-120. eq22 base              reject                                   [2] type 'A' has no static member 'LA'
+                                                                      type 'BC' has no static member 'Y'
+va7-extension-and-conformance-120. eq22 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'A' has no static member 'LA'
+                                                                      type 'BC' has no static member 'Y'
+va7-extension-and-conformance-120. eq22 FULL+sigrounds    reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-120. eq22 NOSIG22           reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'A' has no static member 'LA'
+                                                                      type 'BC' has no static member 'Y'
+va7-extension-and-conformance-120. eq22 NEW22             reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-120. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=4 [1] VIOLATION sigrounds: the stable round computes another table in reverse order
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-120. eq38 FULL              reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'A' has no static member 'LA'
+                                                                      type 'BC' has no static member 'Y'
+va7-extension-and-conformance-120. eq38 NOSIG             reject                                   [3] circular given: the type of this given depends on an implicit resolution of 'S<BC>' that it may sati
+                                                                      type 'A' has no static member 'LA'
+                                                                      type 'BC' has no static member 'Y'
+va7-extension-and-conformance-120. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-120. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+va7-extension-and-conformance-201. eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-201. eq22 FULL              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-201. eq22 FULL+sigrounds    reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-201. eq22 NOSIG22           reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-201. eq22 NEW22             reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-201. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=3 unstable=1 [4] type 'A' has no static member 'LA'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+                                                                      type 'BC' has no static member 'Y'
+                                                                      the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+va7-extension-and-conformance-201. eq38 FULL              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-201. eq38 NOSIG             accept                                   
+va7-extension-and-conformance-201. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-201. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+va7-extension-and-conformance-210. eq22 base              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq22 FULL              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq22 FULL+sigrounds    reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq22 NOSIG22           reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq22 NEW22             reject    nodes=6 restores=2 rounds=3    [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq22 NEW22+selfcheck   reject    nodes=6 ownerFirst=1 restores=2 rounds=4 [1] VIOLATION sigrounds: the stable round computes another table in reverse order
+                                                                      type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq38 FULL              reject                                   [1] type 'A' has no static member 'LA'
+va7-extension-and-conformance-210. eq38 NOSIG             accept                                   
+va7-extension-and-conformance-210. eq38 NEW               accept    nodes=6 restores=3 rounds=4    
+va7-extension-and-conformance-210. eq38 NEW+selfcheck     accept    nodes=6 restores=3 rounds=8    
+vb1-two-named-requirements-forward eq22 base              reject                                   [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq22 FULL              reject                                   [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+vb1-two-named-requirements-forward eq22 NOSIG22           reject                                   [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+vb1-two-named-requirements-forward eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    
+vb1-two-named-requirements-forward eq38 FULL              reject                                   [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq38 NOSIG             reject                                   [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq38 NEW               reject    nodes=1 rounds=1               [1] type 'T' has no static member 'X'
+vb1-two-named-requirements-forward eq38 NEW+selfcheck     reject    nodes=1 rounds=2               [1] type 'T' has no static member 'X'
+vb1c-control-two-named-requirement eq22 base              accept                                   
+vb1c-control-two-named-requirement eq22 FULL              accept                                   
+vb1c-control-two-named-requirement eq22 FULL+sigrounds    accept    nodes=3 restores=2 rounds=3    
+vb1c-control-two-named-requirement eq22 NOSIG22           accept                                   
+vb1c-control-two-named-requirement eq22 NEW22             accept    nodes=3 restores=2 rounds=3    
+vb1c-control-two-named-requirement eq22 NEW22+selfcheck   accept    nodes=3 restores=2 rounds=4    
+vb1c-control-two-named-requirement eq38 FULL              accept                                   
+vb1c-control-two-named-requirement eq38 NOSIG             accept                                   
+vb1c-control-two-named-requirement eq38 NEW               accept    nodes=1 rounds=1               
+vb1c-control-two-named-requirement eq38 NEW+selfcheck     accept    nodes=1 rounds=2               
+vb2-method-with-local-given.hylo   eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq22 FULL+sigrounds    accept    nodes=2 ownerFirst=3 restores=2 rounds=3 
+vb2-method-with-local-given.hylo   eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq22 NEW22             accept    nodes=2 ownerFirst=3 restores=2 rounds=3 
+vb2-method-with-local-given.hylo   eq22 NEW22+selfcheck   accept    nodes=2 ownerFirst=4 restores=2 rounds=4 
+vb2-method-with-local-given.hylo   eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq38 NEW               reject    nodes=1 restores=1 rounds=2    [1] type 'T' has no static member 'X'
+vb2-method-with-local-given.hylo   eq38 NEW+selfcheck     reject    nodes=1 restores=1 rounds=4    [1] type 'T' has no static member 'X'
+vb3-forward-use-read-by-another-gi eq22 base              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq22 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq22 FULL+sigrounds    reject    nodes=5 restores=2 rounds=3    [1] type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq22 NOSIG22           reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq22 NEW22             reject    nodes=5 restores=2 rounds=3    [1] type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq22 NEW22+selfcheck   reject    nodes=5 restores=2 rounds=4    [1] type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq38 FULL              reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq38 NOSIG             reject                                   [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq38 NEW               reject    nodes=4 restores=1 rounds=2    [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3-forward-use-read-by-another-gi eq38 NEW+selfcheck     reject    nodes=4 restores=1 rounds=4    [2] type 'T' has no static member 'X'
+                                                                      type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq22 base              reject                                   [1] type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq22 FULL              reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq22 FULL+sigrounds    reject    nodes=5 restores=2 rounds=3    [1] type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq22 NOSIG22           reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq22 NEW22             accept    nodes=5 restores=3 rounds=4    
+vb3c-control-in-order-read-by-anot eq22 NEW22+selfcheck   accept    nodes=5 ownerFirst=1 restores=3 rounds=5 
+vb3c-control-in-order-read-by-anot eq38 FULL              reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq38 NOSIG             reject                                   [2] circular given: the type of this given depends on an implicit resolution of 'S<BA>' that it may sati
+                                                                      type 'BA' has no static member 'Y'
+vb3c-control-in-order-read-by-anot eq38 NEW               accept    nodes=4 restores=2 rounds=3    
+vb3c-control-in-order-read-by-anot eq38 NEW+selfcheck     accept    nodes=4 restores=2 rounds=6    
+vq1-generic-conformance.hylo       eq22 base              accept                                   
+vq1-generic-conformance.hylo       eq22 FULL              accept                                   
+vq1-generic-conformance.hylo       eq22 FULL+sigrounds    accept    nodes=2 rounds=1               
+vq1-generic-conformance.hylo       eq22 NOSIG22           accept                                   
+vq1-generic-conformance.hylo       eq22 NEW22             accept    nodes=2 rounds=1               
+vq1-generic-conformance.hylo       eq22 NEW22+selfcheck   accept    nodes=2 rounds=2               
+vq1-generic-conformance.hylo       eq38 FULL              accept                                   
+vq1-generic-conformance.hylo       eq38 NOSIG             reject                                   [1] no given instance of 'Base<Box<T>>' in this scope
+vq1-generic-conformance.hylo       eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<Box<T>>' in this scope
+vq1-generic-conformance.hylo       eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<Box<T>>' in this scope
+vq2-two-levels.hylo                eq22 base              accept                                   
+vq2-two-levels.hylo                eq22 FULL              accept                                   
+vq2-two-levels.hylo                eq22 FULL+sigrounds    accept    nodes=3 rounds=1               
+vq2-two-levels.hylo                eq22 NOSIG22           accept                                   
+vq2-two-levels.hylo                eq22 NEW22             accept    nodes=3 rounds=1               
+vq2-two-levels.hylo                eq22 NEW22+selfcheck   accept    nodes=3 rounds=2               
+vq2-two-levels.hylo                eq38 FULL              accept                                   
+vq2-two-levels.hylo                eq38 NOSIG             reject                                   [1] no given instance of 'Derived<B>' in this scope
+vq2-two-levels.hylo                eq38 NEW               reject    nodes=3 rounds=1               [1] no given instance of 'Derived<B>' in this scope
+vq2-two-levels.hylo                eq38 NEW+selfcheck     reject    nodes=3 rounds=2               [1] no given instance of 'Derived<B>' in this scope
+vq3-through-generic-call.hylo      eq22 base              reject                                   [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq22 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq22 NOSIG22           reject                                   [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq22 NEW22             reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq38 FULL              reject                                   [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq38 NOSIG             reject                                   [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq38 NEW               reject    nodes=2 rounds=1               [1] no given instance of 'Base<B>' in this scope
+vq3-through-generic-call.hylo      eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [1] no given instance of 'Base<B>' in this scope
+vt1-named-givens-cycle-swapped.hyl eq22 base              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq22 FULL              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq22 FULL+sigrounds    reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq22 NOSIG22           reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq22 NEW22             reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq22 NEW22+selfcheck   reject    nodes=2 rounds=2               [2] VIOLATION sigrounds: the stable round reports other diagnostics in reverse order
+                                                                      declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq38 FULL              reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq38 NOSIG             reject                                   [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq38 NEW               reject    nodes=2 rounds=1               [2] declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+vt1-named-givens-cycle-swapped.hyl eq38 NEW+selfcheck     reject    nodes=2 rounds=2               [3] VIOLATION sigrounds: the last round reports other diagnostics in reverse order: /home/user/hylo-new/
+                                                                      type 'P<#!>' has no member 'X' | /home/user/hylo-new/research/followup/attack-sigrounds/judge/p/vt1-named-givens-cycle-swapped.hylo:5.14-15:
+                                                                      declaration refers to itself
+                                                                      type 'P<#!>' has no member 'X'
+done

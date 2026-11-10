@@ -1,0 +1,15 @@
+// Control of n04: the argument is a variable or a parameter instead of a constructor call, and
+// the same argument forms passed to a requirement of the trait (no generic callee).
+// Correct verdict: accepted.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun take<T where T is P>(t: T, x: T.X) -> T.X { x }
+fun g1<U where U is P, U.X == S1>(u: U, s: S1) { wantS1(take(u, s)) }
+fun g2<U where U is P, U.X == S1>(u: U) { let s = S1() ; wantS1(take(u, s)) }
+fun g3<U where U is P, U.X == S1>(u: U) { u.put(S1()) }
+fun g4<U where U is P, U.X == S1>(u: U) { let x: U.X = S1() }

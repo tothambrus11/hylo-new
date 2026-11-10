@@ -1,0 +1,21 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/s15_branch_order.hylo.
+// currently (base): accepted; solver.forks=9 solver.overloads=4
+// currently (FULL): accepted; solver.forks=9 solver.overloads=4
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct Z { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> Z { Z() }
+  public static fun b() -> X { X() }
+}
+fun k<V>(x: V, y: V) {}
+fun main() {
+  extension S {
+    static fun a() -> X { X() }
+    static fun b() -> Y { Y() }
+  }
+  extension <T> T { static fun a() -> Y { Y() } }
+  k(S.a(), S.b())
+}

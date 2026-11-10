@@ -1,0 +1,8 @@
+// A given in a function body whose type is inferred from a local binding declared before it.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  let x = A()
+  given let g = x
+  need()
+}

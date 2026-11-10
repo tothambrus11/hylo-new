@@ -1,0 +1,5 @@
+// Expected: rejected. `y` is a `U.X` through the requirement on `U`; `h<T>` expects a `T.X`
+// through the requirement on `T`, which may be another type even though `T == U`.
+trait P { type X }
+fun h<V where V is P>(x: V.X) {}
+fun g<T, U where T == U, T is P, U is P>(y: U.X) { h<T>(y) }

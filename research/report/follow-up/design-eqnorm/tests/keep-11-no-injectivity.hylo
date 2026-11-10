@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// expected: rejected at every stage. Box<T> == Box<U> does not give T == U (no injectivity), unless
+// the language designers decide otherwise (open question 3).
+// currently: base rejected (summon.matches=1); FULL rejected (summon.matches=1). FULL says: cannot pass value of type 'T' to parameter 'U'
+struct Box<X> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<T, U where Box<T> == Box<U>>(x: T) { check<U>(x) }

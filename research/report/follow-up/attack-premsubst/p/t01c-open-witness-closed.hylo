@@ -1,0 +1,10 @@
+// Control of t01 where the only conformance to P is closed (A is P, X = B). Well typed: V = A.
+trait P { type X }
+trait R {}
+struct A {}
+struct B {}
+struct Wrap<T> {}
+given A is P { type X = B }
+given <T, V where V is P, V.X == T> => Wrap<T> is R {}
+fun need<T where T is R>() {}
+public fun main() { need<Wrap<B>>() }

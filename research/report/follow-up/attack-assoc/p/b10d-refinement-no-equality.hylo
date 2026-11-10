@@ -1,0 +1,6 @@
+// Control of b10 without V == W: rejected.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+trait R refines P {}
+fun g<V, W where V is R, W is R>(v: V, w: W) { v.put(w.get()) }

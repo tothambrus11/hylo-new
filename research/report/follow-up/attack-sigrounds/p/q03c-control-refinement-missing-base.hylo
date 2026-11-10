@@ -1,0 +1,5 @@
+// Control of q03: the body of `g` does not use `Base<B>`.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+given B is Derived { fun g() {} }

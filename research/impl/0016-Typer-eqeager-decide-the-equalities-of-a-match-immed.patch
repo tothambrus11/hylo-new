@@ -1,7 +1,7 @@
 From f49136db741cbaaae6a7e0907e665fde682e2498 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 14:32:38 +0000
-Subject: [PATCH 16/27] Typer: eqeager (decide the equalities of a match
+Subject: [PATCH 16/30] Typer: eqeager (decide the equalities of a match
  immediately)
 
 Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>

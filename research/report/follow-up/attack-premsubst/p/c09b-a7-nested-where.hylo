@@ -1,0 +1,12 @@
+// As c09 where the nearer witness of `T is P` is the requirement of a nested function.
+// ILL TYPED: the call needs `TX is R` for the T.X of f's requirement; inner states `T.X is R` for
+// the T.X of ITS requirement.
+trait P { type X }
+trait Q {}
+trait R {}
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  type TX = T.X
+  fun inner<where T is P, T.X is Q, T.X is R>() {
+    f<T, TX>()
+  }
+}

@@ -1,0 +1,16 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 6 with `cleanfirst,twins`
+// reason: The same situation in user code: a method declared in a struct and required by a
+//   trait that the struct conforms to.
+// currently (base): accepted; solver.forks=126 solver.overloads=63
+// currently (FULL): accepted; solver.forks=126 solver.overloads=63
+trait Stepper { fun next() -> Self }
+struct C {
+  public memberwise init
+  public fun next() -> C { C() }
+}
+given C is Stepper {}
+public fun main() {
+  let c = C()
+  let d = c.next().next().next().next().next().next()
+}

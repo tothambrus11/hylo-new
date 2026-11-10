@@ -1,0 +1,9 @@
+// Judge, variant Q2: q04 one refinement higher. Ill-typed: nothing provides B is Derived (nor B is Base).
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+trait Further refines Derived { fun h() }
+struct B { public memberwise init }
+given B is Further { public fun h() { self.g() } }
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+public fun main() { callDerived(B()) }

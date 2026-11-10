@@ -1,0 +1,21 @@
+//! stage:typing no-std
+// expected (heightbound): accepted. The same without the standard library: each requirement needs
+// 4 steps, the three need 13; height 4.
+// currently: base rejected (subgoals=34 matches=2458 depthExhausted=1): no coercion from '(P<S<S<S<X>>>>, P<S<S<S<Y>>>>, P<S<S<S<Z>>>>) ==> [Void]() let -> Void' to '[Void]() let -> ; FULL rejected (subgoals=34 matches=148 depthExhausted=1): no coercion from '(P<S<S<S<X>>>>, P<S<S<S<Y>>>>, P<S<S<S<Z>>>>) ==> [Void]() let -> Void' to '[Void]() let -> 
+trait P {}
+struct X {}
+struct Y {}
+struct Z {}
+struct S<T> {}
+given X is P {}
+given Y is P {}
+given Z is P {}
+given <T where T is P> => S<T> is P {}
+fun one<A where A is P>() {}
+fun three<A, B, C where A is P, B is P, C is P>() {}
+public fun main() {
+  one<S<S<S<X>>>>()
+  one<S<S<S<Y>>>>()
+  one<S<S<S<Z>>>>()
+  three<S<S<S<X>>>, S<S<S<Y>>>, S<S<S<Z>>>>()
+}

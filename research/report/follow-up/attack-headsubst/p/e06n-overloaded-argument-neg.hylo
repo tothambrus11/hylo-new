@@ -1,0 +1,16 @@
+// Negative twin of e06: no `mk` returns an `S0`. Correct verdict: rejected.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+struct S2 { public memberwise init }
+fun mk() -> S2 { S2() }
+fun mk() -> S1 { S1() }
+fun take<T where T is P>(t: T, x: T.X) {}
+fun q() { take(A(), mk()) }

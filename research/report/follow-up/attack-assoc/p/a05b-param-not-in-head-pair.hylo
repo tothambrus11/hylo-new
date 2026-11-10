@@ -1,0 +1,11 @@
+// assocsubst: the undetermined parameter U makes Box<S0>.X and Box<S1>.X the error type.
+// Is one accepted where the other is expected, without any diagnostic?
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T, U> => Box<T> is P { type X = U }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+type B1 = Box<S1>
+fun f(x: B0.X) { check<B1.X>(x) }

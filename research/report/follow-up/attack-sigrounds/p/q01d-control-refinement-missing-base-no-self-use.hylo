@@ -1,0 +1,6 @@
+// Control of q01: no member of the conformance resolves `Base<B>`.
+trait Base { type E }
+trait Derived refines Base { type Assoc }
+struct B {}
+given <U where U is Derived> => U is Base { type E = Int }
+given B is Derived { type Assoc = Int }

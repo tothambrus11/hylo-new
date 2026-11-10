@@ -1,0 +1,16 @@
+// Tests: the argument is an overloaded name; the parameter type is the projection.
+// Correct verdict: accepted; only `mk() -> S0` fits `A.X`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun mk() -> S0 { S0() }
+fun mk() -> S1 { S1() }
+fun take<T where T is P>(t: T, x: T.X) {}
+fun q() { take(A(), mk()) }

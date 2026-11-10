@@ -1,0 +1,11 @@
+// A given in a nested function whose type is inferred from a binding of the enclosing function.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  let x = A()
+  fun inner() {
+    given let g = x
+    need()
+  }
+  inner()
+}

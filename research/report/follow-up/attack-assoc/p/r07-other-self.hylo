@@ -1,0 +1,5 @@
+// abstractstrict: methods of the trait applied to another value of type Self. Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X)
+  fun m(other: Self) { other.put(self.get()) } }

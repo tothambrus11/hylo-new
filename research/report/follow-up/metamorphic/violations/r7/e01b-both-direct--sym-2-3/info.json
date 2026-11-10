@@ -1,0 +1,44 @@
+{
+ "file": "research/report/test-programs/equalities/e01b-both-direct.hylo",
+ "rel": "r7",
+ "vid": "sym:2:3",
+ "kind": "sym",
+ "desc": "`C == A` of `fun f` becomes `A == C`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ],
+   "b_errors": []
+  }
+ }
+}

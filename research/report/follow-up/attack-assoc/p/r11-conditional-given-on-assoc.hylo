@@ -1,0 +1,8 @@
+// abstractstrict: a generic given whose head mentions T.X, used in the body of the trait at T = Self.
+// The only witness of P<Self> is the one the trait declares. Valid.
+trait Q {}
+trait P { type X
+  fun m() { needQ<Holder<X>>() } }
+struct Holder<A> { public memberwise init }
+given <T where T is P> => Holder<T.X> is Q {}
+fun needQ<T where T is Q>() {}

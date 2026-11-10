@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// attack (review): as s1-attack-method, for a function requirement of a trait called on a value.
+// expected (premsubst, with ContextClause.binders): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=12 matches=881): no coercion from '(P<U>, Q<(U::P).X>) ==> [let V]() let -> Void' to '[let V]() let -> Void'; FULL rejected (subgoals=6 matches=149): no coercion from '(P<U>, Q<(U::P).X>) ==> [let V]() let -> Void' to '[let V]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R { fun m<T where T is P, T.X is Q>() }
+fun g<U, V where U is P, U.X is Q, V is R>(v: V) { v.m<U>() }

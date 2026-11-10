@@ -1,0 +1,13 @@
+// As o02, invalid: Box<S1>.X is S1, which is not Q; Box<Box<S0>>.X is Box<S0>, which is not Q (2 errors expected).
+trait P { type X }
+trait Q {}
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+struct Bag<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+given S0 is Q {}
+given <T where T is P, T.X is Q> => Bag<T> is Q {}
+fun needQ<T where T is Q>() {}
+fun bad1() { needQ<Bag<Box<S1>>>() }
+fun bad2() { needQ<Bag<Box<Box<S0>>>>() }

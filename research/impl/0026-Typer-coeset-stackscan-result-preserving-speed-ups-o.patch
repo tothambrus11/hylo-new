@@ -1,7 +1,7 @@
 From cb11436c2d770927155fe09326c37da3bb72dcb7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 17:49:06 +0000
-Subject: [PATCH 26/27] Typer: coeset, stackscan (result-preserving speed-ups
+Subject: [PATCH 26/30] Typer: coeset, stackscan (result-preserving speed-ups
  of the coercion prefilter)
 
 coeset: a closed pair may be coerced only if both types are sides of closed

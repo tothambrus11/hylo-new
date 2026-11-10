@@ -1,7 +1,7 @@
 From eeca4cd711efc81413b8643c2ff4517b72f67893 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 16:08:39 +0000
-Subject: [PATCH 20/27] Typer: experiments eqfilter, eqouter, eqclass (more
+Subject: [PATCH 20/30] Typer: experiments eqfilter, eqouter, eqclass (more
  equalities used by matching)
 
 eqfilter: a closed pair may be coerced if the equality procedure proves it.

@@ -1,0 +1,4 @@
+// abstractstrict: as r02 with the type argument written.
+trait P { type X
+  fun m(x: X) { use<Self>(self, x) } }
+fun use<T where T is P>(t: T, x: T.X) {}

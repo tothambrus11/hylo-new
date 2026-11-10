@@ -1,0 +1,24 @@
+// expected after the change: as today with every flag (rejected)
+// reason: a01 with the two candidates of `f` swapped. The right candidate is found first, the
+//   existing solver cancels the other fork at its first error, and the lookup of `m` in C is
+//   never made. Shows that the verdict of a01 depends on a lookup made in a fork whose result
+//   is discarded.
+// currently (base): rejected, 1 diagnostic(s): 23.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 1 diagnostic(s): 23.6-7: error: definition of 'X' refers to itself; solver.forks=2 solver.overloads=1
+fun test(b: B) { let y = f(b).m() }
+struct A { public memberwise init }
+struct B {
+  public memberwise init
+  public fun m() -> X { B() }
+}
+struct C { public memberwise init }
+extension C { public fun m() -> Int { 0 } }
+fun f(x: B) -> B { x }
+fun f(x: A) -> C { C() }
+extension X {
+  type Me = Int
+  public fun m(q: Int) -> Int { q }
+}
+extension A { type Me = B }
+type X = A.Me
+public fun main() {}

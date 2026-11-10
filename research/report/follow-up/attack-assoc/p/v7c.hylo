@@ -1,0 +1,6 @@
+// v-abs-7 without the second conformance. Valid.
+fun need<A, B where A == B>() {}
+trait P {
+  type X
+  fun f<T, U where T == Self, T.X == U>() { need<X, U>() }
+}

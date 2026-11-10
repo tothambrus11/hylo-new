@@ -1,32 +1,35 @@
 # Hylo Type-Checker Optimizations
 
-Techniques that make Hylo's type checker 4.1× faster on the standard library and up to three orders of magnitude faster on workloads designed to stress resolution, together with fixes for soundness problems of the existing implementation.
+Techniques that make Hylo's type checker faster, fixes for nine soundness problems of the existing implementation, and fixes that let ordinary generic programs with associated types type-check.
 
-**Start with `report.html`.** It is the complete overview, readable in any browser in about 20 minutes. The rest of this folder gives the details behind it.
+**Start with `report.html`.** It is the complete overview, readable in any browser in about 30 minutes. The rest of this folder gives the details behind it.
 
 | Folder | Contents |
 |---|---|
-| `report.html` | The overview: background, results, every technique, the soundness fixes, limitations, validation and related work |
-| `techniques/` | One document per technique: the problem, how it works, why it is correct, what it speeds up, what it costs |
+| `report.html` | The overview: background, results, every technique, the soundness fixes, the programs that were wrongly rejected, an assessment of what is worth its complexity, limitations, validation and related work |
+| `techniques/` | One document per performance technique: the problem, how it works, why it is correct, what it speeds up, what it costs |
 | `soundness/` | One document per soundness problem of the existing implementation: symptom with an example, cause, fix, what remains |
+| `completeness/` | One document per kind of valid program that was rejected |
 | `rejected/` | Approaches that are faster but change results, and why |
-| `validation/` | Test-suite comparison, adversarial test results and timings, with raw data |
-| `test-programs/` | About 540 small programs, grouped by topic, each folder with an index of old and new verdicts |
+| `validation/` | Test-suite comparison, adversarial test results and timings of the first half of the work, with raw data |
+| `test-programs/` | About 540 small programs, grouped by topic, each folder with an index of verdicts |
+| `follow-up/` | The supporting studies: measurements of the problem space, independent tests, designs with their reviews, attacks, and their test programs (about 1,000 more) |
 | `patches/` | The implementation as a patch series, with instructions to build and run it |
-| `follow-up/` | A critical review of this work, with new measurements, and the plan for follow-up experiments |
 | `papers/` | The cited papers available in PDF form, linked from the references of `report.html` |
 
-## Techniques
+## Performance techniques
 
 | Problem | Technique | Document |
 |---|---|---|
 | Too many candidate givens | index givens by head | `techniques/index.md` |
 | | skip givens that cannot coerce | `techniques/coesrc.md` |
-| Searches that must fail | abstract model of the givens | `techniques/absmodel.md` |
-| | …also with equalities in scope | `techniques/absquotient.md` |
-| | bound runaway searches | `techniques/budget.md` |
 | Equality constraints | equality decision procedure | `techniques/eqsolve.md` |
 | | "find a type equal to X" | `techniques/eqmgu.md` |
+| | keep the index under equalities; decide equalities at once | `techniques/eqindex-eqeager.md` |
+| | set-based coercion test | `techniques/coeset.md` |
+| Overloaded names | share work between candidates | `techniques/overload.md` |
+| Searches that must fail | abstract model of the givens | `techniques/absmodel.md`, `techniques/absquotient.md` |
+| | bound runaway searches | `techniques/budget.md` |
 | Member lookup | skip irrelevant extensions | `techniques/memberskip.md` |
 | | index traits by member name | `techniques/traitindex.md` |
 | Overheads | type storage, substitution, unification, symbol table | `techniques/constant-factors.md` |
@@ -38,4 +41,15 @@ Techniques that make Hylo's type checker 4.1× faster on the standard library an
 2. Equality chains time out or are rejected: `soundness/2-equality-chains.md`
 3. Associated types through a callee's requirements are not simplified: `soundness/3-unsimplified-projections.md`
 4. Cyclic type bindings crash the compiler: `soundness/4-cyclic-bindings.md`
-5. Results depend on declaration order (reduced, not eliminated): `soundness/5-declaration-order.md`
+5. Results depend on declaration order: `soundness/5-declaration-order.md`
+6. Associated types of a generic conformance are one type for every instance: `soundness/6-generic-conformance-associated-types.md`
+7. Inside a trait, `Self.X` is equated with another witness's `T.X`: `soundness/7-self-projection.md`
+8. A conformance satisfies the trait it refines with itself: `soundness/8-refinement-satisfied-by-itself.md`
+9. Members selected through an alias lose the type arguments: `soundness/9-members-through-aliases.md`
+
+## Valid programs that were rejected
+
+1. Requirements that mention another requirement: `completeness/1-dependent-requirements.md`
+2. Associated types of a requirement in a signature: `completeness/2-projections-in-signatures.md`
+3. Equalities that matching does not use (experiments): `completeness/3-equalities-in-matching.md`
+4. The bound on the size of a derivation (experiment): `completeness/4-derivation-size.md`

@@ -1,0 +1,10 @@
+// Not assocsubst: a member alias of a generic struct (type Elem = T), for comparison with a14.
+// first() returns the T of a Box<S0>; take expects the T of a Box<S1>.
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public type Elem = T
+  public fun first() -> Elem { self.t }
+  public fun take(x: Elem) { let y: T = x } }
+fun q0(a: Box<S0>, b: Box<S1>) { b.take(a.first()) }

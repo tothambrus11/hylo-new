@@ -1,0 +1,27 @@
+// Control of c07 where the function called is NOT f but a copy of it (k): no reference to the
+// callee's own requirement can occur in the type argument. ILL TYPED, must be rejected.
+trait P { type X
+  fun get() -> X }
+trait Q {}
+trait R { fun show() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+struct D { public memberwise init }
+given B is Q {}
+given C is Q {}
+given C is R { fun show() {} }
+given D is R { fun show() {} }
+given A is P { type X = B
+  fun get() -> B { B() } }
+fun k<T, V where T is P, T.X is Q, V is R>(t: T, v: V) { v.show() }
+fun f<T, V where T is P, T.X is Q, V is R>(t: T, v: V) {
+  v.show()
+  let w = t.get()
+  if true {
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    k(t, w)
+  }
+}
+public fun main() { f<A, D>(A(), D()) }

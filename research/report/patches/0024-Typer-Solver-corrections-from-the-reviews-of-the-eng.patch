@@ -1,7 +1,7 @@
 From c60989ca9e0c79d0680fdc826d7ce1e9d86ef773 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 17:10:17 +0000
-Subject: [PATCH 24/27] Typer, Solver: corrections from the reviews of the
+Subject: [PATCH 24/30] Typer, Solver: corrections from the reviews of the
  engine and overload designs
 
 premsubst: a premise that bound later usings must be discharged by the witness

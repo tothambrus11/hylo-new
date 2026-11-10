@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// CONTROL (not a gap): a conformance that cannot apply, because nothing says that `I.InnerIter` is an iterator.
+// EXPECTED: rejected with one error.  OBSERVED: base overflows the stack; FIX rejects after about 11,000
+// candidate matches; FULL rejects after about 450 (the abstract model refutes the goal).
+trait Iterator { type Item }
+trait NestedIterator { type Item; type InnerIter; type InnerItem }
+struct Flatten<I> { public memberwise init }
+given <I, U where I is NestedIterator, I.InnerIter == U, U is Iterator, I.InnerItem == U.Item> => Flatten<I> is Iterator { type Item = U.Item }
+fun needIterator<T where T is Iterator>() {}
+fun f<I where I is NestedIterator>() { needIterator<Flatten<I>>() }

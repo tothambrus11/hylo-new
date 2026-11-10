@@ -1,0 +1,10 @@
+// As a06 for a generic extension: `LA` is `Self`, that is `Box<T>`, and the requirement
+// `LA is Q` is satisfied for `Box<A>` by a given of the module.
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> {}
+given Box<A> is Q {}
+type BA = Box<A>
+extension <T where LA is Q> Box<T> { type LA = Self }
+given BA.LA is R {}

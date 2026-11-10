@@ -1,0 +1,44 @@
+{
+ "file": "Tests/CompilerTests/negative/use-before-init.hylo",
+ "rel": "r4",
+ "vid": "unused-param:0",
+ "kind": "unused-param",
+ "desc": "unused generic parameter Zq added to `fun use`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: not enough context to infer a type"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: not enough context to infer a type"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: not enough context to infer a type"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: not enough context to infer a type"
+   ]
+  }
+ }
+}

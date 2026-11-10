@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// attack (review): as s1-attack-method, for an initializer used as a constructor
+// (TypeStore.asConstructor rebuilds the type from a ContextClause).
+// expected (premsubst, with ContextClause.binders): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=13 matches=944): no coercion from '<T> (P<T>, Q<(T::P).X>) ==> [Void](let T) let -> S' to '[Void](let U) let -> S'; FULL rejected (subgoals=7 matches=504): no coercion from '<T> (P<T>, Q<(T::P).X>) ==> [Void](let T) let -> S' to '[Void](let U) let -> S'
+trait P { type X }
+trait Q {}
+struct S {
+  public init<T where T is P, T.X is Q>(x: T) {}
+}
+fun g<U where U is P, U.X is Q>(u: U) { let _ = S(u) }

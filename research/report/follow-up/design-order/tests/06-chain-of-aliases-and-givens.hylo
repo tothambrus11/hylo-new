@@ -1,0 +1,15 @@
+// Expected after the change: rejected, in every order of the top-level declarations (no change): "expression does not denote a type".
+// Reason: `Foo<X>.F` selects a member on a type application, which the existing implementation does not accept as a type expression in any program (review). The chain that this program was meant to show is 06b.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 120 orders tried.
+// Review: the first design expected this program to be accepted; with it (binary eq17, FULL+sigrounds) it is rejected in all 120 orders tried, for the reason above.
+trait P { type E }
+trait Q { type F }
+struct A {}
+struct Foo<T> {}
+struct Bar<T> {}
+given A is P { type E = Int }
+type X = A.E
+given Foo<X> is Q { type F = Bool }
+type Y = Foo<X>.F
+given Bar<Y> is P { type E = A }
+fun g(y: Y) {}

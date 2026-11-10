@@ -1,0 +1,9 @@
+// Control of e05: `Int is Q` is provided.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given Int is Q {}
+extension <T where T.X is Q, let u: P<T>> Box<T> { public fun g() {} }
+public fun main() { Box<A>().g() }

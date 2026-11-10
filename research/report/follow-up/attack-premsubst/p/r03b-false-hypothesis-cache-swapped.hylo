@@ -1,0 +1,15 @@
+// r03 with the two calls in the other order. ILL TYPED twice (two errors expected).
+trait P { type X }
+trait R {}
+struct A {}
+struct B {}
+struct C {}
+struct W<T> {}
+given A is P { type X = C }
+given W<B> is R {}
+fun f<T where T is P, T.X == B, W<T.X> is R>() {}
+fun need<T where T is R>() {}
+public fun main() {
+  need<W<C>>()
+  f<A>()
+}

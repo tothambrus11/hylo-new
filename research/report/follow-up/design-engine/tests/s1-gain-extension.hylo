@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected (premsubst, step 2): accepted. The same for the requirements of an extension, which are
+// proved when a member is looked up.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=9 matches=657): type 'Box<U>' has no member 'first'; FULL rejected (subgoals=3 matches=145): type 'Box<U>' has no member 'first'
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> { fun first() {} }
+fun g<U where U is P, U.X is Q>(b: Box<U>) { b.first() }

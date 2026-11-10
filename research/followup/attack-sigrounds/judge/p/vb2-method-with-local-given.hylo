@@ -1,0 +1,10 @@
+// Judge, variant B2: finding 4 on a method of a struct whose body declares a given (the shape of the
+// design's tests/25, one level down). Ill-formed by the order rule.
+trait P { type X }
+trait Q {}
+struct Foo<T> {}
+struct S {
+  fun m<T where T.X is Q, let u: P<T>>() {
+    given Foo<T.X> is Q {}
+  }
+}

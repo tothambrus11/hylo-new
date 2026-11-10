@@ -1,0 +1,26 @@
+// Tests: inside a generic function, the function itself is used as a value whose type is
+// written with `T.X`, in a block where a local conformance of `T` shadows the requirement.
+// In the block, `T.X` in the annotation denotes the `X` of the local conformance (`S1`).
+// Correct verdict: rejected (1 error: `x` is a `T.X` of the requirement, not an `S1`). See k07
+// for the same value obtained without writing a type.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun rec<T where T is P>(t: T, x: T.X, again: Bool) {
+  t.put(x)
+  if again {
+    given T is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    let f: [](let T, let T.X, let Bool) -> Void = rec
+    f(t, x, false)
+  }
+}
+public fun main() { rec(A(), S0(), true) }

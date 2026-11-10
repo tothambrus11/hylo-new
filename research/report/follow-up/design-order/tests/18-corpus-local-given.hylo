@@ -1,0 +1,24 @@
+//! stage:typing no-std
+// Expected after the change: accepted, in every order of the top-level declarations.
+// Reason: Copy of Tests/CompilerTests/positive/local-given.hylo.
+// Currently: base accepts it in all 6 orders tried; FULL accepts it in all 6 orders tried.
+trait P {}
+trait Q {}
+
+struct A {}
+struct B {}
+
+fun f<where B is P>() {
+}
+
+fun g() {
+  given A is P {}
+  given <where A is P> => B is P {}
+  f()
+}
+
+fun h() {
+  given B is Q {}
+  given <T where T is Q> => T is P {}
+  f()
+}

@@ -1,0 +1,27 @@
+// expected after the change: with `twins` alone: as today. With `cleanfirst`: still rejected,
+//   but the first diagnostic becomes "definition of 'X' refers to itself" (line of `type X`)
+//   instead of 'Y', in base, in FULL and with `sigrounds`: a known change of diagnostics
+// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand; the
+//   outcome with the flags was observed on the implementation (binary eq25, DESIGN.md 9.2). X
+//   and Y are defined by each other, so the program is ill-formed in every reading. Which alias
+//   is blamed depends on which one is entered first. Today the fork of the wrong candidate f(x:
+//   A) looks `m` up in C and enters Y; `cleanfirst` cancels that fork, and the first lookup, of
+//   `m` in B, enters X. Unlike a01 to a08 this one is not removed by `sigrounds`, which settles
+//   the signatures of extensions and givens, not aliases.
+// currently (base): rejected, 3 diagnostic(s): 17.25-28: error: no coercion from 'B' to '#!'; 21.25-28: error: no coercion from 'C' to '#!'; 26.6-7: error: definition of 'Y' refers to itself; solver.forks=2 solver.overloads=1
+// currently (FULL): rejected, 3 diagnostic(s): 17.25-28: error: no coercion from 'B' to '#!'; 21.25-28: error: no coercion from 'C' to '#!'; 26.6-7: error: definition of 'Y' refers to itself; solver.forks=2 solver.overloads=1
+fun test(b: B) { let y = f(b).m() }
+struct A { public memberwise init }
+struct B {
+  public memberwise init
+  public fun m() -> X { B() }
+}
+struct C {
+  public memberwise init
+  public fun m() -> Y { C() }
+}
+fun f(x: A) -> C { C() }
+fun f(x: B) -> B { x }
+type X = Y
+type Y = X
+public fun main() {}

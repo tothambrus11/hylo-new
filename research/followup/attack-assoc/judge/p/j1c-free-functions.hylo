@@ -1,0 +1,8 @@
+// Judge, finding 1, variant C. Free generic functions instead of members of an extension.
+// one(w) is a W.X through W's witness, two(v, _) expects a V.X through V's witness. Invalid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+fun one<T where T is P>(t: T) -> T.X { t.get() }
+fun two<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun f<V, W where V == W, V is P, W is P>(v: V, w: W) { two(v, one(w)) }

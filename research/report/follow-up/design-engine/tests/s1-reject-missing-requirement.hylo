@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected (premsubst): rejected, as today. The caller does not know that `U.X is Q`.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=6 matches=432): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=73 refuted=2): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P>() { f<U>() }

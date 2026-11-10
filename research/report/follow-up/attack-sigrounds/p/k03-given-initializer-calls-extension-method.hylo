@@ -1,0 +1,7 @@
+// The type of the given is inferred from a call to a method declared in an extension.
+struct A { public memberwise init }
+struct B { public memberwise init }
+extension A { public fun make() -> B { B() } }
+given let w = A().make()
+fun need<where let u: B>() {}
+public fun main() { need() }

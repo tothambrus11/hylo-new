@@ -1,0 +1,6 @@
+// The mentioned premise (U is P) is discharged by a coerced match (V is P and U == V).
+// Well typed: U.X is the X of the witness of V is P seen at U, and the caller states U.X is Q.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U, V where U == V, V is P, U.X is Q>() { f<U>() }

@@ -1,0 +1,10 @@
+// Not assocsubst: a struct nested in a generic struct that mentions its parameter, for comparison with a13.
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public struct Inner { public var u: T
+    public memberwise init }
+  public fun get() -> Inner { Inner(u: self.t) }
+  public fun put(x: Inner) { let y: T = x.u } }
+fun q0(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

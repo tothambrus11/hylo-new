@@ -1,0 +1,12 @@
+// Probe (syntax and scoping): a local given inside a nested block of a generic function that has
+// a dependent requirement. Well typed.
+trait P { type X }
+trait Q {}
+struct C {}
+given C is Q {}
+fun f<T where T is P, T.X is Q>() {
+  if true {
+    given T is P { type X = C }
+    f<T>()
+  }
+}

@@ -1,0 +1,18 @@
+//! stage:typing no-std
+// ATTACK on stage 1a (eqindex), found in review. expected: accepted at every stage.
+// The given `a` has the alias type AA; unification strips the alias, so `match` records the pair
+// (A, B), which is not the pair of the two types it started from (AA, B): its test for "a single
+// mismatch at the root" does not fire, and the root equality A ~ B is assumed and proved. The index
+// files the given under the head of the aliased type (A) and skips it for the goal B. With eqindex
+// as first implemented (binary eq15) the program is rejected and selfcheck reports "the index
+// skipped a for B, which matches". The revised hook (5.1) does not use the index when a visible
+// given or the goal is an alias at its root.
+// currently: base accepted (summon.subgoals=47 summon.matches=1262); FULL accepted (summon.subgoals=4 summon.matches=223 eqsolve.proved=1 index.fallback=3); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) rejected (summon.subgoals=4 summon.matches=22). Stage 1 says: no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<B>) let -> yield B. With selfcheck: VIOLATION, the index skipped a for B, which matches.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type AA = A
+fun use<T>(x: T) {}
+fun f<T where T == A, T == B>() {
+  given let a: AA = A()
+  use(summon[B])
+}

@@ -1,0 +1,14 @@
+// Expected after the change: accepted, in every order of the top-level declarations (no change).
+// Reason: A conformance declared in the body of a lambda, whose subject needs a resolution. Its signature is a type expression, so it can be computed before the lambda is typed. Must not break.
+// Currently: base accepts it in all 6 orders tried; FULL accepts it in all 6 orders tried.
+// Review: withstood. With the design as first written (binary eq17, FULL+sigrounds+selfcheck) it is accepted in all 6 orders, in 3 rounds.
+trait P { type E }
+struct A {}
+given A is P { type E = Int }
+fun need(x: Int) {}
+fun h() {
+  let f = fun[](a: A.E) {
+    given A.E is P { type E = Bool }
+    need(a)
+  }
+}

@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected (premsubst): accepted, as today. Today the equality procedure resolves `U is P` ahead of
+// time to read the pending `T.X`; with the change the premise arrives already substituted and the
+// proof is the caller's requirement itself (a shorter equality proof: the witness differs).
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base accepted (subgoals=4854 matches=90983); FULL accepted (subgoals=5 matches=288 proved=1 premises=1)
+trait P { type X }
+struct B { public memberwise init }
+fun f<T where T is P, T.X == B>() {}
+fun g<U where U is P, U.X == B>() { f<U>() }

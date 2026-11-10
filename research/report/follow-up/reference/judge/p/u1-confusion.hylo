@@ -1,0 +1,13 @@
+trait Tr1 {
+  type X1
+  fun get() -> X1
+  fun put(x: X1)
+}
+struct St0 { public memberwise init }
+struct St1 { public memberwise init }
+given <A> => A is Tr1 {
+  type X1 = A
+  fun get() -> A { self }
+  fun put(x: A) {}
+}
+fun q0(a: St0, b: St1) { b.put(a.get()) }

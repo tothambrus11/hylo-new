@@ -1,0 +1,16 @@
+// The subject of the last given is an alias that goes through a generic conformance whose
+// associated type is defined by an associated type of its parameter. The rounds stabilize; the
+// given is not found for `Int` because `Wrap<A>.Z` is not reduced to `Int` (the incompleteness of
+// `assocsubst` reported in ../attack-assoc, shape 1), so this is not a defect of sigrounds.
+trait P { type X }
+trait P2 { type Z }
+trait Q {}
+struct A {}
+given A is P { type X = Int }
+struct Wrap<T> {}
+given <T where T is P> => Wrap<T> is P2 { type Z = T.X }
+type WA = Wrap<A>
+type K = WA.Z
+given K is Q {}
+fun need<T where T is Q>(x: T) {}
+fun use(x: Int) { need(x) }

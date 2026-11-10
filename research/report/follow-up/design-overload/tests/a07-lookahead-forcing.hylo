@@ -1,0 +1,38 @@
+// expected after the change: with `twins` and with `cleanfirst`: as today (rejected). With
+//   `lookahead`: ACCEPTED, in base and in FULL: a known change of verdict
+// reason: Attack on assumption A2 (DESIGN.md 5.5), which the design does NOT withstand; the
+//   outcome with the flags was observed on the implementation (binary eq25, DESIGN.md 9.2).
+//   This program has no cyclic definition (X is Int). Today, in the fork of h -> C, the lookup
+//   of `m` in K comes before the failing argument of `two`: K.m mentions the alias X, the alias
+//   is entered first, its definition needs `A is P`, which enumerates the given `Foo<X> is P`,
+//   and the checker reports a self-reference. The look-ahead asks `coerced(C, B)` when the set
+//   of `k` is popped, before that lookup; the coercion enumerates the givens first, which
+//   computes X in the accepting order. a08 has the same goals with the failing coercion placed
+//   before the lookup, and is accepted today.
+// currently (base): rejected, 1 diagnostic(s): 36.6-7: error: definition of 'X' refers to itself; solver.forks=6 solver.overloads=3
+// currently (FULL): rejected, 1 diagnostic(s): 36.6-7: error: definition of 'X' refers to itself; solver.forks=6 solver.overloads=3
+fun test() { let y = two(h(), k().m()) }
+trait P { type E }
+struct A { public memberwise init }
+struct Foo<T> { public memberwise init }
+given A is P { type E = Int }
+struct B { public memberwise init }
+struct C { public memberwise init }
+struct K {
+  public memberwise init
+  public fun m() -> X { 0 }
+}
+struct K2 {
+  public memberwise init
+  public fun m() -> Bool { true }
+}
+fun h() -> C { C() }
+fun h() -> B { B() }
+fun k() -> K { K() }
+fun k() -> K2 { K2() }
+fun two(x: B, y: Int) -> Int { y }
+fun two1(x: B) -> Int { 0 }
+fun pair(x: Int, y: Int) -> Int { y }
+type X = A.E
+given Foo<X> is P { type E = Bool }
+public fun main() {}

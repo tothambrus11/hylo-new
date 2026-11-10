@@ -1,0 +1,6 @@
+// The subject of the second given is `A.X`, which is `A` by the first: it is a second conformance
+// of `A` to `P`, and it makes its own subject ambiguous once it is visible.
+trait P { type X }
+struct A {}
+given A is P { type X = A }
+given A.X is P { type X = Int }

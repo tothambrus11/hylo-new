@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected: accepted at every stage. The extension of Box<A> applies to Box<T> when T == A: `applies`
+// goes through `match`, hence through the same equality machinery as givens.
+// currently: base accepted (summon.subgoals=12 summon.matches=364); FULL accepted (summon.subgoals=1 summon.matches=3 eqsolve.proved=1).
+struct A { public memberwise init }
+struct Box<X> { public memberwise init }
+extension Box<A> { fun bar() {} }
+fun f<T where T == A>(x: Box<T>) { x.bar() }

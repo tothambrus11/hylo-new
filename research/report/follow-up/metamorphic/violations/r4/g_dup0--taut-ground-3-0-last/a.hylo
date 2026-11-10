@@ -1,0 +1,6 @@
+trait P { }
+struct T {}
+given T is P { }
+given T is P { }
+fun need<A where A is P>() {}
+fun main2() { need<T>() }

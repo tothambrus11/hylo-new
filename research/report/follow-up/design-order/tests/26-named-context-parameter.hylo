@@ -1,0 +1,12 @@
+// Expected after the change: accepted, in every order of the top-level declarations (no change).
+// Reason: A named requirement used in the right order by a later requirement and by a given of the body. Must not break; `sigrounds.nodes` must be 2 (the conformance and the local given), not 3.
+// Currently: base accepts it in both orders; FULL accepts it in both orders.
+// Review: with the design as first written (binary eq17) it is accepted, with `sigrounds.nodes=3`: the named requirement is counted as a node.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Foo<T> {}
+given A is P { type X = A }
+fun f<T where let u: P<T>, T.X is Q>() {
+  given Foo<T.X> is Q {}
+}

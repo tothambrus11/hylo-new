@@ -1,0 +1,28 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (accepted)
+// reason: f -> B (declared first) has a nested ambiguity, f -> A is clean. Because no clean
+//   solution was known when f -> B was tried, the clean one replaces it. Tests the rule "a
+//   solution found before the first clean one is dropped" of the clean-first pass.
+// currently (base): accepted; solver.forks=6 solver.overloads=3
+// currently (FULL): accepted; solver.forks=6 solver.overloads=3
+struct C { public memberwise init }
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct S {
+  public memberwise init
+  public static fun a() -> C { C() }
+}
+fun f() -> B { B() }
+fun f() -> A { A() }
+fun two(x: C, y: A) {}
+public fun main() {
+  extension S { static fun a() -> C { C() } }
+  let s = S.a()
+  two(s, f().n())
+}

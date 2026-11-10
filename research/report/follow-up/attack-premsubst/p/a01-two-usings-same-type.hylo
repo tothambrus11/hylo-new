@@ -1,0 +1,7 @@
+// Two usings of the same type before a dependent one. `T.X` is ambiguous at the declaration
+// (two witnesses of `T is P` in the clause), so a rejection AT THE DECLARATION is acceptable;
+// a crash, a stuck premise or an acceptance with an arbitrary pairing is not.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T is P, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

@@ -1,0 +1,10 @@
+// As a05 for a conformance: `Self` in a member of a conformance has no path that reads the
+// subject while the conformance is on the stack, so both ways in report the same cycle.
+trait Q {}
+trait R {}
+trait S { type Y }
+struct A {}
+struct Foo<T> {}
+given <U> => Foo<U> is Q {}
+given <where Foo<Y> is Q> => A is S { type Y = Self }
+given A.Y is R {}

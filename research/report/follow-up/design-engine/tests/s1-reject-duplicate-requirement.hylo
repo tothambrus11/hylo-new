@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// review: answers question 5 of section 7. With the same requirement twice, the projection in a
+// later requirement is ambiguous where the clause is declared, before any call.
+// expected: rejected ("ambiguous use of 'X'"), with or without premsubst.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=8 matches=584): no coercion from '(P<U>, P<U>, Q<#!>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=148): no coercion from '(P<U>, P<U>, Q<#!>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T is P, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

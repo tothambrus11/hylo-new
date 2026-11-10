@@ -1,0 +1,11 @@
+// Control of u02 without dependent requirements: the same call shape with requirements on the
+// parameters themselves. WELL TYPED; shows what the engine does when no premise is deferred.
+trait P {}
+trait Q {}
+trait R2 {}
+struct A {}
+given A is P {}
+given A is Q {}
+given A is R2 {}
+fun f<T, U where T is P, U is P, T is Q, U is R2, T == U>() {}
+public fun main() { f<A, A>() }

@@ -1,0 +1,6 @@
+// As a08 but the caller states V.X is Q. Well typed if U.X and V.X are the same type under
+// U == V with the single witness V is P (positive/associated-type-equality.hylo, f1, says so).
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U, V where U == V, V is P, V.X is Q>() { f<U>() }

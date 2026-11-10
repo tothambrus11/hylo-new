@@ -1,0 +1,13 @@
+// Judge, finding 2, variant D. No associated type: the substituted type is Self. b is a Box<U>,
+// so b.m<S0>(...) returns the Self of b, a Box<U>, not a Box<S0>. Invalid.
+trait P {
+  fun me() -> Self
+  fun m<U>(b: Box<U>, c: Box<S0>) -> Self {
+    let r: Box<S0> = b.m<S0>(c, c)
+    return self.me() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P {
+  fun me() -> Box<T> { self.me() } }

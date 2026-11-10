@@ -1,0 +1,7 @@
+// Judge, finding 1, variant C, valid twin: one parameter, one witness.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+fun one<T where T is P>(t: T) -> T.X { t.get() }
+fun two<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun f<V where V is P>(v: V, w: V) { two(v, one(w)) }

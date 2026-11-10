@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// attack (review): binders must survive the adaptation of a method type. The type of 's.m' is rebuilt
+// by TypeStore.asBoundMemberFunction from a ContextClause; if that drops Implication.binders (as
+// contextAndHead + introduce do unless ContextClause carries them, DESIGN.md 3.2), nothing is bound:
+// premsubst.binders > 0 and premsubst.bound = 0. The same call to a static function is accepted
+// (s1-gain-static-method).
+// expected (premsubst, with ContextClause.binders): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=11 matches=800): no coercion from '(P<U>, Q<(U::P).X>) ==> [let S]() let -> Void' to '[let S]() let -> Void'; FULL rejected (subgoals=5 matches=147): no coercion from '(P<U>, Q<(U::P).X>) ==> [let S]() let -> Void' to '[let S]() let -> Void'
+trait P { type X }
+trait Q {}
+struct S {
+  public memberwise init
+  public fun m<T where T is P, T.X is Q>() {}
+}
+fun g<U where U is P, U.X is Q>(s: S) { s.m<U>() }

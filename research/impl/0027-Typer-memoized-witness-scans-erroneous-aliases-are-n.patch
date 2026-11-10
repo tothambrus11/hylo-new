@@ -1,7 +1,7 @@
 From 4293597616b34e502cb249057be173a88c27bf8b Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 18:06:28 +0000
-Subject: [PATCH 27/27] Typer: memoized witness scans; erroneous aliases are
+Subject: [PATCH 27/30] Typer: memoized witness scans; erroneous aliases are
  not signatures; self-check detail
 
 The scans that ask whether a type mentions an assumed given or contains an

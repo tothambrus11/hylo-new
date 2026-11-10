@@ -1,7 +1,7 @@
 From 784fe85e5bb1d646f6d547b3ef8cef2635e2d111 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 17:31:14 +0000
-Subject: [PATCH 25/27] Typer: owner before member during rounds; hidecache;
+Subject: [PATCH 25/30] Typer: owner before member during rounds; hidecache;
  aliasargs
 
 sigrounds: a member selected through the table is typed after the signature of

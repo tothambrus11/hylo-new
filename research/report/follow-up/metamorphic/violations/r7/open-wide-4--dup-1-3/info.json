@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/performance/open-wide-4.hylo",
+ "rel": "r7",
+ "vid": "dup:1:3",
+ "kind": "dup",
+ "desc": "`T == U3` of `fun pick` becomes `T == U3, T == U3`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations",
+   "error: no coercion from '<T, U1, U2, U3, U4> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "timeout",
+   "b": "timeout",
+   "a_errors": [],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations",
+    "error: no coercion from '<T, U1, U2, U3, U4> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), (T ~ U3), Q<U4>, (T ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations",
+    "error: no coercion from '<T, U1, U2, U3, U4> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), (T ~ U3), Q<U4>, (T ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'"
+   ]
+  }
+ }
+}

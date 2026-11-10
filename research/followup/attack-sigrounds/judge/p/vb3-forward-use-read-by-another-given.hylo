@@ -1,0 +1,14 @@
+// Judge, variant B3: finding 4 on a conformance whose implementation is read by the subject of another
+// given, so that the signature computed with the forward reference feeds a second signature.
+// Ill-formed by the order rule; control vb3c has the requirements in order and is well-typed.
+trait P { type X }
+trait Q {}
+trait R {}
+trait S { type Y }
+struct A {}
+struct Box<T> {}
+given A is P { type X = Int }
+given Int is Q {}
+type BA = Box<A>
+given <T where T.X is Q, let u: P<T>> => Box<T> is S { type Y = T.X }
+given BA.Y is R {}

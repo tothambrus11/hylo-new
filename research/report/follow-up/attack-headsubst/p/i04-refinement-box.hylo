@@ -1,0 +1,13 @@
+// Tests: the projection through a refinement nested in a type constructor on both sides.
+// Correct verdict: rejected; `mk(v)` is a `Box<V.X>` and `wrap(u, _)` expects a `Box<U.X>`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait R refines P {}
+fun mk<T where T is P>(t: T) -> Box<T.X> { Box<T.X>(v: t.get()) }
+fun wrap<T where T is P>(t: T, b: Box<T.X>) { t.put(b.v) }
+fun g<U, V where U is R, V is R>(u: U, v: V) { wrap(u, mk(v)) }

@@ -1,0 +1,4 @@
+// expected (heightbound): accepted, as today (10 steps: exactly today's bound).
+// currently: base accepted (subgoals=46 matches=3254); FULL accepted (subgoals=46 matches=310)
+fun need<T where T is Copyable>() {}
+public fun main() { need<{Bool, Bool, Bool, Bool}>() }

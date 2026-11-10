@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// expected: accepted at every stage.
+// currently: base accepted (summon.subgoals=8215 summon.matches=153018); FULL accepted (summon.subgoals=19 summon.matches=1497 eqsolve.proved=1 index.fallback=18).
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T5 is P, T6 is P, T7 is P, T8 is P, T0.X == T1.X, T1.X == T2.X, T2.X == T3.X, T3.X == T4.X, T4.X == T5.X, T5.X == T6.X, T6.X == T7.X, T7.X == T8.X>(x: T8.X) {
+  check<T0.X>(x)
+}

@@ -1,0 +1,4 @@
+//! stage:typing no-std
+struct Box<T> { }
+struct Opt<T> { }
+fun g<X, Y where Box<X> == Opt<Y>>(b: Box<X>) { let o: Opt<Y> = b }

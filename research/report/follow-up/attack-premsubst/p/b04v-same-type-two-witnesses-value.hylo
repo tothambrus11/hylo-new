@@ -1,0 +1,11 @@
+// Value-level twin of b04. f returns t.get() : T.X. The caller g assigns it to a V.X (selected
+// through the requirement V is P). ILL TYPED if f<V> was satisfied with W's witness (the result is
+// then a W.X): the only way to satisfy `T.X is Q` is W's witness, so `x = f<V>(v)` must be rejected.
+trait P { type X
+  fun get() -> X }
+trait Q {}
+fun f<T where T is P, T.X is Q>(t: T) -> T.X { t.get() }
+fun g<V, W where V == W, V is P, W is P, W.X is Q>(v: V, y: V.X) {
+  var x = y
+  x = f<V>(v)
+}

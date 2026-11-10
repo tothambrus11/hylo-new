@@ -1,0 +1,8 @@
+// Expected: rejected. `Box<A>.X` is `A`, not `C`.
+trait P { type X }
+struct A { public memberwise init }
+struct C { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+fun take<T where T is P>(t: T, x: T.X) {}
+fun q(x: C) { take(Box<A>(), x) }

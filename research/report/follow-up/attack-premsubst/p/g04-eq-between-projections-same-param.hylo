@@ -1,0 +1,5 @@
+// Two projections of one parameter through two traits, equated. Well typed.
+trait P { type X }
+trait R { type Y }
+fun f<T where T is P, T is R, T.X == T.Y>(x: T.X) -> T.Y { x }
+fun g<U where U is P, U is R, U.X == U.Y>(x: U.X) -> U.Y { f<U>(x) }

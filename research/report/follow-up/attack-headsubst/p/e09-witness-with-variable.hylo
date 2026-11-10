@@ -1,0 +1,23 @@
+// Tests: the type argument of the callee is not known when the callee is elaborated: the
+// witness of the generic conformance has an open variable.
+// Correct verdict: accepted; `none()` is a `Box0<S0>` because `pick` must return an `S0`, and
+// a `Box0<S1>` in the second call.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+struct Box0<T> { public memberwise init }
+given <T> => Box0<T> is P { type X = T
+  fun get() -> T { trap() }
+  fun put(x: T) {} }
+fun trap<T>() -> T { trap<T>() }
+fun none<T>() -> Box0<T> { Box0<T>() }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun q() {
+  wantS0(pick(none()))
+  take(none(), S1())
+}

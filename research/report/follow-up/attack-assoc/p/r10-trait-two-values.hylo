@@ -1,0 +1,8 @@
+// abstractstrict: inside the trait, a generic requirement on a second type that conforms to P;
+// the two associated types are used separately. Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X)
+  fun m<T where T is P>(t: T, x: T.X) { t.put(x)
+    self.put(self.get())
+    t.put(t.get()) } }

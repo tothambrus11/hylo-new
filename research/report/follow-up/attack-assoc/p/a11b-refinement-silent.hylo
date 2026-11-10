@@ -1,0 +1,7 @@
+// The associated type of P reached through a requirement `B is R`, where R refines P, is the
+// error type and no diagnostic is reported for the signature; x is then accepted as an S1.
+trait P { type X }
+trait R refines P {}
+struct S1 { public memberwise init }
+fun check<T>(x: T) {}
+fun viaR<B where B is R>(b: B, x: B.X) { check<S1>(x) }

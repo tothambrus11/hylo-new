@@ -1,0 +1,15 @@
+fun conv<A, B where A == B>(x: A) -> B { x }
+trait P {
+  type X
+  fun cast<T, U where T == Self, T is P, T.X == U>(x: U) -> X { conv<U, X>(x) }
+}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given A is P { type X = B }
+fun f0<V, W where V == W, V is P, W is P>(v: V, x: W.X) -> V.X { v.cast<W, W.X>(x) }
+fun h<T where T == A, T is P>(t: T, x: B) -> T.X { f0<T, A>(t, x) }
+fun g(a: A, b: B) -> C {
+  given A is P { type X = C }
+  return h<A>(a, b)
+}

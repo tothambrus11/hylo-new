@@ -1,0 +1,6 @@
+// Control of s01: the caller requires `Q` of the two types directly.
+// Correct verdict: rejected.
+trait Q { type Y; fun y() -> Y; fun eat(y: Y) }
+fun far<Z where Z is Q>(z: Z) -> Z.Y { z.y() }
+fun feed<Z where Z is Q>(z: Z, y: Z.Y) { z.eat(y) }
+fun g<U, V where U is Q, V is Q>(u: U, v: V) { feed(u, far(v)) }

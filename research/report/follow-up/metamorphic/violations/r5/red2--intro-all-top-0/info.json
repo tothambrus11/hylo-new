@@ -1,0 +1,47 @@
+{
+ "file": "research/report/test-programs/declaration-order/red2.hylo",
+ "rel": "r5",
+ "vid": "intro-all-top:0",
+ "kind": "intro-all-top",
+ "desc": "`U.O` named Alq everywhere (1 places), alias declared first",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type 'Int' to parameter '#!'",
+   "error: definition of 'Alq' refers to itself",
+   "error: no coercion from 'P<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'",
+   "error: type 'T' has no static member 'Y'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself"
+   ]
+  }
+ }
+}

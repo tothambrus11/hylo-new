@@ -1,0 +1,6 @@
+// abstractstrict: a method of Q called on a value of type T.X, where the trait P states X is Q
+// with a nested given. The usual way to constrain an associated type. Valid.
+trait Q { fun q() }
+trait P { type X ; given X is Q
+  fun get() -> X }
+fun f<T where T is P>(t: T) { t.get().q() }

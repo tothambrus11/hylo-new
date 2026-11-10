@@ -1,0 +1,1 @@
+fun conv<A, B where A == B>(x: A) -> B { x }

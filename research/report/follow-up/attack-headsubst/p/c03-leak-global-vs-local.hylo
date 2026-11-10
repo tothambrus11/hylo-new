@@ -1,0 +1,32 @@
+// Tests: c01 with a global conformance (`X = S0`) and a function-local one (`X = S1`).
+// Correct verdict: rejected; the `S0` obtained in `first` typed `(A::r).X` cannot be named, so
+// both uses are in `second`, which shadows the global conformance in a nested block.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+enum Opt<Z> { case none
+  case some(v: Z) }
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun io<T where T is P>(t: T, x: Opt<T.X>) -> T.X {
+  match x {
+    case .none { }
+    case .some(let v) { t.put(v) }
+  }
+  return t.get()
+}
+fun apply2<U, V, W>(f: [](let U, let V) -> W, u: U, v: V) -> W { f(u, v) }
+fun second() {
+  let v = apply2(io, A(), Opt.none)
+  if true {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    let u = apply2(io, A(), Opt.some(v))
+  }
+}

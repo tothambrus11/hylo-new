@@ -1,7 +1,7 @@
 From 2734c9356318e0325c341856246aab955bacffc9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 16:46:56 +0000
-Subject: [PATCH 22/27] Typer: corrections to sigrounds from the design review;
+Subject: [PATCH 22/30] Typer: corrections to sigrounds from the design review;
  heightbound experiment
 
 sigrounds: only declarations whose signature is a type expression are in the

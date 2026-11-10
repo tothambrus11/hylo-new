@@ -1,0 +1,10 @@
+// Judge, finding 1, variant A, valid twin: one parameter, one witness.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct Box<T> { public var t: T
+  public memberwise init }
+extension <T where T is P> Box<T> {
+  fun one() -> T.X { self.t.get() }
+  fun two(x: T.X) { self.t.put(x) } }
+fun f<V where V is P>(v: Box<V>, w: Box<V>) { v.two(w.one()) }

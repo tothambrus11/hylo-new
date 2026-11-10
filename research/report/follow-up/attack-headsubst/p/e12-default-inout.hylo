@@ -1,0 +1,22 @@
+// Tests: `inout` and `sink` parameters of projection type, and a default argument.
+// Correct verdict: rejected (the calls with `&s1` and with `S1()` for `y`, and no other).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun upd<T where T is P>(t: T, x: inout T.X) {}
+fun snk<T where T is P>(t: T, x: sink T.X, y: sink T.X) -> T.X { x }
+fun q() {
+  var s0 = S0()
+  var s1 = S1()
+  upd(A(), &s0)
+  upd(A(), &s1)
+  wantS0(snk(A(), S0(), S0()))
+  wantS0(snk(A(), S0(), S1()))
+}

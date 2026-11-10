@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// review: s1-gain-open-variable-a with the last two requirements swapped: same verdict.
+// base is at the 60 s limit: rejected after 1.3 million candidates, or a timeout when the machine is busy.
+// expected (premsubst, step 3): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=4 normalized=4); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=65415 matches=1302257 depthExhausted=2): no coercion from 'R<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=21 matches=243 premises=8): no coercion from 'R<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct C1 {}
+struct C2 {}
+struct C3 {}
+struct Box<T> { public memberwise init }
+given A is P { type X = B }
+given B is Q {}
+given C1 is Q {}
+given C2 is Q {}
+given C3 is Q {}
+given <T, V where T is P, T.X == V, V is Q> => Box<T> is R {}
+fun need<T where T is R>() {}
+public fun main() { need<Box<A>>() }

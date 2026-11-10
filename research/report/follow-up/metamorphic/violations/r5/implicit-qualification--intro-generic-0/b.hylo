@@ -1,0 +1,19 @@
+//! stage:lowering
+
+struct A<T> {
+}
+extension <T> A<T> {
+}
+struct B<T> is Deinitializable {
+}
+extension AlqB<Void> {
+  public init<U>() {}
+  public static fun make<U>() -> Self { .new<U>() }
+}
+public fun use<T>(x: A<T>) {}
+public fun main() {
+
+
+  let b1: B<Void> = .make<Bool>()
+}
+type AlqB<Tq0> = B<Tq0>

@@ -1,7 +1,7 @@
 From 4da70d304793d8935b3da6a692080316b74b15f8 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 17:02:15 +0000
-Subject: [PATCH 23/27] Typer: fixes from the attack on assocsubst,
+Subject: [PATCH 23/30] Typer: fixes from the attack on assocsubst,
  abstractstrict and headsubst
 
 - Two selections through the same witness expression unify only if the types of

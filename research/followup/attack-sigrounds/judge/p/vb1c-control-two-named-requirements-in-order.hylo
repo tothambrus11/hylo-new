@@ -1,0 +1,5 @@
+// Judge, control of B1: the same requirements in the order the rule asks for. Well-formed.
+trait P { type X }
+trait Q {}
+struct Box<T> {}
+extension <T where let u: P<T>, let v: Q<T.X>> Box<T> { fun g() {} }

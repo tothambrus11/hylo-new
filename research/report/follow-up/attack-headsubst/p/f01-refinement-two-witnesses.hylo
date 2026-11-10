@@ -1,0 +1,15 @@
+// Tests: a generic caller with two requirements on a refinement; the projection obtained
+// through one is passed for the other.
+// Correct verdict: rejected; `pick(v)` is a `V.X` and `take(u, _)` expects a `U.X`; nothing
+// relates `U` and `V`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait R refines P {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun g<U, V where U is R, V is R>(u: U, v: V) { take(u, pick(v)) }

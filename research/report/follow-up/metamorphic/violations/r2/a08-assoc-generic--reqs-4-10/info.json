@@ -1,0 +1,48 @@
+{
+ "file": "research/report/test-programs/equalities/a08-assoc-generic.hylo",
+ "rel": "r2",
+ "vid": "reqs:4:10",
+ "kind": "reqs",
+ "desc": "requirements of `fun f` in order [1, 0]",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type '(T::P).X' to parameter 'U'",
+   "error: cannot pass value of type 'U' to parameter '(T::P).X'",
+   "error: no coercion from '((T::P).X ~ U) ==> [Void]() let -> Void' to '[Void]() let -> Void'",
+   "error: no coercion from '(U ~ (T::P).X) ==> [Void]() let -> Void' to '[Void]() let -> Void'",
+   "error: type 'T' has no static member 'X'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'X'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'X'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'T' has no static member 'X'"
+   ]
+  }
+ }
+}

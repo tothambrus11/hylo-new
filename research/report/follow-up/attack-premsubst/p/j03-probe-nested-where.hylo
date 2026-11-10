@@ -1,0 +1,9 @@
+// Probe: a nested function with its own requirement `T is P` (second witness of the same type in a
+// nearer scope) calls the enclosing function at T. Well typed if `T.X` in inner's clause resolves.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {
+  fun inner<where T is P, T.X is Q>() {
+    f<T>()
+  }
+}

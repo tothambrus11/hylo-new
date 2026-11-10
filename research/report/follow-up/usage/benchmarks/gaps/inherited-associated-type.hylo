@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// GAP: an associated type declared in a refined trait is not found through the refining trait.
+// Swift: `protocol Collection: Sequence`, and `C.Element` for `C: Collection`.
+// EXPECTED: one error that names two resolved types ('(C::Collection).Index' and the element type).
+// OBSERVED: the element type is the error type '#!'.
+trait Sequence { type Element }
+trait Collection refines Sequence { type Index }
+fun check<T>(x: T) {}
+fun f<C where C is Collection>(i: C.Index) { check<C.Element>(i) }

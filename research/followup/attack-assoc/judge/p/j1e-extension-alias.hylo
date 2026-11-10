@@ -1,0 +1,8 @@
+// Judge, finding 1, variant E. The extension declares a member type instead of methods.
+// W.Elem is W.X through W's witness and V.Elem is V.X through V's witness. Invalid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T { type Elem = T.X }
+fun check<T>(x: T) {}
+fun f<V, W where V == W, V is P, W is P>(x: W.Elem) { check<V.Elem>(x) }

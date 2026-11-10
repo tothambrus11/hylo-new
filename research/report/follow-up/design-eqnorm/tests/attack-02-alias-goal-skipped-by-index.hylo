@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// Companion of attack-01, found in review. expected: rejected at every stage (the verdict of FULL).
+// The same program with the alias on the goal instead of the given: `summon[BB]` asks for B, the
+// given has type A, the pair (A, B) is the pair of the whole types, and `match` refuses it, although
+// A == B follows from T == A, T == B. Compare attack-01, where the alias on the given makes the same
+// equality usable. Under FULL,eqindex the index skips the given here too, rightly. The two programs
+// must keep their two verdicts until the designers decide which is intended (open question 5).
+// currently: base rejected (summon.subgoals=6 summon.matches=444); FULL rejected (summon.subgoals=4 summon.matches=294 index.fallback=4); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) rejected (summon.subgoals=4 summon.matches=22). FULL says: no coercion from '<T> T ==> [Void](let Metatype<T>) let -> yield T' to '[Void](let Metatype<B>) let -> yield B. With selfcheck: no violation.
+struct A { public memberwise init }
+struct B { public memberwise init }
+type BB = B
+fun use<T>(x: T) {}
+fun f<T where T == A, T == B>() {
+  given let a: A = A()
+  use(summon[BB])
+}

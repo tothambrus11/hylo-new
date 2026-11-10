@@ -1,0 +1,9 @@
+// As n01 for an extension.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given wq: Int is Q {}
+extension <T where T is P, let u: Q<T.X>> Box<T> { public fun g() {} }
+public fun main() { Box<A>().g() }

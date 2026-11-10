@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/declaration-order/al1.hylo",
+ "rel": "r5",
+ "vid": "expand-drop:0",
+ "kind": "expand-drop",
+ "desc": "alias X replaced by `A.Me` (1 places), declaration removed",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: definition of 'X' refers to itself",
+   "error: type 'X' has no static member 'Me'"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: definition of 'X' refers to itself"
+   ],
+   "b_errors": []
+  }
+ }
+}

@@ -1,0 +1,5 @@
+trait P {}
+struct Box<E0> { public memberwise init }
+given <T where T is P> => Box<T> is P {}
+fun needP<W where W is P>() {}
+fun q2<T, U, V where Box<T> == U, V is P, V == T>() { needP<U>() }

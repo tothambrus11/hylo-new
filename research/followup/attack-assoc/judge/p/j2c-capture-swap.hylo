@@ -1,0 +1,14 @@
+// Judge, finding 2, variant C. Two parameters instantiated with each other: b is a Box<Pair<U, W>>,
+// so its X is Pair<U, W>; b.m<W, U>(...) returns a Pair<U, W>, not a Pair<W, U>. Invalid.
+trait P { type X
+  fun get() -> X
+  fun m<U, W>(b: Box<Pair<U, W>>, c: Box<Pair<W, U>>) -> X {
+    let r: Pair<W, U> = b.m<W, U>(c, b)
+    return self.get() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+struct Pair<A, B> { public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }

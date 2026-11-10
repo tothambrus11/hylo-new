@@ -1,0 +1,7 @@
+// Judge, variant A2 (owner last): finding 1 without any given entering the member: the second node is an
+// extension whose extendee is the member alias. Well-typed: A.LA is A.
+trait Q {}
+struct A {}
+given A is Q {}
+extension A.LA { type M = Self }
+extension <where LA is Q> A { type LA = Self }

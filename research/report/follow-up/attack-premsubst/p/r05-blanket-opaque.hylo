@@ -1,0 +1,11 @@
+// FULL accepts this: the dependent requirement is proved for the opaque projection by a blanket
+// conformance (every type is Q). Well typed. NEW must accept.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given A is P { type X = B }
+given <Z> => Z is Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P>() { f<U>() }
+public fun main() { f<A>() }

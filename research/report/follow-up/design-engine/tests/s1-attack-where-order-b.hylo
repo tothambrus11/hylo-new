@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// attack (review): s1-attack-where-order-a with the two dependent requirements swapped: 'T.X is Q4'
+// is proved twice, 13 steps, rejected at bound 10 (accepted at bound 14). So item 3 of the test plan
+// ('move the dependent requirement to every position after the one it mentions: same verdict') only
+// holds for derivations well inside the bound. Not new: s3-keep-where-order-a / s3-gain-where-order-b.
+// expected (premsubst): rejected, summon.depthExhausted=1; (premsubst + a height bound): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=2 depthExhausted=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=26 matches=2019): no coercion from '(P<U>, R<S<(U::P).X>>, Q4<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=20 matches=257): no coercion from '(P<U>, R<S<(U::P).X>>, Q4<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q0 {}
+trait Q1 {}
+trait Q2 {}
+trait Q3 {}
+trait Q4 {}
+trait R {}
+struct S<T> {}
+given <V where V is Q0> => V is Q1 {}
+given <V where V is Q1> => V is Q2 {}
+given <V where V is Q2> => V is Q3 {}
+given <V where V is Q3> => V is Q4 {}
+given <V where V is Q4> => S<V> is R {}
+fun f<T where T is P, S<T.X> is R, T.X is Q4>() {}
+fun g<U where U is P, U.X is Q0>() { f<U>() }

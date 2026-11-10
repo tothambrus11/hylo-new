@@ -1,0 +1,8 @@
+// The initializer of the local given names a binding declared after it.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+public fun main() {
+  given let g = x
+  need()
+  let x = A()
+}

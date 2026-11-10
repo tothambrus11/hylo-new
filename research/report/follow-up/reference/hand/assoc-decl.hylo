@@ -1,0 +1,25 @@
+trait P { type X }
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<E0> { public memberwise init }
+given A is P { type X = B }
+given <T> => Box<T> is P { type X = T }
+given B is Q {}
+fun needP<W where W is P>() {}
+fun needQ<W where W is Q>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0() { needEq<A.X, B>() }
+fun q1() { needQ<A.X>() }
+fun q2<T where T is P, T.X is Q>() { needQ<T.X>() }
+fun q3<T, U where T is P, U is P, T.X == U.X, T.X is Q>() { needQ<U.X>() }
+fun q4<T, U where T is P, U is P, T.X is Q>() { needQ<U.X>() }
+fun q5<T where T == A>() { needEq<T.X, B>() }
+fun q6<T where T == A, T is P>() { needEq<T.X, B>() }
+fun q7<T, U where T == Box<U>>() { needEq<T.X, U>() }
+fun q8<T, U where Box<U> == T>() { needEq<T.X, U>() }
+fun q9<T, U where T == Box<U>>(x: T.X) { check<U>(x) }
+fun q10<T, U>() { needEq<T.X, U>() }
+fun q11<T, U where T is P, U is P>(x: T.X) { check<U.X>(x) }
+fun q12<T where T is P>(x: T.X) { check<T.X>(x) }

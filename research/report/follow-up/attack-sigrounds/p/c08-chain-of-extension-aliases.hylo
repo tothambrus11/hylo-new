@@ -1,0 +1,9 @@
+// A chain of extensions: each extends the member type declared by the previous one.
+struct A {}
+struct B {}
+struct C {}
+extension A { type M = B }
+extension A.M { type N = C }
+extension B.N { type O = Int }
+fun need(x: Int) {}
+fun f(x: C.O) { need(x) }

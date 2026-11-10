@@ -1,0 +1,9 @@
+// Judge, finding 1, valid twin 1. V == W and only V conforms, so W conforms through V's witness and
+// W.X is V.X (positive/associated-type-equality.hylo, f1). Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun f<V, W where V == W, V is P>(v: V, w: W) { v.two(w.one()) }

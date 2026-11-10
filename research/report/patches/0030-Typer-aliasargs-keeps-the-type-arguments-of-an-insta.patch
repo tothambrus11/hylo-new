@@ -1,0 +1,38 @@
+From b8a60af13c14bbd27015403e2420e59e640284b4 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 21:14:24 +0000
+Subject: [PATCH 30/30] Typer: aliasargs keeps the type arguments of an
+ instance as written
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 10f4905..284deaf 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -6629,7 +6629,17 @@ public struct Typer {
+       if !resolvableWithQualification(m) { continue }
+       if !isSelectable(m, statically: selectionIsStatic) { continue }
+       var member = typeOfName(referringTo: m, statically: selectionIsStatic)
+-      let r = TyperExperiments.aliasargs ? program.types.dealiased(receiver) : receiver
++      // Aliases are removed only to find the instance; an instance written as such keeps its
++      // arguments as written.
++      var r = receiver
++      if TyperExperiments.aliasargs {
++        if let x = program.types[r] as? TypeApplication, !(program.types[x.abstraction] is TypeAlias)
++        {
++          r = receiver
++        } else {
++          r = program.types.dealiased(receiver)
++        }
++      }
+       if let a = program.types[r] as? TypeApplication {
+         if TyperExperiments.aliasargs {
+           // A member that is a type alias mentions the parameters of the type in its aliasee.
+-- 
+2.43.0
+

@@ -1,0 +1,48 @@
+{
+ "file": "research/report/test-programs/cycles-and-crashes/e2-abs-qual-distinct-conf.hylo",
+ "rel": "r4",
+ "vid": "taut-assoc:2:1:first",
+ "kind": "taut-assoc",
+ "desc": "`U.X == U.X` added first to `fun f`",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: type 'U' has no static member 'X'",
+   "error: type 'U' has no static member 'X'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'",
+    "error: type 'U' has no static member 'X'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'",
+    "error: type 'U' has no static member 'X'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'",
+    "error: type 'U' has no static member 'X'"
+   ]
+  }
+ }
+}

@@ -1,0 +1,5 @@
+// As s01 with the type of `w` written. Not specific to sigrounds if every configuration agrees.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { A() }
+given let w: A = make()
+public fun main() {}

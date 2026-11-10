@@ -1,0 +1,4 @@
+// premsubst + headsubst: T.X.X in the parameters of the callee, at a generic caller with the same requirements. Valid.
+trait P { type X }
+fun deep<T where T is P, T.X is P>(t: T, x: T.X.X) {}
+fun f<U where U is P, U.X is P>(u: U, s: U.X.X) { deep(u, s) }

@@ -1,0 +1,18 @@
+// Judge, variant A7 (order 102): an extension whose member is defined by an implementation of a generic
+// conformance that needs a requirement of that conformance (the two findings combined: two owners).
+// Well-typed in the sense of a01b and a06: A.LA is BC.Y is C.X is A, and A is Q.
+trait P { type X }
+trait Q {}
+trait R {}
+trait S { type Y }
+struct A {}
+struct C {}
+struct Box<T> {}
+struct Foo<T> {}
+given A is Q {}
+given C is P { type X = A }
+given <U> => Foo<U> is Q {}
+type BC = Box<C>
+given <T where T is P, Foo<Y> is Q> => Box<T> is S { type Y = T.X }
+extension <where LA is Q> A { type LA = BC.Y }
+given A.LA is R {}

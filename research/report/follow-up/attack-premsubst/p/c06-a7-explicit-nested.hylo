@@ -1,0 +1,14 @@
+// As c04 with the type argument written explicitly in a nested function without parameters of its
+// own: `f<T, T.X>` where, inside inner, `T.X` is selected through INNER's requirement.
+// WELL TYPED: inner states T.X is Q and T.X is R for its own requirement, and passes values of
+// that type. (Control: the capture of c04 must not be confused with this legitimate call.)
+trait P { type X
+  fun get() -> X }
+trait Q {}
+trait R { fun show() }
+fun f<T, V where T is P, T.X is Q, V is R>(t: T, v: V) {
+  v.show()
+  fun inner<where T is P, T.X is Q, T.X is R>(t2: T) {
+    f<T, T.X>(t2, t2.get())
+  }
+}

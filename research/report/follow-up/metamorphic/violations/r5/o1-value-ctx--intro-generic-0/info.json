@@ -1,0 +1,44 @@
+{
+ "file": "research/report/test-programs/cycles-and-crashes/o1-value-ctx.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`Box<...>` spelled `AlqBox<...>` (2 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'"
+   ]
+  }
+ }
+}

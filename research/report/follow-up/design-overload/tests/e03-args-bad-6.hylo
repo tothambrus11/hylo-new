@@ -1,0 +1,17 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks at most 308 (280 today plus the failed attempt)
+// reason: Six good calls and one bad one. The system has no clean solution, so the existing
+//   search runs after the clean-first pass has failed.
+// currently (base): rejected, 1 diagnostic(s): 17.77-84: error: cannot pass value of type 'A0' to parameter 'Z'; solver.forks=280 solver.overloads=70
+// currently (FULL): rejected, 1 diagnostic(s): 17.77-84: error: cannot pass value of type 'A0' to parameter 'Z'; solver.forks=280 solver.overloads=70
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+struct Z { public memberwise init }
+fun f(x: A0) -> A0 { x }
+fun f(x: A1) -> A1 { x }
+fun f(x: A2) -> A2 { x }
+fun f(x: A3) -> A3 { x }
+fun g(x0: A0, x1: A0, x2: A0, x3: A0, x4: A0, x5: A0, z: Z) {}
+public fun main() { g(f(A0()), f(A0()), f(A0()), f(A0()), f(A0()), f(A0()), f(A0())) }

@@ -1,0 +1,6 @@
+// A top-level given whose type is inferred from a global binding.
+struct A { public memberwise init }
+let s = A()
+given let g = s
+fun need<where let u: A>() {}
+public fun main() { need() }

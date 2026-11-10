@@ -1,0 +1,13 @@
+// Control of u02: the two type arguments are different types with the same X. WELL TYPED.
+trait P { type X }
+trait Q {}
+trait R2 {}
+struct A {}
+struct A2 {}
+struct B {}
+given A is P { type X = B }
+given A2 is P { type X = B }
+given B is Q {}
+given B is R2 {}
+fun f<T, U where T is P, U is P, T.X is Q, U.X is R2, T.X == U.X>() {}
+public fun main() { f<A, A2>() }

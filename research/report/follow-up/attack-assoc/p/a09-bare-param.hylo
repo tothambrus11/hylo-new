@@ -1,0 +1,15 @@
+// assocsubst: conformance of a bare parameter with a compound definition.
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <A> => A is P { type X = Box<A> }
+fun check<T>(x: T) {}
+type X0 = S0.X
+type X00 = X0.X
+fun ok1(x: S0.X) { check<Box<S0>>(x) }
+fun ok2(x: X0.X) { check<Box<Box<S0>>>(x) }
+fun ok3(x: X00.X) { check<Box<Box<Box<S0>>>>(x) }
+fun bad1(x: S0.X) { check<Box<S1>>(x) }
+fun bad2(x: X0.X) { check<Box<S0>>(x) }
+fun bad3(x: S0.X) { check<S1.X>(x) }

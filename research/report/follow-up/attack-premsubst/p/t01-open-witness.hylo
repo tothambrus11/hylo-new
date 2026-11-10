@@ -1,0 +1,13 @@
+// A given with a parameter V that its head does not determine, a requirement on V and a dependent
+// equality that relates V.X to the head's parameter. Well typed: need<Wrap<B>> with V = Box<B>,
+// whose X is B. When `V is P` is discharged, V is still open in the witness of the generic
+// conformance; the projection must be read once V is known.
+trait P { type X }
+trait R {}
+struct B {}
+struct Box<Y> {}
+struct Wrap<T> {}
+given <Y> => Box<Y> is P { type X = Y }
+given <T, V where V is P, V.X == T> => Wrap<T> is R {}
+fun need<T where T is R>() {}
+public fun main() { need<Wrap<B>>() }

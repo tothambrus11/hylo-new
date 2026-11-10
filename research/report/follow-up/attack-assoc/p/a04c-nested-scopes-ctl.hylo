@@ -1,0 +1,22 @@
+// Control of a04: the same flow with a ground conformance of Box<A> in each scope is rejected.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+type BA = Box<A>
+fun outer() {
+  given Box<A> is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  fun inner(v: BA.X) {
+    given Box<A> is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    Box<A>(t: A()).put(v)
+  }
+  inner(Box<A>(t: A()).get())
+}

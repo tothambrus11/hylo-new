@@ -1,0 +1,11 @@
+// f calls itself at the same T, with a nearer local given `T is P` whose X = C is Q in scope.
+// Well typed either way (the callee's requirements can be satisfied by the local given and C is Q,
+// or by f's own requirements). Must not crash or be ambiguous in a way FULL is not.
+trait P { type X }
+trait Q {}
+struct C {}
+given C is Q {}
+fun f<T where T is P, T.X is Q>() {
+  given T is P { type X = C }
+  f<T>()
+}

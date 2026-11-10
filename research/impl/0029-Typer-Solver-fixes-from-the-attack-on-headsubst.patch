@@ -1,0 +1,226 @@
+From eaa79b47c0b4f5076188e1c300adf092d60ed1a0 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 18:24:47 +0000
+Subject: [PATCH 29/30] Typer, Solver: fixes from the attack on headsubst
+
+- An associated type that a conformance does not define is selected through
+  the witness; it is never the error type, which is equal to every type.
+- The solver fails, with a diagnostic, when an associated type of a callee's
+  requirement cannot be determined.
+- A function used as a value has its head bound to its premises, so that a
+  selection through its requirement written in the scope of use decides the
+  witness passed; only the callee of a call is matched against the solver's
+  opened copy.
+- A coercion to a type that mentions an unresolved associated type waits, also
+  when the variable was unified with another one or occurs inside the type.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Solver.swift | 51 ++++++++++++++++++++++++++---
+ Sources/FrontEnd/Typer/Typer.swift  | 40 +++++++++++++++++-----
+ 2 files changed, 78 insertions(+), 13 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Solver.swift b/Sources/FrontEnd/Typer/Solver.swift
+index 9ebc02b..34ed4c2 100644
+--- a/Sources/FrontEnd/Typer/Solver.swift
++++ b/Sources/FrontEnd/Typer/Solver.swift
+@@ -81,6 +81,10 @@ internal struct Solver {
+   /// The variables standing for projections that have not been resolved yet (`headsubst`).
+   private var unresolvedProjections: Set<TypeVariable.ID> = []
+ 
++  /// The coercion goals that elaborate the callee of a call against the solver's opened copy of
++  /// its type (`headsubst`).
++  private var calleeCoercions: Set<GoalIdentity> = []
++
+   /// `true` iff no overload constraint has been popped on the path leading to `self`.
+   private var atFirstOverload = true
+ 
+@@ -304,12 +308,15 @@ internal struct Solver {
+ 
+     // Fix (`headsubst`): a value is not coerced to an associated type of a requirement of a
+     // callee before the witness of that requirement is known.
+-    if let x = program.types.cast(k.rhs, to: TypeVariable.self), unresolvedProjections.contains(x) {
++    if !unresolvedProjections.isEmpty && !calleeCoercions.contains(g)
++      && mentionsUnresolvedProjection(k.rhs)
++    {
+       return postpone(g)
+     }
+ 
+     // Summon a coercion.
+-    let es = typer.coerced(k.origin, withType: k.lhs, toMatch: k.rhs)
++    let es = typer.coerced(
++      k.origin, withType: k.lhs, toMatch: k.rhs, forCallee: calleeCoercions.contains(g))
+ 
+     // Coercion succeeded?
+     if let pick = es.uniqueElement {
+@@ -321,7 +328,13 @@ internal struct Solver {
+       }
+       if let p = pendingProjections.removeValue(forKey: g) {
+         // The equalities are subgoals of `g`, so that a failure is diagnosed.
+-        let subgoals = resolve(p, elaboratedBy: pick.witness, at: k.site)
++        guard let subgoals = resolve(p, elaboratedBy: pick.witness, at: k.site) else {
++          let site = k.site
++          return .failure { (_, _, _, ds) in
++            let m = "the associated types of the requirements of this callee cannot be determined"
++            ds.insert(.init(.error, m, at: site))
++          }
++        }
+         return subgoals.isEmpty ? .success : delegate(subgoals)
+       }
+       return .success
+@@ -339,9 +352,11 @@ internal struct Solver {
+   /// Schedules, for each projection in `p`, an equality between the variable standing for it and
+   /// the associated type selected through the witness that `w` passes for the requirement that
+   /// the projection mentions, where `w` is the elaboration of the callee (`headsubst`).
++  ///
++  /// Returns `nil` if one of the associated types cannot be determined.
+   private mutating func resolve(
+     _ p: PendingProjections, elaboratedBy w: WitnessExpression, at site: SourceSpan
+-  ) -> [GoalIdentity] {
++  ) -> [GoalIdentity]? {
+     // `w` applies the callee to one witness per requirement, possibly under coercions.
+     var f = typer.program.types.reify(w, applying: substitutions, withVariables: .kept)
+     var arguments: [WitnessExpression] = []
+@@ -372,15 +387,40 @@ internal struct Solver {
+       vs = ts.map({ (_) in AnyTypeIdentity.error })
+     }
+ 
++    for (x, _) in p.items { unresolvedProjections.remove(x) }
++    // The error type is equal to every type: an associated type that could not be determined
++    // must not be equated with anything.
++    if vs.contains(where: { (v) in v[.hasError] }) {
++      TyperCounters.bump("headsubst.undetermined")
++      return nil
++    }
+     var subgoals: [GoalIdentity] = []
+     for ((x, _), v) in zip(p.items, vs) {
+-      unresolvedProjections.remove(x)
+       TyperCounters.bump("headsubst.resolved")
+       subgoals.append(schedule(EqualityConstraint(lhs: x.erased, rhs: v, site: site)))
+     }
+     return subgoals
+   }
+ 
++  /// Returns `true` iff `t` mentions a variable standing for an associated type that has not been
++  /// resolved yet, possibly through other variables it was unified with (`headsubst`).
++  private mutating func mentionsUnresolvedProjection(_ t: AnyTypeIdentity) -> Bool {
++    let u = typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
++    if !u[.hasVariable] { return false }
++    var pending: Set<AnyTypeIdentity> = []
++    for x in unresolvedProjections {
++      let r = typer.program.types.reify(x.erased, applying: substitutions, withVariables: .kept)
++      if r.isVariable { pending.insert(r) }
++    }
++    if pending.isEmpty { return false }
++    var work = [u]
++    while let n = work.popLast() {
++      if pending.contains(n) { return true }
++      if n[.hasVariable] { work.append(contentsOf: typer.program.types.parts(of: n)) }
++    }
++    return false
++  }
++
+   /// Returns the simplification of `k` as an equality between its operands.
+   private mutating func simplify(_ k: CoercionConstraint) -> GoalOutcome {
+     if k.rhs.isVariable && program.types.hasContext(k.lhs) {
+@@ -518,6 +558,7 @@ internal struct Solver {
+         callee = targets.isEmpty
+           ? h : typer.abstractingProjections(in: h, through: targets, into: &items)
+         coercion = schedule(CoercionConstraint(on: f, from: k.callee, to: h, at: program[f].site))
++        calleeCoercions.insert(coercion)
+         if !items.isEmpty {
+           TyperCounters.bump("headsubst.abstracted", by: items.count)
+           pendingProjections[coercion] = .init(usings: us, binders: bs, items: items)
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index f5ae64b..10f4905 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -2582,9 +2582,15 @@ public struct Typer {
+           && !w.hasVariable && !w.type[.hasError] && !mentionsAssumed(w)
+         if case .reference = w.value {} else if !TyperExperiments.assocsubst { readable = false }
+ 
++        var reduced: AnyTypeIdentity? = nil
+         if readable {
+           let m = typeOfImplementation(satisfying: a.declaration, in: w)
+-          replacements[n] = (program.types[m] as? Metatype)?.inhabitant ?? .error
++          reduced = (program.types[m] as? Metatype)?.inhabitant ?? .error
++          // A conformance that does not define the associated type leaves the selection as is.
++          if reduced == n { reduced = nil }
++        }
++        if let r = reduced {
++          replacements[n] = r
+         } else if w != a.qualification {
+           // Name resolution selects an associated type through a coerced witness by removing
+           // the coercion.
+@@ -4086,9 +4092,11 @@ public struct Typer {
+         let u = instantiated(t, declaredIn: .init(c), through: witness)
+         if u != t { TyperCounters.bump("assocsubst.instantiated") }
+         return u
+-      } else if TyperExperiments.assocsubst && (program[c].members == nil) {
+-        // A conformance required by a trait (e.g., a refinement) defines nothing: the associated
+-        // type is the one selected through this very witness.
++      } else if TyperExperiments.assocsubst {
++        // The conformance does not define the associated type: it is required by a trait (e.g.,
++        // a refinement), or it is reached through the conformance of a refining trait. The
++        // associated type is the one selected through this very witness. It must not be the
++        // error type, which is equal to every type.
+         return metatype(of: AssociatedType(declaration: requirement, qualification: witness)).erased
+       } else {
+         return .error
+@@ -4646,7 +4654,8 @@ public struct Typer {
+     in environment: ResolutionThread.Environment,
+     then tail: [ResolutionThread.ContinuationItem] = [],
+     penalties: Int = 0,
+-    ancestors: [AnyTypeIdentity] = []
++    ancestors: [AnyTypeIdentity] = [],
++    bindingHead: Bool? = nil
+   ) -> ResolutionThread {
+     var environment = environment
+     var witness = program.types.reify(
+@@ -4658,7 +4667,11 @@ public struct Typer {
+     // become (`headsubst`); the type of an expression elaborated for the constraint solver is
+     // not, because the solver holds an unbound copy of it (see `Solver.solve(call:)`).
+     let bindsHead: Bool
+-    if case .identity = witness.value { bindsHead = false } else {
++    if let b = bindingHead {
++      bindsHead = b
++    } else if case .identity = witness.value {
++      bindsHead = false
++    } else {
+       bindsHead = TyperExperiments.headsubst
+     }
+     // In the type of a given declared in a trait, the witness that the trait stands for is the
+@@ -6073,8 +6086,15 @@ public struct Typer {
+   }
+ 
+   /// Returns the possible ways to elaborate `e`, which has type `a`, as an expression of type `b`.
++  ///
++  /// `b` is the solver's opened copy of `a` iff `forCallee` is `true`: it then mentions the
++  /// requirements of `a` through the declarations of `a` itself, and the solver resolves the
++  /// associated types selected through them (`headsubst`). Otherwise a selection through a
++  /// requirement of `a` that occurs in `b` was written in the scope of use, where it denotes
++  /// that very requirement, which must then be the witness passed.
+   internal mutating func coerced(
+-    _ e: ExpressionIdentity, withType a: AnyTypeIdentity, toMatch b: AnyTypeIdentity
++    _ e: ExpressionIdentity, withType a: AnyTypeIdentity, toMatch b: AnyTypeIdentity,
++    forCallee: Bool = false
+   ) -> [SummonResult] {
+     let head = program.types.dealiased(a)
+     let goal = program.types.dealiased(b)
+@@ -6090,7 +6110,11 @@ public struct Typer {
+     let scopeOfUse = program.parent(containing: e)
+     let root = WitnessExpression(value: .identity(e), type: head)
+     TyperCounters.bump("coerced.slowPath")
+-    var threads = [formThread(matching: root, to: goal, in: .empty)]
++    var threads = [
++      formThread(
++        matching: root, to: goal, in: .empty,
++        bindingHead: TyperExperiments.headsubst && !forCallee)
++    ]
+ 
+     if mayCoerce(root.type, goal, in: scopeOfUse, where: .empty) {
+       // Either the type of the elaborated witness is unifiable with the queried type or we need to
+-- 
+2.43.0
+

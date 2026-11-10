@@ -1,0 +1,14 @@
+//! stage:lowering
+
+struct A<U> is Deinitializable {
+  public fun f(x: U) {}
+}
+extension <T> A<T> {
+}
+trait P<T> {
+}
+given <T> => A<T> is P<T> {
+}
+fun use(a: A<Void>) {
+  a.f(())         // Native member
+}

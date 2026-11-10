@@ -1,0 +1,11 @@
+// Judge, variant A3 (order 012): two extensions; the member of the first is defined by a member of the
+// second, each named by the where clause of its own extension. Well-typed: A.LA is B.LB is B, B is Q.
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+given A is Q {}
+given B is Q {}
+extension <where LA is Q> A { type LA = B.LB }
+extension <where LB is Q> B { type LB = Self }
+given A.LA is R {}

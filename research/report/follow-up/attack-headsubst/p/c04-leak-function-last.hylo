@@ -1,0 +1,32 @@
+// Tests: c01 with the function as the last parameter of the higher-order function, so that the
+// function is coerced before the type of the other argument is known.
+// Correct verdict: rejected (the same crossing as c01).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+enum Opt<Z> { case none
+  case some(v: Z) }
+fun io<T where T is P>(t: T, x: Opt<T.X>) -> T.X {
+  match x {
+    case .none { }
+    case .some(let v) { t.put(v) }
+  }
+  return t.get()
+}
+fun apply3<U, V, W>(u: U, v: V, f: [](let U, let V) -> W) -> W { f(u, v) }
+fun outer() {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  let v = apply3(A(), Opt.none, io)
+  if true {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    let u = apply3(A(), Opt.some(v), io)
+  }
+}

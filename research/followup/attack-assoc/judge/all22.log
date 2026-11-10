@@ -1,0 +1,360 @@
+eq22 a01-term-witness.hylo                base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a01-term-witness.hylo                FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a01-term-witness.hylo                NEW22                  reject   (2) cannot pass value of type '(A::Q).Y' to parameter 'S0'
+eq22 a02-term-witness-twin.hylo           base                   accept   
+eq22 a02-term-witness-twin.hylo           FULL                   accept   
+eq22 a02-term-witness-twin.hylo           NEW22                  accept   
+eq22 a02c-term-witness-twin-ctl.hylo      base                   reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a02c-term-witness-twin-ctl.hylo      FULL                   reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a02c-term-witness-twin-ctl.hylo      NEW22                  reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a03-value-crossing.hylo              base                   accept   
+eq22 a03-value-crossing.hylo              FULL                   accept   
+eq22 a03-value-crossing.hylo              NEW22                  accept   
+eq22 a04-nested-scopes.hylo               base                   accept   
+eq22 a04-nested-scopes.hylo               FULL                   accept   
+eq22 a04-nested-scopes.hylo               NEW22                  accept   
+eq22 a04c-nested-scopes-ctl.hylo          base                   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          FULL                   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22                  reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a05-param-not-in-head.hylo           base                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a05-param-not-in-head.hylo           FULL                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a05-param-not-in-head.hylo           NEW22                  reject   (3) cannot pass value of type '#!' to parameter 'S1'
+eq22 a05b-param-not-in-head-pair.hylo     base                   accept   
+eq22 a05b-param-not-in-head-pair.hylo     FULL                   accept   
+eq22 a05b-param-not-in-head-pair.hylo     NEW22                  accept   
+eq22 a05c-param-not-in-head-value.hylo    base                   accept   
+eq22 a05c-param-not-in-head-value.hylo    FULL                   accept   
+eq22 a05c-param-not-in-head-value.hylo    NEW22                  reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq22 a05d-param-not-in-head-methods.hylo  base                   reject   (4) no coercion from 'X' to 'S1'
+eq22 a05d-param-not-in-head-methods.hylo  FULL                   reject   (4) no coercion from 'X' to 'S1'
+eq22 a05d-param-not-in-head-methods.hylo  NEW22                  reject   (2) cannot pass value of type 'S0' to parameter '#!'
+eq22 a05e-param-not-in-head-lets.hylo     base                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a05e-param-not-in-head-lets.hylo     FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a05e-param-not-in-head-lets.hylo     NEW22                  accept   
+eq22 a05f-param-not-in-head-ctl.hylo      base                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a05f-param-not-in-head-ctl.hylo      FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a05f-param-not-in-head-ctl.hylo      NEW22                  reject   (1) no coercion from 'S0' to 'S1'
+eq22 a06-two-params.hylo                  base                   reject   (2) cannot pass value of type 'X' to parameter 'S1'
+eq22 a06-two-params.hylo                  FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S1'
+eq22 a06-two-params.hylo                  NEW22                  reject   (2) cannot pass value of type 'S1' to parameter 'S0'
+eq22 a06v-two-params-valid.hylo           base                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a06v-two-params-valid.hylo           FULL                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a06v-two-params-valid.hylo           NEW22                  accept   
+eq22 a07-nested-box.hylo                  base                   reject   (5) cannot pass value of type 'X' to parameter 'Box<S0>'
+eq22 a07-nested-box.hylo                  FULL                   reject   (5) cannot pass value of type 'X' to parameter 'Box<S0>'
+eq22 a07-nested-box.hylo                  NEW22                  accept   
+eq22 a07n-nested-box-neg.hylo             base                   reject   (3) cannot pass value of type 'X' to parameter 'S0'
+eq22 a07n-nested-box-neg.hylo             FULL                   reject   (3) cannot pass value of type 'X' to parameter 'S0'
+eq22 a07n-nested-box-neg.hylo             NEW22                  reject   (3) cannot pass value of type 'Box<S0>' to parameter 'S0'
+eq22 a08-pair-of-param.hylo               base                   reject   (3) cannot pass value of type 'X' to parameter 'Pair<S0, Box<S0>>'
+eq22 a08-pair-of-param.hylo               FULL                   reject   (3) cannot pass value of type 'X' to parameter 'Pair<S0, Box<S0>>'
+eq22 a08-pair-of-param.hylo               NEW22                  reject   (2) cannot pass value of type 'Pair<S0, Box<S0>>' to parameter 'Pair<S0, Box<S1>>'
+eq22 a09-bare-param.hylo                  base                   reject   (5) cannot pass value of type 'X' to parameter 'Box<S0>'
+eq22 a09-bare-param.hylo                  FULL                   reject   (5) cannot pass value of type 'X' to parameter 'Box<S0>'
+eq22 a09-bare-param.hylo                  NEW22                  reject   (3) cannot pass value of type 'Box<S0>' to parameter 'Box<S1>'
+eq22 a10-adjunct.hylo                     base                   reject   (8) expression does not denote a type
+eq22 a10-adjunct.hylo                     FULL                   reject   (8) expression does not denote a type
+eq22 a10-adjunct.hylo                     NEW22                  reject   (8) expression does not denote a type
+eq22 a11-refinement.hylo                  base                   reject   (2) no coercion from '<B> R<B> ==> [Void](let B, let #!) let -> Void' to '[Void](let Box<S0>, let #!) let -> Void'
+eq22 a11-refinement.hylo                  FULL                   reject   (2) no coercion from '<B> R<B> ==> [Void](let B, let #!) let -> Void' to '[Void](let Box<S0>, let #!) let -> Void'
+eq22 a11-refinement.hylo                  NEW22                  reject   (2) no coercion from '<B> R<B> ==> [Void](let B, let #!) let -> Void' to '[Void](let Box<S0>, let #!) let -> Void'
+eq22 a11b-refinement-silent.hylo          base                   reject   (1) cannot pass value of type '#!' to parameter 'S1'
+eq22 a11b-refinement-silent.hylo          FULL                   reject   (1) cannot pass value of type '#!' to parameter 'S1'
+eq22 a11b-refinement-silent.hylo          NEW22                  reject   (1) cannot pass value of type '#!' to parameter 'S1'
+eq22 a12-trait-param.hylo                 base                   reject   (3) no coercion from '<T, K> P<T, K> ==> [Void](let T, let K, let (T::P).X) let -> Void' to '[Void](let Box<S0>, let S1, let
+eq22 a12-trait-param.hylo                 FULL                   reject   (3) no coercion from '<T, K> P<T, K> ==> [Void](let T, let K, let (T::P).X) let -> Void' to '[Void](let Box<S0>, let S1, let
+eq22 a12-trait-param.hylo                 NEW22                  reject   (2) cannot pass value of type 'Pair<S1, S0>' to parameter 'Pair<S0, S1>'
+eq22 a13-struct-in-conformance.hylo       base                   accept   
+eq22 a13-struct-in-conformance.hylo       FULL                   accept   
+eq22 a13-struct-in-conformance.hylo       NEW22                  accept   
+eq22 a13b-struct-in-conformance-field.hyl base                   reject   (1) cannot pass value of type 'T' to parameter 'S1'
+eq22 a13b-struct-in-conformance-field.hyl FULL                   reject   (1) cannot pass value of type 'T' to parameter 'S1'
+eq22 a13b-struct-in-conformance-field.hyl NEW22                  reject   (1) cannot pass value of type 'T' to parameter 'S1'
+eq22 a13c-struct-in-generic-struct.hylo   base                   accept   
+eq22 a13c-struct-in-generic-struct.hylo   FULL                   accept   
+eq22 a13c-struct-in-generic-struct.hylo   NEW22                  accept   
+eq22 a14-member-alias.hylo                base                   accept   
+eq22 a14-member-alias.hylo                FULL                   accept   
+eq22 a14-member-alias.hylo                NEW22                  accept   
+eq22 a14c-member-alias-struct-only.hylo   base                   accept   
+eq22 a14c-member-alias-struct-only.hylo   FULL                   accept   
+eq22 a14c-member-alias-struct-only.hylo   NEW22                  accept   
+eq22 a14d-member-alias-value.hylo         base                   accept   
+eq22 a14d-member-alias-value.hylo         FULL                   accept   
+eq22 a14d-member-alias-value.hylo         NEW22                  accept   
+eq22 a14v-member-alias-valid.hylo         base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a14v-member-alias-valid.hylo         FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a14v-member-alias-valid.hylo         NEW22                  reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a15-alias-chain.hylo                 base                   reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq22 a15-alias-chain.hylo                 FULL                   reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq22 a15-alias-chain.hylo                 NEW22                  reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq22 a16-generic-alias.hylo               base                   reject   (1) cannot pass value of type 'X' to parameter 'Pair<S0, S0>'
+eq22 a16-generic-alias.hylo               FULL                   reject   (1) cannot pass value of type 'X' to parameter 'Pair<S0, S0>'
+eq22 a16-generic-alias.hylo               NEW22                  reject   (1) cannot pass value of type 'Twice<S0>' to parameter 'Twice<S1>'
+eq22 a17-recursive-conditional.hylo       base                   reject   (2) cannot pass value of type 'X' to parameter 'Box<S1>'
+eq22 a17-recursive-conditional.hylo       FULL                   reject   (2) cannot pass value of type 'X' to parameter 'Box<S1>'
+eq22 a17-recursive-conditional.hylo       NEW22                  reject   (2) cannot pass value of type 'Box<(S0::P).X>' to parameter 'Box<S1>'
+eq22 a18-pick.hylo                        base                   reject   (10) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq22 a18-pick.hylo                        FULL                   reject   (10) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq22 a18-pick.hylo                        NEW22                  accept   
+eq22 a18n-pick-neg.hylo                   base                   reject   (8) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq22 a18n-pick-neg.hylo                   FULL                   reject   (8) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Box<S0>) let -> (Box<S0>::P).X'
+eq22 a18n-pick-neg.hylo                   NEW22                  reject   (4) cannot pass value of type 'S0' to parameter 'S1'
+eq22 a19-param-twice.hylo                 base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a19-param-twice.hylo                 FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a19-param-twice.hylo                 NEW22                  reject   (1) cannot pass value of type 'S1' to parameter 'S0'
+eq22 a20-nested-head.hylo                 base                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 a20-nested-head.hylo                 FULL                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 a20-nested-head.hylo                 NEW22                  reject   (2) cannot pass value of type 'S0' to parameter 'Box<S0>'
+eq22 a21-tuple-arrow.hylo                 base                   reject   (4) cannot pass value of type 'X' to parameter '{S1, S0}'
+eq22 a21-tuple-arrow.hylo                 FULL                   reject   (4) cannot pass value of type 'X' to parameter '{S1, S0}'
+eq22 a21-tuple-arrow.hylo                 NEW22                  reject   (2) cannot pass value of type '{S1, S0}' to parameter '{S0, S1}'
+eq22 a22-bare-param-where.hylo            base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a22-bare-param-where.hylo            FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a22-bare-param-where.hylo            NEW22                  reject   (3) cannot pass value of type '(A0::Q).Y' to parameter 'S0'
+eq22 a23-conformance-mismatch.hylo        base                   reject   (2) no implementation of 'put(_:)'
+eq22 a23-conformance-mismatch.hylo        FULL                   reject   (2) no implementation of 'put(_:)'
+eq22 a23-conformance-mismatch.hylo        NEW22                  reject   (2) no implementation of 'put(_:)'
+eq22 a24-inside-conformance.hylo          base                   reject   (2) cannot pass value of type 'Box<T>' to parameter 'X'
+eq22 a24-inside-conformance.hylo          FULL                   reject   (2) cannot pass value of type 'Box<T>' to parameter 'X'
+eq22 a24-inside-conformance.hylo          NEW22                  accept   
+eq22 a24n-inside-conformance-neg.hylo     base                   accept   
+eq22 a24n-inside-conformance-neg.hylo     FULL                   accept   
+eq22 a24n-inside-conformance-neg.hylo     NEW22                  reject   (2) cannot pass value of type 'T' to parameter 'Box<T>'
+eq22 a25-param-through-premise.hylo       base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a25-param-through-premise.hylo       FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 a25-param-through-premise.hylo       NEW22                  reject   (1) cannot pass value of type 'Y' to parameter 'S1'
+eq22 a26-param-through-trait-arg.hylo     base                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a26-param-through-trait-arg.hylo     FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq22 a26-param-through-trait-arg.hylo     NEW22                  reject   (1) no coercion from 'S1' to 'S0'
+eq22 a26b-param-through-trait-arg-check.h base                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a26b-param-through-trait-arg-check.h FULL                   reject   (3) cannot pass value of type 'X' to parameter 'S1'
+eq22 a26b-param-through-trait-arg-check.h NEW22                  reject   (2) cannot pass value of type 'S1' to parameter 'S0'
+eq22 a27-param-ambiguous-premise.hylo     base                   reject   (6) ambiguous use of 'get'
+eq22 a27-param-ambiguous-premise.hylo     FULL                   reject   (6) ambiguous use of 'get'
+eq22 a27-param-ambiguous-premise.hylo     NEW22                  reject   (2) ambiguous use of 'get'
+eq22 b10-refinement-twin.hylo             base                   accept   
+eq22 b10-refinement-twin.hylo             FULL                   accept   
+eq22 b10-refinement-twin.hylo             NEW22                  accept   
+eq22 b10c-refinement-twin-ctl.hylo        base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b11-refinement-twin-value.hylo       base                   accept   
+eq22 b11-refinement-twin-value.hylo       FULL                   accept   
+eq22 b11-refinement-twin-value.hylo       NEW22                  accept   
+eq22 b12-launder-refinement.hylo          base                   accept   
+eq22 b12-launder-refinement.hylo          FULL                   accept   
+eq22 b12-launder-refinement.hylo          NEW22                  accept   
+eq22 b12c-launder-refinement-ctl.hylo     base                   accept   
+eq22 b12c-launder-refinement-ctl.hylo     FULL                   accept   
+eq22 b12c-launder-refinement-ctl.hylo     NEW22                  reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 c01-capture.hylo                     base                   reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     FULL                   reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     NEW22                  accept   
+eq22 c01c-capture-ctl.hylo                base                   reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                FULL                   reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                NEW22                  reject   (1) no coercion from 'U' to 'S0'
+eq22 c01v-capture-valid.hylo              base                   reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              FULL                   reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22                  reject   (1) no coercion from 'S0' to 'U'
+eq22 c02-capture-value.hylo               base                   reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               NEW22                  accept   
+eq22 d01-equality-premise.hylo            base                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 d01-equality-premise.hylo            FULL                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 d01-equality-premise.hylo            NEW22                  reject   (3) cannot pass value of type 'S0' to parameter 'S1'
+eq22 d02-ground-equality-premise.hylo     base                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 d02-ground-equality-premise.hylo     FULL                   reject   (4) cannot pass value of type 'X' to parameter 'S0'
+eq22 d02-ground-equality-premise.hylo     NEW22                  reject   (3) cannot pass value of type 'S0' to parameter 'S1'
+eq22 d03-tuple-head.hylo                  base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 d03-tuple-head.hylo                  FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 d03-tuple-head.hylo                  NEW22                  reject   (1) cannot pass value of type 'S1' to parameter 'S0'
+eq22 d04-alias-head.hylo                  base                   reject   (4) cannot pass value of type '#!' to parameter 'S0'
+eq22 d04-alias-head.hylo                  FULL                   reject   (4) cannot pass value of type '#!' to parameter 'S0'
+eq22 d04-alias-head.hylo                  NEW22                  reject   (4) cannot pass value of type '#!' to parameter 'S0'
+eq22 d05-member-order.hylo                base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 d05-member-order.hylo                FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 d05-member-order.hylo                NEW22                  reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq22 e01-extension-from-generic.hylo      base                   reject   (2) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 e01-extension-from-generic.hylo      FULL                   reject   (2) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 e01-extension-from-generic.hylo      NEW22                  reject   (2) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              NEW22                  accept   
+eq22 e02c-extension-twin-ctl.hylo         base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e03-function-twin.hylo               base                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq22 e03-function-twin.hylo               FULL                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let V, let (V::P).X) let -> Void'
+eq22 e03-function-twin.hylo               NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e03b-function-twin-explicit.hylo     base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e03b-function-twin-explicit.hylo     FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e03b-function-twin-explicit.hylo     NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        NEW22                  accept   
+eq22 e05-extension-concrete.hylo          base                   reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq22 e05-extension-concrete.hylo          FULL                   reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq22 e05-extension-concrete.hylo          NEW22                  reject   (2) cannot pass value of type '(Box<S0>::P).X' to parameter 'S0'
+eq22 e05n-extension-concrete-neg.hylo     base                   reject   (3) cannot pass value of type '(Box<S0>::P).X' to parameter 'S1'
+eq22 e05n-extension-concrete-neg.hylo     FULL                   reject   (3) cannot pass value of type '(Box<S0>::P).X' to parameter 'S1'
+eq22 e05n-extension-concrete-neg.hylo     NEW22                  reject   (3) cannot pass value of type '(Box<S0>::P).X' to parameter 'S1'
+eq22 k01-self-cycle.hylo                  base                   reject   (3) no implementation of associated type requirement 'X'
+eq22 k01-self-cycle.hylo                  FULL                   reject   (3) no implementation of associated type requirement 'X'
+eq22 k01-self-cycle.hylo                  NEW22                  reject   (3) no implementation of associated type requirement 'X'
+eq22 k02-growing.hylo                     base                   reject   (1) cannot pass value of type 'X' to parameter 'Box<Box<Box<Box<Box<Box<S0>>>>>>'
+eq22 k02-growing.hylo                     FULL                   reject   (1) cannot pass value of type 'X' to parameter 'Box<Box<Box<Box<Box<Box<S0>>>>>>'
+eq22 k02-growing.hylo                     NEW22                  accept   
+eq22 k03-recursive-no-base.hylo           base                   reject   (1) no coercion from 'P<Box<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 k03-recursive-no-base.hylo           FULL                   reject   (1) no coercion from 'P<Box<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 k03-recursive-no-base.hylo           NEW22                  reject   (1) no coercion from 'P<Box<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 k04-polymorphic-recursion.hylo       base                   reject   (2) cannot pass value of type '#!' to parameter 'S0'
+eq22 k04-polymorphic-recursion.hylo       FULL                   reject   (2) cannot pass value of type '#!' to parameter 'S0'
+eq22 k04-polymorphic-recursion.hylo       NEW22                  reject   (2) cannot pass value of type '#!' to parameter 'S0'
+eq22 k05-mutual.hylo                      base                   reject   (2) cannot pass value of type 'Y' to parameter 'Box<S0>'
+eq22 k05-mutual.hylo                      FULL                   reject   (2) cannot pass value of type 'Y' to parameter 'Box<S0>'
+eq22 k05-mutual.hylo                      NEW22                  accept   
+eq22 k05n-mutual-neg.hylo                 base                   reject   (2) cannot pass value of type 'Y' to parameter 'Bag<S0>'
+eq22 k05n-mutual-neg.hylo                 FULL                   reject   (2) cannot pass value of type 'Y' to parameter 'Bag<S0>'
+eq22 k05n-mutual-neg.hylo                 NEW22                  reject   (2) cannot pass value of type 'Box<S0>' to parameter 'Bag<S0>'
+eq22 k06-deep-chain.hylo                  base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq22 k06-deep-chain.hylo                  FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq22 k06-deep-chain.hylo                  NEW22                  reject   (1) cannot pass value of type 'S0' to parameter '(((Box<Box<Box<S0>>>::P).X::P).X::P).X'
+eq22 k06n-deep-chain-neg.hylo             base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq22 k06n-deep-chain-neg.hylo             FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>, P<(((T::P).X::P).X::P).X>) ==> [Void](let T, let ((((T::P)
+eq22 k06n-deep-chain-neg.hylo             NEW22                  reject   (1) cannot pass value of type 'Box<S0>' to parameter '(((Box<Box<Box<S0>>>::P).X::P).X::P).X'
+eq22 k07-chain-2.hylo                     base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>
+eq22 k07-chain-2.hylo                     FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let Box<Box<S0>
+eq22 k07-chain-2.hylo                     NEW22                  reject   (1) cannot pass value of type 'S0' to parameter '(Box<S0>::P).X'
+eq22 k08-chain-3.hylo                     base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq22 k08-chain-3.hylo                     FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq22 k08-chain-3.hylo                     NEW22                  reject   (1) cannot pass value of type 'S0' to parameter '((Box<Box<S0>>::P).X::P).X'
+eq22 k08b-chain-3-generic.hylo            base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq22 k08b-chain-3-generic.hylo            FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>, P<((T::P).X::P).X>) ==> [Void](let T, let (((T::P).X::P).X::P).X) let -> Void'
+eq22 k08b-chain-3-generic.hylo            NEW22                  reject   (1) cannot pass value of type '(((U::P).X::P).X::P).X' to parameter '(((U::P).X::P).X::P).X'
+eq22 k09-chain-2-generic.hylo             base                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U:
+eq22 k09-chain-2-generic.hylo             FULL                   reject   (1) no coercion from '<T> (P<T>, P<(T::P).X>) ==> [Void](let T, let ((T::P).X::P).X) let -> Void' to '[Void](let U, let ((U:
+eq22 k09-chain-2-generic.hylo             NEW22                  reject   (1) cannot pass value of type '((U::P).X::P).X' to parameter '((U::P).X::P).X'
+eq22 n01-given-in-generic-struct.hylo     base                   reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n01-given-in-generic-struct.hylo     FULL                   reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n01-given-in-generic-struct.hylo     NEW22                  reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n02-given-in-extension.hylo          base                   reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n02-given-in-extension.hylo          FULL                   reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n02-given-in-extension.hylo          NEW22                  reject   (3) cannot pass value of type '#!' to parameter 'S0'
+eq22 n03-given-in-generic-function.hylo   base                   reject   (1) cannot pass value of type 'X' to parameter 'S1'
+eq22 n03-given-in-generic-function.hylo   FULL                   reject   (1) cannot pass value of type 'X' to parameter 'S1'
+eq22 n03-given-in-generic-function.hylo   NEW22                  reject   (1) cannot pass value of type 'X' to parameter 'S1'
+eq22 o01-head-through-assoc.hylo          base                   reject   (3) no coercion from 'Q<S0> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o01-head-through-assoc.hylo          FULL                   reject   (3) no coercion from 'Q<S0> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o01-head-through-assoc.hylo          NEW22                  accept   
+eq22 o01n-head-through-assoc-neg.hylo     base                   reject   (3) no coercion from 'Q<S1> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o01n-head-through-assoc-neg.hylo     FULL                   reject   (3) no coercion from 'Q<S1> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o01n-head-through-assoc-neg.hylo     NEW22                  reject   (2) no coercion from 'Q<S1> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o02-dependent-premise.hylo           base                   reject   (1) no coercion from 'Q<Bag<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o02-dependent-premise.hylo           FULL                   reject   (1) no coercion from 'Q<Bag<Box<S0>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o02-dependent-premise.hylo           NEW22                  accept   
+eq22 o02n-dependent-premise-neg.hylo      base                   reject   (2) no coercion from 'Q<Bag<Box<S1>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o02n-dependent-premise-neg.hylo      FULL                   reject   (2) no coercion from 'Q<Bag<Box<S1>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o02n-dependent-premise-neg.hylo      NEW22                  reject   (2) no coercion from 'Q<Bag<Box<S1>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 o03-param-order.hylo                 base                   reject   (2) cannot pass value of type 'X' to parameter 'S1'
+eq22 o03-param-order.hylo                 FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S1'
+eq22 o03-param-order.hylo                 NEW22                  accept   
+eq22 o03n-param-order-neg.hylo            base                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 o03n-param-order-neg.hylo            FULL                   reject   (2) cannot pass value of type 'X' to parameter 'S0'
+eq22 o03n-param-order-neg.hylo            NEW22                  reject   (2) cannot pass value of type 'S1' to parameter 'S0'
+eq22 r01-nested-given.hylo                base                   accept   
+eq22 r01-nested-given.hylo                FULL                   accept   
+eq22 r01-nested-given.hylo                NEW22                  reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01c-nested-given-ctl.hylo           base                   accept   
+eq22 r01c-nested-given-ctl.hylo           FULL                   accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22                  accept   
+eq22 r02-trait-calls-generic.hylo         base                   reject   (1) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Self, let (Self::P).X) let -> Voi
+eq22 r02-trait-calls-generic.hylo         FULL                   reject   (1) no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Self, let (Self::P).X) let -> Voi
+eq22 r02-trait-calls-generic.hylo         NEW22                  accept   
+eq22 r02b-trait-calls-generic-explicit.hy base                   accept   
+eq22 r02b-trait-calls-generic-explicit.hy FULL                   accept   
+eq22 r02b-trait-calls-generic-explicit.hy NEW22                  accept   
+eq22 r03-trait-calls-pick.hylo            base                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Self) let -> (Self::P).X'
+eq22 r03-trait-calls-pick.hylo            FULL                   reject   (2) no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let Self) let -> (Self::P).X'
+eq22 r03-trait-calls-pick.hylo            NEW22                  accept   
+eq22 r04-self-equal-param.hylo            base                   accept   
+eq22 r04-self-equal-param.hylo            FULL                   accept   
+eq22 r04-self-equal-param.hylo            NEW22                  accept   
+eq22 r05-trait-calls-extension.hylo       base                   accept   
+eq22 r05-trait-calls-extension.hylo       FULL                   accept   
+eq22 r05-trait-calls-extension.hylo       NEW22                  reject   (1) cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'
+eq22 r06-explicit-equality.hylo           base                   accept   
+eq22 r06-explicit-equality.hylo           FULL                   accept   
+eq22 r06-explicit-equality.hylo           NEW22                  accept   
+eq22 r07-other-self.hylo                  base                   accept   
+eq22 r07-other-self.hylo                  FULL                   accept   
+eq22 r07-other-self.hylo                  NEW22                  accept   
+eq22 r08-method-on-equal-param.hylo       base                   accept   
+eq22 r08-method-on-equal-param.hylo       FULL                   accept   
+eq22 r08-method-on-equal-param.hylo       NEW22                  accept   
+eq22 r09-conformance-uses-default.hylo    base                   reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq22 r09-conformance-uses-default.hylo    FULL                   reject   (1) cannot pass value of type 'X' to parameter 'S0'
+eq22 r09-conformance-uses-default.hylo    NEW22                  accept   
+eq22 r09n-conformance-uses-default-neg.hy base                   reject   (1) cannot pass value of type 'X' to parameter 'S1'
+eq22 r09n-conformance-uses-default-neg.hy FULL                   reject   (1) cannot pass value of type 'X' to parameter 'S1'
+eq22 r09n-conformance-uses-default-neg.hy NEW22                  reject   (1) cannot pass value of type 'S0' to parameter 'S1'
+eq22 r10-trait-two-values.hylo            base                   accept   
+eq22 r10-trait-two-values.hylo            FULL                   accept   
+eq22 r10-trait-two-values.hylo            NEW22                  accept   
+eq22 r11-conditional-given-on-assoc.hylo  base                   accept   
+eq22 r11-conditional-given-on-assoc.hylo  FULL                   accept   
+eq22 r11-conditional-given-on-assoc.hylo  NEW22                  reject   (1) no coercion from 'Q<Holder<(Self::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r11b-conditional-given-on-assoc-gene base                   reject   (1) no coercion from 'Q<Holder<(V::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r11b-conditional-given-on-assoc-gene FULL                   reject   (1) no coercion from 'Q<Holder<(V::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r11b-conditional-given-on-assoc-gene NEW22                  reject   (1) no coercion from 'Q<Holder<(V::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r12-trait-calls-dependent.hylo       base                   accept   
+eq22 r12-trait-calls-dependent.hylo       FULL                   accept   
+eq22 r12-trait-calls-dependent.hylo       NEW22                  accept   
+eq22 r13-nested-given-in-extension.hylo   base                   accept   
+eq22 r13-nested-given-in-extension.hylo   FULL                   accept   
+eq22 r13-nested-given-in-extension.hylo   NEW22                  reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r16-conditional-conformance-on-self. base                   reject   (1) cannot pass value of type '(Self::P).X' to parameter 'E'
+eq22 r16-conditional-conformance-on-self. FULL                   reject   (1) cannot pass value of type '(Self::P).X' to parameter 'E'
+eq22 r16-conditional-conformance-on-self. NEW22                  reject   (1) cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'
+eq22 r22-method-on-assoc-value.hylo       base                   accept   
+eq22 r22-method-on-assoc-value.hylo       FULL                   accept   
+eq22 r22-method-on-assoc-value.hylo       NEW22                  reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22c-method-on-assoc-value-ctl.hylo  base                   accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  FULL                   accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22                  accept   
+eq22 r23-nested-given-concrete.hylo       base                   reject   (2) type 'X' has no member 'q'
+eq22 r23-nested-given-concrete.hylo       FULL                   reject   (2) type 'X' has no member 'q'
+eq22 r23-nested-given-concrete.hylo       NEW22                  accept   
+eq22 r24-extension-equality-from-trait.hy base                   accept   
+eq22 r24-extension-equality-from-trait.hy FULL                   accept   
+eq22 r24-extension-equality-from-trait.hy NEW22                  accept   
+eq22 r25-nested-given-compound.hylo       base                   accept   
+eq22 r25-nested-given-compound.hylo       FULL                   accept   
+eq22 r25-nested-given-compound.hylo       NEW22                  reject   (1) no coercion from 'Q<Box<(T::P).X>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r26-extension-of-box-from-trait.hylo base                   accept   
+eq22 r26-extension-of-box-from-trait.hylo FULL                   accept   
+eq22 r26-extension-of-box-from-trait.hylo NEW22                  reject   (1) cannot pass value of type '(Self::P).X' to parameter '(Self::P).X'
+eq22 r26b-extension-of-box-from-generic.h base                   reject   (1) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 r26b-extension-of-box-from-generic.h FULL                   reject   (1) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 r26b-extension-of-box-from-generic.h NEW22                  reject   (1) cannot pass value of type '(V::P).X' to parameter '(V::P).X'
+eq22 v1c.hylo                             base                   accept   
+eq22 v1c.hylo                             FULL                   accept   
+eq22 v1c.hylo                             NEW22                  accept   
+eq22 v2c.hylo                             base                   accept   
+eq22 v2c.hylo                             FULL                   accept   
+eq22 v2c.hylo                             NEW22                  accept   
+eq22 v4c.hylo                             base                   accept   
+eq22 v4c.hylo                             FULL                   accept   
+eq22 v4c.hylo                             NEW22                  accept   
+eq22 v7c.hylo                             base                   accept   
+eq22 v7c.hylo                             FULL                   accept   
+eq22 v7c.hylo                             NEW22                  accept   
+eq22 v7d.hylo                             base                   accept   
+eq22 v7d.hylo                             FULL                   accept   
+eq22 v7d.hylo                             NEW22                  accept   

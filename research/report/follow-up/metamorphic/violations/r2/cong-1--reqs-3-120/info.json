@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/equalities/cong-1.hylo",
+ "rel": "r2",
+ "vid": "reqs:3:120",
+ "kind": "reqs",
+ "desc": "requirements of `fun f` in order [2, 1, 0]",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type 'V' to parameter '(T::P).X'",
+   "error: type 'U' has no static member 'X'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'U' has no static member 'X'"
+   ]
+  }
+ }
+}

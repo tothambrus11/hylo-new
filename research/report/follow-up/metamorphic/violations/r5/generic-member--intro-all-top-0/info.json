@@ -1,0 +1,44 @@
+{
+ "file": "Tests/CompilerTests/positive/generic-member.hylo",
+ "rel": "r5",
+ "vid": "intro-all-top:0",
+ "kind": "intro-all-top",
+ "desc": "`A<Void>` named Alq everywhere (1 places), alias declared first",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: cannot pass value of type 'Void' to parameter 'U'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: cannot pass value of type 'Void' to parameter 'U'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: cannot pass value of type 'Void' to parameter 'U'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: cannot pass value of type 'Void' to parameter 'U'"
+   ]
+  }
+ }
+}

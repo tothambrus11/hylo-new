@@ -1,7 +1,7 @@
 From a04befe62113bb0bc57af158c837275ea7947a9d Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 15:53:43 +0000
-Subject: [PATCH 19/27] Typer: abstractstrict (Self.X is only equal to a
+Subject: [PATCH 19/30] Typer: abstractstrict (Self.X is only equal to a
  selection through the same witness); corrections to eqindex and eqeager from
  the design review
 

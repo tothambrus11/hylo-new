@@ -1,0 +1,11 @@
+// Tests: u02 for a conditional extension of a generic struct whose requirement is a refinement.
+// Correct verdict: accepted. (Every configuration rejects it.)
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+struct Box<T> { public var v: T; public memberwise init }
+extension <T where T is R> Box<T> {
+  fun one() -> T.X { self.v.get() }
+  fun two(x: T.X) { self.v.put(x) }
+  fun both() { self.two(self.one()) ; self.v.put(self.one()) ; self.two(self.v.get()) }
+}
+fun g<U where U is R>(b: Box<U>) { b.two(b.one()) ; b.v.put(b.one()) ; b.two(b.v.get()) }

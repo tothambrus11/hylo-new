@@ -1,7 +1,7 @@
 From 9dc04d7b1badad7f05cb4cd4b8abf1d0d811f0fc Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 16:17:40 +0000
-Subject: [PATCH 21/27] Solver: twins, cleanfirst, lookahead (result-preserving
+Subject: [PATCH 21/30] Solver: twins, cleanfirst, lookahead (result-preserving
  speed-ups of overload resolution)
 
 twins: candidates of one overload set that have the same type share one

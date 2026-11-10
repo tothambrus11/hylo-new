@@ -1,0 +1,22 @@
+// Tests: the result of the call initialises a field, through the memberwise initialiser of a
+// generic struct and of a concrete one.
+// Correct verdict: rejected (2 errors: `K1(x: pick(A()))` and the annotation `Box<S1>`).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+struct K0 { public var x: S0; public memberwise init }
+struct K1 { public var x: S1; public memberwise init }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun q() {
+  let a = K0(x: pick(A()))
+  let b = K1(x: pick(A()))
+  let c: Box<S0> = Box(v: pick(A()))
+  let d: Box<S1> = Box(v: pick(A()))
+}

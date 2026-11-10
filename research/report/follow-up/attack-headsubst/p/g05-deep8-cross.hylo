@@ -1,0 +1,29 @@
+// Tests: a conditional conformance whose associated type is defined through the one of its
+// premise, at depth 8, for two base types with different associated types.
+// Correct verdict: rejected (2 errors): `pick(c)` is a `Box^8<S1>` and `take(b, _)` expects a
+// `Box^8<S0>`; `pick(b)` is not an `S1`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+struct B { public memberwise init }
+given B is P { type X = S1
+  fun get() -> S1 { S1() }
+  fun put(x: S1) {} }
+given <T where T is P> => Box<T> is P { type X = Box<T.X>
+  fun get() -> Box<T.X> { Box<T.X>(v: self.v.get()) }
+  fun put(x: Box<T.X>) { self.v.put(x.v) } }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+type BA = Box<Box<Box<Box<Box<Box<Box<Box<A>>>>>>>>
+type BB = Box<Box<Box<Box<Box<Box<Box<Box<B>>>>>>>>
+fun q(b: BA, c: BB) {
+  take(b, pick(c))
+  wantS1(pick(b))
+}

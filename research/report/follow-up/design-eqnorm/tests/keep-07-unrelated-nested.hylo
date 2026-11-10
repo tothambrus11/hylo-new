@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// expected: rejected at every stage. A.X == B.X and C.X == D.X do not relate D.X and A.X
+// (soundness problem 1 in a nested position; base accepts).
+// currently: base accepted (summon.subgoals=2429 summon.matches=47781); FULL rejected (summon.subgoals=7 summon.matches=452 eqsolve.refuted=1 index.fallback=6). FULL says: cannot pass value of type 'Box<(D::P).X>' to parameter 'Box<(A::P).X>'
+trait P { type X }
+struct Box<T> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A is P, B is P, C is P, D is P, A.X == B.X, C.X == D.X>(x: Box<D.X>) {
+  check<Box<A.X>>(x)
+}

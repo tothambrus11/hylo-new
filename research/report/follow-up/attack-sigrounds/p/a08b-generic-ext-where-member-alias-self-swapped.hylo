@@ -1,0 +1,9 @@
+// a08 with its last two declarations swapped.
+trait Q {}
+trait R {}
+struct A {}
+struct Box<T> {}
+given Box<A> is Q {}
+type BA = Box<A>
+given BA.LA is R {}
+extension <T where LA is Q> Box<T> { type LA = Self }

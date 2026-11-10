@@ -1,0 +1,6 @@
+// Ill-typed: `B<T> is Derived` needs `B<T> is Base`, which nothing provides. No member of the
+// conformance mentions `Base`.
+trait Base { type E }
+trait Derived refines Base { type Assoc }
+struct B<T> {}
+given <T> => B<T> is Derived { type Assoc = Int }

@@ -1,0 +1,17 @@
+// The form of A7 that DESIGN.md describes: the requirement does not mention the parameters
+// (`A is P`), f calls itself with V := AX, an alias of A.X selected through its own requirement,
+// in the scope of a nearer conformance `A is P` (X = C). ILL TYPED: needs `AX is R`.
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct C {}
+given C is Q {}
+given C is R {}
+fun f<V where A is P, A.X is Q, V is R>() {
+  type AX = A.X
+  if true {
+    given A is P { type X = C }
+    f<AX>()
+  }
+}

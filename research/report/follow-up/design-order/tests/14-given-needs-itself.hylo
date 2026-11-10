@@ -1,0 +1,6 @@
+// Expected after the change: rejected.
+// Reason: `A.E` needs `A is P`, which nothing provides: the given itself is `A.E is P`, whose subject is not known. The table is stable without it and the lookup of `E` fails.
+// Currently: base rejects it; FULL rejects it.
+trait P { type E }
+struct A {}
+given A.E is P { type E = A }

@@ -1,0 +1,22 @@
+// Tests: the type argument occurs only under the projection; it cannot be inferred from the
+// argument unless the checker enumerates the conformances.
+// Correct verdict: QUESTION. With one conformance in scope (`first`) the call may be accepted;
+// with two (`second`) it must be rejected.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun only<T where T is P>(x: T.X) {}
+fun first() { only(S0()) }
+fun second() {
+  given S1 is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  only(S0())
+}

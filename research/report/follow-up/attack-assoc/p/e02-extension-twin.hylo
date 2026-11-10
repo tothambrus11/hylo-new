@@ -1,0 +1,9 @@
+// Extension of the conforming types: w.one() is a W.X through W's witness, v.two expects a V.X
+// through V's witness. V == W does not make them equal (negative/associated-type-inequality.hylo).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun f<V, W where V == W, V is P, W is P>(v: V, w: W) { v.two(w.one()) }

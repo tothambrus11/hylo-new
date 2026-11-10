@@ -1,0 +1,41 @@
+//! stage:typing no-std
+// ATTACK on stage 1b (eqeager), found in review. expected: accepted at every stage.
+// The conditional extension does not apply: its premise has no derivation, and the search for one
+// does not terminate. Each step of that search matches a given through A == B. Under FULL every
+// such step costs three layers, the depth bound stops the search after three steps (6561 threads),
+// the resolution fails silently, the unconditional extension is used and the program is accepted.
+// With eqeager as first implemented the equality layers are free, the search goes two steps deeper
+// (590490 threads), exceeds the budget, and the program is REJECTED with "implicit resolution is too
+// complex". The double-run self-check does not see it (both runs return no result). The revised
+// rule (5.2, Hook 2) ends a resolution silently when the budget is exceeded past the layer at which
+// the depth bound would have ended it.
+// currently: base out of memory; FULL accepted (summon.subgoals=8191 summon.matches=75423 summon.depthExhausted=1 eqsolve.proved=7371 index.fallback=820); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) rejected (summon.subgoals=66430 summon.matches=154994 summon.depthExhausted=1 summon.budgetExhausted=1 eqsolve.proved=66420 eqeager.matches=66420). Stage 1 says: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type argu. With selfcheck: no violation.
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Z0 {}
+struct Z1 {}
+struct S1<X> {}
+struct S2<X> {}
+struct S3<X> {}
+struct S4<X> {}
+struct S5<X> {}
+struct S6<X> {}
+struct S7<X> {}
+struct S8<X> {}
+struct S9<X> {}
+struct Wrap<X, Y> {}
+struct Holder<Y> { public memberwise init }
+given Wrap<A, S1<S1<Z0>>> is Q {}
+given <Y where Wrap<B, S1<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S2<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S3<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S4<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S5<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S6<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S7<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S8<Y>> is Q> => Wrap<A, Y> is Q {}
+given <Y where Wrap<B, S9<Y>> is Q> => Wrap<A, Y> is Q {}
+extension <Y where Wrap<A, Y> is Q> Holder<Y> { fun m() {} }
+extension <Y> Holder<Y> { fun m() {} }
+fun f<T where T == A, T == B>(x: Holder<Z1>) { x.m() }

@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// ATTACK on the account of `match` (section 2). expected: accepted at every stage (unchanged), as a
+// documented quirk; open question 5. `extension A` does not apply to a value of type T when T == A
+// (experiments/m2), but `extension AA` with `type AA = A` does: the alias defeats the root test of
+// `match`, in `applies` as in attack-01. The root test of stage 2 (5.3, Hook 1) must be written so
+// that it gives this same answer, or the change must be listed as a verdict change.
+// currently: base accepted (summon.subgoals=12 summon.matches=364); FULL accepted (summon.subgoals=1 summon.matches=3 eqsolve.proved=1); stage 1 as first implemented (binary eq15, FULL,eqindex,eqeager) accepted (summon.matches=2 eqsolve.proved=1 eqeager.matches=1). With selfcheck: no violation.
+struct A { public memberwise init }
+type AA = A
+extension AA { fun bar() {} }
+fun f<T where T == A>(x: T) { x.bar() }

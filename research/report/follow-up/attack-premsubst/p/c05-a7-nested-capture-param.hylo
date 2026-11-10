@@ -1,0 +1,16 @@
+// As c04 without capturing locals: the value typed through f's requirement is passed to `inner`
+// as an argument whose type is a generic parameter Y of inner, and Y == T.X cannot be written
+// without naming a requirement. Instead inner takes the value through a parameter of type V2
+// and the call f<T, V2> needs `V2 is R`, which inner states: WELL TYPED (control for the syntax of
+// nested generic functions; must be accepted).
+trait P { type X
+  fun get() -> X }
+trait Q {}
+trait R { fun show() }
+fun f<T, V where T is P, T.X is Q, V is R>(t: T, v: V) {
+  v.show()
+  fun inner<V2 where V2 is R>(t2: T, z: V2) {
+    f<T, V2>(t2, z)
+  }
+  inner<V>(t, v)
+}

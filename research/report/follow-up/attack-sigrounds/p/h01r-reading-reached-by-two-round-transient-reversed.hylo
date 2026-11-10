@@ -1,0 +1,31 @@
+// The local givens are in reverse order.
+// The local givens `g` and `g2` justify each other: `g` (A is P with E = Bool) needs `A is Q`,
+// and `g2` is `A is Q` only when `A.E` is `Bool`, that is when `g` is visible. Nothing else
+// provides `A is Q` in the final table. `k` provides it during rounds 2 and 3 only (it reads
+// `A.E3`, which changes one round after `A.E2` does), which is long enough for `g` and `g2` to
+// take over. Compare with h02, where `k` reads `A.E2` and provides `A is Q` during round 2 only.
+trait P { type E }
+trait Q { type F }
+trait P2 { type E2 }
+trait P3 { type E3 }
+struct A {}
+struct C {}
+given A is P { type E = Int }
+given A is P2 { type E2 = Int }
+given A is P3 { type E3 = Int }
+extension Int { type T = A }
+extension Int { type V = C }
+extension Int { type W = A }
+extension Int { type W2 = C }
+extension Bool { type T = C }
+extension Bool { type U = A }
+extension Bool { type V = A }
+extension Bool { type W = A }
+extension Bool { type W2 = A }
+fun h() {
+  given A.E.V is Q { type F = Bool }
+  given A.F.U is P { type E = Bool }
+  given A.E3.T is Q { type F = Bool }
+  given A.E2.W2 is P3 { type E3 = Bool }
+  given A.E2.W is P2 { type E2 = Bool }
+}

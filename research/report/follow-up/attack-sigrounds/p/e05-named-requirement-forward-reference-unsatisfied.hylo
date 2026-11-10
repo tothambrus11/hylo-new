@@ -1,0 +1,10 @@
+// Ill-typed at the call: `Box<A>().g()` needs `A.X is Q`, that is `Int is Q`, which nothing
+// provides (only `Bool is Q`). Control e05c provides `Int is Q`.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int }
+given Bool is Q {}
+extension <T where T.X is Q, let u: P<T>> Box<T> { public fun g() {} }
+public fun main() { Box<A>().g() }

@@ -1,0 +1,8 @@
+// As g06 but the blanket conformance has X = C: only g's requirement satisfies U.X == B.
+// Well typed. FULL accepts through the workaround.
+trait P { type X }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given <Z> => Z is P { type X = C }
+fun f<T where T is P, T.X == B>() {}
+fun g<U where U is P, U.X == B>() { f<U>() }

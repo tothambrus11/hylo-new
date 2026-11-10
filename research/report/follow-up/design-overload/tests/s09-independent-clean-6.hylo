@@ -1,0 +1,18 @@
+// expected after the change: same verdict, diagnostics and inferred types as today;
+//   solver.forks unchanged (126)
+// reason: NOT fixed by this design, recorded so that nobody expects otherwise: six independent
+//   sets, each with two clean candidates of different types. Only solving connected components
+//   separately would help (DESIGN.md, option c).
+// currently (base): accepted; solver.forks=126 solver.overloads=63
+// currently (FULL): accepted; solver.forks=126 solver.overloads=63
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> Y { Y() }
+}
+fun k<V0, V1, V2, V3, V4, V5>(x0: V0, x1: V1, x2: V2, x3: V3, x4: V4, x5: V5) {}
+public fun main() {
+  extension S { static fun a() -> X { X() } }
+  k(S.a(), S.a(), S.a(), S.a(), S.a(), S.a())
+}

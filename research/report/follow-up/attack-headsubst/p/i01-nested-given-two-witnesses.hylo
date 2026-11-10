@@ -1,0 +1,10 @@
+// Tests: the projection goes through a given declared in the trait (`X is Q`), for two
+// unrelated type parameters.
+// Correct verdict: rejected; `far(v)` is a `V.X.Y` and `feed(u, _)` expects a `U.X.Y`.
+trait Q { type Y; fun y() -> Y; fun eat(y: Y) }
+trait P { type X
+  given X is Q
+  fun get() -> X }
+fun far<T where T is P>(t: T) -> T.X.Y { t.get().y() }
+fun feed<T where T is P>(t: T, y: T.X.Y) { t.get().eat(y) }
+fun g<U, V where U is P, V is P>(u: U, v: V) { feed(u, far(v)) }

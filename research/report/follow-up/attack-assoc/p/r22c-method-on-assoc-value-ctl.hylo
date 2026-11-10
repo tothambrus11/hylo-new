@@ -1,0 +1,5 @@
+// Control of r22: the same call in the body of the trait.
+trait Q { fun q() }
+trait P { type X ; given X is Q
+  fun get() -> X
+  fun m() { self.get().q() } }

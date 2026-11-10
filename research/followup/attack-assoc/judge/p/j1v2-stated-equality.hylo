@@ -1,0 +1,9 @@
+// Judge, finding 1, valid twin 2. Two witnesses and V.X == W.X stated
+// (positive/associated-type-equality.hylo, f2). Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) } }
+fun f<V, W where V == W, V is P, W is P, V.X == W.X>(v: V, w: W) { v.two(w.one()) }

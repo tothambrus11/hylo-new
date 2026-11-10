@@ -1,0 +1,6 @@
+// u02 from a generic caller: f<V, V>() where g has the facts for V. WELL TYPED.
+trait P { type X }
+trait Q {}
+trait R2 {}
+fun f<T, U where T is P, U is P, T.X is Q, U.X is R2, T.X == U.X>() {}
+fun g<V where V is P, V.X is Q, V.X is R2>() { f<V, V>() }

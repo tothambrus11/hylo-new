@@ -1,0 +1,17 @@
+// assocsubst: the definition is an application of a generic alias (type X = Twice<T>).
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+type Twice<U> = Pair<U, U>
+given <T> => Box<T> is P {
+  type X = Twice<T>
+  fun get() -> Pair<T, T> { self.get() }
+  fun put(x: Pair<T, T>) {} }
+fun check<T>(x: T) {}
+fun ok(a: Box<S0>) { check<Pair<S0, S0>>(a.get()) }
+fun bad(a: Box<S0>, b: Box<S1>) { b.put(a.get()) }

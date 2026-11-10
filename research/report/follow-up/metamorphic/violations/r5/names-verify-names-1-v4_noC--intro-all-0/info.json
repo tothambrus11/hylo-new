@@ -1,0 +1,45 @@
+{
+ "file": "research/report/test-programs/declaration-order/names-verify-names-1-v4_noC.hylo",
+ "rel": "r5",
+ "vid": "intro-all:0",
+ "kind": "intro-all",
+ "desc": "`A.Inner` named Alq everywhere (2 places), alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "reject",
+  "errors": [
+   "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"
+  ]
+ },
+ "variant": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: definition of 'Alq' refers to itself",
+    "error: type 'Alq' has no static member 'Foo'"
+   ]
+  },
+  "FIX": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"
+   ],
+   "b_errors": []
+  },
+  "FULL": {
+   "a": "reject",
+   "b": "accept",
+   "a_errors": [
+    "error: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect"
+   ],
+   "b_errors": []
+  }
+ }
+}

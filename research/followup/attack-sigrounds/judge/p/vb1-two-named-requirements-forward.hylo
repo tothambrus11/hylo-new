@@ -1,0 +1,6 @@
+// Judge, variant B1: finding 4 with both requirements named. Ill-formed by the order rule: `v` selects
+// T.X before `u: P<T>` is introduced.
+trait P { type X }
+trait Q {}
+struct Box<T> {}
+extension <T where let v: Q<T.X>, let u: P<T>> Box<T> { fun g() {} }

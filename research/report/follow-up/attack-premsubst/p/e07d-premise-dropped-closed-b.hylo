@@ -1,0 +1,16 @@
+// Twin of e07c with `given B is Q` in place of `given BX is Q`. WELL TYPED: Box<A>.X = A.X = B.
+// (Shape of e05; reported as INCOMPLETE if rejected.)
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { var t: T
+  public memberwise init }
+given A is P { type X = B
+  fun get() -> B { B() } }
+given <T where T is P> => Box<T> is P { type X = T.X
+  fun get() -> T.X { self.t.get() } }
+given B is Q { fun use() {} }
+fun f<T where T is P, T.X is Q>(t: T) { t.get().use() }
+public fun main() { f<Box<A>>(Box<A>(t: A())) }

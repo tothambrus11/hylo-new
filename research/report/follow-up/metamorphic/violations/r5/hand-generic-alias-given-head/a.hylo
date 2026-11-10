@@ -1,0 +1,6 @@
+trait P {}
+struct A {}
+struct Box<T> {}
+given <T> => Box<T> is P {}
+fun need<X where X is P>() {}
+fun m() { need<Box<A>>() }

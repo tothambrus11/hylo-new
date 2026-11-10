@@ -1,0 +1,18 @@
+// assocsubst: X is a parameter U that does not occur in the head. Through the methods, is
+// Box<S0>.X an S1 in one statement and an S0 in the next?
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T, U> => Box<T> is P { type X = U
+  fun get() -> U { self.get() }
+  fun put(x: U) {} }
+fun q(a: Box<S0>) {
+  let y: S1 = a.get()
+  let z: S0 = a.get()
+  a.put(S0())
+  a.put(S1())
+}

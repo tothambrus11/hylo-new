@@ -1,0 +1,14 @@
+// Dependent requirements on the parameters of a generic type's member, where both requirements
+// are in the member's clause. Well typed.
+trait P { type X }
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+given B is Q {}
+given A is P { type X = B }
+struct Box<T> {
+  public memberwise init
+  fun m<where T is P, T.X is Q>() {}
+}
+fun g<U where U is P, U.X is Q>(b: Box<U>) { b.m() }
+public fun main() { Box<A>().m() }

@@ -1,7 +1,7 @@
 From 60a94ec93ee3c1e6f3e4e7030c829d74d8cb7f02 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Fri, 6 Nov 2026 15:23:07 +0000
-Subject: [PATCH 09/27] Typer: fixes from the second adversarial review (occurs
+Subject: [PATCH 09/30] Typer: fixes from the second adversarial review (occurs
  root, arrowenv, eqsolve CC/bans/costs, eqmgu, extorder deferred check,
  givencheck)
 

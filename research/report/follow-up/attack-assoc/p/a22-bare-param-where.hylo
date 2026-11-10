@@ -1,0 +1,14 @@
+// assocsubst: conformance of a bare parameter with a requirement, type X = A.Y.
+trait Q { type Y }
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+given A0 is Q { type Y = S0 }
+given A1 is Q { type Y = S1 }
+given <A where A is Q> => A is P { type X = A.Y }
+fun check<T>(x: T) {}
+fun ok(x: A0.X) { check<S0>(x) }
+fun bad1(x: A0.X) { check<S1>(x) }
+fun bad2(x: A0.X) { check<A1.X>(x) }

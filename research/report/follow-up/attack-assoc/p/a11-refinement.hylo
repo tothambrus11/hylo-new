@@ -1,0 +1,12 @@
+// assocsubst: the associated type of P is reached through a conformance to a trait that refines P.
+trait P { type X }
+trait R refines P {}
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = T }
+given <T> => Box<T> is R {}
+fun check<T>(x: T) {}
+fun viaR<B where B is R>(b: B, x: B.X) {}
+fun ok(b: Box<S0>, x: S0) { viaR(b, x) }
+fun bad(b: Box<S0>, x: S1) { viaR(b, x) }

@@ -1,0 +1,6 @@
+// The initializer of `w` calls `make`, which needs a given of type `A`: the only one is `w`.
+// Ill-formed: `w` would be initialized from itself. Control s01c: with a second given.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { A() }
+given let w = make()
+public fun main() {}

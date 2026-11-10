@@ -1,0 +1,15 @@
+// assocsubst: as a14, valid use: Box<S0>.X is Box<S0>.Elem, which is S0.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct S0 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public type Elem = T }
+given <T> => Box<T> is P {
+  type X = Self.Elem
+  fun get() -> X { self.get() }
+  fun put(x: X) {} }
+fun check<T>(x: T) {}
+fun ok(a: Box<S0>) { check<S0>(a.get())
+  a.put(S0()) }

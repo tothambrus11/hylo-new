@@ -1,0 +1,25 @@
+// expected after the change: same verdict, diagnostics and inferred types as today (the error
+//   of the preferred candidate is reported)
+// reason: review/solver/t01_quirk_prune.hylo. The preferred candidate of S.f has an error; the
+//   other one has a nested ambiguity, which is a diagnostic but not a counted error. Both stay
+//   viable and the preferred one wins.
+// currently (base): rejected, 1 diagnostic(s): 24.9-18: error: cannot pass value of type 'B' to parameter 'A'; solver.forks=4 solver.overloads=2
+// currently (FULL): rejected, 1 diagnostic(s): 24.9-18: error: cannot pass value of type 'B' to parameter 'A'; solver.forks=4 solver.overloads=2
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> B { B() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+fun takeA(x: A) {}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  takeA(S.f().n())
+}

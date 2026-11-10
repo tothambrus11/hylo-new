@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// expected: accepted at every stage. `T == U` is proved while U is still unknown; the answer is
+// U := A0 (eqmgu, unchanged), then `A0 is Q` follows from A2 is Q along the chain.
+// currently: base accepted (summon.subgoals=200 summon.matches=4105); FULL accepted (summon.subgoals=3 summon.matches=77 eqsolve.proved=1 eqmgu.solved=1 index.fallback=1).
+trait Q {}
+fun pick<T, U where U is Q, T == U>(x: T) {}
+fun f<A0, A1, A2 where A0 == A1, A1 == A2, A2 is Q>(x: A0) { pick(x) }

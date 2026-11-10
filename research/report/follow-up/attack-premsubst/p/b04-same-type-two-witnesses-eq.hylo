@@ -1,0 +1,10 @@
+// V == W with two witnesses V is P and W is P (negative/associated-type-inequality.hylo: V.X and
+// W.X are different types). f<V> needs (V via some witness).X is Q. g only knows W.X is Q.
+// With the witness of `V is P` taken to be g's requirement on V: ILL TYPED (V.X is not known Q).
+// Resolution may also discharge `T is P` at T = V with the witness of `W is P` coerced along
+// V == W; then T.X is W.X, which is Q: a consistent instantiation, accepted under design question 4.
+// The value-level twin b04v checks which one the elaboration really uses.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<V, W where V == W, V is P, W is P, W.X is Q>() { f<V>() }

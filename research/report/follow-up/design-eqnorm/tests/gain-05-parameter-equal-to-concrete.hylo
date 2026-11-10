@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// expected: accepted from stage 3 (eqclass: class matching for pairs with unification variables). C is Box<A>,
+// and Box<T> is P for every T that is Q. Today the pair (Box<?t>, C) is refused by
+// canDeriveCoercions, which compares the sides of equalities up to renaming only. Rejected by base
+// and FULL.
+// currently: base rejected (summon.subgoals=2 summon.matches=147); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: no coercion from 'P<C> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+trait Q {}
+struct Box<X> { public memberwise init }
+given <T where T is Q> => Box<T> is P {}
+fun need<V where V is P>() {}
+fun f<A, C where Box<A> == C, A is Q>() { need<C>() }

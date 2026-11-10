@@ -1,0 +1,4 @@
+//! stage:typing no-std
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B, C where B is P, C is P, B == A, A == C, C == A>() { g<A>() }

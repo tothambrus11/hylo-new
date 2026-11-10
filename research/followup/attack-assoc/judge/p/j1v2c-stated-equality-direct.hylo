@@ -1,0 +1,5 @@
+// Judge, finding 1, valid twin 2, control: the same through the requirements of the trait. Valid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+fun f<V, W where V == W, V is P, W is P, V.X == W.X>(v: V, w: W) { v.put(w.get()) }

@@ -1,0 +1,4 @@
+struct A<U> {
+  public fun f(x: U) {}
+}
+fun use(a: A<Void>) { a.f(()) }

@@ -1,0 +1,17 @@
+//! stage:typing no-std
+// attack (review): which witness does a requirement get? In g, 'A is P' alone resolves to g's own
+// requirement (nearest; need<A>() picks it), whose X is abstract. The module's conformance has X = B
+// and B is Q. The design as first written tries every witness of 'A is P' and keeps the one for which
+// 'A.X is Q' holds: accepted through the shadowed conformance, although 'A.X is Q' written in g does
+// not hold. With the commit rule (3.10): rejected. Question 4 of section 7.
+// expected (premsubst + commit rule): rejected. expected (premsubst, joint reading): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst accepted (bound=1 released=2 normalized=1); +selfcheck same; +assocsubst accepted; NEW accepted
+// currently: base rejected (subgoals=6 matches=444): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=4 matches=79): no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given B is Q {}
+given A is P { type X = B }
+fun f<T where T is P, T.X is Q>() {}
+fun g<where A is P>() { f<A>() }

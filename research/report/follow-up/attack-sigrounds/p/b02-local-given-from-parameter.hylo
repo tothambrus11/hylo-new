@@ -1,0 +1,7 @@
+// A given in a function body whose type is inferred from a parameter of the function.
+struct A { public memberwise init }
+fun need<where let u: A>() {}
+fun h(a: A) {
+  given let g = a
+  need()
+}

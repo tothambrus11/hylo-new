@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// expected: rejected at every stage. The equality C == A of `inner` must not be visible in `other`,
+// which shares the outer scope: closures are per scope, not per file.
+// currently: base rejected (summon.subgoals=41 summon.matches=880); FULL rejected (summon.subgoals=1 summon.matches=4 eqsolve.proved=1). FULL says: cannot pass value of type 'B' to parameter 'A'
+fun check<T>(x: T) {}
+fun outer<A, B>() {
+  fun inner<C where C == A, B == C>(x: B) { check<A>(x) }
+  fun other(x: B) { check<A>(x) }
+}

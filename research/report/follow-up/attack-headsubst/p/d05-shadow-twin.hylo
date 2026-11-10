@@ -1,0 +1,25 @@
+// Tests: the same requirement `T is P` of `pick` and `take` is satisfied by two conformances
+// of `A` in two nested scopes; the value crosses in a variable.
+// Correct verdict: rejected; `v` is an `S0` (outer conformance) and `take` in the block expects
+// `A.X` = `S1`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun outer() {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  let v = pick(A())
+  if true {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    take(A(), v)
+  }
+}

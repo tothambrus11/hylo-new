@@ -1,0 +1,10 @@
+//! stage:lowering
+
+trait P { fun f() }
+struct A<T> {
+  var x: T
+}
+given <T is P> => AlqA<T> is P {
+  fun f() { self.x.f() }
+}
+type AlqA<Tq0> = A<Tq0>

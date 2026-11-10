@@ -1,0 +1,12 @@
+//! stage:typing no-std
+trait Collection { }
+struct Box<T> { }
+struct Flag { public memberwise init }
+extension <T > Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+fun g<T >(b: AlqBox<T>) {
+  let f: Flag = b.first()
+}
+type AlqBox<Tq0> = Box<Tq0>

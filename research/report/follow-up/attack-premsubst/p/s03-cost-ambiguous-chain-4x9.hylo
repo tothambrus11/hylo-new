@@ -1,0 +1,12 @@
+// COST. A chain of 9 dependent requirements where each level has 4 conformances (all X = A) and
+// the last requirement fails (A is not Q). ILL TYPED. FULL fails at the first step; NEW explores
+// the combinations of witnesses (4^9) until the size bound or the budget stops it.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = A }
+given A is P { type X = A }
+given A is P { type X = A }
+given A is P { type X = A }
+fun f<T where T is P, T.X is P, T.X.X is P, T.X.X.X is P, T.X.X.X.X is P, T.X.X.X.X.X is P, T.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X.X.X is Q>() {}
+public fun main() { f<A>() }

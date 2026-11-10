@@ -1,0 +1,11 @@
+// Judge, finding 2, variant F. No trait: a generic method of a generic struct that calls itself on
+// a receiver whose type mentions its own parameter. b is a Box<Box<U>>, so b.m<S0>(c) returns the T
+// of b, a Box<U>, not a Box<S0>. Invalid.
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public fun first() -> T { self.first() }
+  public fun m<U>(b: Box<Box<U>>, c: Box<Box<S0>>) -> T {
+    let r: Box<S0> = b.m<S0>(c, c)
+    return self.first() } }

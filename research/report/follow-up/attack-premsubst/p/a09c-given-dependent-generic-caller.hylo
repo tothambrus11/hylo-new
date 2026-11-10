@@ -1,0 +1,8 @@
+// As a09 from a generic caller. Well typed: Box<U> is P from U is P and U.X is Q; Box<U>.X = U is R.
+trait P { type X }
+trait Q {}
+trait R {}
+struct Box<T> {}
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+fun f<T where T is P, T.X is R>() {}
+fun g<U where U is P, U.X is Q, U is R>() { f<Box<U>>() }

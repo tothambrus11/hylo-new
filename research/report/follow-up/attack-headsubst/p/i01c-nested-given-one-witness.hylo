@@ -1,0 +1,8 @@
+// Control of i01: one witness. Correct verdict: accepted.
+trait Q { type Y; fun y() -> Y; fun eat(y: Y) }
+trait P { type X
+  given X is Q
+  fun get() -> X }
+fun far<T where T is P>(t: T) -> T.X.Y { t.get().y() }
+fun feed<T where T is P>(t: T, y: T.X.Y) { t.get().eat(y) }
+fun g<U, V where U is P, V is P>(u: U, v: V) { feed(u, far(u)) ; feed(v, far(v)) }

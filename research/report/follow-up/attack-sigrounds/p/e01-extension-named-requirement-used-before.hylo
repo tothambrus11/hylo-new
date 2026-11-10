@@ -1,0 +1,7 @@
+// The first requirement of the extension selects `T.X` through the requirement `u`, which is
+// introduced after it. The rule on the order of requirements rejects the twin e01c, where the
+// second requirement has no name.
+trait P { type X }
+trait Q {}
+struct Box<T> {}
+extension <T where T.X is Q, let u: P<T>> Box<T> { fun g() {} }

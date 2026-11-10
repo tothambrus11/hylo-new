@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// expected: accepted at every stage. The generic given is matched through A0 == ... and its premises
+// `T == U`, `U is Q` are then proved with U inferred; exercises hypotheses with variables, which stay
+// on the existing path.
+// currently: base accepted (summon.subgoals=43 summon.matches=1051); FULL accepted (summon.subgoals=3 summon.matches=151 eqsolve.proved=1 index.fallback=2).
+trait P {}
+trait Q {}
+struct Box<X> {}
+given <T, U where T == U, U is Q> => Box<T> is P {}
+fun need<W where W is P>() {}
+fun f<A0, A1, A2 where A0 == A1, A1 == A2, A2 is Q>() { need<Box<A0>>() }

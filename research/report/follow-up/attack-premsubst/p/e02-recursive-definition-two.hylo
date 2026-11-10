@@ -1,0 +1,10 @@
+// X is defined recursively through two conformances: A.X = B.X and B.X = A.X. ILL TYPED (no such
+// type); must be rejected without a crash or a timeout.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given A is P { type X = B.X }
+given B is P { type X = A.X }
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<A>() }

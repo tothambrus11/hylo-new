@@ -1,0 +1,7 @@
+trait P {}
+struct V {}
+struct I {}
+given a : V is P {}
+given b : <T where T is P> => I is P {}
+fun use<T is P>(x: T) {}
+fun m(i: I) { use(i) }

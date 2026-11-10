@@ -1,0 +1,18 @@
+// A conformance in the body of a method of a generic conformance whose where clause goes through
+// another conformance; the subject of the local conformance uses that where clause.
+trait P { type X; fun f(x: Foo<X>) }
+trait Q {}
+trait R {}
+struct A {}
+struct Foo<T> {}
+struct Box<T> { public memberwise init }
+given A is P { type X = Int; public fun f(x: Foo<Int>) {} }
+given Int is R {}
+fun need<T where T is Q>(x: T) {}
+given <T where T is P, T.X is R> => Box<T> is P {
+  type X = T.X
+  public fun f(x: Foo<T.X>) {
+    given Foo<T.X> is Q {}
+    need(x)
+  }
+}

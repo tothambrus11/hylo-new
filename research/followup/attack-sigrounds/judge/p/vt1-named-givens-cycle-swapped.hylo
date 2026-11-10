@@ -1,0 +1,5 @@
+// Judge, variant T1: t02 with its two givens exchanged. Ill-typed (a cycle).
+trait P { type X }
+struct A {}
+given wb: wa.X is P { type X = A }
+given wa: wb.X is P { type X = A }

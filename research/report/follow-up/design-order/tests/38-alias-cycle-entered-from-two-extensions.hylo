@@ -1,0 +1,9 @@
+// Expected after the change: rejected, in every order of the top-level declarations, without a self-check violation.
+// Reason: A cycle of two aliases entered from two extensions. Which alias is blamed depends on the one entered first (question 7 of section 7); the verdict and the table do not. The self-check must not take the difference in blame for a violation of A3.
+// Currently: base rejects it in all 24 orders tried; FULL rejects it in all 24 orders tried.
+// Review: with the design as first written (binary eq17, FULL+sigrounds+selfcheck) it is rejected in all 24 orders, and the self-check reports "the stable round reports other diagnostics in reverse order": a false alarm, since it compares the messages and the table is the same.
+struct A {}
+type X = Y
+type Y = X
+extension X { fun f() {} }
+extension Y { fun g() {} }

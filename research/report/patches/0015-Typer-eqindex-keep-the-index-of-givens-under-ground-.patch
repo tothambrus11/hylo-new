@@ -1,7 +1,7 @@
 From 4e7a2aabbd4ce1ea52d7f6b7610b84bf9d3c42c9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 14:18:01 +0000
-Subject: [PATCH 15/27] Typer: eqindex (keep the index of givens under ground
+Subject: [PATCH 15/30] Typer: eqindex (keep the index of givens under ground
  equalities)
 
 Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>

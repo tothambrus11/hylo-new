@@ -1,0 +1,9 @@
+// Judge, variant A4 (owner last): finding 1 with the member entered from the where clause of another
+// conformance (not from a subject). Well-typed: A.LA is A and A is Q.
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+given A is Q {}
+given <where A.LA is Q> => B is R {}
+extension <where LA is Q> A { type LA = Self }

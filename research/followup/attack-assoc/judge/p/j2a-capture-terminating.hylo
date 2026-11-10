@@ -1,0 +1,19 @@
+// Judge, finding 2, variant A. c02 made to terminate: the recursive call is guarded, so the S1
+// stored in b is really returned by b.m<S0>(...) and passed to takeS0. Invalid: the call returns
+// a Box<U>.X, which is U.
+trait P { type X
+  fun get() -> X
+  fun m<U>(u: U, b: Box<U>, again: Bool) -> X {
+    if again { takeS0(b.m<S0>(S0(), Box<S0>(t: S0()), false)) }
+    return self.get() } }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.t } }
+fun takeS0(x: S0) {}
+public fun main() {
+  let a = Box<S1>(t: S1())
+  let r: S1 = a.m<S1>(S1(), Box<S1>(t: S1()), true)
+}

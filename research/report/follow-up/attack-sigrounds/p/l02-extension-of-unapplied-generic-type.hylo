@@ -1,0 +1,8 @@
+// An extension whose extendee is a generic type written without arguments.
+trait P { type X }
+trait Q {}
+struct A {}
+struct Box<T> {}
+given A is P { type X = Int }
+given A.X is Q {}
+extension Box { fun g() {} }

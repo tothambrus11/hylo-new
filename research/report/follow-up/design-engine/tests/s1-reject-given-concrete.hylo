@@ -1,0 +1,14 @@
+//! stage:typing no-std
+// review: s1-gain-given-concrete without 'B is Q': the dependent premise fails.
+// expected (premsubst): rejected.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected; +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base rejected (subgoals=7 matches=511): no coercion from 'Q<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=3 matches=73 refuted=2): no coercion from 'Q<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct Box<T> { public memberwise init }
+given A is P { type X = B }
+given <T where T is P, T.X is Q> => Box<T> is Q {}
+fun need<T where T is Q>() {}
+public fun main() { need<Box<A>>() }

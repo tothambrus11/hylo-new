@@ -1,0 +1,14 @@
+//! stage:typing no-std
+// attack (review): the equality form of s1-reject-other-conformance. Rejected by FULL and by premsubst
+// as first written, but only because the coerced witness of 'U is P' (T's conformance, along T == U)
+// yields a projection that never matches (s1-attack-coerced-witness). Once step 3 removes coercions,
+// the joint reading accepts this program and s1-reject-other-conformance through T's conformance; the
+// commit rule keeps both rejected (alone, 'U is P' resolves to the requirement on U).
+// Note: base accepts this program, after a search of 107,565 candidates.
+// expected (premsubst + commit rule): rejected. expected (joint reading + 3.7): accepted.
+// observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=2 depthExhausted=1); +selfcheck same; +assocsubst rejected; NEW rejected
+// currently: base accepted (subgoals=5769 matches=107565); FULL rejected (subgoals=380 matches=10963 depthExhausted=1 premises=1): no coercion from '(P<U>, ((U::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P { type X }
+struct B { public memberwise init }
+fun f<V where V is P, V.X == B>() {}
+fun g<T, U where T == U, T is P, U is P, T.X == B>() { f<U>() }

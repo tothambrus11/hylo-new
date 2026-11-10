@@ -1,0 +1,9 @@
+// Control of u02: the extension and the caller require `P` itself. Correct verdict: accepted.
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun rt() { self.put(self.one()) }
+  fun ann() { let x: T.X = self.one() }
+}
+fun g<U where U is P>(u: U) { u.put(u.one()) }

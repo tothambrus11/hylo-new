@@ -1,0 +1,18 @@
+// As k05, invalid (2 errors expected).
+trait P { type X
+  fun get() -> X }
+trait Q { type Y
+  fun teg() -> Y }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init }
+struct Bag<T> { public var t: T
+  public memberwise init }
+given <T> => Box<T> is P { type X = Bag<T>
+  fun get() -> Bag<T> { Bag<T>(t: self.t) } }
+given <T> => Bag<T> is Q { type Y = Box<T>
+  fun teg() -> Box<T> { Box<T>(t: self.t) } }
+fun check<T>(x: T) {}
+fun f(b: Box<S0>) { check<Bag<S0>>(b.get().teg())
+  check<Box<S1>>(b.get().teg()) }

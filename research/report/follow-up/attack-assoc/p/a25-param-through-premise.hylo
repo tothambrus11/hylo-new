@@ -1,0 +1,13 @@
+// assocsubst: X is a parameter U determined only by a premise (T.Y == U). ok is valid, bad is invalid.
+trait Q { type Y }
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given A is Q { type Y = S0 }
+given <T, U where T is Q, T.Y == U> => Box<T> is P { type X = U }
+fun check<T>(x: T) {}
+type BA = Box<A>
+fun ok(x: BA.X) { check<S0>(x) }
+fun bad(x: BA.X) { check<S1>(x) }

@@ -1,0 +1,6 @@
+// v-abs-1 without the second conformance (T is P removed): Self.X == T.X through one witness. Valid.
+fun need<A, B where A == B>() {}
+trait P {
+  type X
+  fun f<T where T == Self>() { need<Self.X, T.X>() }
+}

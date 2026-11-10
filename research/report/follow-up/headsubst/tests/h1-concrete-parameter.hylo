@@ -1,0 +1,7 @@
+// Expected: accepted. `A.X` is `C`.
+trait P { type X }
+struct A { public memberwise init }
+struct C { public memberwise init }
+given A is P { type X = C }
+fun take<T where T is P>(t: T, x: T.X) {}
+fun q(x: C) { take(A(), x) }

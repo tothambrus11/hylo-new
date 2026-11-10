@@ -1,0 +1,5 @@
+// expected (heightbound): accepted. A tuple of five copyable elements is copyable. The derivation
+// has 12 steps (2 per element, 1 for the empty tail, 1 for the call) and height 6.
+// currently: base rejected (subgoals=304 matches=8889 depthExhausted=2): no coercion from 'Copyable<{Bool, Bool, Bool, Bool, Bool}> ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=304 matches=953 depthExhausted=2): no coercion from 'Copyable<{Bool, Bool, Bool, Bool, Bool}> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+fun need<T where T is Copyable>() {}
+public fun main() { need<{Bool, Bool, Bool, Bool, Bool}>() }

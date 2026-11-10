@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// expected: rejected at every stage. T == U does not identify the witnesses of `T is P` and `U is P`,
+// so T.X and U.X stay different (compiler test negative/associated-type-inequality). A design that
+// rewrote T and U to one representative before resolving `P<T>` would find two candidates and report
+// an ambiguity instead; the error must remain the type mismatch.
+// currently: base rejected (summon.subgoals=6 summon.matches=447); FULL rejected (summon.subgoals=2 summon.matches=147 index.fallback=2). FULL says: cannot pass value of type '(U::P).X' to parameter '(T::P).X'
+trait P { type X }
+fun check<T>(x: T) {}
+fun f0<T, U where T == U, T is P, U is P>(x: U.X) {
+  check<T.X>(x)
+}

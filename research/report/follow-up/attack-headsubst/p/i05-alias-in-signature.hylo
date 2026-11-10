@@ -1,0 +1,24 @@
+// Tests: the projection occurs in the signature under a generic alias and under an alias
+// declared in an extension of the conforming types.
+// Correct verdict: rejected (the calls with `S1()`; the existing checker also rejects the
+// body of `viaXX`, where the alias is not instantiated).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+type Id<Z> = Z
+extension <T where T is P> T { type XX = Box<T.X> }
+fun viaId<T where T is P>(t: T, x: Id<T.X>) { t.put(x) }
+fun viaXX<T where T is P>(t: T, x: T.XX) { t.put(x.v) }
+fun q() {
+  viaId(A(), S0())
+  viaId(A(), S1())
+  viaXX(A(), Box<S0>(v: S0()))
+  viaXX(A(), Box<S1>(v: S1()))
+}

@@ -1,0 +1,5 @@
+// Expected: accepted. The result of the inner call is a `U.X`, the parameter of the outer one.
+trait P { type X; fun get() -> X }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun use<T where T is P>(t: T, x: T.X) {}
+fun g<U where U is P>(u: U) { use(u, pick(u)) }

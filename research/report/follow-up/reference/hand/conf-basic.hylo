@@ -1,0 +1,20 @@
+trait P {}
+trait Q {}
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<E0> { public memberwise init }
+struct Pair<E0, E1> { public memberwise init }
+given A is P {}
+given <T where T is P> => Box<T> is P {}
+given <T, U where T is P, U is Q> => Pair<T, U> is P {}
+fun needP<W where W is P>() {}
+fun needQ<W where W is Q>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0() { needP<Box<Box<A>>>() }
+fun q1() { needP<Box<B>>() }
+fun q2<T where T is Q>() { needP<Pair<A, T>>() }
+fun q3<T where T is P>() { needP<Pair<A, T>>() }
+fun q4<T>() { needP<Box<T>>() }
+fun q5<T where T is P>() { needP<Box<Box<T>>>() }
+fun q6() { needQ<A>() }

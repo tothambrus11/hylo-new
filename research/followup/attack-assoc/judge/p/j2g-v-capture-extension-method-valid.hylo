@@ -1,0 +1,10 @@
+// Judge, finding 2, variant G, valid twin: the call returns a Box<U>.
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var t: T
+  public memberwise init
+  public fun first() -> T { self.first() } }
+extension <T> Box<T> {
+  fun m<U>(b: Box<Box<U>>, c: Box<Box<S0>>) -> T {
+    let r: Box<U> = b.m<S0>(c, c)
+    return self.first() } }

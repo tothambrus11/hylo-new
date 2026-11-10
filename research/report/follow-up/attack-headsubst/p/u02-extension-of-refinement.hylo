@@ -1,0 +1,12 @@
+// Tests: an extension of the types conforming to a refinement; its members mention the
+// associated type of the refined trait and use each other.
+// Correct verdict: accepted. (Every configuration rejects it: in the existing checker `T.X` is
+// already the error type when `T` conforms through a refinement.)
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+extension <T where T is R> T {
+  fun one() -> T.X { self.get() }
+  fun rt() { self.put(self.one()) }
+  fun ann() { let x: T.X = self.one() }
+}
+fun g<U where U is R>(u: U) { u.put(u.one()) }

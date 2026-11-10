@@ -1,0 +1,9 @@
+// The conformance of `A` to `P` is declared with the struct. An extension of every `P` declares
+// the member that the subject of the last given selects on `A`.
+trait P {}
+trait Q {}
+struct A is P {}
+extension <T where T is P> T { type M = Int }
+given A.M is Q {}
+fun need<T where T is Q>(x: T) {}
+fun use(x: Int) { need(x) }

@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// expected: accepted in stage 1, choosing `Box<C> is P`. Today `Box<A> is P` does not match P<Box<B>>
+// at all (see gain-03). From stage 2 (eqclosure) it matches too, with the same penalty, and the call is ambiguous:
+// rejected. This is the price of completeness; the program has two conformances for one type.
+// currently: base accepted (summon.subgoals=4 summon.matches=150); FULL accepted (summon.subgoals=2 summon.matches=77 eqsolve.proved=1 index.fallback=1).
+trait P {}
+struct Box<T> { public memberwise init }
+fun need<W where W is P>() {}
+fun f<A, B, C where Box<A> == Box<B>, C == B, Box<A> is P, Box<C> is P>() {
+  need<Box<B>>()
+}

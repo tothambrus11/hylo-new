@@ -1,0 +1,10 @@
+// `Self` in the where clause of an extension whose extendee goes through another extension.
+trait P {}
+struct A {}
+struct S<T> {}
+extension A { type M = S<A> }
+given <T> => S<T> is P {}
+type AM = A.M
+extension <where Self is P> AM { type N = Int }
+fun need(x: Int) {}
+fun f(x: AM.N) { need(x) }

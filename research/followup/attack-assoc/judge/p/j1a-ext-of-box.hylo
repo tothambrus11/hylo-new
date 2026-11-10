@@ -1,0 +1,11 @@
+// Judge, finding 1, variant A. The extension is of Box<T> for T is P instead of T itself.
+// w.one() is a W.X through W's witness, v.two expects a V.X through V's witness. Invalid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+struct Box<T> { public var t: T
+  public memberwise init }
+extension <T where T is P> Box<T> {
+  fun one() -> T.X { self.t.get() }
+  fun two(x: T.X) { self.t.put(x) } }
+fun f<V, W where V == W, V is P, W is P>(v: Box<V>, w: Box<W>) { v.two(w.one()) }

@@ -1,0 +1,11 @@
+// The default value of a parameter needs a conformance of the module, in a program whose
+// signatures need three rounds. Default values are typed by the checks, not by the rounds.
+trait P { type X }
+trait Q {}
+struct A { public memberwise init }
+given A is P { type X = Int }
+type K = A.X
+given K is Q {}
+fun make<T where T is P>(t: T) -> Int { 1 }
+fun f(x: Int = make(A())) -> Int { x }
+public fun main() { let _ = f() }

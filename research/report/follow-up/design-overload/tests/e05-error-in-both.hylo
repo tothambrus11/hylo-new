@@ -1,0 +1,16 @@
+// expected after the change: same verdict, diagnostics and inferred types as today
+// reason: review/solver/s01_err_commit.hylo. Both candidates of f lead to an error, in
+//   different places; the one reported depends on the scores of complete solutions.
+// currently (base): rejected, 1 diagnostic(s): 15.5-9: error: cannot pass value of type 'A' to parameter 'C'; solver.forks=6 solver.overloads=3
+// currently (FULL): rejected, 1 diagnostic(s): 15.5-9: error: cannot pass value of type 'A' to parameter 'C'; solver.forks=6 solver.overloads=3
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+fun f(x: A) -> A { A() }
+fun f(x: B) -> B { B() }
+fun g(x: B) {}
+fun g(x: C) {}
+public fun main() {
+  let a = A()
+  g(f(a))
+}

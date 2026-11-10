@@ -1,0 +1,12 @@
+// assocsubst: two parameters, the associated type is the second one. Line 11 is valid, 12 and 13 are not.
+trait P { type X }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Pair<T, U> { public memberwise init }
+given <T, U> => Pair<T, U> is P { type X = U }
+fun check<T>(x: T) {}
+type P01 = Pair<S0, S1>
+type P10 = Pair<S1, S0>
+fun ok(x: P01.X) { check<S1>(x) }
+fun bad1(x: P01.X) { check<S0>(x) }
+fun bad2(x: P01.X) { check<P10.X>(x) }

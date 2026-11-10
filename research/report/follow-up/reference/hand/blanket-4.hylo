@@ -1,0 +1,5 @@
+trait Tr0 {}
+trait Tr1 { type X1 }
+given <A where A is Tr0> => A is Tr1 { type X1 = A }
+fun needEq<X, Y where X == Y>() {}
+fun q0<T where T is Tr0>() { needEq<T.X1, T>() }

@@ -1,0 +1,7 @@
+struct Box<E0> { public memberwise init }
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<A, B, C where Box<A> == C, A == B>() { needEq<C, Box<B>>() }
+fun q1<A, B, C where Box<A> == C, A == B>(x: C) { check<Box<B>>(x) }
+fun q2<A, B where Box<A> == Box<B>>() { needEq<Box<Box<A>>, Box<Box<B>>>() }
+fun q3<A, B where Box<A> == Box<B>>(x: Box<Box<A>>) { check<Box<Box<B>>>(x) }

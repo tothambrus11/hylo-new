@@ -1,0 +1,24 @@
+// expected after the change: as today (accepted, the extension member is chosen);
+//   solver.forks=3 and solver.twinsReused=0 with `twins` alone; solver.forks=2 with
+//   `twins,cleanfirst`
+// reason: Three candidates in the order member, extension member, trait requirement; the first
+//   and the third have the same type and both fail at the argument. With `twins` alone the
+//   third must not reuse the first: the first was explored under best = worst and ran to a
+//   solution with one diagnostic; under best = 0 the fork is cancelled (rule T1 needs the same
+//   bound, rule T4 an exploration without any failure). A reuse would put a solution with a
+//   diagnostic in `viable`.
+// currently (base): accepted; solver.forks=3 solver.overloads=1
+// currently (FULL): accepted; solver.forks=3 solver.overloads=1
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+trait P { fun m(x: A0) -> Int }
+struct S {
+  public memberwise init
+  public fun m(x: A0) -> Int { 0 }
+}
+extension S { public fun m(x: A1) -> Int { 1 } }
+given S is P {}
+public fun main() {
+  let s = S()
+  let r = s.m(A1())
+}

@@ -1,0 +1,12 @@
+// assocsubst: the associated type grows at each step (type X = Box<Box<T>>). Valid.
+trait P { type X }
+struct S0 { public memberwise init }
+struct Box<T> { public memberwise init }
+given <T> => Box<T> is P { type X = Box<Box<T>> }
+fun check<T>(x: T) {}
+type B0 = Box<S0>
+type B1 = B0.X
+type B2 = B1.X
+type B3 = B2.X
+type B4 = B3.X
+fun f(x: B4.X) { check<Box<Box<Box<Box<Box<Box<S0>>>>>>>(x) }

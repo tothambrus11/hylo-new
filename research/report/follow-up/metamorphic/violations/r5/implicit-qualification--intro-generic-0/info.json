@@ -1,0 +1,45 @@
+{
+ "file": "Tests/CompilerTests/positive/implicit-qualification.hylo",
+ "rel": "r5",
+ "vid": "intro-generic:0",
+ "kind": "intro-generic",
+ "desc": "`B<...>` spelled `AlqB<...>` (1 places), generic alias declared last",
+ "found_in": "FULL",
+ "original": {
+  "verdict": "accept",
+  "errors": []
+ },
+ "variant": {
+  "verdict": "reject",
+  "errors": [
+   "error: type 'B<Void>' has no static member 'init'",
+   "error: type 'B<Void>' has no static member 'make'"
+  ]
+ },
+ "reduced": {
+  "base": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'B<Void>' has no static member 'make'"
+   ]
+  },
+  "FIX": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'B<Void>' has no static member 'make'"
+   ]
+  },
+  "FULL": {
+   "a": "accept",
+   "b": "reject",
+   "a_errors": [],
+   "b_errors": [
+    "error: type 'B<Void>' has no static member 'make'"
+   ]
+  }
+ }
+}

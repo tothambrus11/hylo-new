@@ -1,0 +1,15 @@
+//! stage:lowering
+
+struct A<U> is Deinitializable {
+}
+extension <T> A<T> {
+  public fun g(x: T) {}
+}
+trait P<T> {
+}
+given <T> => AlqA<T> is P<T> {
+}
+fun use(a: AlqA<Void>) {
+  a.g(())         // Member in extension
+}
+type AlqA<Tq0> = A<Tq0>

@@ -1,0 +1,5 @@
+// Control of r01: the same goal inside the trait, through the witness being declared.
+trait Q {}
+trait P { type X ; given X is Q
+  fun g() { needQ<X>() } }
+fun needQ<T where T is Q>() {}

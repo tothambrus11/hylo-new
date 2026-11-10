@@ -1,0 +1,4 @@
+struct A { struct Inner {} }
+extension Alq { type Foo = Int }
+extension Alq.Foo { type Inner = Bool }
+type Alq = A.Inner

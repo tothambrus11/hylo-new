@@ -1,0 +1,6 @@
+// FULL accepts this through the equality workaround (eqsolve.premises). Well typed.
+// NEW must accept, without ambiguity.
+trait P { type X }
+struct B { public memberwise init }
+fun f<T where T is P, T.X == B>(x: T.X) -> B { x }
+fun g<U where U is P, U.X == B>(y: U.X) -> B { f<U>(y) }

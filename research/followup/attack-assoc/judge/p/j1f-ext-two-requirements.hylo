@@ -1,0 +1,9 @@
+// Judge, finding 1, variant F. The extension has two requirements, the second about the associated
+// type of the first; its member mentions T.X.X. w.one() is a W.X.X, v.two expects a V.X.X. Invalid.
+trait P { type X
+  fun get() -> X
+  fun put(x: X) }
+extension <T where T is P, T.X is P> T {
+  fun one() -> T.X.X { self.get().get() }
+  fun two(x: T.X.X) { self.get().put(x) } }
+fun f<V, W where V == W, V is P, V.X is P, W is P, W.X is P>(v: V, w: W) { v.two(w.one()) }

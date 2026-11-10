@@ -1,0 +1,15 @@
+// T is determined by the expected type of the result only. Well typed: T = Box<B>.
+// The other conformance (A is P, A.X = B, B is Q) satisfies the requirements at T = A.
+trait P { type X }
+trait Q {}
+trait M { static fun make() -> Self }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct Box<T> { public memberwise init }
+given B is Q {}
+given A is P { type X = B }
+given <Y> => Box<Y> is P { type X = Y }
+fun pick<T where T is P, T.X is Q>(x: T, y: T) -> T { x }
+public fun main() {
+  let b: Box<B> = pick(Box(), Box())
+}

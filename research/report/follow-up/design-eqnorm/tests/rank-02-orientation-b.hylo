@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// expected: rejected (ambiguous) at every stage.
+// currently: base rejected (summon.subgoals=14 summon.matches=449); FULL rejected (summon.subgoals=6 summon.matches=157 eqsolve.proved=4 index.fallback=2). FULL says: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B, C where B is P, C is P, B == A, C == A>() { g<A>() }

@@ -1,0 +1,5 @@
+trait P {}
+fun needP<W where W is P>() {}
+fun needEq<X, Y where X == Y>() {}
+fun check<X>(x: X) {}
+fun q0<T0, T1, T2, T3 where T0 == T1, T1 == T2, T2 == T3, T0 is P>() { needP<T3>() }

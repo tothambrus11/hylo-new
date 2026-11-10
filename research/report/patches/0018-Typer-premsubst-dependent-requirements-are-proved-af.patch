@@ -1,7 +1,7 @@
 From 0bbd27ef8b836574d9bb5048e9f48dfa041623d9 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 15:41:50 +0000
-Subject: [PATCH 18/27] Typer: premsubst (dependent requirements are proved
+Subject: [PATCH 18/30] Typer: premsubst (dependent requirements are proved
  after those they mention), headsubst (associated types of a callee's
  requirements in its signature)
 

@@ -1,0 +1,16 @@
+// Tests: a bare projection parameter when the first argument is itself a call, in a caller
+// that knows `U.X == S1`.
+// Correct verdict: accepted (every line passes an `S1` for `U.X`).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun take<T where T is P>(t: T, x: T.X) -> T.X { x }
+fun idU<Z>(z: Z) -> Z { z }
+fun g1<U where U is P, U.X == S1>(u: U) { wantS1(take(u, S1())) }
+fun g2<U where U is P, U.X == S1>(u: U) { wantS1(take(idU(u), S1())) }
+fun g3<U where U is P, U.X == S1>(u: U) { let a = take(idU(u), S1()) }
+fun g4<U where U is P, U.X == S1>(u: U) { let a = take(idU<U>(u), S1()) }
