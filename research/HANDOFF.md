@@ -35,6 +35,16 @@ All six branches are pushed:
 | `workloads/` | The stress workloads. |
 | `profile/*.txt` | Symbolized perf profiles with all six flags on. |
 
+## Status: follow-up complete (2026-11-10)
+
+**Read `report/README.md` and `report/report.html` first**; they supersede the status sections below, which describe earlier states.
+
+- The implementation is on branch `tc/impl-wip` of the worktree `/home/user/hylo-impl` (base `origin/tc/research`), exported as 30 patches in `impl/` and `report/patches/`. Frozen binaries are in `exp/bin/` (not committed); the final one is `eq41-67d7b32db383`.
+- Configurations are defined in `followup/tcrun.py`: `base`, `FIX`, `FULL` (the first half of the work) and `NEW` (the recommended configuration: FULL plus `sigrounds, assocsubst, abstractstrict, hidecache, aliasargs, premsubst, premcommit, headsubst, dedup, eqindex, eqeager, twins, cleanfirst, lookahead, stackscan, coeset`). `NEWX` adds the experiments `eqfilter, eqouter, eqclass`; `heightbound` is a fourth experiment.
+- Checks: `python3 followup/regress.py BINID` (expected verdicts of about 150 programs under `NEW+selfcheck`), `python3 followup/compare2.py BINID OUT.jsonl FULL NEW DIR...` (verdict changes, with self-check), `followup/sigrounds/orders.py` (every order of the declarations of a program), `exp/tcx.py semtest` (semantic dump against the existing implementation), `followup/final_timing.py` (timings of the report; needs an idle machine).
+- `followup/` holds the working material of the studies; `report/follow-up/` is the cleaned copy for readers, produced by `report/collect.py`.
+- Open items, in order of value: (1) review of `premsubst`, `premcommit` and `headsubst` by the compiler's authors, and their answers to the language questions listed under Limitations in the report; (2) delete the superseded mechanisms (`extorder` cycle rule, `givencheck`, `memberskip`, `coesrc`, `unify`, the rejected experiments), about 500 lines; (3) nested nominal types of generic declarations (unsound, outside this work); (4) recompute only the signatures that read a changed table entry in `sigrounds`; (5) associated types through a refinement; generic functions with dependent signatures used as values.
+
 ## Status: sound configuration (2026-11-06)
 
 **Read `round3/soundness.md` § "Final configuration" first.**
