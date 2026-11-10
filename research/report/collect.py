@@ -32,7 +32,7 @@ for f in ["tcrun.py", "regress.py", "compare2.py", "final_timing.py", "selfcheck
           "witness_oracle.py", "timing.py", "BRIEF.md", "BRIEF2.md", "REVIEW-AND-PLAN.md"]:
     cp(f, "scripts/" + f)
 cp("sigrounds/orders.py", "scripts/orders.py"); cp("profile/sample.py", "scripts/sample.py")
-for f in ["compare-final.jsonl", "final-timing.jsonl", "greedy-stdlib.json", "ablation.jsonl", "census.json", "oracle-final.txt",
+for f in ["compare-final.jsonl", "compare-rec.jsonl", "final-timing.jsonl", "greedy-stdlib.json", "ablation.jsonl", "census.json", "oracle-final.txt",
           "witness-oracle.jsonl", "permute-full.jsonl", "permute-base.jsonl", "selfcheck.jsonl"]:
     if os.path.exists(os.path.join(SRC, f)): shutil.copyfile(os.path.join(SRC, f), os.path.join(DST, "data", f)) if os.makedirs(os.path.join(DST, "data"), exist_ok=True) is None else None
 if os.path.exists(os.path.join(SRC, "sigrounds/order-final.jsonl")): shutil.copyfile(os.path.join(SRC, "sigrounds/order-final.jsonl"), os.path.join(DST, "data", "order-final.jsonl"))

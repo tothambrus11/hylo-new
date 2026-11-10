@@ -22,14 +22,14 @@ The set contains exactly the types for which the per-given comparison succeeds, 
 
 ## Measurements
 
-Time to type-check the user module, same binary, with and without the two flags (machine under load; indicative):
+Time to type-check the user module in the recommended configuration, with and without the two flags (best of three processes):
 
 | Program | Without | With |
 |---|---:|---:|
-| 16 equalities between associated types | 336 ms | 17 ms |
-| 64 | 4,234 ms | 175 ms |
-| 128 | 17,067 ms | 375 ms |
-| Swift `Collection` signature, translated (7 traits, 14 equalities) | 676 ms | 44 ms |
-| Swift `StringProtocol`, translated | 874 ms | 53 ms |
+| 16 equalities between associated types | 169 ms | 14 ms |
+| 64 | 2,235 ms | 87 ms |
+| 128 | 10,831 ms | 295 ms |
+| Swift `Collection` signature, translated (7 traits, 14 equalities) | 405 ms | 43 ms |
+| Swift `StringProtocol`, translated | 463 ms | 38 ms |
 
 The standard library, which has no equality, is unaffected.

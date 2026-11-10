@@ -6,8 +6,7 @@ For each workload and configuration: the minimum over three processes of the typ
 import json, os, re, subprocess, sys
 RES = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import tcrun
-MINR = "index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset"
-CONFIGS = {"base": "", "MINR": MINR, "FULL": tcrun.flags("FULL"), "NEW": tcrun.flags("NEW")}
+CONFIGS = {"base": "", "MINR": tcrun.flags("MINR"), "REC": tcrun.flags("REC"), "NEW": tcrun.flags("NEW")}
 W = {
  "stdlib": "workloads/empty.hylo", "members-big": "workloads/members-big.hylo", "breadth40": "workloads/breadth40.hylo",
  "div-branch": "round3/depth/div-branch.hylo", "div-loop-20": "workloads/div-loop-20.hylo",

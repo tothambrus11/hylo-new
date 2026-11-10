@@ -1,8 +1,7 @@
 """Adds the verdicts of the recommended configuration to the indexes of test-programs/.
 
-usage: python3 reindex.py ../followup/compare-final.jsonl
-The column "Final" is the verdict under the recommended configuration (every fix and technique of
-the report except the experiments); "New" stays the verdict of the first half of the work."""
+usage: python3 reindex.py ../followup/compare-rec.jsonl
+The last verdict column is that of the recommended configuration; the two before it are kept."""
 import json, os, re, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 rows = {}
@@ -18,11 +17,11 @@ for topic in sorted(os.listdir(os.path.join(HERE, "test-programs"))):
     for line in open(p).read().split("\n"):
         m = re.match(r"\| `([^`]+)` \| ([^|]+) \| ([^|]+) \|(?: ([^|]*) \|)? (.*) \|$", line)
         if line.startswith("| Program |"):
-            out.append("| Program | Old | New | Final | First error (final) |"); continue
+            out.append("| Program | Existing | Fixes 1–4 | Recommended | First error (recommended) |"); continue
         if line.startswith("|---"):
             out.append("|---|---|---|---|---|"); continue
         if line.startswith("Verdicts of the existing implementation"):
-            out.append('Verdicts of the existing implementation ("Old"), of the revised implementation of the first half of the work with all its techniques ("New"), and of the recommended configuration of the report ("Final"), with a 30 s limit ("Final": 60 s).'); continue
+            out.append('Verdicts of the existing implementation, of the techniques with the fixes for problems 1 to 4 only, and of the recommended configuration of the report, with a 30 s limit (recommended configuration: 60 s).'); continue
         if not m: out.append(line); continue
         name, old, new = m.group(1), m.group(2).strip(), m.group(3).strip()
         r = rows.get(topic + "/" + name)

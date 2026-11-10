@@ -43,7 +43,7 @@ The designs describe some corrections as "not built". They were built afterwards
 | `premsubst` | 141 | `attack-premsubst/README.md` |
 | `headsubst` | 164 | `attack-headsubst/README.md` |
 
-The attacks ran on earlier binaries. Their findings that were defects are fixed, and the programs serve as regression tests; `scripts/regress.py` lists the expected verdicts of the most important ones. Findings that remain are listed under Limitations in the report.
+The attacks ran on earlier binaries. Their findings that were defects are fixed, and the programs serve as regression tests; `scripts/regress.py` lists the expected verdicts of the most important ones. Findings that remain are listed under Limitations in the report. One statement of the attack on `sigrounds` is superseded: `p/f04`, a top-level given with an inferred type, does depend on the order of declarations, under every configuration (`../soundness/5-declaration-order.md`, Limits).
 
 ## Test programs
 
@@ -55,4 +55,4 @@ The attacks ran on earlier binaries. Their findings that were defects are fixed,
 
 ## Scripts and data
 
-`scripts/tcrun.py` runs programs under named configurations (`base`, `FIX`, `FULL`, `NEW`) and is used by the others. `regress.py` checks expected verdicts; `compare2.py` compares two configurations program by program, with the self-checking mode; `orders.py` type-checks a program in every order of its declarations; `final_timing.py` produces the timings of the report. `data/` holds their results for the final binary. `scripts/REVIEW-AND-PLAN.md` is the review of the first half of the work, from which these studies were planned.
+`scripts/tcrun.py` runs programs under named configurations and is used by the others: `base` (the existing implementation), `MINR` (result-preserving techniques), `REC` (recommended), `NEW` (all techniques), and `FIX` and `FULL` (the fixes for problems 1 to 4, alone and with the techniques that preceded the other mechanisms). `regress.py` checks expected verdicts; `compare2.py` compares two configurations program by program, with the self-checking mode; `orders.py` type-checks a program in every order of its declarations; `final_timing.py` produces the timings of the report. `data/` holds their results for the final implementation; `../validation/README.md` summarizes them. `scripts/REVIEW-AND-PLAN.md` is the review of the first half of the work, from which these studies were planned.

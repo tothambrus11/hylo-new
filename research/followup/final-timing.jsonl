@@ -1,3 +1,92 @@
-{"workload": "stdlib", "config": "base", "ms": 589.99, "note": "d=0"}
-{"workload": "stdlib", "config": "MINR", "ms": 127.05, "note": "d=0"}
-{"workload": "stdlib", "config": "REC", "ms": 140.3, "note": "d=0"}
+{"workload": "swift-collection", "config": "base", "ms": 21718.6, "note": "d=0"}
+{"workload": "swift-collection", "config": "MINR", "ms": 16290.53, "note": "d=0"}
+{"workload": "swift-collection", "config": "REC", "ms": 43.73, "note": "d=0"}
+{"workload": "swift-collection", "config": "NEW", "ms": 36.33, "note": "d=0"}
+{"workload": "swift-string-protocol", "config": "base", "ms": null, "note": "timeout"}
+{"workload": "swift-string-protocol", "config": "MINR", "ms": null, "note": "timeout"}
+{"workload": "swift-string-protocol", "config": "REC", "ms": 44.29, "note": "d=0"}
+{"workload": "swift-string-protocol", "config": "NEW", "ms": 38.28, "note": "d=0"}
+{"workload": "swift-transitive", "config": "base", "ms": null, "note": "crash -6"}
+{"workload": "swift-transitive", "config": "MINR", "ms": null, "note": "crash -6"}
+{"workload": "swift-transitive", "config": "REC", "ms": 15.73, "note": "d=0"}
+{"workload": "swift-transitive", "config": "NEW", "ms": 16.39, "note": "d=0"}
+{"workload": "rust-flatten", "config": "base", "ms": null, "note": "crash -11"}
+{"workload": "rust-flatten", "config": "MINR", "ms": null, "note": "crash -11"}
+{"workload": "rust-flatten", "config": "REC", "ms": 691.29, "note": "d=0"}
+{"workload": "rust-flatten", "config": "NEW", "ms": 586.43, "note": "d=0"}
+{"workload": "collection-example", "config": "base", "ms": 36.31, "note": "d=6"}
+{"workload": "collection-example", "config": "MINR", "ms": 3.8, "note": "d=6"}
+{"workload": "collection-example", "config": "REC", "ms": 3.65, "note": "d=0"}
+{"workload": "collection-example", "config": "NEW", "ms": 4.68, "note": "d=0"}
+{"workload": "stdlib", "config": "base", "ms": 605.33, "note": "d=0"}
+{"workload": "stdlib", "config": "MINR", "ms": 126.22, "note": "d=0"}
+{"workload": "stdlib", "config": "REC", "ms": 134.1, "note": "d=0"}
+{"workload": "stdlib", "config": "NEW", "ms": 117.86, "note": "d=0"}
+{"workload": "members-big", "config": "base", "ms": 13423.34, "note": "d=0"}
+{"workload": "members-big", "config": "MINR", "ms": 920.56, "note": "d=0"}
+{"workload": "members-big", "config": "REC", "ms": 380.44, "note": "d=0"}
+{"workload": "members-big", "config": "NEW", "ms": 349.53, "note": "d=0"}
+{"workload": "breadth40", "config": "base", "ms": 4984.83, "note": "d=0"}
+{"workload": "breadth40", "config": "MINR", "ms": 38.05, "note": "d=0"}
+{"workload": "breadth40", "config": "REC", "ms": 43.07, "note": "d=0"}
+{"workload": "breadth40", "config": "NEW", "ms": 46.59, "note": "d=0"}
+{"workload": "div-branch", "config": "base", "ms": 1470.87, "note": "d=1"}
+{"workload": "div-branch", "config": "MINR", "ms": 152.85, "note": "d=1"}
+{"workload": "div-branch", "config": "REC", "ms": 170.52, "note": "d=1"}
+{"workload": "div-branch", "config": "NEW", "ms": 1.84, "note": "d=1"}
+{"workload": "div-loop-20", "config": "base", "ms": 114.94, "note": "d=20"}
+{"workload": "div-loop-20", "config": "MINR", "ms": 6.47, "note": "d=20"}
+{"workload": "div-loop-20", "config": "REC", "ms": 7.64, "note": "d=20"}
+{"workload": "div-loop-20", "config": "NEW", "ms": 3.16, "note": "d=20"}
+{"workload": "trans-8", "config": "base", "ms": 1210.61, "note": "d=0"}
+{"workload": "trans-8", "config": "MINR", "ms": 990.04, "note": "d=0"}
+{"workload": "trans-8", "config": "REC", "ms": 1.3, "note": "d=0"}
+{"workload": "trans-8", "config": "NEW", "ms": 2.47, "note": "d=0"}
+{"workload": "assoceq-8", "config": "base", "ms": 3285.51, "note": "d=0"}
+{"workload": "assoceq-8", "config": "MINR", "ms": 2296.0, "note": "d=0"}
+{"workload": "assoceq-8", "config": "REC", "ms": 7.87, "note": "d=0"}
+{"workload": "assoceq-8", "config": "NEW", "ms": 7.82, "note": "d=0"}
+{"workload": "coercion-cache", "config": "base", "ms": 2526.05, "note": "d=0"}
+{"workload": "coercion-cache", "config": "MINR", "ms": 1904.56, "note": "d=0"}
+{"workload": "coercion-cache", "config": "REC", "ms": 3.19, "note": "d=0"}
+{"workload": "coercion-cache", "config": "NEW", "ms": 4.24, "note": "d=0"}
+{"workload": "assocneg-8", "config": "base", "ms": 2711.0, "note": "d=0"}
+{"workload": "assocneg-8", "config": "MINR", "ms": 1844.33, "note": "d=0"}
+{"workload": "assocneg-8", "config": "REC", "ms": 5.71, "note": "d=1"}
+{"workload": "assocneg-8", "config": "NEW", "ms": 6.82, "note": "d=1"}
+{"workload": "conditional-extension", "config": "base", "ms": 1649.86, "note": "d=0"}
+{"workload": "conditional-extension", "config": "MINR", "ms": 1101.17, "note": "d=0"}
+{"workload": "conditional-extension", "config": "REC", "ms": 6.53, "note": "d=0"}
+{"workload": "conditional-extension", "config": "NEW", "ms": 8.27, "note": "d=0"}
+{"workload": "open-equalities", "config": "base", "ms": null, "note": "crash -6"}
+{"workload": "open-equalities", "config": "MINR", "ms": null, "note": "crash -6"}
+{"workload": "open-equalities", "config": "REC", "ms": 202.06, "note": "d=0"}
+{"workload": "open-equalities", "config": "NEW", "ms": 195.83, "note": "d=0"}
+{"workload": "tuple-equalities", "config": "base", "ms": null, "note": "crash -6"}
+{"workload": "tuple-equalities", "config": "MINR", "ms": null, "note": "crash -6"}
+{"workload": "tuple-equalities", "config": "REC", "ms": 47.08, "note": "d=0"}
+{"workload": "tuple-equalities", "config": "NEW", "ms": 51.09, "note": "d=0"}
+{"workload": "divergence-with-equality", "config": "base", "ms": null, "note": "crash -6"}
+{"workload": "divergence-with-equality", "config": "MINR", "ms": null, "note": "crash -6"}
+{"workload": "divergence-with-equality", "config": "REC", "ms": 2204.7, "note": "d=0"}
+{"workload": "divergence-with-equality", "config": "NEW", "ms": 4.35, "note": "d=0"}
+{"workload": "shared-bindings", "config": "base", "ms": 2298.6, "note": "d=0"}
+{"workload": "shared-bindings", "config": "MINR", "ms": 1639.49, "note": "d=0"}
+{"workload": "shared-bindings", "config": "REC", "ms": 1.63, "note": "d=0"}
+{"workload": "shared-bindings", "config": "NEW", "ms": 2.54, "note": "d=0"}
+{"workload": "overloads", "config": "base", "ms": 3879.53, "note": "d=0"}
+{"workload": "overloads", "config": "MINR", "ms": 120.5, "note": "d=0"}
+{"workload": "overloads", "config": "REC", "ms": 2.52, "note": "d=0"}
+{"workload": "overloads", "config": "NEW", "ms": 3.34, "note": "d=0"}
+{"workload": "return-type-overloads", "config": "base", "ms": 232.93, "note": "d=0"}
+{"workload": "return-type-overloads", "config": "MINR", "ms": 181.59, "note": "d=0"}
+{"workload": "return-type-overloads", "config": "REC", "ms": 1.7, "note": "d=0"}
+{"workload": "return-type-overloads", "config": "NEW", "ms": 2.14, "note": "d=0"}
+{"workload": "plus-chain-14", "config": "base", "ms": 1435.85, "note": "d=0"}
+{"workload": "plus-chain-14", "config": "MINR", "ms": 2.13, "note": "d=0"}
+{"workload": "plus-chain-14", "config": "REC", "ms": 2.49, "note": "d=0"}
+{"workload": "plus-chain-14", "config": "NEW", "ms": 2.41, "note": "d=0"}
+{"workload": "assoceq-64", "config": "base", "ms": null, "note": "crash -6"}
+{"workload": "assoceq-64", "config": "MINR", "ms": null, "note": "crash -6"}
+{"workload": "assoceq-64", "config": "REC", "ms": 95.81, "note": "d=0"}
+{"workload": "assoceq-64", "config": "NEW", "ms": 85.35, "note": "d=0"}

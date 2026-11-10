@@ -1,6 +1,6 @@
 # 5. Results depend on declaration order
 
-**Status:** fixed by `sigrounds`. On 129 programs constructed for this problem, type-checked in 2,876 orders, no program has two verdicts (existing implementation: 52 programs; the earlier fix by after-the-fact checks: 7).
+**Status:** fixed by `sigrounds` for declarations whose type is written. On 129 programs constructed for this problem, type-checked in 2,876 orders, no program has two verdicts (existing implementation: 52 programs; the earlier fix by after-the-fact checks: 7). On the 146 further programs of the design and of the attack on the implementation (3,216 orders), one has two verdicts: a top-level given whose type is inferred, which is outside the mechanism (see Limits).
 
 ## Symptom
 
@@ -97,6 +97,17 @@ The semantic dump (types, name bindings, witness tables, diagnostics, elaborated
 
 - The fixed point is computed from the empty table. A program can have a consistent reading that this iteration does not reach, and it is then rejected; a second reading that is not reachable from the empty table is never seen. Lookup is not monotone (a new candidate can make an answer ambiguous, or shadow another), so no stronger statement holds.
 - The message of a rejected cyclic program can name a different declaration of the cycle depending on the order, for cycles between type aliases (`design-order/tests/10-alias-cycle.hylo`) and between named givens that refer to each other by name (`attack-sigrounds/p/t02-named-givens-cycle-by-name.hylo`): the verdict is the same.
+- A given whose type is inferred is still typed on demand after the rounds, nested in the resolution that first meets it. For a given declared outside a function this depends on the order of declarations, as in the existing implementation:
+
+  ```hylo
+  struct A { public memberwise init }
+  let s = A()
+  given let g = s
+  fun need<where let u: A>() {}
+  public fun main() { need() }
+  ```
+
+  If `s` is typed first, the resolutions made by its initializer compute the type of `g`, which reads `s`: "declaration refers to itself". If `g` is typed first, it is hidden while `s` is typed, and the program is accepted (15 of the 24 orders; `attack-sigrounds/p/f04-global-given-from-global-let.hylo`). Neither the compiler's tests nor the standard library declare such a given. Requiring a written type for givens declared outside functions would close the case; treating them as entries of the table was tried and lets a given justify its own initializer.
 - Type aliases are still computed on demand. No program is known whose verdict depends on the order through an alias alone once the four rules are in place, but nothing proves that none exists; the self-check is the safeguard.
 - Whether a self-supporting reading is found can depend on how many rounds an intermediate table lasts (`attack-sigrounds/p/h01`, `h02`): both verdicts are the same in every order.
 - Whether a program whose signatures depend on each other *should* be accepted when a stable table exists is a question for the language designers (`follow-up/designs/order.md`, section 7). A stricter rule can be added as a check on the stable table.
