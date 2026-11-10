@@ -1,0 +1,18 @@
+// Control of g01 with the requirement on `P`. Correct verdict: rejected (4 errors).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait R refines P {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun wantU<U>(u: U, x: U) {}
+fun g<U where U is P>(u: U) {
+  wantS0(pick(u))
+  wantS1(pick(u))
+  wantU(u, pick(u))
+  take(u, S1())
+}

@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// rust-flatten.hylo without the line that uses the conformance of Flatten (and without that conformance).
+trait Iterator { type Item }
+trait IntoIterator {
+  type Item
+  type IntoIter
+}
+fun need<X, Y where X == Y>() {}
+fun check<T>(x: T) {}
+fun flattenBody<I, U where
+  I is Iterator, U is Iterator, I.Item is IntoIterator, I.Item.IntoIter == U, I.Item.Item == U.Item
+>(x: U.Item, y: I.Item.Item) {
+  need<I.Item.Item, U.Item>()
+  check<I.Item.Item>(x)
+  check<U.Item>(y)
+}

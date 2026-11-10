@@ -1,0 +1,33 @@
+{"file": "m1.hylo", "verdict": "accept", "first": ""}
+{"file": "m2.hylo", "verdict": "accept", "first": ""}
+{"file": "m3.hylo", "verdict": "accept", "first": ""}
+{"file": "m4.hylo", "verdict": "accept", "first": ""}
+{"file": "m5.hylo", "verdict": "accept", "first": ""}
+{"file": "m6.hylo", "verdict": "accept", "first": ""}
+{"file": "m7.hylo", "verdict": "accept", "first": ""}
+{"file": "m8.hylo", "verdict": "accept", "first": ""}
+{"file": "m9.hylo", "verdict": "accept", "first": ""}
+{"file": "n1.hylo", "verdict": "accept", "first": ""}
+{"file": "n2.hylo", "verdict": "accept", "first": ""}
+{"file": "n3.hylo", "verdict": "accept", "first": ""}
+{"file": "n4.hylo", "verdict": "accept", "first": ""}
+{"file": "n5.hylo", "verdict": "accept", "first": ""}
+{"file": "n6.hylo", "verdict": "accept", "first": ""}
+{"file": "n7.hylo", "verdict": "accept", "first": ""}
+{"file": "n8.hylo", "verdict": "accept", "first": ""}
+{"file": "n9.hylo", "verdict": "accept", "first": ""}
+{"file": "y1.hylo", "verdict": "accept", "first": ""}
+{"file": "y2.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, ((A::P).X ~ (A::P).X), Q<(A::P).X>, R2<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "y3.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, R2<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "y4.hylo", "verdict": "accept", "first": ""}
+{"file": "y5.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, R2<(A::P).X>, Q<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "y6.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, R2<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "y7.hylo", "verdict": "accept", "first": ""}
+{"file": "y8.hylo", "verdict": "accept", "first": ""}
+{"file": "z1.hylo", "verdict": "accept", "first": ""}
+{"file": "z2.hylo", "verdict": "accept", "first": ""}
+{"file": "z3.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, R2<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "z4.hylo", "verdict": "accept", "first": ""}
+{"file": "z5.hylo", "verdict": "accept", "first": ""}
+{"file": "z6.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, ((A::P).X ~ (A::P).X), R2<(A::P).X>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}
+{"file": "z7.hylo", "verdict": "reject", "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, ((A::P).X ~ (A::P).X), R2<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'"}

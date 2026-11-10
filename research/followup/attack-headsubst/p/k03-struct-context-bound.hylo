@@ -1,0 +1,21 @@
+// Tests: a generic struct with a context bound and a field of projection type, built by its
+// memberwise initialiser (a type-level use that is not only a call).
+// Correct verdict: rejected (2 errors: the construction with `S1()`, and `wantS1(w.x)`), or
+// rejected at the declaration.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+struct W<T is P> { public var t: T; public var x: T.X; public memberwise init }
+fun q() {
+  let w = W<A>(t: A(), x: S0())
+  let bad = W<A>(t: A(), x: S1())
+  wantS0(w.x)
+  wantS1(w.x)
+}

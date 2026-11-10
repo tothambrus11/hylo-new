@@ -1,7 +1,7 @@
 From 10db7b338eba435e900daae05b621057fd250bea Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 20:49:21 +0000
-Subject: [PATCH 05/13] Typer: add coercememo experiment and HYLO_TC_MAXDEPTH
+Subject: [PATCH 05/27] Typer: add coercememo experiment and HYLO_TC_MAXDEPTH
  override
 
 coercememo memoizes canDeriveCoercions under assumptions when every visible

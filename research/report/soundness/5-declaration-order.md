@@ -46,7 +46,7 @@ Which declaration is hidden when it matters depends on which is computed first, 
 
 ## Fix
 
-Extensions, conformances and given bindings are the declarations that lookups and resolutions select *by their type*: the extended type, or the type of the given. Call that type the *signature* of the declaration. `sigrounds` computes all signatures of a module before anything else, in rounds:
+Extensions, conformances and given bindings whose type is written are the declarations that lookups and resolutions select *by their type*: the extended type, or the type of the given. Call that type the *signature* of the declaration. `sigrounds` computes all signatures of a module before anything else, in rounds:
 
 - A round computes the signature of every such declaration, starting from the untouched typing state.
 - During a round, a lookup or resolution never computes a signature. It reads the signatures from the table that the previous round produced; a declaration without an entry (not computed yet, or erroneous) is ignored. In the first round the table is empty.
@@ -59,13 +59,20 @@ For the first example above, round 1 computes `A is P` and fails on `Box<X> is P
 
 Two kinds of hiding are deliberate scoping rules and are unchanged: a where-clause requirement is invisible while the requirements written before it are typed, and a conformance cannot use itself to satisfy the traits it refines.
 
+Four rules keep everything else a round computes independent of which declaration is visited first. They were added after an adversarial review of the first implementation, which found a program for each.
+
+- **Only written signatures are in the table.** A requirement of a where clause is typed by the clause, in order. A given whose type is inferred from its initializer (`given let w = make()`) can only be typed with the expression that contains it; it is invisible during the rounds, and if a resolution made by a signature could have seen it, the program is rejected: "the type of this given must be written".
+- **Enclosing declarations first.** Before the signature of a declaration nested in a function, extension or conformance with a where clause, the signature of the enclosing declaration is computed, so that a where clause is always typed before what it governs.
+- **Owner before member.** When a lookup selects a member of an extension or conformance through the table, the signature of that extension or conformance is computed, in the current round, before the member is typed.
+- **An alias of an erroneous type is an error.** A signature whose type is an alias that could not be resolved does not enter the table.
+
 ## Why the result does not depend on the order
 
 The table after round *k* is a function of the program and of the table after round *k − 1*: a round starts from the same state whatever the order, reads other signatures only from the previous table, and computes each signature from its own expression. By induction no table depends on the order of declarations, and neither does the stopping test, the set of reported declarations, or the state handed to the rest of the checker. The argument needs no approximation of which declaration "could have matched", which is where the earlier fix failed.
 
 After the last round nothing is hidden for a wrong reason: every signature is memoized, so the remaining checks never compute one inside a lookup.
 
-The argument relies on properties of the implementation that are checked in self-checking mode: restoring the state between rounds restores everything a round wrote; the last round computes the same table and the same diagnostics when the declarations are visited in reverse order; and no signature is computed for the first time after the rounds.
+The argument relies on properties of the implementation that are checked in self-checking mode: restoring the state between rounds restores everything a round wrote; every round computes the same table when the declarations are visited in reverse order, and the last round the same diagnostics; and no signature is computed for the first time after the rounds. This check is what exposed three of the four rules above.
 
 ## What changes
 
@@ -82,15 +89,18 @@ The semantic dump (types, name bindings, witness tables, diagnostics, elaborated
 ## Cost
 
 - Code without dependencies between signatures: one round, plus one copy-on-write of the buffers that the round mutates.
-- A chain of *d* dependent signatures: *d* + 2 rounds, each computing every signature of the module once.
-- About 150 lines. The earlier mechanisms (`givencheck`, the cycle rule of `extorder`, `memberskip`; about 260 lines) are switched off by `sigrounds` and can be deleted.
+- A where clause that selects a member through an earlier requirement (`C.Element`) makes a resolution that could see the module's givens, so such code needs two rounds.
+- A chain of *d* dependent signatures: *d* + 2 rounds, each computing every signature of the module once, without the index of givens. The work is quadratic in the length of the chain, and one chain taxes the whole module: a chain of 8 next to 32 unrelated generic conformances makes ten times more candidate matches than without `sigrounds`. Recomputing only the signatures that read a changed entry would remove this; it is not implemented.
+- About 300 lines. The earlier mechanisms (`givencheck`, the cycle rule of `extorder`, `memberskip`; about 260 lines) are switched off by `sigrounds` and can be deleted.
 
 ## Limits
 
 - The fixed point is computed from the empty table. A program can have a consistent reading that this iteration does not reach, and it is then rejected; a second reading that is not reachable from the empty table is never seen. Lookup is not monotone (a new candidate can make an answer ambiguous, or shadow another), so no stronger statement holds.
 - The message of a rejected cyclic program can name a different declaration of the cycle depending on the order, for cycles between type aliases only (`design-order/tests/10-alias-cycle.hylo`): the verdict is the same.
+- Type aliases are still computed on demand. No program is known whose verdict depends on the order through an alias alone once the four rules are in place, but nothing proves that none exists; the self-check is the safeguard.
+- Whether a self-supporting reading is found can depend on how many rounds an intermediate table lasts (`attack-sigrounds/p/h01`, `h02`): both verdicts are the same in every order.
 - Whether a program whose signatures depend on each other *should* be accepted when a stable table exists is a question for the language designers (`follow-up/designs/order.md`, section 7). A stricter rule can be added as a check on the stable table.
 
 ## Programs
 
-`test-programs/declaration-order/` (129 programs), `follow-up/sigrounds/tests/`, and the 23 programs of the design.
+`test-programs/declaration-order/` (129 programs), `follow-up/sigrounds/tests/`, the 42 programs of the design and its review (`follow-up/design-order/tests/`), and the 104 programs of the attack (`follow-up/attack-sigrounds/p/`).

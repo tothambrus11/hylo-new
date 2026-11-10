@@ -1,0 +1,34 @@
+[twins] 216/216 identical
+[absmodel,absquotient,arrowenv,budget,coesrc,eqeager,eqindex,eqmgu,eqsolve,extorder,fixsubst,givencheck,index,memberskip,occurs,reifymemo,symindex,traitindex,twins,typevec,unify] 215/216 identical
+  MISMATCH research/workloads/breadth80.hylo
+      baseline=timeout config=ok
+[absmodel,absquotient,abstractstrict,aliasargs,arrowenv,assocsubst,budget,cleanfirst,coesrc,eqeager,eqindex,eqmgu,eqsolve,extorder,fixsubst,givencheck,headsubst,hidecache,index,lookahead,memberskip,occurs,premcommit,premsubst,reifymemo,sigrounds,symindex,traitindex,twins,typevec,unify] 214/216 identical
+  MISMATCH Tests/CompilerTests/positive/runtime-record-offsets.hylo
+      --- baseline
+      +++ absmodel,absquotient,abstractstrict,aliasargs,arrowenv,assocsubst,budget,cleanfirst,coesrc,eqeager,eqindex,eqmgu,eqsolve,extorder,fixsubst,givencheck,headsubst,hidecache,index,lookahead,memberskip,occurs,premcommit,premsubst,reifymemo,sigrounds,symindex,traitindex,twins,typevec,unify
+      @@ -16811 +16811 @@
+      -0:148 : Pointer<W>
+      +0:148 : Pointer<TypeWitnessHeader>
+      @@ -16825 +16825 @@
+      -0:156 : Pointer<W>
+      +0:156 : Pointer<TypeWitnessHeader>
+      @@ -16840,2 +16840,2 @@
+      -0:164 : Pointer<W>
+      -0:165 : {Pointer<W>, Pointer<W>, Pointer<W>}
+      +0:164 : Pointer<TypeWitnessHeader>
+      +0:165 : {Pointer<TypeWitnessHeader>, Pointer<TypeWitnessHeader>, Pointer<TypeWitnessHeader>}
+      @@ -16875 +16875 @@
+      -0:187 : Pointer<Pointer<W>>
+      +0:187 : Pointer<Pointer<TypeWitnessHeader>>
+      @@ -16934 +16934 @@
+      -0:222 : Pointer<W>
+      +0:222 : Pointer<TypeWitnessHeader>
+      @@ -16949 +16949 @@
+      -0:230 : Pointer<W>
+      +0:230 : Pointer<TypeWitnessHeader>
+      @@ -16962,2 +16962,2 @@
+      -0:238 : Pointer<W>
+      -0:239 : {Pointer<W>, Pointer<W>, Pointer<W>}
+  MISMATCH research/workloads/breadth80.hylo
+      baseline=timeout config=ok
+finished

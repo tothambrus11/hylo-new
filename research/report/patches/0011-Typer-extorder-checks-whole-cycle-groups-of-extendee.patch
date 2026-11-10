@@ -1,7 +1,7 @@
 From 552603376a8b9085ce4817aaacfe6c303338f613 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Fri, 6 Nov 2026 16:37:12 +0000
-Subject: [PATCH 11/13] Typer: extorder checks whole cycle groups of extendee
+Subject: [PATCH 11/27] Typer: extorder checks whole cycle groups of extendee
  computations
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>

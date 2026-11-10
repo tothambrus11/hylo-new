@@ -1,0 +1,425 @@
+From cdb3415dc6f6d0db46de0192aeb41eb68d3fe880 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 15:20:22 +0000
+Subject: [PATCH 17/27] Typer: sigrounds (signatures of extensions and givens
+ computed in rounds), assocsubst (instantiate associated types of generic
+ conformances)
+
+sigrounds computes the signatures of all extensions, conformances and given
+bindings of a module before checking it, in rounds that each start from the
+pristine typing state and read the signatures of the previous round only, until
+the table is stable. The result no longer depends on the order of declarations.
+
+assocsubst substitutes the type arguments of a witness into the associated type
+read from a generic conformance, so that Box<A>.X and Box<C>.X are distinct.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 218 +++++++++++++++++++--
+ Sources/FrontEnd/Typer/TyperCounters.swift |   9 +
+ Sources/FrontEnd/Types/TypeStore.swift     |  25 +++
+ 3 files changed, 238 insertions(+), 14 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 2e0534f..182c7a2 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -67,6 +67,17 @@ public struct Typer {
+   /// The scopes in which implicit resolution was abandoned (`budget`).
+   private var reportedBudgetScopes: Set<ScopeIdentity> = []
+ 
++  /// `true` while `settleSignatures` is running (`sigrounds`).
++  private var settlingSignatures = false
++
++  /// The signatures that the previous round computed for the extensions and givens of `module`;
++  /// a declaration without an entry is ignored by lookups and resolutions (`sigrounds`).
++  private var signatureTable: [DeclarationIdentity: AnyTypeIdentity] = [:]
++
++  /// `true` iff a lookup or resolution of the current round ignored a declaration because it has
++  /// no entry in `signatureTable`.
++  private var hiddenCandidateSeen = false
++
+   /// `true` iff `pendingGivenChecks` are being processed.
+   private var checkingPendingGivens = false
+ 
+@@ -109,8 +120,120 @@ public struct Typer {
+     if program[module].isStandardLibrary {
+       program.initializeStandardLibraryCaches()
+     }
++    if TyperExperiments.sigrounds { settleSignatures() }
+     for d in program[module].topLevelDeclarations { check(d) }
+-    if TyperExperiments.givencheck { checkPendingGivens() }
++    if TyperExperiments.givencheck && !TyperExperiments.sigrounds { checkPendingGivens() }
++  }
++
++  /// Returns `true` iff `d` is an extension, a conformance or a given binding of the module being
++  /// typed, i.e., a declaration that lookups and resolutions select by its signature.
++  private func isSignatureNode(_ d: DeclarationIdentity) -> Bool {
++    if d.module != module { return false }
++    switch program.tag(of: d) {
++    case ExtensionDeclaration.self, ConformanceDeclaration.self:
++      return true
++    case BindingDeclaration.self:
++      return program[castUnchecked(d, to: BindingDeclaration.self)].role == .given
++    default:
++      return false
++    }
++  }
++
++  /// Returns the signature of `d` computed now, memoized in the module.
++  private mutating func computedSignature(of d: DeclarationIdentity) -> AnyTypeIdentity {
++    if let e = program.cast(d, to: ExtensionDeclaration.self) { return extendeeType(e) }
++    return declaredType(of: d)
++  }
++
++  /// Computes the signature of each of `nodes` in order, reading the signatures used by lookups
++  /// and resolutions from `signatureTable`, and returns the signatures that have no error.
++  private mutating func signatureRound(
++    _ nodes: [DeclarationIdentity]
++  ) -> [DeclarationIdentity: AnyTypeIdentity] {
++    hiddenCandidateSeen = false
++    var next: [DeclarationIdentity: AnyTypeIdentity] = [:]
++    for n in nodes {
++      let t = computedSignature(of: n)
++      if !t[.hasError] { next[n] = t }
++    }
++    TyperCounters.bump("sigrounds.rounds")
++    return next
++  }
++
++  /// Computes the signatures of the extensions and givens of `module` in rounds, each reading the
++  /// signatures of the previous one, until they are stable (`sigrounds`).
++  ///
++  /// The signature of an extension or given can depend on a lookup or resolution for which
++  /// another one, or itself, is a candidate. Evaluating signatures on demand makes the result
++  /// depend on which is requested first. Here, a round computes every signature from a pristine
++  /// state and the table of the previous round only, so each table is a function of the program.
++  private mutating func settleSignatures() {
++    let nodes = program[module].syntax
++      .compactMap({ (n) in program.castToDeclaration(n) }).filter(isSignatureNode(_:))
++    if nodes.isEmpty { return }
++    TyperCounters.bump("sigrounds.nodes", by: nodes.count)
++
++    let pristine = (program[module], cache)
++    settlingSignatures = true
++    defer { settlingSignatures = false }
++    signatureTable = [:]
++    var earlier: [[DeclarationIdentity: AnyTypeIdentity]] = []
++
++    for round in 1 ... (nodes.count + 2) {
++      let next = signatureRound(nodes)
++
++      if (next == signatureTable) || ((round == 1) && !hiddenCandidateSeen) {
++        if TyperExperiments.selfcheck { selfCheckSignatures(nodes, next, from: pristine) }
++        signatureTable = next
++        return
++      }
++      if earlier.contains(next) || (round == nodes.count + 2) {
++        reportUnstableSignatures(nodes, signatureTable, next)
++        signatureTable = next
++        return
++      }
++      earlier.append(signatureTable)
++      signatureTable = next
++      (program[module], cache) = pristine
++      reportedBudgetScopes = []
++      TyperCounters.bump("sigrounds.restores")
++    }
++  }
++
++  /// Checks that the round that computed `stable` from `signatureTable` computes the same table
++  /// and the same diagnostics when it is run again from `pristine` with the nodes in reverse
++  /// order (`selfcheck`).
++  private mutating func selfCheckSignatures(
++    _ nodes: [DeclarationIdentity], _ stable: [DeclarationIdentity: AnyTypeIdentity],
++    from pristine: (Module, Memos)
++  ) {
++    let final = (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen)
++    let expected = Set(program[module].diagnostics.map(\.description))
++    (program[module], cache) = pristine
++    reportedBudgetScopes = []
++    let again = signatureRound(nodes.reversed())
++    let found = Set(program[module].diagnostics.map(\.description))
++    TyperCounters.bump("selfcheck.sigrounds")
++    if again != stable {
++      selfCheckViolation("sigrounds: the stable round computes another table in reverse order")
++    } else if found != expected {
++      selfCheckViolation("sigrounds: the stable round reports other diagnostics in reverse order")
++    }
++    (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen) = final
++  }
++
++  /// Reports that the signatures of the declarations whose entries differ in `a` and `b` did not
++  /// stabilize.
++  private mutating func reportUnstableSignatures(
++    _ nodes: [DeclarationIdentity],
++    _ a: [DeclarationIdentity: AnyTypeIdentity], _ b: [DeclarationIdentity: AnyTypeIdentity]
++  ) {
++    TyperCounters.bump("sigrounds.unstable")
++    for n in nodes where a[n] != b[n] {
++      let m = "the type of this declaration depends on a name lookup or an implicit resolution "
++        + "that it changes; no stable interpretation was found"
++      report(.init(.error, m, at: program.spanForDiagnostic(about: n)))
++    }
+   }
+ 
+   /// Returns the resources held by this instance.
+@@ -1412,6 +1535,19 @@ public struct Typer {
+     if let memoized = program[d.module].type(assignedTo: d) { return memoized }
+     assert(d.module == module, "dependency is not typed")
+ 
++    // A requirement of a where clause is typed by the declaration that introduces it, in order.
++    if TyperExperiments.sigrounds, program[d].role == .using,
++      !declarationsOnStack.contains(.init(d)),
++      let o = program.parent(containing: d).node.flatMap({ (n) in program.castToDeclaration(n) })
++    {
++      TyperCounters.bump("sigrounds.ownerFirst")
++      _ = computedSignature(of: o)
++      return program[d.module].type(assignedTo: d) ?? .error
++    }
++    if TyperExperiments.sigrounds && !settlingSignatures && (program[d].role == .given) {
++      TyperCounters.bump("sigrounds.lateNodes")
++    }
++
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
+@@ -1445,6 +1581,9 @@ public struct Typer {
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
+       let cuts = cycleCuts
++      if TyperExperiments.sigrounds && !settlingSignatures {
++        TyperCounters.bump("sigrounds.lateNodes")
++      }
+ 
+       initializeContext(program[d].contextParameters)
+       let t = evaluateTypeAscription(.init(program[d].witness))
+@@ -1792,6 +1931,7 @@ public struct Typer {
+         }
+         return t
+       }
++      if settlingSignatures && isSignatureNode(d) { return signatureTable[d] ?? .error }
+       return declaredType(of: d)
+ 
+     case .nested(let p, let d):
+@@ -1892,7 +2032,11 @@ public struct Typer {
+     // Is it the first time we enter this method for `d`?
+     if declarationsOnStack.insert(.init(d)).inserted {
+       let u: AnyTypeIdentity
+-      if TyperExperiments.extorder { extensionFrames.append(.init(declaration: d)) }
++      let framed = TyperExperiments.extorder && !TyperExperiments.sigrounds
++      if TyperExperiments.sigrounds && !settlingSignatures {
++        TyperCounters.bump("sigrounds.lateNodes")
++      }
++      if framed { extensionFrames.append(.init(declaration: d)) }
+       do {
+         defer { declarationsOnStack.remove(.init(d)) }
+         let cuts = cycleCuts
+@@ -1903,7 +2047,7 @@ public struct Typer {
+ 
+         if !(speculating > 0 && cycleCuts != cuts) { program[d.module].setType(u, for: d) }
+       }
+-      if TyperExperiments.extorder { popExtensionFrame() }
++      if framed { popExtensionFrame() }
+       return u
+     }
+ 
+@@ -3426,7 +3570,27 @@ public struct Typer {
+     else if let c = program.flatCast(witness.declaration, to: ConformanceDeclaration.self) {
+       // Read the associated type definition.
+       if let i = implementation(of: requirement, in: c) {
+-        return declaredType(of: i)
++        let t = declaredType(of: i)
++        if !TyperExperiments.assocsubst { return t }
++
++        // Fix (`assocsubst`): the definition is written in terms of the generic parameters of the
++        // conformance; instantiate them with the type arguments of the witness. Otherwise the
++        // associated types of two instances of a generic conformance are the same type.
++        var arguments: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++        var w = witness
++        while true {
++          if case .termApplication(let f, _) = w.value {
++            w = f
++          } else if case .typeApplication(let f, let a) = w.value {
++            for (k, v) in a.elements { arguments[k.erased] = v }
++            w = f
++          } else {
++            break
++          }
++        }
++        if arguments.isEmpty { return t }
++        TyperCounters.bump("assocsubst.instantiated")
++        return program.types.substituteThroughAliases(arguments, in: t)
+       } else {
+         return .error
+       }
+@@ -3821,7 +3985,7 @@ public struct Typer {
+         }
+       }
+     }
+-    if TyperExperiments.givencheck {
++    if TyperExperiments.givencheck && !TyperExperiments.sigrounds {
+       if !declarationsOnStack.isEmpty { recordSkippedGivens(t, in: scopeOfUse, where: environment) }
+       if !pendingGivenChecks.isEmpty { checkPendingGivens() }
+     }
+@@ -4748,21 +4912,22 @@ public struct Typer {
+ 
+     // Gather the givens in the current file.
+     for s in program.scopes(from: scopeOfUse) {
+-      let ls = givens(lexicallyIn: s).filter(notOnStack(_:))
++      var ls: [Given] = []
++      for g in givens(lexicallyIn: s) where isVisible(g) { ls.append(g) }
+       if !ls.isEmpty { gs.append(ls) }
+     }
+ 
+     // Gather the givens in other files of the module.
+     var fs: [Given] = []
+     for f in program[scopeOfUse.module].sourceFileIdentities where f != scopeOfUse.file {
+-      for g in givens(lexicallyIn: .init(file: f)) where notOnStack(g) { fs.append(g) }
++      for g in givens(lexicallyIn: .init(file: f)) where isVisible(g) { fs.append(g) }
+     }
+     if !fs.isEmpty { gs.append(fs) }
+ 
+     // Gather the givens imported from other modules.
+     var ms: [Given] = []
+     for i in imports(of: scopeOfUse.file) {
+-      for g in givens(atTopLevelOf: i) where notOnStack(g) { ms.append(g) }
++      for g in givens(atTopLevelOf: i) where isVisible(g) { ms.append(g) }
+     }
+     if !ms.isEmpty { gs.append(ms) }
+ 
+@@ -5328,7 +5493,7 @@ public struct Typer {
+     statically selectionIsStatic: Bool
+   ) -> [NameResolutionCandidate] {
+     var candidates: [NameResolutionCandidate] = []
+-    if TyperExperiments.extorder && !extensionFrames.isEmpty {
++    if TyperExperiments.extorder && !TyperExperiments.sigrounds && !extensionFrames.isEmpty {
+       extensionFrames[extensionFrames.count - 1].lookups.append((q, scopeOfUse, n))
+     }
+     let qs = TyperExperiments.memberskip ? headShape(of: q) : nil
+@@ -5338,12 +5503,19 @@ public struct Typer {
+       // candidate, so its applicability is irrelevant; not evaluating it keeps the order in which
+       // extendees are first computed independent of unrelated lookups.
+       let declaresName = declarations(lexicallyIn: .init(node: e))[n.identifier] != nil
+-      if TyperExperiments.extorder && !declaresName { continue }
+-      if declarationsOnStack.contains(.init(e)) {
++      if (TyperExperiments.extorder || TyperExperiments.sigrounds) && !declaresName { continue }
++      let tabled = settlingSignatures && (e.module == module)
++      if tabled && (signatureTable[.init(e)] == nil) {
++        hiddenCandidateSeen = true
++        continue
++      }
++      if !tabled && declarationsOnStack.contains(.init(e)) {
+         // Fix (`extorder`): the extendee of `e` is being computed and depends on this lookup, which
+         // `e` may affect since it declares `n`. That is a circular definition in any order of
+         // evaluation; report it rather than silently ignoring `e`.
+-        if TyperExperiments.extorder && declaresName { noteExtensionCycle(through: e) }
++        if TyperExperiments.extorder && !TyperExperiments.sigrounds && declaresName {
++          noteExtensionCycle(through: e)
++        }
+         // Skipping an extension whose extendee was already being computed when the current
+         // speculative evaluation started makes this lookup depend on the order of evaluation.
+         if TyperExperiments.cyclecutStack, let b = transactionBases.last, b.contains(.init(e)) {
+@@ -5353,7 +5525,7 @@ public struct Typer {
+       }
+       // Experiment: skip extensions that do not declare any member named `n` and whose
+       // applicability check is known to fail without any observable effect.
+-      if TyperExperiments.memberskip,
++      if TyperExperiments.memberskip, !settlingSignatures,
+         (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil),
+         appliesHasNoEffect(e, to: qs, givensSettled: &settled, in: scopeOfUse)
+       {
+@@ -5804,7 +5976,8 @@ public struct Typer {
+       return applies(d, to: t, in: p)
+     }
+ 
+-    let u = extendeeType(d)
++    let u = (settlingSignatures && (d.module == module))
++      ? (signatureTable[.init(d)] ?? .error) : extendeeType(d)
+     let w = WitnessExpression(value: .reference(.init(d)), type: u)
+ 
+     // Fast path: types are trivially equal.
+@@ -6127,6 +6300,23 @@ public struct Typer {
+     return action(&self)
+   }
+ 
++  /// Returns `true` iff implicit resolution may use `g` now.
++  private mutating func isVisible(_ g: Given) -> Bool {
++    switch g {
++    case .user(let d):
++      if settlingSignatures && isSignatureNode(d) {
++        if signatureTable[d] != nil { return true }
++        hiddenCandidateSeen = true
++        return false
++      }
++      return !declarationsOnStack.contains(d)
++    case .nested(_, let h):
++      return isVisible(h)
++    default:
++      return true
++    }
++  }
++
+   /// Returns `true` iff the type of `g`'s declaration is not being computed.
+   private func notOnStack(_ g: Given) -> Bool {
+     switch g {
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 30dae23..d5e5e20 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -155,6 +155,15 @@ public enum TyperExperiments {
+   /// it would have been a candidate, the program is rejected (circular given).
+   nonisolated(unsafe) public static var givencheck: Bool = enabled.contains("givencheck")
+ 
++  /// SEMANTIC FIX: the signatures of extensions and givens are computed in rounds before anything
++  /// else; lookups and resolutions read them from the previous round only (replaces `givencheck`
++  /// and the cycle rule of `extorder`).
++  nonisolated(unsafe) public static var sigrounds: Bool = enabled.contains("sigrounds")
++
++  /// SEMANTIC FIX: the associated type read from a generic conformance is instantiated with the
++  /// type arguments of the witness (`Box<A>.X` is `A`, not the uninstantiated `T`).
++  nonisolated(unsafe) public static var assocsubst: Bool = enabled.contains("assocsubst")
++
+   /// Build the standard library's symbol table in a single pass over its syntax.
+   nonisolated(unsafe) public static var symindex: Bool = enabled.contains("symindex")
+ 
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 2c05da4..3db9b88 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1012,6 +1012,31 @@ public struct TypeStore: Sendable {
+     }
+   }
+ 
++  /// Returns `n` with the keys in `substitutions` substituted with their corresponding values,
++  /// ignoring bound parameters and substituting in the aliasees of type aliases.
++  ///
++  /// `substitute(_:in:)` does not visit the aliasee of a type alias. A type alias whose aliasee
++  /// is changed by the substitution is replaced by its substituted aliasee.
++  public mutating func substituteThroughAliases(
++    _ substitutions: [AnyTypeIdentity: AnyTypeIdentity], in n: AnyTypeIdentity
++  ) -> AnyTypeIdentity {
++    if substitutions.isEmpty { return n }
++    return self.map(n) { (s, t) in
++      if let u = s[t] as? UniversalType {
++        let r = substitutions.removing(keys: u.parameters)
++        let h = s.substituteThroughAliases(r, in: u.head)
++        return .stepOver(s.demand(UniversalType(parameters: u.parameters, head: h)).erased)
++      } else if let u = substitutions[t] {
++        return .stepOver(u)
++      } else if let a = s[t] as? TypeAlias {
++        let x = s.substituteThroughAliases(substitutions, in: a.aliasee)
++        return .stepOver((x == a.aliasee) ? t : x)
++      } else {
++        return .stepInto(t)
++      }
++    }
++  }
++
+   /// Returns `n` with unification variables substituted with an error.
+   public mutating func substituteVariableForError(in n: AnyTypeIdentity) -> AnyTypeIdentity {
+     self.map(n) { (s, t) in
+-- 
+2.43.0
+

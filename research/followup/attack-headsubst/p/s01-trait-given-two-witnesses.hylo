@@ -1,0 +1,11 @@
+// Tests: the requirement of the callee (`Z is Q`) is satisfied by a given declared in a trait
+// (`trait P { type X; given X is Q }`), for two unrelated type parameters of the caller.
+// Correct verdict: rejected; `far(v.get())` is a `V.X.Y` and `feed(u.get(), _)` expects a
+// `U.X.Y`.
+trait Q { type Y; fun y() -> Y; fun eat(y: Y) }
+trait P { type X
+  given X is Q
+  fun get() -> X }
+fun far<Z where Z is Q>(z: Z) -> Z.Y { z.y() }
+fun feed<Z where Z is Q>(z: Z, y: Z.Y) { z.eat(y) }
+fun g<U, V where U is P, V is P>(u: U, v: V) { feed(u.get(), far(v.get())) }

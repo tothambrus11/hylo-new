@@ -1,6 +1,6 @@
 # 2. Associated types of a requirement in a signature
 
-**Flag:** `headsubst`. About 150 lines. Needs `premsubst` only for the shared recording of binders.
+**Flag:** `headsubst`. About 330 lines. It shares the recording of binders with `premsubst`.
 
 ## Symptom
 
@@ -36,7 +36,14 @@ The type of `use` is `<T> P<T> ==> (T, (T::$u).X) -> Void`, where `$u` is the de
 3. When the elaboration of the callee succeeds, it contains one witness per requirement. Each variable is then equated with the associated type selected through the witness passed for its requirement, reduced to its definition if that witness is a conformance declaration.
 4. An argument is not coerced to such a variable before the variable is resolved, so that an equality in the caller's scope (`U.X == B`) can still be used.
 
-In addition, two associated types selected through the *same* declared witness unify when the types of the witness do, which is needed while type arguments are still being inferred.
+In addition, two associated types selected through the *same* declared witness unify when the types of the witness are syntactically equal up to open variables, which is needed while type arguments are still being inferred. (Equal up to an equality in scope is not enough: one requirement instantiated at two equal types is two witnesses.)
+
+The same substitution is applied in two other places where a type written in terms of a declaration's requirements is used through a witness:
+
+- **Members of extensions.** A member of `extension <T where T is P> Box<T>` is written in terms of the extension's requirement. When the extension is found to apply, the witnesses of its requirements are substituted into the member's type, with its type arguments.
+- **Heads of givens and extensions.** For `given <T where T is P> => Holder<T.X> is Q`, the head mentions the requirement. When the given is matched against a goal `Holder<A.X> is Q` in which `A.X` is selected through a known witness, that match decides the requirement: it is proved by that witness.
+
+Requirements are substituted in order, so that chains such as `T.X.X` under `T is P, T.X is P` resolve.
 
 In the example: `pick(a)` infers `T = A`, elaborates `pick<A>(c)` where `c` is the conformance of `A`, and equates the result with `(A::c).X = C`. In `g`, the witness is the caller's requirement, and the parameter type becomes the caller's `U.X`.
 
@@ -48,14 +55,21 @@ If the callee cannot be elaborated, the variables stay unresolved and the call i
 
 ## What changes
 
-All twelve programs of `follow-up/headsubst/tests` behave as expected: eight valid calls are accepted (concrete and generic callers, parameters and results, nested projections such as `Box<T.X>`, two requirements, a generic conformance, an equality on the projection, a chain `use(u, pick(u))`), and four invalid ones are rejected (a wrong argument type, swapped arguments, another conformance of an equal type, a wrong instance of a generic conformance).
+All programs of `follow-up/headsubst/tests` behave as expected: the valid calls are accepted (concrete and generic callers, parameters and results, nested projections such as `Box<T.X>`, two requirements, a generic conformance, an equality on the projection, a chain `use(u, pick(u))`), and the invalid ones are rejected (a wrong argument type, a wrong result annotation, swapped arguments, another conformance of an equal type, a wrong instance of a generic conformance).
+
+Four patterns translated from the Swift and Rust standard libraries that the revised implementation rejected are accepted with `premsubst` and `headsubst` (`follow-up/usage/benchmarks/`): the Rust `Flatten` iterator, a conformance conditioned on an associated type of its parameter, a conformance with two equality conditions, and member lookup through a given that a trait declares on its associated type.
 
 The semantic dump of the compiler's tests is unchanged: no signature there mentions an associated type of a requirement in a function that is called.
 
+## What the review found
+
+The first implementation's unification rule for selections through one declared witness compared the witness types up to the equalities in scope. Members of an extension of the conforming types then converted `W.X` into `V.X` under `V == W`, the conversion that `../soundness/7-self-projection.md` closes; the rule is now syntactic. The same review found that an elaboration that cannot be decomposed left the associated types selected through the callee's own requirements, which made them equal across calls; they are now erroneous, and the equalities that resolve them are subgoals of the callee's coercion, so that a failure is always diagnosed.
+
 ## Limits
 
-- Calls only. A reference to a generic function that is not called at once, and the members of extensions and conformances with dependent requirements in their *head* (`given <T where T is P> => Box<T.X> is Q`), are not covered.
-- This mechanism was designed and implemented without an independent design document; it is the least reviewed of the new mechanisms. An adversarial review is reported in `../follow-up/attacks/`.
+- A reference to a generic function that is not called at once is not covered.
+- A variable that would be assigned a type mentioning an undecided premise fails the match; such a goal is rejected where the liberal rule of the existing implementation accepted it.
+- This mechanism was designed and implemented without an independent design document. Its adversarial reviews are in `../follow-up/attack-assoc/` and `../follow-up/attack-headsubst/`.
 
 ## Programs
 

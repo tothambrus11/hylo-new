@@ -1,0 +1,22 @@
+// Tests: the callee is a generic subscript with a projection in its signature.
+// Correct verdict: rejected (1 error, the use with `&s1`), or a syntax error if generic
+// subscripts do not exist.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+subscript proj<T where T is P>(t: T, x: inout T.X) inout -> T.X {
+  yield &x
+}
+fun q() {
+  var s0 = S0()
+  var s1 = S1()
+  inout a = &proj[A(), &s0]
+  inout b = &proj[A(), &s1]
+}

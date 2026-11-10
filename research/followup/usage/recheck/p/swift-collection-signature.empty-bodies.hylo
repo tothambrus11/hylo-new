@@ -1,0 +1,84 @@
+//! stage:typing no-std
+
+// SOURCE: Swift standard library (swiftlang/swift, stdlib/public/core).
+//   Sequence.swift:331        associatedtype Iterator: IteratorProtocol where Iterator.Element == Element
+//   Collection.swift:401-404  associatedtype SubSequence: Collection = Slice<Self>
+//                               where SubSequence.Index == Index, Element == SubSequence.Element,
+//                                     SubSequence.SubSequence == SubSequence
+//   Collection.swift:468-471  associatedtype Indices: Collection = DefaultIndices<Self>
+//                               where Indices.Element == Index, Indices.Index == Index,
+//                                     Indices.SubSequence == Indices
+//   Sequence.swift (elementsEqual): func elementsEqual<OtherSequence: Sequence>(_ other: OtherSequence)
+//                               where OtherSequence.Element == Element
+//
+// PATTERN: the requirement signature of `Collection`: seven equalities between associated types of
+// one parameter, two of them recursive (`SubSequence.SubSequence == SubSequence`).  Every generic
+// function over a `Collection` has these equalities in scope in Swift.
+//
+// TRANSLATION LIMITS (features this compiler lacks, found while translating):
+//   * A trait cannot state an equality between its associated types, so the equalities of the
+//     signature are restated in the where clause of each function.
+//   * `C.A.B` only resolves if `C.A is T` is itself a given of the function (the `given A is T`
+//     of the trait is not used for lookup), so the conformances of the associated types are
+//     restated too.  The conformances that Swift derives from the recursive equalities
+//     (`C.SubSequence.SubSequence: Collection`) must NOT be restated: a second given for an equal
+//     type is a different witness, and the projections through it are different types.
+//   * An associated type inherited through `refines` does not resolve (`C.Element` with only
+//     `C is Collection`), so `Collection` declares `Element` and `Iterator` itself, as Swift's
+//     `Collection` also does (`override associatedtype Element`).
+//
+// Lines starting with `// NEG:` are plausible but false claims; `run_benchmarks.py` enables them
+// in a generated copy to measure the cost of rejecting.
+
+trait IteratorProtocol { type Element }
+
+trait Collection {
+  type Element
+  type Iterator
+  type Index
+  type SubSequence
+  type Indices
+}
+
+fun need<A, B where A == B>() {}
+
+// One collection: the signature unrolled once.  7 equalities, 4 conformances.
+fun one<C where
+  C is Collection,
+  C.Iterator is IteratorProtocol, C.Iterator.Element == C.Element,
+  C.SubSequence is Collection,
+  C.SubSequence.Index == C.Index, C.Element == C.SubSequence.Element,
+  C.SubSequence.SubSequence == C.SubSequence,
+  C.Indices is Collection,
+  C.Indices.Element == C.Index, C.Indices.Index == C.Index,
+  C.Indices.SubSequence == C.Indices
+>() {
+  // NEG: need<C.Element, C.Index>()
+  // NEG: need<C.SubSequence, C.Indices>()
+  // NEG: need<C.Indices.Element, C.SubSequence.Element>()
+}
+
+// Two collections with the same elements (`elementsEqual`): 15 equalities, 8 conformances.
+fun two<C, D where
+  C is Collection,
+  C.Iterator is IteratorProtocol, C.Iterator.Element == C.Element,
+  C.SubSequence is Collection,
+  C.SubSequence.Index == C.Index, C.Element == C.SubSequence.Element,
+  C.SubSequence.SubSequence == C.SubSequence,
+  C.Indices is Collection,
+  C.Indices.Element == C.Index, C.Indices.Index == C.Index,
+  C.Indices.SubSequence == C.Indices,
+  D is Collection,
+  D.Iterator is IteratorProtocol, D.Iterator.Element == D.Element,
+  D.SubSequence is Collection,
+  D.SubSequence.Index == D.Index, D.Element == D.SubSequence.Element,
+  D.SubSequence.SubSequence == D.SubSequence,
+  D.Indices is Collection,
+  D.Indices.Element == D.Index, D.Indices.Index == D.Index,
+  D.Indices.SubSequence == D.Indices,
+  D.Element == C.Element
+>() {
+  // NEG: need<C.Index, D.Index>()
+  // NEG: need<C.SubSequence, D.SubSequence>()
+  // NEG: need<C.Indices.Element, D.Iterator.Element>()
+}

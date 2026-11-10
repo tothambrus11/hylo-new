@@ -1,0 +1,16 @@
+// As c09 where no requirement mentions another one: the binder of `T is P` is recorded because
+// the RESULT type mentions it (headsubst). ILL TYPED: the call needs `TX is R`.
+trait P { type X
+  fun get() -> X }
+trait R {}
+struct C { public memberwise init }
+given C is R {}
+fun f<T, V where T is P, V is R>(t: T) -> T.X {
+  type TX = T.X
+  if true {
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    let c = f<T, TX>(t)
+  }
+  return t.get()
+}

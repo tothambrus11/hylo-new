@@ -1,0 +1,20 @@
+trait P { type X }
+trait P2 { type Y }
+trait Q {}
+trait R {}
+trait S0 {}
+struct A {}
+struct B {}
+struct C {}
+struct D {}
+struct Pair<X, Y> {}
+struct W<X> {}
+given A is P { type X = B }
+given C is P2 { type Y = D }
+given B is Q {}
+given D is R {}
+given Pair<B, D> is S0 {}
+given <V where V is Q> => W<V> is R {}
+fun f<T, U where U is P, W<U.X> is R, T is P, T.X == U.X, T.X is Q>() {}
+fun g<V, Z where V is P, Z is P, V.X == Z.X, V.X is Q>() { f<V, Z>() }
+public fun main() { f<A, A>() }

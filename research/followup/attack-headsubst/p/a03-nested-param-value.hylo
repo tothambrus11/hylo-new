@@ -1,0 +1,15 @@
+// Tests: value crossing through a projection nested in a parameter type.
+// Correct verdict: rejected; `Box<S1>` is passed for `Box<A.X>` = `Box<S0>`, and `feed` gives the
+// `S1` inside it to `A.put(x: S0)`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun feed<T where T is P>(t: T, b: Box<T.X>) { t.put(b.v) }
+public fun main() { feed(A(), Box<S1>(v: S1())) }

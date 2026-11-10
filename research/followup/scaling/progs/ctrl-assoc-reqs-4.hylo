@@ -1,0 +1,7 @@
+trait P { type X }
+trait Q {}
+trait R {}
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T0.X is Q, T1.X is R, T1.X is Q, T2.X is R, T2.X is Q, T3.X is R, T3.X is Q, T4.X is R>(x: T4.X) {
+  check<T4.X>(x)
+}

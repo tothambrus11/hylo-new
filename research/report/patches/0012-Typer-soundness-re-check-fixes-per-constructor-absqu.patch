@@ -1,7 +1,7 @@
 From 402a8e221a933c24e2907b506568783a63e7354d Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Tue, 10 Nov 2026 09:22:58 +0000
-Subject: [PATCH 12/13] Typer: soundness re-check fixes (per-constructor
+Subject: [PATCH 12/27] Typer: soundness re-check fixes (per-constructor
  absquotient opacity, nested-scope model reuse, scope-level abstract
  projections, context-stable premise projections, givencheck environment)
 

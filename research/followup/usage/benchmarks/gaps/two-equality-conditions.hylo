@@ -1,0 +1,23 @@
+//! stage:typing no-std
+// GAP: a conformance with two equality conditions on the same parameter, one on the parameter itself and
+// one on an associated type of it, is not found, although each condition alone is.
+// Rust: `impl<I, U> Iterator for FlattenCompat<I, U> where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator`,
+// with the nested associated types flattened into one trait so that no other gap interferes.
+// EXPECTED: accepted; the four conditions of each conformance are exactly the givens of the function that uses it.
+// OBSERVED: FIX and FULL reject `both` (after eqmgu.solved = 142 and two exhausted searches) and accept the other two;
+// base does not finish in 60 s.
+trait Iterator { type Item }
+trait NestedIterator { type Item; type InnerIter; type InnerItem }
+struct Both<I, U> { public memberwise init }
+struct OnlyItem<I, U> { public memberwise init }
+struct OnlyIter<I, U> { public memberwise init }
+fun needIterator<T where T is Iterator>() {}
+
+given <I, U where I is NestedIterator, U is Iterator, I.InnerIter == U, I.InnerItem == U.Item> => Both<I, U> is Iterator { type Item = U.Item }
+fun both<I, U where I is NestedIterator, U is Iterator, I.InnerIter == U, I.InnerItem == U.Item>() { needIterator<Both<I, U>>() }
+
+given <I, U where I is NestedIterator, U is Iterator, I.InnerItem == U.Item> => OnlyItem<I, U> is Iterator { type Item = U.Item }
+fun onlyItem<I, U where I is NestedIterator, U is Iterator, I.InnerItem == U.Item>() { needIterator<OnlyItem<I, U>>() }
+
+given <I, U where I is NestedIterator, U is Iterator, I.InnerIter == U> => OnlyIter<I, U> is Iterator { type Item = U.Item }
+fun onlyIter<I, U where I is NestedIterator, U is Iterator, I.InnerIter == U>() { needIterator<OnlyIter<I, U>>() }

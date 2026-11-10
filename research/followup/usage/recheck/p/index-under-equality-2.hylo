@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// Same goal as index-under-equality.hylo, with one equality in scope that the goal does not need.
+trait P { type X }
+trait Q {}
+struct A { public memberwise init }
+struct Box<T> { public memberwise init }
+given A is Q {}
+given <T where T is Q> => Box<T> is Q {}
+fun needQ<T where T is Q>() {}
+fun withEquality<T, U where T is P, T.X == U>() { needQ<Box<Box<A>>>() }

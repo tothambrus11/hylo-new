@@ -1,0 +1,151 @@
+From a04befe62113bb0bc57af158c837275ea7947a9d Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 15:53:43 +0000
+Subject: [PATCH 19/27] Typer: abstractstrict (Self.X is only equal to a
+ selection through the same witness); corrections to eqindex and eqeager from
+ the design review
+
+eqindex: not when a given or the goal is a type alias at its root.
+eqeager: a search that runs past the depth bound ends silently when it exceeds
+the budget; only givens on the stack disable it; summon.depthExhausted counts
+resolutions that ended without result because of the bound.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 34 +++++++++++++++-------
+ Sources/FrontEnd/Typer/TyperCounters.swift |  6 ++++
+ Sources/FrontEnd/Types/TypeStore.swift     |  7 ++++-
+ 3 files changed, 36 insertions(+), 11 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 706d037..ecf2094 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -4455,7 +4455,7 @@ public struct Typer {
+     if !TyperExperiments.eqsolve || !TyperExperiments.fixsubst || (selfCheck == .equality) {
+       return nil
+     }
+-    if !declarationsOnStack.isEmpty || !pendingGivenChecks.isEmpty { return nil }
++    if hasImplicitOnStack() || !pendingGivenChecks.isEmpty { return nil }
+     if parts.contains(where: { (p) in p[.hasVariable] }) { return nil }
+ 
+     var e = thread.environment.with(
+@@ -4692,11 +4692,12 @@ public struct Typer {
+         ? maxImplicitDepth + (ts.lazy.map(\.environment.credit).max() ?? 0) : maxImplicitDepth
+     }
+ 
++    var exhausted = false
+     while done.isEmpty && !work.isEmpty && (depth < bound(work)) {
+       var next: [ResolutionThread] = []
+       for item in work {
+         if item.delay > 0 { next.append(item.waiting()); continue }
+-        if depth - item.environment.credit >= maxImplicitDepth { continue }
++        if depth - item.environment.credit >= maxImplicitDepth { exhausted = true; continue }
+         switch match(item, in: scopeOfUse) {
+         case .done(let r): done.append(r)
+         case .next(let s): next.append(contentsOf: s)
+@@ -4718,14 +4719,20 @@ public struct Typer {
+       } else if TyperExperiments.budget && done.isEmpty
+         && work.count > TyperExperiments.budgetLimit
+       {
+-        TyperCounters.bump("summon.budgetExhausted")
+-        reportResolutionBudgetExhausted(in: scopeOfUse)
++        if TyperExperiments.eqeager && (depth > maxImplicitDepth) {
++          // Without `eqeager` this resolution ended at the depth bound, silently.
++          TyperCounters.bump("eqeager.budgetPastDepth")
++          exhausted = true
++        } else {
++          TyperCounters.bump("summon.budgetExhausted")
++          reportResolutionBudgetExhausted(in: scopeOfUse)
++        }
+         work = []
+       }
+-      if depth == maxImplicitDepth && done.isEmpty && !work.isEmpty {
+-        TyperCounters.bump("summon.depthExhausted")
+-        lastResolutionExhaustedDepth = true
+-      }
++    }
++    if done.isEmpty && (exhausted || !work.isEmpty) {
++      TyperCounters.bump("summon.depthExhausted")
++      lastResolutionExhaustedDepth = true
+     }
+ 
+     let result = done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
+@@ -4779,6 +4786,10 @@ public struct Typer {
+     /// pair of constructors, which no such equality allows, so the index remains valid.
+     var coercionSourcesAreRigid = true
+ 
++    /// `true` iff the head of some given is a type alias; `match` may then coerce the whole type
++    /// of that given to a goal with another head.
++    var hasAliasHead = false
++
+     /// The number of groups.
+     var groupCount: Int = 0
+ 
+@@ -4834,6 +4845,7 @@ public struct Typer {
+         ix.all.append(e)
+         let gt = declaredType(of: g)
+         let (context, head) = program.types.contextAndHead(gt)
++        if program.types[head] is TypeAlias { ix.hasAliasHead = true }
+         if context.parameters.contains(where: { (p) in p.erased == head })
+           || program.types.isEquality(head)
+         {
+@@ -5107,7 +5119,9 @@ public struct Typer {
+     if !TyperExperiments.index { return nil }
+ 
+     guard let ix = givenIndex(visibleFrom: scopeOfUse),
+-      ix.coercionSources.isEmpty || (TyperExperiments.eqindex && ix.coercionSourcesAreRigid)
++      ix.coercionSources.isEmpty
++        || (TyperExperiments.eqindex && ix.coercionSourcesAreRigid && !ix.hasAliasHead
++          && !(program.types[u] is TypeAlias))
+     else {
+       TyperCounters.bump("index.fallback")
+       return nil
+@@ -6872,7 +6886,7 @@ public struct Typer {
+     // assuming more equalities never retracts a conclusion. It agrees with `v-abs-7.hylo` (one
+     // witness) and with `associated-type-inequality.hylo` (two witnesses: no merge).
+     var abstractBindings: [(Int, Int)] = []
+-    if !abstractProjections.isEmpty {
++    if !abstractProjections.isEmpty && !TyperExperiments.abstractstrict {
+       let scopeFacts = factNodes.filter({ (f) in f.3 >= environment.givens.count })
+       var candidates: [(head: Int, abstraction: AnyTypeIdentity, witness: WitnessExpression)] = []
+       var ambiguous = Set<AnyTypeIdentity>()
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 03b8220..eb11295 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -169,6 +169,12 @@ public enum TyperExperiments {
+   /// requirement (`pick<T where T is P>(t: T) -> T.X` applied to an `A` returns `A.X`).
+   nonisolated(unsafe) public static var headsubst: Bool = enabled.contains("headsubst")
+ 
++  /// SEMANTIC FIX: the associated type `(Self::P).X` selected through the witness that a trait
++  /// or conformance declares is only equal to a selection through that same witness. Without it,
++  /// `Self.X` is equated with `T.X` for another witness `T is P` of a type equal to `Self`, which
++  /// converts `W.X` into `V.X` when `V == W` (compare `negative/associated-type-inequality`).
++  nonisolated(unsafe) public static var abstractstrict: Bool = enabled.contains("abstractstrict")
++
+   /// SEMANTIC FIX: the associated type read from a generic conformance is instantiated with the
+   /// type arguments of the witness (`Box<A>.X` is `A`, not the uninstantiated `T`).
+   nonisolated(unsafe) public static var assocsubst: Bool = enabled.contains("assocsubst")
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 29801b4..4d8138b 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1291,7 +1291,12 @@ public struct TypeStore: Sendable {
+       // if the types of the witness are; they may differ by variables that are still open.
+       var sameReference = false
+       if TyperExperiments.headsubst, case .reference = a.value { sameReference = (a.value == b.value) }
+-      return ((a.value == .abstract) || (b.value == .abstract) || sameReference)
++      // Fix (`abstractstrict`): a selection through the witness being declared is only equal to
++      // another selection through that witness, not to one through any witness of an equal type.
++      let eitherAbstract = TyperExperiments.abstractstrict
++        ? ((a.value == .abstract) && (b.value == .abstract))
++        : ((a.value == .abstract) || (b.value == .abstract))
++      return (eitherAbstract || sameReference)
+         && unifiable(a.type, b.type, extending: &ss, handlingCoercionsWith: areCoercible)
+     } else {
+       return false
+-- 
+2.43.0
+

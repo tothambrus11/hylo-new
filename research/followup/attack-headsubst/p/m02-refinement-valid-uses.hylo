@@ -1,0 +1,18 @@
+// Tests: valid uses of the projection when the caller`s requirement is a refinement.
+// Correct verdict: accepted.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait R refines P {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun g<U where U is R>(u: U) {
+  let x: U.X = pick(u)
+  u.put(pick(u))
+  take(u, u.get())
+}
+fun h<U where U is R, U.X == S1>(u: U) { wantS1(pick(u)) ; take(u, S1()) }

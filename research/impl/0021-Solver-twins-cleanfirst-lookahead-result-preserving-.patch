@@ -1,0 +1,344 @@
+From 9dc04d7b1badad7f05cb4cd4b8abf1d0d811f0fc Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 16:17:40 +0000
+Subject: [PATCH 21/27] Solver: twins, cleanfirst, lookahead (result-preserving
+ speed-ups of overload resolution)
+
+twins: candidates of one overload set that have the same type share one
+exploration. cleanfirst: look for a solution without diagnostics first, with
+the bound 'no error' from the start; fall back to the existing search if the
+first overload set has no clean candidate. lookahead: during that search,
+abandon a branch when a pending goal with closed types is certain to fail.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Solution.swift      |  10 +
+ Sources/FrontEnd/Typer/Solver.swift        | 203 +++++++++++++++++++--
+ Sources/FrontEnd/Typer/Typer.swift         |  19 ++
+ Sources/FrontEnd/Typer/TyperCounters.swift |  12 ++
+ 4 files changed, 232 insertions(+), 12 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Solution.swift b/Sources/FrontEnd/Typer/Solution.swift
+index 920ba3a..1a03aed 100644
+--- a/Sources/FrontEnd/Typer/Solution.swift
++++ b/Sources/FrontEnd/Typer/Solution.swift
+@@ -35,6 +35,16 @@ internal struct Solution {
+     self.diagnostics = diagnostics
+   }
+ 
++  /// Returns a copy of `self` in which `n`, which is bound in `self`, is bound to `r`.
++  internal func rebinding(_ n: NameExpression.ID, to r: DeclarationReference) -> Solution {
++    assert(bindings[n] != nil)
++    var b = bindings
++    b[n] = r  // an existing key keeps its position in the ordered dictionary
++    return .init(
++      substitutions: substitutions, bindings: b, elaborations: elaborations,
++      argumentElaborations: argumentElaborations, diagnostics: diagnostics)
++  }
++
+   /// Adds `d` to the solution's diagnostics.
+   internal mutating func add(_ d: Diagnostic) {
+     diagnostics.insert(d)
+diff --git a/Sources/FrontEnd/Typer/Solver.swift b/Sources/FrontEnd/Typer/Solver.swift
+index 7d0b4f1..b463d8f 100644
+--- a/Sources/FrontEnd/Typer/Solver.swift
++++ b/Sources/FrontEnd/Typer/Solver.swift
+@@ -81,6 +81,45 @@ internal struct Solver {
+   /// The variables standing for projections that have not been resolved yet (`headsubst`).
+   private var unresolvedProjections: Set<TypeVariable.ID> = []
+ 
++  /// `true` iff no overload constraint has been popped on the path leading to `self`.
++  private var atFirstOverload = true
++
++  /// `true` iff `self` is looking for the first candidate whose solution has no diagnostic
++  /// (`cleanfirst`).
++  /// - Invariant: `optimistic` implies `best == .zero`.
++  private var optimistic = false
++
++  /// `true` iff the clean-first pass discarded a solution in the search rooted at `self`. If it
++  /// is `false`, that search returns what the existing algorithm returns for any value of `best`.
++  private var dropped = false
++
++  /// `true` iff `self` runs the existing algorithm only (`selfcheck`).
++  internal var plain = false
++
++  /// `true` iff `self` popped an overload constraint.
++  internal private(set) var sawOverload = false
++
++  /// `true` iff a pending goal was found certain to fail on the path leading to `self`; used
++  /// under `selfcheck` instead of abandoning the branch (`lookahead`).
++  private var expectsError = false
++
++  /// The outcome of exploring one candidate of an overload set (`twins`).
++  private struct Explored {
++
++    /// The type of the candidate.
++    let type: AnyTypeIdentity
++
++    /// The value of `best` when the exploration started, or `nil` if it was optimistic.
++    let bound: SolutionScore?
++
++    /// `true` iff nothing was dropped during the exploration.
++    let pure: Bool
++
++    /// The result of the exploration.
++    let solution: Solution?
++
++  }
++
+   /// The current indentation level for logging message, or `-1` if logging is disabled.
+   private var indentation: Int
+ 
+@@ -171,6 +210,26 @@ internal struct Solver {
+             me.parked.append(g)
+             return .running
+           }
++          me.sawOverload = true
++          if me.atFirstOverload {
++            me.atFirstOverload = false
++            if TyperExperiments.cleanfirst && !me.plain && (me.current.errors == 0)
++              && (me.best == .worst),
++              let s = me.cleanFirstSolution(overload: g)
++            {
++              return .terminated(s)
++            }
++          }
++          if TyperExperiments.lookahead && !me.plain && (me.best == .zero)
++            && me.hasCertainFailure()
++          {
++            if TyperExperiments.selfcheck {
++              me.expectsError = true
++            } else {
++              TyperCounters.bump("solver.lookaheadCuts")
++              return .canceled
++            }
++          }
+           return me.solve(overload: g).map(SolverStatus.terminated(_:)) ?? .canceled
+         default:
+           unreachable()
+@@ -746,26 +805,55 @@ internal struct Solver {
+     let k = goals[g] as! OverloadConstraint
+     TyperCounters.bump("solver.overloads")
+ 
++    assert(!optimistic || best == .zero)
+     var viable: [(choice: NameResolutionCandidate, solution: Solution)] = []
++    var explored: [Explored] = []
+     for choice in candidates {
+-
+-      let equality = EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site)
+-      TyperCounters.bump("solver.forks")
+-      log("- pick: \(program.show(equality))")
+-
+-      let s = indenting { (me) in
+-        var fork = Self(forking: me)
+-        let subgoal = fork.insert(fresh: equality)
+-        fork.outcomes[g] = fork.delegate([subgoal])
+-        fork.bindings[k.name] = choice.reference
+-        return fork.solution(betterThanOrEqualTo: me.best, using: &me.typer)
++      let s: Solution?
++      if let e = twin(of: choice, in: explored) {
++        // `twins`: a candidate of the same type was explored from the same state; exploring this
++        // one would differ only in the declaration bound to the name, which the solver never
++        // reads.
++        TyperCounters.bump("solver.twinsReused")
++        log("- reuse: \(program.show(choice.type))")
++        s = e.solution.map({ (x) in x.rebinding(k.name, to: choice.reference) })
++      } else {
++        let equality = EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site)
++        TyperCounters.bump("solver.forks")
++        log("- pick: \(program.show(equality))")
++
++        var droppedInFork = false
++        s = indenting { (me) in
++          var fork = Self(forking: me)
++          fork.dropped = false
++          let subgoal = fork.insert(fresh: equality)
++          fork.outcomes[g] = fork.delegate([subgoal])
++          fork.bindings[k.name] = choice.reference
++          let r = fork.solution(betterThanOrEqualTo: me.best, using: &me.typer)
++          droppedInFork = fork.dropped
++          return r
++        }
++        dropped = dropped || droppedInFork
++        explored.append(
++          .init(
++            type: choice.type, bound: optimistic ? nil : best,
++            pure: !droppedInFork, solution: s))
+       }
+ 
+       if let newSolution = s {
+         let newScore = SolutionScore(
+           errors: newSolution.diagnostics.elements.count, penalties: current.penalties)
+ 
+-        if newScore < best {
++        if optimistic {
++          // `cleanfirst`: the existing algorithm has `best.errors >= 1` here. A clean solution
++          // resets `viable`; any other one would be erased by that reset, if it ever happens.
++          if newScore == .zero {
++            viable = [(choice, newSolution)]
++            optimistic = false
++          } else {
++            dropped = true
++          }
++        } else if newScore < best {
+           best = newScore
+           viable = [(choice, newSolution)]
+         } else {
+@@ -794,9 +882,100 @@ internal struct Solver {
+     }
+   }
+ 
++  /// Returns the outcome of exploring a candidate of the same type as `choice`, if exploring
++  /// `choice` now would give the same outcome up to the declaration bound to the name (`twins`).
++  private func twin(of choice: NameResolutionCandidate, in explored: [Explored]) -> Explored? {
++    guard TyperExperiments.twins && !plain,
++      let e = explored.last(where: { (x) in x.type == choice.type })
++    else { return nil }
++    if optimistic { return e }
++    if let b = e.bound { return (b == best) ? e : nil }
++    return (e.pure && best == .zero) ? e : nil
++  }
++
++  /// Returns the solution that the existing algorithm computes for the rest of the system, `g`
++  /// being its first overload constraint, if the system has a candidate of `g` with a solution
++  /// free of diagnostics; returns `nil` otherwise, leaving `self` unchanged (`cleanfirst`).
++  ///
++  /// Before a first complete solution exists the existing search cancels nothing, so a candidate
++  /// that fails at its own argument is explored to the end. The attempt made here is the existing
++  /// search with the bound "no error" from the start; each overload set discards the solutions
++  /// that have a diagnostic until it finds a clean one, and runs the unchanged code after that.
++  private mutating func cleanFirstSolution(overload g: GoalIdentity) -> Solution? {
++    assert(best == .worst)
++    TyperCounters.bump("solver.cleanfirstAttempts")
++
++    var attempt = Self(forking: self)
++    attempt.optimistic = true
++    attempt.best = .zero
++    attempt.typer = self.typer.sink()
++    defer { self.typer = attempt.typer.sink() }
++
++    if TyperExperiments.lookahead && !TyperExperiments.selfcheck && attempt.hasCertainFailure() {
++      TyperCounters.bump("solver.cleanfirstFallbacks")
++      return nil
++    }
++    let s = attempt.solve(overload: g)
++    if s == nil { TyperCounters.bump("solver.cleanfirstFallbacks") }
++    return s
++  }
++
++  /// Returns `true` iff some goal in `fresh` fails, and is counted in `current.errors`, in every
++  /// run of the solver that starts from `self` and is not cancelled before it pops that goal
++  /// (`lookahead`).
++  private mutating func hasCertainFailure() -> Bool {
++    TyperCounters.bump("solver.lookaheadScans")
++    for g in fresh {
++      let k = goals[g].updated { (t) in
++        self.typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
++      }
++      if certainlyFails(k) { return true }
++    }
++    return false
++  }
++
++  /// Returns `true` iff `k`, which has been reified, fails whatever is assigned to the variables
++  /// that are still open.
++  private mutating func certainlyFails(_ k: any Constraint) -> Bool {
++    switch k {
++    case let k as EqualityConstraint:
++      return isClosed(k.lhs, k.rhs) && (program.types.unifiable(k.lhs, k.rhs) == nil)
++
++    case let k as WideningConstraint:
++      // `solve(widening:)` turns `k` into the equality of its operands.
++      return isClosed(k.lhs, k.rhs) && (program.types.unifiable(k.lhs, k.rhs) == nil)
++
++    case let k as CoercionConstraint:
++      // The tests of `solve(coercion:)` on closed operands, in the same order.
++      if !isClosed(k.lhs, k.rhs) || k.isTrivial { return false }
++      return typer.coerced(k.origin, withType: k.lhs, toMatch: k.rhs).uniqueElement == nil
++
++    case let k as CallConstraint:
++      // Only callees that `solve(call:)` decomposes without opening a context clause.
++      let (context, head) = program.types.contextAndHead(k.callee)
++      guard context.isEmpty, program.types.tag(of: head) == Arrow.self else { return false }
++      if !program.types.isCallable(head, program[k.origin].style) { return true }
++      let w = program.types.seenAsTermAbstraction(head)!
++      guard let (_, ss, _) = matches(k, w) else { return true }
++      return ss.contains(where: { (s) in certainlyFails(s) })
++
++    default:
++      return false
++    }
++  }
++
++  /// Returns `true` iff neither `a` nor `b` contains a unification variable.
++  private func isClosed(_ a: AnyTypeIdentity, _ b: AnyTypeIdentity) -> Bool {
++    !a[.hasVariable] && !b[.hasVariable]
++  }
++
+   /// Creates a solution with the current state.
+   private mutating func formSolution() -> Solution? {
+     if current > best { return nil }
++    if expectsError && (current.errors == 0) {
++      TyperCounters.bump("selfcheck.violations")
++      print("[selfcheck] VIOLATION: lookahead: a goal found certain to fail did not fail")
++    }
+ 
+     let ss = substitutions.optimized()
+     var ds = DiagnosticSet()
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index d4b98b3..7e16d92 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -3495,6 +3495,25 @@ public struct Typer {
+ 
+       var solver = Solver(o, withLoggingEnabled: loggingIsEnabled)
+       let s = solver.solution(using: &self)
++
++      // Self-check (`twins`, `cleanfirst`, `lookahead`): the existing search gives the same
++      // diagnostics and the same name bindings.
++      if TyperExperiments.selfcheck && solver.sawOverload
++        && (TyperExperiments.twins || TyperExperiments.cleanfirst || TyperExperiments.lookahead)
++      {
++        var reference = Solver(o, withLoggingEnabled: false)
++        reference.plain = true
++        let r = reference.solution(using: &self)
++        let same =
++          (r.diagnostics.elements.map(\.description) == s.diagnostics.elements.map(\.description))
++          && (r.bindings.count == s.bindings.count)
++          && r.bindings.elements.allSatisfy({ (n, d) in s.bindings[n] == d })
++        if same {
++          TyperCounters.bump("selfcheck.overload.confirmed")
++        } else {
++          selfCheckViolation("overload resolution differs from the existing search")
++        }
++      }
+       commit(s, to: o)
+       return s
+     }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index f3f52d8..ec7035e 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -169,6 +169,18 @@ public enum TyperExperiments {
+   /// requirement (`pick<T where T is P>(t: T) -> T.X` applied to an `A` returns `A.X`).
+   nonisolated(unsafe) public static var headsubst: Bool = enabled.contains("headsubst")
+ 
++  /// Overload resolution: candidates of one overload set that have the same type share one
++  /// exploration (result-preserving).
++  nonisolated(unsafe) public static var twins: Bool = enabled.contains("twins")
++
++  /// Overload resolution: look for a solution without diagnostics first; run the existing search
++  /// only if there is none (result-preserving).
++  nonisolated(unsafe) public static var cleanfirst: Bool = enabled.contains("cleanfirst")
++
++  /// With `cleanfirst`: abandon a branch in which a pending goal is certain to fail
++  /// (result-preserving).
++  nonisolated(unsafe) public static var lookahead: Bool = enabled.contains("lookahead")
++
+   /// EXPERIMENT (accepts more programs): a closed pair of types may be coerced if the equality
+   /// procedure proves them equal, even if they are not both written in an equality.
+   nonisolated(unsafe) public static var eqfilter: Bool = enabled.contains("eqfilter")
+-- 
+2.43.0
+

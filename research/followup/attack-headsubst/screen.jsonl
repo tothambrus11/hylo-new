@@ -1,0 +1,618 @@
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/abstract-given.hylo", "config": "FULL", "sha": "ae4904627018", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/abstract-given.hylo", "config": "NEW", "sha": "ae4904627018", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/abstract-given.hylo", "config": "NEW-headsubst", "sha": "ae4904627018", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/adjunct-conformance.hylo", "config": "FULL", "sha": "21258e14081b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/adjunct-conformance.hylo", "config": "NEW", "sha": "21258e14081b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/adjunct-conformance.hylo", "config": "NEW-headsubst", "sha": "21258e14081b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/assignment.hylo", "config": "FULL", "sha": "b34c2b6bd9e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/assignment.hylo", "config": "NEW", "sha": "b34c2b6bd9e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/assignment.hylo", "config": "NEW-headsubst", "sha": "b34c2b6bd9e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/associated-type-equality.hylo", "config": "FULL", "sha": "6b338c19fdb2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/associated-type-equality.hylo", "config": "NEW", "sha": "6b338c19fdb2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/associated-type-equality.hylo", "config": "NEW-headsubst", "sha": "6b338c19fdb2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/big-return.hylo", "config": "FULL", "sha": "be19fbbb203d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/big-return.hylo", "config": "NEW", "sha": "be19fbbb203d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/big-return.hylo", "config": "NEW-headsubst", "sha": "be19fbbb203d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/branch-inference.hylo", "config": "FULL", "sha": "230a701de13e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/branch-inference.hylo", "config": "NEW", "sha": "230a701de13e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/branch-inference.hylo", "config": "NEW-headsubst", "sha": "230a701de13e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/buffer-literal.hylo", "config": "FULL", "sha": "0ecf91548e7a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/buffer-literal.hylo", "config": "NEW", "sha": "0ecf91548e7a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/buffer-literal.hylo", "config": "NEW-headsubst", "sha": "0ecf91548e7a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/builtins.hylo", "config": "FULL", "sha": "ef5425f4d54b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/builtins.hylo", "config": "NEW", "sha": "ef5425f4d54b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/builtins.hylo", "config": "NEW-headsubst", "sha": "ef5425f4d54b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-1.hylo", "config": "FULL", "sha": "85d550487489", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-1.hylo", "config": "NEW", "sha": "85d550487489", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-1.hylo", "config": "NEW-headsubst", "sha": "85d550487489", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-2.hylo", "config": "FULL", "sha": "922730312cbc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-2.hylo", "config": "NEW", "sha": "922730312cbc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-application-2.hylo", "config": "NEW-headsubst", "sha": "922730312cbc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-requirement.hylo", "config": "FULL", "sha": "4e78c75b1ae0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-requirement.hylo", "config": "NEW", "sha": "4e78c75b1ae0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/bundle-requirement.hylo", "config": "NEW-headsubst", "sha": "4e78c75b1ae0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/chained-type-aliases.hylo", "config": "FULL", "sha": "caf9bfc166f6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/chained-type-aliases.hylo", "config": "NEW", "sha": "caf9bfc166f6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/chained-type-aliases.hylo", "config": "NEW-headsubst", "sha": "caf9bfc166f6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/coercion-derivability-cache.hylo", "config": "FULL", "sha": "8e2e6b8f98e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/coercion-derivability-cache.hylo", "config": "NEW", "sha": "8e2e6b8f98e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/coercion-derivability-cache.hylo", "config": "NEW-headsubst", "sha": "8e2e6b8f98e9", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance-via-equivalence.hylo", "config": "FULL", "sha": "90af34398032", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance-via-equivalence.hylo", "config": "NEW", "sha": "90af34398032", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance-via-equivalence.hylo", "config": "NEW-headsubst", "sha": "90af34398032", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance.hylo", "config": "FULL", "sha": "37e718ade2aa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance.hylo", "config": "NEW", "sha": "37e718ade2aa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conformance.hylo", "config": "NEW-headsubst", "sha": "37e718ade2aa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/context-bound.hylo", "config": "FULL", "sha": "3d2eda74013a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/context-bound.hylo", "config": "NEW", "sha": "3d2eda74013a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/context-bound.hylo", "config": "NEW-headsubst", "sha": "3d2eda74013a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/control-flow.hylo", "config": "FULL", "sha": "36664c4d573b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/control-flow.hylo", "config": "NEW", "sha": "36664c4d573b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/control-flow.hylo", "config": "NEW-headsubst", "sha": "36664c4d573b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conversion.hylo", "config": "FULL", "sha": "fc83fe3183b0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conversion.hylo", "config": "NEW", "sha": "fc83fe3183b0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/conversion.hylo", "config": "NEW-headsubst", "sha": "fc83fe3183b0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-signed.hylo", "config": "FULL", "sha": "f4d1ab4369f7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-signed.hylo", "config": "NEW", "sha": "f4d1ab4369f7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-signed.hylo", "config": "NEW-headsubst", "sha": "f4d1ab4369f7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-unsigned.hylo", "config": "FULL", "sha": "cb5d1b93fbab", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-unsigned.hylo", "config": "NEW", "sha": "cb5d1b93fbab", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-by-zero-unsigned.hylo", "config": "NEW-headsubst", "sha": "cb5d1b93fbab", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-result-unrepresentable.hylo", "config": "FULL", "sha": "c9eebfb4bc52", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-result-unrepresentable.hylo", "config": "NEW", "sha": "c9eebfb4bc52", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-result-unrepresentable.hylo", "config": "NEW-headsubst", "sha": "c9eebfb4bc52", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-succeeds.hylo", "config": "FULL", "sha": "31ff15c28f87", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-succeeds.hylo", "config": "NEW", "sha": "31ff15c28f87", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/division-succeeds.hylo", "config": "NEW-headsubst", "sha": "31ff15c28f87", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-constructor.hylo", "config": "FULL", "sha": "a980e3af177d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-constructor.hylo", "config": "NEW", "sha": "a980e3af177d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-constructor.hylo", "config": "NEW-headsubst", "sha": "a980e3af177d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-inference.hylo", "config": "FULL", "sha": "96765224b833", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-inference.hylo", "config": "NEW", "sha": "96765224b833", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/enum-inference.hylo", "config": "NEW-headsubst", "sha": "96765224b833", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/equality.hylo", "config": "FULL", "sha": "79c1aa60b127", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/equality.hylo", "config": "NEW", "sha": "79c1aa60b127", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/equality.hylo", "config": "NEW-headsubst", "sha": "79c1aa60b127", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-1.hylo", "config": "FULL", "sha": "70bc1656faf7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-1.hylo", "config": "NEW", "sha": "70bc1656faf7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-1.hylo", "config": "NEW-headsubst", "sha": "70bc1656faf7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-2.hylo", "config": "FULL", "sha": "8261a3c7b717", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-2.hylo", "config": "NEW", "sha": "8261a3c7b717", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-2.hylo", "config": "NEW-headsubst", "sha": "8261a3c7b717", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-3.hylo", "config": "FULL", "sha": "94dae37195c3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-3.hylo", "config": "NEW", "sha": "94dae37195c3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-3.hylo", "config": "NEW-headsubst", "sha": "94dae37195c3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-4.hylo", "config": "FULL", "sha": "ac68d458c979", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-4.hylo", "config": "NEW", "sha": "ac68d458c979", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-4.hylo", "config": "NEW-headsubst", "sha": "ac68d458c979", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-5.hylo", "config": "FULL", "sha": "e4f0786c0634", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-5.hylo", "config": "NEW", "sha": "e4f0786c0634", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/existentialization-5.hylo", "config": "NEW-headsubst", "sha": "e4f0786c0634", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/explicit-deinit.hylo", "config": "FULL", "sha": "1ff63fe23d1c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/explicit-deinit.hylo", "config": "NEW", "sha": "1ff63fe23d1c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/explicit-deinit.hylo", "config": "NEW-headsubst", "sha": "1ff63fe23d1c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/extension.hylo", "config": "FULL", "sha": "808e196287c2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/extension.hylo", "config": "NEW", "sha": "808e196287c2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/extension.hylo", "config": "NEW-headsubst", "sha": "808e196287c2", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/factorial.hylo", "config": "FULL", "sha": "e5c4b4a4ef0a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/factorial.hylo", "config": "NEW", "sha": "e5c4b4a4ef0a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/factorial.hylo", "config": "NEW-headsubst", "sha": "e5c4b4a4ef0a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/fibonacci.hylo", "config": "FULL", "sha": "10a320c8ef8b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/fibonacci.hylo", "config": "NEW", "sha": "10a320c8ef8b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/fibonacci.hylo", "config": "NEW-headsubst", "sha": "10a320c8ef8b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-arithmetic.hylo", "config": "FULL", "sha": "e8e05d3ec538", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-arithmetic.hylo", "config": "NEW", "sha": "e8e05d3ec538", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-arithmetic.hylo", "config": "NEW-headsubst", "sha": "e8e05d3ec538", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-literal.hylo", "config": "FULL", "sha": "df7eb77493c4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-literal.hylo", "config": "NEW", "sha": "df7eb77493c4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/float-literal.hylo", "config": "NEW-headsubst", "sha": "df7eb77493c4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-bundle.hylo", "config": "FULL", "sha": "74e80e8f1227", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-bundle.hylo", "config": "NEW", "sha": "74e80e8f1227", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-bundle.hylo", "config": "NEW-headsubst", "sha": "74e80e8f1227", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-1.hylo", "config": "FULL", "sha": "8c5a55bf9090", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-1.hylo", "config": "NEW", "sha": "8c5a55bf9090", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-1.hylo", "config": "NEW-headsubst", "sha": "8c5a55bf9090", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-2.hylo", "config": "FULL", "sha": "d313927316a8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-2.hylo", "config": "NEW", "sha": "d313927316a8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-call-2.hylo", "config": "NEW-headsubst", "sha": "d313927316a8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-constructor.hylo", "config": "FULL", "sha": "1ef6620f3f3b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-constructor.hylo", "config": "NEW", "sha": "1ef6620f3f3b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-constructor.hylo", "config": "NEW-headsubst", "sha": "1ef6620f3f3b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-extension.hylo", "config": "FULL", "sha": "3c4ad572d5bc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-extension.hylo", "config": "NEW", "sha": "3c4ad572d5bc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-extension.hylo", "config": "NEW-headsubst", "sha": "3c4ad572d5bc", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-given.hylo", "config": "FULL", "sha": "9d3d0a999885", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-given.hylo", "config": "NEW", "sha": "9d3d0a999885", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-given.hylo", "config": "NEW-headsubst", "sha": "9d3d0a999885", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-member.hylo", "config": "FULL", "sha": "0a475a65e9da", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-member.hylo", "config": "NEW", "sha": "0a475a65e9da", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-member.hylo", "config": "NEW-headsubst", "sha": "0a475a65e9da", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-qualification.hylo", "config": "FULL", "sha": "1f2556728af7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-qualification.hylo", "config": "NEW", "sha": "1f2556728af7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-qualification.hylo", "config": "NEW-headsubst", "sha": "1f2556728af7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-witness-table.hylo", "config": "FULL", "sha": "c98f9ea67826", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-witness-table.hylo", "config": "NEW", "sha": "c98f9ea67826", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/generic-witness-table.hylo", "config": "NEW-headsubst", "sha": "c98f9ea67826", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/global-binding.hylo", "config": "FULL", "sha": "156d4bc30300", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/global-binding.hylo", "config": "NEW", "sha": "156d4bc30300", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/global-binding.hylo", "config": "NEW-headsubst", "sha": "156d4bc30300", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/higher-kinded.hylo", "config": "FULL", "sha": "0c811ab21c6f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/higher-kinded.hylo", "config": "NEW", "sha": "0c811ab21c6f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/higher-kinded.hylo", "config": "NEW-headsubst", "sha": "0c811ab21c6f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/implicit-qualification.hylo", "config": "FULL", "sha": "73c3d0a9e74f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/implicit-qualification.hylo", "config": "NEW", "sha": "73c3d0a9e74f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/implicit-qualification.hylo", "config": "NEW-headsubst", "sha": "73c3d0a9e74f", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-1.hylo", "config": "FULL", "sha": "f8e502e487f8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-1.hylo", "config": "NEW", "sha": "f8e502e487f8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-1.hylo", "config": "NEW-headsubst", "sha": "f8e502e487f8", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-2.hylo", "config": "FULL", "sha": "6f2518d28056", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-2.hylo", "config": "NEW", "sha": "6f2518d28056", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-2.hylo", "config": "NEW-headsubst", "sha": "6f2518d28056", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-broken-cycle.hylo", "config": "FULL", "sha": "d4db19895dc6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-broken-cycle.hylo", "config": "NEW", "sha": "d4db19895dc6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-broken-cycle.hylo", "config": "NEW-headsubst", "sha": "d4db19895dc6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-deep-chain.hylo", "config": "FULL", "sha": "f6b7b31b3669", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-deep-chain.hylo", "config": "NEW", "sha": "f6b7b31b3669", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-deep-chain.hylo", "config": "NEW-headsubst", "sha": "f6b7b31b3669", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-existentialized.hylo", "config": "FULL", "sha": "75f91f65f82e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-existentialized.hylo", "config": "NEW", "sha": "75f91f65f82e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-existentialized.hylo", "config": "NEW-headsubst", "sha": "75f91f65f82e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-shared-callee.hylo", "config": "FULL", "sha": "351b738d4b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-shared-callee.hylo", "config": "NEW", "sha": "351b738d4b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-shared-callee.hylo", "config": "NEW-headsubst", "sha": "351b738d4b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-with-extensions.hylo", "config": "FULL", "sha": "46b4fa2a43c1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-with-extensions.hylo", "config": "NEW", "sha": "46b4fa2a43c1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/inlining-with-extensions.hylo", "config": "NEW-headsubst", "sha": "46b4fa2a43c1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-bits.hylo", "config": "FULL", "sha": "60b3cc2d119a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-bits.hylo", "config": "NEW", "sha": "60b3cc2d119a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-bits.hylo", "config": "NEW-headsubst", "sha": "60b3cc2d119a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-conversions.hylo", "config": "FULL", "sha": "0f8a73d18b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-conversions.hylo", "config": "NEW", "sha": "0f8a73d18b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-conversions.hylo", "config": "NEW-headsubst", "sha": "0f8a73d18b21", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-literal.hylo", "config": "FULL", "sha": "112dfc198a5c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-literal.hylo", "config": "NEW", "sha": "112dfc198a5c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/integer-literal.hylo", "config": "NEW-headsubst", "sha": "112dfc198a5c", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/keyword-identifiers.hylo", "config": "FULL", "sha": "4bddfa712c37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/keyword-identifiers.hylo", "config": "NEW", "sha": "4bddfa712c37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/keyword-identifiers.hylo", "config": "NEW-headsubst", "sha": "4bddfa712c37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/lambda-inference.hylo", "config": "FULL", "sha": "754cd1179480", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/lambda-inference.hylo", "config": "NEW", "sha": "754cd1179480", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/lambda-inference.hylo", "config": "NEW-headsubst", "sha": "754cd1179480", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/local-given.hylo", "config": "FULL", "sha": "34d772fc0262", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/local-given.hylo", "config": "NEW", "sha": "34d772fc0262", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/local-given.hylo", "config": "NEW-headsubst", "sha": "34d772fc0262", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-break.hylo", "config": "FULL", "sha": "522ed1d46524", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-break.hylo", "config": "NEW", "sha": "522ed1d46524", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-break.hylo", "config": "NEW-headsubst", "sha": "522ed1d46524", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-continue.hylo", "config": "FULL", "sha": "8e350bd9b6f5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-continue.hylo", "config": "NEW", "sha": "8e350bd9b6f5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/loop-continue.hylo", "config": "NEW-headsubst", "sha": "8e350bd9b6f5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/member-bundle.hylo", "config": "FULL", "sha": "546d28acee37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/member-bundle.hylo", "config": "NEW", "sha": "546d28acee37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/member-bundle.hylo", "config": "NEW-headsubst", "sha": "546d28acee37", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-1.hylo", "config": "FULL", "sha": "c1e0f6d43b55", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-1.hylo", "config": "NEW", "sha": "c1e0f6d43b55", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-1.hylo", "config": "NEW-headsubst", "sha": "c1e0f6d43b55", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-2.hylo", "config": "FULL", "sha": "ac7b81d16208", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-2.hylo", "config": "NEW", "sha": "ac7b81d16208", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-2.hylo", "config": "NEW-headsubst", "sha": "ac7b81d16208", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-3.hylo", "config": "FULL", "sha": "853a27dfff68", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-3.hylo", "config": "NEW", "sha": "853a27dfff68", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/memberwise-init-3.hylo", "config": "NEW-headsubst", "sha": "853a27dfff68", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/metatype.hylo", "config": "FULL", "sha": "b6585c090543", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/metatype.hylo", "config": "NEW", "sha": "b6585c090543", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/metatype.hylo", "config": "NEW-headsubst", "sha": "b6585c090543", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-1.hylo", "config": "FULL", "sha": "3ea0742723fd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-1.hylo", "config": "NEW", "sha": "3ea0742723fd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-1.hylo", "config": "NEW-headsubst", "sha": "3ea0742723fd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-2.hylo", "config": "FULL", "sha": "8b99fb53b2d6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-2.hylo", "config": "NEW", "sha": "8b99fb53b2d6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nested-given-2.hylo", "config": "NEW-headsubst", "sha": "8b99fb53b2d6", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/new-expression.hylo", "config": "FULL", "sha": "703616ad9e7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/new-expression.hylo", "config": "NEW", "sha": "703616ad9e7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/new-expression.hylo", "config": "NEW-headsubst", "sha": "703616ad9e7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nullary-conformance.hylo", "config": "FULL", "sha": "80fc0cc07fa5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nullary-conformance.hylo", "config": "NEW", "sha": "80fc0cc07fa5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/nullary-conformance.hylo", "config": "NEW-headsubst", "sha": "80fc0cc07fa5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overload-priority.hylo", "config": "FULL", "sha": "103f2415f29a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overload-priority.hylo", "config": "NEW", "sha": "103f2415f29a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overload-priority.hylo", "config": "NEW-headsubst", "sha": "103f2415f29a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-1.hylo", "config": "FULL", "sha": "88f30b89ba38", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-1.hylo", "config": "NEW", "sha": "88f30b89ba38", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-1.hylo", "config": "NEW-headsubst", "sha": "88f30b89ba38", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-2.hylo", "config": "FULL", "sha": "d4698dda3052", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-2.hylo", "config": "NEW", "sha": "d4698dda3052", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/overloading-2.hylo", "config": "NEW-headsubst", "sha": "d4698dda3052", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/partial-type-substitution.hylo", "config": "FULL", "sha": "20459475f226", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/partial-type-substitution.hylo", "config": "NEW", "sha": "20459475f226", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/partial-type-substitution.hylo", "config": "NEW-headsubst", "sha": "20459475f226", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pattern-matching.hylo", "config": "FULL", "sha": "4ff3ac1f6dbd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pattern-matching.hylo", "config": "NEW", "sha": "4ff3ac1f6dbd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pattern-matching.hylo", "config": "NEW-headsubst", "sha": "4ff3ac1f6dbd", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pointer-place-roundtrip.hylo", "config": "FULL", "sha": "326fa5a5c674", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pointer-place-roundtrip.hylo", "config": "NEW", "sha": "326fa5a5c674", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/pointer-place-roundtrip.hylo", "config": "NEW-headsubst", "sha": "326fa5a5c674", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/refinement.hylo", "config": "FULL", "sha": "20c089893e3a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/refinement.hylo", "config": "NEW", "sha": "20c089893e3a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/refinement.hylo", "config": "NEW-headsubst", "sha": "20c089893e3a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/remote-binding.hylo", "config": "FULL", "sha": "1530d6aa2ebe", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/remote-binding.hylo", "config": "NEW", "sha": "1530d6aa2ebe", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/remote-binding.hylo", "config": "NEW-headsubst", "sha": "1530d6aa2ebe", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/resolution-in-extension.hylo", "config": "FULL", "sha": "1ea78e992c25", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/resolution-in-extension.hylo", "config": "NEW", "sha": "1ea78e992c25", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/resolution-in-extension.hylo", "config": "NEW-headsubst", "sha": "1ea78e992c25", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-1.hylo", "config": "FULL", "sha": "906914d615a5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-1.hylo", "config": "NEW", "sha": "906914d615a5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-1.hylo", "config": "NEW-headsubst", "sha": "906914d615a5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-2.hylo", "config": "FULL", "sha": "a76e36378fa3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-2.hylo", "config": "NEW", "sha": "a76e36378fa3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/return-in-if-2.hylo", "config": "NEW-headsubst", "sha": "a76e36378fa3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/runtime-record-offsets.hylo", "config": "FULL", "sha": "0056d1237074", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/runtime-record-offsets.hylo", "config": "NEW", "sha": "0056d1237074", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/runtime-record-offsets.hylo", "config": "NEW-headsubst", "sha": "0056d1237074", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/self-where-clause.hylo", "config": "FULL", "sha": "76a13acae5f0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/self-where-clause.hylo", "config": "NEW", "sha": "76a13acae5f0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/self-where-clause.hylo", "config": "NEW-headsubst", "sha": "76a13acae5f0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript-locally-movable.hylo", "config": "FULL", "sha": "8f4111c1d9db", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript-locally-movable.hylo", "config": "NEW", "sha": "8f4111c1d9db", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript-locally-movable.hylo", "config": "NEW-headsubst", "sha": "8f4111c1d9db", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript.hylo", "config": "FULL", "sha": "bcb961de653b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript.hylo", "config": "NEW", "sha": "bcb961de653b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/sink-subscript.hylo", "config": "NEW-headsubst", "sha": "bcb961de653b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/standard-library.hylo", "config": "FULL", "sha": "a0e43e70ff2e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/standard-library.hylo", "config": "NEW", "sha": "a0e43e70ff2e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/standard-library.hylo", "config": "NEW-headsubst", "sha": "a0e43e70ff2e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-function.hylo", "config": "FULL", "sha": "251bb5aafbe5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-function.hylo", "config": "NEW", "sha": "251bb5aafbe5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-function.hylo", "config": "NEW-headsubst", "sha": "251bb5aafbe5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-member-name-clash.hylo", "config": "FULL", "sha": "dba625a9e366", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-member-name-clash.hylo", "config": "NEW", "sha": "dba625a9e366", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/static-member-name-clash.hylo", "config": "NEW-headsubst", "sha": "dba625a9e366", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/stored-binding.hylo", "config": "FULL", "sha": "7d5412da0bbf", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/stored-binding.hylo", "config": "NEW", "sha": "7d5412da0bbf", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/stored-binding.hylo", "config": "NEW-headsubst", "sha": "7d5412da0bbf", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-1.hylo", "config": "FULL", "sha": "c0e0a83b7f27", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-1.hylo", "config": "NEW", "sha": "c0e0a83b7f27", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-1.hylo", "config": "NEW-headsubst", "sha": "c0e0a83b7f27", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-2.hylo", "config": "FULL", "sha": "d785adf20904", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-2.hylo", "config": "NEW", "sha": "d785adf20904", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-2.hylo", "config": "NEW-headsubst", "sha": "d785adf20904", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-3.hylo", "config": "FULL", "sha": "bffc807a4f7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-3.hylo", "config": "NEW", "sha": "bffc807a4f7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-3.hylo", "config": "NEW-headsubst", "sha": "bffc807a4f7b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-4.hylo", "config": "FULL", "sha": "c41614da7b10", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-4.hylo", "config": "NEW", "sha": "c41614da7b10", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-4.hylo", "config": "NEW-headsubst", "sha": "c41614da7b10", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-5.hylo", "config": "FULL", "sha": "dd4f041edafa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-5.hylo", "config": "NEW", "sha": "dd4f041edafa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-5.hylo", "config": "NEW-headsubst", "sha": "dd4f041edafa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-6.hylo", "config": "FULL", "sha": "93e2c0f529a7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-6.hylo", "config": "NEW", "sha": "93e2c0f529a7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-6.hylo", "config": "NEW-headsubst", "sha": "93e2c0f529a7", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-7.hylo", "config": "FULL", "sha": "48252c2786df", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-7.hylo", "config": "NEW", "sha": "48252c2786df", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-decomposition-7.hylo", "config": "NEW-headsubst", "sha": "48252c2786df", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-load-across-yieldpoint.hylo", "config": "FULL", "sha": "faff833d339a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-load-across-yieldpoint.hylo", "config": "NEW", "sha": "faff833d339a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-load-across-yieldpoint.hylo", "config": "NEW-headsubst", "sha": "faff833d339a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-optimized.hylo", "config": "FULL", "sha": "0dfb66a3a24a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-optimized.hylo", "config": "NEW", "sha": "0dfb66a3a24a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-optimized.hylo", "config": "NEW-headsubst", "sha": "0dfb66a3a24a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-use-erased-parameter-in-slide.hylo", "config": "FULL", "sha": "8e0e70995450", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-use-erased-parameter-in-slide.hylo", "config": "NEW", "sha": "8e0e70995450", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/subscript-use-erased-parameter-in-slide.hylo", "config": "NEW-headsubst", "sha": "8e0e70995450", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-1.hylo", "config": "FULL", "sha": "62579aaa7ad5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-1.hylo", "config": "NEW", "sha": "62579aaa7ad5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-1.hylo", "config": "NEW-headsubst", "sha": "62579aaa7ad5", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-2.hylo", "config": "FULL", "sha": "91c780481fd3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-2.hylo", "config": "NEW", "sha": "91c780481fd3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/synthesized-deinit-2.hylo", "config": "NEW-headsubst", "sha": "91c780481fd3", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/ternary.hylo", "config": "FULL", "sha": "1b30ff63552b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/ternary.hylo", "config": "NEW", "sha": "1b30ff63552b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/ternary.hylo", "config": "NEW-headsubst", "sha": "1b30ff63552b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-1.hylo", "config": "FULL", "sha": "e3e453a2882d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-1.hylo", "config": "NEW", "sha": "e3e453a2882d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-1.hylo", "config": "NEW-headsubst", "sha": "e3e453a2882d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-2.hylo", "config": "FULL", "sha": "695f2efa3d2d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-2.hylo", "config": "NEW", "sha": "695f2efa3d2d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-2.hylo", "config": "NEW-headsubst", "sha": "695f2efa3d2d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-3.hylo", "config": "FULL", "sha": "56686886b832", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-3.hylo", "config": "NEW", "sha": "56686886b832", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-3.hylo", "config": "NEW-headsubst", "sha": "56686886b832", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-4.hylo", "config": "FULL", "sha": "ee76b4bccd88", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-4.hylo", "config": "NEW", "sha": "ee76b4bccd88", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/trap-4.hylo", "config": "NEW-headsubst", "sha": "ee76b4bccd88", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/tuple-consing.hylo", "config": "FULL", "sha": "0da187f67d03", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/tuple-consing.hylo", "config": "NEW", "sha": "0da187f67d03", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/tuple-consing.hylo", "config": "NEW-headsubst", "sha": "0da187f67d03", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealias-transparent.hylo", "config": "FULL", "sha": "174e2bc3d27d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealias-transparent.hylo", "config": "NEW", "sha": "174e2bc3d27d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealias-transparent.hylo", "config": "NEW-headsubst", "sha": "174e2bc3d27d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealiases.hylo", "config": "FULL", "sha": "9b06300d859b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealiases.hylo", "config": "NEW", "sha": "9b06300d859b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/typealiases.hylo", "config": "NEW-headsubst", "sha": "9b06300d859b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/unsigned-multiplication-succeeds.hylo", "config": "FULL", "sha": "6c3268bfa274", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/unsigned-multiplication-succeeds.hylo", "config": "NEW", "sha": "6c3268bfa274", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/unsigned-multiplication-succeeds.hylo", "config": "NEW-headsubst", "sha": "6c3268bfa274", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-project.hylo", "config": "FULL", "sha": "3c01d31418d1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-project.hylo", "config": "NEW", "sha": "3c01d31418d1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-project.hylo", "config": "NEW-headsubst", "sha": "3c01d31418d1", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-with-alloca.hylo", "config": "FULL", "sha": "a4475f9b425b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-with-alloca.hylo", "config": "NEW", "sha": "a4475f9b425b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/positive/while-with-alloca.hylo", "config": "NEW-headsubst", "sha": "a4475f9b425b", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-implementation.hylo", "config": "FULL", "sha": "658e762b8a24", "verdict": "reject", "errors": ["ambiguous implementation of 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-implementation.hylo", "config": "NEW", "sha": "658e762b8a24", "verdict": "reject", "errors": ["ambiguous implementation of 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-implementation.hylo", "config": "NEW-headsubst", "sha": "658e762b8a24", "verdict": "reject", "errors": ["ambiguous implementation of 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-overload.hylo", "config": "FULL", "sha": "08dfc3f9ea0d", "verdict": "reject", "errors": ["ambiguous use of 'f'", "cannot pass value of type 'Void' to parameter 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-overload.hylo", "config": "NEW", "sha": "08dfc3f9ea0d", "verdict": "reject", "errors": ["ambiguous use of 'f'", "cannot pass value of type 'Void' to parameter 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/ambiguous-overload.hylo", "config": "NEW-headsubst", "sha": "08dfc3f9ea0d", "verdict": "reject", "errors": ["ambiguous use of 'f'", "cannot pass value of type 'Void' to parameter 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/argument-labels.hylo", "config": "FULL", "sha": "34f027574881", "verdict": "reject", "errors": ["no candidate matches the argument list"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/argument-labels.hylo", "config": "NEW", "sha": "34f027574881", "verdict": "reject", "errors": ["no candidate matches the argument list"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/argument-labels.hylo", "config": "NEW-headsubst", "sha": "34f027574881", "verdict": "reject", "errors": ["no candidate matches the argument list"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/associated-type-inequality.hylo", "config": "FULL", "sha": "f2ae9c4e738d", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/associated-type-inequality.hylo", "config": "NEW", "sha": "f2ae9c4e738d", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/associated-type-inequality.hylo", "config": "NEW-headsubst", "sha": "f2ae9c4e738d", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/bodyless-local-function.hylo", "config": "FULL", "sha": "52c433fb4354", "verdict": "reject", "errors": ["declaration requires a body"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/bodyless-local-function.hylo", "config": "NEW", "sha": "52c433fb4354", "verdict": "reject", "errors": ["declaration requires a body"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/bodyless-local-function.hylo", "config": "NEW-headsubst", "sha": "52c433fb4354", "verdict": "reject", "errors": ["declaration requires a body"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/conditional-sink.hylo", "config": "FULL", "sha": "84cb531a583a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/conditional-sink.hylo", "config": "NEW", "sha": "84cb531a583a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/conditional-sink.hylo", "config": "NEW-headsubst", "sha": "84cb531a583a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-binding.hylo", "config": "FULL", "sha": "8ea02ae30d22", "verdict": "reject", "errors": ["declaration refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-binding.hylo", "config": "NEW", "sha": "8ea02ae30d22", "verdict": "reject", "errors": ["declaration refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-binding.hylo", "config": "NEW-headsubst", "sha": "8ea02ae30d22", "verdict": "reject", "errors": ["declaration refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-typealias.hylo", "config": "FULL", "sha": "9079624b5d5f", "verdict": "reject", "errors": ["definition of 'X' refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-typealias.hylo", "config": "NEW", "sha": "9079624b5d5f", "verdict": "reject", "errors": ["definition of 'X' refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/cyclic-typealias.hylo", "config": "NEW-headsubst", "sha": "9079624b5d5f", "verdict": "reject", "errors": ["definition of 'X' refers to itself"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/empty-initialization.hylo", "config": "FULL", "sha": "3097e2d47bb4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/empty-initialization.hylo", "config": "NEW", "sha": "3097e2d47bb4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/empty-initialization.hylo", "config": "NEW-headsubst", "sha": "3097e2d47bb4", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/exclusivity-violation.hylo", "config": "FULL", "sha": "5cc75e304797", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/exclusivity-violation.hylo", "config": "NEW", "sha": "5cc75e304797", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/exclusivity-violation.hylo", "config": "NEW-headsubst", "sha": "5cc75e304797", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-llvm.hylo", "config": "FULL", "sha": "4beb8ec15faa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-llvm.hylo", "config": "NEW", "sha": "4beb8ec15faa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-llvm.hylo", "config": "NEW-headsubst", "sha": "4beb8ec15faa", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-typing.hylo", "config": "FULL", "sha": "52190fd68330", "verdict": "reject", "errors": ["'@extern_c_indirect' cannot be applied to a generic function", "'@extern_c_indirect' cannot be applied to a function with a body", "'@extern_c_indirect' cannot be combined with '@extern'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-typing.hylo", "config": "NEW", "sha": "52190fd68330", "verdict": "reject", "errors": ["'@extern_c_indirect' cannot be applied to a generic function", "'@extern_c_indirect' cannot be applied to a function with a body", "'@extern_c_indirect' cannot be combined with '@extern'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect-typing.hylo", "config": "NEW-headsubst", "sha": "52190fd68330", "verdict": "reject", "errors": ["'@extern_c_indirect' cannot be applied to a generic function", "'@extern_c_indirect' cannot be applied to a function with a body", "'@extern_c_indirect' cannot be combined with '@extern'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect.hylo", "config": "FULL", "sha": "ca5d4cba82e3", "verdict": "reject", "errors": ["expected string argument", "expected string argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' requires exactly 1 string argument", "expected non-empty string argument", "'@extern_c_indirect' requires exactly 1 string argument"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect.hylo", "config": "NEW", "sha": "ca5d4cba82e3", "verdict": "reject", "errors": ["expected string argument", "expected string argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' requires exactly 1 string argument", "expected non-empty string argument", "'@extern_c_indirect' requires exactly 1 string argument"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/extern-c-indirect.hylo", "config": "NEW-headsubst", "sha": "ca5d4cba82e3", "verdict": "reject", "errors": ["expected string argument", "expected string argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' accepts exactly 1 argument", "'@extern_c_indirect' requires exactly 1 string argument", "expected non-empty string argument", "'@extern_c_indirect' requires exactly 1 string argument"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/generic-requirement.hylo", "config": "FULL", "sha": "156742cff4ab", "verdict": "reject", "errors": ["no implementation of 'f(x:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/generic-requirement.hylo", "config": "NEW", "sha": "156742cff4ab", "verdict": "reject", "errors": ["no implementation of 'f(x:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/generic-requirement.hylo", "config": "NEW-headsubst", "sha": "156742cff4ab", "verdict": "reject", "errors": ["no implementation of 'f(x:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-conditional-expression.hylo", "config": "FULL", "sha": "8df120b6b476", "verdict": "reject", "errors": ["branches of if-expression cannot contain statements", "branches of if-expression cannot contain statements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-conditional-expression.hylo", "config": "NEW", "sha": "8df120b6b476", "verdict": "reject", "errors": ["branches of if-expression cannot contain statements", "branches of if-expression cannot contain statements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-conditional-expression.hylo", "config": "NEW-headsubst", "sha": "8df120b6b476", "verdict": "reject", "errors": ["branches of if-expression cannot contain statements", "branches of if-expression cannot contain statements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-enum-case.hylo", "config": "FULL", "sha": "7d19b0d0a506", "verdict": "reject", "errors": ["declaration is not allowed here", "enum case with parameters cannot have an explicit definition", "access effect is not allowed here"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-enum-case.hylo", "config": "NEW", "sha": "7d19b0d0a506", "verdict": "reject", "errors": ["declaration is not allowed here", "enum case with parameters cannot have an explicit definition", "access effect is not allowed here"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-enum-case.hylo", "config": "NEW-headsubst", "sha": "7d19b0d0a506", "verdict": "reject", "errors": ["declaration is not allowed here", "enum case with parameters cannot have an explicit definition", "access effect is not allowed here"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-inlining.hylo", "config": "FULL", "sha": "331309b37d08", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-inlining.hylo", "config": "NEW", "sha": "331309b37d08", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-inlining.hylo", "config": "NEW-headsubst", "sha": "331309b37d08", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-loop-control.hylo", "config": "FULL", "sha": "51ae19160b12", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-loop-control.hylo", "config": "NEW", "sha": "51ae19160b12", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-loop-control.hylo", "config": "NEW-headsubst", "sha": "51ae19160b12", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-memberwise-init.hylo", "config": "FULL", "sha": "715105d6a829", "verdict": "reject", "errors": ["memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-memberwise-init.hylo", "config": "NEW", "sha": "715105d6a829", "verdict": "reject", "errors": ["memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-memberwise-init.hylo", "config": "NEW-headsubst", "sha": "715105d6a829", "verdict": "reject", "errors": ["memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct", "memberwise initializer can only occur in the declaration of a struct"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-move-sink-subscript.hylo", "config": "FULL", "sha": "7948494e1c11", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-move-sink-subscript.hylo", "config": "NEW", "sha": "7948494e1c11", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-move-sink-subscript.hylo", "config": "NEW-headsubst", "sha": "7948494e1c11", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-mutation-marker.hylo", "config": "FULL", "sha": "4ef94361c663", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-mutation-marker.hylo", "config": "NEW", "sha": "4ef94361c663", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-mutation-marker.hylo", "config": "NEW-headsubst", "sha": "4ef94361c663", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-nested-yield.hylo", "config": "FULL", "sha": "a1dd59c1abca", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-nested-yield.hylo", "config": "NEW", "sha": "a1dd59c1abca", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-nested-yield.hylo", "config": "NEW-headsubst", "sha": "a1dd59c1abca", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-remote-type.hylo", "config": "FULL", "sha": "a731ed048138", "verdict": "reject", "errors": ["type expression may have at most one access effect"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-remote-type.hylo", "config": "NEW", "sha": "a731ed048138", "verdict": "reject", "errors": ["type expression may have at most one access effect"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-remote-type.hylo", "config": "NEW-headsubst", "sha": "a731ed048138", "verdict": "reject", "errors": ["type expression may have at most one access effect"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-return-yield.hylo", "config": "FULL", "sha": "ff2ec6da40db", "verdict": "reject", "errors": ["no coercion from 'A' to 'Void'", "yield statement can only occur in a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-return-yield.hylo", "config": "NEW", "sha": "ff2ec6da40db", "verdict": "reject", "errors": ["no coercion from 'A' to 'Void'", "yield statement can only occur in a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-return-yield.hylo", "config": "NEW-headsubst", "sha": "ff2ec6da40db", "verdict": "reject", "errors": ["no coercion from 'A' to 'Void'", "yield statement can only occur in a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-global.hylo", "config": "FULL", "sha": "68a850ee2d80", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-global.hylo", "config": "NEW", "sha": "68a850ee2d80", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-global.hylo", "config": "NEW-headsubst", "sha": "68a850ee2d80", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-let.hylo", "config": "FULL", "sha": "7ea79418fade", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-let.hylo", "config": "NEW", "sha": "7ea79418fade", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-sink-let.hylo", "config": "NEW-headsubst", "sha": "7ea79418fade", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-stored-properties.hylo", "config": "FULL", "sha": "a38f3030b3d6", "verdict": "reject", "errors": ["extensions cannot contain stored properties", "generic types cannot contain static stored properties", "generic types cannot contain static stored properties", "enums cannot contain stored properties", "generic types cannot contain static stored properties"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-stored-properties.hylo", "config": "NEW", "sha": "a38f3030b3d6", "verdict": "reject", "errors": ["extensions cannot contain stored properties", "generic types cannot contain static stored properties", "generic types cannot contain static stored properties", "enums cannot contain stored properties", "generic types cannot contain static stored properties"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-stored-properties.hylo", "config": "NEW-headsubst", "sha": "a38f3030b3d6", "verdict": "reject", "errors": ["extensions cannot contain stored properties", "generic types cannot contain static stored properties", "generic types cannot contain static stored properties", "enums cannot contain stored properties", "generic types cannot contain static stored properties"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-trait-extension.hylo", "config": "FULL", "sha": "1a0a708d16d0", "verdict": "reject", "errors": ["undefined symbol 'U'", "'unexpected context bound'", "undefined symbol 'A'", "'unexpected context bound'", "undefined symbol 'f@let'", "'unexpected context bound'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-trait-extension.hylo", "config": "NEW", "sha": "1a0a708d16d0", "verdict": "reject", "errors": ["undefined symbol 'U'", "'unexpected context bound'", "undefined symbol 'A'", "'unexpected context bound'", "undefined symbol 'f@let'", "'unexpected context bound'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-trait-extension.hylo", "config": "NEW-headsubst", "sha": "1a0a708d16d0", "verdict": "reject", "errors": ["undefined symbol 'U'", "'unexpected context bound'", "undefined symbol 'A'", "'unexpected context bound'", "undefined symbol 'f@let'", "'unexpected context bound'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-yield.hylo", "config": "FULL", "sha": "cdb799ab81cb", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-yield.hylo", "config": "NEW", "sha": "cdb799ab81cb", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/illegal-yield.hylo", "config": "NEW-headsubst", "sha": "cdb799ab81cb", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/impossible-implicit-deinit.hylo", "config": "FULL", "sha": "91fc3e3c96c0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/impossible-implicit-deinit.hylo", "config": "NEW", "sha": "91fc3e3c96c0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/impossible-implicit-deinit.hylo", "config": "NEW-headsubst", "sha": "91fc3e3c96c0", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incompatible-if-branches.hylo", "config": "FULL", "sha": "860168aa0546", "verdict": "reject", "errors": ["no coercion from 'B' to 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incompatible-if-branches.hylo", "config": "NEW", "sha": "860168aa0546", "verdict": "reject", "errors": ["no coercion from 'B' to 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incompatible-if-branches.hylo", "config": "NEW-headsubst", "sha": "860168aa0546", "verdict": "reject", "errors": ["no coercion from 'B' to 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incomplete-type-declaration.hylo", "config": "FULL", "sha": "407a681a2238", "verdict": "reject", "errors": ["expected identifier", "expected '='", "expected '='", "expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incomplete-type-declaration.hylo", "config": "NEW", "sha": "407a681a2238", "verdict": "reject", "errors": ["expected identifier", "expected '='", "expected '='", "expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/incomplete-type-declaration.hylo", "config": "NEW-headsubst", "sha": "407a681a2238", "verdict": "reject", "errors": ["expected identifier", "expected '='", "expected '='", "expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-alias.hylo", "config": "FULL", "sha": "d336bc4d6049", "verdict": "reject", "errors": ["cannot pass value of type 'Z<Void>' to parameter 'X<Void>'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-alias.hylo", "config": "NEW", "sha": "d336bc4d6049", "verdict": "reject", "errors": ["cannot pass value of type 'Z<Void>' to parameter 'X<Void>'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-alias.hylo", "config": "NEW-headsubst", "sha": "d336bc4d6049", "verdict": "reject", "errors": ["cannot pass value of type 'Z<Void>' to parameter 'X<Void>'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-annotation.hylo", "config": "FULL", "sha": "6964649586da", "verdict": "reject", "errors": ["invalid annotation", "invalid annotation", "invalid annotation", "no implementation of associated type requirement 'X'", "expected 'always' or 'never'", "'@inline' accepts at most 1 argument", "extraneous whitespace between '@' and annotation identifier", "invalid annotation", "invalid annotation"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-annotation.hylo", "config": "NEW", "sha": "6964649586da", "verdict": "reject", "errors": ["invalid annotation", "invalid annotation", "invalid annotation", "no implementation of associated type requirement 'X'", "expected 'always' or 'never'", "'@inline' accepts at most 1 argument", "extraneous whitespace between '@' and annotation identifier", "invalid annotation", "invalid annotation"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-annotation.hylo", "config": "NEW-headsubst", "sha": "6964649586da", "verdict": "reject", "errors": ["invalid annotation", "invalid annotation", "invalid annotation", "no implementation of associated type requirement 'X'", "expected 'always' or 'never'", "'@inline' accepts at most 1 argument", "extraneous whitespace between '@' and annotation identifier", "invalid annotation", "invalid annotation"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-ascription.hylo", "config": "FULL", "sha": "08f0ede92104", "verdict": "reject", "errors": ["expression does not denote a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-ascription.hylo", "config": "NEW", "sha": "08f0ede92104", "verdict": "reject", "errors": ["expression does not denote a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-ascription.hylo", "config": "NEW-headsubst", "sha": "08f0ede92104", "verdict": "reject", "errors": ["expression does not denote a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-binding-declaration.hylo", "config": "FULL", "sha": "216abae0f9f5", "verdict": "reject", "errors": ["tuple pattern cannot match values of type 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-binding-declaration.hylo", "config": "NEW", "sha": "216abae0f9f5", "verdict": "reject", "errors": ["tuple pattern cannot match values of type 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-binding-declaration.hylo", "config": "NEW-headsubst", "sha": "216abae0f9f5", "verdict": "reject", "errors": ["tuple pattern cannot match values of type 'A'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-builtin-dereference.hylo", "config": "FULL", "sha": "87b18dcb6e9b", "verdict": "reject", "errors": ["expected remote type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-builtin-dereference.hylo", "config": "NEW", "sha": "87b18dcb6e9b", "verdict": "reject", "errors": ["expected remote type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-builtin-dereference.hylo", "config": "NEW-headsubst", "sha": "87b18dcb6e9b", "verdict": "reject", "errors": ["expected remote type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-call.hylo", "config": "FULL", "sha": "cceb2ebb130b", "verdict": "reject", "errors": ["cannot call 'foo' as a function", "cannot call 'bar' as a subscript", "cannot call value of type 'Void' as a function", "cannot call value of type 'Void' as a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-call.hylo", "config": "NEW", "sha": "cceb2ebb130b", "verdict": "reject", "errors": ["cannot call 'foo' as a function", "cannot call 'bar' as a subscript", "cannot call value of type 'Void' as a function", "cannot call value of type 'Void' as a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-call.hylo", "config": "NEW-headsubst", "sha": "cceb2ebb130b", "verdict": "reject", "errors": ["cannot call 'foo' as a function", "cannot call 'bar' as a subscript", "cannot call value of type 'Void' as a function", "cannot call value of type 'Void' as a subscript"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-captures.hylo", "config": "FULL", "sha": "cd9d3788add4", "verdict": "reject", "errors": ["declaration cannot have a non-empty capture list", "illegal mutating capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-captures.hylo", "config": "NEW", "sha": "cd9d3788add4", "verdict": "reject", "errors": ["declaration cannot have a non-empty capture list", "illegal mutating capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-captures.hylo", "config": "NEW-headsubst", "sha": "cd9d3788add4", "verdict": "reject", "errors": ["declaration cannot have a non-empty capture list", "illegal mutating capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture", "illegal implicit capture"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-deconstruction.hylo", "config": "FULL", "sha": "2231b1871139", "verdict": "reject", "errors": ["tuple pattern cannot match open-ended value of type '{Void, ...A}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-deconstruction.hylo", "config": "NEW", "sha": "2231b1871139", "verdict": "reject", "errors": ["tuple pattern cannot match open-ended value of type '{Void, ...A}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-deconstruction.hylo", "config": "NEW-headsubst", "sha": "2231b1871139", "verdict": "reject", "errors": ["tuple pattern cannot match open-ended value of type '{Void, ...A}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-1.hylo", "config": "FULL", "sha": "697a61b3bad2", "verdict": "reject", "errors": ["declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "duplicate modifier", "'public' should occur before 'static'", "consecutive statements on the same line must be separated by ';'", "undefined symbol 'indirect'", "declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "declaration cannot be marked 'static'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-1.hylo", "config": "NEW", "sha": "697a61b3bad2", "verdict": "reject", "errors": ["declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "duplicate modifier", "'public' should occur before 'static'", "consecutive statements on the same line must be separated by ';'", "undefined symbol 'indirect'", "declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "declaration cannot be marked 'static'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-1.hylo", "config": "NEW-headsubst", "sha": "697a61b3bad2", "verdict": "reject", "errors": ["declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "duplicate modifier", "'public' should occur before 'static'", "consecutive statements on the same line must be separated by ';'", "undefined symbol 'indirect'", "declaration cannot be marked 'static'", "declaration cannot be marked 'public'", "declaration cannot be marked 'static'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-2.hylo", "config": "FULL", "sha": "b317fa201603", "verdict": "reject", "errors": ["cannot apply access modifiers on trait requirements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-2.hylo", "config": "NEW", "sha": "b317fa201603", "verdict": "reject", "errors": ["cannot apply access modifiers on trait requirements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-modifier-2.hylo", "config": "NEW-headsubst", "sha": "b317fa201603", "verdict": "reject", "errors": ["cannot apply access modifiers on trait requirements"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-redeclaration.hylo", "config": "FULL", "sha": "047070a8c320", "verdict": "reject", "errors": ["invalid redeclaration of 'x'", "invalid redeclaration of 'x'", "invalid redeclaration of 'y'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-redeclaration.hylo", "config": "NEW", "sha": "047070a8c320", "verdict": "reject", "errors": ["invalid redeclaration of 'x'", "invalid redeclaration of 'x'", "invalid redeclaration of 'y'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-redeclaration.hylo", "config": "NEW-headsubst", "sha": "047070a8c320", "verdict": "reject", "errors": ["invalid redeclaration of 'x'", "invalid redeclaration of 'x'", "invalid redeclaration of 'y'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-return.hylo", "config": "FULL", "sha": "b0d4e79cc032", "verdict": "reject", "errors": ["type 'A' has no static member 'init'", "expected value of type 'A'", "type 'A' has no static member 'init'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-return.hylo", "config": "NEW", "sha": "b0d4e79cc032", "verdict": "reject", "errors": ["type 'A' has no static member 'init'", "expected value of type 'A'", "type 'A' has no static member 'init'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-return.hylo", "config": "NEW-headsubst", "sha": "b0d4e79cc032", "verdict": "reject", "errors": ["type 'A' has no static member 'init'", "expected value of type 'A'", "type 'A' has no static member 'init'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-wildcard.hylo", "config": "FULL", "sha": "9a9421800127", "verdict": "reject", "errors": ["expected '='"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-wildcard.hylo", "config": "NEW", "sha": "9a9421800127", "verdict": "reject", "errors": ["expected '='"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/invalid-wildcard.hylo", "config": "NEW-headsubst", "sha": "9a9421800127", "verdict": "reject", "errors": ["expected '='"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-argument.hylo", "config": "FULL", "sha": "5b0d3bc7edcb", "verdict": "reject", "errors": ["incompatible labels: found '()', expected '(first:second:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-argument.hylo", "config": "NEW", "sha": "5b0d3bc7edcb", "verdict": "reject", "errors": ["incompatible labels: found '()', expected '(first:second:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-argument.hylo", "config": "NEW-headsubst", "sha": "5b0d3bc7edcb", "verdict": "reject", "errors": ["incompatible labels: found '()', expected '(first:second:)'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-associated-type-conformance.hylo", "config": "FULL", "sha": "ff4211a7acdd", "verdict": "reject", "errors": ["no given instance of 'P<X>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-associated-type-conformance.hylo", "config": "NEW", "sha": "ff4211a7acdd", "verdict": "reject", "errors": ["no given instance of 'P<X>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-associated-type-conformance.hylo", "config": "NEW-headsubst", "sha": "ff4211a7acdd", "verdict": "reject", "errors": ["no given instance of 'P<X>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-binding-ascription.hylo", "config": "FULL", "sha": "a7b40909f0bb", "verdict": "reject", "errors": ["binding declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-binding-ascription.hylo", "config": "NEW", "sha": "a7b40909f0bb", "verdict": "reject", "errors": ["binding declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-binding-ascription.hylo", "config": "NEW-headsubst", "sha": "a7b40909f0bb", "verdict": "reject", "errors": ["binding declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-comma.hylo", "config": "FULL", "sha": "35f2ab317d9b", "verdict": "reject", "errors": ["expected ','"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-comma.hylo", "config": "NEW", "sha": "35f2ab317d9b", "verdict": "reject", "errors": ["expected ','"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-comma.hylo", "config": "NEW-headsubst", "sha": "35f2ab317d9b", "verdict": "reject", "errors": ["expected ','"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-context.hylo", "config": "FULL", "sha": "d451e291b7a9", "verdict": "reject", "errors": ["not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-context.hylo", "config": "NEW", "sha": "d451e291b7a9", "verdict": "reject", "errors": ["not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-context.hylo", "config": "NEW-headsubst", "sha": "d451e291b7a9", "verdict": "reject", "errors": ["not enough context to infer a type", "not enough context to infer a type"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-implementation.hylo", "config": "FULL", "sha": "2e43bec01ff1", "verdict": "reject", "errors": ["no implementation of 'f3'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-implementation.hylo", "config": "NEW", "sha": "2e43bec01ff1", "verdict": "reject", "errors": ["no implementation of 'f3'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-implementation.hylo", "config": "NEW-headsubst", "sha": "2e43bec01ff1", "verdict": "reject", "errors": ["no implementation of 'f3'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-initializer.hylo", "config": "FULL", "sha": "0a1446d6362e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-initializer.hylo", "config": "NEW", "sha": "0a1446d6362e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-initializer.hylo", "config": "NEW-headsubst", "sha": "0a1446d6362e", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-parameter-ascription.hylo", "config": "FULL", "sha": "786fc084076c", "verdict": "reject", "errors": ["parameter declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-parameter-ascription.hylo", "config": "NEW", "sha": "786fc084076c", "verdict": "reject", "errors": ["parameter declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-parameter-ascription.hylo", "config": "NEW-headsubst", "sha": "786fc084076c", "verdict": "reject", "errors": ["parameter declaration requires an ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-return-ascription.hylo", "config": "FULL", "sha": "e237ec9d8819", "verdict": "reject", "errors": ["missing return type ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-return-ascription.hylo", "config": "NEW", "sha": "e237ec9d8819", "verdict": "reject", "errors": ["missing return type ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-return-ascription.hylo", "config": "NEW-headsubst", "sha": "e237ec9d8819", "verdict": "reject", "errors": ["missing return type ascription"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-semicolon.hylo", "config": "FULL", "sha": "e03ad54884b5", "verdict": "reject", "errors": ["consecutive statements on the same line must be separated by ';'", "expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-semicolon.hylo", "config": "NEW", "sha": "e03ad54884b5", "verdict": "reject", "errors": ["consecutive statements on the same line must be separated by ';'", "expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-semicolon.hylo", "config": "NEW-headsubst", "sha": "e03ad54884b5", "verdict": "reject", "errors": ["consecutive statements on the same line must be separated by ';'", "expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-type-identifier.hylo", "config": "FULL", "sha": "798c68d7865a", "verdict": "reject", "errors": ["expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-type-identifier.hylo", "config": "NEW", "sha": "798c68d7865a", "verdict": "reject", "errors": ["expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-type-identifier.hylo", "config": "NEW-headsubst", "sha": "798c68d7865a", "verdict": "reject", "errors": ["expected identifier"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-variant.hylo", "config": "FULL", "sha": "e846dcdd279c", "verdict": "reject", "errors": ["cannot call bundle of type '[Void](auto A) auto -> B { let }' mutably", "cannot call bundle of type '[Void](auto A) auto -> B { inout }' immutably"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-variant.hylo", "config": "NEW", "sha": "e846dcdd279c", "verdict": "reject", "errors": ["cannot call bundle of type '[Void](auto A) auto -> B { let }' mutably", "cannot call bundle of type '[Void](auto A) auto -> B { inout }' immutably"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-variant.hylo", "config": "NEW-headsubst", "sha": "e846dcdd279c", "verdict": "reject", "errors": ["cannot call bundle of type '[Void](auto A) auto -> B { let }' mutably", "cannot call bundle of type '[Void](auto A) auto -> B { inout }' immutably"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-yield-value.hylo", "config": "FULL", "sha": "311e407ddee6", "verdict": "reject", "errors": ["expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-yield-value.hylo", "config": "NEW", "sha": "311e407ddee6", "verdict": "reject", "errors": ["expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/missing-yield-value.hylo", "config": "NEW-headsubst", "sha": "311e407ddee6", "verdict": "reject", "errors": ["expected expression"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-conversion.hylo", "config": "FULL", "sha": "31a1111a436d", "verdict": "reject", "errors": ["no conversion from 'Void' to '{Void, Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-conversion.hylo", "config": "NEW", "sha": "31a1111a436d", "verdict": "reject", "errors": ["no conversion from 'Void' to '{Void, Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-conversion.hylo", "config": "NEW-headsubst", "sha": "31a1111a436d", "verdict": "reject", "errors": ["no conversion from 'Void' to '{Void, Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-1.hylo", "config": "FULL", "sha": "072a7de165b6", "verdict": "reject", "errors": ["no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Void) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-1.hylo", "config": "NEW", "sha": "072a7de165b6", "verdict": "reject", "errors": ["no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Void) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-1.hylo", "config": "NEW-headsubst", "sha": "072a7de165b6", "verdict": "reject", "errors": ["no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from 'Q<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'", "no coercion from '<T> P<T> ==> [Void](let T) let -> Void' to '[Void](let Void) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-2.hylo", "config": "FULL", "sha": "cbab5ba79c2a", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<A>) ==> [Void](let T) let -> Void' to '[Void](let B) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-2.hylo", "config": "NEW", "sha": "cbab5ba79c2a", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<A>) ==> [Void](let T) let -> Void' to '[Void](let B) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-2.hylo", "config": "NEW-headsubst", "sha": "cbab5ba79c2a", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, P<A>) ==> [Void](let T) let -> Void' to '[Void](let B) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-3.hylo", "config": "FULL", "sha": "89499dcaf76a", "verdict": "reject", "errors": ["no coercion from 'Void ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-3.hylo", "config": "NEW", "sha": "89499dcaf76a", "verdict": "reject", "errors": ["no coercion from 'Void ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/no-given-3.hylo", "config": "NEW-headsubst", "sha": "89499dcaf76a", "verdict": "reject", "errors": ["no coercion from 'Void ==> [Void]() let -> Void' to '[Void]() let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/polycephalic-trait.hylo", "config": "FULL", "sha": "e75770643a86", "verdict": "reject", "errors": ["no coercion from 'P<A, A> ==> [Void](let A) let -> Void' to '[Void](let A) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/polycephalic-trait.hylo", "config": "NEW", "sha": "e75770643a86", "verdict": "reject", "errors": ["no coercion from 'P<A, A> ==> [Void](let A) let -> Void' to '[Void](let A) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/polycephalic-trait.hylo", "config": "NEW-headsubst", "sha": "e75770643a86", "verdict": "reject", "errors": ["no coercion from 'P<A, A> ==> [Void](let A) let -> Void' to '[Void](let A) let -> Void'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-implicit-deinit.hylo", "config": "FULL", "sha": "247d45344e9a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-implicit-deinit.hylo", "config": "NEW", "sha": "247d45344e9a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-implicit-deinit.hylo", "config": "NEW-headsubst", "sha": "247d45344e9a", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-inlining.hylo", "config": "FULL", "sha": "1a1f5bcde953", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-inlining.hylo", "config": "NEW", "sha": "1a1f5bcde953", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/recursive-inlining.hylo", "config": "NEW-headsubst", "sha": "1a1f5bcde953", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-call.hylo", "config": "FULL", "sha": "b039325ced25", "verdict": "reject", "errors": ["'f0' takes no compile-time arguments", "cannot pass value of type '{Void, Void}' to parameter 'Void'", "'f1' takes 1 compile-time argument(s); found 2", "T expects 1 type argument(s)"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-call.hylo", "config": "NEW", "sha": "b039325ced25", "verdict": "reject", "errors": ["'f0' takes no compile-time arguments", "cannot pass value of type '{Void, Void}' to parameter 'Void'", "'f1' takes 1 compile-time argument(s); found 2", "T expects 1 type argument(s)"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-call.hylo", "config": "NEW-headsubst", "sha": "b039325ced25", "verdict": "reject", "errors": ["'f0' takes no compile-time arguments", "cannot pass value of type '{Void, Void}' to parameter 'Void'", "'f1' takes 1 compile-time argument(s); found 2", "T expects 1 type argument(s)"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-member-via-instance.hylo", "config": "FULL", "sha": "0c1b57097a8e", "verdict": "reject", "errors": ["type 'A' has no member 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-member-via-instance.hylo", "config": "NEW", "sha": "0c1b57097a8e", "verdict": "reject", "errors": ["type 'A' has no member 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/static-member-via-instance.hylo", "config": "NEW-headsubst", "sha": "0c1b57097a8e", "verdict": "reject", "errors": ["type 'A' has no member 'f'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/synthetic-conformance.hylo", "config": "FULL", "sha": "a03d70784ef0", "verdict": "reject", "errors": ["no implementation of 'deinit'", "no implementation of 'deinit'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/synthetic-conformance.hylo", "config": "NEW", "sha": "a03d70784ef0", "verdict": "reject", "errors": ["no implementation of 'deinit'", "no implementation of 'deinit'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/synthetic-conformance.hylo", "config": "NEW-headsubst", "sha": "a03d70784ef0", "verdict": "reject", "errors": ["no implementation of 'deinit'", "no implementation of 'deinit'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/trait-refinement.hylo", "config": "FULL", "sha": "ab5c292ce972", "verdict": "reject", "errors": ["no given instance of 'Base<B<T>>' in this scope", "no given instance of 'Derived<C<T>>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/trait-refinement.hylo", "config": "NEW", "sha": "ab5c292ce972", "verdict": "reject", "errors": ["no given instance of 'Base<B<T>>' in this scope", "no given instance of 'Derived<C<T>>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/trait-refinement.hylo", "config": "NEW-headsubst", "sha": "ab5c292ce972", "verdict": "reject", "errors": ["no given instance of 'Base<B<T>>' in this scope", "no given instance of 'Derived<C<T>>' in this scope"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-module.hylo", "config": "FULL", "sha": "1733fef07c4f", "verdict": "reject", "errors": ["undefined module 'Jugemu'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-module.hylo", "config": "NEW", "sha": "1733fef07c4f", "verdict": "reject", "errors": ["undefined module 'Jugemu'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-module.hylo", "config": "NEW-headsubst", "sha": "1733fef07c4f", "verdict": "reject", "errors": ["undefined module 'Jugemu'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-symbol.hylo", "config": "FULL", "sha": "3d9e9f461a8b", "verdict": "reject", "errors": ["type 'A' has no static member 'B'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-symbol.hylo", "config": "NEW", "sha": "3d9e9f461a8b", "verdict": "reject", "errors": ["type 'A' has no static member 'B'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-symbol.hylo", "config": "NEW-headsubst", "sha": "3d9e9f461a8b", "verdict": "reject", "errors": ["type 'A' has no static member 'B'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-variant.hylo", "config": "FULL", "sha": "834633779452", "verdict": "reject", "errors": ["undefined symbol 'f@sink'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-variant.hylo", "config": "NEW", "sha": "834633779452", "verdict": "reject", "errors": ["undefined symbol 'f@sink'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/undefined-variant.hylo", "config": "NEW-headsubst", "sha": "834633779452", "verdict": "reject", "errors": ["undefined symbol 'f@sink'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unmatched-comment-delimiter.hylo", "config": "FULL", "sha": "6511118d2268", "verdict": "reject", "errors": ["type 'Void' has no member 'prefix*/'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unmatched-comment-delimiter.hylo", "config": "NEW", "sha": "6511118d2268", "verdict": "reject", "errors": ["type 'Void' has no member 'prefix*/'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unmatched-comment-delimiter.hylo", "config": "NEW-headsubst", "sha": "6511118d2268", "verdict": "reject", "errors": ["type 'Void' has no member 'prefix*/'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unterminated-call-at-eof.hylo", "config": "FULL", "sha": "07860e6d828d", "verdict": "reject", "errors": ["expected expression", "expected expression", "consecutive statements on the same line must be separated by ';'", "not enough context to infer a type", "expected ','", "expected expression", "consecutive statements on the same line must be separated by ';'", "expected '}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unterminated-call-at-eof.hylo", "config": "NEW", "sha": "07860e6d828d", "verdict": "reject", "errors": ["expected expression", "expected expression", "consecutive statements on the same line must be separated by ';'", "not enough context to infer a type", "expected ','", "expected expression", "consecutive statements on the same line must be separated by ';'", "expected '}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unterminated-call-at-eof.hylo", "config": "NEW-headsubst", "sha": "07860e6d828d", "verdict": "reject", "errors": ["expected expression", "expected expression", "consecutive statements on the same line must be separated by ';'", "not enough context to infer a type", "expected ','", "expected expression", "consecutive statements on the same line must be separated by ';'", "expected '}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-1.hylo", "config": "FULL", "sha": "f6cf84f4b63c", "verdict": "reject", "errors": ["unused value of type '{Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-1.hylo", "config": "NEW", "sha": "f6cf84f4b63c", "verdict": "reject", "errors": ["unused value of type '{Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-1.hylo", "config": "NEW-headsubst", "sha": "f6cf84f4b63c", "verdict": "reject", "errors": ["unused value of type '{Void}'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-2.hylo", "config": "FULL", "sha": "21f82c1bab03", "verdict": "reject", "errors": ["unused value of type 'Int'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-2.hylo", "config": "NEW", "sha": "21f82c1bab03", "verdict": "reject", "errors": ["unused value of type 'Int'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/unused-value-2.hylo", "config": "NEW-headsubst", "sha": "21f82c1bab03", "verdict": "reject", "errors": ["unused value of type 'Int'"]}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-declaration.hylo", "config": "FULL", "sha": "c267985dc810", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-declaration.hylo", "config": "NEW", "sha": "c267985dc810", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-declaration.hylo", "config": "NEW-headsubst", "sha": "c267985dc810", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-init.hylo", "config": "FULL", "sha": "014518b17e0d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-init.hylo", "config": "NEW", "sha": "014518b17e0d", "verdict": "accept", "errors": []}
+{"file": "/home/user/hylo-new/Tests/CompilerTests/negative/use-before-init.hylo", "config": "NEW-headsubst", "sha": "014518b17e0d", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/c1-collection.hylo", "config": "FULL", "sha": "fbe4fe0e8cc3", "verdict": "reject", "errors": ["no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let Bag<Int8>) let -> (Bag<Int8>::Collection).Element'", "no coercion from '(Bag<Int8>::Collection).Element' to 'Int8'", "no coercion from '<C> (Collection<C>, Showable<(C::Collection).Element>) ==> [Void](let C) let -> Void' to '[Void](let Bag<Int8>) let -> Void'", "no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let D) let -> (D::Collection).Element'", "no coercion from '(D::Collection).Element' to '(D::Collection).Element'", "no coercion from '<C> (Collection<C>, Showable<(C::Collection).Element>) ==> [Void](let C) let -> Void' to '[Void](let D) let -> Void'"]}
+{"file": "../headsubst/tests/c1-collection.hylo", "config": "NEW", "sha": "fbe4fe0e8cc3", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/c1-collection.hylo", "config": "NEW-headsubst", "sha": "fbe4fe0e8cc3", "verdict": "reject", "errors": ["no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let Bag<Int8>) let -> (Bag<Int8>::Collection).Element'", "no coercion from '(Bag<Int8>::Collection).Element' to 'Int8'", "no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let D) let -> (D::Collection).Element'", "no coercion from '(D::Collection).Element' to '(D::Collection).Element'"]}
+{"file": "../headsubst/tests/h1-concrete-parameter.hylo", "config": "FULL", "sha": "3d1391a2e42f", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let A, let (A::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h1-concrete-parameter.hylo", "config": "NEW", "sha": "3d1391a2e42f", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h1-concrete-parameter.hylo", "config": "NEW-headsubst", "sha": "3d1391a2e42f", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let A, let (A::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h10-nested-projection.hylo", "config": "FULL", "sha": "a164f07f722e", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let Box<(T::P).X>) let -> Void' to '[Void](let A, let Box<(A::P).X>) let -> Void'"]}
+{"file": "../headsubst/tests/h10-nested-projection.hylo", "config": "NEW", "sha": "a164f07f722e", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h10-nested-projection.hylo", "config": "NEW-headsubst", "sha": "a164f07f722e", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let Box<(T::P).X>) let -> Void' to '[Void](let A, let Box<(A::P).X>) let -> Void'"]}
+{"file": "../headsubst/tests/h11-two-requirements.hylo", "config": "FULL", "sha": "26aeb1d1bba4", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, Q<T>) ==> [Void](let T, let (T::P).X, let (T::Q).Y) let -> Void' to '[Void](let A, let (A::P).X, let (A::Q).Y) let -> Void'"]}
+{"file": "../headsubst/tests/h11-two-requirements.hylo", "config": "NEW", "sha": "26aeb1d1bba4", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h11-two-requirements.hylo", "config": "NEW-headsubst", "sha": "26aeb1d1bba4", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, Q<T>) ==> [Void](let T, let (T::P).X, let (T::Q).Y) let -> Void' to '[Void](let A, let (A::P).X, let (A::Q).Y) let -> Void'"]}
+{"file": "../headsubst/tests/h12-reject-two-requirements.hylo", "config": "FULL", "sha": "e7a5cac44b7c", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, Q<T>) ==> [Void](let T, let (T::P).X, let (T::Q).Y) let -> Void' to '[Void](let A, let (A::P).X, let (A::Q).Y) let -> Void'"]}
+{"file": "../headsubst/tests/h12-reject-two-requirements.hylo", "config": "NEW", "sha": "e7a5cac44b7c", "verdict": "reject", "errors": ["cannot pass value of type 'D' to parameter 'X'", "cannot pass value of type 'C' to parameter 'Y'"]}
+{"file": "../headsubst/tests/h12-reject-two-requirements.hylo", "config": "NEW-headsubst", "sha": "e7a5cac44b7c", "verdict": "reject", "errors": ["no coercion from '<T> (P<T>, Q<T>) ==> [Void](let T, let (T::P).X, let (T::Q).Y) let -> Void' to '[Void](let A, let (A::P).X, let (A::Q).Y) let -> Void'"]}
+{"file": "../headsubst/tests/h13-reject-result-annotation.hylo", "config": "FULL", "sha": "06ca4e60aa0c", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'"]}
+{"file": "../headsubst/tests/h13-reject-result-annotation.hylo", "config": "NEW", "sha": "06ca4e60aa0c", "verdict": "reject", "errors": ["no coercion from 'X' to 'D'", "cannot pass value of type 'X' to parameter 'D'", "no coercion from 'X' to 'D'", "no coercion from 'X' to 'D'"]}
+{"file": "../headsubst/tests/h13-reject-result-annotation.hylo", "config": "NEW-headsubst", "sha": "06ca4e60aa0c", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "cannot pass value of type '(A::P).X' to parameter 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'D'"]}
+{"file": "../headsubst/tests/h2-concrete-result.hylo", "config": "FULL", "sha": "8347c78cfcb4", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'C'"]}
+{"file": "../headsubst/tests/h2-concrete-result.hylo", "config": "NEW", "sha": "8347c78cfcb4", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h2-concrete-result.hylo", "config": "NEW-headsubst", "sha": "8347c78cfcb4", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let A) let -> (A::P).X'", "no coercion from '(A::P).X' to 'C'"]}
+{"file": "../headsubst/tests/h3-generic-caller.hylo", "config": "FULL", "sha": "4e5562f96dd0", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(U::P).X'"]}
+{"file": "../headsubst/tests/h3-generic-caller.hylo", "config": "NEW", "sha": "4e5562f96dd0", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h3-generic-caller.hylo", "config": "NEW-headsubst", "sha": "4e5562f96dd0", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(U::P).X'"]}
+{"file": "../headsubst/tests/h4-reject-mismatch.hylo", "config": "FULL", "sha": "dd47a4dc2074", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let A, let (A::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h4-reject-mismatch.hylo", "config": "NEW", "sha": "dd47a4dc2074", "verdict": "reject", "errors": ["cannot pass value of type 'D' to parameter 'X'"]}
+{"file": "../headsubst/tests/h4-reject-mismatch.hylo", "config": "NEW-headsubst", "sha": "dd47a4dc2074", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let A, let (A::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h5-reject-other-conformance.hylo", "config": "FULL", "sha": "370e3c5a4255", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "../headsubst/tests/h5-reject-other-conformance.hylo", "config": "NEW", "sha": "370e3c5a4255", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "../headsubst/tests/h5-reject-other-conformance.hylo", "config": "NEW-headsubst", "sha": "370e3c5a4255", "verdict": "reject", "errors": ["cannot pass value of type '(U::P).X' to parameter '(T::P).X'"]}
+{"file": "../headsubst/tests/h6-generic-conformance.hylo", "config": "FULL", "sha": "71cd9c29151e", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Box<A>, let (Box<A>::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h6-generic-conformance.hylo", "config": "NEW", "sha": "71cd9c29151e", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h6-generic-conformance.hylo", "config": "NEW-headsubst", "sha": "71cd9c29151e", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Box<A>, let (Box<A>::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h7-reject-generic-conformance.hylo", "config": "FULL", "sha": "424663dc6a15", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Box<A>, let (Box<A>::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h7-reject-generic-conformance.hylo", "config": "NEW", "sha": "424663dc6a15", "verdict": "reject", "errors": ["cannot pass value of type 'C' to parameter 'A'"]}
+{"file": "../headsubst/tests/h7-reject-generic-conformance.hylo", "config": "NEW-headsubst", "sha": "424663dc6a15", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let Box<A>, let (Box<A>::P).X) let -> Void'"]}
+{"file": "../headsubst/tests/h8-equality-on-projection.hylo", "config": "FULL", "sha": "ee670d511eeb", "verdict": "reject", "errors": ["cannot pass value of type 'B' to parameter '(U::P).X'"]}
+{"file": "../headsubst/tests/h8-equality-on-projection.hylo", "config": "NEW", "sha": "ee670d511eeb", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h8-equality-on-projection.hylo", "config": "NEW-headsubst", "sha": "ee670d511eeb", "verdict": "reject", "errors": ["cannot pass value of type 'B' to parameter '(U::P).X'"]}
+{"file": "../headsubst/tests/h9-chain.hylo", "config": "FULL", "sha": "bf667d98d3bf", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let U, let (U::P).X) let -> Void'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let U) let -> (U::P).X'"]}
+{"file": "../headsubst/tests/h9-chain.hylo", "config": "NEW", "sha": "bf667d98d3bf", "verdict": "accept", "errors": []}
+{"file": "../headsubst/tests/h9-chain.hylo", "config": "NEW-headsubst", "sha": "bf667d98d3bf", "verdict": "reject", "errors": ["no coercion from '<T> P<T> ==> [Void](let T, let (T::P).X) let -> Void' to '[Void](let U, let (U::P).X) let -> Void'", "no coercion from '<T> P<T> ==> [Void](let T) let -> (T::P).X' to '[Void](let U) let -> (U::P).X'"]}

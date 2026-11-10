@@ -1,0 +1,10 @@
+// Control of d08. Correct verdict: accepted.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun even<T, U where T is P, U is P>(t: T, u: U, x: T.X) { odd(u, t, x) }
+fun odd<T, U where T is P, U is P>(t: T, u: U, x: U.X) { even(u, t, x) }

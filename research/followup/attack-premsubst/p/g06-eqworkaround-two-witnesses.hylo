@@ -1,0 +1,9 @@
+// FULL accepts through the equality workaround: `U is P` has two witnesses, g's requirement
+// (nearer) and a blanket conformance (X = B). With g's requirement, U.X == B is g's fact; with the
+// blanket conformance, X is B by definition. Well typed; FULL passes g's requirement to f.
+// NEW must accept (no new ambiguity) and should pass the same witness.
+trait P { type X }
+struct B { public memberwise init }
+given <Z> => Z is P { type X = B }
+fun f<T where T is P, T.X == B>() {}
+fun g<U where U is P, U.X == B>() { f<U>() }

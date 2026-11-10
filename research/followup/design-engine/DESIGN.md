@@ -685,7 +685,7 @@ The first version says (section 3.5, "Ambiguity") that if the premise others wai
 | `s1-open-ambiguous-dependency`: two conformances of equal rank, one with a `Q` associated type | ambiguous | accepted |
 | `s1-attack-shadowed-result-type` (with `headsubst`): as the second row, `f` returns `W<T.X>` | the local conformance, so `A.X` is `C` in `main` | `let x: W<B> = f<A>()` accepted; `let x: W<A.X> = f<A>()` rejected with "no coercion from 'W<X>' to 'W<X>'" |
 
-In each of these, the requirements of `f` written out at the call site (`A is P`, then `A.X is Q` with the call site's `A.X`) do not hold, and the call is accepted. Shadowing a conformance has no effect on the call, and the type of the call is not the type its signature gives when read at the call site. Name resolution, by contrast, *commits*: `A.X` is the projection through the result of resolving `A is P` alone.
+In each of these, the requirements of `f` written out at the call site (`A is P`, then `A.X is Q` with the call site's `A.X`) do not hold (in the fourth row `A.X` is ambiguous there), and the call is accepted. Shadowing a conformance has no effect on the call, and the type of the call is not the type its signature gives when read at the call site. Name resolution, by contrast, *commits*: `A.X` is the projection through the result of resolving `A is P` alone.
 
 **The rule.** A premise that another premise waits for must have been discharged by the witness that resolving it alone gives, under the hypotheses it had. If resolving it alone is ambiguous, the thread fails. It is a filter on threads: it never produces a witness, so nothing can be accepted because of it.
 

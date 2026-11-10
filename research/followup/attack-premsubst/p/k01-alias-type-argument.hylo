@@ -1,0 +1,11 @@
+// The type argument is an alias (assumption A2: every transformation of the callee's type applies
+// to a using and to the references to it alike). Well typed: AA = A, A.X = B, B is Q.
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+given B is Q {}
+given A is P { type X = B }
+type AA = A
+fun f<T where T is P, T.X is Q>() {}
+public fun main() { f<AA>() }

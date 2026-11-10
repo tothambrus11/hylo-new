@@ -1,0 +1,27 @@
+// Tests: inside a generic function, the function itself is passed as a value to a higher-order
+// function, in a block where a local conformance of `T` shadows the requirement. No type that
+// cannot be written is involved: `x` is the parameter `x: T.X`.
+// Correct verdict: rejected. `rec` is elaborated with the local conformance (`X = S1`), so the
+// function value takes an `S1`; `call3` gives it the caller`s `x`, a `T.X` of the requirement
+// (an `S0` in `main`), which reaches the local `put(x: S1)`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun call3<U, V>(f: [](let U, let V, let Bool) -> Void, u: U, v: V) { f(u, v, false) }
+fun rec<T where T is P>(t: T, x: T.X, again: Bool) {
+  t.put(x)
+  if again {
+    given T is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    call3(rec, t, x)
+  }
+}
+public fun main() { rec(A(), S0(), true) }

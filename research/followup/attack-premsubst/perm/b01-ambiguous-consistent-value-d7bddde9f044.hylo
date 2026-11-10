@@ -1,0 +1,13 @@
+given A is P { type X = B
+  fun get() -> B { B() } }
+fun f<T where T is P, T.X is Q>(t: T) { t.get().use() }
+public fun main() { f<A>(A()) }
+given A is P { type X = C
+  fun get() -> C { C() } }
+given B is Q { fun use() {} }
+struct B { public memberwise init }
+trait P { type X
+  fun get() -> X }
+struct C { public memberwise init }
+trait Q { fun use() }
+struct A { public memberwise init }

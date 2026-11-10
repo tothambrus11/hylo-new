@@ -1,0 +1,48 @@
+{"file": "wperm/callee-01234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-01243.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-01324.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-01342.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-01423.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-01432.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-02134.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-02143.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10243.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10324.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10342.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10423.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-10432.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-13024.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/callee-13042.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01243.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01324.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01342.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01423.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-01432.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-02134.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-02143.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10243.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10324.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10342.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10423.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-10432.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-13024.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/caller-13042.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-01234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-01243.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, ((A::P).X ~ (A::P).X), R<W<(A::P).X>>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-01324.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, ((A::P).X ~ (A::P).X), R<W<(A::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-01342.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-01423.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-01432.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-03124.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, Q<(A::P).X>, P<A>, ((A::P).X ~ (A::P).X), R<W<(A::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-03142.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-10234.hylo", "verdict": "accept", "errors": 0, "first": "", "stuck": 0}
+{"file": "wperm/mixed-10243.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, ((A::P).X ~ (A::P).X), R<W<(A::P).X>>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-10324.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, ((A::P).X ~ (A::P).X), R<W<(A::P).X>>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-10342.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, Q<(A::P).X>, R<W<(A::P).X>>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-10423.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, R<W<(A::P).X>>, ((A::P).X ~ (A::P).X), Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-10432.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, P<A>, R<W<(A::P).X>>, Q<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-14023.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, R<W<(A::P).X>>, P<A>, ((A::P).X ~ (A::P).X), Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}
+{"file": "wperm/mixed-14032.hylo", "verdict": "reject", "errors": 1, "first": "no coercion from '(P<A>, R<W<(A::P).X>>, P<A>, Q<(A::P).X>, ((A::P).X ~ (A::P).X)) ==> [Void]() let -> Void' to '[Void]() let -> Void'", "stuck": 0}

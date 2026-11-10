@@ -8,7 +8,7 @@ RES = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FIX = "occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget"
 PERF = "symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo"
 CONFIGS = {"base": "", "FIX": FIX, "FULL": FIX + "," + PERF, "MIN5": "index,memberskip,typevec,symindex,traitindex",
-           "NEW": FIX + "," + PERF + ",sigrounds,assocsubst,eqindex,eqeager,premsubst,headsubst,abstractstrict,twins,cleanfirst,lookahead"}
+           "NEW": FIX + "," + PERF + ",sigrounds,assocsubst,eqindex,eqeager,premsubst,headsubst,abstractstrict,twins,cleanfirst,lookahead,premcommit,hidecache,aliasargs,stackscan,coeset"}
 CONFIGS["NEWX"] = CONFIGS["NEW"] + ",eqfilter,eqouter,eqclass"
 def flags(config):
     parts = config.split("+")

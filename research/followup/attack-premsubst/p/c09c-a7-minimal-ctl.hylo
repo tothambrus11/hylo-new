@@ -1,0 +1,14 @@
+// Control of c09: the same call outside the scope of the local conformance. ILL TYPED, rejected.
+trait P { type X }
+trait Q {}
+trait R {}
+struct C {}
+given C is Q {}
+given C is R {}
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  type TX = T.X
+  f<T, TX>()
+  if true {
+    given T is P { type X = C }
+  }
+}

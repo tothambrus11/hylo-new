@@ -1,0 +1,22 @@
+// u01a with the last two requirements of f swapped. WELL TYPED. `U is P` can be proved by the
+// declared conformance or by the pending hypothesis `T is P` (same type P<A>); both derivations
+// build the same witness. Must be accepted like u01a.
+trait P { type X }
+trait P2 { type Y }
+trait Q {}
+trait R {}
+trait S0 {}
+struct A {}
+struct B {}
+struct C {}
+struct D {}
+struct Pair<X, Y> {}
+struct W<X> {}
+given A is P { type X = B }
+given C is P2 { type Y = D }
+given B is Q {}
+given D is R {}
+given Pair<B, D> is S0 {}
+given <V where V is Q> => W<V> is R {}
+fun f<T, U where T is P, U is P, T.X == U.X, W<U.X> is R, T.X is Q>() {}
+public fun main() { f<A, A>() }

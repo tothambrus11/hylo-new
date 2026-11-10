@@ -6,7 +6,7 @@
 //   adapters/flatten.rs        impl<I, U> Iterator for Flatten<I>
 //                              where I: Iterator<Item: IntoIterator<IntoIter = U, Item = U::Item>>, U: Iterator,
 //                              { type Item = U::Item; ... }
-//                              (the same where clause is repeated on 17 impls of Flatten and FlattenCompat)
+//                              (the same bound is repeated on 11 impls of Flatten and FlattenCompat)
 //
 // PATTERN: associated type bindings nested two deep, one of which defines a parameter of the impl
 // (`U` occurs only on the right of `I::Item::IntoIter == U`), and an equality between associated
@@ -20,8 +20,10 @@
 // The original where clause lists `U: Iterator` after the binding that mentions `U::Item`; this
 // compiler resolves a where clause from left to right, so `U is Iterator` is moved forward (see
 // gaps/where-clause-order.hylo).  The concrete use of the impl (flattening an iterator of vectors)
-// is left out: it needs two features this compiler lacks (gaps/generic-projection.hylo and
-// gaps/associated-type-premise.hylo).
+// is left out: it needs a feature this compiler lacks (gaps/generic-projection.hylo).
+//
+// EXPECTED: accepted.  OBSERVED: the last line of `flattenBody` is rejected by every configuration,
+// for two independent reasons (gaps/associated-type-premise.hylo and gaps/two-equality-conditions.hylo).
 //
 // Lines starting with `// NEG:` are plausible but false claims; `run_benchmarks.py` enables them
 // in a generated copy to measure the cost of rejecting.

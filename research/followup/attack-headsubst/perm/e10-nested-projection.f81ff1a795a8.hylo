@@ -1,0 +1,20 @@
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+struct B { public memberwise init }
+given A is P { type X = B
+  fun get() -> B { B() }
+  fun put(x: B) {} }
+given B is P { type X = S1
+  fun get() -> S1 { S1() }
+  fun put(x: S1) {} }
+fun deep<T where T is P, T.X is P>(t: T, x: T.X, y: T.X.X) -> T.X.X { y }
+fun q() {
+  wantS1(deep(A(), B(), S1()))
+  let z = deep(A(), B(), S0())
+}
+fun g<U where U is P, U.X is P>(u: U, x: U.X.X) { let y: U.X.X = deep(u, u.get(), x) }
+trait P { type X; fun get() -> X; fun put(x: X) }

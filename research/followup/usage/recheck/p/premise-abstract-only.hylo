@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// gaps/associated-type-premise.hylo, abstract use only.
+trait It { type Item }
+trait Q {}
+struct W<I> { public memberwise init }
+given <I where I is It, I.Item is Q> => W<I> is Q {}
+fun needQ<T where T is Q>() {}
+fun abstract<I where I is It, I.Item is Q>() { needQ<W<I>>() }

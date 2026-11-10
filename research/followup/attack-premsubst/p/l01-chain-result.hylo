@@ -1,0 +1,13 @@
+// The result type is a projection through a DEPENDENT requirement (T.X.X). Well typed:
+// A.X = B, B.X = C, the result is a C.
+trait P { type X
+  fun get() -> X }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+given A is P { type X = B
+  fun get() -> B { B() } }
+given B is P { type X = C
+  fun get() -> C { C() } }
+fun f<T where T is P, T.X is P>(t: T) -> T.X.X { t.get().get() }
+public fun main() { let c: C = f<A>(A()) }

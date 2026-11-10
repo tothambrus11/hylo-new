@@ -1,0 +1,7 @@
+trait P { type X }
+trait Q {}
+trait R {}
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T5 is P, T6 is P, T7 is P, T8 is P, T0.X is Q, T1.X is R, T1.X is Q, T2.X is R, T2.X is Q, T3.X is R, T3.X is Q, T4.X is R, T4.X is Q, T5.X is R, T5.X is Q, T6.X is R, T6.X is Q, T7.X is R, T7.X is Q, T8.X is R>(x: T8.X) {
+  check<T8.X>(x)
+}

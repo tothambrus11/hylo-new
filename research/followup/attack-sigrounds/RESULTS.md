@@ -111,7 +111,7 @@ One row per program of `p/`, one column per configuration (binary `eq22-554540c3
 
 ## One flag removed from NEW
 
-61 programs were also run under NEW without `memberskip`, without `index`, without `absmodel`, without `extorder` and without `givencheck` (305 runs). Runs whose verdict or diagnostics differ from NEW: 0.
+104 programs were also run under NEW without `memberskip`, without `index`, without `absmodel`, without `extorder` and without `givencheck` (520 runs). Runs whose verdict or diagnostics differ from NEW: 0.
 
 ## Orders of the top-level declarations
 

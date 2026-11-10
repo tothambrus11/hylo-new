@@ -23,10 +23,14 @@ FIX = "occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget"
 CONFIGS = {"base": "", "FIX": FIX,
            "FULL": FIX + ",symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo"}
 
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+import tcrun
+
 def flags_of(config):
-    """`FULL+sigrounds+selfcheck` is FULL with two more flags."""
+    """`FULL+sigrounds+selfcheck` is FULL with two more flags; names are those of tcrun.py."""
     parts = config.split("+")
-    return ",".join(x for x in [CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)
+    assert parts[0] in tcrun.CONFIGS, "unknown configuration " + parts[0]
+    return tcrun.flags(config)
 
 def strip(line):
     return re.sub(r'"(\\.|[^"\\])*"', '""', line.split("//")[0])

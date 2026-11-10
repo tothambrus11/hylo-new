@@ -1,0 +1,22 @@
+// ORDER, far from the size bound (7 steps). f<A, A>() with both parameters at the same type.
+// WELL TYPED: A.X = B, B == B, B is Q, W<B> is R. Same verdict as u01b expected (the two programs
+// differ only in the order of the last two requirements of f).
+trait P { type X }
+trait P2 { type Y }
+trait Q {}
+trait R {}
+trait S0 {}
+struct A {}
+struct B {}
+struct C {}
+struct D {}
+struct Pair<X, Y> {}
+struct W<X> {}
+given A is P { type X = B }
+given C is P2 { type Y = D }
+given B is Q {}
+given D is R {}
+given Pair<B, D> is S0 {}
+given <V where V is Q> => W<V> is R {}
+fun f<T, U where T is P, U is P, T.X == U.X, T.X is Q, W<U.X> is R>() {}
+public fun main() { f<A, A>() }

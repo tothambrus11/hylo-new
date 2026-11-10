@@ -1,0 +1,16 @@
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+trait R refines P {
+  fun m() { take(self, pick(self)) }
+}
+extension <T where T is P> T {
+  fun rt() { take(self, pick(self)) ; take(self, self.get()) }
+  fun n<V where V is P>(t: V) { take(self, t.get()) }
+}
+trait P { type X; fun get() -> X; fun put(x: X) }

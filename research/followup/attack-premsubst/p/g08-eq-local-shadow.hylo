@@ -1,0 +1,11 @@
+// The equality form of j01. f<U>() in a block with a nearer conformance `U is P` whose X = B.
+// Well typed with either witness (U.X == B is g's fact; X of the local conformance is B).
+trait P { type X }
+struct B { public memberwise init }
+fun f<T where T is P, T.X == B>() {}
+fun g<U where U is P, U.X == B>() {
+  if true {
+    given U is P { type X = B }
+    f<U>()
+  }
+}

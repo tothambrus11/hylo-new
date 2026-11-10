@@ -203,3 +203,14 @@
 {"file": "workloads/div-loop-20.hylo", "base": true, "diff": {}}
 {"file": "workloads/div-loop.hylo", "base": true, "diff": {}}
 {"file": "workloads/empty.hylo", "base": true, "diff": {}}
+{"file": "workloads/members-big.hylo", "base": true, "diff": {}}
+{"file": "workloads/members.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovl-4-4.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovl-4-6.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovl-4-8.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovl-8-8.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovr-3-10.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovr-3-4.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovr-3-6.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovr-3-8.hylo", "base": true, "diff": {}}
+{"file": "workloads/ovr-3-9.hylo", "base": true, "diff": {}}

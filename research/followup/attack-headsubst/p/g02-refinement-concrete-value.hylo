@@ -1,0 +1,14 @@
+// Tests: the projection through a requirement on a refinement meets a concrete type.
+// Correct verdict: rejected; in `g`, `take(u, S1())` passes an `S1` for `U.X`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+given A is R {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun g<U where U is R>(u: U) { take(u, S1()) }
+public fun main() { g(A()) }

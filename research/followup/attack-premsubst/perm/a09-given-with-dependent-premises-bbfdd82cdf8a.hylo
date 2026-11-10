@@ -1,0 +1,12 @@
+public fun main() { f<Box<A>>() }
+fun f<T where T is P, T.X is R>() {}
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+given A is P { type X = B }
+given A is R {}
+given B is Q {}
+struct Box<T> {}
+struct B {}
+struct A {}
+trait R {}
+trait Q {}
+trait P { type X }

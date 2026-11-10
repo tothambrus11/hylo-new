@@ -1,0 +1,22 @@
+public fun main() { h(Box<A>(t: A())) }
+fun h(b: Box<A>) {
+  if true {
+    f<Box<A>>(b)
+  }
+}
+fun f<T where T is P, T.X is Q>(t: T) { t.get().use() }
+given BX is Q { fun use() {} }
+type BX = BA.X
+type BA = Box<A>
+given <T where T is P> => Box<T> is P { type X = T.X
+  fun get() -> T.X { self.t.get() } }
+given A is P { type X = B
+  fun get() -> B { B() } }
+struct Box<T> { var t: T
+  public memberwise init }
+struct C { public memberwise init }
+struct B { public memberwise init }
+struct A { public memberwise init }
+trait Q { fun use() }
+trait P { type X
+  fun get() -> X }

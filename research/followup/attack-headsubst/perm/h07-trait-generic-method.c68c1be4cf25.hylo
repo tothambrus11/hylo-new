@@ -1,0 +1,27 @@
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+struct B { public memberwise init }
+given B is P { type X = S1
+  fun get() -> S1 { S1() }
+  fun put(x: S1) {} }
+trait R { fun mix<V where V is P>(v: V, x: V.X) -> V.X { v.put(x) ; return v.get() } }
+given A is R {}
+fun g<U where U is R>(u: U) {
+  wantS0(u.mix(A(), S0()))
+  wantS0(u.mix(B(), S1()))
+  wantS1(u.mix(B(), S1()))
+}
+fun q() {
+  wantS0(A().mix(A(), S1()))
+  wantS1(A().mix(B(), S1()))
+  wantS0(A().mix(A(), S0()))
+  wantS1(A().mix(A(), S0()))
+}
+trait P { type X; fun get() -> X; fun put(x: X) }

@@ -6,9 +6,9 @@ The claims of the form "an exponential behaviour becomes polynomial" rest on sin
 
 ## Results in brief
 
-The work counters are exact and deterministic. The times are measurements taken on a heavily loaded machine and are indicative only.
+The work counters are exact and deterministic: 464 points measured twice and 49 points measured again independently gave identical counters and verdicts. The times were taken on a heavily loaded machine and are indicative only: two measurements of the same point commonly differ by a factor of 1.4, sometimes by more than 2.
 
-1. **Most of the claims hold, now with curves.** Under FULL the growth of the work counter drops, in most families to linear or constant, where the existing checker is quadratic, cubic, quartic or exponential:
+1. **Most of the claims hold, now with curves.** Under FULL the growth of the work counter drops, in most families to linear or constant, where the existing checker is quadratic, cubic, quartic or explosive. Each law is exact on the sizes that completed (base reaches 64 links on `eqchain`, 16 on `eqchain-goals`, 32 on `open-chain`); nothing is known beyond them.
 
    | Family | base | FULL |
    |---|---|---|
@@ -22,35 +22,46 @@ The work counters are exact and deterministic. The times are measurements taken 
    | `n` extensions, `n` member lookups (`members-both`) | `2n² + 8n` | `n` |
    | chain of `n` refinements (`refine`) | `n² + 72n + 73` | `n + 3` |
 
-2. **The existing checker is not exponential on equality chains: it is cubic, and unsound.** It finds short invalid proofs (soundness problem 1 of the report), and accordingly accepts the ill-typed variants `eqchain-neg` and `assocneg` from three links on, at every size measured. The exponential that `eqsolve` removes belongs to the *sound* search: FULL without `eqsolve` needs 363, 1260, 9655 and 120230 matches for 1 to 4 links, and rejects the valid program from 5 links on (resource bound). The statement "exponential becomes linear" is therefore true of `fixsubst` with and without `eqsolve`, not of base against FULL. It is true of base against FULL for independent equality requirements (`req-eq`).
+   On the equality rows the whole gain is that of FIX: the counts of FULL equal those of FIX at every size (result 8).
 
-3. **MIN5 has the gains of indexing and nothing else.** On every equality and divergence family it follows the same growth law as base (with the same or a smaller constant), including the wrong acceptances and the memory exhaustion on `open-neg`. On the breadth, member-lookup, refinement, nesting and where-clause families it follows the law of FULL, except where FULL's abstract model refutes the goal at once (`nest-diamond-neg`: `n² + 3n + 5` against a constant).
+2. **The existing checker is not exponential on equality chains: it is cubic, and unsound.** It accepts the ill-typed variants `eqchain-neg` and `assocneg` from three links on, at every size measured, through an invalid derivation (soundness problem 1 of the report; `HYLO_TC_EXPERIMENTS=trace` on `progs/eqchain-neg-3.hylo` prints it). On the valid chain the number of resolution layers stays at 28 from 3 to 64 links, although a derivation that uses all `n` links needs at least `n` steps and the bound is 10: from 10 links on, the acceptance of the valid program cannot rest on a complete derivation either. The explosive growth that `eqsolve` removes belongs to the *sound* search: FULL without `eqsolve` needs 363, 1260, 9655 and 120230 matches for 1 to 4 links (factors 3.5, 7.7, 12.5), and rejects the valid program from 5 links on (resource bound). Four points are too few to fit a law; they show a factor that grows with each link. The statement "exponential becomes linear" therefore describes the sound search with and without `eqsolve`, not base against FULL. For independent equality requirements (`req-eq`) base itself explodes: three points (factors 4.1 and 23 per doubling), then out of memory at 8.
 
-4. **Exponential behaviours that remain under FULL** (all but the last occur with the default settings):
-   - **Overloads distinguished by their return type.** `g(h(), …, h())` with `n` arguments and `m` overloads of `h` costs exactly `m + m² + … + mⁿ` solver forks under every configuration (`ovr-args`: 3ⁿ; `ovr-width`: `m⁴ + m³ + m² + m`). Twelve arguments and three overloads take 34 s.
-   - **Nested overloaded calls.** `g(f(A0()), …)` with `n` calls and 4 overloads of `f`: the number of forks grows by a factor of 2.0 to 2.2 per call from 10 to 16 calls, and the factor is not falling. Sixteen calls take 113 s (`ovl-calls`). The same calls in separate statements cost `4n` (`ovl-stmts`).
-   - **Several inferred arguments constrained by equalities.** `pick<T, U1, …, Un where Ui is Q, T == Ui>(x)`: 3, 79, 1351 and 24281 matches for `n` = 1 to 4, a factor of 17 to 26 per argument. At `n` = 5 the valid program is rejected, by the resource bound, or by the depth bound if the resource bound is lifted (`open-wide`, `open-wide-nobudget`).
-   - **A derivable goal next to growing givens.** The count doubles with each level of the derivation, `2^d`, up to the depth bound (`div-valid`), and beyond it when the bound is raised (`div-valid-deep`). The abstract model cannot help: the goal is true.
-   - **An underivable goal that the abstract model does not refute.** With facts `S<S<Xi>> is P` in scope, the model (truncated at depth 2) no longer refutes `Yb is P`, and the count doubles with each unit of the depth bound, as in base (`div-trunc-depth`). With the default bound and three or more branching givens the resource bound of `budget` ends the search after 3 to 20 s; with 32 branching givens the checker runs out of memory instead (`div-trunc`).
-   - **Diamond-shaped conditional givens.** `S<T> is P` and `S<T> is Q` each requiring `T is P` and `T is Q` cost `2^d` for nesting `d`: subgoals are not shared (`nest-diamond`). This needs a raised depth bound; with the default bound the program is rejected from `d = 3`.
+3. **MIN5 has the gains of indexing and nothing else.** On every equality and divergence family, including `req-eq`, it follows the same growth law as base (with the same or a smaller constant), including the wrong acceptances and the memory exhaustion on `open-neg`. On the breadth, member-lookup, refinement, nesting and conformance where-clause families its counter follows the law of FULL, with two exceptions: where FULL's abstract model refutes the goal at once (`nest-diamond-neg`: `n² + 3n + 5` against a constant), and with conformance requirements on associated types, where it follows base (`ctrl-assoc-reqs`: `12n² + 432n + 1` against `4n² + 142n + 1`). Its time does not always follow: with identical counters, `req-params-deep` at 256 takes 15.5 s and 15.9 s under MIN5 against 3.2 s (twice) under FULL.
+
+4. **Exponential behaviours that remain under FULL.**
+
+   With the default settings, on programs that are accepted:
+   - **Overloads distinguished by their return type.** `g(h(), …, h())` with `n` arguments and `m` overloads of `h` costs exactly `m + m² + … + mⁿ` solver forks under every configuration (`ovr-args`: `(3ⁿ⁺¹ − 3)/2`; `ovr-width`: `m⁴ + m³ + m² + m`). Twelve arguments and three overloads take 34 s.
+   - **Nested overloaded calls.** `g(f(A0()), …)` with `n` calls and 4 overloads of `f`: the number of forks is multiplied by 1.99, 1.95, 1.99, 2.07, 2.17 and 2.22 for each call added from 10 to 16 (`ovl-calls`, `ovl-calls-odd`). The factor fell from 3.1 to 2.1 between 5 and 10 calls and has not fallen since; a polynomial would keep falling towards 1. The fit is formally undecided (16 calls do not exclude a polynomial of degree 10 or more). Fifteen calls take 59 s and sixteen 113 s. The same calls in separate statements cost `4n` (`ovl-stmts`).
+   - **Several inferred arguments constrained by equalities.** `pick<T, U1, …, Un where Ui is Q, T == Ui>(x)`: 3, 79, 1351 and 24281 matches for `n` = 1 to 4 (`open-wide`). Only these four sizes are accepted: 5 arguments make 10 requirements, which the depth bound rejects (result 6), and the resource bound stops the search first. With both bounds lifted a fifth point is accepted with 547435 matches in 8 s (`open-wide-deep`): the factors per argument are 26, 17, 18 and 22.5.
+   - **A derivable goal next to growing givens.** The count is `6·2^d − 2` for a derivation of depth `d` (`div-valid`). With the default bound `d` cannot exceed 8, so the cost is bounded: 1534 matches and under 0.1 s with two growing givens. The abstract model cannot help: the goal is true.
+
+   With the default settings, on a program that is rejected:
+   - **An underivable goal that the abstract model does not refute.** With facts `S<S<Xi>> is P` in scope, the model (truncated at depth 2) no longer refutes `Yb is P`. With three or more branching givens the resource bound of `budget` ends the search after 3 to 20 s; with 32 branching givens the checker runs out of memory instead (`div-trunc`).
+
+   Only when the depth bound is raised:
+   - The two behaviours above grow as `2^d` in the bound or in the depth of the derivation (`div-trunc-depth`, `div-valid-deep`), as in base.
+   - **Diamond-shaped conditional givens.** `S<T> is P` and `S<T> is Q` each requiring `T is P` and `T is Q` cost exactly `(d + 3)·2^d` matches for nesting `d` under MIN5 and FULL, measured to `d = 12`: subgoals are not shared (`nest-diamond`, `nest-diamond-deep`). The time grows faster than the count, three to four times per level against 2.1 for the count (0.18 s at 8, 2.2 s at 10, 29 s at 12; single measurements). With the default bound the program is rejected from `d = 3`, and with a bound of 1000 from `d = 9`, because the derivation has `2^(d+1) − 1` subgoals.
 
 5. **Super-linear polynomial behaviours that remain under FULL:**
-   - **`n` equalities between associated types** (`assoceq`, `assocneg`): `3n² + 145n + 145` matches, and a time that grows faster than the count: 0.8 s at 32, 15 s at 128, 52 s at 192, no answer in 120 s at 256 (exponent about 2.5). The control without the equalities takes 13 ms at 256.
-   - **`n` equality goals over `n` equalities** (`eqchain-goals`): `2n` matches, but 0.7 s at 256, 4.2 s at 512 and 23 s at 1024 (exponent about 2.4). The control without equalities takes 42 ms at 1024. The count of matches does not see this cost; presumably each goal runs the decision procedure over all the facts in scope again. `n` independent requirements `Ti == Ui` behave alike (`req-eq-deep`: `n + 1` matches, 0.4 s at 256). A single goal stays cheap: 67 ms for a chain of 1024 (`eqchain`).
-   - **A call with `n` requirements from a function with `n` requirements** (`req-traits-deep`, `req-params-deep`): `0.5n² + 0.5n + 1` or `1.5n² − 0.5n + 1` matches, time exponent 2.6 to 2.8 (3.2 s for 256 type parameters with one requirement each). With the default depth bound this cannot be observed, because the call is rejected from 10 requirements (result 6).
-   - **`n` lookups among `n` candidates that the index does not separate**: `n² + n` for conformances of `n` types to the same trait (`breadth-square`), `n² + 3n` for `n` nested givens (`nestwide`). One lookup among `n` conformances to one trait costs `n + 1` (`breadth-types`).
+   - **`n` requirements on associated types, whether equalities or not.** `n` equalities `T{i}.X == T{i+1}.X` cost `3n² + 145n + 145` matches (`assoceq`, `assocneg`), and a time that grows faster than the count: 0.8 to 1.0 s at 32, 3.0 to 3.6 s at 64, 15 to 25 s at 128, 52 to 65 s at 192, no answer in 120 s at 256. The exponent of the time lies between 2 and 3; the measurements do not fix it more closely. The equalities are not the cause. A control with the same `2n` mentions of `T{i}.X` as conformance requirements (`T{i}.X is Q`) and no equality costs `4n² + 142n + 1` matches and more time: 5.8 s at 64, 34 s at 128, 91 s at 192, no answer in 120 s at 256 (`ctrl-assoc-reqs`). Removing `eqsolve` does not remove the cost either (62 s at 192, with the search cut short by the resource bound). The same mentions as parameter types, with no requirement on an associated type, cost `(n + 1)²` cheap matches: 0.15 s at 256 (`ctrl-assoc-uses`). The cost is already visible at small sizes: 10 ms for one equality and 46 ms for four (15 ms and 77 ms for the conformance requirements), against at most 7 ms for `ctrl-assoc-uses` up to 32.
+   - **`n` equality goals over `n` equalities** (`eqchain-goals`): `2n` matches, but 0.7 s at 256, 4.2 s at 512 and 21 to 23 s at 1024. No counter sees this cost. Two controls locate it: with the chain fixed at 8 links the time is linear in the number of goals (0.24 s for 1024 goals, `eqgoals-fixedchain`), and with 8 goals it grows a little faster than the number of links (26, 68 and 167 ms for 256, 512 and 1024 links, `eqgoals-fixedgoals`). Each goal therefore costs a time roughly proportional to the number of equalities in scope, 13 to 20 µs per equality, rising with the size, and the product predicts the measurement (1024 goals at 21 ms each). Every goal is discharged by the equality procedure of `eqsolve` (counter `eqsolve.proved`), under FIX as under FULL, so the cost presumably lies there; no profile confirms it. A single goal stays cheap: 67 to 118 ms for a chain of 1024 (`eqchain`).
+   - **A call with `n` requirements from a function with `n` requirements** (`req-traits-deep`, `req-params-deep`): `0.5n² + 0.5n + 1` or `1.5n² − 0.5n + 1` matches, time exponent 2.6 to 2.8 (3.2 s for 256 type parameters with one requirement each). Equality requirements are cheaper, not dearer: `n + 1` matches and 0.4 to 0.55 s at 256 (`req-eq-deep`). With the default depth bound none of this can be observed, because the call is rejected from 10 requirements (result 6).
+   - **`n` lookups among `n` candidates that the index does not separate**: `n² + n` for conformances of `n` types to the same trait (`breadth-square`), `n² + 3n` for `n` nested givens (`nestwide`), `(n + 1)²` for the associated types of `n` parameters (`ctrl-assoc-uses`). One lookup among `n` conformances to one trait costs `n + 1` (`breadth-types`).
    - **Overload width**: `m² + 7m` forks for four nested calls with `m` overloads (`ovl-width`), `m⁴ + …` for four arguments overloaded on the return type (`ovr-width`).
-   - Nothing super-linear was found in member lookup (`members-*`, `condext`), nesting (`nest-deep`, 128 levels) or refinement (`refine-deep`, 64 levels): the counters are linear or constant and the times stay below 0.12 s at the largest sizes (1280 extensions, 640 lookups).
+   - In member lookup (`members-*`, `condext`), nesting (`nest-deep`, 128 levels) and refinement (`refine-deep`, 64 levels) the counters are linear or constant, and the times stay below 0.12 s at the largest sizes (1280 extensions, 640 lookups). Times this small are too noisy to show whether they are linear.
 
-6. **The depth bound of 10 counts resolution steps, not nesting depth, and it rejects valid programs of modest size under all four configurations.** A call whose callee has 10 or more requirements is rejected (`req-traits`, `req-params`: accepted up to 9), as are 10 independent equality requirements under FIX and FULL (`req-eq`), a conditional conformance nested 9 deep (`nest` is accepted up to 8), a diamond nested 3 deep, and 5 inferred arguments. Most scaling behaviours of valid programs are therefore cut off by a rejection before they become expensive. The curves beyond those sizes were measured with the bound raised to 1000 (families named `-deep`, and the diamonds).
+6. **The depth bound of 10 counts the subgoals of the whole derivation, not its nesting, and it rejects valid programs of modest size under all four configurations.** A derivation is accepted only if it has fewer subgoals than the bound: 10 requirements on a callee are accepted from a bound of 11, a conditional conformance nested 9 deep (10 subgoals) from 11, a diamond nested 3 deep (15 subgoals) from 16 (`bound-req`, `bound-nest`, `bound-diamond`). With the default bound, a call whose callee has 10 or more requirements is rejected (`req-traits`, `req-params`: accepted up to 9), as are 10 independent equality requirements under FIX and FULL (`req-eq`), a conditional conformance nested 9 deep (`nest` is accepted up to 8), a diamond nested 3 deep, and 5 inferred arguments. Most scaling behaviours of valid programs are therefore cut off by a rejection before they become expensive. The curves beyond those sizes were measured with the bound raised (families named `-deep`, and the diamonds): they describe the algorithm, not the checker with its default settings.
 
-7. **The resource bound turns explosions into rejections, not always.** Under FIX and FULL, `budget` stops the divergent families after a few seconds. It also rejects valid programs (`open-wide` at 5, `div-valid-deep` at depth 16 under FULL and 12 under FIX), and it does not prevent memory exhaustion on `div-trunc` with 32 branches under FULL.
+7. **The resource bound turns explosions into rejections, not always.** Under FIX and FULL, `budget` stops the divergent families after a few seconds. It does not prevent memory exhaustion on `div-trunc` with 32 branches under FULL. It ends the search on two valid programs, `open-wide` at 5 arguments and `div-valid-deep` at depth 16 under FULL (12 under FIX), but neither is a program that the default depth bound accepts: without `budget` the first is rejected by the depth bound (`open-wide-nobudget`), and the second needs a raised bound. No program was found that `budget` rejects and the same configuration without `budget` accepts with the default depth bound.
+
+8. **Where an equality or a requirement on an associated type is in scope, FULL makes little or no use of its index.** In such a function the conformance lookups fall back to the unindexed search (counter `index.fallback`), and each still tries the 72 or so givens of the standard library. On `assoceq`, `eqchain`, `eqchain-conf` and `open-chain` the index skips no candidate at any size (no `index.skipped`); on `ctrl-assoc-reqs` at 8, 16 of 18 lookups fall back. On every equality family whose programs are accepted (`eqchain`, `eqchain-conf`, `eqchain-goals`, `assoceq`, `open-chain`, `req-eq`, `req-eq-deep`) the match counts of FULL equal those of FIX at every size. The gain of indexing, which is the main gain on real code, is absent inside functions that state such requirements.
 
 ## Leave-one-out configurations
 
 These were run to tie each curve to the technique that produces it. The points are few, because the resource bound of `budget` cuts every explosion short.
 
-- **FULL without `eqsolve`.** `eqchain`: 363, 1260, 9655, 120230 matches for 1 to 4 links (factors 3.5, 7.7, 12.5), then the resource bound rejects the valid program. `eqchain-goals`: 72, 586, 5324, 66171, then the same. `assoceq` is rejected from 4 equalities, `open-chain` from 4 links, `req-eq-deep` from 8 requirements. The ill-typed `eqchain-neg` and `assocneg` are still rejected, but from 3 links on only after the resource bound has stopped a search, which takes 1 to 11 s.
+- **FULL without `eqsolve`.** `eqchain`: 363, 1260, 9655, 120230 matches for 1 to 4 links (factors 3.5, 7.7, 12.5), then the resource bound rejects the valid program. `eqchain-goals`: 72, 586, 5324, 66171, then the same. `assoceq` is rejected from 4 equalities (resource bound), `open-chain` from 4 links (depth bound, then resource bound from 8), `req-eq-deep` from 8 requirements (resource bound). The ill-typed `eqchain-neg` and `assocneg` are still rejected, but from 3 links on only after the resource bound has stopped a search, which takes from 1 s to more than a minute.
 - **FULL without `absmodel` and `absquotient`.** `div-depth`: 93, 189, 765, 3069, 12285, 49149 for depth bounds 5 to 14, that is `2^d` again, with the counts of MIN5. `div-branch`, `div-trunc` and `cyc-clique` explode with the counts of MIN5 until the resource bound stops them (for example 20 and 3069 matches for `div-branch` with 1 and 2 branches, against 1 with the model), and `div-branch-eq` with those of FIX. `nest-diamond-neg` returns to `n² + 3n + 5`. `cyc-ring`, `nest-neg`, `req-neg` and `eqchain-neg` stay linear: there the model saves a constant factor only.
 - **FULL without `absquotient`.** `div-branch-eq` (an equality in scope) gives exactly the counts of FULL without the whole model: 1369, 111983, then the resource bound. With an equality in scope, the benefit of the abstract model depends entirely on `absquotient`. `eqchain-neg` is unaffected.
 
@@ -61,35 +72,39 @@ These were run to tie each curve to the technique that produces it. The points a
 | Group | Families | Size parameter |
 |---|---|---|
 | Equality chain | `eqchain` (conformance and associated type through the chain), `eqchain-conf` (conformance only), `eqchain-neg` (ill-typed: the middle link is missing), `eqchain-goals` (`n` goals) | number of links |
+| | `eqgoals-fixedchain` (`n` goals, 8 links), `eqgoals-fixedgoals` (8 goals, `n` links) | goals, links |
 | Associated types | `assoceq`, `assocneg` (ill-typed: the middle equality is missing) | number of equalities `T{i}.X == T{i+1}.X` |
 | Breadth | `breadth-traits`, `breadth-types` (one lookup), `breadth-square` (`n × n` conformances and `n` lookups; breadth40 is `n = 40`) | number of conformances, or its square root |
 | Divergence | `div-branch`, `div-branch-eq` (an unrelated equality is in scope), `div-trunc` (facts deeper than the abstract model looks), `cyc-ring`, `cyc-clique` (cyclic givens) | branching, or length of the cycle |
 | | `div-depth`, `div-trunc-depth` (two branches) | the depth bound `HYLO_TC_MAXDEPTH` |
 | | `div-valid`, `div-valid-deep` (the goal is derivable) | depth of the derivation |
 | Member lookup | `members-ext`, `members-use`, `members-both`, `condext` (conditional extensions) | extensions, lookups |
-| Overloads | `ovl-calls` (`n` calls, 4 overloads), `ovl-width` (4 calls, `n` overloads), `ovl-stmts` (`n` statements), `ovr-args` (`n` arguments, 3 overloads on the return type), `ovr-width` (4 arguments, `n` overloads) | calls or overloads |
-| Nested givens | `nest`, `nest-deep`, `nest-neg`, `nest-diamond`, `nest-diamond-default`, `nest-diamond-neg`, `refine`, `refine-deep`, `nestwide` | nesting depth, or number of nested givens |
-| Open equalities | `open-chain`, `open-neg` (ill-typed), `open-wide`, `open-wide-nobudget` | length of the chain, or number of inferred arguments |
+| Overloads | `ovl-calls` and `ovl-calls-odd` (`n` calls, 4 overloads), `ovl-width` (4 calls, `n` overloads), `ovl-stmts` (`n` statements), `ovr-args` (`n` arguments, 3 overloads on the return type), `ovr-width` (4 arguments, `n` overloads) | calls or overloads |
+| Nested givens | `nest`, `nest-deep`, `nest-neg`, `nest-diamond`, `nest-diamond-deep`, `nest-diamond-default`, `nest-diamond-neg`, `refine`, `refine-deep`, `nestwide` | nesting depth, or number of nested givens |
+| Open equalities | `open-chain`, `open-neg` (ill-typed), `open-wide`, `open-wide-nobudget`, `open-wide-deep` | length of the chain, or number of inferred arguments |
 | Where clauses | `req-traits`, `req-params`, `req-eq`, `req-neg` (ill-typed), and their `-deep` variants | number of requirements |
-| Controls | `ctrl-goals` (`eqchain-goals` without the equalities), `ctrl-assoc` (`assoceq` without the equalities) | as the family they control |
+| Depth bound | `bound-req` (10 requirements), `bound-nest` (nesting 9), `bound-diamond` (diamond of depth 3) | the depth bound `HYLO_TC_MAXDEPTH` |
+| Controls | `ctrl-goals` (`eqchain-goals` without the equalities), `ctrl-assoc` (`assoceq` without the equalities and without the mentions of `T{i}.X`), `ctrl-assoc-reqs` (`assoceq` with conformance requirements `T{i}.X is Q` in place of the equalities), `ctrl-assoc-uses` (the same mentions of `T{i}.X` as parameter types) | as the family they control |
 
-The `-deep` families and the diamonds (except `nest-diamond-default`) run with `HYLO_TC_MAXDEPTH=1000`. `div-depth` and `div-trunc-depth` vary `HYLO_TC_MAXDEPTH` itself, from 5 upwards (below 5 the standard library no longer type-checks). `open-wide-nobudget` sets `HYLO_TC_BUDGET` to 10⁹.
+The `-deep` families and the diamonds (except `nest-diamond-default`) run with `HYLO_TC_MAXDEPTH=1000` (`nest-diamond-deep`: 10⁶). `div-depth`, `div-trunc-depth` and the `bound-` families vary `HYLO_TC_MAXDEPTH` itself (below 5 the standard library no longer type-checks). `open-wide-nobudget` sets `HYLO_TC_BUDGET` to 10⁹, and `open-wide-deep` also raises the depth bound.
 
-**Intended verdicts.** Each family states whether its programs should be accepted. At the smallest size every configuration gives the intended verdict, and the rejections carry a diagnostic of the intended kind (no syntax error), with one exception: on `open-neg`, base and MIN5 exhaust memory at every size. Where a configuration departs from the intended verdict at a larger size, the tables mark the point, and the fit uses only the longest run of sizes with one verdict.
+**Intended verdicts.** Each family states whether its programs should be accepted. At the smallest size every configuration gives the intended verdict, and the rejections carry a diagnostic of the intended kind (no syntax error), with two exceptions: on `open-neg`, base and MIN5 exhaust memory at both sizes that were tried (1 and 2 links); and the `bound-` families are valid programs that are rejected, by design, while the bound is too small. Where a configuration departs from the intended verdict at a larger size, the tables mark the point, and the fit uses only the longest run of sizes with one verdict. Every departure is one of three kinds, identified by its counters and diagnostics: a valid program rejected at the depth bound or at the resource bound, or an ill-typed program accepted by base or MIN5.
 
 **Runs.** `run.py` runs `tc-bench --count` (binary `eq9-723cc0e6b0f8`) for each (family, size, configuration), one process at a time, under `timeout`, and appends a record to `results.jsonl`: verdict, diagnostics, every counter of the user module, the `type.user` time, exit code, wall time and peak memory. Within a series the sizes are run in increasing order. The series stops after a timeout, after two consecutive crashes, or when a run slower than 2 s predicts more than twice the timeout for the next size by power-law extrapolation from the last two sizes (which underestimates an exponential). Sizes that were not run are recorded as `skipped`, with the reason.
 
-Every point was first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. The continuation was not completed for every series: the following ones end with a 20 s timeout (or with a prediction against 20 s) instead of 120 s, and the tables say so point by point. **FULL-eqsolve**: `assoceq`, `assocneg`, `eqchain-goals`, `open-chain`, `req-eq-deep`; **FULL-absmodel**: `cyc-clique`, `div-branch`, `div-branch-eq`, `div-depth`, `div-trunc`; **FULL-absquotient**: `div-branch-eq`; **MIN5**: `req-eq-deep`.
+Most families were first run with a 20 s timeout, then every series cut short was continued with the 120 s timeout. Eight families (`ctrl-assoc-reqs`, `ctrl-assoc-uses`, `eqgoals-*`, `bound-*`, `nest-diamond-deep`) were run with a 30 s timeout only (`ctrl-assoc-reqs` under FULL: 120 s). `open-wide-deep` was run under FIX and FULL only (60 s), and `ovl-calls-odd` under FULL only. The following series end with a shorter timeout (or with a prediction against it), given in parentheses, and the tables say so point by point; every other timeout in the tables is a 120 s timeout. **FIX**: `ctrl-assoc-reqs` (30 s), `nest-diamond-deep` (30 s), `open-wide-deep` (60 s); **FULL**: `nest-diamond-deep` (30 s), `open-wide-deep` (60 s); **FULL-absmodel**: `cyc-clique` (20 s), `div-branch` (20 s), `div-branch-eq` (20 s), `div-depth` (20 s), `div-trunc` (20 s); **FULL-absquotient**: `div-branch-eq` (20 s); **FULL-eqsolve**: `assocneg` (20 s), `open-chain` (20 s), `req-eq-deep` (20 s); **MIN5**: `ctrl-assoc-reqs` (30 s), `eqgoals-fixedchain` (30 s), `eqgoals-fixedgoals` (30 s), `nest-diamond-deep` (30 s); **base**: `ctrl-assoc-reqs` (30 s), `eqgoals-fixedchain` (30 s), `eqgoals-fixedgoals` (30 s), `nest-diamond-deep` (30 s). In total 2,241 points were run: 2,168 completed, 21 timed out, 52 crashed (out of memory); 304 larger sizes were not run for the reasons above.
 
-Three leave-one-out configurations were also run on the families they concern: FULL without `eqsolve`, FULL without `absmodel` and `absquotient`, and FULL without `absquotient`. A second pass repeated the FULL points that finish within 5 s: the counters and verdicts were identical in all of them, and the time reported for those points is the smaller of the two.
+Three leave-one-out configurations were also run on the families they concern: FULL without `eqsolve`, FULL without `absmodel` and `absquotient`, and FULL without `absquotient`. A second pass repeated the 464 points of FULL that finish within 5 s: the counters and verdicts were identical in all of them, and the time reported for those points is the smaller of the two.
+
+`verify.py` measures chosen points again and compares them with the record. 49 points covering the main claims were measured again (`verify.jsonl`): all verdicts and all counters are identical, including the two wrong acceptances of base, the rejections at the depth bound and at the resource bound, and the memory exhaustion of `div-trunc` with 32 branches. Of their times above 100 ms, the two measurements differ by a median factor of 1.3 and at most 2.1.
 
 **Fits.** `analyze.py` produces this file from `results.jsonl` and `README.head.md`, and writes the fits to `fits.json`. For each (family, configuration):
 - If the counter values lie *exactly* on a polynomial of degree at most 5 (relative error below 10⁻⁶, with at least two more points than coefficients), that polynomial is reported, possibly from some size on. Since the counters are deterministic, this test is much sharper than a regression. For example the count of base on `eqchain` is the cubic above for every `n` from 3 to 64, whereas a log-log regression on the same points gives an exponent of 1.3, because the cubic term is still small.
-- Otherwise two models with a constant term, `a + c·n^p` and `a + c·r^n`, are fitted in log space to the series and to its suffixes (at least five points). A model is retained when its root-mean-square error (`rms`, in units of natural log, so 0.05 is about 5%) is small and clearly below the other's, when the sizes span at least a factor of 4 for a polynomial, and when the values grow at least 8-fold for an exponential. An exponent above 5 is retained only on a close fit. Otherwise the result is "undecided" or "too few points".
+- Otherwise two models with a constant term, `a + c·n^p` and `a + c·r^n`, are fitted in log space to the series and to its suffixes (at least five points). A model is retained when its root-mean-square error (`rms`, in units of natural log, so 0.05 is about 5%) is small and clearly below the other's, when the sizes span at least a factor of 4 for a polynomial, and when the values grow at least 8-fold for an exponential. An exponent above 5 is retained only on a close fit. Otherwise the result is "undecided" or "too few points". A fitted base absorbs polynomial factors: `nest-diamond` is reported as `2.28^n` and is exactly `(n + 3)·2^n`.
 - The detailed tables also give the plain log-log and semi-log regressions over the upper half of the sizes (exponent and base, with R²), and the local exponents and the growth factors per unit of size over the last three intervals. A steady factor indicates an exponential; a factor that falls towards 1 indicates a polynomial.
-- Times are fitted the same way with looser thresholds. A series whose times all stay below 200 ms is not fitted: at that scale the noise of this machine is as large as the signal.
+- Times are fitted the same way with looser thresholds. A series whose times all stay below 200 ms is not fitted: at that scale the noise of this machine is as large as the signal. The fitted time laws of the summary are indicative at best; several contradict an exact counter law on short or fast series (for example `1.1^n` for MIN5 on `eqchain-conf`, `n^0.5` for base on `members-ext`) and reflect noise.
 
-**Reproducing.** `python3 run.py --timeout 20`, then `python3 run.py --timeout 120`, then `python3 analyze.py`. `run.py --configs FULL-eqsolve --only FAMILY,…` runs a leave-one-out configuration, and `run.py --pass 1` repeats the fast points. The runner skips the points already in `results.jsonl`.
+**Reproducing.** `python3 run.py --timeout 20`, then `python3 run.py --timeout 120`, then `python3 analyze.py`. `run.py --configs FULL-eqsolve --only FAMILY,…` runs a leave-one-out configuration, and `run.py --configs FULL --pass 1` repeats the fast points. The runner skips the points already in `results.jsonl`, so the commands can be interrupted and restarted. The whole sweep takes about three hours on a loaded machine, most of it in timeouts and memory exhaustions. `python3 verify.py FAMILY:N:CONFIG …` measures points again.
 
 **Files.**
 
@@ -100,20 +115,28 @@ Three leave-one-out configurations were also run on the families they concern: F
 | `analyze.py` | the fits; writes `README.md`, `tables.md` (the generated part of this file alone) and `fits.json` |
 | `README.head.md` | the hand-written part of this file |
 | `results.jsonl` | one record per run (the last record of a point wins; `pass` 1 is the repeated timing pass) |
+| `verify.py`, `verify.jsonl` | the points measured again, each compared with its record |
 | `fits.json` | every fit, with the residuals of both models, the local exponents and the growth factors |
 | `progs/` | the programs, named `FAMILY-N.hylo` |
 
-## What remains uncertain
+## Limits
 
-- **Times.** They were taken while four to eight other type-checking jobs ran on the same four cores (load average 6 to 9). The same point measured twice differs by up to a factor of two below 100 ms, and by tens of percent above. Exponents fitted on times are good to about ±0.5, and only where the times exceed a few hundred milliseconds. For example the time of FULL on `assoceq` gives local exponents between 1.6 and more than 3 over successive doublings; "about 2.5" summarizes them. The counters do not have this problem.
-- **Work that no counter sees.** Where the time grows faster than every counter (`assoceq`, `eqchain-goals`, `req-traits-deep`, `req-params-deep`), the time is the only evidence of the true cost. The controls show that the growth comes from the equalities, not from the size of the program, but not which part of the checker spends it.
-- **Short series.** Families that grow like `b^10` give two or three points before the timeout or the memory limit (`div-branch`, `div-trunc`, `cyc-clique`, `open-wide` under base and MIN5). Their growth in `b` is reported as "too few points"; the growth in the depth bound is measured instead by `div-depth` and `div-trunc-depth`. Likewise `open-wide` gives four points under FIX and FULL before the depth bound rejects the program, and the leave-one-out configurations give three or four points before the resource bound stops them.
-- **Nested overloaded calls.** The local exponent of `ovl-calls` rises from 7 to 12 while the factor per call stays near 2, which is the signature of an exponential, but 16 calls do not exclude a polynomial of high degree by a formal test.
-- **Programs.** The families are synthetic. They show how each behaviour scales, not how often it occurs in real code.
+What this experiment cannot show, and what remains uncertain in what it does show.
+
+- **How often any of this occurs.** The families are synthetic and each varies one parameter. They show how a behaviour scales, not whether real code reaches the sizes at which it matters. Many of the sizes are far beyond plausible programs (a thousand equality links, 256 requirements on one function).
+- **Where the time goes.** No profile was taken. Where the time grows faster than every counter (`assoceq`, `ctrl-assoc-reqs`, `eqchain-goals`, `req-*-deep`, `nest-diamond-deep`), the controls show which feature of the program the cost follows; they do not show which part of the checker spends it. That requirements on associated types make each match expensive, and that each equality goal re-examines every equality in scope, are readings of the curves, not observations of the code.
+- **Time exponents.** The times were taken while four to eight other type-checking jobs ran on the same four cores (load average 6 to 9), mostly once. Of the 464 points measured twice, the two times differ by a median factor of 1.4, by more than 2.2 for one point in five and by more than 2.7 for one in ten; among the 62 of them above 100 ms, the median is 1.4, one in ten exceeds 2.2 and the largest ratio is 3.1. Exponents fitted on times are good to about ±0.5 at best, and only over series that reach seconds. For `assoceq` under FULL the measurements allow any exponent between 2 and 3.
+- **Laws beyond the measured range.** An exact polynomial is a statement about the sizes that completed. Base and MIN5 stop early on the equality families (timeout or memory exhaustion between 16 and 64), so "cubic" and "quartic" for the existing checker are established over 3 to 64 links at most.
+- **Short series.** Families that grow like `b^10` give two or three points before the timeout or the memory limit (`div-branch`, `div-trunc`, `cyc-clique`, `open-wide` under base and MIN5); their growth in `b` is reported as "too few points", and the growth in the depth bound is measured instead by `div-depth` and `div-trunc-depth`. `open-wide` gives four points under FIX and FULL (five with the bounds lifted), and the leave-one-out configurations give three or four points before the resource bound stops them. For these the report gives growth factors, not a fitted law, and "exponential" means only that the factor per unit of size does not fall.
+- **Nested overloaded calls.** The factor per call stays near 2 and rises slightly from 10 to 16 calls, which a polynomial does not do, but the series is too short for the formal test to exclude a polynomial of high degree, and the arguments repeat with period 4, which may shape the curve.
+- **Valid programs beyond the depth bound.** With the default bound a derivation of 10 or more subgoals is rejected, so the growth of valid families beyond that size was measured with `HYLO_TC_MAXDEPTH` raised. Those curves say what the algorithm would cost if the bound were raised or replaced; with the default settings the user sees a rejection.
+- **One binary, one memory limit.** Everything was measured with `eq9-723cc0e6b0f8`. The reading of the depth bound and of the index fallback agrees with the resolution loop in `/home/user/hylo-impl`, which may be newer than that binary and contains later mechanisms (for example `eqindex`) that were not measured. "Out of memory" means the 2.5 GB limit of the wrapper.
+- **Which technique of FIX or FULL produces a gain.** Only `eqsolve`, `absmodel` and `absquotient` were removed one at a time, and only on the families they concern. The other differences between configurations are attributed by comparing base, FIX, MIN5 and FULL, which does not separate the flags inside each.
+- **The cost of a wrong answer.** On the ill-typed equality families base and MIN5 accept the program, so their counts there measure a search that ends in an invalid derivation.
 
 ## Summary: growth of the primary counter / of the time
 
-Each cell gives the growth of the counter, then that of the time, in the size `n` of the family. `n^k exact`: the counter is exactly a polynomial of degree `k` (given in the next table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<0.2 s`: the time stays too small to fit; `too few`: fewer than five points completed; `capped`: every point was cut short by the resource bound; `undecided`: neither model fits clearly better (`exp?`, `poly?`: what the last growth factors suggest).
+Each cell gives the growth of the counter, then that of the time, in the size `n` of the family. `n^k exact`: the counter is exactly a polynomial of degree `k` (given in the next table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<0.2 s`: the time stays too small to fit; `too few`: fewer than five points completed; `capped`: every point was cut short by the resource bound; `undecided`: neither model fits clearly better (`exp?`, `poly?`: what the last growth factors suggest). The counter cell is the reliable one. The time cell is fitted on single measurements taken under load: where it contradicts an exact counter law on a series that stays below a few seconds (for example `n^0.5` or `1.1^n` next to an exact polynomial), it reflects noise, not the checker.
 
 | Family | base | FIX | MIN5 | FULL |
 |---|---|---|---|---|
@@ -142,6 +165,7 @@ Each cell gives the growth of the counter, then that of the time, in the size `n
 | members-both | n^2 exact / n^1.4 | n^1 exact / n^1.5 | n^1 exact / n^2.0 | n^1 exact / <0.2 s |
 | condext | n^1 exact / n^2.2 | flat / n^1.1 | flat / <0.2 s | flat / <0.2 s |
 | ovl-calls | undecided (poly?) / undecided † | undecided / undecided † | undecided / undecided † | undecided (exp?) / 2.3^n † |
+| ovl-calls-odd | – / – | – / – | – / – | too few / too few |
 | ovl-width | n^2 exact / undecided | n^2 exact / <0.2 s | n^2 exact / <0.2 s | n^2 exact / <0.2 s |
 | ovl-stmts | n^1 exact / n^0.6 | n^1 exact / <0.2 s | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
 | ovr-args | 3.0^n / undecided | 3.0^n / undecided | 3.0^n / undecided | 3.0^n / 3.6^n |
@@ -166,6 +190,15 @@ Each cell gives the growth of the counter, then that of the time, in the size `n
 | req-params-deep | n^2 exact / n^2.7 | n^2 exact / n^2.9 | n^2 exact / n^3.3 | n^2 exact / n^2.6 |
 | req-eq-deep | too few / too few ‡ | n^1 exact / n^2.2 | too few / <0.2 s ‡ | n^1 exact / n^2.0 |
 | req-neg | n^2 exact / n^1.7 | n^2 exact / n^2.4 | n^1 exact / <0.2 s | n^1 exact / <0.2 s |
+| ctrl-assoc-reqs | n^2 exact / n^1.7 † | n^2 exact / n^2.0 † | n^2 exact / n^1.8 † | n^2 exact / n^2.3 † |
+| ctrl-assoc-uses | n^2 exact / n^2.2 | n^2 exact / n^2.7 | n^2 exact / <0.2 s | n^2 exact / <0.2 s |
+| eqgoals-fixedchain | too few / too few † | n^1 exact / n^1.1 | too few / too few † | n^1 exact / n^1.1 |
+| eqgoals-fixedgoals | too few / too few † | flat / n^1.4 | too few / too few † | flat / <0.2 s |
+| nest-diamond-deep | 2.0^n / 2.2^n † | 2.0^n / 2.3^n † | 2.2^n / 3.5^n † | 2.2^n / 3.4^n † |
+| open-wide-deep | – / – | 16.4^n / 25.7^n † | – / – | 20.0^n / undecided † |
+| bound-req | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ |
+| bound-nest | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ |
+| bound-diamond | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ | flat / <0.2 s ✗ |
 
 † the series ends with a timeout (or was stopped because a timeout was predicted); ‡ it ends with a crash; ✗ at some size the verdict differs from the intended one; [B] the resource bound of `budget` stopped a resolution, so the count is capped.
 
@@ -200,6 +233,7 @@ An expression in `n` without qualification is exact: every measured size lies on
 | members-both | appliesCalls | 2n^2 + 8n | n | n | n |
 | condext | appliesCalls | 16n + 64 | flat | flat | flat |
 | ovl-calls | forks | undecided: n^6.6 † | undecided: n^7.2 † | undecided: n^7.2 † | undecided: n^7.8 † |
+| ovl-calls-odd | forks | – | – | – | too few points (3); per-step factors 1.97, 2.12 |
 | ovl-width | forks | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) | n^2 + 7n (n ≥ 3) |
 | ovl-stmts | forks | 4n | 4n | 4n | 4n |
 | ovr-args | forks | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 | 3.02^n for n ≥ 2 |
@@ -224,6 +258,15 @@ An expression in `n` without qualification is exact: every measured size lies on
 | req-params-deep | matches | 1.5n^2 + 69.5n + 1 | 1.5n^2 + 69.5n + 1 | 1.5n^2 − 0.5n + 1 | 1.5n^2 − 0.5n + 1 |
 | req-eq-deep | matches | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 | too few points (3); per-step factors 4.11, 4.8 ‡ | n + 1 |
 | req-neg | matches | n^2 + 71n + 69 | n^2 + 71n + 69 | 2n − 1 | n |
+| ctrl-assoc-reqs | matches | 12n^2 + 446n + 363 † | 4n^2 + 144n + 71 † | 12n^2 + 432n + 1 † | 4n^2 + 142n + 1 † |
+| ctrl-assoc-uses | matches | 5n^2 + 368n + 363 | n^2 + 72n + 71 | n^2 + 2n + 1 | n^2 + 2n + 1 |
+| eqgoals-fixedchain | matches | too few points (3); per-step factors 1.09, 1.04 † | 2n | too few points (3); per-step factors 1.09, 1.04 † | 2n |
+| eqgoals-fixedgoals | matches | too few points (2); per-step factors 1.13 † | flat | too few points (2); per-step factors 1.13 † | flat |
+| nest-diamond-deep | matches | 2.04^n † | 2.04^n † | 2.23^n † | 2.23^n † |
+| open-wide-deep | matches | – | 16.44^n † | – | 20.00^n † |
+| bound-req | matches | flat | flat | flat | flat |
+| bound-nest | matches | flat | flat | flat | flat |
+| bound-diamond | matches | flat | flat | flat | flat |
 
 ## Summary: leave-one-out configurations
 
@@ -233,9 +276,9 @@ An expression in `n` without qualification is exact: every measured size lies on
 | eqchain-neg | FULL-eqsolve | capped / capped [B] | completed; fitted on n=3..1024 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | eqchain-neg | FULL-absmodel | n^1 exact / <0.2 s | completed |
 | eqchain-neg | FULL-absquotient | n^1 exact / <0.2 s | completed |
-| eqchain-goals | FULL-eqsolve | too few / too few † ✗ [B] | stopped before n=16: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..12 |
-| assoceq | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>20 s) at n=128; fitted on n=4..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..64 |
-| assocneg | FULL-eqsolve | capped / capped † [B] | stopped before n=128: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| eqchain-goals | FULL-eqsolve | too few / too few † ✗ [B] | stopped before n=32: predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..24 |
+| assoceq | FULL-eqsolve | capped / capped † ✗ [B] | timeout (>120 s) at n=256; fitted on n=4..192 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..192 |
+| assocneg | FULL-eqsolve | capped / capped † [B] | stopped before n=256: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..192 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | div-branch | FULL-absmodel | too few / too few † | timeout (>20 s) at n=3 |
 | div-branch-eq | FULL-absmodel | capped / capped † [B] | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 72 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 | div-branch-eq | FULL-absquotient | capped / capped † [B] | stopped before n=8: predicted timeout: 15 s at n=6, power-law extrapolation gives 79 s at n=8; fitted on n=3..6 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
@@ -418,7 +461,7 @@ Valid: a chain of n links and n equality goals T0 == Ti, one per link. Intended 
 | FIX | 2n (exact) | n^2.10 for n ≥ 64 (rms 0.17) | n^1.00 (R² 1.000) / 1.00^n (R² 0.780); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
 | MIN5 | n^4 + 100n^3 + 1,731n^2 + 4,200n − 15,475 (exact, n ≥ 3) | n^3.22 for n ≥ 5 (rms 0.13) | n^2.43 (R² 0.999) / 1.20^n (R² 0.970); last local exponents 2.4, 2.5, 2.6; last per-step factors 1.27, 1.19, 1.14 | – | timeout (>120 s) at n=32 |
 | FULL | 2n (exact) | n^2.36 for n ≥ 24 (rms 0.07) | n^1.00 (R² 1.000) / 1.00^n (R² 0.780); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
-| FULL-eqsolve | too few points (4); per-step factors 8.14, 9.09, 12.4 | too few points (4); per-step factors 3.88, 3.91, 14.2 | n^6.73 (R² 0.982) / 10.63^n (R² 0.999); last local exponents 3.0, 5.4, 8.8; last per-step factors 8.14, 9.09, 12.43 | – | stopped before n=16: predicted timeout: 17 s at n=6, power-law extrapolation gives 74 s at n=8; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..12 |
+| FULL-eqsolve | too few points (4); per-step factors 8.14, 9.09, 12.4 | too few points (4); per-step factors 3.88, 3.91, 14.2 | n^6.73 (R² 0.982) / 10.63^n (R² 0.999); last local exponents 3.0, 5.4, 8.8; last per-step factors 8.14, 9.09, 12.43 | – | stopped before n=32: predicted timeout: 115 s at n=24, power-law extrapolation gives 280 s at n=32; fitted on n=1..4 (accepted); resource bound (`budget`) hit from n=5; verdict differs from the intended one at n=5..24 |
 
 Leave-one-out configurations (same counter):
 
@@ -432,6 +475,8 @@ Leave-one-out configurations (same counter):
 | 6 | 599,816 ✗ [B] | 16,902 |
 | 8 | 474,835 ✗ [B] | 17,528 |
 | 12 | 1,615,871 ✗ [B] | 69,977 |
+| 16 | 1,100,179 ✗ [B] | 32,816 |
+| 24 | 3,635,419 ✗ [B] | 114,928 |
 
 ### assoceq
 
@@ -464,7 +509,7 @@ Valid: n equalities T{i}.X == T{i+1}.X; goal T0.X == T{n}.X. Intended verdict: a
 | FIX | 3n^2 + 145n + 145 (exact) | n^2.92 for n ≥ 48 (rms 0.11) | n^1.52 (R² 0.997) / 1.02^n (R² 0.938); last local exponents 1.7, 1.7, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
 | MIN5 | 15n^3 + 753n^2 + 8,770n + 26,630 (exact, n ≥ 3) | undecided: n^3.6 (rms 0.12) or 1.20^n (rms 0.08) | n^1.50 (R² 0.992) / 1.12^n (R² 0.987); last local exponents 1.4, 1.6, 1.8; last per-step factors 1.15, 1.12, 1.10 | – | crash (exit 134) at n=32 |
 | FULL | 3n^2 + 145n + 145 (exact) | n^2.45 for n ≥ 12 (rms 0.14) | n^1.52 (R² 0.997) / 1.02^n (R² 0.938); last local exponents 1.7, 1.7, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
-| FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.28 (R² 0.086) / 0.99^n (R² 0.032); last local exponents 1.9, -5.4, 1.5; last per-step factors 1.10, 0.82, 1.03 | – | timeout (>20 s) at n=128; fitted on n=4..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..64 |
+| FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^1.19 (R² 0.959) / 1.01^n (R² 0.871); last local exponents -0.5, 1.8, 1.8; last per-step factors 1.00, 1.01, 1.01 | – | timeout (>120 s) at n=256; fitted on n=4..192 (rejected, resource bound hit); resource bound (`budget`) hit from n=4; verdict differs from the intended one at n=4..192 |
 
 Leave-one-out configurations (same counter):
 
@@ -481,8 +526,13 @@ Leave-one-out configurations (same counter):
 | 16 | 51,870 ✗ [B] | 1,496 |
 | 24 | 111,662 ✗ [B] | 3,036 |
 | 32 | 23,550 ✗ [B] | 2,341 |
+| 48 | 42,574 ✗ [B] | 4,388 |
 | 64 | 66,718 ✗ [B] | 9,487 |
-| 128 | timeout | >20 s |
+| 96 | 130,366 ✗ [B] | 18,433 |
+| 128 | 111,735 ✗ [B] | 22,051 |
+| 160 | 165,143 ✗ [B] | 38,353 |
+| 192 | 228,791 ✗ [B] | 62,471 |
+| 256 | timeout | >120 s |
 
 ### assocneg
 
@@ -515,7 +565,7 @@ Ill-typed: like assoceq with the middle equality missing. Intended verdict: reje
 | FIX | 3n^2 + 141n + 2 (exact, n ≥ 3) | n^2.63 for n ≥ 6 (rms 0.20) | n^1.55 (R² 0.997) / 1.02^n (R² 0.935); last local exponents 1.7, 1.8, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | timeout (>120 s) at n=256 |
 | MIN5 | 15n^3 + 715n^2 + 7,404n + 18,871 (exact, n ≥ 5) | undecided: n^2.3 (rms 0.10) or 1.18^n (rms 0.15) | n^1.66 (R² 0.996) / 1.12^n (R² 0.989); last local exponents 1.4, 1.7, 1.9; last per-step factors 1.16, 1.13, 1.10 | – | crash (exit 134) at n=32; fitted on n=3..24 (accepted); verdict differs from the intended one at n=3..24 |
 | FULL | 3n^2 + 141n + 2 (exact, n ≥ 3) | n^2.63 for n ≥ 24 (rms 0.12) | n^1.61 (R² 0.998) / 1.02^n (R² 0.931); last local exponents 1.8, 1.8, 1.8; last per-step factors 1.01, 1.01, 1.01 | – | stopped before n=512: predicted timeout: 116 s at n=256, power-law extrapolation gives 813 s at n=512 |
-| FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^-0.21 (R² 0.050) / 1.00^n (R² 0.013); last local exponents 2.0, -5.3, 1.5; last per-step factors 1.10, 0.83, 1.03 | – | stopped before n=128: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..64 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
+| FULL-eqsolve | capped by the resource bound (not fitted) | capped by the resource bound (not fitted) | n^0.72 (R² 0.530) / 1.01^n (R² 0.623); last local exponents -0.5, 1.8, 1.8; last per-step factors 1.00, 1.01, 1.01 | – | stopped before n=256: predicted timeout: 11 s at n=64, power-law extrapolation gives 44 s at n=128; fitted on n=3..192 (rejected, resource bound hit); resource bound (`budget`) hit from n=3 |
 
 Leave-one-out configurations (same counter):
 
@@ -532,7 +582,12 @@ Leave-one-out configurations (same counter):
 | 16 | 46,741 [B] | 1,534 |
 | 24 | 103,453 [B] | 3,478 |
 | 32 | 22,698 [B] | 2,671 |
+| 48 | 41,482 [B] | 4,308 |
 | 64 | 65,386 [B] | 10,872 |
+| 96 | 128,554 [B] | 18,016 |
+| 128 | 110,619 [B] | 21,311 |
+| 160 | 163,803 [B] | 44,970 |
+| 192 | 227,227 [B] | 68,364 |
 
 ### ctrl-goals
 
@@ -1038,6 +1093,23 @@ Valid: one expression with k calls, each choosing among 4 overloads by argument 
 | FIX | undecided: n^7.2 (rms 0.12) or 2.41^n (rms 0.39) | undecided: n^7.6 (rms 0.17) or 2.15^n (rms 0.14) | n^7.54 (R² 0.997) / 2.10^n (R² 0.997); last local exponents 7.1, 7.4, 9.2; last per-step factors 2.10, 1.97, 2.03 | `summon.matches`: 1.95^n (rms 0.19) | timeout (>120 s) at n=16 |
 | MIN5 | undecided: n^7.2 (rms 0.12) or 2.41^n (rms 0.39) | undecided: n^7.1 (rms 0.15) or 2.22^n (rms 0.36) | n^7.54 (R² 0.997) / 2.10^n (R² 0.997); last local exponents 7.1, 7.4, 9.2; last per-step factors 2.10, 1.97, 2.03 | `summon.matches`: 2.20^n (rms 0.13) | timeout (>120 s) at n=16 |
 | FULL | undecided: n^7.8 (rms 0.22) or 2.29^n (rms 0.36); leaning exponential: the per-step factor stays near 2.2 while the local exponent rises | 2.32^n (rms 0.17) | n^8.10 (R² 0.991) / 2.10^n (R² 0.998); last local exponents 7.4, 9.2, 11.8; last per-step factors 1.97, 2.03, 2.20 | – | stopped before n=20: predicted timeout: 113 s at n=16, power-law extrapolation gives 2426 s at n=20 |
+
+### ovl-calls-odd
+
+Valid: one expression with k calls, each choosing among 4 overloads by argument type. Intended verdict: accepted. Primary counter: `solver.forks`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 11 |  |  |  |  |  |  | 30,632 | 2,077 |
+| 13 |  |  |  |  |  |  | 118,924 | 10,461 |
+| 15 |  |  |  |  |  |  | 535,252 | 59,370 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | – | – | – | – | completed |
+| FIX | – | – | – | – | completed |
+| MIN5 | – | – | – | – | completed |
+| FULL | too few points (3); per-step factors 1.97, 2.12 | too few points (3); per-step factors 2.24, 2.38 | n^9.19 (R² 0.994) / 2.04^n (R² 0.999); last local exponents 8.1, 10.5; last per-step factors 1.97, 2.12 | – | completed |
 
 ### ovl-width
 
@@ -1620,7 +1692,7 @@ Valid: f<T1..Tn, U1..Un where Ti == Ui> calls g with the same n equality require
 | 2 | 296 | 49.1 | 3 | 4.9 | 296 | 2.8 | 3 | 0.9 |
 | 4 | 6,818 | 241 | 5 | 21.9 | 6,818 | 155 | 5 | 0.9 |
 | 8 | crash (out of memory) | 45 s wall | 9 | 15.7 | crash (out of memory) | 40 s wall | 9 | 1.4 |
-| 16 | crash (out of memory) | 43 s wall | 17 | 16.1 | not run |  | 17 | 6.6 |
+| 16 | crash (out of memory) | 43 s wall | 17 | 16.1 | crash (out of memory) | 28 s wall | 17 | 6.6 |
 | 32 | not run |  | 33 | 26.8 | not run |  | 33 | 15.2 |
 | 64 | not run |  | 65 | 52.9 | not run |  | 65 | 27.2 |
 | 128 | not run |  | 129 | 172 | not run |  | 129 | 95.8 |
@@ -1681,4 +1753,197 @@ Leave-one-out configurations (same counter):
 | 32 | 63 | 9.5 |
 | 64 | 127 | 7.4 |
 | 128 | 255 | 22.6 |
+
+### ctrl-assoc-reqs
+
+Valid control for assoceq: the same 2n mentions of T{i}.X in the where clause, as conformance requirements (T{i}.X is Q, T{i+1}.X is R) instead of equalities. Intended verdict: accepted. Primary counter: `summon.matches`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 821 | 127 | 219 | 43.5 | 445 | 48.5 | 147 | 15.5 |
+| 2 | 1,303 | 142 | 375 | 37.1 | 913 | 99.2 | 301 | 42.9 |
+| 4 | 2,339 | 273 | 711 | 88.9 | 1,921 | 122 | 633 | 76.9 |
+| 8 | 4,699 | 541 | 1,479 | 145 | 4,225 | 358 | 1,393 | 141 |
+| 16 | 10,571 | 1,497 | 3,399 | 523 | 9,985 | 943 | 3,297 | 362 |
+| 32 | 26,923 | 4,162 | 8,775 | 1,360 | 26,113 | 2,884 | 8,641 | 1,243 |
+| 64 | 78,059 | 17,068 | 25,671 | 6,242 | 76,801 | 11,632 | 25,473 | 5,840 |
+| 128 | not run |  | timeout | >30 s | timeout | >30 s | 83,713 | 33,555 |
+| 192 | not run |  | not run |  | not run |  | 174,721 | 91,462 |
+| 256 | not run |  | not run |  | not run |  | timeout | >120 s |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | 12n^2 + 446n + 363 (exact) | n^1.72 (rms 0.08) | n^1.35 (R² 0.996) / 1.05^n (R² 0.949); last local exponents 1.2, 1.3, 1.5; last per-step factors 1.11, 1.06, 1.03 | – | stopped before n=128: predicted timeout: 17 s at n=64, power-law extrapolation gives 70 s at n=128 |
+| FIX | 4n^2 + 144n + 71 (exact) | n^1.97 for n ≥ 4 (rms 0.11) | n^1.37 (R² 0.997) / 1.05^n (R² 0.948); last local exponents 1.2, 1.4, 1.5; last per-step factors 1.11, 1.06, 1.03 | – | timeout (>30 s) at n=128 |
+| MIN5 | 12n^2 + 432n + 1 (exact) | n^1.84 for n ≥ 2 (rms 0.09) | n^1.39 (R² 0.997) / 1.05^n (R² 0.945); last local exponents 1.2, 1.4, 1.6; last per-step factors 1.11, 1.06, 1.03 | – | timeout (>30 s) at n=128 |
+| FULL | 4n^2 + 142n + 1 (exact) | n^2.33 for n ≥ 4 (rms 0.09) | n^1.60 (R² 0.998) / 1.02^n (R² 0.931); last local exponents 1.6, 1.7, 1.8; last per-step factors 1.03, 1.02, 1.01 | – | timeout (>120 s) at n=256 |
+
+### ctrl-assoc-uses
+
+Valid control for assoceq: the same 2n mentions of T{i}.X, as parameter types; no equality. Intended verdict: accepted. Primary counter: `summon.matches`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 736 | 29.9 | 144 | 12.6 | 4 | 0.9 | 4 | 2.4 |
+| 2 | 1,119 | 47.8 | 219 | 27.1 | 9 | 0.8 | 9 | 6.3 |
+| 4 | 1,915 | 41.7 | 375 | 12.7 | 25 | 1.4 | 25 | 2.4 |
+| 8 | 3,627 | 58.7 | 711 | 27.6 | 81 | 1.4 | 81 | 7.0 |
+| 16 | 7,531 | 111 | 1,479 | 29.8 | 289 | 2.5 | 289 | 3.6 |
+| 32 | 17,259 | 251 | 3,399 | 96.8 | 1,089 | 4.7 | 1,089 | 6.1 |
+| 64 | 44,395 | 951 | 8,775 | 491 | 4,225 | 21.9 | 4,225 | 12.4 |
+| 128 | 129,387 | 4,159 | 25,671 | 2,419 | 16,641 | 41.7 | 16,641 | 50.0 |
+| 192 | 255,339 | 10,527 | 50,759 | 8,389 | 37,249 | 113 | 37,249 | 138 |
+| 256 | 422,251 | 24,234 | 84,039 | 17,012 | 66,049 | 186 | 66,049 | 154 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | 5n^2 + 368n + 363 (exact) | n^2.20 for n ≥ 2 (rms 0.11) | n^1.54 (R² 0.998) / 1.01^n (R² 0.950); last local exponents 1.5, 1.7, 1.7; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+| FIX | n^2 + 72n + 71 (exact) | n^2.65 for n ≥ 8 (rms 0.09) | n^1.54 (R² 0.998) / 1.01^n (R² 0.950); last local exponents 1.5, 1.7, 1.8; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+| MIN5 | n^2 + 2n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.97 (R² 1.000) / 1.02^n (R² 0.930); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+| FULL | n^2 + 2n + 1 (exact) | below 200 ms throughout (not fitted) | n^1.97 (R² 1.000) / 1.02^n (R² 0.930); last local exponents 2.0, 2.0, 2.0; last per-step factors 1.02, 1.01, 1.01 | – | completed |
+
+### eqgoals-fixedchain
+
+Valid: n equality goals over a chain of 8 links (eqchain-goals with the number of facts fixed). Intended verdict: accepted. Primary counter: `summon.matches`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 8 | 184,205 | 4,600 | 16 | 12.9 | 184,205 | 4,770 | 16 | 2.4 |
+| 16 | 368,410 | 10,171 | 32 | 14.5 | 368,410 | 10,394 | 32 | 3.5 |
+| 32 | 736,820 | 24,966 | 64 | 15.7 | 736,820 | 18,058 | 64 | 9.7 |
+| 64 | not run |  | 128 | 25.6 | timeout | >30 s | 128 | 11.4 |
+| 128 | not run |  | 256 | 40.8 | not run |  | 256 | 26.4 |
+| 256 | not run |  | 512 | 63.0 | not run |  | 512 | 66.7 |
+| 512 | not run |  | 1,024 | 164 | not run |  | 1,024 | 125 |
+| 1024 | not run |  | 2,048 | 249 | not run |  | 2,048 | 243 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | too few points (3); per-step factors 1.09, 1.04 | too few points (3); per-step factors 1.1, 1.06 | n^1.00 (R² 1.000) / 1.06^n (R² 0.964); last local exponents 1.0, 1.0; last per-step factors 1.09, 1.04 | – | stopped before n=64: predicted timeout: 25 s at n=32, power-law extrapolation gives 61 s at n=64 |
+| FIX | 2n (exact) | n^1.07 (rms 0.10) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+| MIN5 | too few points (3); per-step factors 1.09, 1.04 | too few points (3); per-step factors 1.1, 1.04 | n^1.00 (R² 1.000) / 1.06^n (R² 0.964); last local exponents 1.0, 1.0; last per-step factors 1.09, 1.04 | – | timeout (>30 s) at n=64 |
+| FULL | 2n (exact) | n^1.11 for n ≥ 64 (rms 0.09) | n^1.00 (R² 1.000) / 1.00^n (R² 0.920); last local exponents 1.0, 1.0, 1.0; last per-step factors 1.01, 1.00, 1.00 | – | completed |
+
+### eqgoals-fixedgoals
+
+Valid: 8 equality goals over a chain of n links (eqchain-goals with the number of goals fixed). Intended verdict: accepted. Primary counter: `summon.matches`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 8 | 184,205 | 5,726 | 16 | 17.6 | 184,205 | 3,911 | 16 | 2.4 |
+| 16 | 485,930 | 16,043 | 16 | 23.1 | 485,930 | 11,910 | 16 | 8.7 |
+| 32 | timeout | >30 s | 16 | 20.8 | timeout | >30 s | 16 | 4.0 |
+| 64 | not run |  | 16 | 22.4 | not run |  | 16 | 7.7 |
+| 128 | not run |  | 16 | 27.0 | not run |  | 16 | 37.7 |
+| 256 | not run |  | 16 | 66.2 | not run |  | 16 | 25.8 |
+| 512 | not run |  | 16 | 88.3 | not run |  | 16 | 68.4 |
+| 1024 | not run |  | 16 | 255 | not run |  | 16 | 167 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | too few points (2); per-step factors 1.13 | too few points (2); per-step factors 1.14 | n^1.40 (R² 1.000) / 1.13^n (R² 1.000); last local exponents 1.4; last per-step factors 1.13 | – | timeout (>30 s) at n=32 |
+| FIX | flat | n^1.41 (rms 0.14) | – | – | completed |
+| MIN5 | too few points (2); per-step factors 1.13 | too few points (2); per-step factors 1.15 | n^1.40 (R² 1.000) / 1.13^n (R² 1.000); last local exponents 1.4; last per-step factors 1.13 | – | timeout (>30 s) at n=32 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed |
+
+### nest-diamond-deep
+
+Valid: S<T> is P and S<T> is Q each need T is P and T is Q (2^d subgoals without sharing). Intended verdict: accepted. Primary counter: `summon.matches`. Environment: `HYLO_TC_MAXDEPTH=1000000`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 2 | 524 | 26.3 | 524 | 26.6 | 20 | 1.5 | 20 | 6.5 |
+| 4 | 2,344 | 74.7 | 2,344 | 64.8 | 112 | 2.0 | 112 | 8.2 |
+| 6 | 9,720 | 292 | 9,720 | 253 | 576 | 18.7 | 576 | 27.6 |
+| 8 | 39,608 | 1,066 | 39,608 | 1,090 | 2,816 | 153 | 2,816 | 178 |
+| 9 | 79,800 | 2,264 | 79,800 | 2,787 | 6,144 | 477 | 6,144 | 562 |
+| 10 | 160,696 | 5,281 | 160,696 | 6,002 | 13,312 | 1,579 | 13,312 | 2,248 |
+| 11 | 323,512 | 16,683 | 323,512 | 17,775 | 28,672 | 6,353 | 28,672 | 6,574 |
+| 12 | timeout | >30 s | timeout | >30 s | 61,440 | 28,208 | 61,440 | 28,821 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | 2.04^n (rms 0.03) | 2.21^n (rms 0.15) | n^6.59 (R² 0.998) / 2.01^n (R² 1.000); last local exponents 5.9, 6.6, 7.3; last per-step factors 2.01, 2.01, 2.01 | – | timeout (>30 s) at n=12 |
+| FIX | 2.04^n (rms 0.03) | 2.34^n (rms 0.09) | n^6.59 (R² 0.998) / 2.01^n (R² 1.000); last local exponents 5.9, 6.6, 7.3; last per-step factors 2.01, 2.01, 2.01 | – | timeout (>30 s) at n=12 |
+| MIN5 | 2.23^n (rms 0.05) | 3.48^n (rms 0.17) | n^7.99 (R² 0.998) / 2.15^n (R² 1.000); last local exponents 7.3, 8.1, 8.8; last per-step factors 2.17, 2.15, 2.14 | – | stopped before n=13: predicted timeout: 28 s at n=12, power-law extrapolation gives 111 s at n=13 |
+| FULL | 2.23^n (rms 0.05) | 3.39^n (rms 0.11) | n^7.99 (R² 0.998) / 2.15^n (R² 1.000); last local exponents 7.3, 8.1, 8.8; last per-step factors 2.17, 2.15, 2.14 | – | stopped before n=13: predicted timeout: 29 s at n=12, power-law extrapolation gives 112 s at n=13 |
+
+### open-wide-deep
+
+Valid: pick has n inferred arguments U{i}, each with U{i} is Q and T == U{i}. Intended verdict: accepted. Primary counter: `summon.matches`. Environment: `HYLO_TC_MAXDEPTH=1000`, `HYLO_TC_BUDGET=1000000000`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 1 |  |  | 73 | 17.5 |  |  | 3 | 8.2 |
+| 2 |  |  | 219 | 34.6 |  |  | 79 | 3.8 |
+| 3 |  |  | 1,911 | 48.8 |  |  | 1,351 | 21.6 |
+| 4 |  |  | 28,201 | 493 |  |  | 24,281 | 232 |
+| 5 |  |  | 589,995 | 14,809 |  |  | 547,435 | 8,301 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | – | – | – | – | completed |
+| FIX | 16.44^n (rms 0.11) | 25.68^n (rms 0.24) | n^11.13 (R² 0.988) / 17.57^n (R² 0.999); last local exponents 5.3, 9.4, 13.6; last per-step factors 8.73, 14.76, 20.92 | – | stopped before n=6: predicted timeout: 15 s at n=5, power-law extrapolation gives 239 s at n=6 |
+| MIN5 | – | – | – | – | completed |
+| FULL | 20.00^n (rms 0.10) | undecided: n^12.9 (rms 0.44) or 26.00^n (rms 0.35) | n^11.67 (R² 0.991) / 20.13^n (R² 1.000); last local exponents 7.0, 10.0, 14.0; last per-step factors 17.10, 17.97, 22.55 | – | stopped before n=6: predicted timeout: 8 s at n=5, power-law extrapolation gives 154 s at n=6 |
+
+### bound-req
+
+Valid: req-traits with 10 requirements; the size is the depth bound HYLO_TC_MAXDEPTH = d. Intended verdict: accepted. Primary counter: `summon.matches`. Environment: `HYLO_TC_MAXDEPTH=n`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 8 | 1,403 ✗(depth) | 76.4 | 1,403 ✗(depth) | 60.6 | 60 ✗(depth) | 3.7 | 60 ✗(depth) | 4.7 |
+| 9 | 1,485 ✗(depth) | 96.0 | 1,485 ✗(depth) | 57.3 | 63 ✗(depth) | 11.4 | 63 ✗(depth) | 8.2 |
+| 10 | 1,566 ✗(depth) | 90.5 | 1,566 ✗(depth) | 79.8 | 65 ✗(depth) | 3.9 | 65 ✗(depth) | 9.1 |
+| 11 | 846 | 96.6 | 846 | 51.6 | 56 | 7.2 | 56 | 8.7 |
+| 12 | 846 | 58.5 | 846 | 38.6 | 56 | 7.0 | 56 | 7.8 |
+| 16 | 846 | 72.1 | 846 | 43.8 | 56 | 3.4 | 56 | 3.9 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| FIX | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+
+### bound-nest
+
+Valid: nest at nesting depth 9 (a derivation of 10 subgoals); the size is the depth bound HYLO_TC_MAXDEPTH = d. Intended verdict: accepted. Primary counter: `summon.matches`. Environment: `HYLO_TC_MAXDEPTH=n`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 8 | 1,081 ✗(depth) | 35.6 | 1,081 ✗(depth) | 20.3 | 31 ✗(depth) | 1.5 | 31 ✗(depth) | 2.8 |
+| 9 | 1,225 ✗(depth) | 26.6 | 1,225 ✗(depth) | 21.9 | 35 ✗(depth) | 1.5 | 35 ✗(depth) | 2.8 |
+| 10 | 1,369 ✗(depth) | 34.4 | 1,369 ✗(depth) | 22.8 | 39 ✗(depth) | 1.7 | 39 ✗(depth) | 3.2 |
+| 11 | 721 | 27.8 | 721 | 22.0 | 21 | 0.9 | 21 | 2.6 |
+| 12 | 721 | 36.2 | 721 | 22.4 | 21 | 5.2 | 21 | 2.5 |
+| 16 | 721 | 25.4 | 721 | 15.3 | 21 | 1.0 | 21 | 2.3 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| FIX | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=11..16 (accepted); verdict differs from the intended one at n=8..10 |
+
+### bound-diamond
+
+Valid: nest-diamond at nesting depth 3 (a derivation of 15 subgoals); the size is the depth bound HYLO_TC_MAXDEPTH = d. Intended verdict: accepted. Primary counter: `summon.matches`. Environment: `HYLO_TC_MAXDEPTH=n`.
+
+| n | base count | base ms | FIX count | FIX ms | MIN5 count | MIN5 ms | FULL count | FULL ms |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 12 | 1,734 ✗(depth) | 60.1 | 1,734 ✗(depth) | 48.5 | 78 ✗(depth) | 2.0 | 78 ✗(depth) | 3.4 |
+| 14 | 2,032 ✗(depth) | 56.5 | 2,032 ✗(depth) | 45.2 | 88 ✗(depth) | 2.0 | 88 ✗(depth) | 3.5 |
+| 15 | 2,181 ✗(depth) | 68.5 | 2,181 ✗(depth) | 44.0 | 93 ✗(depth) | 2.4 | 93 ✗(depth) | 3.8 |
+| 16 | 1,128 | 37.1 | 1,128 | 30.0 | 48 | 1.3 | 48 | 2.5 |
+| 17 | 1,128 | 43.9 | 1,128 | 30.5 | 48 | 2.8 | 48 | 2.6 |
+| 20 | 1,128 | 43.4 | 1,128 | 34.9 | 48 | 5.5 | 48 | 2.5 |
+
+| Configuration | Counter growth | Time growth | Counter: log-log fit / semi-log fit (upper half of the sizes), local exponents, per-step factors | Fastest other counter | Ends with |
+|---|---|---|---|---|---|
+| base | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=16..20 (accepted); verdict differs from the intended one at n=12..15 |
+| FIX | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=16..20 (accepted); verdict differs from the intended one at n=12..15 |
+| MIN5 | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=16..20 (accepted); verdict differs from the intended one at n=12..15 |
+| FULL | flat | below 200 ms throughout (not fitted) | – | – | completed; fitted on n=16..20 (accepted); verdict differs from the intended one at n=12..15 |
 

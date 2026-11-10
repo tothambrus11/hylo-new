@@ -1,0 +1,9 @@
+public fun main() { A().deep() }
+fun g<U where U is P, U.X is Q>(u: U) { u.deep() }
+extension <T where T is P, T.X is Q> T { fun deep() {} }
+given A is P { type X = B }
+given B is Q {}
+struct B { public memberwise init }
+struct A { public memberwise init }
+trait Q {}
+trait P { type X }

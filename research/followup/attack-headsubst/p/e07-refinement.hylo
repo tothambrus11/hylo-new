@@ -1,0 +1,28 @@
+// Tests: the requirement of the callee is satisfied through a refinement.
+// Correct verdict: rejected (2 errors: `wantS1(pick(A()))`, and `take(u, pick(v))` in `g`);
+// the calls of `pickR` are valid.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait R refines P {}
+given A is R {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun pickR<T where T is R>(t: T) -> T.X { t.get() }
+fun q() {
+  wantS0(pick(A()))
+  wantS0(pickR(A()))
+  wantS1(pick(A()))
+}
+fun g<U, V where U is R, V is R>(u: U, v: V) {
+  take(u, pick(u))
+  take(u, pickR(u))
+  take(u, pick(v))
+}

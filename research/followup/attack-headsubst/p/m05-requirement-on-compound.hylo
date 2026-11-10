@@ -1,0 +1,19 @@
+// Tests: the requirement of the callee is on a parameter that an equality makes a compound
+// type (`W == Box<T>, W is P`).
+// Correct verdict: rejected (1 error, `wantS1`): `Box<A>.X` is `A` with this conformance.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given <T> => Box<T> is P { type X = T
+  fun get() -> T { self.v }
+  fun put(x: T) {} }
+fun wantA(x: A) {}
+fun inner<T, W where W == Box<T>, W is P>(w: W, t: T) -> W.X { w.get() }
+fun q(b: Box<A>) {
+  wantA(inner(b, A()))
+  wantS1(inner(b, A()))
+}

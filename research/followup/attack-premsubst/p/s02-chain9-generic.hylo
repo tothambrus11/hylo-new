@@ -1,0 +1,6 @@
+// A chain of nine projections, generic caller with the same clause. Well typed; 11 steps, over
+// the size bound of 10 (expected: rejected with summon.depthExhausted, like any 11-step clause).
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is P, T.X.X is P, T.X.X.X is P, T.X.X.X.X is P, T.X.X.X.X.X is P, T.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X.X.X is Q>() {}
+fun g<U where U is P, U.X is P, U.X.X is P, U.X.X.X is P, U.X.X.X.X is P, U.X.X.X.X.X is P, U.X.X.X.X.X.X is P, U.X.X.X.X.X.X.X is P, U.X.X.X.X.X.X.X.X is P, U.X.X.X.X.X.X.X.X.X is Q>() { f<U>() }

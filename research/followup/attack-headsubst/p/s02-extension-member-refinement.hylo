@@ -1,0 +1,10 @@
+// Tests: members of an extension of the types conforming to `P`, used on two unrelated type
+// parameters that conform through a refinement.
+// Correct verdict: rejected; `v.one()` is a `V.X` and `u.two(_)` expects a `U.X`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+trait R refines P {}
+extension <T where T is P> T {
+  fun one() -> T.X { self.get() }
+  fun two(x: T.X) { self.put(x) }
+}
+fun g<U, V where U is R, V is R>(u: U, v: V) { u.two(v.one()) }

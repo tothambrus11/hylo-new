@@ -1,0 +1,19 @@
+// j04 for a METHOD: m calls itself at the same T inside a block that declares a nearer
+// conformance `T is P` (X = C); C is NOT Q. Well typed through m's own requirements. The
+// elaboration must pass m's requirement for `T is P`; passing the local conformance together with
+// m's `T.X is Q` runs the `use` of another type on a C (check with trace).
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct C { public memberwise init }
+struct K {
+  public memberwise init
+  fun m<T where T is P, T.X is Q>(t: T) {
+    t.get().use()
+    if true {
+      given T is P { type X = C
+        fun get() -> C { C() } }
+      self.m<T>(t)
+    }
+  }
+}

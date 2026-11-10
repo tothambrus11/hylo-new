@@ -1,0 +1,5 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T5 is P, T6 is P, T7 is P, T8 is P, T9 is P, T10 is P, T11 is P, T12 is P, T13 is P, T14 is P, T15 is P, T16 is P>(a0: T0.X, b0: T1.X, a1: T1.X, b1: T2.X, a2: T2.X, b2: T3.X, a3: T3.X, b3: T4.X, a4: T4.X, b4: T5.X, a5: T5.X, b5: T6.X, a6: T6.X, b6: T7.X, a7: T7.X, b7: T8.X, a8: T8.X, b8: T9.X, a9: T9.X, b9: T10.X, a10: T10.X, b10: T11.X, a11: T11.X, b11: T12.X, a12: T12.X, b12: T13.X, a13: T13.X, b13: T14.X, a14: T14.X, b14: T15.X, a15: T15.X, b15: T16.X, x: T16.X) {
+  check<T16.X>(x)
+}

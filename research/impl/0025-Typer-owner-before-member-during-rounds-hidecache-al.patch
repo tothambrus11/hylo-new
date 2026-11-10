@@ -1,0 +1,120 @@
+From 784fe85e5bb1d646f6d547b3ef8cef2635e2d111 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 17:31:14 +0000
+Subject: [PATCH 25/27] Typer: owner before member during rounds; hidecache;
+ aliasargs
+
+sigrounds: a member selected through the table is typed after the signature of
+the extension or conformance that declares it.
+hidecache: the memoized result of a resolution is not used while a given is
+deliberately hidden (a conformance satisfied the trait it refines with itself).
+aliasargs: a member selected through an alias of an instance of a generic type
+is instantiated with the type arguments of the instance, including the aliasee
+of a member alias.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 34 +++++++++++++++++++---
+ Sources/FrontEnd/Typer/TyperCounters.swift | 12 ++++++++
+ 2 files changed, 42 insertions(+), 4 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 0b427da..bbab1e6 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -3983,6 +3983,12 @@ public struct Typer {
+ 
+     // The witness refers to a given declaration?
+     else if let c = program.flatCast(witness.declaration, to: ConformanceDeclaration.self) {
++      // Fix (`sigrounds`): a member is typed after the signature of the conformance that
++      // declares it, whichever is asked for first.
++      if settlingSignatures && (c.module == module) && !declarationsOnStack.contains(.init(c)) {
++        _ = declaredType(of: c)
++      }
++
+       // Read the associated type definition.
+       if let i = implementation(of: requirement, in: c) {
+         let t = declaredType(of: i)
+@@ -4386,7 +4392,11 @@ public struct Typer {
+   ) -> [SummonResult] {
+     TyperCounters.bump("summon.calls")
+     // Did we already compute the result?
+-    if let table = cache.scopeToSummoned[scopeOfUse], let result = table[t] {
++    // Fix (`hidecache`): not if a given is hidden now; the memoized result was computed with
++    // every given visible.
++    if !(TyperExperiments.hidecache && hasImplicitOnStack()),
++      let table = cache.scopeToSummoned[scopeOfUse], let result = table[t]
++    {
+       TyperCounters.bump("summon.cacheHits")
+       return result
+     }
+@@ -6445,8 +6455,16 @@ public struct Typer {
+       if !resolvableWithQualification(m) { continue }
+       if !isSelectable(m, statically: selectionIsStatic) { continue }
+       var member = typeOfName(referringTo: m, statically: selectionIsStatic)
+-      if let a = program.types[receiver] as? TypeApplication {
+-        member = program.types.substitute(a.arguments, in: member)
++      let r = TyperExperiments.aliasargs ? program.types.dealiased(receiver) : receiver
++      if let a = program.types[r] as? TypeApplication {
++        if TyperExperiments.aliasargs {
++          // A member that is a type alias mentions the parameters of the type in its aliasee.
++          let s = Dictionary(
++            uniqueKeysWithValues: a.arguments.elements.map({ (k, v) in (k.erased, v) }))
++          member = program.types.substituteThroughAliases(s, in: member)
++        } else {
++          member = program.types.substitute(a.arguments, in: member)
++        }
+       }
+       member = program.types.introduce(context, into: member)
+       candidates.append(
+@@ -6542,6 +6560,12 @@ public struct Typer {
+         let w = program.types.reify(
+           a.witness, applying: a.substitutions, withVariables: .substitutedByError)
+ 
++        // Fix (`sigrounds`): a member is typed after the signature of the extension that
++        // declares it, whichever is asked for first, as when the extension is entered first.
++        if settlingSignatures && (e.module == module) && !declarationsOnStack.contains(.init(e)) {
++          _ = extendeeType(e)
++        }
++
+         for m in declarations(lexicallyIn: .init(node: e))[n.identifier] ?? [] {
+           if !resolvableWithQualification(m) { continue }
+           if !isSelectable(m, statically: selectionIsStatic) { continue }
+@@ -6552,7 +6576,9 @@ public struct Typer {
+           if TyperExperiments.headsubst {
+             // Fix (`headsubst`): the member is also written in terms of the requirements of the
+             // extension; substitute the witnesses found for them.
+-            member = instantiated(member, declaredIn: .init(e), through: w, throughAliases: false)
++            member = instantiated(
++              member, declaredIn: .init(e), through: w,
++              throughAliases: TyperExperiments.aliasargs)
+           } else if let arguments = w.typeArguments(appliedTo: e) {
+             member = program.types.substitute(arguments, in: member)
+           }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index a3d6f91..3a989b4 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -164,6 +164,18 @@ public enum TyperExperiments {
+   /// after it, with the witness found for it substituted into its type.
+   nonisolated(unsafe) public static var premsubst: Bool = enabled.contains("premsubst")
+ 
++  /// SEMANTIC FIX: a member selected on a value whose type is an alias of an instance of a
++  /// generic type is instantiated with the type arguments of that instance. Without it the
++  /// member keeps the type's own parameter, and `a.f(b.g())` is accepted for `a: A<Void>` and
++  /// `b: A<K>` written through aliases.
++  nonisolated(unsafe) public static var aliasargs: Bool = enabled.contains("aliasargs")
++
++  /// SEMANTIC FIX: the memoized result of an implicit resolution is not used while a given is
++  /// deliberately hidden (a conformance being checked against the traits it refines, a
++  /// requirement of a where clause being typed). Without it a conformance satisfies the trait it
++  /// refines with itself when a member has resolved that goal before.
++  nonisolated(unsafe) public static var hidecache: Bool = enabled.contains("hidecache")
++
+   /// SEMANTIC FIX (with `premsubst`): a requirement that another requirement mentions is proved
+   /// by the witness that resolving it alone gives; if that is ambiguous, the resolution fails.
+   /// Without it, the witness is chosen among all its derivations by whether the requirements that
+-- 
+2.43.0
+

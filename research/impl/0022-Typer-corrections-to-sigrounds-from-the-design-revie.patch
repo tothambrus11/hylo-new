@@ -1,0 +1,430 @@
+From 2734c9356318e0325c341856246aab955bacffc9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 16:46:56 +0000
+Subject: [PATCH 22/27] Typer: corrections to sigrounds from the design review;
+ heightbound experiment
+
+sigrounds: only declarations whose signature is a type expression are in the
+table (not context parameters, not givens whose type is inferred); the
+signature of an enclosing declaration with a where clause is computed before a
+declaration inside it; the given index and the abstract model are unavailable
+during the rounds; the self-check runs every round in both orders.
+
+heightbound: implicit resolution bounds the nesting of premises instead of the
+number of givens used, with a work budget past the former bound.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 206 ++++++++++++++++++---
+ Sources/FrontEnd/Typer/TyperCounters.swift |  12 ++
+ 2 files changed, 195 insertions(+), 23 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 7e16d92..19cc652 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -78,6 +78,13 @@ public struct Typer {
+   /// no entry in `signatureTable`.
+   private var hiddenCandidateSeen = false
+ 
++  /// `true` iff the resolution in progress dropped a premise because of its level (`heightbound`).
++  private var heightExhausted = false
++
++  /// The inferred givens that a resolution of the current round ignored because they have no type
++  /// yet (`sigrounds`).
++  private var skippedInferredGivens: Set<DeclarationIdentity> = []
++
+   /// `true` iff `pendingGivenChecks` are being processed.
+   private var checkingPendingGivens = false
+ 
+@@ -127,18 +134,82 @@ public struct Typer {
+ 
+   /// Returns `true` iff `d` is an extension, a conformance or a given binding of the module being
+   /// typed, i.e., a declaration that lookups and resolutions select by its signature.
++  ///
++  /// A given binding is such a declaration only if its type is written: a context parameter is
++  /// typed by the where clause that introduces it, and a given whose type is inferred from its
++  /// initializer can only be typed with the expression that contains it.
+   private func isSignatureNode(_ d: DeclarationIdentity) -> Bool {
+     if d.module != module { return false }
+     switch program.tag(of: d) {
+     case ExtensionDeclaration.self, ConformanceDeclaration.self:
+       return true
+     case BindingDeclaration.self:
+-      return program[castUnchecked(d, to: BindingDeclaration.self)].role == .given
++      let b = castUnchecked(d, to: BindingDeclaration.self)
++      return (program[b].role == .given) && (ownerOfContextParameter(b) == nil)
++        && !isInferredGiven(d)
+     default:
+       return false
+     }
+   }
+ 
++  /// Returns the context parameters of `d` if it is a declaration that can have a where clause.
++  private func contextParameters(of d: DeclarationIdentity) -> ContextParameters? {
++    switch program.tag(of: d) {
++    case ExtensionDeclaration.self:
++      return program[castUnchecked(d, to: ExtensionDeclaration.self)].contextParameters
++    case ConformanceDeclaration.self:
++      return program[castUnchecked(d, to: ConformanceDeclaration.self)].contextParameters
++    case FunctionDeclaration.self:
++      return program[castUnchecked(d, to: FunctionDeclaration.self)].contextParameters
++    case FunctionBundleDeclaration.self:
++      return program[castUnchecked(d, to: FunctionBundleDeclaration.self)].contextParameters
++    default:
++      return nil
++    }
++  }
++
++  /// Returns the declaration whose where clause introduces `d`, if `d` is a context parameter,
++  /// whether anonymous (`T is P`) or named (`let u: P<T>`).
++  private func ownerOfContextParameter(_ d: BindingDeclaration.ID) -> DeclarationIdentity? {
++    guard
++      let o = program.parent(containing: d).node.flatMap({ (n) in program.castToDeclaration(n) }),
++      let ps = contextParameters(of: o), ps.usings.contains(.init(d))
++    else { return nil }
++    return o
++  }
++
++  /// Returns `true` iff `d` is a given binding whose type is only known by typing its initializer.
++  private func isInferredGiven(_ d: DeclarationIdentity) -> Bool {
++    guard
++      let b = program.cast(d, to: BindingDeclaration.self), program[b].role == .given,
++      ownerOfContextParameter(b) == nil
++    else { return false }
++    guard let a = program[program[b].pattern].ascription else { return true }
++
++    struct WildcardFinder: SyntaxVisitor {
++      var found = false
++      mutating func willEnter(_ n: AnySyntaxIdentity, in program: Program) -> Bool {
++        if program.tag(of: n) == WildcardLiteral.self { found = true }
++        return !found
++      }
++    }
++    var v = WildcardFinder()
++    program.visit(a, calling: &v)
++    return v.found
++  }
++
++  /// Computes the signatures of the declarations with a where clause that enclose `d`, outermost
++  /// first, so that nothing declared inside one of them is typed before its context parameters.
++  private mutating func computeOwners(enclosing d: DeclarationIdentity) {
++    var owners: [DeclarationIdentity] = []
++    for s in program.scopes(from: program.parent(containing: d)) {
++      if let o = s.node.flatMap({ (n) in program.castToDeclaration(n) }),
++        let ps = contextParameters(of: o), !ps.usings.isEmpty
++      { owners.append(o) }
++    }
++    for o in owners.reversed() { _ = computedSignature(of: o) }
++  }
++
+   /// Returns the signature of `d` computed now, memoized in the module.
+   private mutating func computedSignature(of d: DeclarationIdentity) -> AnyTypeIdentity {
+     if let e = program.cast(d, to: ExtensionDeclaration.self) { return extendeeType(e) }
+@@ -151,8 +222,10 @@ public struct Typer {
+     _ nodes: [DeclarationIdentity]
+   ) -> [DeclarationIdentity: AnyTypeIdentity] {
+     hiddenCandidateSeen = false
++    skippedInferredGivens = []
+     var next: [DeclarationIdentity: AnyTypeIdentity] = [:]
+     for n in nodes {
++      computeOwners(enclosing: n)
+       let t = computedSignature(of: n)
+       if !t[.hasError] { next[n] = t }
+     }
+@@ -181,10 +254,16 @@ public struct Typer {
+ 
+     for round in 1 ... (nodes.count + 2) {
+       let next = signatureRound(nodes)
++      let stable = (next == signatureTable) || ((round == 1) && !hiddenCandidateSeen)
++      let unstable = !stable && (earlier.contains(next) || (round == nodes.count + 2))
++      if TyperExperiments.selfcheck {
++        // The diagnostics of a round that is discarded are discarded with it.
++        selfCheckSignatures(nodes, next, from: pristine, comparingDiagnostics: stable || unstable)
++      }
+ 
+-      if (next == signatureTable) || ((round == 1) && !hiddenCandidateSeen) {
+-        if TyperExperiments.selfcheck { selfCheckSignatures(nodes, next, from: pristine) }
++      if stable {
+         signatureTable = next
++        reportSkippedInferredGivens()
+         return
+       }
+       if earlier.contains(next) || (round == nodes.count + 2) {
+@@ -205,21 +284,51 @@ public struct Typer {
+   /// order (`selfcheck`).
+   private mutating func selfCheckSignatures(
+     _ nodes: [DeclarationIdentity], _ stable: [DeclarationIdentity: AnyTypeIdentity],
+-    from pristine: (Module, Memos)
++    from pristine: (Module, Memos), comparingDiagnostics: Bool
+   ) {
+-    let final = (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen)
+-    let expected = Set(program[module].diagnostics.map(\.description))
++    // Which member of a cycle of definitions is blamed depends on the member entered first; the
++    // verdict does not. Compare such messages without their subject.
++    func normalized(_ d: Diagnostic) -> String {
++      let m = d.description
++      for k in ["refers to itself"] where m.contains(k) { return k }
++      return m
++    }
++    let final = (
++      program[module], cache, reportedBudgetScopes, hiddenCandidateSeen, skippedInferredGivens
++    )
++    let expected = Set(program[module].diagnostics.map(normalized(_:)))
+     (program[module], cache) = pristine
+     reportedBudgetScopes = []
+     let again = signatureRound(nodes.reversed())
+-    let found = Set(program[module].diagnostics.map(\.description))
++    let found = Set(program[module].diagnostics.map(normalized(_:)))
+     TyperCounters.bump("selfcheck.sigrounds")
+     if again != stable {
+-      selfCheckViolation("sigrounds: the stable round computes another table in reverse order")
+-    } else if found != expected {
+-      selfCheckViolation("sigrounds: the stable round reports other diagnostics in reverse order")
++      selfCheckViolation("sigrounds: a round computes another table in reverse order")
++    } else if comparingDiagnostics && (found != expected) {
++      let d = found.symmetricDifference(expected).sorted().prefix(2).joined(separator: " | ")
++      selfCheckViolation("sigrounds: the last round reports other diagnostics in reverse order: \(d)")
++    } else if skippedInferredGivens != final.4 {
++      selfCheckViolation("sigrounds: a round skips other inferred givens in reverse order")
++    }
++    (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen, skippedInferredGivens) =
++      final
++  }
++
++  /// Reports the inferred givens that a resolution made while computing signatures ignored.
++  ///
++  /// Such a given has no type until the expression that contains it is typed, which happens
++  /// after the signatures are settled. Using it later for a goal that a signature resolved
++  /// without it would give that goal two answers.
++  private mutating func reportSkippedInferredGivens() {
++    let ds = skippedInferredGivens.sorted(by: { (a, b) in
++      program.spanForDiagnostic(about: a).start < program.spanForDiagnostic(about: b).start
++    })
++    for d in ds {
++      TyperCounters.bump("sigrounds.inferredGivenSkipped")
++      let m = "the type of this given must be written: it is visible to the implicit resolutions "
++        + "made by the signatures of other declarations"
++      report(.init(.error, m, at: program.spanForDiagnostic(about: d)))
+     }
+-    (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen) = final
+   }
+ 
+   /// Reports that the signatures of the declarations whose entries differ in `a` and `b` did not
+@@ -1536,15 +1645,14 @@ public struct Typer {
+     assert(d.module == module, "dependency is not typed")
+ 
+     // A requirement of a where clause is typed by the declaration that introduces it, in order.
+-    if TyperExperiments.sigrounds, program[d].role == .using,
+-      !declarationsOnStack.contains(.init(d)),
+-      let o = program.parent(containing: d).node.flatMap({ (n) in program.castToDeclaration(n) })
++    if TyperExperiments.sigrounds, !declarationsOnStack.contains(.init(d)),
++      let o = ownerOfContextParameter(d)
+     {
+       TyperCounters.bump("sigrounds.ownerFirst")
+       _ = computedSignature(of: o)
+       return program[d.module].type(assignedTo: d) ?? .error
+     }
+-    if TyperExperiments.sigrounds && !settlingSignatures && (program[d].role == .given) {
++    if TyperExperiments.sigrounds && !settlingSignatures && isSignatureNode(.init(d)) {
+       TyperCounters.bump("sigrounds.lateNodes")
+     }
+ 
+@@ -1932,6 +2040,10 @@ public struct Typer {
+         return t
+       }
+       if settlingSignatures && isSignatureNode(d) { return signatureTable[d] ?? .error }
++      if settlingSignatures && isInferredGiven(d) && (program[d.module].type(assignedTo: d) == nil)
++      {
++        return .error
++      }
+       return declaredType(of: d)
+ 
+     case .nested(let p, let d):
+@@ -4037,6 +4149,13 @@ public struct Typer {
+       /// `true` iff a using of this thread was bound to an earlier one (`premsubst`).
+       var dependent = false
+ 
++      /// The level of each assumed given: one more than the level of the goal whose match
++      /// assumed it (`heightbound`).
++      var levels: [Int: Int] = [:]
++
++      /// The level of the goal that the thread is matching; 0 for the goal of a resolution.
++      var goalLevel = 0
++
+       /// Returns a copy of `self` with the given substitutions and hypotheses.
+       func with(
+         substitutions s: SubstitutionTable, givens gs: [Given], nextGivenIdentifier n: Int? = nil
+@@ -4048,15 +4167,19 @@ public struct Typer {
+         e.credit = credit
+         e.deferred = deferred
+         e.dependent = dependent
++        e.levels = levels
++        e.goalLevel = goalLevel
+         return e
+       }
+ 
+       /// Returns a copy of `self` in which `ts` are assumed given.
+       func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
+         let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
+-        return with(
++        var e = with(
+           substitutions: substitutions, givens: givens + gs,
+           nextGivenIdentifier: nextGivenIdentifier + gs.count)
++        for i in 0 ..< gs.count { e.levels[nextGivenIdentifier + i] = goalLevel + 1 }
++        return e
+       }
+ 
+       /// Returns `(e, w)` where `e` is a copy of `self` in which `t` is a premise that is not a
+@@ -4065,6 +4188,7 @@ public struct Typer {
+         let i = nextGivenIdentifier
+         var e = with(substitutions: substitutions, givens: givens, nextGivenIdentifier: i + 1)
+         e.deferred.append(.assumed(i, t))
++        e.levels[i] = goalLevel + 1
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -4073,8 +4197,9 @@ public struct Typer {
+       func assuming(given t: AnyTypeIdentity) -> (Environment, WitnessExpression) {
+         let i = nextGivenIdentifier
+         let g = Given.assumed(i, t)
+-        let e = with(
++        var e = with(
+           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
++        e.levels[i] = goalLevel + 1
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -4703,6 +4828,15 @@ public struct Typer {
+     if case .assumed(let i, let assumed) = environment.givens.last {
+       var e = environment.with(
+         substitutions: operand.substitutions, givens: environment.givens.dropLast())
++
++      // Experiment (`heightbound`): a premise nested too deep is not discharged.
++      let level = e.levels.removeValue(forKey: i) ?? 1
++      if TyperExperiments.heightbound && (level >= maxImplicitDepth) {
++        TyperCounters.bump("heightbound.cut")
++        heightExhausted = true
++        return .next([])
++      }
++      e.goalLevel = level
+       let ancestors = e.ancestry.removeValue(forKey: i) ?? []
+       if TyperExperiments.enabled.contains("trace") {
+         e.log.append("  solved with \(program.show(operand.witness)); now prove $\(i): \(program.show(assumed)) [pending: " + e.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", ") + "]")
+@@ -4863,11 +4997,16 @@ public struct Typer {
+     }
+ 
+     var exhausted = false
+-    while done.isEmpty && !work.isEmpty && (depth < bound(work)) {
++    var matchesAtBound: Int? = nil
++    heightExhausted = false
++    while done.isEmpty && !work.isEmpty && (TyperExperiments.heightbound || depth < bound(work)) {
+       var next: [ResolutionThread] = []
+       for item in work {
+         if item.delay > 0 { next.append(item.waiting()); continue }
+-        if depth - item.environment.credit >= maxImplicitDepth { exhausted = true; continue }
++        if !TyperExperiments.heightbound && (depth - item.environment.credit >= maxImplicitDepth) {
++          exhausted = true
++          continue
++        }
+         switch match(item, in: scopeOfUse) {
+         case .done(let r): done.append(r)
+         case .next(let s): next.append(contentsOf: s)
+@@ -4877,6 +5016,21 @@ public struct Typer {
+       swap(&next, &work)
+       TyperCounters.bump("summon.layers")
+ 
++      // Experiment (`heightbound`): past the layer at which the size bound would have stopped the
++      // resolution, it may try a bounded number of candidates; then it fails, as it did.
++      if TyperExperiments.heightbound && (depth >= maxImplicitDepth) && done.isEmpty {
++        if let m = matchesAtBound {
++          if matchCount - m > TyperExperiments.heightBudget {
++            TyperCounters.bump("heightbound.budgetExhausted")
++            exhausted = true
++            work = []
++          }
++        } else {
++          matchesAtBound = matchCount
++          if !work.isEmpty { TyperCounters.bump("heightbound.continued") }
++        }
++      }
++
+       // Fix (`budget`): a frontier this large comes from exponential search; give up and reject
+       // the program rather than exhaust memory. Giving up is reported as an error, since a failed
+       // resolution may otherwise steer overload or extension selection to another candidate.
+@@ -4889,7 +5043,8 @@ public struct Typer {
+       } else if TyperExperiments.budget && done.isEmpty
+         && work.count > TyperExperiments.budgetLimit
+       {
+-        if TyperExperiments.eqeager && (depth > maxImplicitDepth) {
++        if (TyperExperiments.eqeager || TyperExperiments.heightbound) && (depth > maxImplicitDepth)
++        {
+           // Without `eqeager` this resolution ended at the depth bound, silently.
+           TyperCounters.bump("eqeager.budgetPastDepth")
+           exhausted = true
+@@ -4900,7 +5055,7 @@ public struct Typer {
+         work = []
+       }
+     }
+-    if done.isEmpty && (exhausted || !work.isEmpty) {
++    if done.isEmpty && (exhausted || heightExhausted || !work.isEmpty) {
+       TyperCounters.bump("summon.depthExhausted")
+       lastResolutionExhaustedDepth = true
+     }
+@@ -4995,7 +5150,7 @@ public struct Typer {
+   /// Returns the index of the givens visible from `scopeOfUse`, or `nil` if it can't be computed
+   /// because some declarations are being typed.
+   internal mutating func givenIndex(visibleFrom scopeOfUse: ScopeIdentity) -> GivenIndex? {
+-    if !declarationsOnStack.isEmpty {
++    if !declarationsOnStack.isEmpty || settlingSignatures {
+       TyperCounters.bump("index.unavailable")
+       return nil
+     }
+@@ -5041,7 +5196,7 @@ public struct Typer {
+   internal mutating func abstractModel(
+     visibleFrom scopeOfUse: ScopeIdentity
+   ) -> AbstractResolutionModel? {
+-    if !declarationsOnStack.isEmpty { return nil }
++    if !declarationsOnStack.isEmpty || settlingSignatures { return nil }
+     if givens(lexicallyIn: scopeOfUse).isEmpty, let p = program.parent(containing: scopeOfUse) {
+       return abstractModel(visibleFrom: p)
+     }
+@@ -6781,6 +6936,11 @@ public struct Typer {
+         hiddenCandidateSeen = true
+         return false
+       }
++      if settlingSignatures && isInferredGiven(d) && (program[d.module].type(assignedTo: d) == nil)
++      {
++        skippedInferredGivens.insert(d)
++        return false
++      }
+       return !declarationsOnStack.contains(d)
+     case .nested(_, let h):
+       return isVisible(h)
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index ec7035e..d306084 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -181,6 +181,18 @@ public enum TyperExperiments {
+   /// (result-preserving).
+   nonisolated(unsafe) public static var lookahead: Bool = enabled.contains("lookahead")
+ 
++  /// EXPERIMENT (accepts more programs): implicit resolution bounds the height of a derivation
++  /// (the nesting of premises) instead of its size (the number of givens used). Every derivation
++  /// found today is still found; larger ones of the same height are found as well.
++  nonisolated(unsafe) public static var heightbound: Bool = enabled.contains("heightbound")
++
++  /// The number of candidate matches that a resolution may try after the layer at which the size
++  /// bound would have stopped it (`heightbound`); past it the resolution fails, silently.
++  nonisolated(unsafe) public static var heightBudget: Int = {
++    guard let p = getenv("HYLO_TC_HEIGHTBUDGET") else { return 100_000 }
++    return Int(String(cString: p)) ?? 100_000
++  }()
++
+   /// EXPERIMENT (accepts more programs): a closed pair of types may be coerced if the equality
+   /// procedure proves them equal, even if they are not both written in an equality.
+   nonisolated(unsafe) public static var eqfilter: Bool = enabled.contains("eqfilter")
+-- 
+2.43.0
+

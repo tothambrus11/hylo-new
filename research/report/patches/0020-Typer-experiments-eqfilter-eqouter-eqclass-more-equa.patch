@@ -1,0 +1,233 @@
+From eeca4cd711efc81413b8643c2ff4517b72f67893 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 16:08:39 +0000
+Subject: [PATCH 20/27] Typer: experiments eqfilter, eqouter, eqclass (more
+ equalities used by matching)
+
+eqfilter: a closed pair may be coerced if the equality procedure proves it.
+eqouter: when innermost mismatching parts cannot be coerced, the outermost
+enclosing parts that can be are used.
+eqclass: a part with unification variables is instantiated with the types of
+its shape written in equalities, so that a generic given applies to a type
+equal to an instance of its head.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 159 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  13 ++
+ 2 files changed, 168 insertions(+), 4 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index ecf2094..d4b98b3 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -4398,11 +4398,34 @@ public struct Typer {
+     // Can coercions of pairwise nested parts be derived in the current context?
+     var gs: [AnyTypeIdentity] = .init(minimumCapacity: coercions.count)
+     for c in coercions {
+-      if canDeriveCoercions(c.0, c.1, in: scopeOfUse, where: thread.environment) {
++      if mayCoerce(c.0, c.1, in: scopeOfUse, where: thread.environment) {
+         gs.append(demand(EqualityWitness(lhs: c.0, rhs: c.1)).erased)
+-      } else {
+-        return .next([])
++        continue
++      }
++
++      // Experiment (`eqclass`): a part with variables is instantiated with the types written in
++      // equalities that it can stand for; each instance is matched again in the next layer.
++      if TyperExperiments.eqclass,
++        let ts = instantiatedThroughEqualities(
++          thread, part: c, keeping: substitutions, in: scopeOfUse)
++      {
++        return .next(ts)
++      }
++
++      // Experiment (`eqouter`): use the outermost enclosing parts that can be coerced.
++      if TyperExperiments.eqouter {
++        let s = thread.environment.substitutions.union(substitutions)
++        let x = program.types.reify(a, applying: s, withVariables: .kept)
++        let y = program.types.reify(b, applying: s, withVariables: .kept)
++        if let ps = outerParts(x, y, atRoot: true, in: scopeOfUse, where: thread.environment),
++          !ps.isEmpty
++        {
++          TyperCounters.bump("eqouter.matches")
++          gs = ps.map({ (p) in demand(EqualityWitness(lhs: p.0, rhs: p.1)).erased })
++          break
++        }
+       }
++      return .next([])
+     }
+ 
+     // Experiment (`eqeager`): decide the equalities now if they are all closed.
+@@ -4437,6 +4460,134 @@ public struct Typer {
+     return .next([thread.copy(matching: w, to: b, in: e)])
+   }
+ 
++  /// Returns `true` iff matching may assume that `x` and `y` are equal and prove it afterwards.
++  private mutating func mayCoerce(
++    _ x: AnyTypeIdentity, _ y: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment
++  ) -> Bool {
++    if canDeriveCoercions(x, y, in: scopeOfUse, where: environment) { return true }
++
++    // Experiment (`eqfilter`): the test above requires each type to be written in an equality;
++    // a closed pair that the equality procedure proves is as good.
++    if TyperExperiments.eqfilter && TyperExperiments.eqsolve && (selfCheck != .equality)
++      && !x[.hasVariable] && !y[.hasVariable] && !x[.hasError] && !y[.hasError]
++    {
++      let s = environment.substitutions
++      let e = demand(
++        EqualityWitness(
++          lhs: program.types.reify(x, applying: s, withVariables: .kept),
++          rhs: program.types.reify(y, applying: s, withVariables: .kept))
++      ).erased
++      if case .proved = solveEquality(e, in: scopeOfUse, where: environment) {
++        TyperCounters.bump("eqfilter.admitted")
++        return true
++      }
++    }
++    return false
++  }
++
++  /// Returns the outermost pairs of corresponding parts of `x` and `y` that differ and may be
++  /// coerced, or `nil` if some difference between `x` and `y` is in no such pair (`eqouter`).
++  ///
++  /// The pair `(x, y)` itself is not a candidate if `atRoot` is `true`: matching never coerces
++  /// the whole type of a witness to the whole goal.
++  private mutating func outerParts(
++    _ x: AnyTypeIdentity, _ y: AnyTypeIdentity, atRoot: Bool = false, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment
++  ) -> [(AnyTypeIdentity, AnyTypeIdentity)]? {
++    if x == y { return [] }
++    if !atRoot && !x[.hasVariable] && !y[.hasVariable]
++      && mayCoerce(x, y, in: scopeOfUse, where: environment)
++    {
++      return [(x, y)]
++    }
++
++    var xs: [AnyTypeIdentity] = []
++    var ys: [AnyTypeIdentity] = []
++    switch (program.types[x], program.types[y]) {
++    case (let t as TypeApplication, let u as TypeApplication):
++      if (t.abstraction != u.abstraction)
++        || (Array(t.arguments.parameters) != Array(u.arguments.parameters))
++      { return nil }
++      (xs, ys) = (Array(t.arguments.values), Array(u.arguments.values))
++    case (.cons(let h0, let t0) as Tuple, .cons(let h1, let t1) as Tuple):
++      (xs, ys) = ([h0, t0], [h1, t1])
++    default:
++      return nil
++    }
++
++    var result: [(AnyTypeIdentity, AnyTypeIdentity)] = []
++    for (a, b) in zip(xs, ys) {
++      guard let ps = outerParts(a, b, in: scopeOfUse, where: environment) else { return nil }
++      result.append(contentsOf: ps)
++    }
++    return result
++  }
++
++  /// Returns the types written as a side of a closed equality that is assumed in `environment`
++  /// or given in `scopeOfUse`.
++  private mutating func equalitySides(
++    visibleFrom scopeOfUse: ScopeIdentity, where environment: ResolutionThread.Environment
++  ) -> [AnyTypeIdentity] {
++    let sources: [Given]
++    if TyperExperiments.index, let ix = givenIndex(visibleFrom: scopeOfUse) {
++      sources = ix.coercionSources
++    } else {
++      sources = Array(givens(visibleFrom: scopeOfUse).joined())
++    }
++    var sides: [AnyTypeIdentity] = []
++    for g in chain(environment.givens, sources) {
++      let t = program.types.reify(
++        declaredType(of: g), applying: environment.substitutions, withVariables: .kept)
++      if let e = program.types[t] as? EqualityWitness, !t[.hasVariable], !t[.hasError] {
++        for s in [e.lhs, e.rhs] where !sides.contains(s) { sides.append(s) }
++      }
++    }
++    return sides
++  }
++
++  /// Returns the threads that continue `thread` after instantiating the side of `part` that has
++  /// unification variables with each type written in an equality of the context that it unifies
++  /// with and that may be equal to the other side, or `nil` if `part` does not have exactly one
++  /// side with variables (`eqclass`).
++  ///
++  /// A given such as `<X> Box<X> is P` does not match the goal `P<T>` when `T == Box<U>` is
++  /// known: the mismatching part is `(Box<%x>, T)`, and no equality is written about `Box<%x>`.
++  /// Instantiating `%x` so that `Box<%x>` is the written type `Box<U>` leaves the closed part
++  /// `(Box<U>, T)`, which the next match assumes and proves as usual. Nothing is accepted without
++  /// that proof; the instances only add candidates.
++  private mutating func instantiatedThroughEqualities(
++    _ thread: ResolutionThread, part: (AnyTypeIdentity, AnyTypeIdentity),
++    keeping substitutions: SubstitutionTable, in scopeOfUse: ScopeIdentity
++  ) -> [ResolutionThread]? {
++    let s0 = thread.environment.substitutions.union(substitutions)
++    let x = program.types.reify(part.0, applying: s0, withVariables: .kept)
++    let y = program.types.reify(part.1, applying: s0, withVariables: .kept)
++    let (pattern, closed): (AnyTypeIdentity, AnyTypeIdentity)
++    if x[.hasVariable] && !y[.hasVariable] {
++      (pattern, closed) = (x, y)
++    } else if y[.hasVariable] && !x[.hasVariable] {
++      (pattern, closed) = (y, x)
++    } else {
++      return nil
++    }
++    if pattern.isVariable || pattern[.hasError] || closed[.hasError] { return nil }
++
++    var result: [ResolutionThread] = []
++    for m in equalitySides(visibleFrom: scopeOfUse, where: thread.environment) where m != closed {
++      var s = SubstitutionTable()
++      let unified = program.types.unifiable(pattern, m, extending: &s) { (_, _) in false }
++      if !unified || !mayCoerce(m, closed, in: scopeOfUse, where: thread.environment) { continue }
++      let all = s0.union(s)
++      let w = program.types.reify(thread.witness, applying: all, withVariables: .kept)
++      if w.type[.hasError] { continue }
++      let e = thread.environment.with(substitutions: all, givens: thread.environment.givens)
++      result.append(thread.copy(matching: w, to: thread.queried, in: e))
++      TyperCounters.bump("eqclass.instances")
++    }
++    return result
++  }
++
+   /// Returns the step following a match of `thread` to `b` up to the equalities `parts`, having
+   /// decided them now, or `nil` if they must be assumed and proved by search (`eqeager`).
+   ///
+@@ -5306,7 +5457,7 @@ public struct Typer {
+     TyperCounters.bump("coerced.slowPath")
+     var threads = [formThread(matching: root, to: goal, in: .empty)]
+ 
+-    if canDeriveCoercions(root.type, goal, in: scopeOfUse, where: .empty) {
++    if mayCoerce(root.type, goal, in: scopeOfUse, where: .empty) {
+       // Either the type of the elaborated witness is unifiable with the queried type or we need to
+       // assume a coercion. Implicit resolution will figure out the "cheapest" alternative.
+       let (environment, coercion) = ResolutionThread.Environment.empty.assuming(
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index eb11295..f3f52d8 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -169,6 +169,19 @@ public enum TyperExperiments {
+   /// requirement (`pick<T where T is P>(t: T) -> T.X` applied to an `A` returns `A.X`).
+   nonisolated(unsafe) public static var headsubst: Bool = enabled.contains("headsubst")
+ 
++  /// EXPERIMENT (accepts more programs): a closed pair of types may be coerced if the equality
++  /// procedure proves them equal, even if they are not both written in an equality.
++  nonisolated(unsafe) public static var eqfilter: Bool = enabled.contains("eqfilter")
++
++  /// EXPERIMENT (accepts more programs): when the innermost mismatching parts of two types cannot
++  /// be coerced, the outermost enclosing parts that can be are used instead.
++  nonisolated(unsafe) public static var eqouter: Bool = enabled.contains("eqouter")
++
++  /// EXPERIMENT (accepts more programs): a mismatching part with unification variables is
++  /// instantiated with each type of its shape written in an equality that may be equal to the
++  /// other part, so that a generic given applies to a type equal to an instance of its head.
++  nonisolated(unsafe) public static var eqclass: Bool = enabled.contains("eqclass")
++
+   /// SEMANTIC FIX: the associated type `(Self::P).X` selected through the witness that a trait
+   /// or conformance declares is only equal to a selection through that same witness. Without it,
+   /// `Self.X` is equated with `T.X` for another witness `T is P` of a type equal to `Self`, which
+-- 
+2.43.0
+

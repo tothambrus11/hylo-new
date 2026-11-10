@@ -1,0 +1,11 @@
+// The mentioned requirement is a conformance to a trait with a parameter. Well typed.
+trait G<V> { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct K {}
+given B is Q {}
+given A is G<K> { type X = B }
+fun f<T where T is G<K>, T.X is Q>() {}
+fun g<U where U is G<K>, U.X is Q>() { f<U>() }
+public fun main() { f<A>() }

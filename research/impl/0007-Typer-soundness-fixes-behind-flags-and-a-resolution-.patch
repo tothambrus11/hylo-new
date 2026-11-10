@@ -1,7 +1,7 @@
 From 1f43195527d2940228497ac9a0e9c96671de89d7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Thu, 5 Nov 2026 23:53:30 +0000
-Subject: [PATCH 07/13] Typer: soundness fixes behind flags, and a resolution
+Subject: [PATCH 07/27] Typer: soundness fixes behind flags, and a resolution
  trace
 
 - fixsubst: keep the substitutions computed by match when it assumes

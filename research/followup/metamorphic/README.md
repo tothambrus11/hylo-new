@@ -6,12 +6,14 @@ Apply, systematically, eight transformations that should not change whether a pr
 
 ## Summary
 
-- The tool checked 15,206 variants of 760 programs under FULL. The verdict changed for 370 variants. They reduce to eleven causes: eight defects (D1 to D8 below) and three changes that are legitimate in this language (L1 to L3).
-- **No violation is specific to the optimizations.** Every verdict change under FULL also occurs under FIX. FULL and FIX never differed on the variants that were run under both.
-- **Most defects are in the existing checker** and are untouched by the fixes: the left-to-right reading of where clauses (D3), ambiguity decided by derivation length (D2, D4, D5), opaque generic aliases (D7), cycles through an alias (D1, D8).
-- **Three effects come from the fixes**: the resource bound makes acceptance depend on the order of requirements (D6); the rule against circular extensions is avoided by naming the extended type through an alias (D8); the occurs check does not look under a generic alias (D7).
+- The tool checked 15,206 variants of 760 programs under FULL. The verdict changed for 370 variants. They reduce to eleven causes, named D1 to D8 and L1 to L3 below.
+- **An independent check is in `JUDGEMENT.md`.** It reproduced every observation and changed the classification: D1, D2, D5, D7 and the resource bound of D6 are confirmed defects; D8 is the same defect as D1; D3 is a deliberate rule; D4 and the depth bound of D6 follow from rules whose status is an open question; L1 to L3 are legitimate. The text below was corrected where it said more than that.
+- **No violation is specific to the optimizations.** Every verdict change under FULL that is attributed to D1–D8, L2 or L3 also occurs under FIX, as do the 28 changes of L1 that were run (308 of 370 in all; the 62 not run are L1). FULL and FIX never differed on the 396 variants that were run under both. FIX was not run on variants whose verdict did not change under FULL.
+- **Most confirmed defects are in the existing checker** and are untouched by the fixes: ambiguity decided by the number of search steps (D2, D5), aliases of generic types (D7), cycles through an alias or a given (D1, D8). The existing checker was run on 170 of the 370 changed variants and on every reduced pair.
+- **Two effects come from the fixes**: the resource bound makes acceptance depend on the order of requirements (D6); the check for circular extensions does not follow a cycle through an alias or a given, so it reports the cycle in one order only (D1, D8).
+- **D7 includes an unsound case**: through an alias of a generic type, a method call with an argument of the wrong type is accepted, in the three configurations.
 - Relations 3 (order of members) and 6 (renaming) never changed a verdict. Relation 8 (unrelated declaration) changed it only where a call leaves a type argument to be inferred from the conformances in scope (L3).
-- Declaration order: the same seven programs as in the pilot, and no other, among 727 programs. Relation 5 produced 16 more order-dependent programs, by introducing an alias. All of them are cycles through a type alias or through a given; cycles through extensions only are handled.
+- Declaration order: the same seven programs as in the pilot, and no other, among 727 programs (two permutations each outside the declaration-order set). Relation 5 produced 16 more order-dependent programs, by introducing an alias. All of them are cycles through a type alias or through a given. Under FIX and FULL, no cycle made of extensions only was order-dependent.
 
 ## What was done
 
@@ -53,7 +55,7 @@ To reproduce a finding: `./tc.sh FULL violations/r7/e01-orient-amb--sym-2-2/a.hy
 7. **Forms of an equality.** `sym`: `B == A` for `A == B`. `dup`: `A == B, A == B`. `dup-sym`: `A == B, B == A`.
 8. **Unrelated declaration.** `conf`: a new struct and its conformance to an existing trait of the file (only traits without requirements other than associated types), added at the end. `struct-top`: a new struct at the beginning. `trait`: a new empty trait at the end (run for the programs that have no suitable trait for `conf`). Further kinds (`gconf`, a generic conformance of a new generic struct; a new extension; the same at the other end of the file) are implemented but were not run, for lack of machine time.
 
-Each relation lists its variants in a fixed priority order and the driver checks the first *n* of them: 23 permutations for the 129 programs of the declaration-order set and 2 for the others (the pilot found nothing there with 24); 8 for relation 2 plus every `reqs-dep` variant, 6 for relations 3, 4 and 7, 8 for relation 5, 2 for relations 6 and 8. The random choices are seeded by the program text, so a run is reproducible.
+Each relation lists its variants in a fixed priority order and the driver checks the first *n* of them: 23 permutations for the 124 tested programs of the declaration-order set (five of its 129 have a syntax error) and 2 for the others (the pilot found nothing there with 24); 8 for relation 2 plus every `reqs-dep` variant, 6 for relations 3, 4 and 7, 8 for relation 5, 2 for relations 6 and 8. The random choices are seeded by the program text, so a run is reproducible.
 
 ### Validation of the declaration splitter
 
@@ -116,12 +118,12 @@ A program counts under "only messages changed" when none of its variants changes
 |---|---|---|---:|---:|---|---|---|---|
 | D1 | Cycle through a type alias, or through a given and extensions: the verdict depends on declaration order | 1, 5 | 102 | 22 | yes | yes | yes | defect |
 | D2 | The orientation of an equality decides between two derivations | 7 | 7 | 3 | yes | yes | yes | defect |
-| D3 | A where clause is read from left to right | 2, 4 | 98 | 50 | yes | yes | yes | language decision; one case is a defect |
-| D4 | A trivially true premise hides an ambiguity between two conformances | 4 | 8 | 4 | yes | yes | yes | defect |
-| D5 | The position of a tautology in the callee decides the verdict of a call | 4 | 2 | 2 | yes | yes | yes | defect |
-| D6 | The depth bound and the resource bound: one more step or another order exhausts them | 2, 4, 7 | 13 | 2 | partly | yes | yes | defect of the bounds |
-| D7 | Generic type aliases are not transparent | 5 | 29 | 27 | yes | yes | yes | defect |
-| D8 | A type alias changes the handling of cyclic lookups | 5 | 12 | 9 | yes, differently | yes | yes | defect |
+| D3 | A where clause is read from left to right | 2, 4 | 98 | 50 | yes | yes | yes | deliberate rule; one case is an open question |
+| D4 | A trivially true premise hides an ambiguity between two conformances | 4 | 8 | 4 | yes | yes | yes | open question about the ranking rule |
+| D5 | The position of a tautology in the callee decides the verdict of a call | 4 | 2 | 2 (same text) | yes | yes | yes | defect |
+| D6 | The depth bound and the resource bound: one more step or another order exhausts them | 2, 4, 7 | 13 | 2 | depth bound only | yes | yes | resource bound: defect; depth bound: the known bound |
+| D7 | Aliases of generic types are not transparent | 5 | 29 | 27 | yes | yes | yes | defect, with an unsound case |
+| D8 | A type alias changes the handling of cyclic lookups | 5 | 12 | 9 | yes, differently | yes | yes | defect, same root as D1 |
 | L1 | An unused generic parameter cannot be inferred | 4 | 90 | 84 | yes | yes | yes | legitimate |
 | L2 | `T == T` for a type constructor `T :: * -> *` is ill-kinded | 4 | 1 | 1 | yes | yes | yes | legitimate |
 | L3 | A type argument left open is inferred from the conformances in scope | 8 | 8 | 8 | yes (or crash) | yes | yes | legitimate |
@@ -226,7 +228,7 @@ fun f<T, U, V where V == U.X, T is P, T == U>(x: V) {}    // b.hylo: type 'U' ha
 
 A requirement sees only the requirements written before it. A projection `T.X` written before `T is P` (or before the equality that makes `T is P` derivable) is an error. This holds for functions, extensions and conformances, in the three configurations. It accounts for 81 of the 84 verdict changes of relation 2 (37 programs; the three others are the case below and the resource bound of D6, twice), and for the 16 verdict changes of `taut-assoc` in relation 4, which all come from `T.X == T.X` added as the *first* requirement (`violations/r4/e2-abs-qual-distinct-conf--taut-assoc-2-1-first/`); added last, it never changes a verdict (313 variants).
 
-Classification: a language decision that is not written down. If requirements form a telescope, the rejection is intended, and relation 2 only holds for permutations that respect dependencies. The kind `reqs-dep` tests exactly those: 263 variants, one verdict change, which is the resource bound of D6 on `open-wide-4`.
+Classification: a deliberate rule that is not written down. `initializeContext` in the type checker hides the later requirements while a requirement is typed, and its comment says so. Requirements form a telescope, the rejection is intended, and relation 2 only holds for permutations that respect dependencies. The kind `reqs-dep` tests exactly those: 263 variants, one verdict change, which is the resource bound of D6 on `open-wide-4`.
 
 One case is not a scoping error and changes the verdict in the other direction, `violations/r2/v-abs-9--reqs-3-021/`:
 
@@ -239,7 +241,7 @@ trait P {
 }
 ```
 
-In `b`, `T.X` is resolved when `T is P` is not yet in scope, through `T == Self` and the conformance of `Self`, so `U == Self.X` holds. In `a`, `T.X` is resolved through the requirement `T is P`, a different conformance, and `U == Self.X` is not derivable. Both orders are valid telescopes; the meaning of `T.X` depends on the position of another requirement. This is a defect, in the three configurations. It is one face of the open question about `Self.X` in section 4.1 of the plan.
+In `b`, `T.X` is resolved when `T is P` is not yet in scope, through `T == Self` and the conformance of `Self`, so `U == Self.X` holds. In `a`, `T.X` is resolved through the requirement `T is P`, a different conformance, and `U == Self.X` is not derivable. Both orders are valid telescopes; the meaning of `T.X` depends on the position of another requirement. Under the left-to-right rule the two programs are different programs, and each verdict is right for its reading: nothing says that the requirement `T is P` and the conformance of `Self` have the same `X`. What is open is which conformance `T.X` should select in `a` when both are in scope. This is the open question about `Self.X` in section 4.1 of the plan, not a separate defect.
 
 ### D4. A trivially true premise hides an ambiguity (relation 4; base, FIX, FULL)
 
@@ -257,7 +259,7 @@ fun main2() { need<T>() }
 
 Two conformances of the same type are reported as ambiguous only when their derivations have the same length. A premise that is trivially true makes one of them one step longer, and the checker then uses the other without a diagnostic. With the premise on both, the program is rejected again (checked by hand). `violations/r4/gz0--taut-ground-4-0-last/` shows the same for the lookup of an associated type (`ambiguous use of 'Y'` disappears). Eight variants in four programs of the declaration-order set (`g_dup0`, `ge3`, `gz0`, `red3`); 18 more variants lose an ambiguity message while staying rejected for another reason.
 
-Classification: defect. A language may prefer an unconditional conformance to a conditional one, but here the premise is a tautology, and the preference decides which of two conflicting declarations is silently used.
+Classification: open question about the ranking rule. The premise is a tautology, and the preference decides which of two conflicting declarations is silently used. But the preference is the rule "the smallest derivation wins", and the compiler test `nullary-conformance.hylo` is accepted only because of that rule (it has infinitely many derivations of `Int is P`). Under that rule the accepted program is right. Whether the rule should count a satisfied premise is for the designers of the ranking to decide.
 
 ### D5. The position of a tautology in the callee decides the verdict of a call (relation 4; base, FIX, FULL)
 
@@ -277,7 +279,7 @@ fun f<A, B where B == A, B is P, A is R>() {
 }
 ```
 
-`P<A>` has a short derivation (from `B is P` and `B == A`) and a long one (through `Q` and `R`). The requirements of the callee are resolved together, and the depth at which the search stops depends on where the trivial goal `A ~ A` stands in the list. In `e06-elab-change.hylo` the effect goes the other way: the original is accepted and the variant with `V == V` first is rejected. Same root as D2 and D4: ambiguity is decided among the derivations found at the first successful depth, and that depth is not stable under transformations that do not change the meaning.
+`P<A>` has a short derivation (from `B is P` and `B == A`) and a long one (through `Q` and `R`). The requirements of the callee are resolved together, and the depth at which the search stops depends on where the trivial goal `A ~ A` stands in the list. In `e06-elab-change.hylo` the effect goes the other way: the original is accepted and the variant with `V == V` first is rejected. The traces show that here both derivations complete at the same depth in the three programs, and that the penalty separates them in `b` only: each step of a proof costs one more for every requirement of the callee that is still waiting to be proved, so the proof with three steps gets a larger penalty than the proof with two when `A ~ A` waits behind it (cause in `JUDGEMENT.md`). Related to D2 and D4: the ranking of derivations is not stable under transformations that do not change the meaning.
 
 ### D6. The depth bound and the resource bound make acceptance depend on spelling (relations 2, 4, 7)
 
@@ -294,7 +296,7 @@ fun need<where S<S<S<S<S<S<S<S<Z>>>>>>>> is P>() {}
 public fun main() { need() }
 ```
 
-The derivation of the goal has nine steps; the tautology adds a tenth and the search gives up at its depth limit. With the tautology on the generic conformance instead (`violations/r4/chain8--taut-app-4-1-last/`, `given <T where T is P, S<T> == S<T>> => ...`), FIX and FULL reject, and the existing checker does not terminate within 60 s.
+The derivation of the goal has nine steps; the tautology adds a tenth and the search gives up at its depth limit. With the tautology on the generic conformance instead (`violations/r4/chain8--taut-app-4-1-last/`, `given <T where T is P, S<T> == S<T>> => ...`), FIX and FULL reject, and the existing checker gives no verdict (it runs for 60 s or is stopped at the memory limit). With `HYLO_TC_MAXDEPTH=12` the variant `b.hylo` above is accepted in the three configurations, so the bound is the only cause.
 
 Resource bound, `violations/r2/open-wide-4--reqs-1-76543210/` (FIX and FULL; the existing checker times out on both programs):
 
@@ -307,7 +309,9 @@ fun f<A0 where A0 is Q>(x: A0) { pick(x) }
 
 `b` is rejected with `implicit resolution is too complex: more than 100000 candidate derivations`. On the same program, adding `U4 == U4` (`violations/r4/open-wide-4--taut-param-1-0-last/`), stating `T == U2` twice, or adding `U2 == T` next to it has the same effect: eight variants of `performance/open-wide-4.hylo` in all. Two more programs change only their messages in this way: `cycles-and-crashes/o4-toplevel-occurs-full.hylo` (requirements reversed) and `cycles-and-crashes/r1-bundle-eq.hylo` (`X == Y, Y == X`) get the "too complex" error in addition to their other errors.
 
-Classification: defect of the bounds, for the configurations with `budget`. The bound turns a search that does not terminate into an error, which is its purpose, but whether a correct program is accepted then depends on the order in which its requirements are written. This supports section 4.1 of the plan: both bounds are language decisions.
+With `HYLO_TC_BUDGET=3000000`, FULL accepts `b.hylo`, so the rejection comes from the bound alone.
+
+Classification: the resource bound is a defect of the configurations with `budget`. The bound turns a search that does not terminate into an error, which is its purpose, but whether a correct program is accepted then depends on the order in which its requirements are written. The depth bound is the known bound of the existing checker; `chain8` was written to sit at it, and the finding is only that one more trivial step crosses it and that the error does not mention the bound. This supports section 4.1 of the plan: both bounds are language decisions.
 
 ### D7. Generic type aliases are not transparent (relation 5; base, FIX, FULL)
 
@@ -343,7 +347,22 @@ public fun main() {
 }
 ```
 
-`same(a, mkbox(a).n)` requires the type of `a` to contain itself. The occurs check added by `occurs` reports it, but not when the type variable is under an application of a generic alias: the program is then accepted with no diagnostic, in the three configurations.
+`same(a, mkbox(a).n)` requires the type of `a` to contain itself, and the occurs check added by `occurs` reports it. With the alias the program is accepted with no diagnostic, in the three configurations. The occurs check is not at fault (it does look under type applications and aliases). The type arguments are lost when a member is selected through an alias of a generic type, as in `hand-alias-method-call`: the type of `mkbox(a).n` no longer mentions the type of `a`, so no cycle arises. The existing checker confirms it: it overflows the stack on `a.hylo` and accepts `b.hylo` without a crash.
+
+The same loss accepts an ill-typed call, `judge/progs/alias-args-lost.hylo` (base, FIX, FULL):
+
+```hylo
+struct K {}
+struct A<U> {
+  public fun f(x: U) {}
+  public fun g() -> U { self.g() }
+}
+type AV = A<Void>
+type AK = A<K>
+fun use(a: AV, b: AK) { a.f(b.g()) }     // accepted: passes a K where a Void is expected
+```
+
+Written with `A<Void>` and `A<K>` the call is rejected (`judge/progs/alias-args-ctrl.hylo`). Both sides of the call keep the parameter `U` of the struct, so they agree.
 
 `intro-generic` changed the verdict of 27 of its 158 variants (27 programs); the non-generic alias of a generic application adds 2 variants. The compiler tests `typealiases.hylo`, `chained-type-aliases.hylo` and `typealias-transparent.hylo` pass because they use aliases as annotations of values that are only passed around.
 
@@ -376,7 +395,7 @@ extension A.Inner { type Foo = Int }
 | base | accepted | rejected: definition of 'Alq' refers to itself |
 | FIX, FULL | rejected: circular extension | accepted |
 
-So the rule that rejects `a` is avoided by naming the extended type through an alias (five programs). Whether `a` should be rejected at all is the open question "are cyclic extensions legal" of the plan; the point here is that the alias changes the answer, in opposite directions before and after the fix.
+So the rule that rejects `a` is avoided by naming the extended type through an alias (five programs). The alias form is itself order-dependent: with its two extensions exchanged (`judge/progs/v4-alias-swapped.hylo`) it is rejected with `definition of 'Alq' refers to itself` in the three configurations, while `a` with its extensions exchanged (`judge/progs/v4-swapped.hylo`) stays rejected under FIX and FULL. D8 is therefore the order dependence of D1 seen through relation 5, not a second defect. Whether `a` should be rejected at all is the open question "are cyclic extensions legal" of the plan; the point here is that the alias changes the answer, in opposite directions before and after the fix.
 
 One more program gets a self-reference error from a new alias declared last (`violations/r5/x05-alias-ext--intro-all-0/`).
 
@@ -408,7 +427,7 @@ The call does not determine `T`, and resolution instantiates it with the only ty
 
 - **Relation 3, order of members:** 197 variants of 120 programs (every program with a type body of at least two members), no change of verdict or of messages.
 - **Relation 6, renaming:** 1,424 variants of 727 programs, no change of verdict or of messages once renamed identifiers are mapped back in the messages. In particular the reversal of the alphabetical order of all declared names changes nothing: no result depends on the order of names.
-- **Relation 8, unrelated declaration:** 1,520 variants of 760 programs: a new struct conforming to an existing trait (332 programs that have a suitable trait), a new struct at the beginning of the file (760), a new trait (428). The only verdict changes are those of L3.
+- **Relation 8, unrelated declaration:** 1,520 variants of 760 programs: a new struct conforming to an existing trait (332 programs that have a suitable trait), a new struct at the beginning of the file (760), a new trait (428). The only verdict changes are those of L3. The kinds that the campaign did not run were run afterwards on a sample, under FULL only (`judge/r8-extra.jsonl`): 684 variants of 347 programs (a generic conformance of a new generic struct, 156; a new struct with an extension, 347; a new conformance placed first, 181). Two verdict changes, both on `nullary-conformance.hylo` and both L3.
 
 ## What remains uncertain
 
@@ -418,3 +437,7 @@ The call does not determine `T`, and resolution instantiates it with the only ty
 - **D3 and the bounds of D6 are language decisions.** They are reported as defects of the relation, not necessarily of the implementation.
 - **Type positions in relation 5 are recognised from the preceding token.** Occurrences in function bodies are replaced only between angle brackets, so aliases in local annotations and constructor calls (`Alq()`) are not tested.
 - **Each expected verdict is the verdict of the original program.** A metamorphic test says that two programs should agree, not which of the two verdicts is right; where it matters, the text above says which one the reading of the program supports.
+- **Half of the variants have a rejected original.** For 7,261 of the 15,206 variants the original is rejected, so only a change from reject to accept, or a change of messages, can show. The variants with an accepted original number 141 for relation 3, 773 for relation 6 and 840 for relation 8.
+- **A tautology was rarely placed first.** Relation 4 put it first in 179 variants and last in 2,292, and D5 and the `taut-assoc` changes appear only when it is first.
+- **FIX was run only where FULL had changed its verdict** (and on every permutation of the seven order-dependent programs). A change that FIX shows and the optimizations hide would not have been seen.
+- **One program crashes.** `Tests/CompilerTests/negative/illegal-enum-case.hylo` stops `tc-bench` with signal 4 in the three configurations, in the original and in each of its variants. It is counted among the 760 programs and is not a finding of this work.

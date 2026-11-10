@@ -1,0 +1,10 @@
+// Dependent requirements on an extension that declares a nested call chain: a method calls
+// another method of the same conditional extension (FULL accepts by syntactic identity).
+// Well typed.
+trait P { type X }
+trait Q {}
+struct Box<T> { public memberwise init }
+extension <T where T is P, T.X is Q> Box<T> {
+  fun a() {}
+  fun b() { self.a() }
+}

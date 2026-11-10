@@ -1,0 +1,22 @@
+// Tests: a lambda whose body declares its own conformance; the call inside it and the call
+// around it resolve the same requirement differently.
+// Correct verdict: rejected; the lambda returns an `S1` (`A.X` in its body) and `take(A(), _)`
+// expects an `S0` (`A.X` outside).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun call<Z>(f: []() -> Z) -> Z { f() }
+public fun main() {
+  take(A(), call(fun[]() {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    return pick(A())
+  }))
+}

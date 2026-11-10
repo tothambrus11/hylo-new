@@ -29,7 +29,12 @@ The equality procedure (`eqsolve`) contained the same rule in a narrower form (w
 
 ## Fix
 
-A selection through the witness that a trait or conformance declares is equal only to a selection through that same witness (`TypeStore.unifiable` for associated types; the rule of the equality procedure is removed). About 10 lines.
+A selection through the witness that a trait or conformance declares is equal only to a selection through that same witness, at the same type (`TypeStore.unifiable` for associated types; the rule of the equality procedure is removed, and such selections are atoms for it). Two witness expressions are "the same" only if their types are syntactically equal up to open variables, not up to an equality in scope: one requirement instantiated at two equal types is two witnesses.
+
+The liberal rule also did real work, which is now done explicitly:
+
+- **A given declared in a trait about its associated type** (`trait P { type X; given X is Q }`) has the type "for every `Self` with a witness of `P`, `Self.X is Q`", where `Self.X` is selected through that witness. When such a given is matched against a goal `T.X is Q` in which `T.X` is selected through a known witness `w`, that match *decides* the premise: it is `w`. No other choice makes the two types equal.
+- **A member of an extension** `extension <T where T is P> T { fun twice(x: T.X) }` used inside the trait at `T = Self` has its `T.X` replaced by the selection through the witness that made the extension apply, here the trait's own (see `../completeness/2-projections-in-signatures.md`).
 
 A requirement `T == Self` without `T is P` still makes `T.X` available: resolution finds `T is P` from the trait's own witness, transported along the equality, and that selection is the same witness. Only the case with a *second* witness changes.
 

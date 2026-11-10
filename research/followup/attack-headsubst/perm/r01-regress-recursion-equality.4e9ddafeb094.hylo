@@ -1,0 +1,8 @@
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun rec<T where T is P, T.X == S1>(t: T, x: T.X) -> T.X { rec<T>(t, S1()) }

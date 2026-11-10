@@ -872,6 +872,11 @@ def summarise(codebase, lang, decls, nlines, traits, env_sig):
     S["files"], S["lines"] = len(nlines), sum(nlines.values())
     by = collections.Counter(d["kind"] for d in decls)
     S["declarations"] = dict(by)
+    # `F: Fn(A) -> B` binds `F::Output`; Hylo has built-in arrow types, so these are listed apart and not counted as equalities.
+    sugar = sum(1 for d in decls for r in d["reqs"] if r["kind"] == "eq" and r["via"] == "fnsugar")
+    for d in decls:
+        for r in d["reqs"]:
+            if r["kind"] == "eq" and r["via"] == "fnsugar": r["kind"] = "fnsugar"
     def own(d, kind, vias=None): return [r for r in d["reqs"] if r["kind"] == kind and (vias is None or r["via"] in vias)]
     def is_generic(d):
         return bool(d["params"]) or (lang == "swift" and re.search(r"\bsome\s", d["sig"])) or (lang == "rust" and re.search(r"\bimpl\s", d["sig"]))
@@ -889,6 +894,7 @@ def summarise(codebase, lang, decls, nlines, traits, env_sig):
     eqs = [(d, r) for d in decls for r in d["reqs"] if r["kind"] == "eq"]
     S["equality requirements"] = len(eqs)
     S["equality requirements by origin"] = dict(collections.Counter(r["via"] for d, r in eqs))
+    S["return types of Fn bounds (not counted as equalities)"] = sugar
     S["equality requirements by shape"] = {s: sum(r["shape"] == s for d, r in eqs) for s in SHAPES}
     S["equality requirements written in traits"] = sum(1 for d, r in eqs if d["kind"] in ("trait", "assoctype"))
     S["equality requirements by projection depth"] = dict(sorted(collections.Counter(r["depth"] for d, r in eqs).items()))
@@ -913,8 +919,8 @@ def summarise(codebase, lang, decls, nlines, traits, env_sig):
         return re.split(r"\.|::", re.match(r"[\w.:]*", d["name"]).group(0))[-1] in traits
     S["extensions of a trait"] = sum(ext_of_trait(d) for d in ext)
     per_type = collections.Counter(re.match(r"[\w.:]*", d["name"]).group(0) or d["name"] for d in decls if d["kind"] in ("extension", "conformance"))
-    S["types extended"] = len(per_type)
-    S["extensions per type (median, p95, max)"] = [pct(per_type.values(), .5), pct(per_type.values(), .95), max(per_type.values(), default=0)]
+    S["types with an extension or conformance declaration"] = len(per_type)
+    S["extensions and conformance declarations per type (median, p95, max)"] = [pct(per_type.values(), .5), pct(per_type.values(), .95), max(per_type.values(), default=0)]
     S["most extended"] = per_type.most_common(8)
     # traits
     tr = [d for d in decls if d["kind"] == "trait"]
@@ -974,9 +980,13 @@ def summarise(codebase, lang, decls, nlines, traits, env_sig):
                     if (subj, t) not in seen:
                         seen.add((subj, t)); n += sig[t]["eq"] if t in sig else 0
         return n
-    imp = [implied(d) + d["n_vis_eq"] for d in body]
+    def written(d):      # equalities written on the function and on enclosing declarations other than traits
+        return sum(1 for x in d["_chain"] if x["kind"] not in ("trait", "assoctype") for r in x["reqs"] if r["kind"] == "eq" and r["via"] != "fnsugar")
+    for d in body: d["n_scope_eq"] = implied(d) + written(d)
+    imp = [d["n_scope_eq"] for d in body]
     S["equalities in scope incl. those of the named traits, one level (median, p95, p99, max)"] = [pct(imp, .5), pct(imp, .95), pct(imp, .99), max(imp, default=0)]
     S["functions with any equality in scope incl. those of the named traits"] = sum(v > 0 for v in imp)
+    S["functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)"] = [sum(v == 0 for v in imp), sum(1 <= v <= 3 for v in imp), sum(4 <= v <= 7 for v in imp), sum(8 <= v <= 15 for v in imp), sum(v >= 16 for v in imp)]
     # transitivity and congruence
     alld = [d for d in decls if d["kind"] in ("function", "type", "alias", "extension", "conformance", "trait", "assoctype")]
     S["declarations whose visible equalities form a class of 3 or more terms"] = sum(d["max_class"] >= 3 for d in alld)
@@ -1073,8 +1083,8 @@ def main():
     simple = ["files", "lines", "functions", "generic declarations", "generic functions", "generic types", "functions in a generic context",
               "where clauses", "conformance requirements (where)", "conformance requirements (inline bounds)",
               "conformance requirements (associated type declarations)", "inverse / lifetime / layout requirements",
-              "equality requirements", "equality requirements written in traits", "declarations with an equality requirement",
-              "extensions", "extensions of a trait", "types extended", "conformance declarations", "conformances declared (one per trait named)",
+              "equality requirements", "return types of Fn bounds (not counted as equalities)", "equality requirements written in traits", "declarations with an equality requirement",
+              "extensions", "extensions of a trait", "types with an extension or conformance declaration", "conformance declarations", "conformances declared (one per trait named)",
               "conformance requirements on an associated type",
               "conditional conformances", "conditional conformances constraining an associated type", "conditional conformances with an equality",
               "conditional extensions", "conditional extensions constraining an associated type", "conditional extensions with an equality", "traits", "traits with associated types",
@@ -1086,10 +1096,11 @@ def main():
               "declarations needing a chain of 2 or more equalities", "longest chain of equalities",
               "declarations where a projection of an equated term is written", "declarations where congruence applies", "declarations with equalities between different roots"]
     for k in simple: row(k, lambda s, k=k: s[k])
-    for k in ["extensions per type (median, p95, max)", "requirements per constrained declaration (median, p95, p99, max)",
+    for k in ["extensions and conformance declarations per type (median, p95, max)", "requirements per constrained declaration (median, p95, p99, max)",
               "equalities per declaration that has one (median, p95, p99, max)", "local givens visible in a function (median, p95, p99, max)",
               "local equalities visible in a function (median, p95, p99, max)",
               "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)",
+              "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)",
               "projections written in the code, by depth (1, 2, 3, 4+)"]:
         row(k, lambda s, k=k: " / ".join(map(str, s[k])))
     lines.append("")

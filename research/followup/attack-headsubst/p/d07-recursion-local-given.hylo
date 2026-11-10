@@ -1,0 +1,20 @@
+// Tests: a function with a local conformance of its own parameter calls itself; the recursive
+// call resolves `T is P` to the local conformance (`X = S1`), not to the requirement.
+// Correct verdict: rejected (1 error): `x` is a `T.X` through the requirement, and the call
+// `rec(t, x)` in the block expects an `S1`. (The call with `S1()` is accepted.)
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun rec<T where T is P>(t: T, x: T.X) {
+  if true {
+    given T is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    rec(t, S1())
+    rec(t, x)
+  }
+}

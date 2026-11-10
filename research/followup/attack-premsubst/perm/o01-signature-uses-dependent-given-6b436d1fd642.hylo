@@ -1,0 +1,10 @@
+given B is Q {}
+type BA = Box<A>
+fun k(x: BA.X) -> A { x }
+given <T where T is P, T.X is Q> => Box<T> is P { type X = T }
+given A is P { type X = B }
+struct B { public memberwise init }
+trait P { type X }
+struct Box<T> { public memberwise init }
+trait Q {}
+struct A { public memberwise init }

@@ -1,0 +1,23 @@
+// Tests: an extension whose extendee mentions the projection of its own requirement
+// (`Wrap<T, T.X>`); the member is found by deciding the premise from the receiver.
+// Correct verdict: rejected (2 errors): in `g`, `w.eat(v.get())` passes a `V.X` for a `U.X`;
+// in `k`, `Wrap<U, V.X>` is not a `Wrap<T, T.X>` for any `T`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+struct Wrap<T, Y> { public var t: T; public var y: Y; public memberwise init }
+extension <T where T is P> Wrap<T, T.X> {
+  fun eat(x: T.X) { self.t.put(x) }
+  fun feed() { self.t.put(self.y) }
+  fun again() { self.feed() ; self.eat(self.y) }
+}
+fun g<U, V where U is P, V is P>(w: Wrap<U, U.X>, v: V) {
+  w.feed()
+  w.eat(w.y)
+  w.eat(v.get())
+}
+fun k<U, V where U is P, V is P>(w: Wrap<U, V.X>) { w.feed() }

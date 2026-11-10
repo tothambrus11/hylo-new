@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// rust-flatten.hylo reduced to its declarations: no function uses the conformance.
+trait Iterator { type Item }
+trait IntoIterator {
+  type Item
+  type IntoIter
+}
+struct Flatten<I> { public memberwise init }
+given <I, U where
+  I is Iterator, U is Iterator, I.Item is IntoIterator, I.Item.IntoIter == U, I.Item.Item == U.Item
+> => Flatten<I> is Iterator {
+  type Item = U.Item
+}

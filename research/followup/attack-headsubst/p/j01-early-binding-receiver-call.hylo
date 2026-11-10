@@ -1,0 +1,17 @@
+// Tests: the argument for a bare projection parameter when the callee is a method of the
+// result of a call; the caller knows `V.X == S1`.
+// Correct verdict: accepted (both functions).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+trait R { fun mix<V where V is P>(v: V, x: V.X) { v.put(x) } }
+given A is R {}
+fun k1<V where V is P, V.X == S1>(v: V) { let a = A() ; a.mix(v, S1()) }
+fun k2<V where V is P, V.X == S1>(v: V) { A().mix(v, S1()) }

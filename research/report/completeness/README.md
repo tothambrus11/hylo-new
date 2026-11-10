@@ -7,8 +7,9 @@ The soundness fixes make the checker reject programs it should not accept. This 
 | A requirement on an associated type of another requirement can never be satisfied by a caller | `fun f<T where T is P, T.X is Q>()` called from a function with the same requirements | `premsubst` | `1-dependent-requirements.md` |
 | An associated type of a requirement in a signature is not the caller's associated type | `fun first<T where T is P>(t: T) -> T.X` applied to a value of a concrete type | `headsubst` | `2-projections-in-signatures.md` |
 | An equality is used only if both of its sides are written and only at the innermost mismatch | `where T == Box<U>` with `given <X> => Box<X> is P` and a need for `T is P` | `eqfilter`, `eqouter`, `eqclass` (experiments) | `3-equalities-in-matching.md` |
+| A derivation may use at most ten givens in all | a 5-tuple is not `Copyable`; a function with three requirements on pairs cannot be called | `heightbound` (experiment) | `4-derivation-size.md` |
 
-The first two are fixes: they implement the dependent reading of a where clause, which the language already has for equalities in simple cases. The third group changes which givens match and therefore, in a few constructed programs, which conformance is selected or whether a use is ambiguous; it needs a decision from the language designers before it is adopted.
+The first two are fixes: they implement the dependent reading of a where clause, which the language already has for equalities in simple cases. The third group changes which givens match and therefore, in a few constructed programs, which conformance is selected or whether a use is ambiguous; the fourth changes which resolutions fail at a bound. Both need a decision from the language designers before they are adopted.
 
 Together with `assocsubst` (`../soundness/6-generic-conformance-associated-types.md`), the first two make the following program type-check. The existing implementation rejects every call in it.
 

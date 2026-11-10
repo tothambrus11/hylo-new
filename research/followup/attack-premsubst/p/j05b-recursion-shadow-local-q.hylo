@@ -1,0 +1,15 @@
+// j05 where `C is Q` is declared in the block too (nearer than f's requirements): the penalties of
+// the two derivations differ. Well typed; accepted expected.
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct C { public memberwise init }
+fun f<T where T is P, T.X is Q>(t: T) {
+  t.get().use()
+  if true {
+    given C is Q { fun use() {} }
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    f<T>(t)
+  }
+}

@@ -1,0 +1,93 @@
+From 4e7a2aabbd4ce1ea52d7f6b7610b84bf9d3c42c9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 14:18:01 +0000
+Subject: [PATCH 15/27] Typer: eqindex (keep the index of givens under ground
+ equalities)
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 31 +++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  3 +++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 2029590..128401d 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -4166,6 +4166,13 @@ public struct Typer {
+     /// The givens that may be used to derive a coercion (i.e., `T ~ U` or `<T> T` heads).
+     var coercionSources: [Given] = []
+ 
++    /// `true` iff every coercion source is a ground equality neither side of which is a type
++    /// constructor taking arguments (`eqindex`).
++    ///
++    /// A given whose head constructor differs from a goal's can then only match by coercing the
++    /// pair of constructors, which no such equality allows, so the index remains valid.
++    var coercionSourcesAreRigid = true
++
+     /// The number of groups.
+     var groupCount: Int = 0
+ 
+@@ -4225,6 +4232,7 @@ public struct Typer {
+           || program.types.isEquality(head)
+         {
+           ix.coercionSources.append(g)
++          if !isGroundEquality(gt) || hasConstructorSide(head) { ix.coercionSourcesAreRigid = false }
+         }
+         if let k = nominalHead(head) {
+           ix.byHead[k, default: []].append(e)
+@@ -4331,6 +4339,25 @@ public struct Typer {
+     return .init(head: h, premises: ps)
+   }
+ 
++  /// Returns `true` iff a side of the equality `e` is a trait or a generic type constructor
++  /// without its arguments.
++  private mutating func hasConstructorSide(_ e: AnyTypeIdentity) -> Bool {
++    guard let w = program.types[e] as? EqualityWitness else { return true }
++    for side in [w.lhs, w.rhs] {
++      switch program.types[program.types.dealiased(side)] {
++      case is Trait:
++        return true
++      case let u as Struct:
++        if !program[u.declaration].parameters.isEmpty { return true }
++      case let u as Enum:
++        if !program[u.declaration].parameters.isEmpty { return true }
++      default:
++        continue
++      }
++    }
++    return false
++  }
++
+   /// Returns `true` iff `t` is the type of a given asserting an equality between closed types.
+   private func isGroundEquality(_ t: AnyTypeIdentity) -> Bool {
+     let (c, h) = program.types.contextAndHead(t)
+@@ -4473,7 +4500,9 @@ public struct Typer {
+     }
+     if !TyperExperiments.index { return nil }
+ 
+-    guard let ix = givenIndex(visibleFrom: scopeOfUse), ix.coercionSources.isEmpty else {
++    guard let ix = givenIndex(visibleFrom: scopeOfUse),
++      ix.coercionSources.isEmpty || (TyperExperiments.eqindex && ix.coercionSourcesAreRigid)
++    else {
+       TyperCounters.bump("index.fallback")
+       return nil
+     }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 0d8e808..7aa3d2f 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -138,6 +138,9 @@ public enum TyperExperiments {
+   /// Prints one line per implicit resolution describing its size and outcome.
+   nonisolated(unsafe) public static var census: Bool = enabled.contains("census")
+ 
++  /// Keep the index of givens in scopes whose coercion sources are ground equalities.
++  nonisolated(unsafe) public static var eqindex: Bool = enabled.contains("eqindex")
++
+   nonisolated(unsafe) public static var arrowenv: Bool = enabled.contains("arrowenv")
+ 
+   /// SEMANTIC FIX: an open equality goal `?v ~ X` (?v not in X) is solved only by its most
+-- 
+2.43.0
+

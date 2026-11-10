@@ -410,6 +410,14 @@ def main():
         for (mid, what), cells in d.items():
             P(f"| {mid} | {what} | " + " | ".join(dc(cells.get((c, dd))) for c in ("base", "min5", "min5abs") for dd in (10, 12, 14)) + " |")
         P("")
+        other = [(mid, what, c, dd, x) for (mid, what), cells in d.items() for (c, dd), x in sorted(cells.items()) if dd not in (10, 12, 14)]
+        if other:
+            P("Runs at other depths (the blow-ups were also run at depth 6, where they finish; `verify.md` section 3 has depths 6 to 10):\n")
+            P("| mutant | program | config | depth | result | summon.depthExhausted |")
+            P("|---|---|---|---:|---:|---:|")
+            for mid, what, c, dd, x in other:
+                P(f"| {mid} | {what} | {c} | {dd} | {dc(x)} | {x['depthExhausted']} |")
+            P("")
     # sources with and without equality requirements
     import re, mutate
     eqcache = {}

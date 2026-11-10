@@ -1,0 +1,13 @@
+// Tests: an extension of the types conforming to a trait that constrains its associated type
+// with a given (`given X is Q`); its members mention `T.X.Y` and use each other.
+// Correct verdict: accepted. (Every configuration rejects it.)
+trait Q { type Y; fun y() -> Y; fun eat(y: Y) }
+trait P { type X
+  given X is Q
+  fun get() -> X }
+extension <T where T is P> T {
+  fun far() -> T.X.Y { self.get().y() }
+  fun rt() { self.get().eat(self.far()) }
+  fun ann() { let y: T.X.Y = self.far() }
+}
+fun g<U where U is P>(u: U) { u.get().eat(u.far()) }

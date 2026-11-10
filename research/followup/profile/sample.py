@@ -10,7 +10,7 @@ RES = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))
 B = os.path.join(RES, "exp", "bin", sys.argv[1], "tc-bench.real")
 flags, out = sys.argv[2], sys.argv[3]
 N = int(sys.argv[4]) if len(sys.argv) > 4 else 150
-p = subprocess.Popen([B, "--repeat", "100000", os.path.join(RES, "workloads/empty.hylo")],
+p = subprocess.Popen([B, "--repeat", "100000", os.environ.get("WORKLOAD", os.path.join(RES, "workloads/empty.hylo"))],
                      env=dict(os.environ, HYLO_TC_EXPERIMENTS=flags), stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 time.sleep(2)
 stacks = []

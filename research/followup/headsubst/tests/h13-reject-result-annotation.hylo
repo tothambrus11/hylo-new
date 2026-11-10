@@ -1,0 +1,13 @@
+// Expected: rejected. The result of `pick` applied to an `A` is `A.X`, which is `C`, not `D`.
+trait P { type X; fun get() -> X }
+struct A { public memberwise init }
+struct C { public memberwise init }
+struct D { public memberwise init }
+given A is P { type X = C
+  fun get() -> C { C() } }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun want(d: D) {}
+fun q(a: A) { let c: D = pick(a) }
+fun q2(a: A) { want(pick(a)) }
+fun q3(a: A) -> D { pick(a) }
+fun q4(a: A) -> D { return pick(a) }

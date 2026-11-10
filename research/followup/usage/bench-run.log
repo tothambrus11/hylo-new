@@ -10,3 +10,105 @@ generated/rust-flatten.control.hylo FULL rejected (3)
 swift-collection-signature.hylo base accepted
 swift-collection-signature.hylo FIX accepted
 swift-collection-signature.hylo FULL accepted
+generated/swift-collection-signature.neg.hylo base timeout (60 s)
+generated/swift-collection-signature.neg.hylo FIX rejected (6)
+generated/swift-collection-signature.neg.hylo FULL rejected (6)
+generated/swift-collection-signature.control.hylo base timeout (60 s)
+generated/swift-collection-signature.control.hylo FIX rejected (20)
+generated/swift-collection-signature.control.hylo FULL rejected (20)
+generated/swift-collection-signature.fn-one.hylo base accepted
+generated/swift-collection-signature.fn-one.hylo FIX accepted
+generated/swift-collection-signature.fn-one.hylo FULL accepted
+generated/swift-collection-signature.fn-two.hylo base accepted
+generated/swift-collection-signature.fn-two.hylo FIX accepted
+generated/swift-collection-signature.fn-two.hylo FULL accepted
+swift-string-protocol.hylo base timeout (60 s)
+swift-string-protocol.hylo FIX accepted
+swift-string-protocol.hylo FULL accepted
+generated/swift-string-protocol.neg.hylo base timeout (60 s)
+generated/swift-string-protocol.neg.hylo FIX rejected (5)
+generated/swift-string-protocol.neg.hylo FULL rejected (5)
+generated/swift-string-protocol.control.hylo base timeout (60 s)
+generated/swift-string-protocol.control.hylo FIX rejected (18)
+generated/swift-string-protocol.control.hylo FULL rejected (18)
+generated/swift-string-protocol.fn-overString.hylo base timeout (60 s)
+generated/swift-string-protocol.fn-overString.hylo FIX accepted
+generated/swift-string-protocol.fn-overString.hylo FULL accepted
+generated/swift-string-protocol.fn-decoding.hylo base accepted
+generated/swift-string-protocol.fn-decoding.hylo FIX accepted
+generated/swift-string-protocol.fn-decoding.hylo FULL accepted
+swift-transitive-parameters.hylo base rejected (1)
+swift-transitive-parameters.hylo FIX accepted
+swift-transitive-parameters.hylo FULL accepted
+generated/swift-transitive-parameters.neg.hylo base timeout (60 s)
+generated/swift-transitive-parameters.neg.hylo FIX rejected (6)
+generated/swift-transitive-parameters.neg.hylo FULL rejected (6)
+generated/swift-transitive-parameters.control.hylo base timeout (60 s)
+generated/swift-transitive-parameters.control.hylo FIX rejected (4)
+generated/swift-transitive-parameters.control.hylo FULL rejected (4)
+generated/swift-transitive-parameters.fn-rangeSetInit.hylo base accepted
+generated/swift-transitive-parameters.fn-rangeSetInit.hylo FIX accepted
+generated/swift-transitive-parameters.fn-rangeSetInit.hylo FULL accepted
+generated/swift-transitive-parameters.fn-anyCollectionInit.hylo base accepted
+generated/swift-transitive-parameters.fn-anyCollectionInit.hylo FIX accepted
+generated/swift-transitive-parameters.fn-anyCollectionInit.hylo FULL accepted
+generated/swift-transitive-parameters.fn-chainUse.hylo base rejected (1)
+generated/swift-transitive-parameters.fn-chainUse.hylo FIX accepted
+generated/swift-transitive-parameters.fn-chainUse.hylo FULL accepted
+gaps/associated-type-premise.hylo base rejected (2)
+gaps/associated-type-premise.hylo FIX rejected (2)
+gaps/associated-type-premise.hylo FULL rejected (2)
+gaps/equality-determined-parameter-simple.hylo base accepted
+gaps/equality-determined-parameter-simple.hylo FIX accepted
+gaps/equality-determined-parameter-simple.hylo FULL accepted
+gaps/equality-determined-parameter.hylo base exit -11
+gaps/equality-determined-parameter.hylo FIX rejected (1)
+gaps/equality-determined-parameter.hylo FULL rejected (1)
+gaps/error-type-accepted.hylo base accepted
+gaps/error-type-accepted.hylo FIX accepted
+gaps/error-type-accepted.hylo FULL accepted
+gaps/generic-projection.hylo base rejected (2)
+gaps/generic-projection.hylo FIX rejected (2)
+gaps/generic-projection.hylo FULL rejected (2)
+gaps/inherited-associated-type.hylo base rejected (1)
+gaps/inherited-associated-type.hylo FIX rejected (1)
+gaps/inherited-associated-type.hylo FULL rejected (1)
+gaps/restated-conformance.hylo base accepted
+gaps/restated-conformance.hylo FIX rejected (1)
+gaps/restated-conformance.hylo FULL rejected (1)
+gaps/trait-equality.hylo base timeout (60 s)
+gaps/trait-equality.hylo FIX rejected (2)
+gaps/trait-equality.hylo FULL rejected (2)
+gaps/trait-given-not-used-for-lookup.hylo base rejected (1)
+gaps/trait-given-not-used-for-lookup.hylo FIX rejected (1)
+gaps/trait-given-not-used-for-lookup.hylo FULL rejected (1)
+gaps/where-clause-order.hylo base rejected (1)
+gaps/where-clause-order.hylo FIX rejected (1)
+gaps/where-clause-order.hylo FULL rejected (1)
+gaps/unsatisfiable-conformance.hylo base crash (stack overflow)
+gaps/unsatisfiable-conformance.hylo FIX rejected (1)
+gaps/unsatisfiable-conformance.hylo FULL rejected (1)
+rust-flatten.hylo base crash (stack overflow)
+rust-flatten.hylo FIX rejected (1)
+rust-flatten.hylo FULL rejected (1)
+generated/rust-flatten.neg.hylo base crash (stack overflow)
+generated/rust-flatten.neg.hylo FIX rejected (4)
+generated/rust-flatten.neg.hylo FULL rejected (4)
+generated/rust-flatten.control.hylo base crash (stack overflow)
+generated/rust-flatten.control.hylo FIX rejected (3)
+generated/rust-flatten.control.hylo FULL rejected (3)
+gaps/equality-determined-parameter.hylo base accepted
+gaps/equality-determined-parameter.hylo FIX accepted
+gaps/equality-determined-parameter.hylo FULL accepted
+gaps/two-equality-conditions.hylo base timeout (60 s)
+gaps/two-equality-conditions.hylo FIX rejected (1)
+gaps/two-equality-conditions.hylo FULL rejected (1)
+rust-flatten.hylo base crash (stack overflow)
+rust-flatten.hylo FIX rejected (1)
+rust-flatten.hylo FULL rejected (1)
+generated/rust-flatten.neg.hylo base crash (stack overflow)
+generated/rust-flatten.neg.hylo FIX rejected (4)
+generated/rust-flatten.neg.hylo FULL rejected (4)
+generated/rust-flatten.control.hylo base crash (stack overflow)
+generated/rust-flatten.control.hylo FIX rejected (3)
+generated/rust-flatten.control.hylo FULL rejected (3)

@@ -1,0 +1,17 @@
+// f calls itself at the same T inside a block that declares a nearer conformance `T is P` (X = C);
+// C is NOT Q. Well typed: the call is satisfied with f's own two requirements.
+// The elaboration must pass f's requirement for `T is P` (not the local conformance) together
+// with f's requirement for `T.X is Q`; passing the local conformance with f's `T.X is Q` would
+// call the `use` of one type on a C (check with trace).
+trait P { type X
+  fun get() -> X }
+trait Q { fun use() }
+struct C { public memberwise init }
+fun f<T where T is P, T.X is Q>(t: T) {
+  t.get().use()
+  if true {
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    f<T>(t)
+  }
+}

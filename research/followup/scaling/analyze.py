@@ -452,7 +452,10 @@ def main():
             "table); `n^p`, `r^n`: fitted exponent or base; `flat`: no growth; `<0.2 s`: the time stays "
             "too small to fit; `too few`: fewer than five points completed; `capped`: every point was "
             "cut short by the resource bound; `undecided`: neither model fits clearly better "
-            "(`exp?`, `poly?`: what the last growth factors suggest).\n",
+            "(`exp?`, `poly?`: what the last growth factors suggest). The counter cell is the reliable "
+            "one. The time cell is fitted on single measurements taken under load: where it "
+            "contradicts an exact counter law on a series that stays below a few seconds (for example "
+            "`n^0.5` or `1.1^n` next to an exact polynomial), it reflects noise, not the checker.\n",
             "| Family | " + " | ".join(CONFIGS) + " |", "|---|" + "---|" * len(CONFIGS)]
     for s in summary:
         head.append("| " + " | ".join(s) + " |")
@@ -482,18 +485,19 @@ def main():
     with open(os.path.join(HERE, "tables.md"), "w") as f:
         f.write(body)
     # Which series were cut short by a timeout smaller than 120 s?
-    short = defaultdict(list)
+    short = defaultdict(set)
     for (fam, n, c), r in sorted(pts.items()):
         cut = r["status"] == "timeout" or (r["status"] == "skipped" and "timeout" in r.get("why", ""))
         if cut and r.get("timeout_s", 120) < 120 and fam in gen.FAMILIES:
-            short[c].append(fam)
+            short[c].add((fam, r.get("timeout_s", 120)))
+    lst = "; ".join(f"**{c}**: " + ", ".join(f"`{x}` ({t} s)" for x, t in sorted(fs))
+                    for c, fs in sorted(short.items()))
     if short:
-        note = ("The continuation was not completed for every series: the following ones end with a "
-                "20 s timeout (or with a prediction against 20 s) instead of 120 s, and the tables say "
-                "so point by point. " + "; ".join(
-                    f"**{c}**: " + ", ".join(f"`{x}`" for x in sorted(set(fs))) for c, fs in short.items()) + ".")
+        note = ("The following series end with a shorter timeout (or with a prediction against it), "
+                "given in parentheses, and the tables say so point by point; every other timeout in "
+                "the tables is a 120 s timeout. " + lst + ".")
     else:
-        note = "This was completed for every series, so every timeout in the tables is a 120 s timeout."
+        note = "Every timeout in the tables is a 120 s timeout."
     hp = os.path.join(HERE, "README.head.md")
     if os.path.exists(hp):
         with open(os.path.join(HERE, "README.md"), "w") as f:

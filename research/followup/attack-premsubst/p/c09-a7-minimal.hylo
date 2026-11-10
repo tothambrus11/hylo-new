@@ -1,0 +1,16 @@
+// Minimal form of c08 (assumption A7). ILL TYPED: the call f<T, TX> needs `TX is R`, where TX is
+// T.X selected through f's own requirement; f only knows `TX is Q`. The nearer local conformance
+// (X = C, C is Q and R) must not make the call acceptable.
+trait P { type X }
+trait Q {}
+trait R {}
+struct C {}
+given C is Q {}
+given C is R {}
+fun f<T, V where T is P, T.X is Q, V is R>() {
+  type TX = T.X
+  if true {
+    given T is P { type X = C }
+    f<T, TX>()
+  }
+}

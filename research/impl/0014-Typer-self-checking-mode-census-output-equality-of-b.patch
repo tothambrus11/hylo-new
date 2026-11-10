@@ -1,0 +1,371 @@
+From f4aa7603ec828bdc8ea063dab20643fb53343030 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 13:50:39 +0000
+Subject: [PATCH 14/27] Typer: self-checking mode, census output; equality of
+ bundle types; no crash on a case outside an enum
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 168 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |   6 +
+ Sources/FrontEnd/Types/TypeStore.swift     |  19 ++-
+ 3 files changed, 183 insertions(+), 10 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index cd4e8d2..2029590 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -43,6 +43,18 @@ public struct Typer {
+   /// The number of nested premise resolutions made by `solveEquality`.
+   private var premiseResolutionDepth = 0
+ 
++  /// The kind of pruning that a nested search is verifying, if any (`selfcheck`).
++  private enum SelfCheck { case none, model, equality }
++
++  /// The verification in progress (`selfcheck`).
++  private var selfCheck = SelfCheck.none
++
++  /// `true` iff the nested search of the verification in progress was abandoned.
++  private var selfCheckInconclusive = false
++
++  /// The number of matches attempted so far (`census`).
++  private var matchCount = 0
++
+   /// The scopes in which implicit resolution was abandoned (`budget`).
+   private var reportedBudgetScopes: Set<ScopeIdentity> = []
+ 
+@@ -1462,7 +1474,12 @@ public struct Typer {
+     assert(d.module == module, "dependency is not typed")
+ 
+     // The enclosing scope is an enum declaration.
+-    let o = typeOfSelf(in: program.parent(containing: d, as: EnumDeclaration.self)!)
++    guard let e = program.parent(containing: d, as: EnumDeclaration.self) else {
++      // The case is not in an enum; the error is diagnosed during scoping.
++      program[d.module].setType(.error, for: d)
++      return .error
++    }
++    let o = typeOfSelf(in: e)
+ 
+     // The case denotes a constant if it has no associated value and a constructor otherwise.
+     if program[d].parameters.isEmpty {
+@@ -3781,14 +3798,41 @@ public struct Typer {
+       if !declarationsOnStack.isEmpty { recordSkippedGivens(t, in: scopeOfUse, where: environment) }
+       if !pendingGivenChecks.isEmpty { checkPendingGivens() }
+     }
+-    if TyperExperiments.eqsolve {
++    if TyperExperiments.eqsolve && (selfCheck != .equality) {
+       switch solveEquality(t, in: scopeOfUse, where: environment) {
+       case .notApplicable:
+         break
+       case .refuted:
++        if TyperExperiments.selfcheck && (selfCheck == .none) {
++          switch searchDerives(t, in: scopeOfUse, where: environment, verifying: .equality) {
++          case .some(true):
++            let g = program.types.reify(
++              t, applying: environment.substitutions, withVariables: .kept)
++            selfCheckViolation(
++              "the equality procedure refuted \(program.show(g)), which search derives")
++          case .some(false):
++            TyperCounters.bump("selfcheck.equality.refutationConfirmed")
++          case .none:
++            TyperCounters.bump("selfcheck.equality.inconclusive")
++          }
++        }
+         return []
+       case .proved(let w, let cost):
+         let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++        if TyperExperiments.selfcheck && (selfCheck == .none) {
++          if program.types.dealiased(w.type) != program.types.dealiased(u) {
++            selfCheckViolation(
++              "the equality procedure built a proof of \(program.show(w.type)) for \(program.show(u))")
++          }
++          switch searchDerives(t, in: scopeOfUse, where: environment, verifying: .equality) {
++          case .some(true):
++            TyperCounters.bump("selfcheck.equality.proofConfirmed")
++          case .some(false):
++            TyperCounters.bump("selfcheck.equality.proofNotFoundBySearch")
++          case .none:
++            TyperCounters.bump("selfcheck.equality.inconclusive")
++          }
++        }
+         return [
+           formThread(
+             matching: w, to: u, in: environment, then: continuation,
+@@ -3797,7 +3841,7 @@ public struct Typer {
+         ]
+       }
+     }
+-    if TyperExperiments.eqmgu, let r = mostGeneralEqualityThread(
++    if TyperExperiments.eqmgu && (selfCheck != .equality), let r = mostGeneralEqualityThread(
+       t, in: scopeOfUse, where: environment, then: continuation, penalties: penalties,
+       ancestors: ancestors)
+     {
+@@ -3908,6 +3952,7 @@ public struct Typer {
+   ) -> ResolutionThread.Advanced {
+     assert(!program.types.hasContext(thread.witness.type))
+     TyperCounters.bump("summon.matches")
++    matchCount += 1
+     let (a, b) = (thread.witness.type, thread.queried)
+ 
+     // The witness has a simple type; attempt a match.
+@@ -4042,6 +4087,7 @@ public struct Typer {
+     var work = threads
+     var done: [SummonResult] = []
+     var depth = 0
++    let matchesAtEntry = matchCount
+ 
+     while done.isEmpty && !work.isEmpty && (depth < maxImplicitDepth) {
+       var next: [ResolutionThread] = []
+@@ -4058,7 +4104,15 @@ public struct Typer {
+       // Fix (`budget`): a frontier this large comes from exponential search; give up and reject
+       // the program rather than exhaust memory. Giving up is reported as an error, since a failed
+       // resolution may otherwise steer overload or extension selection to another candidate.
+-      if TyperExperiments.budget && done.isEmpty && work.count > TyperExperiments.budgetLimit {
++      if selfCheck != .none {
++        // A verification search is abandoned silently; its verdict is then inconclusive.
++        if done.isEmpty && work.count > min(TyperExperiments.budgetLimit, 20_000) {
++          selfCheckInconclusive = true
++          work = []
++        }
++      } else if TyperExperiments.budget && done.isEmpty
++        && work.count > TyperExperiments.budgetLimit
++      {
+         TyperCounters.bump("summon.budgetExhausted")
+         reportResolutionBudgetExhausted(in: scopeOfUse)
+         work = []
+@@ -4069,6 +4123,18 @@ public struct Typer {
+     }
+ 
+     let result = done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
++    if TyperExperiments.census && (selfCheck == .none), let q = threads.first?.queried {
++      let h = program.types.head(q)
++      let kind =
++        program.types.isEquality(h) ? "equality"
++        : (nominalHead(h).map({ (k) in program.types[k] is Trait }) ?? false) ? "conformance"
++        : "other"
++      let visible = givens(visibleFrom: scopeOfUse).reduce(0, { (n, g) in n + g.count })
++      print(
++        "[census] {\"kind\":\"\(kind)\",\"givens\":\(visible),\"assumed\":\(threads[0].environment.givens.count),"
++          + "\"threads\":\(threads.count),\"layers\":\(depth),\"matches\":\(matchCount - matchesAtEntry),"
++          + "\"done\":\(done.count),\"minimal\":\(result.count),\"open\":\(q[.hasVariable])}")
++    }
+     if TyperExperiments.enabled.contains("trace") && !threads.isEmpty {
+       let q = program.show(threads[0].queried)
+       print("[trace] resolve \(q): \(depth) layers, \(done.count) done, \(result.count) minimal")
+@@ -4390,7 +4456,19 @@ public struct Typer {
+     let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
+ 
+     // Refutation by the abstract model.
+-    if TyperExperiments.absmodel && !u.isVariable && !mayDerive(u, in: scopeOfUse) {
++    if TyperExperiments.absmodel && (selfCheck != .model) && !u.isVariable
++      && !mayDerive(u, in: scopeOfUse)
++    {
++      if TyperExperiments.selfcheck && (selfCheck == .none) {
++        switch searchDerives(u, in: scopeOfUse, where: environment, verifying: .model) {
++        case .some(true):
++          selfCheckViolation("the abstract model refuted \(program.show(u)), which search derives")
++        case .some(false):
++          TyperCounters.bump("selfcheck.model.confirmed")
++        case .none:
++          TyperCounters.bump("selfcheck.model.inconclusive")
++        }
++      }
+       return []
+     }
+     if !TyperExperiments.index { return nil }
+@@ -4424,6 +4502,22 @@ public struct Typer {
+         penalties: penalties + a + e.group, ancestors: ancestors))
+     }
+ 
++    // Self-check: every candidate left out by the index must fail at its first match.
++    if TyperExperiments.selfcheck && (selfCheck == .none) && (k != nil) {
++      let used = Set(cs.map(\.position))
++      for e in ix.all where !used.contains(e.position) {
++        let th = formThread(
++          matching: expression(referringTo: e.given), to: u, in: environment, then: continuation,
++          penalties: 0, ancestors: ancestors)
++        if case .next(let next) = match(th, in: scopeOfUse), next.isEmpty {
++          TyperCounters.bump("selfcheck.index.confirmed")
++        } else {
++          selfCheckViolation(
++            "the index skipped \(program.show(th.witness)) for \(program.show(u)), which matches")
++        }
++      }
++    }
++
+     // Built-in givens only conclude equalities.
+     if k == nil {
+       for g in [Given.coercion(.reflexivity), .coercion(.symmetry), .coercion(.transitivity)] {
+@@ -4634,6 +4728,9 @@ public struct Typer {
+       // return `0b00` for them, which does not change `result`.
+       if TyperExperiments.coesrc && cache.notCoercionSources.contains(g) {
+         TyperCounters.bump("coesrc.skipped")
++        if TyperExperiments.selfcheck && (canDeriveCoercion(p, applying: g) != 0) {
++          selfCheckViolation("a given recorded as unable to derive coercions derives one")
++        }
+         continue
+       }
+       result |= canDeriveCoercion(p, applying: g)
+@@ -5249,6 +5346,18 @@ public struct Typer {
+         result.append((concept: d, members: ms))
+       }
+     }
++    if TyperExperiments.traitindex && TyperExperiments.selfcheck {
++      var expected: [TraitDeclaration.ID] = []
++      for d in traits(visibleFrom: scopeOfUse) {
++        let ms = lookup(name, lexicallyIn: .init(node: d)).filter(resolvableWithQualification(_:))
++        if !ms.isEmpty { expected.append(d) }
++      }
++      if expected != result.map(\.concept) {
++        selfCheckViolation("the trait index gave different traits for '\(name.identifier)'")
++      } else {
++        TyperCounters.bump("selfcheck.traitindex.confirmed")
++      }
++    }
+     return result
+   }
+ 
+@@ -5959,6 +6068,7 @@ public struct Typer {
+     var shapes: [String?] = []
+     var abstractProjections: [Int] = []
+     var concreteProjections: [AssociatedTypeDeclaration.ID: [Int]] = [:]
++    var unmodelled = false
+     func node(_ x: AnyTypeIdentity) -> Int {
+       let y = program.types.dealiased(x)
+       if let i = index[y] { return i }
+@@ -5995,8 +6105,15 @@ public struct Typer {
+         } else {
+           concreteProjections[u.declaration, default: []].append(i)
+         }
+-      default:
++      case let u as Bundle:
++        cs = [node(u.shape.erased)]; shape = "bundle \(u.variants)"
++      case is GenericParameter, is Struct, is Enum, is Trait, is MachineType, is Namespace,
++        is LiteralType, is Metakind:
+         break
++      default:
++        // A kind of type whose parts are not modelled is treated as an atom, which is only
++        // correct for proving: a refutation that involves such a type is not trusted.
++        unmodelled = true
+       }
+       children[i] = cs
+       shapes[i] = shape
+@@ -6214,7 +6331,7 @@ public struct Typer {
+ 
+     }
+ 
+-    if find(a) != find(b) && unresolvedPremises {
++    if find(a) != find(b) && (unresolvedPremises || unmodelled) {
+       TyperCounters.bump("eqsolve.untrusted")
+       return .notApplicable
+     }
+@@ -6352,7 +6469,17 @@ public struct Typer {
+ 
+   /// Returns `f` applied to `x`, where `f` is a witness of an implication.
+   private mutating func applied(_ f: WitnessExpression, to x: WitnessExpression) -> WitnessExpression {
+-    .init(
++    if TyperExperiments.selfcheck {
++      if let i = program.types[f.type] as? Implication, let h = i.usings.first,
++        program.types.dealiased(h) == program.types.dealiased(x.type)
++      {
++        TyperCounters.bump("selfcheck.proofStep.confirmed")
++      } else {
++        selfCheckViolation(
++          "ill-typed proof step: \(program.show(f.type)) applied to \(program.show(x.type))")
++      }
++    }
++    return .init(
+       value: .termApplication(f, x),
+       type: program.types.dropFirstRequirement(.init(uncheckedFrom: f.type)))
+   }
+@@ -6580,6 +6707,31 @@ public struct Typer {
+     pendingGivenChecks = remaining
+   }
+ 
++  /// Returns whether search derives `t` in `environment`, discharging the assumptions of
++  /// `environment`, with the pruning identified by `mode` disabled; `nil` if the search was
++  /// abandoned (`selfcheck`).
++  private mutating func searchDerives(
++    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment, verifying mode: SelfCheck
++  ) -> Bool? {
++    let saved = (selfCheck, selfCheckInconclusive)
++    selfCheck = mode
++    selfCheckInconclusive = false
++    defer { (selfCheck, selfCheckInconclusive) = saved }
++    var e = environment
++    e.log = []
++    let ts = summon(t, in: scopeOfUse, where: e, then: [], penalties: 0)
++    let rs = takeSummonResults(from: ts, in: scopeOfUse)
++    if !rs.isEmpty { return true }
++    return selfCheckInconclusive ? nil : false
++  }
++
++  /// Reports that a pruning decision was contradicted by the work it avoided (`selfcheck`).
++  private mutating func selfCheckViolation(_ m: String) {
++    TyperCounters.bump("selfcheck.violations")
++    print("[selfcheck] VIOLATION: \(m)")
++  }
++
+   /// Reports that implicit resolution in `scopeOfUse` was abandoned (`budget`).
+   private mutating func reportResolutionBudgetExhausted(in scopeOfUse: ScopeIdentity) {
+     if !reportedBudgetScopes.insert(scopeOfUse).inserted { return }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 8be6bf9..0d8e808 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -132,6 +132,12 @@ public enum TyperExperiments {
+   /// Memoize the reification of subterms within one call to `TypeStore.reify`.
+   nonisolated(unsafe) public static var reifymemo: Bool = enabled.contains("reifymemo")
+ 
++  /// Verification mode: every pruning decision is checked by doing the work it avoided.
++  nonisolated(unsafe) public static var selfcheck: Bool = enabled.contains("selfcheck")
++
++  /// Prints one line per implicit resolution describing its size and outcome.
++  nonisolated(unsafe) public static var census: Bool = enabled.contains("census")
++
+   nonisolated(unsafe) public static var arrowenv: Bool = enabled.contains("arrowenv")
+ 
+   /// SEMANTIC FIX: an open equality goal `?v ~ X` (?v not in X) is solved only by its most
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index b84061e..2c05da4 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -34,6 +34,9 @@ public struct TypeStore: Sendable {
+   /// The identifier of the next fresh variable.
+   private var nextFreshIdentifier: Int
+ 
++  /// `true` while a reification is recomputed without memoization for verification.
++  private var reifyingForSelfCheck = false
++
+   /// The identity of a proper generic type parameter.
+   private var alpha: GenericParameter.ID
+ 
+@@ -875,9 +878,21 @@ public struct TypeStore: Sendable {
+     if !n[.hasVariable] { return n }
+ 
+     // Experiment (`reifymemo`): substitutions often form DAGs; reify each subterm once.
+-    if TyperExperiments.reifymemo {
++    if TyperExperiments.reifymemo && !reifyingForSelfCheck {
+       var memo: [AnyTypeIdentity: AnyTypeIdentity] = [:]
+-      return reify(n, applying: substitutions, withVariables: substitutionPolicy, memo: &memo)
++      let r = reify(n, applying: substitutions, withVariables: substitutionPolicy, memo: &memo)
++      if TyperExperiments.selfcheck {
++        reifyingForSelfCheck = true
++        let expected = reify(n, applying: substitutions, withVariables: substitutionPolicy)
++        reifyingForSelfCheck = false
++        if expected != r {
++          TyperCounters.bump("selfcheck.violations")
++          print("[selfcheck] VIOLATION: memoized reification differs")
++        } else {
++          TyperCounters.bump("selfcheck.reify.confirmed")
++        }
++      }
++      return r
+     }
+ 
+     // Reduce type applications if the abstraction is a universal type.
+-- 
+2.43.0
+

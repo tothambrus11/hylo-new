@@ -1,0 +1,15 @@
+// Tests: the result of the call is one branch of a conditional expression.
+// Correct verdict: rejected (1 error, in `bad`).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun good(c: Bool) -> S0 { if c { pick(A()) } else { S0() } }
+fun bad(c: Bool) -> S1 { if c { pick(A()) } else { S1() } }

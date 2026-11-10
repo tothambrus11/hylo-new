@@ -1,0 +1,11 @@
+trait P { type X }
+trait Q {}
+trait R {}
+struct A {}
+struct B {}
+struct W<X> {}
+given A is P { type X = B }
+given B is Q {}
+given <V where V is Q> => W<V> is R {}
+fun f<T, U where U is P, T is P, T.X is Q, W<U.X> is R>() {}
+public fun main() { f<A, A>() }

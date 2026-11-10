@@ -1,0 +1,24 @@
+// Tests: the callee is a generic requirement of a trait, called through a type parameter and
+// through a conformance.
+// Correct verdict: rejected (2 errors: the two calls with `S1()`).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+trait Q { fun m<U where U is P>(u: U, x: U.X) -> U.X }
+struct K { public memberwise init }
+given K is Q { fun m<U where U is P>(u: U, x: U.X) -> U.X { u.get() } }
+fun g<V where V is Q>(v: V) {
+  wantS0(v.m(A(), S0()))
+  v.m(A(), S1())
+}
+public fun main() {
+  wantS0(K().m(A(), S0()))
+  K().m(A(), S1())
+}

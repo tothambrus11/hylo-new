@@ -1,0 +1,741 @@
+From 0bbd27ef8b836574d9bb5048e9f48dfa041623d9 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 15:41:50 +0000
+Subject: [PATCH 18/27] Typer: premsubst (dependent requirements are proved
+ after those they mention), headsubst (associated types of a callee's
+ requirements in its signature)
+
+premsubst records in an implication the declaration through which later usings
+refer to each using; a using that mentions an earlier one waits until that one
+has a witness, which is substituted into its type.
+
+headsubst abstracts, in a call, the associated types of the callee's
+requirements that occur in its parameters and result by variables, resolved
+from the witnesses found when the callee is elaborated.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Solver.swift        |  95 +++++-
+ Sources/FrontEnd/Typer/Typer.swift         | 358 +++++++++++++++++++--
+ Sources/FrontEnd/Typer/TyperCounters.swift |   9 +
+ Sources/FrontEnd/Types/Implication.swift   |  11 +-
+ Sources/FrontEnd/Types/TypeStore.swift     |  41 ++-
+ 5 files changed, 471 insertions(+), 43 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Solver.swift b/Sources/FrontEnd/Typer/Solver.swift
+index 48ddafe..7d0b4f1 100644
+--- a/Sources/FrontEnd/Typer/Solver.swift
++++ b/Sources/FrontEnd/Typer/Solver.swift
+@@ -59,6 +59,28 @@ internal struct Solver {
+   /// A table from call expression to its arguments after elaboration.
+   private var argumentElaborations: [(Call.ID, ParameterBindings)] = []
+ 
++  /// The associated types of a callee's requirements that occur in its parameters or result,
++  /// each abstracted by a variable until the callee has been elaborated (`headsubst`).
++  private struct PendingProjections {
++
++    /// The types of the callee's requirements, opened.
++    let usings: [AnyTypeIdentity]
++
++    /// For each requirement, the declaration through which the callee's type refers to it.
++    let binders: [DeclarationIdentity?]
++
++    /// The variables and the associated types they stand for.
++    let items: [(TypeVariable.ID, AnyTypeIdentity)]
++
++  }
++
++  /// The projections waiting for the elaboration of a callee, keyed by the coercion goal that
++  /// computes it (`headsubst`).
++  private var pendingProjections: [GoalIdentity: PendingProjections] = [:]
++
++  /// The variables standing for projections that have not been resolved yet (`headsubst`).
++  private var unresolvedProjections: Set<TypeVariable.ID> = []
++
+   /// The current indentation level for logging message, or `-1` if logging is disabled.
+   private var indentation: Int
+ 
+@@ -209,6 +231,12 @@ internal struct Solver {
+       return postpone(g)
+     }
+ 
++    // Fix (`headsubst`): a value is not coerced to an associated type of a requirement of a
++    // callee before the witness of that requirement is known.
++    if let x = program.types.cast(k.rhs, to: TypeVariable.self), unresolvedProjections.contains(x) {
++      return postpone(g)
++    }
++
+     // Summon a coercion.
+     let es = typer.coerced(k.origin, withType: k.lhs, toMatch: k.rhs)
+ 
+@@ -220,6 +248,9 @@ internal struct Solver {
+           pick.witness, applying: pick.substitutions, withVariables: .kept)
+         elaborations.append((k.origin, w))
+       }
++      if let p = pendingProjections.removeValue(forKey: g) {
++        resolve(p, elaboratedBy: pick.witness, at: k.site)
++      }
+       return .success
+     }
+ 
+@@ -232,6 +263,45 @@ internal struct Solver {
+     else { return .failure(diagnoseInvalidCoercion(k)) }
+   }
+ 
++  /// Schedules, for each projection in `p`, an equality between the variable standing for it and
++  /// the associated type selected through the witness that `w` passes for the requirement that
++  /// the projection mentions, where `w` is the elaboration of the callee (`headsubst`).
++  private mutating func resolve(
++    _ p: PendingProjections, elaboratedBy w: WitnessExpression, at site: SourceSpan
++  ) {
++    // `w` applies the callee to one witness per requirement, possibly under coercions.
++    var f = typer.program.types.reify(w, applying: substitutions, withVariables: .kept)
++    var arguments: [WitnessExpression] = []
++    while case .termApplication(let a, let b) = f.value {
++      if program.types[a.type] is EqualityWitness {
++        f = b
++      } else {
++        arguments.append(b)
++        f = a
++      }
++    }
++    arguments.reverse()
++
++    var bindings: [(WitnessExpression, WitnessExpression)] = []
++    if arguments.count == p.usings.count {
++      for (k, b) in p.binders.enumerated() {
++        guard let d = b else { continue }
++        let u = typer.program.types.reify(p.usings[k], applying: substitutions, withVariables: .kept)
++        bindings.append((.init(value: .reference(d), type: u), arguments[k]))
++      }
++    } else {
++      TyperCounters.bump("headsubst.unexpectedElaboration")
++    }
++
++    for (x, t) in p.items {
++      unresolvedProjections.remove(x)
++      let u = typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
++      let v = bindings.isEmpty ? u : typer.projection(u, binding: bindings)
++      TyperCounters.bump("headsubst.resolved")
++      _ = schedule(EqualityConstraint(lhs: x.erased, rhs: v, site: site))
++    }
++  }
++
+   /// Returns the simplification of `k` as an equality between its operands.
+   private mutating func simplify(_ k: CoercionConstraint) -> GoalOutcome {
+     if k.rhs.isVariable && program.types.hasContext(k.lhs) {
+@@ -357,9 +427,28 @@ internal struct Solver {
+       callee = head
+     } else {
+       let f = program[k.origin].callee
+-      (_, callee) = program.types.open(k.callee)
+-      coercion = schedule(
+-        CoercionConstraint(on: f, from: k.callee, to: callee, at: program[f].site))
++      if TyperExperiments.headsubst {
++        // Fix (`headsubst`): the associated types of the callee's requirements that occur in its
++        // parameters and result are abstracted by variables, which are resolved once the callee
++        // has been elaborated, i.e., once the witnesses of its requirements are known.
++        let (us, bs, h) = typer.program.types.openWithBinders(k.callee)
++        let targets = zip(bs, us).compactMap({ (b, u) in
++          b.map({ (d) in WitnessExpression(value: .reference(d), type: u) })
++        })
++        var items: [(TypeVariable.ID, AnyTypeIdentity)] = []
++        callee = targets.isEmpty
++          ? h : typer.abstractingProjections(in: h, through: targets, into: &items)
++        coercion = schedule(CoercionConstraint(on: f, from: k.callee, to: h, at: program[f].site))
++        if !items.isEmpty {
++          TyperCounters.bump("headsubst.abstracted", by: items.count)
++          pendingProjections[coercion] = .init(usings: us, binders: bs, items: items)
++          for (x, _) in items { unresolvedProjections.insert(x) }
++        }
++      } else {
++        (_, callee) = program.types.open(k.callee)
++        coercion = schedule(
++          CoercionConstraint(on: f, from: k.callee, to: callee, at: program[f].site))
++      }
+       subgoals.append(coercion)
+     }
+ 
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 182c7a2..706d037 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -2120,9 +2120,187 @@ public struct Typer {
+ 
+     let ps = declaredTypes(of: types)
+     let us = usings.map({ (p) in declaredType(of: p) })
++
++    // Fix (`premsubst`): record, for each using, the declaration through which later usings refer
++    // to its witness, so that resolution can bind those references to the premise it assumes.
++    // Fix (`headsubst`): likewise if the head `t` refers to it, for calls.
++    let later = TyperExperiments.premsubst && (us.count > 1)
++    if later || (TyperExperiments.headsubst && !us.isEmpty) {
++      var bs: [DeclarationIdentity?] = []
++      for (k, p) in usings.enumerated() {
++        guard case .reference(let r) = expression(referringTo: p) else { bs.append(nil); continue }
++        let target = WitnessExpression(value: .reference(r), type: us[k])
++        var used = later && us[(k + 1)...].contains(where: { (u) in mentions(target, in: u) })
++        if used { TyperCounters.bump("premsubst.binders") }
++        if !used && TyperExperiments.headsubst && mentions(target, in: t) {
++          used = true
++          TyperCounters.bump("headsubst.binders")
++        }
++        bs.append(used ? r : nil)
++      }
++      let i = program.types.introduce(usings: us, binders: bs, into: t)
++      return program.types.introduce(parameters: ps, into: i)
++    }
+     return program.types.introduce(.init(parameters: ps, usings: us), into: t)
+   }
+ 
++  /// Returns `t` with each witness `w` occurring in the qualification of an associated type
++  /// replaced by `replacement(w)` where that is not `nil`. A witness is visited after its parts
++  /// and after the types it contains, so `replacement` sees them already rewritten.
++  private mutating func rewritingWitnesses(
++    in t: AnyTypeIdentity, _ replacement: (WitnessExpression) -> WitnessExpression?
++  ) -> AnyTypeIdentity {
++    withoutActuallyEscaping(replacement) { (f) in
++      Self.rewritingWitnesses(in: t, of: &program.types, f)
++    }
++  }
++
++  /// Returns `w` with each witness occurring in it or in the qualification of an associated type
++  /// of one of its types replaced by `replacement` of it where that is not `nil`.
++  private mutating func rewritingWitnesses(
++    in w: WitnessExpression, _ replacement: (WitnessExpression) -> WitnessExpression?
++  ) -> WitnessExpression {
++    withoutActuallyEscaping(replacement) { (f) in
++      Self.rewritingWitnesses(in: w, of: &program.types, f)
++    }
++  }
++
++  /// Implements `rewritingWitnesses(in:_:)` for types.
++  private static func rewritingWitnesses(
++    in t: AnyTypeIdentity, of s: inout TypeStore,
++    _ replacement: @escaping (WitnessExpression) -> WitnessExpression?
++  ) -> AnyTypeIdentity {
++    s.map(t) { (s, n) in
++      guard let a = s[n] as? AssociatedType else { return .stepInto(n) }
++      let q = rewritingWitnesses(in: a.qualification, of: &s, replacement)
++      return .stepOver(s.demand(AssociatedType(declaration: a.declaration, qualification: q)).erased)
++    }
++  }
++
++  /// Implements `rewritingWitnesses(in:_:)` for witnesses.
++  private static func rewritingWitnesses(
++    in w: WitnessExpression, of s: inout TypeStore,
++    _ replacement: @escaping (WitnessExpression) -> WitnessExpression?
++  ) -> WitnessExpression {
++    let u = rewritingWitnesses(in: w.type, of: &s, replacement)
++    let v: WitnessExpression.Value
++    switch w.value {
++    case .termApplication(let a, let b):
++      v = .termApplication(
++        rewritingWitnesses(in: a, of: &s, replacement),
++        rewritingWitnesses(in: b, of: &s, replacement))
++    case .typeApplication(let a, let ts):
++      let x = rewritingWitnesses(in: a, of: &s, replacement)
++      v = .typeApplication(
++        x, ts.mapValues({ (y) in rewritingWitnesses(in: y, of: &s, replacement) }))
++    case .nested(let a):
++      v = .nested(rewritingWitnesses(in: a, of: &s, replacement))
++    default:
++      v = w.value
++    }
++    let r = WitnessExpression(value: v, type: u)
++    return replacement(r) ?? r
++  }
++
++  /// Returns `t` with each outermost associated type whose qualification mentions one of
++  /// `targets` replaced by a fresh variable, appending each variable and the type it stands for
++  /// to `projections` (`headsubst`).
++  internal mutating func abstractingProjections(
++    in t: AnyTypeIdentity, through targets: [WitnessExpression],
++    into projections: inout [(TypeVariable.ID, AnyTypeIdentity)]
++  ) -> AnyTypeIdentity {
++    var found: [AnyTypeIdentity] = []
++    _ = program.types.map(t) { (s, n) in
++      guard s[n] is AssociatedType else { return .stepInto(n) }
++      var mentioned = false
++      _ = Self.rewritingWitnesses(in: n, of: &s, { (w) in
++        if targets.contains(w) { mentioned = true }
++        return nil
++      })
++      if !mentioned { return .stepInto(n) }
++      if !found.contains(n) { found.append(n) }
++      return .stepOver(n)
++    }
++    if found.isEmpty { return t }
++
++    var replacements: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++    for n in found {
++      let x = fresh()
++      replacements[n] = x.erased
++      projections.append((x, n))
++    }
++    return program.types.map(t) { (_, n) in
++      if let r = replacements[n] { .stepOver(r) } else { .stepInto(n) }
++    }
++  }
++
++  /// Returns `p` in which each of the witnesses `bindings[i].0` is replaced by `bindings[i].1`
++  /// and associated types selected through conformance declarations are replaced by their
++  /// definitions (`headsubst`).
++  internal mutating func projection(
++    _ p: AnyTypeIdentity, binding bindings: [(WitnessExpression, WitnessExpression)]
++  ) -> AnyTypeIdentity {
++    let r = rewritingWitnesses(in: p, { (w) in bindings.first(where: { (b) in b.0 == w })?.1 })
++    return normalizingProjections(in: r)
++  }
++
++  /// Returns `true` iff `target` occurs as a witness in `t`.
++  private mutating func mentions(_ target: WitnessExpression, in t: AnyTypeIdentity) -> Bool {
++    var found = false
++    _ = rewritingWitnesses(in: t, { (w) in if w == target { found = true }; return nil })
++    return found
++  }
++
++  /// Returns `true` iff a witness in `t` is an assumed given.
++  private mutating func mentionsAssumed(_ t: AnyTypeIdentity) -> Bool {
++    var found = false
++    _ = rewritingWitnesses(in: t, { (w) in if case .assumed = w.value { found = true }; return nil })
++    return found
++  }
++
++  /// Returns `true` iff a witness in `w` or in one of its types is an assumed given.
++  private mutating func mentionsAssumed(_ w: WitnessExpression) -> Bool {
++    var found = false
++    _ = rewritingWitnesses(in: w, { (x) in if case .assumed = x.value { found = true }; return nil })
++    return found
++  }
++
++  /// Returns `t` in which each associated type selected through a conformance declaration is
++  /// replaced by its definition, or `.error` if that does not terminate (`premsubst`).
++  ///
++  /// Name resolution never builds `(A::c).X` where `c` is a conformance declaration: it returns
++  /// the definition of `X` in `c`. Substituting the witness of a premise can build such a type.
++  private mutating func normalizingProjections(in t: AnyTypeIdentity) -> AnyTypeIdentity {
++    var t = t
++    for _ in 0 ..< 8 {
++      var found: [AnyTypeIdentity] = []
++      _ = program.types.map(t) { (s, n) in
++        if s[n] is AssociatedType { found.append(n) }
++        return .stepInto(n)
++      }
++      var replacements: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++      for n in found {
++        let a = program.types[n] as! AssociatedType
++        var w = a.qualification
++        while let (_, b) = asCoercionApplication(w) { w = b }
++        guard
++          program.flatCast(w.declaration, to: ConformanceDeclaration.self) != nil,
++          !w.hasVariable, !w.type[.hasError], !mentionsAssumed(w)
++        else { continue }
++        if case .reference = w.value {} else if !TyperExperiments.assocsubst { continue }
++        let m = typeOfImplementation(satisfying: a.declaration, in: a.qualification)
++        replacements[n] = (program.types[m] as? Metatype)?.inhabitant ?? .error
++        TyperCounters.bump("premsubst.normalized")
++      }
++      if replacements.isEmpty { return t }
++      t = program.types.map(t) { (_, n) in
++        if let r = replacements[n] { .stepOver(r) } else { .stepInto(n) }
++      }
++      if t[.hasError] { return .error }
++    }
++    return .error
++  }
++
+   /// Configures `p` as a pattern of type `t` introducing variables with capability `k` or reports
+   /// an error if `t` doesn't match `p`'s shape.
+   ///
+@@ -3833,28 +4011,51 @@ public struct Typer {
+       /// do not count against the depth bound.
+       var credit = 0
+ 
+-      /// Returns a copy of `self` in which `ts` are assumed given.
+-      func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
+-        let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
++      /// The premises that are not hypotheses yet: the type of each mentions an assumed given
++      /// that has no witness (`premsubst`). In the order in which they were assumed.
++      var deferred: [Given] = []
++
++      /// `true` iff a using of this thread was bound to an earlier one (`premsubst`).
++      var dependent = false
++
++      /// Returns a copy of `self` with the given substitutions and hypotheses.
++      func with(
++        substitutions s: SubstitutionTable, givens gs: [Given], nextGivenIdentifier n: Int? = nil
++      ) -> Environment {
+         var e = Environment(
+-          substitutions: substitutions, givens: givens + gs,
+-          nextGivenIdentifier: nextGivenIdentifier + gs.count)
++          substitutions: s, givens: gs, nextGivenIdentifier: n ?? nextGivenIdentifier)
+         e.ancestry = ancestry
+         e.log = log
+         e.credit = credit
++        e.deferred = deferred
++        e.dependent = dependent
+         return e
+       }
+ 
++      /// Returns a copy of `self` in which `ts` are assumed given.
++      func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
++        let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
++        return with(
++          substitutions: substitutions, givens: givens + gs,
++          nextGivenIdentifier: nextGivenIdentifier + gs.count)
++      }
++
++      /// Returns `(e, w)` where `e` is a copy of `self` in which `t` is a premise that is not a
++      /// hypothesis yet and `w` is a placeholder for a term of type `t`.
++      func deferring(given t: AnyTypeIdentity) -> (Environment, WitnessExpression) {
++        let i = nextGivenIdentifier
++        var e = with(substitutions: substitutions, givens: givens, nextGivenIdentifier: i + 1)
++        e.deferred.append(.assumed(i, t))
++        return (e, .init(value: .assumed(i), type: t))
++      }
++
+       /// Returns `(e, w)` where `e` is copy of `self` in which `t` is assumed and `w` is a
+       /// placheloder for a term of type `t`.
+       func assuming(given t: AnyTypeIdentity) -> (Environment, WitnessExpression) {
+         let i = nextGivenIdentifier
+         let g = Given.assumed(i, t)
+-        var e = Environment(
++        let e = with(
+           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
+-        e.ancestry = ancestry
+-        e.log = log
+-        e.credit = credit
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -4115,13 +4316,33 @@ public struct Typer {
+       if let i = program.types[witness.type] as? Implication {
+         // Assume that the implication has a non-empty context.
+         let h = i.usings.first!
+-        var (e, v) = environment.assuming(given: h)
++        // Fix (`premsubst`): a using that mentions an earlier one of this thread waits for its
++        // witness.
++        let waits = TyperExperiments.premsubst && environment.dependent && mentionsAssumed(h)
++        var (e, v) = waits ? environment.deferring(given: h) : environment.assuming(given: h)
++        if waits { TyperCounters.bump("premsubst.deferred") }
+         if TyperExperiments.loopcheck {
+           e.ancestry[environment.nextGivenIdentifier] = ancestors.appending(queried)
+         }
+-        witness = WitnessExpression(
+-          value: .termApplication(witness, v),
+-          type: program.types.dropFirstRequirement(.init(uncheckedFrom: witness.type)))
++        var rest = program.types.dropFirstRequirement(.init(uncheckedFrom: witness.type))
++
++        // Bind the usings after `h` that refer to it to the premise just assumed.
++        if TyperExperiments.premsubst, i.usings.count > 1, let b = i.binders.first ?? nil {
++          let j = program.types[rest] as! Implication
++          let target = WitnessExpression(value: .reference(b), type: h)
++          let us = j.usings.map({ (u) in
++            rewritingWitnesses(in: u, { (w) in (w == target) ? v : nil })
++          })
++          if us != j.usings {
++            rest = demand(Implication(context: us, binders: j.binders, head: j.head)).erased
++            e.dependent = true
++            TyperCounters.bump("premsubst.bound")
++          } else if TyperExperiments.selfcheck && !TyperExperiments.headsubst {
++            selfCheckViolation("premsubst: a recorded binder is not referred to by a later using")
++          }
++        }
++
++        witness = WitnessExpression(value: .termApplication(witness, v), type: rest)
+         environment = e
+         continue
+       }
+@@ -4198,13 +4419,8 @@ public struct Typer {
+     // match. Dropping them lets later premises re-bind the same variables differently, which
+     // makes resolution accept underivable equalities (research/round3/soundness.md).
+     if TyperExperiments.fixsubst {
+-      var f = ResolutionThread.Environment(
+-        substitutions: thread.environment.substitutions.union(substitutions),
+-        givens: e.givens, nextGivenIdentifier: e.nextGivenIdentifier)
+-      f.ancestry = e.ancestry
+-      f.log = e.log
+-      f.credit = e.credit
+-      e = f
++      e = e.with(
++        substitutions: thread.environment.substitutions.union(substitutions), givens: e.givens)
+     }
+     if TyperExperiments.enabled.contains("trace") {
+       let n = thread.environment.nextGivenIdentifier
+@@ -4242,12 +4458,9 @@ public struct Typer {
+     if !declarationsOnStack.isEmpty || !pendingGivenChecks.isEmpty { return nil }
+     if parts.contains(where: { (p) in p[.hasVariable] }) { return nil }
+ 
+-    var e = ResolutionThread.Environment(
++    var e = thread.environment.with(
+       substitutions: thread.environment.substitutions.union(substitutions),
+-      givens: thread.environment.givens,
+-      nextGivenIdentifier: thread.environment.nextGivenIdentifier)
+-    e.ancestry = thread.environment.ancestry
+-    e.log = thread.environment.log
++      givens: thread.environment.givens)
+     e.credit = thread.environment.credit + parts.count
+ 
+     var cost = 0
+@@ -4285,14 +4498,41 @@ public struct Typer {
+   private mutating func threadContinuation(
+     appending operand: SummonResult, to thread: ResolutionThread, in scopeOfUse: ScopeIdentity
+   ) -> ResolutionThread.Advanced {
++    var environment = thread.environment
++    assert(environment.dependent || environment.deferred.isEmpty)
++
++    // Fix (`premsubst`): a premise whose type is now known becomes a hypothesis, on top of the
++    // stack, once every hypothesis assumed after it has been discharged.
++    if !environment.deferred.isEmpty {
++      let solved = solvedWitnesses(thread.tail, operand)
++      var gs = environment.givens
++      var waiting: [Given] = []
++      for g in environment.deferred {
++        guard case .assumed(let i, let a) = g else { unreachable() }
++        // Identifiers grow with time: a hypothesis with a larger one was assumed after `g`.
++        if case .assumed(let youngest, _) = gs.last, youngest > i { waiting.append(g); continue }
++        var t = program.types.reify(a, applying: operand.substitutions, withVariables: .kept)
++        t = rewritingWitnesses(in: t, { (w) in
++          if case .assumed(let j) = w.value { solved[j] } else { nil }
++        })
++        t = normalizingProjections(in: t)
++        if mentionsAssumed(t) {
++          waiting.append(g)
++        } else if t[.hasError] {
++          return .next([])
++        } else {
++          gs.append(.assumed(i, t))
++          TyperCounters.bump("premsubst.released")
++        }
++      }
++      environment = environment.with(substitutions: environment.substitutions, givens: gs)
++      environment.deferred = waiting
++    }
++
+     // Are there assumptions to discharge?
+-    if case .assumed(let i, let assumed) = thread.environment.givens.last {
+-      var e = ResolutionThread.Environment(
+-        substitutions: operand.substitutions, givens: thread.environment.givens.dropLast(),
+-        nextGivenIdentifier: thread.environment.nextGivenIdentifier)
+-      e.ancestry = thread.environment.ancestry
+-      e.log = thread.environment.log
+-      e.credit = thread.environment.credit
++    if case .assumed(let i, let assumed) = environment.givens.last {
++      var e = environment.with(
++        substitutions: operand.substitutions, givens: environment.givens.dropLast())
+       let ancestors = e.ancestry.removeValue(forKey: i) ?? []
+       if TyperExperiments.enabled.contains("trace") {
+         e.log.append("  solved with \(program.show(operand.witness)); now prove $\(i): \(program.show(assumed)) [pending: " + e.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", ") + "]")
+@@ -4308,15 +4548,63 @@ public struct Typer {
+           ancestors: ancestors))
+     }
+ 
++    // No hypothesis is left but a premise still waits: excluded by the order of premises.
++    else if !environment.deferred.isEmpty {
++      TyperCounters.bump("premsubst.stuck")
++      if TyperExperiments.selfcheck {
++        selfCheckViolation("premsubst: a deferred premise is never released")
++      }
++      return .next([])
++    }
++
+     // We're done; apply the continuation.
+     else {
+       if TyperExperiments.enabled.contains("trace") {
+         print("[trace] DONE \(program.show(operand.witness))")
+         for l in thread.environment.log { print("[trace]   \(l)") }
+       }
+-      assert(thread.environment.givens.isEmpty)
+-      return .done(applyContinuation(thread.tail[...], to: operand))
++      assert(environment.givens.isEmpty)
++      let r = applyContinuation(thread.tail[...], to: operand)
++      if !environment.dependent { return .done(r) }
++      let clean = withoutAssumed(r, thread.tail, operand)
++      if TyperExperiments.selfcheck && mentionsAssumed(clean.witness) {
++        selfCheckViolation("premsubst: an assumed given remains in the types of a result")
++      }
++      return .done(clean)
++    }
++  }
++
++  /// Returns the witnesses of the assumed givens discharged so far in a thread whose continuation
++  /// is `tail` and whose latest result is `operand`. A witness may mention assumed givens that
++  /// are still pending.
++  private mutating func solvedWitnesses(
++    _ tail: [ResolutionThread.ContinuationItem], _ operand: SummonResult
++  ) -> [Int: WitnessExpression] {
++    var solved: [Int: WitnessExpression] = [:]
++    var w = operand.witness
++    for item in tail.reversed() {
++      // `w` was found for `item.assumed`. The givens it assumes were discharged after it, if at
++      // all, so their witnesses are already in `solved`.
++      let known = solved
++      let r = program.types.reify(w, applying: operand.substitutions, withVariables: .kept)
++      solved[item.assumed] = rewritingWitnesses(in: r, { (x) in
++        if case .assumed(let j) = x.value { known[j] } else { nil }
++      })
++      w = item.elaboration.witness
+     }
++    return solved
++  }
++
++  /// Returns `r` with the assumed givens that occur in the types of its witness replaced by their
++  /// witnesses.
++  private mutating func withoutAssumed(
++    _ r: SummonResult, _ tail: [ResolutionThread.ContinuationItem], _ operand: SummonResult
++  ) -> SummonResult {
++    let solved = solvedWitnesses(tail, operand)
++    let w = rewritingWitnesses(in: r.witness, { (x) in
++      if case .assumed(let j) = x.value { solved[j] } else { nil }
++    })
++    return .init(witness: w, substitutions: r.substitutions, penalties: r.penalties)
+   }
+ 
+   /// Returns the result of  `continuation` applied to `operand`.
+@@ -7093,6 +7381,8 @@ public struct Typer {
+     defer { (selfCheck, selfCheckInconclusive) = saved }
+     var e = environment
+     e.log = []
++    // The premises that wait for a witness of the enclosing thread cannot be released here.
++    e.deferred = []
+     let ts = summon(t, in: scopeOfUse, where: e, then: [], penalties: 0)
+     let rs = takeSummonResults(from: ts, in: scopeOfUse)
+     if !rs.isEmpty { return true }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index d5e5e20..03b8220 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -160,6 +160,15 @@ public enum TyperExperiments {
+   /// and the cycle rule of `extorder`).
+   nonisolated(unsafe) public static var sigrounds: Bool = enabled.contains("sigrounds")
+ 
++  /// SEMANTIC FIX: a requirement that mentions another requirement of the same clause is proved
++  /// after it, with the witness found for it substituted into its type.
++  nonisolated(unsafe) public static var premsubst: Bool = enabled.contains("premsubst")
++
++  /// SEMANTIC FIX: in a call, an associated type of a requirement of the callee that occurs in
++  /// the callee's parameters or result is the associated type of the witness passed for that
++  /// requirement (`pick<T where T is P>(t: T) -> T.X` applied to an `A` returns `A.X`).
++  nonisolated(unsafe) public static var headsubst: Bool = enabled.contains("headsubst")
++
+   /// SEMANTIC FIX: the associated type read from a generic conformance is instantiated with the
+   /// type arguments of the witness (`Box<A>.X` is `A`, not the uninstantiated `T`).
+   nonisolated(unsafe) public static var assocsubst: Bool = enabled.contains("assocsubst")
+diff --git a/Sources/FrontEnd/Types/Implication.swift b/Sources/FrontEnd/Types/Implication.swift
+index 860efe0..054723c 100644
+--- a/Sources/FrontEnd/Types/Implication.swift
++++ b/Sources/FrontEnd/Types/Implication.swift
+@@ -11,10 +11,18 @@ public struct Implication: TypeTree {
+   /// The right-hand side of the implication.
+   public let head: AnyTypeIdentity
+ 
++  /// For each using, the declaration through which the usings after it refer to its witness, or
++  /// `nil` if none does. Empty if no using is referred to (always, unless `premsubst` is on).
++  public let binders: [DeclarationIdentity?]
++
+   /// Creates an instance with the given properties.
+-  public init(context: [AnyTypeIdentity], head: AnyTypeIdentity) {
++  public init(
++    context: [AnyTypeIdentity], binders: [DeclarationIdentity?] = [], head: AnyTypeIdentity
++  ) {
+     assert(!context.isEmpty)
++    assert(binders.isEmpty || (binders.count == context.count))
+     self.usings = context
++    self.binders = binders.contains(where: { (b) in b != nil }) ? binders : []
+     self.head = head
+   }
+ 
+@@ -30,6 +38,7 @@ public struct Implication: TypeTree {
+   ) -> Implication {
+     .init(
+       context: usings.map({ (t) in store.map(t, transform) }),
++      binders: binders,
+       head: store.map(head, transform))
+   }
+ 
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 3db9b88..29801b4 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -249,6 +249,29 @@ public struct TypeStore: Sendable {
+     }
+   }
+ 
++  /// Returns the implicit parameters and head of `n` opened for unification, along with the
++  /// binder of each implicit parameter (see `Implication.binders`).
++  public mutating func openWithBinders(
++    _ n: AnyTypeIdentity
++  ) -> (usings: [AnyTypeIdentity], binders: [DeclarationIdentity?], head: AnyTypeIdentity) {
++    var u: [AnyTypeIdentity] = []
++    var b: [DeclarationIdentity?] = []
++    var h = n
++
++    while true {
++      switch self[h] {
++      case let t as UniversalType:
++        h = open(t.parameters, in: t.head)
++      case let t as Implication:
++        u.append(contentsOf: t.usings)
++        b.append(contentsOf: t.binders.isEmpty ? .init(repeating: nil, count: t.usings.count) : t.binders)
++        h = t.head
++      default:
++        return (u, b, h)
++      }
++    }
++  }
++
+   /// Returns `n` with each occurrence the parameters in `ps` substituted with a fresh variable.
+   public mutating func open(
+     _ ps: [GenericParameter.ID], in n: AnyTypeIdentity
+@@ -273,9 +296,9 @@ public struct TypeStore: Sendable {
+ 
+   /// Returns `n` as the head of an implication having `lhs` on the left-hand side.
+   public mutating func introduce(
+-    usings lhs: [AnyTypeIdentity], into n: AnyTypeIdentity
++    usings lhs: [AnyTypeIdentity], binders: [DeclarationIdentity?] = [], into n: AnyTypeIdentity
+   ) -> AnyTypeIdentity {
+-    lhs.isEmpty ? n : demand(Implication(context: lhs, head: n)).erased
++    lhs.isEmpty ? n : demand(Implication(context: lhs, binders: binders, head: n)).erased
+   }
+ 
+   /// Returns `n` as the head of a universal type introducing `ps`.
+@@ -298,7 +321,11 @@ public struct TypeStore: Sendable {
+     if i.usings.count == 1 {
+       return i.head
+     } else {
+-      return demand(Implication(context: .init(i.usings.dropFirst()), head: i.head)).erased
++      return demand(
++        Implication(
++          context: .init(i.usings.dropFirst()), binders: .init(i.binders.dropFirst()),
++          head: i.head)
++      ).erased
+     }
+   }
+ 
+@@ -474,7 +501,7 @@ public struct TypeStore: Sendable {
+   /// Implements `lifted(_:)` for implications.
+   public mutating func lifted(_ a: Implication.ID) -> Implication.ID {
+     let h = lifted(self[a].head)
+-    return demand(Implication(context: self[a].usings, head: h))
++    return demand(Implication(context: self[a].usings, binders: self[a].binders, head: h))
+   }
+ 
+   /// Implements `lifted(_:)` for universal types.
+@@ -1260,7 +1287,11 @@ public struct TypeStore: Sendable {
+     if lhs.declaration == rhs.declaration {
+       let a = lhs.qualification
+       let b = rhs.qualification
+-      return ((a.value == .abstract) || (b.value == .abstract))
++      // Fix (`headsubst`): two selections through the same declared witness are the same type
++      // if the types of the witness are; they may differ by variables that are still open.
++      var sameReference = false
++      if TyperExperiments.headsubst, case .reference = a.value { sameReference = (a.value == b.value) }
++      return ((a.value == .abstract) || (b.value == .abstract) || sameReference)
+         && unifiable(a.type, b.type, extending: &ss, handlingCoercionsWith: areCoercible)
+     } else {
+       return false
+-- 
+2.43.0
+

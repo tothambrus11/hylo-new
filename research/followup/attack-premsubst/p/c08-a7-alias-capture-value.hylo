@@ -1,0 +1,32 @@
+// Assumption A7 with a nearer given and an EXPLICIT type argument. f calls itself with
+// V := TX, a local alias of T.X selected through f's OWN requirement `T is P`. The call needs
+// `(that T.X) is R`. ILL TYPED: f only knows that this T.X is Q.
+// A nearer local conformance `T is P` (X = C, and C is Q and R) is in scope of the call. If the
+// reference to f's requirement inside the type argument is bound to the callee's premise, and the
+// premise is discharged by the local conformance, the requirement checked is `C is R`.
+// From main, T = A, A.X = B: the inner call would run C's `show` on a B.
+trait P { type X
+  fun get() -> X }
+trait Q {}
+trait R { fun show() }
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+struct D { public memberwise init }
+given B is Q {}
+given C is Q {}
+given C is R { fun show() {} }
+given D is R { fun show() {} }
+given A is P { type X = B
+  fun get() -> B { B() } }
+fun f<T, V where T is P, T.X is Q, V is R>(t: T, v: V) {
+  v.show()
+  type TX = T.X
+  let w = t.get()
+  if true {
+    given T is P { type X = C
+      fun get() -> C { C() } }
+    f<T, TX>(t, w)
+  }
+}
+public fun main() { f<A, D>(A(), D()) }

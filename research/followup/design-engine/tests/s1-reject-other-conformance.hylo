@@ -2,6 +2,10 @@
 // expected (premsubst): rejected, as today. `U is P` is found by the requirement on `U`; the caller
 // only knows `T.X is Q` through the requirement on `T`, a different conformance, whose `X` may be a
 // different type even though `T == U` (compare Tests/CompilerTests/negative/associated-type-inequality.hylo).
+// review: the first version rejects this only because the witness of `U is P` obtained by coercing
+// T's requirement gives a projection that never matches (DESIGN.md 3.7). Once coercions are removed,
+// it stays rejected only under the commit rule (3.10); without that rule it is accepted through T's
+// conformance.
 // observed: (eq25, premsubst as first designed) FULL+premsubst rejected (bound=1 released=2); +selfcheck same; +assocsubst rejected; NEW rejected
 // currently: base rejected (subgoals=9 matches=664): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'; FULL rejected (subgoals=5 matches=368): no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
 trait P { type X }

@@ -499,6 +499,29 @@ MIN5 versus base, text of the diagnostics: 0 mutants differ.
 | corpus/del-where-req/013 | mutant | oom | – | oom | oom | – | oom | oom | – | oom |
 | corpus/del-where-req/013 | original | 584 (78) d0 | – | 584 (82) d0 | 584 (11) d0 | – | 584 (9) d0 | 584 (12) d0 | – | 584 (8) d0 |
 
+Runs at other depths (the blow-ups were also run at depth 6, where they finish; `verify.md` section 3 has depths 6 to 10):
+
+| mutant | program | config | depth | result | summon.depthExhausted |
+|---|---|---|---:|---:|---:|
+| tests/repl-typearg/007 | mutant | base | 6 | 23218 (632) d1 | 2 |
+| tests/repl-typearg/007 | mutant | min5 | 6 | 23218 (481) d1 | 2 |
+| tests/repl-typearg/007 | mutant | min5abs | 6 | 23218 (346) d1 | 2 |
+| tests/repl-typearg/007 | original | base | 6 | 1166 (66) d0 | 0 |
+| tests/repl-typearg/007 | original | min5 | 6 | 1166 (11) d0 | 0 |
+| tests/repl-typearg/007 | original | min5abs | 6 | 1166 (56) d0 | 0 |
+| corpus/del-bound/015 | mutant | base | 6 | 28585 (996) d1 | 2 |
+| corpus/del-bound/015 | mutant | min5 | 6 | 28585 (814) d1 | 2 |
+| corpus/del-bound/015 | mutant | min5abs | 6 | 1 (4) d1 | 0 |
+| corpus/del-bound/015 | original | base | 6 | 29664 (595) d1 | 1 |
+| corpus/del-bound/015 | original | min5 | 6 | 29664 (606) d1 | 1 |
+| corpus/del-bound/015 | original | min5abs | 6 | 29664 (500) d1 | 1 |
+| corpus/del-where-req/013 | mutant | base | 6 | 11281 (152) d2 | 4 |
+| corpus/del-where-req/013 | mutant | min5 | 6 | 11001 (125) d2 | 4 |
+| corpus/del-where-req/013 | mutant | min5abs | 6 | 11001 (132) d2 | 4 |
+| corpus/del-where-req/013 | original | base | 6 | 584 (87) d0 | 0 |
+| corpus/del-where-req/013 | original | min5 | 6 | 584 (8) d0 | 0 |
+| corpus/del-where-req/013 | original | min5abs | 6 | 584 (12) d0 | 0 |
+
 ## 12. Outcome under base by whether the source program has an equality requirement (`where ... ==`)
 
 `wrongly accepted` = accepted by base, rejected by FULL (each one inspected: all are ill-typed).

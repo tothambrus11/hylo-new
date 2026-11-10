@@ -1,0 +1,34 @@
+// Tests: a generic function passed to a higher-order function leaves the type `(A::r).X`, where
+// `r` is the requirement of `io`, in the caller; it is one type in every scope, whatever witness
+// `A is P` has there.
+// Correct verdict: rejected. `outer` uses the conformance with `X = S0`; the nested block uses
+// the one with `X = S1`. `v` is the `S0` returned by `get` of the first; it is passed, in an
+// `Opt`, to `io` elaborated with the second, which gives it to `put(x: S1)`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+enum Opt<Z> { case none
+  case some(v: Z) }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun io<T where T is P>(t: T, x: Opt<T.X>) -> T.X {
+  match x {
+    case .none { }
+    case .some(let v) { t.put(v) }
+  }
+  return t.get()
+}
+fun apply2<U, V, W>(f: [](let U, let V) -> W, u: U, v: V) -> W { f(u, v) }
+fun outer() {
+  given A is P { type X = S0
+    fun get() -> S0 { S0() }
+    fun put(x: S0) {} }
+  let v = apply2(io, A(), Opt.none)
+  if true {
+    given A is P { type X = S1
+      fun get() -> S1 { S1() }
+      fun put(x: S1) {} }
+    let u = apply2(io, A(), Opt.some(v))
+  }
+}

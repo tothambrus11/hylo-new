@@ -1,0 +1,10 @@
+// Tests: members of a conditional extension and of a trait called without `self.`.
+// Correct verdict: rejected by every configuration: a member called without `self.` is the
+// unbound method, which takes `self` as an argument (not a test of the mechanism).
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct Box<T> { public var v: T; public memberwise init }
+extension <T where T is P> Box<T> {
+  fun one() -> T.X { self.v.get() }
+  fun two(x: T.X) { self.v.put(x) }
+  fun both() { two(one()) }
+}

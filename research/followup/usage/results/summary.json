@@ -22,6 +22,7 @@
   "inverse / lifetime / layout requirements": 0,
   "equality requirements": 0,
   "equality requirements by origin": {},
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 0,
@@ -40,12 +41,15 @@
   "conformance declarations": 28,
   "conformances declared (one per trait named)": 28,
   "conditional conformances": 4,
+  "conformance requirements on an associated type": 0,
+  "conditional conformances constraining an associated type": 0,
+  "conditional extensions constraining an associated type": 0,
   "conditional conformances with an equality": 0,
   "conditional extensions": 0,
   "conditional extensions with an equality": 0,
   "extensions of a trait": 0,
-  "types extended": 10,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 10,
+  "extensions and conformance declarations per type (median, p95, max)": [
    1,
    7,
    7
@@ -178,6 +182,13 @@
    0
   ],
   "functions with any equality in scope incl. those of the named traits": 0,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   68,
+   0,
+   0,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 0,
   "largest equivalence class among visible equalities": 0,
   "class sizes (declarations by largest class)": {},
@@ -267,6 +278,7 @@
   "equality requirements by origin": {
    "where": 12
   },
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 8,
    "param == concrete": 1,
@@ -288,12 +300,15 @@
   "conformance declarations": 102,
   "conformances declared (one per trait named)": 110,
   "conditional conformances": 10,
+  "conformance requirements on an associated type": 0,
+  "conditional conformances constraining an associated type": 1,
+  "conditional extensions constraining an associated type": 0,
   "conditional conformances with an equality": 1,
   "conditional extensions": 6,
   "conditional extensions with an equality": 0,
   "extensions of a trait": 5,
-  "types extended": 17,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 17,
+  "extensions and conformance declarations per type (median, p95, max)": [
    2,
    20,
    21
@@ -426,6 +441,13 @@
    2
   ],
   "functions with any equality in scope incl. those of the named traits": 8,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   555,
+   8,
+   0,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 2,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {
@@ -517,6 +539,7 @@
   "equality requirements by origin": {
    "where": 1
   },
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 1,
@@ -537,12 +560,15 @@
   "conformance declarations": 171,
   "conformances declared (one per trait named)": 176,
   "conditional conformances": 7,
+  "conformance requirements on an associated type": 4,
+  "conditional conformances constraining an associated type": 1,
+  "conditional extensions constraining an associated type": 3,
   "conditional conformances with an equality": 0,
   "conditional extensions": 9,
   "conditional extensions with an equality": 1,
   "extensions of a trait": 8,
-  "types extended": 29,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 29,
+  "extensions and conformance declarations per type (median, p95, max)": [
    4,
    16,
    16
@@ -675,6 +701,13 @@
    1
   ],
   "functions with any equality in scope incl. those of the named traits": 1,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   860,
+   1,
+   0,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 0,
   "largest equivalence class among visible equalities": 2,
   "class sizes (declarations by largest class)": {
@@ -783,6 +816,7 @@
    "where": 312,
    "primary": 45
   },
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 13,
@@ -806,12 +840,15 @@
   "conformance declarations": 1064,
   "conformances declared (one per trait named)": 1193,
   "conditional conformances": 207,
+  "conformance requirements on an associated type": 130,
+  "conditional conformances constraining an associated type": 44,
+  "conditional extensions constraining an associated type": 88,
   "conditional conformances with an equality": 0,
   "conditional extensions": 183,
   "conditional extensions with an equality": 41,
   "extensions of a trait": 280,
-  "types extended": 354,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 354,
+  "extensions and conformance declarations per type (median, p95, max)": [
    3,
    21,
    77
@@ -941,9 +978,16 @@
    0,
    7,
    15,
-   47
+   44
   ],
   "functions with any equality in scope incl. those of the named traits": 1250,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   5570,
+   690,
+   330,
+   171,
+   59
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 6,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {
@@ -960,9 +1004,9 @@
   "declarations where congruence applies": 0,
   "declarations with equalities between different roots": 80,
   "projections written in the code, by depth (1, 2, 3, 4+)": [
-   1334,
-   37,
-   0,
+   1207,
+   163,
+   1,
    0
   ],
   "trait signatures (trait: associated types, equalities, conformances)": {
@@ -1054,6 +1098,7 @@
    "where": 113,
    "primary": 414
   },
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 5,
@@ -1076,12 +1121,15 @@
   "conformance declarations": 566,
   "conformances declared (one per trait named)": 596,
   "conditional conformances": 98,
+  "conformance requirements on an associated type": 29,
+  "conditional conformances constraining an associated type": 1,
+  "conditional extensions constraining an associated type": 28,
   "conditional conformances with an equality": 0,
   "conditional extensions": 71,
   "conditional extensions with an equality": 11,
   "extensions of a trait": 83,
-  "types extended": 197,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 197,
+  "extensions and conformance declarations per type (median, p95, max)": [
    4,
    37,
    65
@@ -1209,11 +1257,18 @@
   "functions with a local equality in scope": 479,
   "equalities in scope incl. those of the named traits, one level (median, p95, p99, max)": [
    0,
-   4,
+   3,
    9,
    18
   ],
   "functions with any equality in scope incl. those of the named traits": 634,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   3312,
+   437,
+   139,
+   51,
+   7
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 1,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {
@@ -1230,8 +1285,8 @@
   "declarations where congruence applies": 0,
   "declarations with equalities between different roots": 81,
   "projections written in the code, by depth (1, 2, 3, 4+)": [
-   568,
-   14,
+   547,
+   35,
    1,
    0
   ],
@@ -1281,6 +1336,7 @@
   "equality requirements by origin": {
    "where": 22
   },
+  "return types of Fn bounds (not counted as equalities)": 0,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 0,
@@ -1302,12 +1358,15 @@
   "conformance declarations": 154,
   "conformances declared (one per trait named)": 163,
   "conditional conformances": 74,
+  "conformance requirements on an associated type": 40,
+  "conditional conformances constraining an associated type": 16,
+  "conditional extensions constraining an associated type": 19,
   "conditional conformances with an equality": 1,
   "conditional extensions": 24,
   "conditional extensions with an equality": 2,
   "extensions of a trait": 71,
-  "types extended": 53,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 53,
+  "extensions and conformance declarations per type (median, p95, max)": [
    3,
    7,
    24
@@ -1440,6 +1499,13 @@
    22
   ],
   "functions with any equality in scope incl. those of the named traits": 235,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   184,
+   55,
+   126,
+   48,
+   6
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 0,
   "largest equivalence class among visible equalities": 2,
   "class sizes (declarations by largest class)": {
@@ -1454,8 +1520,8 @@
   "declarations where congruence applies": 0,
   "declarations with equalities between different roots": 10,
   "projections written in the code, by depth (1, 2, 3, 4+)": [
-   294,
-   12,
+   279,
+   27,
    0,
    0
   ],
@@ -1483,38 +1549,41 @@
   "conformance requirements (inline bounds)": 257,
   "conformance requirements (associated type declarations)": 28,
   "inverse / lifetime / layout requirements": 64,
-  "equality requirements": 553,
+  "equality requirements": 177,
   "equality requirements by origin": {
-   "fnsugar": 376,
    "binding": 177
   },
+  "return types of Fn bounds (not counted as equalities)": 376,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 0,
    "param == constructed": 0,
-   "assoc == concrete": 107,
-   "assoc == constructed": 52,
-   "assoc == param": 371,
+   "assoc == concrete": 29,
+   "assoc == constructed": 10,
+   "assoc == param": 120,
    "assoc == assoc (same root)": 1,
-   "assoc == assoc (different roots)": 22,
+   "assoc == assoc (different roots)": 17,
    "other": 0
   },
   "equality requirements written in traits": 1,
   "equality requirements by projection depth": {
-   "1": 529,
+   "1": 153,
    "2": 24
   },
-  "declarations with an equality requirement": 384,
+  "declarations with an equality requirement": 166,
   "extensions": 38,
   "conformance declarations": 355,
   "conformances declared (one per trait named)": 355,
   "conditional conformances": 285,
-  "conditional conformances with an equality": 68,
+  "conformance requirements on an associated type": 213,
+  "conditional conformances constraining an associated type": 46,
+  "conditional extensions constraining an associated type": 4,
+  "conditional conformances with an equality": 31,
   "conditional extensions": 18,
-  "conditional extensions with an equality": 5,
+  "conditional extensions with an equality": 2,
   "extensions of a trait": 0,
-  "types extended": 81,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 81,
+  "extensions and conformance declarations per type (median, p95, max)": [
    3,
    12,
    19
@@ -1616,16 +1685,16 @@
   "constrained declarations": 712,
   "requirements per constrained declaration (median, p95, p99, max)": [
    2,
+   4,
    6,
-   7,
-   8
+   7
   ],
-  "declarations with equalities (excluding traits)": 383,
+  "declarations with equalities (excluding traits)": 165,
   "equalities per declaration that has one (median, p95, p99, max)": [
    1,
    2,
-   4,
-   4
+   2,
+   2
   ],
   "local givens visible in a function (median, p95, p99, max)": [
    2,
@@ -1647,6 +1716,13 @@
    5
   ],
   "functions with any equality in scope incl. those of the named traits": 263,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   665,
+   253,
+   10,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 1,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {
@@ -1661,7 +1737,7 @@
   },
   "declarations where a projection of an equated term is written": 55,
   "declarations where congruence applies": 0,
-  "declarations with equalities between different roots": 22,
+  "declarations with equalities between different roots": 17,
   "projections written in the code, by depth (1, 2, 3, 4+)": [
    612,
    2,
@@ -1753,38 +1829,41 @@
   "conformance requirements (inline bounds)": 194,
   "conformance requirements (associated type declarations)": 5,
   "inverse / lifetime / layout requirements": 95,
-  "equality requirements": 187,
+  "equality requirements": 15,
   "equality requirements by origin": {
-   "binding": 15,
-   "fnsugar": 172
+   "binding": 15
   },
+  "return types of Fn bounds (not counted as equalities)": 172,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 0,
    "param == constructed": 0,
-   "assoc == concrete": 148,
-   "assoc == constructed": 3,
-   "assoc == param": 34,
+   "assoc == concrete": 0,
+   "assoc == constructed": 0,
+   "assoc == param": 13,
    "assoc == assoc (same root)": 2,
    "assoc == assoc (different roots)": 0,
    "other": 0
   },
   "equality requirements written in traits": 4,
   "equality requirements by projection depth": {
-   "1": 183,
+   "1": 11,
    "2": 4
   },
-  "declarations with an equality requirement": 179,
+  "declarations with an equality requirement": 13,
   "extensions": 54,
   "conformance declarations": 326,
   "conformances declared (one per trait named)": 326,
   "conditional conformances": 125,
-  "conditional conformances with an equality": 45,
+  "conformance requirements on an associated type": 11,
+  "conditional conformances constraining an associated type": 2,
+  "conditional extensions constraining an associated type": 0,
+  "conditional conformances with an equality": 2,
   "conditional extensions": 18,
-  "conditional extensions with an equality": 10,
+  "conditional extensions with an equality": 0,
   "extensions of a trait": 0,
-  "types extended": 104,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 104,
+  "extensions and conformance declarations per type (median, p95, max)": [
    2,
    10,
    25
@@ -1885,15 +1964,15 @@
   ],
   "constrained declarations": 320,
   "requirements per constrained declaration (median, p95, p99, max)": [
-   2,
+   1,
    3,
-   5,
-   7
+   4,
+   5
   ],
-  "declarations with equalities (excluding traits)": 176,
+  "declarations with equalities (excluding traits)": 10,
   "equalities per declaration that has one (median, p95, p99, max)": [
    1,
-   1,
+   2,
    2,
    2
   ],
@@ -1917,6 +1996,13 @@
    2
   ],
   "functions with any equality in scope incl. those of the named traits": 19,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   808,
+   19,
+   0,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 1,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {
@@ -2018,18 +2104,18 @@
   "conformance requirements (inline bounds)": 902,
   "conformance requirements (associated type declarations)": 2,
   "inverse / lifetime / layout requirements": 222,
-  "equality requirements": 139,
+  "equality requirements": 72,
   "equality requirements by origin": {
-   "fnsugar": 67,
    "binding": 72
   },
+  "return types of Fn bounds (not counted as equalities)": 67,
   "equality requirements by shape": {
    "param == param": 0,
    "param == concrete": 0,
    "param == constructed": 2,
-   "assoc == concrete": 50,
-   "assoc == constructed": 11,
-   "assoc == param": 75,
+   "assoc == concrete": 17,
+   "assoc == constructed": 7,
+   "assoc == param": 45,
    "assoc == assoc (same root)": 0,
    "assoc == assoc (different roots)": 0,
    "other": 1
@@ -2037,19 +2123,22 @@
   "equality requirements written in traits": 0,
   "equality requirements by projection depth": {
    "0": 3,
-   "1": 136
+   "1": 69
   },
-  "declarations with an equality requirement": 131,
+  "declarations with an equality requirement": 71,
   "extensions": 183,
   "conformance declarations": 539,
   "conformances declared (one per trait named)": 539,
   "conditional conformances": 358,
-  "conditional conformances with an equality": 26,
+  "conformance requirements on an associated type": 72,
+  "conditional conformances constraining an associated type": 22,
+  "conditional extensions constraining an associated type": 1,
+  "conditional conformances with an equality": 19,
   "conditional extensions": 66,
   "conditional extensions with an equality": 1,
   "extensions of a trait": 0,
-  "types extended": 110,
-  "extensions per type (median, p95, max)": [
+  "types with an extension or conformance declaration": 110,
+  "extensions and conformance declarations per type (median, p95, max)": [
    2,
    38,
    60
@@ -2151,15 +2240,15 @@
   "constrained declarations": 842,
   "requirements per constrained declaration (median, p95, p99, max)": [
    1,
-   4,
+   3,
    4,
    5
   ],
-  "declarations with equalities (excluding traits)": 131,
+  "declarations with equalities (excluding traits)": 71,
   "equalities per declaration that has one (median, p95, p99, max)": [
    1,
-   2,
-   2,
+   1,
+   1,
    2
   ],
   "local givens visible in a function (median, p95, p99, max)": [
@@ -2182,6 +2271,13 @@
    4
   ],
   "functions with any equality in scope incl. those of the named traits": 75,
+  "functions by equalities in scope (0, 1-3, 4-7, 8-15, 16+)": [
+   1631,
+   74,
+   1,
+   0,
+   0
+  ],
   "declarations whose visible equalities form a class of 3 or more terms": 1,
   "largest equivalence class among visible equalities": 3,
   "class sizes (declarations by largest class)": {

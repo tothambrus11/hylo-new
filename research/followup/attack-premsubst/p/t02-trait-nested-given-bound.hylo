@@ -1,0 +1,7 @@
+// The trait bounds its associated type with a nested given (`given X is Q` in the trait).
+// If that declaration is accepted, f<U>() is well typed: U.X is Q follows from U is P.
+trait Q {}
+trait P { type X
+  given X is Q }
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P>() { f<U>() }

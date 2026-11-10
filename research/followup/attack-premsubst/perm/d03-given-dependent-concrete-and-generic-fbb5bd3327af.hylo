@@ -1,0 +1,12 @@
+public fun main() { need<Box<A>>() }
+fun g<U where U is P, U.X is Q>() { need<Box<U>>() }
+fun need<T where T is R>() {}
+given <T where T is P, T.X is Q> => Box<T> is R {}
+given A is P { type X = B }
+given B is Q {}
+struct Box<T> {}
+struct B {}
+struct A {}
+trait R {}
+trait Q {}
+trait P { type X }

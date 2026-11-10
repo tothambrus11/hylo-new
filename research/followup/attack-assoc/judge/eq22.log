@@ -1,0 +1,253 @@
+eq22 e04-extension-twin-value.hylo        base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        NEW22                  accept   
+eq22 e04-extension-twin-value.hylo        NEW22+selfcheck        accept   
+eq22 e04-extension-twin-value.hylo        NEW22-assocsubst       accept   
+eq22 e04-extension-twin-value.hylo        NEW22-abstractstrict   accept   
+eq22 e04-extension-twin-value.hylo        NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e04-extension-twin-value.hylo        FULL+headsubst         accept   
+eq22 e04-extension-twin-value.hylo        NEW                    accept   
+eq22 e02-extension-twin.hylo              base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              NEW22                  accept   
+eq22 e02-extension-twin.hylo              NEW22+selfcheck        accept   
+eq22 e02-extension-twin.hylo              NEW22-assocsubst       accept   
+eq22 e02-extension-twin.hylo              NEW22-abstractstrict   accept   
+eq22 e02-extension-twin.hylo              NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02-extension-twin.hylo              FULL+headsubst         accept   
+eq22 e02-extension-twin.hylo              NEW                    accept   
+eq22 e02c-extension-twin-ctl.hylo         base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22+selfcheck        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22-assocsubst       reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22-abstractstrict   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         FULL+headsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02c-extension-twin-ctl.hylo         NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22+selfcheck        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22-assocsubst       reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22-abstractstrict   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      FULL+headsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 e02d-extension-no-equality.hylo      NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 c02-capture-value.hylo               base                   reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               FULL                   reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               NEW22                  accept   
+eq22 c02-capture-value.hylo               NEW22+selfcheck        accept   
+eq22 c02-capture-value.hylo               NEW22-assocsubst       reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               NEW22-abstractstrict   accept   
+eq22 c02-capture-value.hylo               NEW22-headsubst        accept   
+eq22 c02-capture-value.hylo               FULL+assocsubst        accept   
+eq22 c02-capture-value.hylo               FULL+abstractstrict    reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               FULL+headsubst         reject   (2) no coercion from 'X' to 'S1'
+eq22 c02-capture-value.hylo               NEW                    accept   
+eq22 c01-capture.hylo                     base                   reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     FULL                   reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     NEW22                  accept   
+eq22 c01-capture.hylo                     NEW22+selfcheck        accept   
+eq22 c01-capture.hylo                     NEW22-assocsubst       reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     NEW22-abstractstrict   accept   
+eq22 c01-capture.hylo                     NEW22-headsubst        accept   
+eq22 c01-capture.hylo                     FULL+assocsubst        accept   
+eq22 c01-capture.hylo                     FULL+abstractstrict    reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     FULL+headsubst         reject   (1) no coercion from 'X' to 'S0'
+eq22 c01-capture.hylo                     NEW                    accept   
+eq22 c01c-capture-ctl.hylo                base                   reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                FULL                   reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                NEW22                  reject   (1) no coercion from 'U' to 'S0'
+eq22 c01c-capture-ctl.hylo                NEW22+selfcheck        reject   (1) no coercion from 'U' to 'S0'
+eq22 c01c-capture-ctl.hylo                NEW22-assocsubst       reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                NEW22-abstractstrict   reject   (1) no coercion from 'U' to 'S0'
+eq22 c01c-capture-ctl.hylo                NEW22-headsubst        reject   (1) no coercion from 'U' to 'S0'
+eq22 c01c-capture-ctl.hylo                FULL+assocsubst        reject   (1) no coercion from 'U' to 'S0'
+eq22 c01c-capture-ctl.hylo                FULL+abstractstrict    reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                FULL+headsubst         reject   (2) no coercion from 'X' to 'U'
+eq22 c01c-capture-ctl.hylo                NEW                    reject   (1) no coercion from 'U' to 'S0'
+eq22 c01v-capture-valid.hylo              base                   reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              FULL                   reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22                  reject   (1) no coercion from 'S0' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22+selfcheck        reject   (1) no coercion from 'S0' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22-assocsubst       reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22-abstractstrict   reject   (1) no coercion from 'S0' to 'U'
+eq22 c01v-capture-valid.hylo              NEW22-headsubst        reject   (1) no coercion from 'S0' to 'U'
+eq22 c01v-capture-valid.hylo              FULL+assocsubst        reject   (1) no coercion from 'S0' to 'U'
+eq22 c01v-capture-valid.hylo              FULL+abstractstrict    reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              FULL+headsubst         reject   (1) no coercion from 'X' to 'U'
+eq22 c01v-capture-valid.hylo              NEW                    reject   (1) no coercion from 'S0' to 'U'
+eq22 a04-nested-scopes.hylo               base                   accept   
+eq22 a04-nested-scopes.hylo               FULL                   accept   
+eq22 a04-nested-scopes.hylo               NEW22                  accept   
+eq22 a04-nested-scopes.hylo               NEW22+selfcheck        accept   
+eq22 a04-nested-scopes.hylo               NEW22-assocsubst       accept   
+eq22 a04-nested-scopes.hylo               NEW22-abstractstrict   accept   
+eq22 a04-nested-scopes.hylo               NEW22-headsubst        accept   
+eq22 a04-nested-scopes.hylo               FULL+assocsubst        accept   
+eq22 a04-nested-scopes.hylo               FULL+abstractstrict    accept   
+eq22 a04-nested-scopes.hylo               FULL+headsubst         accept   
+eq22 a04-nested-scopes.hylo               NEW                    accept   
+eq22 a04c-nested-scopes-ctl.hylo          base                   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          FULL                   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22                  reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22+selfcheck        reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22-assocsubst       reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22-abstractstrict   reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW22-headsubst        reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          FULL+assocsubst        reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          FULL+abstractstrict    reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          FULL+headsubst         reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a04c-nested-scopes-ctl.hylo          NEW                    reject   (1) cannot pass value of type 'X' to parameter 'X'
+eq22 a02-term-witness-twin.hylo           base                   accept   
+eq22 a02-term-witness-twin.hylo           FULL                   accept   
+eq22 a02-term-witness-twin.hylo           NEW22                  accept   
+eq22 a02-term-witness-twin.hylo           NEW22+selfcheck        accept   
+eq22 a02-term-witness-twin.hylo           NEW22-assocsubst       accept   
+eq22 a02-term-witness-twin.hylo           NEW22-abstractstrict   accept   
+eq22 a02-term-witness-twin.hylo           NEW22-headsubst        reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a02-term-witness-twin.hylo           FULL+assocsubst        reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a02-term-witness-twin.hylo           FULL+abstractstrict    accept   
+eq22 a02-term-witness-twin.hylo           FULL+headsubst         accept   
+eq22 a02-term-witness-twin.hylo           NEW                    accept   
+eq22 a03-value-crossing.hylo              base                   accept   
+eq22 a03-value-crossing.hylo              FULL                   accept   
+eq22 a03-value-crossing.hylo              NEW22                  accept   
+eq22 a03-value-crossing.hylo              NEW22+selfcheck        accept   
+eq22 a03-value-crossing.hylo              NEW22-assocsubst       accept   
+eq22 a03-value-crossing.hylo              NEW22-abstractstrict   accept   
+eq22 a03-value-crossing.hylo              NEW22-headsubst        reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a03-value-crossing.hylo              FULL+assocsubst        reject   (1) cannot pass value of type '(V::Q).Y' to parameter '(W::Q).Y'
+eq22 a03-value-crossing.hylo              FULL+abstractstrict    accept   
+eq22 a03-value-crossing.hylo              FULL+headsubst         accept   
+eq22 a03-value-crossing.hylo              NEW                    accept   
+eq22 b11-refinement-twin-value.hylo       base                   accept   
+eq22 b11-refinement-twin-value.hylo       FULL                   accept   
+eq22 b11-refinement-twin-value.hylo       NEW22                  accept   
+eq22 b11-refinement-twin-value.hylo       NEW22+selfcheck        accept   
+eq22 b11-refinement-twin-value.hylo       NEW22-assocsubst       accept   
+eq22 b11-refinement-twin-value.hylo       NEW22-abstractstrict   accept   
+eq22 b11-refinement-twin-value.hylo       NEW22-headsubst        accept   
+eq22 b11-refinement-twin-value.hylo       FULL+assocsubst        accept   
+eq22 b11-refinement-twin-value.hylo       FULL+abstractstrict    accept   
+eq22 b11-refinement-twin-value.hylo       FULL+headsubst         accept   
+eq22 b11-refinement-twin-value.hylo       NEW                    accept   
+eq22 b10-refinement-twin.hylo             base                   accept   
+eq22 b10-refinement-twin.hylo             FULL                   accept   
+eq22 b10-refinement-twin.hylo             NEW22                  accept   
+eq22 b10-refinement-twin.hylo             NEW22+selfcheck        accept   
+eq22 b10-refinement-twin.hylo             NEW22-assocsubst       accept   
+eq22 b10-refinement-twin.hylo             NEW22-abstractstrict   accept   
+eq22 b10-refinement-twin.hylo             NEW22-headsubst        accept   
+eq22 b10-refinement-twin.hylo             FULL+assocsubst        accept   
+eq22 b10-refinement-twin.hylo             FULL+abstractstrict    accept   
+eq22 b10-refinement-twin.hylo             FULL+headsubst         accept   
+eq22 b10-refinement-twin.hylo             NEW                    accept   
+eq22 b10c-refinement-twin-ctl.hylo        base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22+selfcheck        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22-assocsubst       reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22-abstractstrict   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        FULL+headsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10c-refinement-twin-ctl.hylo        NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     base                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     FULL                   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22                  reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22+selfcheck        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22-assocsubst       reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22-abstractstrict   reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW22-headsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     FULL+assocsubst        reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     FULL+abstractstrict    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     FULL+headsubst         reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b10d-refinement-no-equality.hylo     NEW                    reject   (1) cannot pass value of type '(W::P).X' to parameter '(V::P).X'
+eq22 b12-launder-refinement.hylo          base                   accept   
+eq22 b12-launder-refinement.hylo          FULL                   accept   
+eq22 b12-launder-refinement.hylo          NEW22                  accept   
+eq22 b12-launder-refinement.hylo          NEW22+selfcheck        accept   
+eq22 b12-launder-refinement.hylo          NEW22-assocsubst       accept   
+eq22 b12-launder-refinement.hylo          NEW22-abstractstrict   accept   
+eq22 b12-launder-refinement.hylo          NEW22-headsubst        accept   
+eq22 b12-launder-refinement.hylo          FULL+assocsubst        accept   
+eq22 b12-launder-refinement.hylo          FULL+abstractstrict    accept   
+eq22 b12-launder-refinement.hylo          FULL+headsubst         accept   
+eq22 b12-launder-refinement.hylo          NEW                    accept   
+eq22 b12c-launder-refinement-ctl.hylo     base                   accept   
+eq22 b12c-launder-refinement-ctl.hylo     FULL                   accept   
+eq22 b12c-launder-refinement-ctl.hylo     NEW22                  reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 b12c-launder-refinement-ctl.hylo     NEW22+selfcheck        reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 b12c-launder-refinement-ctl.hylo     NEW22-assocsubst       reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 b12c-launder-refinement-ctl.hylo     NEW22-abstractstrict   accept   
+eq22 b12c-launder-refinement-ctl.hylo     NEW22-headsubst        reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 b12c-launder-refinement-ctl.hylo     FULL+assocsubst        accept   
+eq22 b12c-launder-refinement-ctl.hylo     FULL+abstractstrict    reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 b12c-launder-refinement-ctl.hylo     FULL+headsubst         accept   
+eq22 b12c-launder-refinement-ctl.hylo     NEW                    reject   (1) no coercion from '(T::P).X' to '(Self::P).X'
+eq22 r22-method-on-assoc-value.hylo       base                   accept   
+eq22 r22-method-on-assoc-value.hylo       FULL                   accept   
+eq22 r22-method-on-assoc-value.hylo       NEW22                  reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22-method-on-assoc-value.hylo       NEW22+selfcheck        reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22-method-on-assoc-value.hylo       NEW22-assocsubst       reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22-method-on-assoc-value.hylo       NEW22-abstractstrict   accept   
+eq22 r22-method-on-assoc-value.hylo       NEW22-headsubst        reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22-method-on-assoc-value.hylo       FULL+assocsubst        accept   
+eq22 r22-method-on-assoc-value.hylo       FULL+abstractstrict    reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22-method-on-assoc-value.hylo       FULL+headsubst         accept   
+eq22 r22-method-on-assoc-value.hylo       NEW                    reject   (1) type '(T::P).X' has no member 'q'
+eq22 r22c-method-on-assoc-value-ctl.hylo  base                   accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  FULL                   accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22                  accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22+selfcheck        accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22-assocsubst       accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22-abstractstrict   accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW22-headsubst        accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  FULL+assocsubst        accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  FULL+abstractstrict    accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  FULL+headsubst         accept   
+eq22 r22c-method-on-assoc-value-ctl.hylo  NEW                    accept   
+eq22 r01-nested-given.hylo                base                   accept   
+eq22 r01-nested-given.hylo                FULL                   accept   
+eq22 r01-nested-given.hylo                NEW22                  reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01-nested-given.hylo                NEW22+selfcheck        reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01-nested-given.hylo                NEW22-assocsubst       reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01-nested-given.hylo                NEW22-abstractstrict   accept   
+eq22 r01-nested-given.hylo                NEW22-headsubst        reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01-nested-given.hylo                FULL+assocsubst        accept   
+eq22 r01-nested-given.hylo                FULL+abstractstrict    reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01-nested-given.hylo                FULL+headsubst         accept   
+eq22 r01-nested-given.hylo                NEW                    reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r01c-nested-given-ctl.hylo           base                   accept   
+eq22 r01c-nested-given-ctl.hylo           FULL                   accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22                  accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22+selfcheck        accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22-assocsubst       accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22-abstractstrict   accept   
+eq22 r01c-nested-given-ctl.hylo           NEW22-headsubst        accept   
+eq22 r01c-nested-given-ctl.hylo           FULL+assocsubst        accept   
+eq22 r01c-nested-given-ctl.hylo           FULL+abstractstrict    accept   
+eq22 r01c-nested-given-ctl.hylo           FULL+headsubst         accept   
+eq22 r01c-nested-given-ctl.hylo           NEW                    accept   
+eq22 r13-nested-given-in-extension.hylo   base                   accept   
+eq22 r13-nested-given-in-extension.hylo   FULL                   accept   
+eq22 r13-nested-given-in-extension.hylo   NEW22                  reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r13-nested-given-in-extension.hylo   NEW22+selfcheck        reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r13-nested-given-in-extension.hylo   NEW22-assocsubst       reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r13-nested-given-in-extension.hylo   NEW22-abstractstrict   accept   
+eq22 r13-nested-given-in-extension.hylo   NEW22-headsubst        reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r13-nested-given-in-extension.hylo   FULL+assocsubst        accept   
+eq22 r13-nested-given-in-extension.hylo   FULL+abstractstrict    reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+eq22 r13-nested-given-in-extension.hylo   FULL+headsubst         accept   
+eq22 r13-nested-given-in-extension.hylo   NEW                    reject   (1) no coercion from 'Q<(T::P).X> ==> [Void]() let -> Void' to '[Void]() let -> Void'

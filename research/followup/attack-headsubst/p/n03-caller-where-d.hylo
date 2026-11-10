@@ -1,0 +1,20 @@
+// Tests: order of the caller's type parameters and requirements, variant d (`<V, U where V is P, U is P, U.X == V.X>`).
+// Correct verdict: rejected (1 error: `wantS0(pick(u))`), in every variant.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun pick<T where T is P>(t: T) -> T.X { t.get() }
+fun take<T where T is P>(t: T, x: T.X) { t.put(x) }
+fun wrap<T where T is P>(t: T, b: Box<T.X>) { t.put(b.v) }
+fun mk<T where T is P>(t: T) -> Box<T.X> { Box<T.X>(v: t.get()) }
+fun g<V, U where V is P, U is P, U.X == V.X>(u: U, v: V) {
+  take(v, pick(u))
+  take(u, pick(v))
+  v.put(pick(u))
+  let x: V.X = pick(u)
+  wantS0(pick(u))
+}

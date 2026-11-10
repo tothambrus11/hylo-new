@@ -46,6 +46,8 @@ In every case the pair is still assumed and then proved by the existing mechanis
 
 Hylo selects a conformance by the way a type is written: with `T == U`, `T is P` and `U is P`, the types `T.X` and `U.X` differ. A mechanism that lets more givens match through equalities must choose a spelling for the instantiated variables, and any deterministic choice either depends on the order of the where clause or reports ambiguities that a user may not expect. The design chooses the ambiguity. Whether that is acceptable, or whether conformances should be coherent across equal types (which would make a true normal form possible), is the first question of `../follow-up/designs/eqnorm.md`.
 
+The adversarial review of the equality design recommends adopting only the result-preserving part (`../techniques/eqindex-eqeager.md`) until the designers answer, and judging these three by the list of call sites whose witness changes, not by verdicts.
+
 ## Programs
 
 `follow-up/design-eqnorm/tests/`, `follow-up/reference/minimized/`, `follow-up/reference/judge/p/i*.hylo`.

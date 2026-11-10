@@ -1,0 +1,483 @@
+From 4da70d304793d8935b3da6a692080316b74b15f8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 17:02:15 +0000
+Subject: [PATCH 23/27] Typer: fixes from the attack on assocsubst,
+ abstractstrict and headsubst
+
+- Two selections through the same witness expression unify only if the types of
+  the witness unify syntactically (not up to an equality): one requirement
+  instantiated at two equal types is two witnesses.
+- abstractstrict: selections through the declared witness are atoms of the
+  equality procedure.
+- assocsubst: the premise witnesses of a conditional conformance are
+  substituted into the associated type, as are its type arguments; a
+  conformance required by a trait selects the associated type through its own
+  witness; bound parameters of a generic requirement are renamed when a
+  substituted associated type mentions one of them.
+- headsubst: members of extensions are instantiated with the witnesses of the
+  extension's requirements; requirements are substituted in order, so that
+  chains of projections resolve; the head of a given or of an extension is
+  bound to its premises, and a projection through a premise that faces a
+  projection through a known witness decides the premise; an elaboration that
+  cannot be decomposed makes the projections erroneous instead of opaque.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Solver.swift    |  22 +-
+ Sources/FrontEnd/Typer/Typer.swift     | 289 ++++++++++++++++++++++---
+ Sources/FrontEnd/Types/TypeStore.swift |  21 +-
+ 3 files changed, 290 insertions(+), 42 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Solver.swift b/Sources/FrontEnd/Typer/Solver.swift
+index b463d8f..b86be74 100644
+--- a/Sources/FrontEnd/Typer/Solver.swift
++++ b/Sources/FrontEnd/Typer/Solver.swift
+@@ -341,21 +341,25 @@ internal struct Solver {
+     }
+     arguments.reverse()
+ 
+-    var bindings: [(WitnessExpression, WitnessExpression)] = []
++    let ts = p.items.map({ (i) in
++      typer.program.types.reify(i.1, applying: substitutions, withVariables: .kept)
++    })
++    let vs: [AnyTypeIdentity]
+     if arguments.count == p.usings.count {
+-      for (k, b) in p.binders.enumerated() {
+-        guard let d = b else { continue }
+-        let u = typer.program.types.reify(p.usings[k], applying: substitutions, withVariables: .kept)
+-        bindings.append((.init(value: .reference(d), type: u), arguments[k]))
+-      }
++      let us = p.usings.map({ (u) in
++        typer.program.types.reify(u, applying: substitutions, withVariables: .kept)
++      })
++      vs = typer.instantiating(ts, requirements: us, boundBy: p.binders, with: arguments)
+     } else {
++      // The witnesses of the requirements cannot be told apart: the associated types selected
++      // through them are unknown. They must not stay selected through the callee's own
++      // requirements, which would make them equal across calls.
+       TyperCounters.bump("headsubst.unexpectedElaboration")
++      vs = ts.map({ (_) in AnyTypeIdentity.error })
+     }
+ 
+-    for (x, t) in p.items {
++    for ((x, _), v) in zip(p.items, vs) {
+       unresolvedProjections.remove(x)
+-      let u = typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
+-      let v = bindings.isEmpty ? u : typer.projection(u, binding: bindings)
+       TyperCounters.bump("headsubst.resolved")
+       _ = schedule(EqualityConstraint(lhs: x.erased, rhs: v, site: site))
+     }
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 19cc652..e1ed838 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -81,6 +81,9 @@ public struct Typer {
+   /// `true` iff the resolution in progress dropped a premise because of its level (`heightbound`).
+   private var heightExhausted = false
+ 
++  /// The index of the last generic parameter created to rename a bound parameter.
++  private var freshParameterIndex = 1 << 20
++
+   /// The inferred givens that a resolution of the current round ignored because they have no type
+   /// yet (`sigrounds`).
+   private var skippedInferredGivens: Set<DeclarationIdentity> = []
+@@ -2094,7 +2097,35 @@ public struct Typer {
+     of requirement: DeclarationIdentity, seenThrough witness: WitnessExpression
+   ) -> AnyTypeIdentity {
+     let substitutions = aliasesInConformance(seenThrough: witness)
+-    let member = declaredType(of: requirement)
++    var member = declaredType(of: requirement)
++
++    // Fix (`assocsubst`): an associated type can now be instantiated to a type that mentions a
++    // generic parameter of `requirement` itself (inside the body of a generic requirement that
++    // uses itself at another type). Substitution is not capture-avoiding, so rename the
++    // parameters that `member` binds if a substituted type mentions one of them.
++    if TyperExperiments.assocsubst, let u = program.types[member] as? UniversalType {
++      let bound = Set(u.parameters.map(\.erased))
++      var captured = false
++      for v in substitutions.values where !captured {
++        _ = program.types.map(v) { (_, t) in
++          if bound.contains(t) { captured = true }
++          return captured ? .stepOver(t) : .stepInto(t)
++        }
++      }
++      if captured {
++        TyperCounters.bump("assocsubst.renamed")
++        var renaming: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++        var fresh: [GenericParameter.ID] = []
++        for p in u.parameters {
++          freshParameterIndex += 1
++          let q = demand(GenericParameter.nth(freshParameterIndex, program.types[p].kind))
++          renaming[p.erased] = q.erased
++          fresh.append(q)
++        }
++        let h = program.types.substitute(renaming, in: u.head)
++        member = demand(UniversalType(parameters: fresh, head: h)).erased
++      }
++    }
+     return program.types.substitute(substitutions, in: member)
+   }
+ 
+@@ -2346,14 +2377,79 @@ public struct Typer {
+     }
+   }
+ 
+-  /// Returns `p` in which each of the witnesses `bindings[i].0` is replaced by `bindings[i].1`
+-  /// and associated types selected through conformance declarations are replaced by their
+-  /// definitions (`headsubst`).
+-  internal mutating func projection(
+-    _ p: AnyTypeIdentity, binding bindings: [(WitnessExpression, WitnessExpression)]
++  /// Returns `ts` in which the references to each requirement `usings[k]`, made through the
++  /// declaration `binders[k]`, are replaced by `arguments[k]`, and associated types selected
++  /// through conformance declarations are replaced by their definitions.
++  ///
++  /// A requirement can mention the ones before it, so the replacement is made in order, in `ts`
++  /// and in the requirements that follow: a reference to the `k`-th requirement has the type of
++  /// that requirement in which the earlier ones have already been replaced.
++  ///
++  /// - Requires: `usings`, `binders` and `arguments` have the same length.
++  internal mutating func instantiating(
++    _ ts: [AnyTypeIdentity], requirements usings: [AnyTypeIdentity],
++    boundBy binders: [DeclarationIdentity?], with arguments: [WitnessExpression]
++  ) -> [AnyTypeIdentity] {
++    var us = usings
++    var result = ts
++    for k in us.indices {
++      guard let r = binders[k] else { continue }
++      let target = WitnessExpression(value: .reference(r), type: us[k])
++      let a = arguments[k]
++      result = result.map({ (t) in rewritingWitnesses(in: t, { (w) in (w == target) ? a : nil }) })
++      for j in us.indices where j > k {
++        us[j] = rewritingWitnesses(in: us[j], { (w) in (w == target) ? a : nil })
++      }
++    }
++    return result.map({ (t) in normalizingProjections(in: t) })
++  }
++
++  /// Returns `t`, which is written in the context of `d`, as seen through `witness`, which is
++  /// `d` applied to type arguments and to one witness for each of its requirements.
++  private mutating func instantiated(
++    _ t: AnyTypeIdentity, declaredIn d: DeclarationIdentity, through witness: WitnessExpression,
++    throughAliases: Bool = true
+   ) -> AnyTypeIdentity {
+-    let r = rewritingWitnesses(in: p, { (w) in bindings.first(where: { (b) in b.0 == w })?.1 })
+-    return normalizingProjections(in: r)
++    // Collect the arguments on the spine of the witness.
++    var types: [AnyTypeIdentity: AnyTypeIdentity] = [:]
++    var terms: [WitnessExpression] = []
++    var w = witness
++    while true {
++      if let (_, b) = asCoercionApplication(w) {
++        w = b
++      } else if case .termApplication(let f, let a) = w.value {
++        terms.append(a)
++        w = f
++      } else if case .typeApplication(let f, let a) = w.value {
++        for (k, v) in a.elements { types[k.erased] = v }
++        w = f
++      } else {
++        break
++      }
++    }
++    terms.reverse()
++    guard case .reference(let r) = w.value, r == d else { return t }
++
++    var result = t
++    if !types.isEmpty {
++      result = throughAliases
++        ? program.types.substituteThroughAliases(types, in: result)
++        : program.types.substitute(types, in: result)
++    }
++    guard let ps = contextParameters(of: d), !ps.usings.isEmpty, ps.usings.count == terms.count
++    else { return result }
++
++    var binders: [DeclarationIdentity?] = []
++    var usings: [AnyTypeIdentity] = []
++    for p in ps.usings {
++      if case .reference(let b) = expression(referringTo: p) {
++        binders.append(b)
++      } else {
++        binders.append(nil)
++      }
++      usings.append(program.types.substitute(types, in: declaredType(of: p)))
++    }
++    return instantiating([result], requirements: usings, boundBy: binders, with: terms)[0]
+   }
+ 
+   /// Returns `true` iff `target` occurs as a witness in `t`.
+@@ -3882,24 +3978,17 @@ public struct Typer {
+         let t = declaredType(of: i)
+         if !TyperExperiments.assocsubst { return t }
+ 
+-        // Fix (`assocsubst`): the definition is written in terms of the generic parameters of the
+-        // conformance; instantiate them with the type arguments of the witness. Otherwise the
+-        // associated types of two instances of a generic conformance are the same type.
+-        var arguments: [AnyTypeIdentity: AnyTypeIdentity] = [:]
+-        var w = witness
+-        while true {
+-          if case .termApplication(let f, _) = w.value {
+-            w = f
+-          } else if case .typeApplication(let f, let a) = w.value {
+-            for (k, v) in a.elements { arguments[k.erased] = v }
+-            w = f
+-          } else {
+-            break
+-          }
+-        }
+-        if arguments.isEmpty { return t }
+-        TyperCounters.bump("assocsubst.instantiated")
+-        return program.types.substituteThroughAliases(arguments, in: t)
++        // Fix (`assocsubst`): the definition is written in terms of the generic parameters and of
++        // the requirements of the conformance; instantiate them with the type arguments and the
++        // premise witnesses of `witness`. Otherwise the associated types of two instances of a
++        // generic conformance are the same type.
++        let u = instantiated(t, declaredIn: .init(c), through: witness)
++        if u != t { TyperCounters.bump("assocsubst.instantiated") }
++        return u
++      } else if TyperExperiments.assocsubst && (program[c].members == nil) {
++        // A conformance required by a trait (e.g., a refinement) defines nothing: the associated
++        // type is the one selected through this very witness.
++        return metatype(of: AssociatedType(declaration: requirement, qualification: witness)).erased
+       } else {
+         return .error
+       }
+@@ -4149,6 +4238,9 @@ public struct Typer {
+       /// `true` iff a using of this thread was bound to an earlier one (`premsubst`).
+       var dependent = false
+ 
++      /// `true` iff the head of this thread's witness mentions one of its premises (`headsubst`).
++      var headBound = false
++
+       /// The level of each assumed given: one more than the level of the goal whose match
+       /// assumed it (`heightbound`).
+       var levels: [Int: Int] = [:]
+@@ -4169,6 +4261,7 @@ public struct Typer {
+         e.dependent = dependent
+         e.levels = levels
+         e.goalLevel = goalLevel
++        e.headBound = headBound
+         return e
+       }
+ 
+@@ -4446,6 +4539,20 @@ public struct Typer {
+     let queried = program.types.reify(
+       queried, applying: environment.substitutions, withVariables: .kept)
+ 
++    // The head of a given or of an extension is bound to the premises that its requirements
++    // become (`headsubst`); the type of an expression elaborated for the constraint solver is
++    // not, because the solver holds an unbound copy of it (see `Solver.solve(call:)`).
++    let bindsHead: Bool
++    if case .identity = witness.value { bindsHead = false } else {
++      bindsHead = TyperExperiments.headsubst
++    }
++    // In the type of a given declared in a trait, the witness that the trait stands for is the
++    // first requirement (`abstractstrict`).
++    let bindsAbstract: Bool
++    if case .nested = witness.value { bindsAbstract = TyperExperiments.abstractstrict } else {
++      bindsAbstract = false
++    }
++
+     while true {
+       // The witness has a universal type?
+       if let u = program.types[witness.type] as? UniversalType {
+@@ -4486,6 +4593,34 @@ public struct Typer {
+           }
+         }
+ 
++        // Bind the head likewise. A projection through the premise in the head is matched with
++        // a projection through a known witness by taking that witness for the premise.
++        if bindsHead || bindsAbstract {
++          var targets: [WitnessExpression] = []
++          if bindsHead, let b = i.binders.first ?? nil {
++            targets.append(.init(value: .reference(b), type: h))
++          }
++          if bindsAbstract && (environment.givens.isEmpty) && environment.deferred.isEmpty {
++            targets.append(.init(value: .abstract, type: h))
++          }
++          if !targets.isEmpty {
++            let before = rest
++            if let j = program.types[rest] as? Implication {
++              let x = rewritingWitnesses(in: j.head, { (w) in targets.contains(w) ? v : nil })
++              if x != j.head {
++                rest = demand(Implication(context: j.usings, binders: j.binders, head: x)).erased
++              }
++            } else {
++              rest = rewritingWitnesses(in: rest, { (w) in targets.contains(w) ? v : nil })
++            }
++            if rest != before {
++              e.dependent = true
++              e.headBound = true
++              TyperCounters.bump("headsubst.boundHeads")
++            }
++          }
++        }
++
+         witness = WitnessExpression(value: .termApplication(witness, v), type: rest)
+         environment = e
+         continue
+@@ -4523,6 +4658,12 @@ public struct Typer {
+     // no coercion recorded; it must not be taken as a successful match.
+     if TyperExperiments.occurs && !unified && coercions.isEmpty { return .next([]) }
+ 
++    // Fix (`headsubst`): the head mentions premises of this thread. A projection through such a
++    // premise that faces a projection through a known witness decides the premise.
++    if thread.environment.headBound {
++      return matchBindingPremises(thread, coercions, keeping: substitutions, in: scopeOfUse)
++    }
++
+     // No coercion required?
+     if coercions.isEmpty {
+       let s = thread.environment.substitutions.union(substitutions)
+@@ -4604,6 +4745,91 @@ public struct Typer {
+     return .next([thread.copy(matching: w, to: b, in: e)])
+   }
+ 
++  /// Returns the step following a match of `thread`, whose head mentions premises of the thread,
++  /// in which unification left the mismatching `parts` (`headsubst`).
++  ///
++  /// A part that pairs the associated type selected through a pending premise `$i` with the
++  /// same associated type selected through a witness `w` is solved by taking `w` for `$i`: `w`
++  /// is a term of the type of the premise, so the premise holds, and no other choice makes the
++  /// two types equal. The thread continues, in the next layer, with `w` substituted for `$i`.
++  /// Any other part that mentions a premise fails the match, as does a variable that would be
++  /// assigned a type mentioning one.
++  private mutating func matchBindingPremises(
++    _ thread: ResolutionThread, _ parts: [(AnyTypeIdentity, AnyTypeIdentity)],
++    keeping substitutions: SubstitutionTable, in scopeOfUse: ScopeIdentity
++  ) -> ResolutionThread.Advanced {
++    var substitutions = substitutions
++    var chosen: [Int: WitnessExpression] = [:]
++    let pending = Set(
++      (thread.environment.givens + thread.environment.deferred).compactMap({ (g) -> Int? in
++        if case .assumed(let i, _) = g { i } else { nil }
++      }))
++
++    for (x, y) in parts {
++      guard
++        let a = program.types[x] as? AssociatedType, let b = program.types[y] as? AssociatedType,
++        a.declaration == b.declaration
++      else {
++        if mentionsAssumed(x) || mentionsAssumed(y) { return .next([]) }
++        continue
++      }
++      let (premise, known): (WitnessExpression, WitnessExpression)
++      if case .assumed = a.qualification.value {
++        (premise, known) = (a.qualification, b.qualification)
++      } else if case .assumed = b.qualification.value {
++        (premise, known) = (b.qualification, a.qualification)
++      } else {
++        if mentionsAssumed(x) || mentionsAssumed(y) { return .next([]) }
++        continue
++      }
++      guard case .assumed(let i) = premise.value, pending.contains(i), !mentionsAssumed(known)
++      else { return .next([]) }
++
++      var s = substitutions
++      let unified = program.types.unifiable(premise.type, known.type, extending: &s) { (_, _) in
++        false
++      }
++      if !unified { return .next([]) }
++      if let w = chosen[i], w != known { return .next([]) }
++      substitutions = s
++      chosen[i] = known
++    }
++
++    let all = thread.environment.substitutions.union(substitutions)
++    if chosen.isEmpty {
++      // Nothing to decide; the head must not leak a premise into the assignments.
++      for (_, u) in substitutions.assignments where mentionsAssumed(u) { return .next([]) }
++      var e = thread.environment
++      e.headBound = false
++      let w = program.types.reify(thread.witness, applying: all, withVariables: .kept)
++      return match(thread.copy(matching: w, to: thread.queried, in: e), in: scopeOfUse)
++    }
++
++    // Substitute the chosen witnesses for the premises, everywhere in the thread.
++    TyperCounters.bump("headsubst.premisesDecided", by: chosen.count)
++    func resolved(_ t: AnyTypeIdentity) -> AnyTypeIdentity {
++      let u = program.types.reify(t, applying: all, withVariables: .kept)
++      return rewritingWitnesses(in: u, { (w) in
++        if case .assumed(let j) = w.value { chosen[j] } else { nil }
++      })
++    }
++    func kept(_ gs: [Given]) -> [Given] {
++      gs.compactMap({ (g) -> Given? in
++        guard case .assumed(let j, let t) = g else { return g }
++        return (chosen[j] != nil) ? nil : .assumed(j, resolved(t))
++      })
++    }
++    var e = thread.environment.with(substitutions: all, givens: kept(thread.environment.givens))
++    e.deferred = kept(thread.environment.deferred)
++    e.headBound = false
++    let r = program.types.reify(thread.witness, applying: all, withVariables: .kept)
++    let w = rewritingWitnesses(in: r, { (x) in
++      if case .assumed(let j) = x.value { chosen[j] } else { nil }
++    })
++    if mentionsAssumed(w.type) || w.type[.hasError] { return .next([]) }
++    return .next([thread.copy(matching: w, to: thread.queried, in: e)])
++  }
++
+   /// Returns `true` iff matching may assume that `x` and `y` are equal and prove it afterwards.
+   private mutating func mayCoerce(
+     _ x: AnyTypeIdentity, _ y: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
+@@ -6192,7 +6418,11 @@ public struct Typer {
+ 
+           // Strip the context defined by the extension, apply type arguments from the matching
+           // witness, and substitute the extendee for the receiver.
+-          if let arguments = w.typeArguments(appliedTo: e) {
++          if TyperExperiments.headsubst {
++            // Fix (`headsubst`): the member is also written in terms of the requirements of the
++            // extension; substitute the witnesses found for them.
++            member = instantiated(member, declaredIn: .init(e), through: w, throughAliases: false)
++          } else if let arguments = w.typeArguments(appliedTo: e) {
+             member = program.types.substitute(arguments, in: member)
+           }
+           candidates.append(
+@@ -7104,7 +7334,10 @@ public struct Typer {
+         cs = u.inputs.map({ (x) in node(x) }) + [node(u.output)]; shape = "fp"
+       case let u as AssociatedType:
+         cs = [node(u.qualification.type)]
+-        if u.qualification.value == .abstract {
++        if (u.qualification.value == .abstract) && TyperExperiments.abstractstrict {
++          // A selection through the declared witness at a given type is equal to itself only.
++          cs = []
++        } else if u.qualification.value == .abstract {
+           shape = "abstract \(u.declaration)"
+           abstractProjections.append(i)
+         } else {
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 4d8138b..2645a98 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1293,11 +1293,22 @@ public struct TypeStore: Sendable {
+       if TyperExperiments.headsubst, case .reference = a.value { sameReference = (a.value == b.value) }
+       // Fix (`abstractstrict`): a selection through the witness being declared is only equal to
+       // another selection through that witness, not to one through any witness of an equal type.
+-      let eitherAbstract = TyperExperiments.abstractstrict
+-        ? ((a.value == .abstract) && (b.value == .abstract))
+-        : ((a.value == .abstract) || (b.value == .abstract))
+-      return (eitherAbstract || sameReference)
+-        && unifiable(a.type, b.type, extending: &ss, handlingCoercionsWith: areCoercible)
++      if !TyperExperiments.abstractstrict && ((a.value == .abstract) || (b.value == .abstract)) {
++        return unifiable(a.type, b.type, extending: &ss, handlingCoercionsWith: areCoercible)
++      }
++
++      // The same witness expression at the same type is the same witness. Its types may differ
++      // by open variables, which are bound; they may not differ up to an equality: one declared
++      // requirement instantiated at two equal types is two witnesses.
++      let bothAbstract = (a.value == .abstract) && (b.value == .abstract)
++      if !(bothAbstract || sameReference) { return false }
++      var s = ss
++      if unifiable(a.type, b.type, extending: &s, handlingCoercionsWith: { (_, _) in false }) {
++        ss = s
++        return true
++      } else {
++        return false
++      }
+     } else {
+       return false
+     }
+-- 
+2.43.0
+

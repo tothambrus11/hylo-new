@@ -249,3 +249,389 @@ FULL  reject    violations/r4/gz0--taut-ground-4-0-last/a.hylo
 base  accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo
 FIX   accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo
 FULL  accept    violations/r4/gz0--taut-ground-4-0-last/b.hylo
+base  reject    violations/r4/hand-tautology-position/a.hylo
+        error: L8: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r4/hand-tautology-position/a.hylo
+        error: L8: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/hand-tautology-position/a.hylo
+        error: L8: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/hand-tautology-position/b.hylo
+FIX   accept    violations/r4/hand-tautology-position/b.hylo
+FULL  accept    violations/r4/hand-tautology-position/b.hylo
+base  reject    violations/r4/hand-tautology-position/c.hylo
+        error: L8: no coercion from '(P<A>, (A ~ A)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r4/hand-tautology-position/c.hylo
+        error: L8: no coercion from '(P<A>, (A ~ A)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r4/hand-tautology-position/c.hylo
+        error: L8: no coercion from '(P<A>, (A ~ A)) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r4/higher-kinded--taut-param-4-0-last/a.hylo
+FIX   accept    violations/r4/higher-kinded--taut-param-4-0-last/a.hylo
+FULL  accept    violations/r4/higher-kinded--taut-param-4-0-last/a.hylo
+base  reject    violations/r4/higher-kinded--taut-param-4-0-last/b.hylo
+        error: L5: T expects 1 type argument(s)
+        error: L5: T expects 1 type argument(s)
+FIX   reject    violations/r4/higher-kinded--taut-param-4-0-last/b.hylo
+        error: L5: T expects 1 type argument(s)
+        error: L5: T expects 1 type argument(s)
+FULL  reject    violations/r4/higher-kinded--taut-param-4-0-last/b.hylo
+        error: L5: T expects 1 type argument(s)
+        error: L5: T expects 1 type argument(s)
+base  accept    violations/r4/open-wide-4--taut-param-1-0-last/a.hylo
+FIX   accept    violations/r4/open-wide-4--taut-param-1-0-last/a.hylo
+FULL  accept    violations/r4/open-wide-4--taut-param-1-0-last/a.hylo
+base  crash:-6  violations/r4/open-wide-4--taut-param-1-0-last/b.hylo
+FIX   reject    violations/r4/open-wide-4--taut-param-1-0-last/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U1), (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), (U4 ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+FULL  reject    violations/r4/open-wide-4--taut-param-1-0-last/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> ((T ~ U1), (T ~ U2), Q<U3>, (T ~ U3), Q<U4>, (T ~ U4), (U4 ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+base  accept    violations/r4/use-before-init--unused-param-0/a.hylo
+FIX   accept    violations/r4/use-before-init--unused-param-0/a.hylo
+FULL  accept    violations/r4/use-before-init--unused-param-0/a.hylo
+base  reject    violations/r4/use-before-init--unused-param-0/b.hylo
+        error: L4: not enough context to infer a type
+FIX   reject    violations/r4/use-before-init--unused-param-0/b.hylo
+        error: L4: not enough context to infer a type
+FULL  reject    violations/r4/use-before-init--unused-param-0/b.hylo
+        error: L4: not enough context to infer a type
+base  reject    violations/r5/al1--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r5/al1--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r5/al1--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r5/al1--expand-0/b.hylo
+FIX   accept    violations/r5/al1--expand-0/b.hylo
+FULL  accept    violations/r5/al1--expand-0/b.hylo
+base  reject    violations/r5/al1--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r5/al1--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r5/al1--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r5/al1--expand-drop-0/b.hylo
+FIX   accept    violations/r5/al1--expand-drop-0/b.hylo
+FULL  accept    violations/r5/al1--expand-drop-0/b.hylo
+base  crash:-11 violations/r5/b1d-method-env-cycle--intro-generic-0/a.hylo
+FIX   reject    violations/r5/b1d-method-env-cycle--intro-generic-0/a.hylo
+        error: L8: cannot pass value of type '#!' to parameter '[let Box<#!>]() let -> Void'
+FULL  reject    violations/r5/b1d-method-env-cycle--intro-generic-0/a.hylo
+        error: L8: cannot pass value of type '#!' to parameter '[let Box<#!>]() let -> Void'
+base  accept    violations/r5/b1d-method-env-cycle--intro-generic-0/b.hylo
+FIX   accept    violations/r5/b1d-method-env-cycle--intro-generic-0/b.hylo
+FULL  accept    violations/r5/b1d-method-env-cycle--intro-generic-0/b.hylo
+base  accept    violations/r5/chain3--intro-generic-0/a.hylo
+FIX   accept    violations/r5/chain3--intro-generic-0/a.hylo
+FULL  accept    violations/r5/chain3--intro-generic-0/a.hylo
+base  reject    violations/r5/chain3--intro-generic-0/b.hylo
+        error: L7: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r5/chain3--intro-generic-0/b.hylo
+        error: L7: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r5/chain3--intro-generic-0/b.hylo
+        error: L7: no coercion from 'P<AlqS<AlqS<AlqS<Z>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r5/context-bound--intro-generic-0/a.hylo
+FIX   accept    violations/r5/context-bound--intro-generic-0/a.hylo
+FULL  accept    violations/r5/context-bound--intro-generic-0/a.hylo
+base  reject    violations/r5/context-bound--intro-generic-0/b.hylo
+        error: L8: type 'T' has no member 'f'
+FIX   reject    violations/r5/context-bound--intro-generic-0/b.hylo
+        error: L8: type 'T' has no member 'f'
+FULL  reject    violations/r5/context-bound--intro-generic-0/b.hylo
+        error: L8: type 'T' has no member 'f'
+base  accept    violations/r5/decomp-1--intro-generic-0/a.hylo
+FIX   accept    violations/r5/decomp-1--intro-generic-0/a.hylo
+FULL  accept    violations/r5/decomp-1--intro-generic-0/a.hylo
+base  reject    violations/r5/decomp-1--intro-generic-0/b.hylo
+        error: L4: cannot pass value of type 'AlqBox<A>' to parameter 'AlqBox<B>'
+FIX   reject    violations/r5/decomp-1--intro-generic-0/b.hylo
+        error: L4: cannot pass value of type 'AlqBox<A>' to parameter 'AlqBox<B>'
+FULL  reject    violations/r5/decomp-1--intro-generic-0/b.hylo
+        error: L4: cannot pass value of type 'AlqBox<A>' to parameter 'AlqBox<B>'
+base  accept    violations/r5/generic-member--intro-all-0/a.hylo
+FIX   accept    violations/r5/generic-member--intro-all-0/a.hylo
+FULL  accept    violations/r5/generic-member--intro-all-0/a.hylo
+base  reject    violations/r5/generic-member--intro-all-0/b.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+FIX   reject    violations/r5/generic-member--intro-all-0/b.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+FULL  reject    violations/r5/generic-member--intro-all-0/b.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+base  accept    violations/r5/generic-member--intro-all-top-0/a.hylo
+FIX   accept    violations/r5/generic-member--intro-all-top-0/a.hylo
+FULL  accept    violations/r5/generic-member--intro-all-top-0/a.hylo
+base  reject    violations/r5/generic-member--intro-all-top-0/b.hylo
+        error: L14: cannot pass value of type 'Void' to parameter 'U'
+FIX   reject    violations/r5/generic-member--intro-all-top-0/b.hylo
+        error: L14: cannot pass value of type 'Void' to parameter 'U'
+FULL  reject    violations/r5/generic-member--intro-all-top-0/b.hylo
+        error: L14: cannot pass value of type 'Void' to parameter 'U'
+base  reject    violations/r5/generic-member--intro-all-top-0/c.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+FIX   reject    violations/r5/generic-member--intro-all-top-0/c.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+FULL  reject    violations/r5/generic-member--intro-all-top-0/c.hylo
+        error: L13: cannot pass value of type 'Void' to parameter 'U'
+base  accept    violations/r5/generic-member--intro-generic-0/a.hylo
+FIX   accept    violations/r5/generic-member--intro-generic-0/a.hylo
+FULL  accept    violations/r5/generic-member--intro-generic-0/a.hylo
+base  reject    violations/r5/generic-member--intro-generic-0/b.hylo
+        error: L13: type 'AlqA<Void>' has no member 'g'
+FIX   reject    violations/r5/generic-member--intro-generic-0/b.hylo
+        error: L13: type 'AlqA<Void>' has no member 'g'
+FULL  reject    violations/r5/generic-member--intro-generic-0/b.hylo
+        error: L13: type 'AlqA<Void>' has no member 'g'
+base  accept    violations/r5/hand-alias-method-call/a.hylo
+FIX   accept    violations/r5/hand-alias-method-call/a.hylo
+FULL  accept    violations/r5/hand-alias-method-call/a.hylo
+base  reject    violations/r5/hand-alias-method-call/b.hylo
+        error: L5: cannot pass value of type 'Void' to parameter 'U'
+FIX   reject    violations/r5/hand-alias-method-call/b.hylo
+        error: L5: cannot pass value of type 'Void' to parameter 'U'
+FULL  reject    violations/r5/hand-alias-method-call/b.hylo
+        error: L5: cannot pass value of type 'Void' to parameter 'U'
+base  accept    violations/r5/hand-generic-alias-extension-head/a.hylo
+FIX   accept    violations/r5/hand-generic-alias-extension-head/a.hylo
+FULL  accept    violations/r5/hand-generic-alias-extension-head/a.hylo
+base  reject    violations/r5/hand-generic-alias-extension-head/b.hylo
+        error: L5: type 'Box<A>' has no member 'first'
+FIX   reject    violations/r5/hand-generic-alias-extension-head/b.hylo
+        error: L5: type 'Box<A>' has no member 'first'
+FULL  reject    violations/r5/hand-generic-alias-extension-head/b.hylo
+        error: L5: type 'Box<A>' has no member 'first'
+base  accept    violations/r5/hand-generic-alias-given-head/a.hylo
+FIX   accept    violations/r5/hand-generic-alias-given-head/a.hylo
+FULL  accept    violations/r5/hand-generic-alias-given-head/a.hylo
+base  reject    violations/r5/hand-generic-alias-given-head/b.hylo
+        error: L7: no coercion from 'P<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r5/hand-generic-alias-given-head/b.hylo
+        error: L7: no coercion from 'P<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r5/hand-generic-alias-given-head/b.hylo
+        error: L7: no coercion from 'P<Box<A>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r5/hand-generic-alias-receiver/a.hylo
+FIX   accept    violations/r5/hand-generic-alias-receiver/a.hylo
+FULL  accept    violations/r5/hand-generic-alias-receiver/a.hylo
+base  reject    violations/r5/hand-generic-alias-receiver/b.hylo
+        error: L5: type 'AB<A>' has no member 'first'
+FIX   reject    violations/r5/hand-generic-alias-receiver/b.hylo
+        error: L5: type 'AB<A>' has no member 'first'
+FULL  reject    violations/r5/hand-generic-alias-receiver/b.hylo
+        error: L5: type 'AB<A>' has no member 'first'
+base  accept    violations/r5/implicit-qualification--intro-generic-0/a.hylo
+FIX   accept    violations/r5/implicit-qualification--intro-generic-0/a.hylo
+FULL  accept    violations/r5/implicit-qualification--intro-generic-0/a.hylo
+base  reject    violations/r5/implicit-qualification--intro-generic-0/b.hylo
+        error: L17: type 'B<Void>' has no static member 'make'
+FIX   reject    violations/r5/implicit-qualification--intro-generic-0/b.hylo
+        error: L17: type 'B<Void>' has no static member 'make'
+FULL  reject    violations/r5/implicit-qualification--intro-generic-0/b.hylo
+        error: L17: type 'B<Void>' has no static member 'make'
+base  accept    violations/r5/names-verify-names-1-v4_noC--intro-all-0/a.hylo
+FIX   reject    violations/r5/names-verify-names-1-v4_noC--intro-all-0/a.hylo
+        error: L3: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+FULL  reject    violations/r5/names-verify-names-1-v4_noC--intro-all-0/a.hylo
+        error: L3: circular extension: the extendee of this extension depends on a lookup of 'Foo', which this extension may affect
+base  reject    violations/r5/names-verify-names-1-v4_noC--intro-all-0/b.hylo
+        error: L2: type 'Alq' has no static member 'Foo'
+        error: L4: definition of 'Alq' refers to itself
+FIX   accept    violations/r5/names-verify-names-1-v4_noC--intro-all-0/b.hylo
+FULL  accept    violations/r5/names-verify-names-1-v4_noC--intro-all-0/b.hylo
+base  reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/b.hylo
+FIX   accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/b.hylo
+FULL  accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-0/b.hylo
+base  reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FIX   reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+FULL  reject    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/a.hylo
+        error: L4: definition of 'X' refers to itself
+base  accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/b.hylo
+FIX   accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/b.hylo
+FULL  accept    violations/r5/names-verify-names-2-v01_ext_declares_foo--expand-drop-0/b.hylo
+base  accept    violations/r5/o1-value-ctx--intro-generic-0/a.hylo
+FIX   accept    violations/r5/o1-value-ctx--intro-generic-0/a.hylo
+FULL  accept    violations/r5/o1-value-ctx--intro-generic-0/a.hylo
+base  reject    violations/r5/o1-value-ctx--intro-generic-0/b.hylo
+        error: L8: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r5/o1-value-ctx--intro-generic-0/b.hylo
+        error: L8: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r5/o1-value-ctx--intro-generic-0/b.hylo
+        error: L8: no coercion from 'P<AlqBox<Void>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r5/overload-priority--intro-generic-0/a.hylo
+FIX   accept    violations/r5/overload-priority--intro-generic-0/a.hylo
+FULL  accept    violations/r5/overload-priority--intro-generic-0/a.hylo
+base  reject    violations/r5/overload-priority--intro-generic-0/b.hylo
+        error: L19: no conversion from '#!' to 'A<Void>'
+        error: L19: type 'A<Void>' has no member 'f'
+FIX   reject    violations/r5/overload-priority--intro-generic-0/b.hylo
+        error: L19: no conversion from '#!' to 'A<Void>'
+        error: L19: type 'A<Void>' has no member 'f'
+FULL  reject    violations/r5/overload-priority--intro-generic-0/b.hylo
+        error: L19: no conversion from '#!' to 'A<Void>'
+        error: L19: type 'A<Void>' has no member 'f'
+base  accept    violations/r5/probe1--intro-generic-0/a.hylo
+FIX   accept    violations/r5/probe1--intro-generic-0/a.hylo
+FULL  accept    violations/r5/probe1--intro-generic-0/a.hylo
+base  timeout   violations/r5/probe1--intro-generic-0/b.hylo
+FIX   reject    violations/r5/probe1--intro-generic-0/b.hylo
+        error: L4: no coercion from 'Box<X>' to 'Opt<Y>'
+FULL  reject    violations/r5/probe1--intro-generic-0/b.hylo
+        error: L4: no coercion from 'Box<X>' to 'Opt<Y>'
+base  accept    violations/r5/r1_selfname--intro-all-top-1/a.hylo
+FIX   accept    violations/r5/r1_selfname--intro-all-top-1/a.hylo
+FULL  accept    violations/r5/r1_selfname--intro-all-top-1/a.hylo
+base  reject    violations/r5/r1_selfname--intro-all-top-1/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FIX   reject    violations/r5/r1_selfname--intro-all-top-1/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FULL  reject    violations/r5/r1_selfname--intro-all-top-1/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+base  accept    violations/r5/r1_selfname--intro-all-top-1/c.hylo
+FIX   accept    violations/r5/r1_selfname--intro-all-top-1/c.hylo
+FULL  accept    violations/r5/r1_selfname--intro-all-top-1/c.hylo
+base  accept    violations/r5/r1_selfname_fun--intro-all-top-0/a.hylo
+FIX   accept    violations/r5/r1_selfname_fun--intro-all-top-0/a.hylo
+FULL  accept    violations/r5/r1_selfname_fun--intro-all-top-0/a.hylo
+base  reject    violations/r5/r1_selfname_fun--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FIX   reject    violations/r5/r1_selfname_fun--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FULL  reject    violations/r5/r1_selfname_fun--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+base  accept    violations/r5/r1_selfname_fun--intro-all-top-0/c.hylo
+FIX   accept    violations/r5/r1_selfname_fun--intro-all-top-0/c.hylo
+FULL  accept    violations/r5/r1_selfname_fun--intro-all-top-0/c.hylo
+base  accept    violations/r5/red2--intro-all-top-0/a.hylo
+FIX   accept    violations/r5/red2--intro-all-top-0/a.hylo
+FULL  accept    violations/r5/red2--intro-all-top-0/a.hylo
+base  reject    violations/r5/red2--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FIX   reject    violations/r5/red2--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+FULL  reject    violations/r5/red2--intro-all-top-0/b.hylo
+        error: L1: definition of 'Alq' refers to itself
+base  accept    violations/r5/red2--intro-all-top-0/c.hylo
+FIX   accept    violations/r5/red2--intro-all-top-0/c.hylo
+FULL  accept    violations/r5/red2--intro-all-top-0/c.hylo
+base  accept    violations/r5/x01-ext-arg-member--intro-generic-0/a.hylo
+FIX   accept    violations/r5/x01-ext-arg-member--intro-generic-0/a.hylo
+FULL  accept    violations/r5/x01-ext-arg-member--intro-generic-0/a.hylo
+base  reject    violations/r5/x01-ext-arg-member--intro-generic-0/b.hylo
+        error: L10: type 'Wrapper<Bool>' has no member 'first'
+FIX   reject    violations/r5/x01-ext-arg-member--intro-generic-0/b.hylo
+        error: L10: type 'Wrapper<Bool>' has no member 'first'
+FULL  reject    violations/r5/x01-ext-arg-member--intro-generic-0/b.hylo
+        error: L10: type 'Wrapper<Bool>' has no member 'first'
+base  accept    violations/r5/x05-alias-ext--intro-all-0/a.hylo
+FIX   accept    violations/r5/x05-alias-ext--intro-all-0/a.hylo
+FULL  accept    violations/r5/x05-alias-ext--intro-all-0/a.hylo
+base  reject    violations/r5/x05-alias-ext--intro-all-0/b.hylo
+        error: L9: definition of 'Alq' refers to itself
+FIX   reject    violations/r5/x05-alias-ext--intro-all-0/b.hylo
+        error: L9: definition of 'Alq' refers to itself
+FULL  reject    violations/r5/x05-alias-ext--intro-all-0/b.hylo
+        error: L9: definition of 'Alq' refers to itself
+base  accept    violations/r5/x07-given-arg-member--intro-generic-0/a.hylo
+FIX   accept    violations/r5/x07-given-arg-member--intro-generic-0/a.hylo
+FULL  accept    violations/r5/x07-given-arg-member--intro-generic-0/a.hylo
+base  reject    violations/r5/x07-given-arg-member--intro-generic-0/b.hylo
+        error: L10: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'
+FIX   reject    violations/r5/x07-given-arg-member--intro-generic-0/b.hylo
+        error: L10: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'
+FULL  reject    violations/r5/x07-given-arg-member--intro-generic-0/b.hylo
+        error: L10: no coercion from '<C> Container<C> ==> [Void](let C) let -> Void' to '[Void](let Wrapper<Bool>) let -> Void'
+base  accept    violations/r5/x10b-ext-where-assoc--intro-generic-0/a.hylo
+FIX   accept    violations/r5/x10b-ext-where-assoc--intro-generic-0/a.hylo
+FULL  accept    violations/r5/x10b-ext-where-assoc--intro-generic-0/a.hylo
+base  reject    violations/r5/x10b-ext-where-assoc--intro-generic-0/b.hylo
+        error: L10: type 'AlqBox<T>' has no member 'first'
+FIX   reject    violations/r5/x10b-ext-where-assoc--intro-generic-0/b.hylo
+        error: L10: type 'AlqBox<T>' has no member 'first'
+FULL  reject    violations/r5/x10b-ext-where-assoc--intro-generic-0/b.hylo
+        error: L10: type 'AlqBox<T>' has no member 'first'
+base  accept    violations/r7/e01-orient-amb--dup-sym-2-3/a.hylo
+FIX   accept    violations/r7/e01-orient-amb--dup-sym-2-3/a.hylo
+FULL  accept    violations/r7/e01-orient-amb--dup-sym-2-3/a.hylo
+base  reject    violations/r7/e01-orient-amb--dup-sym-2-3/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r7/e01-orient-amb--dup-sym-2-3/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r7/e01-orient-amb--dup-sym-2-3/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r7/e01-orient-amb--sym-2-2/a.hylo
+FIX   accept    violations/r7/e01-orient-amb--sym-2-2/a.hylo
+FULL  accept    violations/r7/e01-orient-amb--sym-2-2/a.hylo
+base  reject    violations/r7/e01-orient-amb--sym-2-2/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r7/e01-orient-amb--sym-2-2/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r7/e01-orient-amb--sym-2-2/b.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  reject    violations/r7/e01b-both-direct--sym-2-3/a.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r7/e01b-both-direct--sym-2-3/a.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r7/e01b-both-direct--sym-2-3/a.hylo
+        error: L4: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r7/e01b-both-direct--sym-2-3/b.hylo
+FIX   accept    violations/r7/e01b-both-direct--sym-2-3/b.hylo
+FULL  accept    violations/r7/e01b-both-direct--sym-2-3/b.hylo
+base  crash:-6  violations/r7/open-wide-4--dup-1-3/a.hylo
+FIX   accept    violations/r7/open-wide-4--dup-1-3/a.hylo
+FULL  accept    violations/r7/open-wide-4--dup-1-3/a.hylo
+base  crash:-6  violations/r7/open-wide-4--dup-1-3/b.hylo
+FIX   reject    violations/r7/open-wide-4--dup-1-3/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), (T ~ U3), Q<U4>, (T ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+FULL  reject    violations/r7/open-wide-4--dup-1-3/b.hylo
+        error: L3: no coercion from '<T, U1, U2, U3, U4> (Q<U1>, (T ~ U1), Q<U2>, (T ~ U2), Q<U3>, (T ~ U3), (T ~ U3), Q<U4>, (T ~ U4)) ==> [Void](let T) let -> Void' to '[Void](let A0) let -> Void'
+        error: L3: implicit resolution is too complex: more than 100000 candidate derivations; consider adding explicit type arguments or annotations
+base  reject    violations/r7/pen-ref-2--dup-sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+FIX   reject    violations/r7/pen-ref-2--dup-sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+FULL  reject    violations/r7/pen-ref-2--dup-sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+base  accept    violations/r7/pen-ref-2--dup-sym-6-0/b.hylo
+FIX   accept    violations/r7/pen-ref-2--dup-sym-6-0/b.hylo
+FULL  accept    violations/r7/pen-ref-2--dup-sym-6-0/b.hylo
+base  reject    violations/r7/pen-ref-2--sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+FIX   reject    violations/r7/pen-ref-2--sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+FULL  reject    violations/r7/pen-ref-2--sym-6-0/a.hylo
+        error: L8: no coercion from 'A' to '#!'
+base  accept    violations/r7/pen-ref-2--sym-6-0/b.hylo
+FIX   accept    violations/r7/pen-ref-2--sym-6-0/b.hylo
+FULL  accept    violations/r7/pen-ref-2--sym-6-0/b.hylo
+base  reject    violations/r8/cyclic-query-segfault--conf-0/a.hylo
+        error: L7: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r8/cyclic-query-segfault--conf-0/a.hylo
+        error: L7: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r8/cyclic-query-segfault--conf-0/a.hylo
+        error: L7: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r8/cyclic-query-segfault--conf-0/b.hylo
+FIX   accept    violations/r8/cyclic-query-segfault--conf-0/b.hylo
+FULL  accept    violations/r8/cyclic-query-segfault--conf-0/b.hylo
+base  reject    violations/r8/hand-open-goal/a.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r8/hand-open-goal/a.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r8/hand-open-goal/a.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+base  accept    violations/r8/hand-open-goal/b.hylo
+FIX   accept    violations/r8/hand-open-goal/b.hylo
+FULL  accept    violations/r8/hand-open-goal/b.hylo
+base  reject    violations/r8/hand-open-goal/c.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FIX   reject    violations/r8/hand-open-goal/c.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+FULL  reject    violations/r8/hand-open-goal/c.hylo
+        error: L3: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+done

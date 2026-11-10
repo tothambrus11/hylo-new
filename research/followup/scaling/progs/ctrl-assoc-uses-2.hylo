@@ -1,0 +1,5 @@
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<T0, T1, T2 where T0 is P, T1 is P, T2 is P>(a0: T0.X, b0: T1.X, a1: T1.X, b1: T2.X, x: T2.X) {
+  check<T2.X>(x)
+}

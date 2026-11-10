@@ -1,0 +1,7 @@
+basecap2 corpus/del-where-req/025 mutant base None crash -6 diags None matches 0 ms None rss 2002 wall 82.975
+basecap2 corpus/del-where-req/026 mutant base None crash -6 diags None matches 0 ms None rss 1710 wall 82.475
+basecap2 corpus/del-bound/027 mutant base None crash -6 diags None matches 0 ms None rss 1708 wall 61.665
+basecap2 corpus/del-bound/028 mutant base None crash -6 diags None matches 0 ms None rss 1663 wall 57.976
+basecap2 corpus/repl-typearg/018 mutant base None crash -6 diags None matches 0 ms None rss 1718 wall 61.968
+basecap2 corpus/repl-typearg/005 mutant base None crash -6 diags None matches 0 ms None rss 1732 wall 67.322bbasecap2 workloads/del-where-req/016 mutant base None crash -6 diags None matches 0 ms None rss 2066 wall 79.3
+basecap2 corpus/del-where-req/000 mutant base None crash -6 diags None matches 0 ms None rss 1840 wall 83.596bbasecap2 corpus/del-bound/015 mutant base None crash -6 diags None matches 0 ms None rss 1686 wall 51.40bibigcap corpus/del-where-req/013 mutant min5 None ok 0 diags 2 matches 2037475 ms 57518.64 rss 1941 wall 60.561

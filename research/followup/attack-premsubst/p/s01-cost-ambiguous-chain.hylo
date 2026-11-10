@@ -1,0 +1,11 @@
+// COST. A chain of 8 dependent requirements where each level has 3 conformances (all with X = A)
+// and the last requirement fails (A is not Q). ILL TYPED. FULL fails at the first step; NEW may
+// explore 3^8 = 6561 combinations of witnesses before failing.
+trait P { type X }
+trait Q {}
+struct A {}
+given A is P { type X = A }
+given A is P { type X = A }
+given A is P { type X = A }
+fun f<T where T is P, T.X is P, T.X.X is P, T.X.X.X is P, T.X.X.X.X is P, T.X.X.X.X.X is P, T.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X is P, T.X.X.X.X.X.X.X.X is Q>() {}
+public fun main() { f<A>() }

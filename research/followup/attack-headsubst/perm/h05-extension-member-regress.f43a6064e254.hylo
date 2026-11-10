@@ -1,0 +1,35 @@
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S0
+  fun get() -> S0 { S0() }
+  fun put(x: S0) {} }
+extension <T where T is P> Box<T> {
+  fun one() -> T.X { self.v.get() }
+  fun two(x: T.X) { self.v.put(x) }
+  fun both() { self.two(self.one()) }
+}
+extension <T where T is P> T {
+  fun rt() { self.put(self.get()) }
+  fun one1() -> T.X { self.get() }
+  fun two1(x: T.X) { self.put(x) }
+}
+fun q(b: Box<A>, a: A) {
+  b.two(b.one())
+  b.both()
+  a.rt()
+  a.two1(a.one1())
+  wantS0(a.one1())
+  wantS0(b.one())
+}
+fun g<U where U is P>(b: Box<U>, u: U) {
+  b.two(b.one())
+  u.two1(u.one1())
+  u.put(u.one1())
+  u.two1(u.get())
+  b.two(u.get())
+}
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }

@@ -1,0 +1,11 @@
+given <T where T is P> => S<T> is P { type X = T }
+given A is Q {}
+type SA = S<A>
+fun f<where A is P, SA is P, SA.X is Q>() {}
+public fun main() { f() }
+trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct S<T> {}
+given A is P { type X = B }

@@ -1,6 +1,6 @@
 # Overload resolution (`twins`, `cleanfirst`, `lookahead`)
 
-**Kind:** result-preserving: the same solution, name bindings and diagnostics as the existing search. About 220 lines. Design, proof and executable model: `../follow-up/designs/overload.md`.
+**Kind:** `twins` is result-preserving. `cleanfirst` and `lookahead` return the solution of the existing search, but are result-preserving for whole programs only together with the order-independence fix (`../soundness/5-declaration-order.md`); see "What the review found". About 250 lines. Design, proof, executable model and adversarial review: `../follow-up/designs/overload.md`.
 
 ## The problem
 
@@ -16,7 +16,7 @@ An earlier attempt to defer overloaded names was faster but changed which soluti
 
 ## How it works
 
-**`twins`.** Two candidates of one overloaded name that have the same type lead to the same search: the two forks differ only in the declaration bound to the name, which the solver never reads. The second candidate reuses the result of the first, with the name rebound, when both start from the same bound.
+**`twins`.** Two candidates of one overloaded name that have the same type lead to the same search: the two forks differ only in the declaration bound to the name, which the solver never reads. The second candidate reuses the result of the first, with the name rebound, when both start from the same bound, or under any bound when the first search met no failure at all (its result then does not depend on the bound).
 
 **`cleanfirst`.** Before a first complete solution exists the existing search cancels nothing. At the first overloaded name of a system, the solver first looks for a solution *without diagnostics*: the existing search with the bound "no error" from the start. Each overloaded name discards solutions that have a diagnostic until it finds a clean one, and from then on runs the unchanged code, in the state the existing search is in after it has found a clean solution. If the first overloaded name has no clean candidate, the attempt is dropped and the existing search runs unchanged.
 
@@ -28,7 +28,15 @@ An earlier attempt to defer overloaded names was faster but changed which soluti
 - `cleanfirst`: the design proves that when the attempt returns a solution, the list of viable candidates it built is, element by element, the list the existing search builds; the selection among them is then the same. The proof does not rely on any property of the preference between candidates. When the attempt fails, the existing search runs from the unmodified state.
 - `lookahead`: a goal whose failure is decided by what is already assigned fails in every continuation of the branch.
 
-One assumption cannot be asserted in code: the optimizations skip some queries to the type checker that the existing search makes in branches it later discards, and answers must not depend on that. This is the mechanism of the dependence on declaration order (`../soundness/5-declaration-order.md`).
+## What the review found
+
+`cleanfirst` and `lookahead` skip queries to the type checker that the existing search makes in branches it later discards, and `lookahead` makes one earlier. In the existing implementation the answers of the type checker depend on the order of queries: a lookup made by a wrong candidate's branch decides which declaration is computed first. An adversarial review constructed five programs on which a verdict or a diagnostic changes for that reason (one accepted program becomes rejected, two rejected ones accepted). The in-process self-check cannot see this, because its second run makes the missing queries.
+
+With `sigrounds`, which removes that order dependence for extensions and givens, the verdicts of these programs are stable; only the alias named in the diagnostic of a true alias cycle still differs. No argument excludes a verdict change through aliases, which are still computed on demand.
+
+`twins` only skips repetitions of queries just made from the same state and is not affected. With the rule for searches without failure it makes operator chains linear on its own.
+
+Recommendation: adopt `twins` unconditionally; adopt `cleanfirst` and `lookahead` only together with `sigrounds`.
 
 Evidence:
 - an executable model of the solver's bookkeeping predicts the fork counts of the implementation on 18 programs, and the proposed algorithm returns the existing solution on 1.2 million random systems; six deliberately wrong variants are all detected;
@@ -41,10 +49,9 @@ Forks, on the revised implementation (`follow-up/overload/`, `follow-up/design-o
 
 | Program | Without | `twins` | all three |
 |---|---:|---:|---:|
-| `a + … + a`, 6 operators | 126 | 27 | 6 |
-| 10 operators | 2,046 | 65 | 10 |
-| 14 operators | 32,766 | 119 | 14 |
-| 18 operators | (not run) | 189 | 18 |
+| `a + … + a`, 6 operators | 126 | 6 | 6 |
+| 10 operators | 2,046 | 10 | 10 |
+| 14 operators | 32,766 | 14 | 14 |
 | Four overloads by parameter type, eight calls (`ovl-4-8`) | 3,184 | 3,184 | 32 |
 | Three overloads by result type, eight calls (`ovr-3-8`) | 9,840 | 9,840 | 24 |
 | Four overloads by result type, nine calls | 349,524 | 349,524 | 36 |

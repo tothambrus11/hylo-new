@@ -464,6 +464,73 @@ fun f<{ps} where {confs}>(x: T0.X) {{
 """
 
 
+def ctrl_assoc_reqs(n):
+    """Valid control for assoceq: the same 2n mentions of T{i}.X in the where clause, as conformance requirements (T{i}.X is Q, T{i+1}.X is R) instead of equalities."""
+    ps = ", ".join(f"T{i}" for i in range(n + 1))
+    confs = ", ".join(f"T{i} is P" for i in range(n + 1))
+    reqs = ", ".join(f"T{i}.X is Q, T{i+1}.X is R" for i in range(n))
+    return f"""trait P {{ type X }}
+trait Q {{}}
+trait R {{}}
+fun check<T>(x: T) {{}}
+fun f<{ps} where {confs}, {reqs}>(x: T{n}.X) {{
+  check<T{n}.X>(x)
+}}
+"""
+
+
+def ctrl_assoc_uses(n):
+    """Valid control for assoceq: the same 2n mentions of T{i}.X, as parameter types; no equality."""
+    ps = ", ".join(f"T{i}" for i in range(n + 1))
+    confs = ", ".join(f"T{i} is P" for i in range(n + 1))
+    params = ", ".join(f"a{i}: T{i}.X, b{i}: T{i+1}.X" for i in range(n))
+    return f"""trait P {{ type X }}
+fun check<T>(x: T) {{}}
+fun f<{ps} where {confs}>({params}, x: T{n}.X) {{
+  check<T{n}.X>(x)
+}}
+"""
+
+
+def eqgoals_fixedchain(n):
+    """Valid: n equality goals over a chain of 8 links (eqchain-goals with the number of facts fixed)."""
+    ps = ", ".join(f"T{i}" for i in range(9))
+    eqs = ", ".join(f"T{i} == T{i+1}" for i in range(8))
+    calls = "\n".join(f"  need<T0, T{1 + i % 8}>()" for i in range(n))
+    return f"""fun need<A, B where A == B>() {{}}
+fun f<{ps} where {eqs}>() {{
+{calls}
+}}
+"""
+
+
+def eqgoals_fixedgoals(n):
+    """Valid: 8 equality goals over a chain of n links (eqchain-goals with the number of goals fixed)."""
+    ps = ", ".join(f"T{i}" for i in range(n + 1))
+    eqs = ", ".join(f"T{i} == T{i+1}" for i in range(n))
+    calls = "\n".join(f"  need<T0, T{max(1, n * k // 8)}>()" for k in range(1, 9))
+    return f"""fun need<A, B where A == B>() {{}}
+fun f<{ps} where {eqs}>() {{
+{calls}
+}}
+"""
+
+
+def bound_req(d):
+    """Valid: req-traits with 10 requirements; the size is the depth bound HYLO_TC_MAXDEPTH = d."""
+    return req_traits(10)
+
+
+def bound_nest(d):
+    """Valid: nest at nesting depth 9 (a derivation of 10 subgoals); the size is the depth bound HYLO_TC_MAXDEPTH = d."""
+    return nest(9)
+
+
+def bound_diamond(d):
+    """Valid: nest-diamond at nesting depth 3 (a derivation of 15 subgoals); the size is the depth bound HYLO_TC_MAXDEPTH = d."""
+    return nest_diamond(3)
+
+
 # ---------------------------------------------------------------- registry
 
 M = "summon.matches"
@@ -494,6 +561,7 @@ FAMILIES = {
     "members-both":   (members_both,   [20, 40, 80, 160, 320, 640], "ok", {}, "names.appliesCalls"),
     "condext":        (condext,        [2, 4, 8, 16, 32, 64, 128], "ok", {}, "names.appliesCalls"),
     "ovl-calls":      (ovl_calls,      [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 20], "ok", {}, "solver.forks"),
+    "ovl-calls-odd":  (ovl_calls,      [11, 13, 15], "ok", {}, "solver.forks"),
     "ovl-width":      (ovl_width,      [2, 3, 4, 6, 8, 12, 16], "ok", {}, "solver.forks"),
     "ovl-stmts":      (ovl_stmts,      [1, 2, 4, 8, 16, 32, 64], "ok", {}, "solver.forks"),
     "ovr-args":       (ovr_args,       [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12], "ok", {}, "solver.forks"),
@@ -518,6 +586,15 @@ FAMILIES = {
     "req-params-deep": (req_params,    [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "req-eq-deep":    (req_eq,         [1, 2, 4, 8, 16, 32, 64, 128, 256], "ok", {"HYLO_TC_MAXDEPTH": "1000"}, M),
     "req-neg":        (req_neg,        [1, 2, 4, 8, 16, 32, 64, 128], "err", {}, M),
+    "ctrl-assoc-reqs": (ctrl_assoc_reqs, [1, 2, 4, 8, 16, 32, 64, 128, 192, 256], "ok", {}, M),
+    "ctrl-assoc-uses": (ctrl_assoc_uses, [1, 2, 4, 8, 16, 32, 64, 128, 192, 256], "ok", {}, M),
+    "eqgoals-fixedchain": (eqgoals_fixedchain, [8, 16, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
+    "eqgoals-fixedgoals": (eqgoals_fixedgoals, [8, 16, 32, 64, 128, 256, 512, 1024], "ok", {}, M),
+    "nest-diamond-deep": (nest_diamond, [2, 4, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16], "ok", {"HYLO_TC_MAXDEPTH": "1000000"}, M),
+    "open-wide-deep": (open_wide,      [1, 2, 3, 4, 5, 6], "ok", {"HYLO_TC_MAXDEPTH": "1000", "HYLO_TC_BUDGET": "1000000000"}, M),
+    "bound-req":      (bound_req,      [8, 9, 10, 11, 12, 16], "ok", {"HYLO_TC_MAXDEPTH": "{n}"}, M),
+    "bound-nest":     (bound_nest,     [8, 9, 10, 11, 12, 16], "ok", {"HYLO_TC_MAXDEPTH": "{n}"}, M),
+    "bound-diamond":  (bound_diamond,  [12, 14, 15, 16, 17, 20], "ok", {"HYLO_TC_MAXDEPTH": "{n}"}, M),
 }
 
 

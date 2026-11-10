@@ -1,0 +1,20 @@
+struct S1 { public memberwise init }
+given A is Conv<S0> { type Out = S1
+  fun conv(x: S0) -> S1 { S1() } }
+given A is Conv<S1> { type Out = S0
+  fun conv(x: S1) -> S0 { S0() } }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+fun run<S, T where S is Conv<T>>(s: S, x: T) -> S.Out { s.conv(x) }
+fun nur<S, T where S is Conv<T>>(x: T, s: S) -> S.Out { s.conv(x) }
+fun q() {
+  wantS1(run(A(), S0()))
+  wantS0(run(A(), S1()))
+  wantS0(run(A(), S0()))
+  wantS1(nur(S0(), A()))
+  wantS0(nur(S1(), A()))
+  wantS1(nur(S1(), A()))
+}
+trait Conv<T> { type Out; fun conv(x: T) -> Out }
+struct A { public memberwise init }
+struct S0 { public memberwise init }

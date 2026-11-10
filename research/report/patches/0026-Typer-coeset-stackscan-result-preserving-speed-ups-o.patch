@@ -1,0 +1,165 @@
+From cb11436c2d770927155fe09326c37da3bb72dcb7 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 17:49:06 +0000
+Subject: [PATCH 26/27] Typer: coeset, stackscan (result-preserving speed-ups
+ of the coercion prefilter)
+
+coeset: a closed pair may be coerced only if both types are sides of closed
+equalities in scope; one lookup in the set of sides replaces a pass over every
+given, which made typing a where clause with n equalities cubic.
+stackscan: test whether a given is being typed without forming a closure that
+copies the program.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 85 +++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  8 ++
+ 2 files changed, 91 insertions(+), 2 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index bbab1e6..ebf11c5 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -15,7 +15,17 @@ public struct Typer {
+   private var cache: Memos
+ 
+   /// The set of declarations whose type is being computed.
+-  private var declarationsOnStack: Set<DeclarationIdentity>
++  private var declarationsOnStack: Set<DeclarationIdentity> {
++    didSet { stackVersion &+= 1 }
++  }
++
++  /// A number that changes whenever `declarationsOnStack` or `signatureTable` does.
++  private var stackVersion = 0
++
++  /// The sides of the closed equalities given in a scope and the other givens that can derive a
++  /// coercion, for the version of the stack at which they were computed (`coeset`).
++  private var coercionSidesMemo:
++    (scope: ScopeIdentity, version: Int, sides: Set<AnyTypeIdentity>, others: [Given])? = nil
+ 
+   /// Fix (`extorder`): the extensions for which a circular definition has been reported.
+   private var reportedCircularExtensions: Set<ExtensionDeclaration.ID> = []
+@@ -226,6 +236,7 @@ public struct Typer {
+   ) -> [DeclarationIdentity: AnyTypeIdentity] {
+     hiddenCandidateSeen = false
+     skippedInferredGivens = []
++    stackVersion &+= 1
+     var next: [DeclarationIdentity: AnyTypeIdentity] = [:]
+     for n in nodes {
+       computeOwners(enclosing: n)
+@@ -6057,6 +6068,34 @@ public struct Typer {
+       extendedKey = k
+     }
+ 
++    // Experiment (`coeset`): a closed type can be coerced through a closed equality only if it is
++    // one of its sides, so one lookup in the set of all sides replaces a pass over the givens.
++    if TyperExperiments.coeset && p.isClosed
++      && !program.types.hasContext(p.first) && !program.types.hasContext(p.second)
++    {
++      let (sides, others) = coercionSides(visibleFrom: scopeOfUse)
++      var bits: UInt8 = 0
++      if sides.contains(program.types.dealiased(p.first)) { bits |= 0b10 }
++      if sides.contains(program.types.dealiased(p.second)) { bits |= 0b01 }
++      if bits != 0b11 {
++        for g in chain(environment.givens, others) {
++          bits |= canDeriveCoercion(p, applying: g)
++          if bits == 0b11 { break }
++        }
++      }
++      TyperCounters.bump("coeset.answers")
++      if TyperExperiments.selfcheck {
++        var expected: UInt8 = 0
++        for g in chain(environment.givens, givens(visibleFrom: scopeOfUse).joined()) {
++          expected |= canDeriveCoercion(p, applying: g)
++        }
++        if (expected == 0b11) != (bits == 0b11) {
++          selfCheckViolation("coeset: the set of equality sides disagrees with the givens")
++        }
++      }
++      return bits == 0b11
++    }
++
+     // Check if there are givens in scope that could be used to derive a coercion.
+     var result: UInt8 = 0
+     let sources: [Given]
+@@ -6093,6 +6132,34 @@ public struct Typer {
+     return false
+   }
+ 
++  /// Returns the sides of the closed equalities given in `scopeOfUse`, without aliases, and the
++  /// other givens visible from it that can derive a coercion (`coeset`).
++  private mutating func coercionSides(
++    visibleFrom scopeOfUse: ScopeIdentity
++  ) -> (sides: Set<AnyTypeIdentity>, others: [Given]) {
++    if let m = coercionSidesMemo, m.scope == scopeOfUse, m.version == stackVersion {
++      return (m.sides, m.others)
++    }
++    var sides: Set<AnyTypeIdentity> = []
++    var others: [Given] = []
++    for g in givens(visibleFrom: scopeOfUse).joined() {
++      let t = declaredType(of: g)
++      let (c, h) = program.types.contextAndHead(t)
++      if c.parameters.contains(where: { (p) in p.erased == h }) {
++        others.append(g)
++      } else if let e = program.types[h] as? EqualityWitness {
++        if c.parameters.isEmpty && c.usings.isEmpty && !h[.hasVariable] && !h[.hasError] {
++          sides.insert(program.types.dealiased(e.lhs))
++          sides.insert(program.types.dealiased(e.rhs))
++        } else {
++          others.append(g)
++        }
++      }
++    }
++    coercionSidesMemo = (scopeOfUse, stackVersion, sides, others)
++    return (sides, others)
++  }
++
+   /// Returns two bits indicating whether `g` may be used to prove a coercion between `p.first` and
+   /// some type `x`, and between `x` and `p.second`, respectively.
+   ///
+@@ -8149,7 +8216,21 @@ public struct Typer {
+ 
+   /// Returns `true` iff there is a declaration introducing an implicit that is being typed.
+   private func hasImplicitOnStack() -> Bool {
+-    declarationsOnStack.contains(where: program.isImplicit)
++    if TyperExperiments.stackscan {
++      if declarationsOnStack.isEmpty { return false }
++      for d in declarationsOnStack {
++        switch program.tag(of: d) {
++        case ConformanceDeclaration.self:
++          return true
++        case BindingDeclaration.self:
++          if program[castUnchecked(d, to: BindingDeclaration.self)].isImplicit { return true }
++        default:
++          continue
++        }
++      }
++      return false
++    }
++    return declarationsOnStack.contains(where: program.isImplicit)
+   }
+ 
+ }
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 3a989b4..032da38 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -164,6 +164,14 @@ public enum TyperExperiments {
+   /// after it, with the witness found for it substituted into its type.
+   nonisolated(unsafe) public static var premsubst: Bool = enabled.contains("premsubst")
+ 
++  /// Decide whether two closed types may be coerced by looking them up in the set of the sides of
++  /// the equalities in scope, instead of comparing them with every given (result-preserving).
++  nonisolated(unsafe) public static var coeset: Bool = enabled.contains("coeset")
++
++  /// Test whether a given is being typed without copying the program (result-preserving). The
++  /// existing test forms a closure that captures a copy of the whole program value.
++  nonisolated(unsafe) public static var stackscan: Bool = enabled.contains("stackscan")
++
+   /// SEMANTIC FIX: a member selected on a value whose type is an alias of an instance of a
+   /// generic type is instantiated with the type arguments of that instance. Without it the
+   /// member keeps the type's own parameter, and `a.f(b.g())` is accepted for `a: A<Void>` and
+-- 
+2.43.0
+

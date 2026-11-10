@@ -1,0 +1,6 @@
+// A call with dependent requirements from a default method of the trait, at Self.
+// ILL TYPED: nothing says Self.X is Q.
+trait Q {}
+trait P { type X
+  fun m() { f<Self>() } }
+fun f<T where T is P, T.X is Q>() {}

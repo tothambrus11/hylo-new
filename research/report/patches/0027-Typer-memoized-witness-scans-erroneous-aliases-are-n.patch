@@ -1,0 +1,253 @@
+From 4293597616b34e502cb249057be173a88c27bf8b Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 18:06:28 +0000
+Subject: [PATCH 27/27] Typer: memoized witness scans; erroneous aliases are
+ not signatures; self-check detail
+
+The scans that ask whether a type mentions an assumed given or contains an
+associated type are memoized per type, and rewriting is skipped where nothing
+can change (premsubst made typing with long derivations slow).
+sigrounds: a signature whose type is an alias of an erroneous type is not put
+in the table.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift     | 105 ++++++++++++++++++++-----
+ Sources/FrontEnd/Types/TypeStore.swift |  31 ++++++++
+ 2 files changed, 118 insertions(+), 18 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index ebf11c5..c1d99d1 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -94,6 +94,12 @@ public struct Typer {
+   /// The index of the last generic parameter created to rename a bound parameter.
+   private var freshParameterIndex = 1 << 20
+ 
++  /// For each type asked, whether a witness in it is an assumed given.
++  private var assumedMemo: [AnyTypeIdentity: Bool] = [:]
++
++  /// For each type asked, whether it contains an associated type.
++  private var projectionMemo: [AnyTypeIdentity: Bool] = [:]
++
+   /// The inferred givens that a resolution of the current round ignored because they have no type
+   /// yet (`sigrounds`).
+   private var skippedInferredGivens: Set<DeclarationIdentity> = []
+@@ -241,7 +247,8 @@ public struct Typer {
+     for n in nodes {
+       computeOwners(enclosing: n)
+       let t = computedSignature(of: n)
+-      if !t[.hasError] { next[n] = t }
++      // An alias of an erroneous type does not have the error property itself.
++      if !t[.hasError] && !program.types.dealiased(t)[.hasError] { next[n] = t }
+     }
+     TyperCounters.bump("sigrounds.rounds")
+     return next
+@@ -317,7 +324,15 @@ public struct Typer {
+     let found = Set(program[module].diagnostics.map(normalized(_:)))
+     TyperCounters.bump("selfcheck.sigrounds")
+     if again != stable {
+-      selfCheckViolation("sigrounds: a round computes another table in reverse order")
++      var d: [String] = []
++      for n in nodes where again[n] != stable[n] {
++        let x = stable[n].map({ (t) in program.show(t) }) ?? "none"
++        let y = again[n].map({ (t) in program.show(t) }) ?? "none"
++        d.append("\(program.spanForDiagnostic(about: n)): \(x) / \(y)")
++      }
++      selfCheckViolation(
++        "sigrounds: a round computes another table in reverse order: "
++          + d.prefix(3).joined(separator: "; "))
+     } else if comparingDiagnostics && (found != expected) {
+       let d = found.symmetricDifference(expected).sorted().prefix(2).joined(separator: " | ")
+       selfCheckViolation("sigrounds: the last round reports other diagnostics in reverse order: \(d)")
+@@ -2304,7 +2319,9 @@ public struct Typer {
+   private mutating func rewritingWitnesses(
+     in t: AnyTypeIdentity, _ replacement: (WitnessExpression) -> WitnessExpression?
+   ) -> AnyTypeIdentity {
+-    withoutActuallyEscaping(replacement) { (f) in
++    // Witnesses only occur in the qualifications of associated types.
++    if !containsAssociatedType(t) { return t }
++    return withoutActuallyEscaping(replacement) { (f) in
+       Self.rewritingWitnesses(in: t, of: &program.types, f)
+     }
+   }
+@@ -2471,25 +2488,82 @@ public struct Typer {
+   }
+ 
+   /// Returns `true` iff a witness in `t` is an assumed given.
++  ///
++  /// The answer is a function of the type, which is immutable, so it is memoized.
+   private mutating func mentionsAssumed(_ t: AnyTypeIdentity) -> Bool {
++    if let m = assumedMemo[t] { return m }
+     var found = false
+-    _ = rewritingWitnesses(in: t, { (w) in if case .assumed = w.value { found = true }; return nil })
++    if let a = program.types[t] as? AssociatedType {
++      found = mentionsAssumed(a.qualification)
++    } else {
++      for p in program.types.parts(of: t) where mentionsAssumed(p) {
++        found = true
++        break
++      }
++    }
++    assumedMemo[t] = found
+     return found
+   }
+ 
+   /// Returns `true` iff a witness in `w` or in one of its types is an assumed given.
+   private mutating func mentionsAssumed(_ w: WitnessExpression) -> Bool {
+-    var found = false
+-    _ = rewritingWitnesses(in: w, { (x) in if case .assumed = x.value { found = true }; return nil })
++    switch w.value {
++    case .assumed:
++      return true
++    case .termApplication(let a, let b):
++      if mentionsAssumed(a) || mentionsAssumed(b) { return true }
++    case .typeApplication(let a, let ts):
++      if mentionsAssumed(a) { return true }
++      for t in ts.values where mentionsAssumed(t) { return true }
++    case .nested(let a):
++      if mentionsAssumed(a) { return true }
++    default:
++      break
++    }
++    return mentionsAssumed(w.type)
++  }
++
++  /// Returns `true` iff `t` contains an associated type.
++  private mutating func containsAssociatedType(_ t: AnyTypeIdentity) -> Bool {
++    if let m = projectionMemo[t] { return m }
++    var found = program.types[t] is AssociatedType
++    if !found {
++      for p in program.types.parts(of: t) where containsAssociatedType(p) {
++        found = true
++        break
++      }
++    }
++    projectionMemo[t] = found
+     return found
+   }
+ 
++  /// Returns `t` with each assumed given that occurs in it replaced by its value in `solved`.
++  private mutating func substitutingAssumed(
++    _ solved: [Int: WitnessExpression], in t: AnyTypeIdentity
++  ) -> AnyTypeIdentity {
++    if !mentionsAssumed(t) { return t }
++    return rewritingWitnesses(in: t, { (w) in
++      if case .assumed(let j) = w.value { solved[j] } else { nil }
++    })
++  }
++
++  /// Returns `w` with each assumed given that occurs in it replaced by its value in `solved`.
++  private mutating func substitutingAssumed(
++    _ solved: [Int: WitnessExpression], in w: WitnessExpression
++  ) -> WitnessExpression {
++    if !mentionsAssumed(w) { return w }
++    return rewritingWitnesses(in: w, { (x) in
++      if case .assumed(let j) = x.value { solved[j] } else { nil }
++    })
++  }
++
+   /// Returns `t` in which each associated type selected through a conformance declaration is
+   /// replaced by its definition, or `.error` if that does not terminate (`premsubst`).
+   ///
+   /// Name resolution never builds `(A::c).X` where `c` is a conformance declaration: it returns
+   /// the definition of `X` in `c`. Substituting the witness of a premise can build such a type.
+   private mutating func normalizingProjections(in t: AnyTypeIdentity) -> AnyTypeIdentity {
++    if !containsAssociatedType(t) { return t }
+     var t = t
+     for _ in 0 ..< 8 {
+       var found: [AnyTypeIdentity] = []
+@@ -5090,9 +5164,7 @@ public struct Typer {
+         // Identifiers grow with time: a hypothesis with a larger one was assumed after `g`.
+         if case .assumed(let youngest, _) = gs.last, youngest > i { waiting.append(g); continue }
+         var t = program.types.reify(a, applying: operand.substitutions, withVariables: .kept)
+-        t = rewritingWitnesses(in: t, { (w) in
+-          if case .assumed(let j) = w.value { solved[j] } else { nil }
+-        })
++        t = substitutingAssumed(solved, in: t)
+         t = normalizingProjections(in: t)
+         if mentionsAssumed(t) {
+           waiting.append(g)
+@@ -5245,9 +5317,9 @@ public struct Typer {
+         TyperCounters.bump("premcommit.ambiguous")
+         return false
+       }
+-      let v = rewritingWitnesses(
+-        in: program.types.reify(r.witness, applying: r.substitutions, withVariables: .kept),
+-        { (x) in if case .assumed(let k) = x.value { solved[k] } else { nil } })
++      let v = substitutingAssumed(
++        solved,
++        in: program.types.reify(r.witness, applying: r.substitutions, withVariables: .kept))
+       if !sameValue(v, w) {
+         TyperCounters.bump("premcommit.cut")
+         return false
+@@ -5269,9 +5341,7 @@ public struct Typer {
+       // all, so their witnesses are already in `solved`.
+       let known = solved
+       let r = program.types.reify(w, applying: operand.substitutions, withVariables: .kept)
+-      solved[item.assumed] = rewritingWitnesses(in: r, { (x) in
+-        if case .assumed(let j) = x.value { known[j] } else { nil }
+-      })
++      solved[item.assumed] = substitutingAssumed(known, in: r)
+       w = item.elaboration.witness
+     }
+     return solved
+@@ -5282,10 +5352,9 @@ public struct Typer {
+   private mutating func withoutAssumed(
+     _ r: SummonResult, _ tail: [ResolutionThread.ContinuationItem], _ operand: SummonResult
+   ) -> SummonResult {
++    if !mentionsAssumed(r.witness) { return r }
+     let solved = solvedWitnesses(tail, operand)
+-    let w = rewritingWitnesses(in: r.witness, { (x) in
+-      if case .assumed(let j) = x.value { solved[j] } else { nil }
+-    })
++    let w = substitutingAssumed(solved, in: r.witness)
+     return .init(witness: w, substitutions: r.substitutions, penalties: r.penalties)
+   }
+ 
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 719e0fa..df1396c 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1230,6 +1230,37 @@ public struct TypeStore: Sendable {
+     return found
+   }
+ 
++  /// Returns the types that are immediate parts of `t`, not looking into the aliasee of a type
++  /// alias (as `map(_:_:)`). The qualification of an associated type contributes its type only.
++  public func parts(of t: AnyTypeIdentity) -> [AnyTypeIdentity] {
++    switch self[t] {
++    case let x as TypeApplication:
++      return [x.abstraction] + Array(x.arguments.values)
++    case let x as Tuple:
++      if case .cons(let h, let r) = x { return [h, r] } else { return [] }
++    case let x as Metatype:
++      return [x.inhabitant]
++    case let x as EqualityWitness:
++      return [x.lhs, x.rhs]
++    case let x as AssociatedType:
++      return [x.qualification.type]
++    case let x as Arrow:
++      return [x.environment, x.output] + x.inputs.map(\.type)
++    case let x as Bundle:
++      return [x.shape.erased]
++    case let x as Implication:
++      return [x.head] + x.usings
++    case let x as UniversalType:
++      return [x.head]
++    case let x as RemoteType:
++      return [x.projectee]
++    case let x as FunctionPointer:
++      return [x.output] + x.inputs
++    default:
++      return []
++    }
++  }
++
+   /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
+   /// but compares type tags before projecting and casting each operand once.
+   private func unifiableSameShape(
+-- 
+2.43.0
+

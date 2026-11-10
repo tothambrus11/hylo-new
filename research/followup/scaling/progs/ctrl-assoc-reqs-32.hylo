@@ -1,0 +1,7 @@
+trait P { type X }
+trait Q {}
+trait R {}
+fun check<T>(x: T) {}
+fun f<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18, T19, T20, T21, T22, T23, T24, T25, T26, T27, T28, T29, T30, T31, T32 where T0 is P, T1 is P, T2 is P, T3 is P, T4 is P, T5 is P, T6 is P, T7 is P, T8 is P, T9 is P, T10 is P, T11 is P, T12 is P, T13 is P, T14 is P, T15 is P, T16 is P, T17 is P, T18 is P, T19 is P, T20 is P, T21 is P, T22 is P, T23 is P, T24 is P, T25 is P, T26 is P, T27 is P, T28 is P, T29 is P, T30 is P, T31 is P, T32 is P, T0.X is Q, T1.X is R, T1.X is Q, T2.X is R, T2.X is Q, T3.X is R, T3.X is Q, T4.X is R, T4.X is Q, T5.X is R, T5.X is Q, T6.X is R, T6.X is Q, T7.X is R, T7.X is Q, T8.X is R, T8.X is Q, T9.X is R, T9.X is Q, T10.X is R, T10.X is Q, T11.X is R, T11.X is Q, T12.X is R, T12.X is Q, T13.X is R, T13.X is Q, T14.X is R, T14.X is Q, T15.X is R, T15.X is Q, T16.X is R, T16.X is Q, T17.X is R, T17.X is Q, T18.X is R, T18.X is Q, T19.X is R, T19.X is Q, T20.X is R, T20.X is Q, T21.X is R, T21.X is Q, T22.X is R, T22.X is Q, T23.X is R, T23.X is Q, T24.X is R, T24.X is Q, T25.X is R, T25.X is Q, T26.X is R, T26.X is Q, T27.X is R, T27.X is Q, T28.X is R, T28.X is Q, T29.X is R, T29.X is Q, T30.X is R, T30.X is Q, T31.X is R, T31.X is Q, T32.X is R>(x: T32.X) {
+  check<T32.X>(x)
+}

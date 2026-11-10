@@ -1,0 +1,20 @@
+// Tests: a callee whose where clause fixes its projection (`T.X == S1`), called from another
+// generic function that knows the same about its own parameter, and from a concrete context.
+// Correct verdict: accepted. (The functions are also in r04-part1 to r04-part4, one per file.)
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct S0 { public memberwise init }
+struct S1 { public memberwise init }
+struct Box<T> { public var v: T; public memberwise init }
+fun wantS0(x: S0) {}
+fun wantS1(x: S1) {}
+given A is P { type X = S1
+  fun get() -> S1 { S1() }
+  fun put(x: S1) {} }
+fun nested<T where T is P, T.X == S1>(t: T, b: Box<T.X>) {}
+fun bare<T where T is P, T.X == S1>(t: T, x: T.X) -> T.X { x }
+fun g1<U where U is P, U.X == S1>(u: U, c: Box<S1>) { nested(u, c) }
+fun g2<U where U is P, U.X == S1>(u: U, s: S1) { wantS1(bare(u, s)) }
+fun g3<U where U is P, U.X == S1>(u: U, c: Box<U.X>) { nested(u, c) }
+fun g4<U where U is P, U.X == S1>(u: U, s: U.X) { wantS1(bare(u, s)) }
+fun q(c: Box<S1>) { nested(A(), c) ; wantS1(bare(A(), S1())) }

@@ -1,0 +1,300 @@
+From f49136db741cbaaae6a7e0907e665fde682e2498 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 14:32:38 +0000
+Subject: [PATCH 16/27] Typer: eqeager (decide the equalities of a match
+ immediately)
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 162 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |   4 +
+ 2 files changed, 162 insertions(+), 4 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 128401d..2e0534f 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -44,7 +44,7 @@ public struct Typer {
+   private var premiseResolutionDepth = 0
+ 
+   /// The kind of pruning that a nested search is verifying, if any (`selfcheck`).
+-  private enum SelfCheck { case none, model, equality }
++  private enum SelfCheck { case none, model, equality, replay }
+ 
+   /// The verification in progress (`selfcheck`).
+   private var selfCheck = SelfCheck.none
+@@ -55,6 +55,15 @@ public struct Typer {
+   /// The number of matches attempted so far (`census`).
+   private var matchCount = 0
+ 
++  /// The number of matches whose equalities were decided immediately (`eqeager`).
++  private var eagerDecisions = 0
++
++  /// `true` while a resolution is replayed without deciding equalities in `match` (`selfcheck`).
++  private var eagerDecisionsDisabled = false
++
++  /// `true` iff the last resolution stopped at the depth bound with work left.
++  private var lastResolutionExhaustedDepth = false
++
+   /// The scopes in which implicit resolution was abandoned (`budget`).
+   private var reportedBudgetScopes: Set<ScopeIdentity> = []
+ 
+@@ -3656,6 +3665,10 @@ public struct Typer {
+       /// Research tracing: the steps that led to this environment (only with the `trace` flag).
+       var log: [String] = []
+ 
++      /// The number of layers that this thread and its ancestors spent waiting (`eqeager`); they
++      /// do not count against the depth bound.
++      var credit = 0
++
+       /// Returns a copy of `self` in which `ts` are assumed given.
+       func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
+         let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
+@@ -3664,6 +3677,7 @@ public struct Typer {
+           nextGivenIdentifier: nextGivenIdentifier + gs.count)
+         e.ancestry = ancestry
+         e.log = log
++        e.credit = credit
+         return e
+       }
+ 
+@@ -3676,6 +3690,7 @@ public struct Typer {
+           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
+         e.ancestry = ancestry
+         e.log = log
++        e.credit = credit
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -3706,19 +3721,31 @@ public struct Typer {
+     /// Penalties are used to favor lexically closer givens.
+     let penalties: Int
+ 
++    /// The number of layers the thread waits before its next step (`eqeager`).
++    let delay: Int
++
+     /// Creates an instance with the given properties.
+     init(
+       matching witness: WitnessExpression, to queried: AnyTypeIdentity,
+       in environment: Environment,
+       then tail: [ContinuationItem] = [],
+-      penalties: Int
++      penalties: Int,
++      delay: Int = 0
+     ) {
+-      // assert(delay >= 0)
++      assert(delay >= 0)
+       self.witness = witness
+       self.queried = queried
+       self.environment = environment
+       self.tail = tail
+       self.penalties = penalties
++      self.delay = delay
++    }
++
++    /// Returns a copy of `self` that waits one layer less.
++    consuming func waiting() -> Self {
++      .init(
++        matching: witness, to: queried, in: environment, then: tail, penalties: penalties,
++        delay: delay - 1)
+     }
+ 
+     /// Returns a copy of `self` with the given properties reassigned.
+@@ -3993,6 +4020,13 @@ public struct Typer {
+       }
+     }
+ 
++    // Experiment (`eqeager`): decide the equalities now if they are all closed.
++    if TyperExperiments.eqeager && !eagerDecisionsDisabled,
++      let r = eagerlyCoerced(thread, to: b, assuming: gs, keeping: substitutions, in: scopeOfUse)
++    {
++      return r
++    }
++
+     // If yes, assume non-syntactic equalities between pairwise nested parts.
+     var e = thread.environment.assuming(givens: gs)
+ 
+@@ -4005,6 +4039,7 @@ public struct Typer {
+         givens: e.givens, nextGivenIdentifier: e.nextGivenIdentifier)
+       f.ancestry = e.ancestry
+       f.log = e.log
++      f.credit = e.credit
+       e = f
+     }
+     if TyperExperiments.enabled.contains("trace") {
+@@ -4022,6 +4057,66 @@ public struct Typer {
+     return .next([thread.copy(matching: w, to: b, in: e)])
+   }
+ 
++  /// Returns the step following a match of `thread` to `b` up to the equalities `parts`, having
++  /// decided them now, or `nil` if they must be assumed and proved by search (`eqeager`).
++  ///
++  /// Search would prove each part in one layer, last first, with the earlier parts still assumed,
++  /// by calling `solveEquality`. This function asks the same questions at once. The resulting
++  /// thread waits as many layers as search would have spent, so that it completes in the same
++  /// layer and ranks as before, but these layers do not count against the depth bound.
++  ///
++  /// - Requires: `parts` are the equalities recorded by `match`, in order.
++  private mutating func eagerlyCoerced(
++    _ thread: ResolutionThread, to b: AnyTypeIdentity, assuming parts: [AnyTypeIdentity],
++    keeping substitutions: SubstitutionTable, in scopeOfUse: ScopeIdentity
++  ) -> ResolutionThread.Advanced? {
++    // The conditions under which `summon` would have reached `solveEquality` for each part
++    // without doing anything else that is observable.
++    if !TyperExperiments.eqsolve || !TyperExperiments.fixsubst || (selfCheck == .equality) {
++      return nil
++    }
++    if !declarationsOnStack.isEmpty || !pendingGivenChecks.isEmpty { return nil }
++    if parts.contains(where: { (p) in p[.hasVariable] }) { return nil }
++
++    var e = ResolutionThread.Environment(
++      substitutions: thread.environment.substitutions.union(substitutions),
++      givens: thread.environment.givens,
++      nextGivenIdentifier: thread.environment.nextGivenIdentifier)
++    e.ancestry = thread.environment.ancestry
++    e.log = thread.environment.log
++    e.credit = thread.environment.credit + parts.count
++
++    var cost = 0
++    var refuted = false
++    for i in parts.indices {
++      switch solveEquality(parts[i], in: scopeOfUse, where: e.assuming(givens: Array(parts[..<i]))) {
++      case .notApplicable:
++        return nil
++      case .refuted:
++        refuted = true
++      case .proved(_, let c):
++        cost += TyperExperiments.eqsolveCost ? c : 0
++      }
++    }
++    eagerDecisions += 1
++    if refuted {
++      TyperCounters.bump("eqeager.refuted")
++      return .next([])
++    }
++    TyperCounters.bump("eqeager.matches")
++    TyperCounters.bump("eqeager.parts", by: parts.count)
++
++    let t = demand(EqualityWitness(lhs: thread.witness.type, rhs: b)).erased
++    let w = WitnessExpression(
++      value: .termApplication(.init(value: .builtin(.coercion), type: t), thread.witness),
++      type: b)
++    return .next([
++      ResolutionThread(
++        matching: w, to: b, in: e, then: thread.tail,
++        penalties: thread.penalties + cost, delay: parts.count)
++    ])
++  }
++
+   /// Returns the continuation of `thread` after having resolved `operand` in `scopeOfUse`.
+   private mutating func threadContinuation(
+     appending operand: SummonResult, to thread: ResolutionThread, in scopeOfUse: ScopeIdentity
+@@ -4033,6 +4128,7 @@ public struct Typer {
+         nextGivenIdentifier: thread.environment.nextGivenIdentifier)
+       e.ancestry = thread.environment.ancestry
+       e.log = thread.environment.log
++      e.credit = thread.environment.credit
+       let ancestors = e.ancestry.removeValue(forKey: i) ?? []
+       if TyperExperiments.enabled.contains("trace") {
+         e.log.append("  solved with \(program.show(operand.witness)); now prove $\(i): \(program.show(assumed)) [pending: " + e.givens.map({ (g) in if case .assumed(let j, let t) = g { "$\(j): \(program.show(t))" } else { "?" } }).joined(separator: ", ") + "]")
+@@ -4083,15 +4179,72 @@ public struct Typer {
+   /// - Requires: The types of the witnesses in `threads` have no context.
+   private mutating func takeSummonResults(
+     from threads: [ResolutionThread], in scopeOfUse: ScopeIdentity
++  ) -> [SummonResult] {
++    let eagerAtEntry = eagerDecisions
++    let result = takeSummonResultsUnchecked(from: threads, in: scopeOfUse)
++
++    // Self-check (`eqeager`): the resolution must give the same results when the equalities of
++    // matches are assumed and proved by search, unless search runs out of depth or work.
++    if TyperExperiments.selfcheck && (selfCheck == .none) && (eagerDecisions != eagerAtEntry) {
++      let saved = (selfCheck, selfCheckInconclusive)
++      (selfCheck, selfCheckInconclusive, eagerDecisionsDisabled) = (.replay, false, true)
++      let expected = takeSummonResultsUnchecked(from: threads, in: scopeOfUse)
++      let inconclusive = selfCheckInconclusive || lastResolutionExhaustedDepth
++      (selfCheck, selfCheckInconclusive, eagerDecisionsDisabled) = (saved.0, saved.1, false)
++      func key(_ r: SummonResult) -> String {
++        "\(r.penalties): " + erasingVariableNames(program.show(r.witness))
++      }
++      if result.map(key).sorted() == expected.map(key).sorted() {
++        TyperCounters.bump("selfcheck.eager.confirmed")
++      } else if inconclusive && expected.isEmpty {
++        TyperCounters.bump("selfcheck.eager.beyondSearch")
++      } else {
++        selfCheckViolation(
++          "deciding equalities in match changed the results of \(threads.first.map({ (t) in program.show(t.queried) }) ?? "?"): "
++            + "\(result.map(key).sorted()) instead of \(expected.map(key).sorted())")
++      }
++    }
++    return result
++  }
++
++  /// Returns `s` with the name of every unification variable replaced by a placeholder.
++  private func erasingVariableNames(_ s: String) -> String {
++    var r = ""
++    var i = s.startIndex
++    while i < s.endIndex {
++      if s[i] == "%" {
++        r.append("%_")
++        i = s.index(after: i)
++        while i < s.endIndex, s[i].isLetter || s[i].isNumber { i = s.index(after: i) }
++      } else {
++        r.append(s[i])
++        i = s.index(after: i)
++      }
++    }
++    return r
++  }
++
++  /// Implements `takeSummonResults(from:in:)`.
++  private mutating func takeSummonResultsUnchecked(
++    from threads: [ResolutionThread], in scopeOfUse: ScopeIdentity
+   ) -> [SummonResult] {
+     var work = threads
+     var done: [SummonResult] = []
+     var depth = 0
+     let matchesAtEntry = matchCount
++    lastResolutionExhaustedDepth = false
++
++    // Layers spent waiting for equalities decided in `match` do not count against the bound.
++    func bound(_ ts: [ResolutionThread]) -> Int {
++      TyperExperiments.eqeager
++        ? maxImplicitDepth + (ts.lazy.map(\.environment.credit).max() ?? 0) : maxImplicitDepth
++    }
+ 
+-    while done.isEmpty && !work.isEmpty && (depth < maxImplicitDepth) {
++    while done.isEmpty && !work.isEmpty && (depth < bound(work)) {
+       var next: [ResolutionThread] = []
+       for item in work {
++        if item.delay > 0 { next.append(item.waiting()); continue }
++        if depth - item.environment.credit >= maxImplicitDepth { continue }
+         switch match(item, in: scopeOfUse) {
+         case .done(let r): done.append(r)
+         case .next(let s): next.append(contentsOf: s)
+@@ -4119,6 +4272,7 @@ public struct Typer {
+       }
+       if depth == maxImplicitDepth && done.isEmpty && !work.isEmpty {
+         TyperCounters.bump("summon.depthExhausted")
++        lastResolutionExhaustedDepth = true
+       }
+     }
+ 
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 7aa3d2f..30dae23 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -141,6 +141,10 @@ public enum TyperExperiments {
+   /// Keep the index of givens in scopes whose coercion sources are ground equalities.
+   nonisolated(unsafe) public static var eqindex: Bool = enabled.contains("eqindex")
+ 
++  /// Decide the equalities between closed mismatching parts inside `match` instead of assuming
++  /// them and proving them by search (requires `eqsolve` and `fixsubst`).
++  nonisolated(unsafe) public static var eqeager: Bool = enabled.contains("eqeager")
++
+   nonisolated(unsafe) public static var arrowenv: Bool = enabled.contains("arrowenv")
+ 
+   /// SEMANTIC FIX: an open equality goal `?v ~ X` (?v not in X) is solved only by its most
+-- 
+2.43.0
+
