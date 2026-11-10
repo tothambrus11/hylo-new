@@ -14,7 +14,8 @@ With `givencheck`:
 2. Two kinds of declaration are deliberately hidden, and their skips are not recorded:
    - where-clause usings being introduced by `initializeContext` (scoping rule);
    - a conformance resolving its own refined requirements (`anonymousImplementation`).
-3. Once a recorded given's type is known (checked at the next `summon`, and at the end of the module), it is tested with `mayMatch`: unification of the heads up to coercions that `canDeriveCoercions` allows. If it may match the query it was skipped for, "circular given: the type of this given depends on an implicit resolution of 'Q' that it may satisfy" is reported.
+3. Each record keeps the environment of the skipped resolution, with its assumed givens.
+4. Once a recorded given's type is known (checked at the next `summon`, and at the end of the module), it is tested with `mayMatch`, in the recorded environment: unification of the heads up to coercions that `canDeriveCoercions` allows. An empty environment could miss a coercion that the skipped resolution's assumptions allow, and with it a circularity. If it may match the query it was skipped for, "circular given: the type of this given depends on an implicit resolution of 'Q' that it may satisfy" is reported.
 
 ## Why it is sound
 

@@ -15,13 +15,12 @@ At the start of `summon`, a goal that is a closed equality `A ~ B` (no open type
    - A concrete associated-type projection `(T::w).X` is an atom.
    - An abstract projection `(Self::P).X` is handled by step 5.
 4. **Congruence closure** (Nelson–Oppen / Downey–Sethi–Tarjan). It uses a signature table `(shape, find(children)) → node` and use lists. Unioning two classes re-signs only the parents of the smaller class. This is `O(n log n)`.
-5. **Abstract projections.**
-   - `(Self::P).X` is merged with the concrete projections `(T::w).X` whose qualification types are in its class, but only if they all fall in **one** class. Otherwise it would equate projections through two distinct witnesses, which `negative/associated-type-inequality.hylo` forbids.
-   - A projection that acquires a second concrete class is *banned*, and the closure is recomputed without it. Bans only grow, so the loop terminates, and the result does not depend on any order.
+5. **Abstract projections.** `(Self::P).X` is merged with `(T::w).X` if `w` is the **only** conformance given to `P` in the scope whose type `P<T>` has `T` equal to `Self` under the scope's own equalities. Assumed givens and the goal do not take part in that decision. A conditional, generic or wildcard given to `P` makes the case ambiguous, and then no merge is made. The rule is a fixed set of axioms per scope, so it is the same in every context, and assuming more never retracts a conclusion.
 6. **Premise projections.** A projection through a premise that is not discharged yet is resolved ahead of time: either through `$k` directly, or through a callee's `using` whose premise is assumed with the same type.
    - The premise's type is resolved in the environment in which the premise will be discharged (the givens assumed before it).
    - If that resolution has a unique result `w`, the projection is merged with `(T::w).X`.
-   - Resolution is deterministic, so `w` is the witness that will discharge the premise.
+   - Resolution is deterministic, so `w` is the witness that will discharge the premise. This holds only if that environment is closed, so open variables leave the projection unresolved.
+   - A refutation that depends on an unresolved premise projection is not trusted: `eqsolve` answers `notApplicable`, and search decides.
    - This removes bug #3's incompleteness for conditional extensions such as `extension <T where T is Collection, T.Element == Flag> Box<T>`.
 7. **Verdict.** If the goal's two nodes fall in different classes, the goal is **refuted** (`return []`). Otherwise a proof is rebuilt from the cheapest path, found by Dijkstra over edge costs. The edge costs mirror search penalties:
    - a fact costs its group offset;
@@ -34,7 +33,9 @@ At the start of `summon`, a goal that is a closed equality `A ~ B` (no open type
 
 - **The theory.** The decided theory is the one search implements: reflexivity, symmetry, transitivity, the ground facts, and congruence (`match` assumes equalities between mismatching parts of two types of the same shape). Injectivity is *not* used, and search does not use it either.
 - **Refutation is exact for this theory.** Two terms are equal in the congruence closure of ground equations iff they fall in one class (Nelson–Oppen). Goals with open variables or non-ground facts are left to search.
-- **The abstract-projection rule** is the one sound reading that agrees with both `v-abs-7.hylo` (valid) and `associated-type-inequality.hylo` (negative). Admitting the unification rule transitively derived `T.X == U.X` from `T == Self, U == Self` (review2 `abs-trans-2/3/5`).
+- **The abstract-projection rule** agrees with both `v-abs-7.hylo` (valid) and `associated-type-inequality.hylo` (negative). Admitting the unification rule transitively derived `T.X == U.X` from `T == Self, U == Self` (review2 `abs-trans-2/3/5`).
+  - Review2's first fix decided uniqueness from the goal's graph. That was context-dependent and non-monotone: an assumed equality mentioning `U.X` could retract `X == T.X`. It is now decided per scope (`../round3/soundness/recheck3/README.md` §2).
+- **Undecidable cases are delegated.** Open goals (rigid E-unification), quantified equalities (the word problem) and bare-variable heads go to search; only the decidable ground fragment is decided.
 - **Proof terms.** Every symmetry step is now instantiated with the arguments in the right order. Review2 `e1-sym-proof.hylo` showed `symmetry<B,A>` applied to an `A~B` proof.
 - **Costs.** With the costs, the selection of witnesses matches the baseline's ranking on review2 `e04`/`e05`/`e06`. Without them (`eqsolvefree`), equally cheap alternatives made valid programs ambiguous.
 - **Oracle.** 216/216 identical on the corpus (192 tests and 24 workloads), with the whole final configuration.

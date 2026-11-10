@@ -1,0 +1,4 @@
+//! stage:typing no-std
+struct Box<T> { public memberwise init }
+struct Opt<T> { public memberwise init }
+fun g<X, Y where Box<X> == Opt<Y>>(b: Box<X>) { let o: Opt<Y> = b }

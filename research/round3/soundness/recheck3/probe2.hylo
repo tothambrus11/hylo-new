@@ -1,0 +1,6 @@
+//! stage:typing no-std
+trait Q {}
+struct Box<T> {}
+struct Opt<T> {}
+fun needq<T where T is Q>() {}
+fun g<X, Y where Box<X> == Opt<Y>, Box<X> is Q>() { needq<Opt<Y>>() }

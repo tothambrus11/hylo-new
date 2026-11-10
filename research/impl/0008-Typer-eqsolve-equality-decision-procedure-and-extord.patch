@@ -1,7 +1,7 @@
 From c32b7152f029e58275e03f4a26e5920029d924e7 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Fri, 6 Nov 2026 13:57:06 +0000
-Subject: [PATCH 08/11] Typer: eqsolve (equality decision procedure) and
+Subject: [PATCH 08/12] Typer: eqsolve (equality decision procedure) and
  extorder (order-independent extension lookup)
 
 eqsolve decides closed equality goals with a congruence closure of the

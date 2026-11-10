@@ -1,7 +1,7 @@
 From 9b9bf6aeba045eba7281a418d90b366c3a3e9fd5 Mon Sep 17 00:00:00 2001
 From: Claude <noreply@anthropic.com>
 Date: Fri, 6 Nov 2026 16:03:17 +0000
-Subject: [PATCH 10/11] Typer: premise-resolved projections in eqsolve,
+Subject: [PATCH 10/12] Typer: premise-resolved projections in eqsolve,
  absquotient, budget, reifymemo
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
