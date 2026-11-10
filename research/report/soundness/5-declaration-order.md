@@ -1,6 +1,6 @@
 # 5. Results depend on declaration order
 
-**Status:** fixed by `givencheck` (givens) and `extorder` (extensions).
+**Status:** reduced, not eliminated, by `givencheck` (givens) and `extorder` (extensions). See "What the fix achieves" below.
 
 ## Symptom
 
@@ -50,9 +50,37 @@ Two kinds of hiding are deliberate scoping rules, and they are not checked:
 - A lookup that reaches an extension whose extended type is being computed closes a cycle. The extensions on that cycle form a group.
 - Once the whole group is computed, every lookup made by its members is checked against every member that declares the name. If a member could apply to the type looked into, the group is reported as circular.
 
-## Why the verdict no longer depends on order
+## What the fix achieves
 
-The checks use only the final types. They examine every lookup of a cycle group, not only the one that closed the cycle, so the verdict is the same whichever member is computed first. If no hidden declaration could have taken part, every skip was exact, and the program is accepted with the same meaning as before.
+The checks use only the final types, and for extensions they examine every lookup of a cycle group, not only the one that closed the cycle. If no hidden declaration could have taken part, every skip was exact, and the program is accepted with the same meaning as before.
+
+Declaration-order fuzzing measures the effect. For each of 129 programs constructed for this problem, up to 24 permutations of the top-level declarations are type-checked, and the verdicts compared:
+
+| | Programs whose verdict depends on the order |
+|---|---:|
+| existing implementation | 52 of 129 |
+| with `givencheck` and `extorder` | 7 of 129 |
+
+On 575 other programs (the remaining test programs and the compiler's tests), no verdict depends on the order.
+
+## What remains order-dependent
+
+The seven remaining programs have two shapes.
+
+**A cycle through a type alias:**
+
+```hylo
+struct A {}
+struct B {}
+extension X { type Me = Int }
+extension A { type Me = B }
+type X = A.Me            // accepted in this order
+fun f(x: X.Me) {}        // "definition of 'X' refers to itself" if this declaration comes first
+```
+
+**A cycle through a given and an extension together** (for example `names-n11_poison_via_summon.hylo`).
+
+The cause is structural. A cycle is detected from the state of the evaluation stack when a declaration is re-entered, by a separate mechanism for each kind of declaration. Whether the cycle is seen therefore depends on where evaluation enters it. A uniform solution needs either explicit dependency tracking, with cycles detected on the dependency graph, or a language rule that excludes such dependencies.
 
 ## Limitation
 

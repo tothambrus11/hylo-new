@@ -1,0 +1,51 @@
+From 03bde9d49716aa0ddd61999dcf6920f674364f45 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 11:59:37 +0000
+Subject: [PATCH 13/13] SemanticDump: record the witnesses of elaborated
+ expressions
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/SemanticDump.swift | 23 +++++++++++++++++++++++
+ 1 file changed, 23 insertions(+)
+
+diff --git a/Sources/FrontEnd/Typer/SemanticDump.swift b/Sources/FrontEnd/Typer/SemanticDump.swift
+index e2ad898..5123a9b 100644
+--- a/Sources/FrontEnd/Typer/SemanticDump.swift
++++ b/Sources/FrontEnd/Typer/SemanticDump.swift
+@@ -22,8 +22,31 @@ extension Program {
+         for (r, x) in e.types { lines.append("\(f):\(n) witness.t\(r) = \(show(x))") }
+         for (r, x) in e.members { lines.append("\(f):\(n) witness.m\(r) = \(show(x))") }
+       }
++      // Witnesses of elaborated expressions (coercions and implicit arguments): the raw term,
++      // and the term in which proofs of equalities are erased (they are proof-irrelevant).
++      for (n, x) in s.syntax.enumerated() {
++        guard let e = x.wrapped as? SyntheticExpression else { continue }
++        lines.append("\(f):\(n) syn.raw \(show(e.value))")
++        lines.append("\(f):\(n) syn.norm \(normalized(e.value))")
++      }
+     }
+     return lines.sorted()
+   }
+ 
++  /// Returns a textual form of `w` in which every subterm proving an equality is erased.
++  private func normalized(_ w: WitnessExpression) -> String {
++    if types[w.type] is EqualityWitness { return "<eq>" }
++    switch w.value {
++    case .termApplication(let f, let a):
++      if case .builtin = f.value { return "coerce(\(normalized(a)))" }
++      return "\(normalized(f))(\(normalized(a)))"
++    case .typeApplication(let f, let a):
++      return "\(normalized(f))<\(a.values.map({ (t) in show(t) }).joined(separator: ", "))>"
++    case .nested(let x):
++      return "nested(\(normalized(x)))"
++    default:
++      return show(w.value)
++    }
++  }
++
+ }
+-- 
+2.43.0
+

@@ -1,6 +1,6 @@
 # Hylo Type-Checker Optimizations
 
-Techniques that make Hylo's type checker 4.1× faster on the standard library and up to three orders of magnitude faster on workloads designed to stress resolution, together with fixes for five soundness problems of the existing implementation.
+Techniques that make Hylo's type checker 4.1× faster on the standard library and up to three orders of magnitude faster on workloads designed to stress resolution, together with fixes for soundness problems of the existing implementation.
 
 **Start with `report.html`.** It is the complete overview, readable in any browser in about 20 minutes. The rest of this folder gives the details behind it.
 
@@ -13,6 +13,7 @@ Techniques that make Hylo's type checker 4.1× faster on the standard library an
 | `validation/` | Test-suite comparison, adversarial test results and timings, with raw data |
 | `test-programs/` | About 540 small programs, grouped by topic, each folder with an index of old and new verdicts |
 | `patches/` | The implementation as a patch series, with instructions to build and run it |
+| `follow-up/` | A critical review of this work, with new measurements, and the plan for follow-up experiments |
 | `papers/` | The cited papers available in PDF form, linked from the references of `report.html` |
 
 ## Techniques
@@ -37,4 +38,4 @@ Techniques that make Hylo's type checker 4.1× faster on the standard library an
 2. Equality chains time out or are rejected: `soundness/2-equality-chains.md`
 3. Associated types through a callee's requirements are not simplified: `soundness/3-unsimplified-projections.md`
 4. Cyclic type bindings crash the compiler: `soundness/4-cyclic-bindings.md`
-5. Results depend on declaration order: `soundness/5-declaration-order.md`
+5. Results depend on declaration order (reduced, not eliminated): `soundness/5-declaration-order.md`

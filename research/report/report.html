@@ -120,7 +120,7 @@ sup.c a { color: inherit; text-decoration: none; }
       <li>deciding equalities between closed types by congruence closure;</li>
       <li>several engineering improvements.</li>
     </ul>
-    <p>The report also identifies five soundness problems of the existing implementation and gives a fix for each. With all techniques enabled, the type checker is 4.1× faster on the standard library, and up to three orders of magnitude faster on workloads designed to stress resolution. Its output is unchanged on the compiler's test suite.</p>
+    <p>The report also identifies five soundness problems of the existing implementation and gives a fix for each; the fix for dependence on declaration order is partial. With all techniques enabled, the type checker is 4.1× faster on the standard library, and up to three orders of magnitude faster on workloads designed to stress resolution. Its output is unchanged on the compiler's test suite.</p>
   </header>
 
   <section>
@@ -139,7 +139,7 @@ sup.c a { color: inherit; text-decoration: none; }
           <li>replacing the search for equality derivations with a decision procedure.</li>
         </ul>
       </li>
-      <li><strong>Soundness.</strong> The existing implementation is unsound in three respects: it accepts ill-typed programs, crashes on some inputs, and produces results that depend on the order of declarations. Five problems are identified and fixed. The fixes and the equality decision procedure depend on each other and must be adopted together.</li>
+      <li><strong>Soundness.</strong> The existing implementation is unsound in three respects: it accepts ill-typed programs, crashes on some inputs, and produces results that depend on the order of declarations. Five problems are identified. Four are fixed; the fifth, order dependence, is reduced but not eliminated. The fixes and the equality decision procedure depend on each other and must be adopted together.</li>
       <li><strong>Preservation.</strong> On the 192 compiler tests and 24 workloads, every inferred type, name binding, implicit argument and diagnostic is identical to that of the existing implementation.</li>
       <li><strong>Open problems.</strong> Overloading on return types remains exponential in the number of arguments. Mutually recursive extensions are rejected conservatively. A few further cases are listed under Limitations.</li>
     </ul>
@@ -207,7 +207,8 @@ sup.c a { color: inherit; text-decoration: none; }
 
   <section>
     <h2>Performance techniques</h2>
-    <p>The techniques in this section are result-preserving. Each is controlled by a runtime flag (shown in <span class="flag">grey</span>), which allows it to be measured and validated in isolation. Speed-ups quoted for a single technique are measured with only that technique enabled.</p>
+    <p>The techniques in this section are result-preserving. Each is controlled by a runtime flag (shown in <span class="flag">grey</span>), which allows it to be measured and validated in isolation. Speed-ups quoted for a single technique are measured with only that technique enabled; they are not additive.</p>
+    <p>On the standard library, five techniques account for the entire gain. Adding them greedily, each time the one that helps most, gives 517 ms → 233 ms (<code>index</code>) → 177 ms (skipping extensions that do not declare the requested name) → 158 ms (<code>typevec</code>) → 138 ms (<code>symindex</code>) → 126 ms (<code>traitindex</code>); all techniques together give 130 ms. The remaining techniques matter only on the stress workloads, where each removes one super-polynomial behaviour, or are soundness fixes.</p>
 
     <h3>Candidate selection</h3>
     <div class="tech">
@@ -319,7 +320,7 @@ sup.c a { color: inherit; text-decoration: none; }
             <li>its applicability test is known to have no side effect.</li>
           </ul></dd>
         <dt>Correctness</dt><dd>The applicability test is not a pure function. It forces the computation of the extension's extended type, and possibly of the types of givens, and these results are memoized and read by later lookups. Omitting a test that would have computed something can change the order of these computations and thereby the result. The technique therefore skips a test only when everything it could compute is already memoized.</dd>
-        <dt>Effect</dt><dd>1.7× on the standard library and 15× on members-big, where the number of applicability tests falls from 4 million to 1,000.</dd>
+        <dt>Effect</dt><dd>1.7× on the standard library and 15× on members-big, where the number of applicability tests falls from 4 million to 1,000. When <code>extorder</code> is enabled, this technique is redundant: <code>extorder</code> skips the same extensions unconditionally, at the price of changing the outcome of some cyclic programs. <code>memberskip</code> is the result-preserving alternative.</dd>
         <dt>Cost</dt><dd>A cache per extension.</dd>
       </dl>
     </div>
@@ -390,7 +391,8 @@ given U is Q { type O = T }
 given Z.O is P { type Y = Int }   // accepted…
 type Z = T.Y                      // …but rejected if these two declarations are exchanged</code></pre>
       <p><strong>Cause.</strong> While the type of a declaration is being computed, the declaration is hidden from lookups, to prevent infinite regress. The answers of those lookups are memoized, but it is never verified that the hidden declaration would not have changed them. The outcome therefore depends on which declaration is computed first. Extensions whose extended types depend on members of other extensions exhibit the same problem. This is an instance of the general difficulty of scheduling name resolution soundly in type checkers<sup class="c">[<a href="#ref-11">11</a>]</sup>.</p>
-      <p><strong>Fix</strong> <span class="flag">givencheck</span>, <span class="flag">extorder</span>. Every lookup that omitted a hidden declaration is recorded, together with its query and the hypotheses in force. Once the types of all declarations involved are known, each record is checked: if the omitted declaration could have contributed a candidate, the program is reported as circular. For extensions, the check ranges over all lookups made by the members of a dependency cycle. The verdict is therefore independent of which member is computed first. If no omitted declaration could have contributed, the program is accepted with its original meaning.</p>
+      <p><strong>Fix</strong> <span class="flag">givencheck</span>, <span class="flag">extorder</span>. Every lookup that omitted a hidden declaration is recorded, together with its query and the hypotheses in force. Once the types of all declarations involved are known, each record is checked: if the omitted declaration could have contributed a candidate, the program is reported as circular. For extensions, the check ranges over all lookups made by the members of a dependency cycle. If no omitted declaration could have contributed, the program is accepted with its original meaning.</p>
+      <p><strong>Residual order dependence.</strong> The fix reduces the problem but does not eliminate it. Under declaration-order fuzzing (up to 24 permutations of the top-level declarations of each of 129 programs constructed for this problem), the verdict of the existing implementation varies with the order for 52 programs, and that of the revised implementation for 7. The remaining cases are cycles that pass through a type alias, or through a given and an extension together; the checks added here are specific to one kind of declaration each and do not observe such cycles from every entry point.</p>
     </div>
 
     <h3>Context independence of the equality procedure</h3>
@@ -436,6 +438,7 @@ type Z = T.Y                      // …but rejected if these two declarations a
         <pre><code>extension A.Inner.Foo { type Inner = Bool }   // requires Foo, declared by the next extension
 extension A.Inner { type Foo = Int }          // requires Inner in A, which the first might declare</code></pre>
         The existing implementation accepts this program only under a favourable evaluation order. Accepting it under every order would require a fixed-point computation over memoized results.</li>
+      <li><strong>Residual order dependence.</strong> Dependency cycles through type aliases, and through givens combined with extensions, are still detected from some entry points only (7 of 129 fuzzed programs). Cycle detection is tied to the evaluation stack and to one kind of declaration at a time; a uniform treatment requires either explicit dependency tracking or a language rule that excludes such dependencies.</li>
       <li><strong>Resource bound.</strong> With the soundness fixes alone, a few valid programs with divergent givens exceed the bound. With the abstract model enabled, none of the test programs does.</li>
       <li><strong>Residual search.</strong> Equality goals containing unification variables inside types, such as <code>Box&lt;?v&gt; ~ C</code>, are still solved by search, as are projections through pending requirements of more complex forms.</li>
     </ul>
@@ -444,7 +447,8 @@ extension A.Inner { type Foo = Int }          // requires Inner in A, which the 
   <section>
     <h2>Validation</h2>
     <ul>
-      <li><strong>Output equivalence.</strong> A semantic dump records every inferred type, name binding, implicit argument, conformance table and diagnostic. It is identical to that of the existing implementation on all 192 tests and 24 workloads, both with the soundness fixes alone and with all techniques enabled.</li>
+      <li><strong>Output equivalence.</strong> A semantic dump records every inferred type, name binding, conformance table and diagnostic, together with the witness selected at each elaborated site (coercions and implicit arguments; 11,817 sites). On the 192 tests and 24 workloads, the dump is identical to that of the existing implementation up to the terms of equality proofs, both with the soundness fixes alone and with all techniques enabled. Equality proofs differ in two files, where the decision procedure constructs them differently; they carry no computational content.</li>
+      <li><strong>Declaration-order fuzzing.</strong> For 704 programs, up to 24 permutations of the top-level declarations were checked (11,554 runs). Outside the programs constructed for problem 5, no verdict depends on the order. Within them, 7 of 129 do (52 for the existing implementation).</li>
       <li><strong>Adversarial programs.</strong> A corpus of 520 programs was constructed to falsify the correctness argument of each technique. It targets unsound acceptance, abnormal termination, order dependence and pathological running times. Each reported defect was reproduced before being fixed.
         <ul>
           <li>On this corpus, the existing implementation terminates abnormally on 21 programs and exceeds a 30 s limit on 43.</li>
@@ -457,14 +461,15 @@ extension A.Inner { type Foo = Int }          // requires Inner in A, which the 
     <ul>
       <li>The correctness arguments are informal; none is mechanized.</li>
       <li>Output equivalence is established on a finite corpus. The adversarial programs complement it, but cannot exclude untested interactions.</li>
+      <li>The compiler's test suite barely exercises the soundness fixes: the equality procedure runs in 4 of the 216 files and refutes nothing there, and the cycle checks never run. Their validation rests on the adversarial programs, whose expected verdicts were established within this work and not against an independent specification.</li>
       <li>Most stress workloads are synthetic, designed to isolate one cost. Their speed-ups indicate the asymptotic effect of a technique, not its effect on typical code, for which the standard library is the best available indicator.</li>
-      <li>Timings come from a single virtual machine, so differences below about 10% are not significant.</li>
+      <li>Timings come from a single virtual machine. Repeated sessions differ by up to 20%, so the constant-factor techniques cannot be ranked reliably, and small differences are not significant.</li>
     </ul>
   </section>
 
   <section>
     <h2>Using the implementation</h2>
-    <p>The implementation is a series of twelve patches to the Hylo front end (<code>patches/</code> in the accompanying archive). Each technique is enabled through the environment variable <code>HYLO_TC_EXPERIMENTS</code>:</p>
+    <p>The implementation is a series of thirteen patches to the Hylo front end (<code>patches/</code> in the accompanying archive). Each technique is enabled through the environment variable <code>HYLO_TC_EXPERIMENTS</code>:</p>
     <div class="config">
       <div><b>Soundness fixes:</b> <code>occurs,fixsubst,eqsolve,extorder,arrowenv,eqmgu,givencheck,budget</code></div>
       <div><b>All techniques (recommended):</b> the above, together with <code>symindex,coesrc,traitindex,memberskip,unify,index,absmodel,absquotient,typevec,reifymemo</code></div>

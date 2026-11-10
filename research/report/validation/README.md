@@ -2,7 +2,7 @@
 
 ## Identical results on the test suite
 
-A semantic dump records every expression type, name binding (including implicit and witness arguments), conformance table and diagnostic. It is compared with that of the existing implementation on the compiler's 192 tests and 24 workloads:
+A semantic dump records every expression type, name binding, conformance table and diagnostic, together with the witness selected at each elaborated site (coercions and implicit arguments; 11,817 sites). It is compared with that of the existing implementation on the compiler's 192 tests and 24 workloads. "Identical" means identical up to the terms of equality proofs, which differ in two files where the decision procedure constructs them differently:
 
 | Configuration | Identical files |
 |---|---|
@@ -26,6 +26,34 @@ The only timeout of the revised implementation is a return-type overload, a know
 - the mutually recursive extensions discussed in `../soundness/5-declaration-order.md`.
 
 Each folder of `../test-programs/` has an `INDEX.md` with the verdict of every program. Raw rows are in `test-programs.jsonl`.
+
+## Declaration-order fuzzing
+
+Up to 24 permutations of the top-level declarations of each program are type-checked, and the verdicts compared (704 programs, 11,554 runs).
+
+| Program set | Programs | Verdict depends on order: existing implementation | Revised implementation |
+|---|---:|---:|---:|
+| `test-programs/declaration-order` | 129 | 52 | 7 |
+| other test programs | 407 | not measured | 0 |
+| compiler tests | 168 | not measured | 0 |
+
+The seven remaining cases are described in `../soundness/5-declaration-order.md`.
+
+## Contribution of each technique on the standard library
+
+Techniques added greedily, each time the one that reduces the time most (minimum of 12 runs):
+
+| Technique added | Time (ms) |
+|---|---:|
+| none | 517 |
+| `index` | 233 |
+| skipping extensions that do not declare the name (`extorder`) | 177 |
+| `typevec` | 158 |
+| `symindex` | 138 |
+| `traitindex` | 126 |
+| all techniques | 130 |
+
+The other techniques have no measurable effect on the standard library; each matters on stress workloads or is a soundness fix. Sessions differ by up to 20%, so small differences in the tables below are not significant.
 
 ## Timings
 

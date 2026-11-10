@@ -54,5 +54,6 @@ The correctness fixes depend on each other and should be enabled, or merged, tog
 | 0010 | `absquotient`, `budget`, `reifymemo`; pending-requirement projections in `eqsolve` |
 | 0011 | `extorder` checks whole cycles of extensions |
 | 0012 | per-constructor opacity in `absquotient`; the scope-level rule for `Self` projections in `eqsolve`; recorded assumptions in `givencheck` |
+| 0013 | the semantic dump also records the witness selected at each elaborated site (validation only) |
 
 Patches 0005 and 0007 also contain two rejected experiments (`coercememo`, `eqrefute`, `cyclecut`), still behind flags that are off by default. They can be dropped when merging.

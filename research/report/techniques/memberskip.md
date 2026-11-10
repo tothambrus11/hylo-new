@@ -34,6 +34,10 @@ The computed results are remembered, and other lookups read them. Results comput
 
 Early in a module, while some givens are not yet typed, lookups through extensions of *every* type (`extension <T where T is P> T`) cannot be skipped.
 
+## Relation to `extorder`
+
+`extorder` skips every extension that does not declare the requested name, unconditionally. That subsumes this technique, and changes the outcome of some programs with cyclic extensions. With `extorder` enabled, `memberskip` has no effect; it is the alternative to use when results must be preserved exactly. On the standard library, the two give 141 ms and 126 ms respectively when combined with `index`, `typevec`, `symindex` and `traitindex` (526 ms without any technique).
+
 ## Cost
 
 A cache of each extension's head shape, and one "all givens typed" flag per scope.
