@@ -1,0 +1,7 @@
+// The initializer needs a given of the type being declared, and a written one exists.
+// Expected: the same verdict in every order.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { u }
+given let other: A = A()
+given let w = make()
+public fun main() {}

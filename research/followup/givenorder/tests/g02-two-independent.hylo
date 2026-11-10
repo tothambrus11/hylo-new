@@ -1,0 +1,7 @@
+// Two unrelated top-level givens with inferred types. Expected: accepted in every order.
+struct A { public memberwise init }
+struct B { public memberwise init }
+given let a = A()
+given let b = B()
+fun need<where let u: A, let v: B>() {}
+public fun main() { need() }

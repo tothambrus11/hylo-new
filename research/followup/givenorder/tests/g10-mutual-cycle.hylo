@@ -1,0 +1,8 @@
+// Two inferred givens, each initialized with the other. Expected: rejected in every order.
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun fa<where let v: B>() -> A { A() }
+fun fb<where let u: A>() -> B { B() }
+given let ga = fa()
+given let gb = fb()
+public fun main() {}

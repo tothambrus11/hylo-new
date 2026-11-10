@@ -1,0 +1,10 @@
+// An inferred given initialized by a generic call whose requirement another inferred given meets.
+// Expected: accepted in every order.
+trait P { fun id() -> Self }
+struct A { public memberwise init }
+given A is P { fun id() -> A { A() } }
+fun dup<T where T is P>(x: T) -> T { x.id() }
+let base = A()
+given let g = dup(base)
+fun need<where let u: A>() {}
+public fun main() { need() }

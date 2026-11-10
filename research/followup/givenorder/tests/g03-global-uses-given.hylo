@@ -1,0 +1,7 @@
+// A global binding whose initializer needs a top-level given with an inferred type.
+// Expected: accepted in every order.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { u }
+given let g = A()
+let s = make()
+public fun main() { _ = s }

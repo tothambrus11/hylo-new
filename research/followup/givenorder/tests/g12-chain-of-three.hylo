@@ -1,0 +1,11 @@
+// A chain of three inferred givens. Expected: accepted in every order.
+struct A { public memberwise init }
+struct B { public memberwise init }
+struct C { public memberwise init }
+fun ab<where let u: A>() -> B { B() }
+fun bc<where let v: B>() -> C { C() }
+given let c = bc()
+given let b = ab()
+given let a = A()
+fun need<where let w: C>() {}
+public fun main() { need() }
