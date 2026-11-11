@@ -111,6 +111,58 @@ final class ManglingStructureRecoveryTests: XCTestCase {
       type(m), expected, "demangling of an arrow with 10 inputs is incorrect\n(mangled: \(m))")
   }
 
+  /// Tests that symbols are looked up at the right position when they come after a declaration
+  /// that occurs in its own qualification.
+  func testLookupAfterDeclarationOccurringInItsQualification() async {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(
+      .init(contents: program + "fun generic<T>(x: T) {}\n"))
+    let f = p.firstDeclaration(FunctionDeclaration.self, in: m0) { $0.hasPrefix("generic(") }!
+    let a = p.firstDeclaration(StructDeclaration.self, named: "A", in: m0)!
+
+    // `T` occurs in the type of `generic`, which is part of the qualification of `T`.
+    let t = p.types.demand(GenericParameter.user(p[f].contextParameters.types[0], .proper)).erased
+    let u = p.types.demand(Struct(declaration: a)).erased
+    guard let x = type(p.mangled(t)), let y = type(p.mangled(u)) else { return }
+
+    // The second occurrence of `A` in `{T, A, A}` is mangled as a lookup.
+    let single = p.types.demand(Tuple.cons(head: u, tail: .void)).erased
+    let pair = p.types.demand(Tuple.cons(head: u, tail: single)).erased
+    let triple = p.types.demand(Tuple.cons(head: t, tail: pair)).erased
+    let m = p.mangled(triple)
+    XCTAssertEqual(
+      type(m), .tupleConsType(x, .tupleConsType(y, .tupleConsType(y, .void))),
+      "demangling of a tuple is incorrect\n(mangled: \(m))")
+  }
+
+  /// Tests that the name of the implementation of a requirement by a generic conformance, built
+  /// as the IR emitter does (i.e., from the declaration of the requirement in the trait),
+  /// demangles to the entities and type arguments it denotes.
+  func testImplementationOfRequirementByGenericConformance() async {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
+    let requirement = p.findDeclaration(FunctionDeclaration.self, named: "Greeter.greet", in: m0)!
+    let greet = p.findDeclaration(FunctionDeclaration.self, in: m0) {
+      $0.hasPrefix("$<ConformanceDeclaration") && $0.hasSuffix(".greet")
+    }!
+    let c = p.cast(p.parent(containing: greet).node!, to: ConformanceDeclaration.self)!
+    let a = p.firstDeclaration(StructDeclaration.self, named: "A", in: m0)!
+    let t = p.types.demand(Struct(declaration: a)).erased
+    let ps = p[c].contextParameters.types.map({ (x) in
+      p.types.demand(GenericParameter.user(x, .proper))
+    })
+    guard let x = type(p.mangled(t)) else { return }
+
+    // The second type argument is mangled as a lookup.
+    let n = IRFunction.Name.implementation(requirement, c, .init(mapping: ps, to: [t, t]))
+    let m = p.mangled(n)
+    guard let e = entity(m) else { return }
+    guard case .implementation(let y, let z, let arguments) = e else {
+      return XCTFail("demangling of \(n) has the wrong structure: \(e)\n(mangled: \(m))")
+    }
+    XCTAssert(qualifiedName(y, describes: requirement, relativeTo: nil, in: p), "(mangled: \(m))")
+    XCTAssert(component(z, describes: .node(c.erased), in: p), "(mangled: \(m))")
+    XCTAssertEqual(arguments, [x, x], "type arguments are incorrect\n(mangled: \(m))")
+  }
+
   /// An IR function name that does not contain another name, paired with a predicate that holds
   /// iff its argument has the structure of the entity to which that name should demangle.
   private typealias BaseName = (

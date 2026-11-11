@@ -287,11 +287,9 @@ internal struct ManglingEncoding: Sendable {
     if !rootedAtExisting {
       // Modules aren't scopes in the AST, so add it manually.
       append(module: p.module, to: &output)
-      output.record(symbol: .module(p.module))
     }
     for s in qs.reversed() {
       append(scope: s, to: &output)
-      output.record(symbol: s.asSymbol)
     }
   }
 
@@ -362,6 +360,7 @@ internal struct ManglingEncoding: Sendable {
     if output.addIf(reservedOrRecorded: .module(m)) { return }
     output.add(operator: .module)
     output.add(string: program[m].name.description)
+    output.record(symbol: .module(m))
   }
 
   /// Demangles a module declaration from `source`.
