@@ -330,17 +330,23 @@ final class ManglingTests: XCTestCase {
 
   /// Tests the mangling and demangling of the names of IR functions.
   func testIRFunctionNames() async {
-    let (p, m0) = await typeCheckedWithMinimalStandardLibrary(conformingProgram)
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(conformingProgram)
 
     let greet = p.findDeclaration(FunctionDeclaration.self, named: "Greeter.greet", in: m0)!
     let conformance = p.firstDeclaration(ConformanceDeclaration.self, in: m0)!
     let origin = p.firstDeclaration(BindingDeclaration.self, in: m0)!
+    let robot = p.firstDeclaration(StructDeclaration.self, named: "Robot", in: m0)!
+    let constructor = p.types.demand(
+      UniversalType(
+        parameters: [p.types.demand(GenericParameter.nth(0, .proper))],
+        head: p.types.demand(Struct(declaration: robot)).erased))
 
     let names: [IRFunction.Name] = [
       .lowered(greet),
       .initializer(origin),
       .synthesized(greet, TypeArguments()),
       .implementation(greet, conformance, TypeArguments()),
+      .typeWitnessConstructor(constructor),
       .existentialized(.lowered(greet)),
       .slide(.lowered(greet), 0),
       .plateau(.lowered(greet), 0),
@@ -686,7 +692,8 @@ extension IRFunction.Name {
   /// A case of `IRFunction.Name`.
   internal enum Kind: CaseIterable {
 
-    case lowered, initializer, synthesized, implementation, existentialized, slide, plateau, applied
+    case lowered, initializer, synthesized, implementation, typeWitnessConstructor
+    case existentialized, slide, plateau, applied
 
   }
 
@@ -699,6 +706,7 @@ extension IRFunction.Name {
     case .initializer: .initializer
     case .synthesized: .synthesized
     case .implementation: .implementation
+    case .typeWitnessConstructor: .typeWitnessConstructor
     case .existentialized: .existentialized
     case .slide: .slide
     case .plateau: .plateau
