@@ -9,8 +9,8 @@ import XCTest
 /// program from which they have been mangled rather than checking for the absence of `#!`.
 final class ManglingStructureRecoveryTests: XCTestCase {
 
-  /// Tests that each declaration of `program` demangles to a qualified name whose components
-  /// describe the scopes containing that declaration.
+  /// Tests that each declaration of `program` extended with `syntheticFunctionsCode` demangles to
+  /// a qualified name whose components describe that declaration and the scopes containing it.
   func testDeclarationNames() async {
     let (p, m0) = await typeCheckedWithMinimalStandardLibrary(
       .init(contents: program + syntheticFunctionsCode))
@@ -28,7 +28,14 @@ final class ManglingStructureRecoveryTests: XCTestCase {
   /// that does not contain another name.
   func testFunctionNames() async {
     var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
-    for b in baseNames(in: m0, of: &p) {
+    let bases = baseNames(in: m0, of: &p)
+
+    // Together with the names that contain another name, `bases` covers every kind of name.
+    let wrapped = wrappers(tags: [0]).map({ (w) in w.name(bases[0].name) })
+    XCTAssertEqual(
+      Set((bases.map(\.name) + wrapped).map(\.kind)), Set(IRFunction.Name.Kind.allCases))
+
+    for b in bases {
       let m = p.mangled(b.name)
       guard let e = entity(m) else { continue }
       XCTAssert(
@@ -37,13 +44,16 @@ final class ManglingStructureRecoveryTests: XCTestCase {
     }
   }
 
-  /// Tests that IR function names demangle to the entities they denote, for every kind of name
-  /// that contains another name, with a range of tags.
+  /// Tests that each kind of IR function name containing another name `n` demangles to the
+  /// corresponding entity containing the demangling of `n`, with a range of tags.
+  ///
+  /// The demangling of `n` itself is checked by `testFunctionNames`.
   func testWrappedFunctionNames() async {
     var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
 
     // Small tags, including all those encoded with a single character (some of which read as
-    // entity operators), and tags at the boundaries of the variable-length integer encoding.
+    // entity operators), tags at the boundaries of the variable-length integer encoding, and a
+    // large one.
     let tags = Array(0 ..< 64) + [114, 115, 4209, 4210, 1 << 20]
 
     for b in baseNames(in: m0, of: &p) {
@@ -54,8 +64,10 @@ final class ManglingStructureRecoveryTests: XCTestCase {
     }
   }
 
-  /// Tests that IR function names demangle to the entities they denote, for every kind of name
-  /// that contains another name itself containing another name.
+  /// Tests that each kind of IR function name containing another name, itself containing a name
+  /// `n`, demangles to the corresponding entity containing the demangling of `n`.
+  ///
+  /// The demangling of `n` itself is checked by `testFunctionNames`.
   func testNestedWrappedFunctionNames() async {
     var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
 
@@ -80,8 +92,8 @@ final class ManglingStructureRecoveryTests: XCTestCase {
     isExpectedDemangling: (DemangledEntity) -> Bool
   )
 
-  /// Returns one IR function name of each kind that does not contain another name, each denoting
-  /// an entity of `m`, which is the module of `p` containing `program`.
+  /// Returns at least one IR function name of each kind that does not contain another name, each
+  /// denoting an entity of `m`, which is the module of `p` containing `program`.
   ///
   /// The types occurring in the result are demanded from `p`.
   private func baseNames(in m: Module.ID, of p: inout Program) -> [BaseName] {
@@ -94,16 +106,25 @@ final class ManglingStructureRecoveryTests: XCTestCase {
 
     // The usings of `c` are mangled twice in the name of its implementation of `greet`: once in
     // the qualification of `greet` and once for `c` itself.
-    XCTAssertEqual(p[c].contextParameters.usings.count, 2)
+    XCTAssertEqual(
+      p[c].contextParameters.usings.count, 2, "unexpected fixture: `c` should have two usings")
 
-    // The constructor is that of `<T> E`, where `E` is deliberately not applied to `T`, so that
-    // the mangling of its type ends with a declaration chain.
+    // A synthetic witness constructor, which the compiler would not create: its type is `<T> E`,
+    // where `E` is deliberately not applied to `T`, so that its mangling ends with a declaration
+    // chain.
     let e = p.firstDeclaration(EnumDeclaration.self, named: "E", in: m)!
-    let t = p.types.demand(GenericParameter.user(p[e].parameters[0], .proper))
-    let constructor = p.types.demand(
-      UniversalType(parameters: [t], head: p.types.demand(Enum(declaration: e)).erased))
+    let d = p[e].parameters[0]
+    let t = p.types.demand(GenericParameter.user(d, .proper))
+    let head = p.types.demand(Enum(declaration: e)).erased
+    let synthetic = p.types.demand(UniversalType(parameters: [t], head: head))
 
-    // `p` is not modified past this point.
+    // The witness constructor that the back end creates for `E<T>` (see `TypeStore.constructor`),
+    // whose type ends with a type lookup rather than a declaration chain once mangled.
+    let application = p.types.demand(TypeApplication(abstraction: head, arguments: [t: t.erased]))
+    let realistic = p.types.constructor(binding: [t], in: application.erased)
+
+    // The closures below escape and thus can't capture `p`, which is `inout`; they capture this
+    // copy instead. `p` is not modified past this point.
     let p = p
     return [
       (.lowered(g), { (x) in self.qualifiedName(x, describes: g, relativeTo: nil, in: p) }),
@@ -130,12 +151,24 @@ final class ManglingStructureRecoveryTests: XCTestCase {
         }
       ),
       (
-        .typeWitnessConstructor(constructor),
+        .typeWitnessConstructor(synthetic),
         { (x) in
           guard
-            case .typeWitnessConstructor(.universalType(let parameters, .enumType(let y))) = x
+            case .typeWitnessConstructor(.universalType(let ps, .enumType(let y))) = x,
+            ps.count == 1, case .genericParameterUser(let z) = ps[0]
           else { return false }
-          return (parameters.count == 1)
+          return self.qualifiedName(z, describes: .init(d), relativeTo: nil, in: p)
+            && self.qualifiedName(y, describes: .init(e), relativeTo: nil, in: p)
+        }
+      ),
+      (
+        .typeWitnessConstructor(realistic),
+        { (x) in
+          guard
+            case .typeWitnessConstructor(.universalType(let ps, let h)) = x,
+            case .typeApplication(.enumType(let y), let a) = h
+          else { return false }
+          return (ps == [.genericParameterNth(index: 0)]) && (a == ps)
             && self.qualifiedName(y, describes: .init(e), relativeTo: nil, in: p)
         }
       ),

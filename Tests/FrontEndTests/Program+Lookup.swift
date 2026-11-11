@@ -2,13 +2,13 @@
 
 extension Program {
 
+  // The debug name of a declaration (see `Program.debugName(of:)`) is not its name: it is
+  // qualified by the debug names of the declarations containing it (e.g., `Greeter.greet`) and, if
+  // the declaration does not introduce exactly one name, it describes that declaration by its tag
+  // (e.g., `$<ConformanceDeclaration at ...>`).
+
   /// Finds the first top-level declaration of `m` whose debug name is `n`, returning its identity,
   /// or `nil` if no such declaration exists.
-  ///
-  /// The debug name of a declaration (see `Program.debugName(of:)`) is not its name: it is
-  /// qualified by the debug names of the declarations that contain it (e.g., `Greeter.greet`) and
-  /// describes a declaration that does not introduce exactly one name by its tag (e.g.,
-  /// `$<ConformanceDeclaration at ...>`).
   func firstTopLevelDeclaration(named n: String, in m: Module.ID) -> DeclarationIdentity? {
     self[m].topLevelDeclarations.first { (d) in debugName(of: d) == n }
   }

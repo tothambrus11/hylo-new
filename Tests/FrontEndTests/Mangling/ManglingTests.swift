@@ -336,6 +336,8 @@ final class ManglingTests: XCTestCase {
     let conformance = p.firstDeclaration(ConformanceDeclaration.self, in: m0)!
     let origin = p.firstDeclaration(BindingDeclaration.self, in: m0)!
     let robot = p.firstDeclaration(StructDeclaration.self, named: "Robot", in: m0)!
+
+    // A synthetic witness constructor, which the compiler would not create: `Robot` isn't generic.
     let constructor = p.types.demand(
       UniversalType(
         parameters: [p.types.demand(GenericParameter.nth(0, .proper))],
