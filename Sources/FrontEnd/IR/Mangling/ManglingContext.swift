@@ -25,7 +25,8 @@ internal struct ManglingContext {
   /// The number of declaration chains that ended with the last symbol added to `output`.
   ///
   /// A `declarationEnd` operator is written for each of these chains before the next symbol unless
-  /// that symbol can't be read as a continuation of a declaration chain.
+  /// that symbol is known not to read as the continuation of a declaration chain, i.e., unless it
+  /// is an operator that ends declaration chains or an integer less than 10.
   private var declarationChainsToDisambiguate: UInt8 = 0
 
   /// Creates an instance for mangling symbols in `program`.
@@ -210,8 +211,8 @@ internal struct ManglingContext {
     }
   }
 
-  /// If `q` is known, meaning we can trivially reference it without emitting more qualifications
-  /// manually, writes a lookup reference to it.
+  /// Writes a lookup reference to `q` iff `q` is reserved, has already been inserted in the symbol
+  /// lookup table, or is the innermost scope being mangled.
   internal mutating func addIf(referenceable q: ScopeIdentity) -> Bool {
     addIf(reservedOrRecorded: q.asSymbol) || addIf(qualification: q)
   }

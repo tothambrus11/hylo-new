@@ -20,6 +20,40 @@ internal struct ManglingEncoding: Sendable {
   //
   // We also memoize strings. Repeated strings are encoded with a string-lookup token.
   // Some common symbols are reserved and encoded with dedicated reserved tokens.
+  //
+  // Declaration chains:
+  //
+  // The encoding of a qualified entity is called a declaration chain. It is a sequence of links,
+  // each introduced by an entity operator, going from the outermost qualification of the entity
+  // to the entity itself. For example, `M0.TU.A.B` is encoded as a chain of four links. A link is
+  // either the encoding of a single entity sans qualification or a token (i.e., a lookup, a
+  // relative lookup, or a reserved symbol) standing for a part of the chain that does not have to
+  // be spelled out.
+  //
+  // A chain has no length prefix. Instead, the demangler reads links for as long as the next
+  // token is an entity operator that can continue a chain. Hence, a chain ends at the end of the
+  // input, before an operator that can't continue a chain (see `endsDeclarationChain`), i.e., a
+  // non-entity operator or an operator that can only start a new chain (a module, a reserved
+  // symbol, or a relative lookup), or before anything that does not read as an operator. The
+  // mangler relies on the latter only for decimal digits, which can never start an operator.
+  //
+  // That rule is ambiguous when a chain is followed by something that reads as an operator
+  // continuing it, like another chain starting with a lookup, or a string or integer whose
+  // encoding starts with the spelling of an entity operator. In those cases we write a
+  // `declarationEnd` token after the chain, which the demangler consumes to stop reading links.
+  // The same goes for data whose encoding starts with the spelling of `declarationEnd` itself.
+  //
+  // `ManglingContext` keeps track of the chains that have just ended and decides whether to write
+  // the token from what comes next, conservatively:
+  // - before an operator, iff that operator can continue a chain;
+  // - before an integer, unless it is less than 10 and thus encoded as a decimal digit;
+  // - before a string or a base 64 digit, always.
+  // Hence, the token may be present even if the chain would be read correctly without it.
+  //
+  // Chains nest. For example, the name of an existentialized function is a link that wraps the
+  // chain encoding the name of another function, and can itself be followed by more data. Hence,
+  // several chains may end at the same position. Since reading each of them consumes exactly one
+  // `declarationEnd` token, we write one token for each of the chains ending at that position.
 
   /// The program defining the symbols being mangled.
   private let program: Program
@@ -114,8 +148,13 @@ internal struct ManglingEncoding: Sendable {
     output.endDeclaration()
   }
 
-  /// Demangles the part of a declaration chain introduced by `o` from `source`.
-  private static func takeDeclarationChainPart(
+  /// Demangles the link of a declaration chain introduced by `o` from `source`.
+  ///
+  /// The result is the entity introduced by `o` sans qualification, unless `o` is a lookup or a
+  /// reserved symbol, in which case it is the (possibly qualified) entity to which `o` refers.
+  /// Either way, qualifying the result with the links that come before it in the chain is the
+  /// responsibility of the caller. The result is `.error` if `o` does not introduce an entity.
+  private static func takeUnqualifiedDeclaration(
     _ o: ManglingOperator, from source: inout DemanglingContext
   ) -> DemangledEntity {
     switch o {
@@ -195,7 +234,7 @@ internal struct ManglingEncoding: Sendable {
     var qualifiedEntity: DemangledEntity? = nil
 
     while let o = source.takeOperator() {
-      let demangled = takeDeclarationChainPart(o, from: &source)
+      let demangled = takeUnqualifiedDeclaration(o, from: &source)
       if demangled == .error { return .error }
 
       qualifiedEntity =
