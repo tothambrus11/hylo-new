@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// Soundness 6. The conformance is generic: `A.X` is `A` and `C.X` is `C`. `a.get()` is an `A`
+// and `c.put` expects a `C`. Expected: an error at the call.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+struct C { public memberwise init }
+given <T> => T is P {
+  type X = T
+  fun get() -> T { self }
+  fun put(x: T) {}
+}
+fun q(a: A, c: C) { c.put(a.get()) }

@@ -1,0 +1,6 @@
+// Two inferred givens of the same type: ambiguous. Expected: rejected in every order.
+struct A { public memberwise init }
+given let a1 = A()
+given let a2 = A()
+fun need<where let u: A>() {}
+public fun main() { need() }

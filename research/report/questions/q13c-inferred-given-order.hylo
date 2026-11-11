@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 13. A given whose type is inferred from a global binding. The verdict depends on
+// the order of the declarations `s` and `g`.
+struct A { public memberwise init }
+let s = A()
+given let g = s
+fun need<where let u: A>() {}
+public fun main() { need() }

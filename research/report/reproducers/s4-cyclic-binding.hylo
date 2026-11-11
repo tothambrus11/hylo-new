@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// Soundness 4 (crash). Resolving `R<?y>` binds `?y` to `S<?y>`.
+// Expected: an error at `needR()`; the compiler must not crash.
+trait P<B> {}
+trait R {}
+struct S<T> {}
+given <U> => U is P<U> {}
+given <T where S<T> is P<T>> => T is R {}
+fun needR<T where T is R>() {}
+public fun main() {
+  needR()
+}

@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// Question 2, consequence. `f` has the where clause of question 1, where `V.X` and `W.X` are
+// different types. Through the method `cast` of the trait, a `W.X` is used as a `V.X`.
+fun conv<A, B where A == B>(x: A) -> B { x }
+fun check<T>(x: T) {}
+trait P {
+  type X
+  fun cast<T, U where T == Self, T is P, T.X == U>(x: U) -> X { conv<U, X>(x) }
+}
+fun f<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.cast<W, W.X>(x))
+}

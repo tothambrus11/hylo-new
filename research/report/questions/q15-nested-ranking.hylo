@@ -1,0 +1,24 @@
+//! stage:typing
+// Question 15. `S.a` and `S.b` each have two candidates. `k(S.a(), S.b())` and `k(S.b(), S.a())`
+// differ only in the order of the arguments, and select different overloads: `p` is an `X`,
+// `q` is a `Y`.
+struct X { public memberwise init }
+struct Y { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -> Y { Y() }
+  public static fun b() -> X { X() }
+}
+fun k<V>(x: V, y: V) -> V { x }
+fun takeX(x: X) {}
+fun takeY(y: Y) {}
+fun main() {
+  extension S {
+    static fun a() -> X { X() }
+    static fun b() -> Y { Y() }
+  }
+  let p = k(S.a(), S.b())
+  takeX(p)
+  let q = k(S.b(), S.a())
+  takeY(q)
+}

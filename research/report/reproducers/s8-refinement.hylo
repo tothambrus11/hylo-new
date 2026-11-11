@@ -1,0 +1,12 @@
+//! stage:typing no-std
+// Soundness 8. `B is Derived` requires `B is Base`, which nothing provides.
+// Expected: an error at the conformance.
+trait Base { fun f() }
+trait Derived refines Base { fun g() }
+struct B { public memberwise init }
+given B is Derived {
+  public fun g() { self.f() }
+}
+fun callBase<T where T is Base>(x: T) { x.f() }
+fun callDerived<T where T is Derived>(x: T) { callBase(x) }
+public fun main() { callDerived(B()) }

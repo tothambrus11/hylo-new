@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// Completeness 1. The caller has exactly the requirements of the callee.
+// Expected: accepted.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, T.X is Q>() {}
+fun g<U where U is P, U.X is Q>() { f<U>() }

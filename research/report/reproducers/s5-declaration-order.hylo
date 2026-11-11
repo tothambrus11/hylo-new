@@ -1,0 +1,10 @@
+//! stage:typing no-std
+// Soundness 5. No cycle: `X` needs `A is P`, and `Box<X> is P` needs `X`.
+// Expected: accepted in every order of the declarations.
+trait P { type E }
+struct A {}
+struct Box<T> {}
+given A is P { type E = Int }
+type X = A.E
+given Box<X> is P { type E = A }
+fun k(x: X) {}

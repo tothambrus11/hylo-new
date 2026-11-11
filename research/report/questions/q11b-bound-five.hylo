@@ -1,0 +1,9 @@
+//! stage:typing no-std
+// Question 11. One more pair: 11 givens. The program is valid.
+trait P {}
+struct A {}
+struct Pair<X, Y> {}
+given A is P {}
+given <X, Y where X is P, Y is P> => Pair<X, Y> is P {}
+fun need<T where T is P>() {}
+public fun main() { need<Pair<A, Pair<A, Pair<A, Pair<A, Pair<A, A>>>>>>() }

@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Soundness 1. Only `A.X == B.X` and `C.X == D.X` hold; nothing relates `A.X` to `D.X`.
+// Expected: an error at `check<A.X>(x)`.
+trait P { type X }
+fun check<T>(x: T) {}
+fun f<A, B, C, D where A is P, B is P, C is P, D is P, A.X == B.X, C.X == D.X>(x: D.X) {
+  check<A.X>(x)
+}

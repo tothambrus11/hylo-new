@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// Question 9. The same conformance: `a.get()` has type `A.X`, which is `A`.
+trait P { type X; fun get() -> X; fun put(x: X) }
+struct A { public memberwise init }
+given <T> => T is P {
+  type X = T
+  fun get() -> T { self }
+  fun put(x: T) {}
+}
+fun check<T>(x: T) {}
+fun q(a: A) { check<A>(a.get()) }

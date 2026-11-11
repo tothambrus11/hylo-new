@@ -1,0 +1,63 @@
+Output of the type checker on each program, without flags ("existing") and in the recommended configuration.
+For each: the verdict and the diagnostics.
+
+c1-dependent-requirement.hylo
+  existing     rejected
+               error: no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  accepted
+
+c2-collection.hylo
+  existing     rejected
+               error: no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let Bag<Int8>) let -> (Bag<Int8>::Collection).Element'
+               error: no coercion from '(Bag<Int8>::Collection).Element' to 'Int8'
+               error: no coercion from '<C> (Collection<C>, Showable<(C::Collection).Element>) ==> [Void](let C) let -> Void' to '[Void](let Bag<Int8>) let -> Void'
+               error: no coercion from '<C> Collection<C> ==> [Void](let C) let -> (C::Collection).Element' to '[Void](let D) let -> (D::Collection).Element'
+  recommended  accepted
+
+s1-unrelated-equalities.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type '(D::P).X' to parameter '(A::P).X'
+
+s1b-unrelated-equality-call.hylo
+  existing     accepted
+  recommended  rejected
+               error: no coercion from '(D ~ V) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+s2-equality-chain.hylo
+  existing     accepted
+  recommended  accepted
+
+s3-conditional-extension.hylo
+  existing     accepted
+  recommended  accepted
+
+s4-cyclic-binding.hylo
+  existing     crash (stack overflow)
+  recommended  rejected
+               error: no coercion from '<T> R<T> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+s5-declaration-order.hylo
+  existing     rejected
+               error: definition of 'X' refers to itself
+  recommended  accepted
+
+s6-generic-conformance.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type 'A' to parameter 'C'
+
+s7-self-projection.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type '(Self::P).X' to parameter '(T::P).X'
+
+s8-refinement.hylo
+  existing     accepted
+  recommended  rejected
+               error: no given instance of 'Base<B>' in this scope
+
+s9-alias-arguments.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type 'K' to parameter 'Void'

@@ -2,19 +2,23 @@
 
 Techniques that make Hylo's type checker faster, fixes for nine soundness problems of the existing implementation, and fixes that let ordinary generic programs with associated types type-check.
 
-**Start with `report.html`.** It is the complete overview, readable in any browser in about 30 minutes. The rest of this folder gives the details behind it.
+**Start with `START-HERE.html`.** It summarizes the findings, states the open questions on the language with a program for each, and says how to reproduce everything (about 20 minutes). `report.html` is the complete overview (about 30 minutes). The rest of this folder gives the details behind them.
 
 | Folder | Contents |
 |---|---|
+| `START-HERE.html` | Entry point: what is asked of a reviewer, the findings, eighteen questions on the language, how to reproduce |
+| `reproducers/` | One small program per finding, with the observed output of the existing implementation and of the fixes |
+| `questions/` | The programs of the questions, the questions as text, and the observed output |
 | `report.html` | The overview: background, results, every technique, the soundness fixes, the programs that were wrongly rejected, an assessment of what is worth its complexity, limitations, validation and related work |
 | `techniques/` | One document per performance technique: the problem, how it works, why it is correct, what it speeds up, what it costs |
 | `soundness/` | One document per soundness problem of the existing implementation: symptom with an example, cause, fix, what remains |
 | `completeness/` | One document per kind of valid program that was rejected |
 | `rejected/` | Approaches that are faster but change results, and why |
-| `validation/` | Test-suite comparison, adversarial test results and timings of the first half of the work, with raw data |
+| `validation/` | Test-suite comparison, verdicts on 1,651 programs, declaration-order sweeps and timings, with raw data |
 | `test-programs/` | About 540 small programs, grouped by topic, each folder with an index of verdicts |
 | `follow-up/` | The supporting studies: measurements of the problem space, independent tests, designs with their reviews, attacks, and their test programs (about 1,000 more) |
-| `patches/` | The implementation as a patch series, with instructions to build and run it |
+| `experiments/inferred-givens/` | Four options for givens with an inferred type declared outside a function; none is adopted |
+| `patches/` | The implementation as a patch series against `main`, with instructions to build and run it |
 | `papers/` | The cited papers available in PDF form, linked from the references of `report.html` |
 
 ## Performance techniques

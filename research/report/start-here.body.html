@@ -1,0 +1,158 @@
+<main>
+  <header>
+    <div class="eyebrow">Hylo compiler · type checker · review package</div>
+    <h1>Hylo type checker: findings, fixes and open questions</h1>
+    <p class="lede">This package describes a study of the type checker of <code>hylo-new</code>: nine soundness problems of the existing implementation with a fix for each, two kinds of valid generic programs that it rejects, and a set of techniques that make it 4.5× faster on the standard library. Several of the fixes rest on a reading of the language that only its designer can confirm. Those readings are stated here as eighteen questions, each with a small program.</p>
+    <p>This page is the entry point. It takes about twenty minutes to read; everything else in the archive is supporting detail.</p>
+    <ul class="toc">
+      <li><a href="#asked">What is asked</a></li>
+      <li><a href="#confidence">Provenance and confidence</a></li>
+      <li><a href="#findings">Findings in the existing implementation</a></li>
+      <li><a href="#questions">Questions on the language</a></li>
+      <li><a href="#performance">Performance in brief</a></li>
+      <li><a href="#open">What is not solved</a></li>
+      <li><a href="#reproducing">Reproducing the results</a></li>
+      <li><a href="#contents">Contents of the archive</a></li>
+    </ul>
+  </header>
+
+  <section id="asked">
+    <h2>What is asked</h2>
+    <ol class="steps">
+      <li><strong>Are the nine findings defects?</strong> Each has a program of a dozen lines in <code>reproducers/</code> that can be checked with an unmodified compiler. Eight of them should be uncontroversial. The seventh depends on questions 1 and 2.</li>
+      <li><strong>Answers to the questions</strong>, where there is one. Four decide most: 1 and 2 (are conformances coherent across equal types), 8 (which witness a requirement gets), and 11 (the status of the bound on derivations). A short answer to each is enough to say which parts of the fixes should be relaxed, tightened or removed.</li>
+      <li><strong>A judgement on two mechanisms</strong> that are larger than a fix usually is: computing the types of extensions and givens in rounds, so that results do not depend on declaration order (problem 5), and proving requirements that mention an associated type of another requirement. Together they are about 1,100 lines and the least reviewed part of the work.</li>
+    </ol>
+  </section>
+
+  <section id="confidence">
+    <h2>Provenance and confidence</h2>
+    <p>The implementation, the test programs and the documents were produced with an AI coding agent (Claude), directed by the sender. No part has been reviewed by a second person, and no argument is mechanized. What supports the results is the following.</p>
+    <ul>
+      <li><strong>Every change is behind a flag</strong> that is off by default. Without flags, the patched compiler is the existing implementation.</li>
+      <li><strong>Unchanged output on the test suite.</strong> A dump of every inferred type, name binding, conformance table, diagnostic and elaborated witness is identical to that of the existing implementation on the 192 compiler tests and 24 workloads, for the result-preserving techniques and also with every fix enabled. The fixes change results only on programs that exercise the defects, and the test suite has none.</li>
+      <li><strong>A self-checking mode</strong> re-does the work that each technique avoids and compares. It reports no violation on 1,651 programs.</li>
+      <li><strong>Independent tests.</strong> A reference resolver written from the compiler's tests, compared on 21,500 generated queries, and 15,206 metamorphic variants of 760 programs. They found problems 6, 7 and 9.</li>
+      <li><strong>Adversarial review.</strong> Each design and each new mechanism was attacked with programs written to break it, about 550 in all. The attacks found more than twenty defects in first implementations, six of them wrong acceptances; all are fixed and kept as tests. The last round of attacks was not judged by a second reviewer.</li>
+    </ul>
+    <p>The arguments for correctness are informal. For problems 5 to 9 and for dependent requirements, the attacks found errors in arguments that had seemed complete, and nothing guarantees that they found the last one. Hylo has little generic code so far: the standard library has no equality constraint and no associated type in a signature, so the mechanisms that concern them are exercised only by programs written for this study and by four patterns translated from the Swift and Rust standard libraries.</p>
+  </section>
+
+  <section id="findings">
+    <h2>Findings in the existing implementation</h2>
+    <p>Problems 1, 6, 7, 8 and 9 let an ill-typed program through: in the reproducers of 6 and 9 a value of one concrete type is passed where another is expected, and in that of 8 a method is called on a type that does not have it. Problem 4 is a crash, problem 5 is two verdicts for one program, and problems 2 and 3 are costs that become failures on slightly larger programs. "Existing" is the unpatched compiler; "With the fixes" is the recommended configuration.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Problem</th><th>Program in <code>reproducers/</code></th><th>Existing</th><th>With the fixes</th><th>Document</th></tr></thead>
+        <tbody>
+@@REPRO@@        </tbody>
+      </table>
+    </div>
+    <p>Two kinds of valid programs are rejected by the existing implementation. Every collection-like library needs both.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Kind</th><th>Program in <code>reproducers/</code></th><th>Existing</th><th>With the fixes</th><th>Document</th></tr></thead>
+        <tbody>
+@@COMPLETE@@        </tbody>
+      </table>
+    </div>
+    <pre><code>trait Collection { type Element; fun first() -&gt; Element }
+trait Showable {}
+fun head&lt;C where C is Collection&gt;(c: C) -&gt; C.Element { c.first() }     // no caller could use the result
+fun show&lt;C where C is Collection, C.Element is Showable&gt;(c: C) {}       // no caller could satisfy the clause</code></pre>
+    <p class="muted">Times are type-checking times of the user module on one core. Orders are orders of the top-level declarations, 24 tried.</p>
+  </section>
+
+  <section id="questions">
+    <h2>Questions on the language</h2>
+    <p>Each entry gives the question, a program, what the type checker does with it today, what the fixes assume, and what would change with the other answer. The programs are in <code>questions/</code>; <code>questions/README.md</code> has the same list as text, convenient for answering inline. Questions 3, 4, 7, 10, 15 and 16 describe behaviour that this work leaves unchanged; they are listed because every technique had to reproduce it, and a different answer would simplify the implementation.</p>
+@@QUESTIONS@@  </section>
+
+  <section id="performance">
+    <h2>Performance in brief</h2>
+    <p>Type-checking time in milliseconds, one core. The full table, the contribution of each technique and an assessment of which ones are worth their complexity are in <a href="report.html">report.html</a>.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Workload</th><th class="num">Existing</th><th class="num">Recommended</th></tr></thead>
+        <tbody>
+          <tr><td>Standard library</td><td class="num">605</td><td class="num">134</td></tr>
+          <tr><td>2,000 extensions, 1,000 member lookups</td><td class="num">13,423</td><td class="num">380</td></tr>
+          <tr><td>40 unrelated conformances in scope</td><td class="num">4,985</td><td class="num">43</td></tr>
+          <tr><td><code>a + a + … + a</code>, 14 operators</td><td class="num">1,436</td><td class="num">2.5</td></tr>
+          <tr><td>Signature of Swift's <code>Collection</code>, translated (7 traits, 14 equalities)</td><td class="num">21,719</td><td class="num">44</td></tr>
+          <tr><td>Swift's <code>StringProtocol</code>, translated</td><td class="num">timeout (90 s)</td><td class="num">44</td></tr>
+          <tr><td>Rust's <code>Flatten</code>, translated</td><td class="num">crash</td><td class="num">691</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>On code without equality constraints, five simple techniques give the whole gain: indexing givens by the head constructor of their conclusion, skipping extensions that do not declare the requested name, and three constant-factor improvements. They are about 450 lines and leave every result unchanged.</li>
+      <li>On code with equality constraints, the gain comes from deciding equalities by congruence closure instead of by search, which is also what removes problems 1 to 3.</li>
+      <li>One technique is not recommended: an abstract model that refutes underivable goals. It removes an exponential cost on constructed programs, but made only one of 687 ill-typed variants of real programs more than ten times cheaper to reject, for about 600 lines.</li>
+    </ul>
+  </section>
+
+  <section id="open">
+    <h2>What is not solved</h2>
+    <ul>
+      <li><strong>Nested nominal types.</strong> A struct declared inside a generic conformance or a generic type is one type for all instances. This is unsound, exists in the unpatched compiler, and is outside the mechanisms studied.</li>
+      <li><strong>Givens with an inferred type outside a function</strong> are still typed on demand, and the verdict can depend on declaration order (question 13).</li>
+      <li><strong>The bound on derivations</strong> rejects valid programs (question 11).</li>
+      <li><strong>Function values.</strong> A generic function whose signature mentions an associated type of its requirement can be called, but not passed as a value at a concrete type.</li>
+      <li><strong>Associated types through a refinement</strong> are opaque: <code>T.X</code> selected through <code>T is R</code>, where <code>R</code> refines <code>P</code>, is not identified with the definition in the conformance to <code>P</code>.</li>
+      <li><strong>Cost of dependent signatures.</strong> A chain of <em>d</em> extensions or givens whose types depend on each other costs <em>d</em> + 2 rounds over the whole module.</li>
+    </ul>
+    <p>The complete list is in the section "Limitations" of <a href="report.html">report.html</a>.</p>
+  </section>
+
+  <section id="reproducing">
+    <h2>Reproducing the results</h2>
+    <h3>The existing behaviour, with an unmodified compiler</h3>
+    <p>The programs of <code>reproducers/</code> and <code>questions/</code> are single files with the header of the compiler's tests (<code>//! stage:typing no-std</code>), so they can be copied into <code>Tests/CompilerTests/positive</code> or <code>negative</code>, or type-checked directly. The first lines of each file state the expected result. The results quoted on this page were obtained with the benchmark tool described below, run without flags, on commit <code>3ce4aa0</code> of <code>main</code> (4 November 2026); they were not re-run with <code>hc</code>.</p>
+    <h3>The fixes</h3>
+    <p>The patch series applies to the same commit:</p>
+    <pre><code>git checkout -b type-checker-review 3ce4aa0
+git apply --index patches/0000-base-harness-flags-and-first-techniques.diff
+git commit -m "Benchmark harness, flags and first techniques"
+git am patches/00*.patch
+swift build -c release --product tc-bench</code></pre>
+    <p><code>patches/all-in-one.diff</code> is the same change as a single diff, for reading: 14 files, about 5,100 added lines, almost all in <code>Typer.swift</code>, <code>Solver.swift</code> and <code>TypeStore.swift</code>. Applied in this way, the series was checked to reproduce exactly the sources that produced the results.</p>
+    <p><code>tc-bench</code> type-checks the files given to it and prints the diagnostics, their number and the time. The environment variable <code>HYLO_TC_EXPERIMENTS</code> selects the techniques:</p>
+    <pre><code># the existing implementation
+.build/release/tc-bench reproducers/s6-generic-conformance.hylo
+
+# the recommended configuration
+export REC=index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,premcommit,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead
+HYLO_TC_EXPERIMENTS=$REC .build/release/tc-bench reproducers/s6-generic-conformance.hylo
+
+# with the self-check, and with a trace of each completed resolution
+HYLO_TC_EXPERIMENTS=$REC,selfcheck,trace .build/release/tc-bench reproducers/c2-collection.hylo</code></pre>
+    <p><code>patches/README.md</code> lists what each patch contains and which flags depend on each other. <code>reproducers/observed.txt</code> and <code>questions/observed.txt</code> hold the output of both configurations on every program.</p>
+  </section>
+
+  <section id="contents">
+    <h2>Contents of the archive</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Path</th><th>Contents</th></tr></thead>
+        <tbody>
+          <tr><td><code>START-HERE.html</code></td><td>This page</td></tr>
+          <tr><td><code>reproducers/</code></td><td>One program per finding, with the observed output</td></tr>
+          <tr><td><code>questions/</code></td><td>The programs of the questions, the questions as text, and the observed output</td></tr>
+          <tr><td><code>report.html</code></td><td>The full report: every technique, every fix, results, assessment, limitations, validation, related work (about 30 minutes)</td></tr>
+          <tr><td><code>soundness/</code></td><td>One document per soundness problem: symptom, cause, fix, what remains</td></tr>
+          <tr><td><code>completeness/</code></td><td>One document per kind of valid program that was rejected</td></tr>
+          <tr><td><code>techniques/</code></td><td>One document per performance technique: how it works, why it is correct, what it costs</td></tr>
+          <tr><td><code>experiments/inferred-givens/</code></td><td>Four options for question 13, with their test programs and a patch; none is adopted</td></tr>
+          <tr><td><code>patches/</code></td><td>The implementation: a series against <code>main</code>, and the same as one diff</td></tr>
+          <tr><td><code>validation/</code></td><td>Test-suite comparison, verdicts on 1,651 programs, declaration-order sweeps, timings</td></tr>
+          <tr><td><code>test-programs/</code></td><td>About 540 programs by topic, each folder with an index of verdicts</td></tr>
+          <tr><td><code>follow-up/</code></td><td>Supporting studies, kept as working documents: growth laws, cost of errors, use of equalities in Swift and Rust libraries, the reference resolver, metamorphic tests, the designs with their open questions, the attacks. <code>follow-up/README.md</code> is their guide</td></tr>
+          <tr><td><code>rejected/</code></td><td>Approaches that are faster but change results</td></tr>
+          <tr><td><code>papers/</code></td><td>The cited papers, linked from the references of the report</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">The designs in <code>follow-up/designs/</code> each end with their own list of questions for the language designers; the eighteen above are those lists merged, without the ones that the work answered on the way.</p>
+  </section>
+</main>

@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Soundness 7. Inside the trait, `T == Self` and `T is P` is a second requirement:
+// `Self.X` and `T.X` are selected through two witnesses. Expected (if question 2 is answered "no"): an error.
+trait P {
+  type X
+  fun f<T where T == Self, T is P>(x: X) { check<T.X>(x) }
+}
+fun check<T>(x: T) {}

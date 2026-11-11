@@ -1,0 +1,235 @@
+From 1aedd1c32ed6eda9847f2c3d9068bc177bb611b8 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Tue, 10 Nov 2026 23:58:34 +0000
+Subject: [PATCH] Typer: experiments for givens with an inferred type declared
+ outside functions
+
+Four flags, all off by default and outside the recommended configuration:
+givenwritten (the type must be written), givenlazy (a given whose type
+depends on a declaration being typed is hidden from that declaration's
+resolutions), givennodes (such givens are entries of the table of
+signatures) and givencycle (with givennodes: computed in isolation, and a
+given whose initializer is resolved with itself is rejected).
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 109 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  15 +++
+ 2 files changed, 121 insertions(+), 3 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 3a156a2..a893bd3 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -104,6 +104,13 @@ public struct Typer {
+   /// yet (`sigrounds`).
+   private var skippedInferredGivens: Set<DeclarationIdentity> = []
+ 
++  /// The given with an inferred type whose entry in the table of signatures is being computed.
++  private var inferredNodeInProgress: DeclarationIdentity? = nil
++
++  /// For each given with an inferred type, the givens of that kind that the resolutions made to
++  /// compute its type selected, in the current round (`givencycle`).
++  private var inferredGivenUses: [DeclarationIdentity: Set<DeclarationIdentity>] = [:]
++
+   /// `true` iff `pendingGivenChecks` are being processed.
+   private var checkingPendingGivens = false
+ 
+@@ -147,6 +154,13 @@ public struct Typer {
+       program.initializeStandardLibraryCaches()
+     }
+     if TyperExperiments.sigrounds { settleSignatures() }
++    if TyperExperiments.givenwritten {
++      for d in program[module].syntax.compactMap({ (n) in program.castToDeclaration(n) })
++      where isInferredGiven(d) && !program.isLocal(d) {
++        let m = "the type of a given declared outside of a function must be written"
++        report(.init(.error, m, at: program.spanForDiagnostic(about: d)))
++      }
++    }
+     for d in program[module].topLevelDeclarations { check(d) }
+     if TyperExperiments.givencheck && !TyperExperiments.sigrounds { checkPendingGivens() }
+   }
+@@ -165,7 +179,7 @@ public struct Typer {
+     case BindingDeclaration.self:
+       let b = castUnchecked(d, to: BindingDeclaration.self)
+       return (program[b].role == .given) && (ownerOfContextParameter(b) == nil)
+-        && !isInferredGiven(d)
++        && (!isInferredGiven(d) || (TyperExperiments.givennodes && !program.isLocal(d)))
+     default:
+       return false
+     }
+@@ -244,9 +258,22 @@ public struct Typer {
+     skippedInferredGivens = []
+     stackVersion &+= 1
+     var next: [DeclarationIdentity: AnyTypeIdentity] = [:]
++    inferredGivenUses = [:]
+     for n in nodes {
+       computeOwners(enclosing: n)
+-      let t = computedSignature(of: n)
++      let t: AnyTypeIdentity
++      if TyperExperiments.givencycle && isInferredGiven(n) {
++        // Computed in isolation: what its initializer makes the checker compute is discarded, so
++        // that the resolutions observed here do not depend on the nodes visited before.
++        let before = (program[module], cache, reportedBudgetScopes)
++        inferredNodeInProgress = n
++        t = computedSignature(of: n)
++        inferredNodeInProgress = nil
++        (program[module], cache, reportedBudgetScopes) = before
++        stackVersion &+= 1
++      } else {
++        t = computedSignature(of: n)
++      }
+       // An alias of an erroneous type does not have the error property itself.
+       if !t[.hasError] && !program.types.dealiased(t)[.hasError] { next[n] = t }
+     }
+@@ -285,6 +312,12 @@ public struct Typer {
+       if stable {
+         signatureTable = next
+         reportSkippedInferredGivens()
++        if TyperExperiments.givencycle {
++          reportCyclicInferredGivens()
++          // The types computed in isolation were discarded; compute them in the state that is
++          // kept, where every signature is read from the stable table.
++          for n in nodes where isInferredGiven(n) { _ = computedSignature(of: n) }
++        }
+         return
+       }
+       if earlier.contains(next) || (round == nodes.count + 2) {
+@@ -319,6 +352,7 @@ public struct Typer {
+     let final = (
+       program[module], cache, reportedBudgetScopes, hiddenCandidateSeen, skippedInferredGivens
+     )
++    let uses = inferredGivenUses
+     let expected = Set(program[module].diagnostics.map(normalized(_:)))
+     (program[module], cache) = pristine
+     reportedBudgetScopes = []
+@@ -340,7 +374,10 @@ public struct Typer {
+       selfCheckViolation("sigrounds: the last round reports other diagnostics in reverse order: \(d)")
+     } else if skippedInferredGivens != final.4 {
+       selfCheckViolation("sigrounds: a round skips other inferred givens in reverse order")
++    } else if inferredGivenUses != uses {
++      selfCheckViolation("givencycle: a round records other uses of givens in reverse order")
+     }
++    inferredGivenUses = uses
+     (program[module], cache, reportedBudgetScopes, hiddenCandidateSeen, skippedInferredGivens) =
+       final
+   }
+@@ -362,6 +399,51 @@ public struct Typer {
+     }
+   }
+ 
++  /// Reports the givens with an inferred type whose initializer is resolved with themselves,
++  /// directly or through the initializers of other such givens (`givencycle`).
++  private mutating func reportCyclicInferredGivens() {
++    let uses = inferredGivenUses
++    func reaches(_ a: DeclarationIdentity, _ b: DeclarationIdentity) -> Bool {
++      var seen: Set<DeclarationIdentity> = []
++      var work = Array(uses[a] ?? [])
++      while let x = work.popLast() {
++        if x == b { return true }
++        if seen.insert(x).inserted { work.append(contentsOf: uses[x] ?? []) }
++      }
++      return false
++    }
++    let ds = uses.keys.filter({ (d) in reaches(d, d) }).sorted(by: { (a, b) in
++      program.spanForDiagnostic(about: a).start < program.spanForDiagnostic(about: b).start
++    })
++    for d in ds {
++      TyperCounters.bump("givencycle.reported")
++      let m = "the initializer of this given is resolved with the given itself"
++      report(.init(.error, m, at: program.spanForDiagnostic(about: d)))
++    }
++  }
++
++  /// Records the givens with an inferred type that `w` refers to as used by the one whose type
++  /// is being computed.
++  private mutating func recordInferredGivenUses(in w: WitnessExpression) {
++    guard let n = inferredNodeInProgress else { return }
++    switch w.value {
++    case .reference(let r):
++      // A given binding is referred to through the variable that it introduces.
++      var d = r
++      if let v = program.cast(r, to: VariableDeclaration.self),
++        let b = program.bindingDeclaration(containing: v)
++      { d = .init(b) }
++      if isInferredGiven(d) && isSignatureNode(d) { inferredGivenUses[n, default: []].insert(d) }
++    case .termApplication(let a, let b):
++      recordInferredGivenUses(in: a)
++      recordInferredGivenUses(in: b)
++    case .typeApplication(let a, _), .nested(let a):
++      recordInferredGivenUses(in: a)
++    default:
++      break
++    }
++  }
++
+   /// Reports that the signatures of the declarations whose entries differ in `a` and `b` did not
+   /// stabilize.
+   private mutating func reportUnstableSignatures(
+@@ -5400,6 +5482,9 @@ public struct Typer {
+   ) -> [SummonResult] {
+     let eagerAtEntry = eagerDecisions
+     let result = takeSummonResultsUnchecked(from: threads, in: scopeOfUse)
++    if inferredNodeInProgress != nil {
++      for r in result { recordInferredGivenUses(in: r.witness) }
++    }
+ 
+     // Self-check (`eqeager`): the resolution must give the same results when the equalities of
+     // matches are assumed and proved by search, unless search runs out of depth or work.
+@@ -7521,7 +7606,25 @@ public struct Typer {
+         skippedInferredGivens.insert(d)
+         return false
+       }
+-      return !declarationsOnStack.contains(d)
++      if declarationsOnStack.contains(d) { return false }
++      // Experiment (`givenlazy`): the type of an inferred given is computed here, where a
++      // failure can be undone. If it reads a declaration being typed, the given is hidden, as
++      // it would be had its own typing started first.
++      if TyperExperiments.givenlazy && !settlingSignatures && !declarationsOnStack.isEmpty
++        && (program[d.module].type(assignedTo: d) == nil) && (d.module == module)
++        && isInferredGiven(d) && !program.isLocal(d)
++      {
++        let before = (program[module], cache, cycleCuts, reportedBudgetScopes)
++        _ = declaredType(of: d)
++        if cycleCuts != before.2 {
++          (program[module], cache, cycleCuts, reportedBudgetScopes) = before
++          stackVersion &+= 1
++          TyperCounters.bump("givenlazy.hidden")
++          return false
++        }
++        TyperCounters.bump("givenlazy.forced")
++      }
++      return true
+     case .nested(_, let h):
+       return isVisible(h)
+     default:
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index a2d03e0..6b67ba7 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -160,6 +160,21 @@ public enum TyperExperiments {
+   /// and the cycle rule of `extorder`).
+   nonisolated(unsafe) public static var sigrounds: Bool = enabled.contains("sigrounds")
+ 
++  /// EXPERIMENT (with `sigrounds`): a given declared outside a function must have a written type.
++  nonisolated(unsafe) public static var givenwritten: Bool = enabled.contains("givenwritten")
++
++  /// EXPERIMENT (with `sigrounds`): a given declared outside a function whose type is inferred
++  /// is an entry of the table of signatures.
++  nonisolated(unsafe) public static var givennodes: Bool = enabled.contains("givennodes")
++
++  /// EXPERIMENT (with `givennodes`): the type of such a given is computed in isolation, and a
++  /// given whose initializer is resolved, directly or through others, with itself is rejected.
++  nonisolated(unsafe) public static var givencycle: Bool = enabled.contains("givencycle")
++
++  /// EXPERIMENT (with `sigrounds`): a given whose inferred type depends on a declaration being
++  /// typed is not a candidate of the resolutions made by that declaration.
++  nonisolated(unsafe) public static var givenlazy: Bool = enabled.contains("givenlazy")
++
+   /// SEMANTIC FIX: a requirement that mentions another requirement of the same clause is proved
+   /// after it, with the witness found for it substituted into its type.
+   nonisolated(unsafe) public static var premsubst: Bool = enabled.contains("premsubst")
+-- 
+2.43.0
+

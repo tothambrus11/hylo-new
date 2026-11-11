@@ -1,15 +1,25 @@
 # Patches
 
-A `git format-patch` series against the Hylo front end, to be applied on top of branch `tc/research` of `tothambrus11/hylo-new`. That branch provides the benchmarking harness, the flag mechanism and the first techniques (`index`, `absmodel`, `unify`).
+The implementation as a patch series against `main` of `hylo-new`: a base diff with the benchmark tool, the flag mechanism and the first techniques, followed by 31 patches in `git format-patch` form. `all-in-one.diff` is the same change as one diff.
 
 ## Applying and building
 
+The series applies to commit `3ce4aa0` of `main` (4 November 2026). `0000-base-harness-flags-and-first-techniques.diff` adds the benchmark tool `tc-bench`, the flag mechanism, the semantic dump and the first techniques (`index`, `absmodel`, `unify`); the 31 patches follow.
+
 ```bash
-git checkout -b type-checker-optimizations origin/tc/research
+git checkout -b type-checker-review 3ce4aa0
 ```
 
 ```bash
-git am patches/*.patch
+git apply --index patches/0000-base-harness-flags-and-first-techniques.diff
+```
+
+```bash
+git commit -m "Benchmark harness, flags and first techniques"
+```
+
+```bash
+git am patches/00*.patch
 ```
 
 ```bash
@@ -20,7 +30,13 @@ git submodule update --init
 swift build -c release --product tc-bench
 ```
 
+`all-in-one.diff` is the whole change against the same commit as a single diff (14 files, about 5,100 added lines), for reading or for `git apply`. Applied as above, the series reproduces exactly the sources that produced the results of the report.
+
+On the fork `tothambrus11/hylo-new`, the base diff is the branch `tc/research` (source files only), and the 31 patches apply on top of it.
+
 A clean release build takes about 20 minutes on 4 cores, and needs up to 3.5 GB of memory. Avoid running several builds at once.
+
+Every change is behind a flag that is off by default: without `HYLO_TC_EXPERIMENTS`, the patched compiler behaves as the existing implementation.
 
 ## Running
 

@@ -1,0 +1,678 @@
+<title>Hylo type checker: findings and questions</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+/* Layout: one reading column (~72ch) with wide tables allowed to scroll; technique entries as ruled rows, not cards. */
+:root {
+  --bg: #fbfbfc;
+  --surface: #f1f3f6;
+  --fg: #1b2230;
+  --muted: #5a6475;
+  --rule: #d9dde4;
+  --accent: #1f5fae;
+  --accent-soft: #e3ecf8;
+  --good: #1d7a4a;
+  --good-soft: #e1f3e8;
+  --warn: #9a5b00;
+  --warn-soft: #fbefd9;
+  --bad: #b3261e;
+  --bad-soft: #fbe3e1;
+  --font-display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --font-body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+    --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+    --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #12161d; --surface: #1a2029; --fg: #e4e8ef; --muted: #9aa4b4; --rule: #2c3442;
+  --accent: #7fb0f0; --accent-soft: #1d2b40; --good: #6fcf97; --good-soft: #17301f;
+  --warn: #f0b75a; --warn-soft: #33270f; --bad: #f28b82; --bad-soft: #3a1c1a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg); font-family: var(--font-body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+main { max-width: 76ch; margin: 0 auto; padding-block: 48px 80px; display: grid; gap: 56px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.2; margin: 0; }
+h1 { font-size: 2.3rem; font-weight: 700; letter-spacing: -0.01em; }
+h2 { font-size: 1.5rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid var(--fg); }
+h3 { font-size: 1.15rem; font-weight: 600; }
+p, ul { margin: 0; }
+ul { padding-left: 1.2em; display: grid; gap: 4px; }
+code { font-family: var(--font-mono); font-size: 0.88em; background: var(--surface); padding: 0.1em 0.35em; border-radius: 4px; }
+.eyebrow { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.lede { font-size: 1.12rem; color: var(--fg); }
+.muted { color: var(--muted); }
+header { display: grid; gap: 14px; }
+.meta { font-family: var(--font-mono); font-size: 0.82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 6px 18px; }
+.config { background: var(--surface); border-left: 3px solid var(--accent); padding: 14px 16px; display: grid; gap: 8px; font-size: 0.95rem; }
+.config div { min-width: 0; overflow-wrap: anywhere; }
+.config b { font-family: var(--font-display); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 0.92rem; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: 0.85rem; color: var(--muted); border-bottom: 1.5px solid var(--fg); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; font-family: var(--font-mono); font-size: 0.86rem; }
+td.x { font-weight: 600; color: var(--good); }
+td.fixd { color: var(--accent); font-weight: 600; }
+.pill { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; text-transform: uppercase; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pill.perf { background: var(--good-soft); color: var(--good); }
+.pill.fix { background: var(--accent-soft); color: var(--accent); }
+.pill.no { background: var(--bad-soft); color: var(--bad); }
+.pill.neutral { background: var(--warn-soft); color: var(--warn); }
+.tech { display: grid; gap: 10px; padding-block: 18px; border-top: 1px solid var(--rule); }
+.tech:first-of-type { border-top: none; padding-top: 4px; }
+.tech-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.tech-head h3 code { font-size: 1rem; background: none; padding: 0; }
+.tech-head .area { color: var(--muted); font-size: 0.92rem; }
+dl { display: grid; grid-template-columns: 7.5em 1fr; gap: 6px 14px; margin: 0; font-size: 0.95rem; }
+dt { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); padding-top: 3px; }
+dd { margin: 0; min-width: 0; }
+@media (max-width: 560px) {
+  h1 { font-size: 1.8rem; }
+  dl { grid-template-columns: 1fr; gap: 2px; }
+  dd { margin-bottom: 8px; }
+}
+.legend { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 0.88rem; color: var(--muted); align-items: center; }
+footer { font-size: 0.88rem; color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
+
+.refs { display: grid; gap: 8px; font-size: 0.9rem; padding-left: 2.2em; margin: 0; }
+.refs li { padding-left: 0.2em; }
+.refs .v { font-family: var(--font-mono); font-size: 0.72rem; color: var(--muted); white-space: nowrap; }
+.lit { display: grid; gap: 10px; }
+.lit h3 { margin-top: 8px; }
+.lit .para { display: grid; gap: 6px; }
+sup.c { font-family: var(--font-mono); font-size: 0.72em; color: var(--accent); }
+a { color: var(--accent); }
+a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+section > *, li { min-width: 0; }
+pre { max-width: 100%; font-family: var(--font-mono); font-size: 0.84rem; line-height: 1.5; background: var(--surface); padding: 12px 14px; border-radius: 6px; overflow-x: auto; margin: 0; }
+pre code { background: none; padding: 0; font-size: inherit; }
+.bug { display: grid; gap: 10px; padding-block: 18px; border-top: 1px solid var(--rule); }
+.bug:first-of-type { border-top: none; padding-top: 4px; }
+.flag { font-family: var(--font-mono); font-size: 0.78rem; color: var(--muted); }
+.toc { display: grid; gap: 4px; font-size: 0.95rem; padding-left: 1.4em; margin: 0; }
+.kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.kpi { background: var(--surface); padding: 12px 14px; border-radius: 6px; display: grid; gap: 2px; min-width: 0; }
+.kpi b { font-family: var(--font-display); font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+.kpi span { font-size: 0.86rem; color: var(--muted); }
+.para { display: grid; gap: 6px; }
+.refs a.pdf { font-family: var(--font-mono); font-size: 0.75rem; margin-left: 4px; }
+sup.c a { color: inherit; text-decoration: none; }
+h3.group { margin-top: 18px; font-size: 0.86rem; font-family: var(--font-mono); font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.prog { display: grid; gap: 4px; }
+.steps { display: grid; gap: 10px; padding-left: 1.4em; margin: 0; }
+</style>
+
+<main>
+  <header>
+    <div class="eyebrow">Hylo compiler · type checker · review package</div>
+    <h1>Hylo type checker: findings, fixes and open questions</h1>
+    <p class="lede">This package describes a study of the type checker of <code>hylo-new</code>: nine soundness problems of the existing implementation with a fix for each, two kinds of valid generic programs that it rejects, and a set of techniques that make it 4.5× faster on the standard library. Several of the fixes rest on a reading of the language that only its designer can confirm. Those readings are stated here as eighteen questions, each with a small program.</p>
+    <p>This page is the entry point. It takes about twenty minutes to read; everything else in the archive is supporting detail.</p>
+    <ul class="toc">
+      <li><a href="#asked">What is asked</a></li>
+      <li><a href="#confidence">Provenance and confidence</a></li>
+      <li><a href="#findings">Findings in the existing implementation</a></li>
+      <li><a href="#questions">Questions on the language</a></li>
+      <li><a href="#performance">Performance in brief</a></li>
+      <li><a href="#open">What is not solved</a></li>
+      <li><a href="#reproducing">Reproducing the results</a></li>
+      <li><a href="#contents">Contents of the archive</a></li>
+    </ul>
+  </header>
+
+  <section id="asked">
+    <h2>What is asked</h2>
+    <ol class="steps">
+      <li><strong>Are the nine findings defects?</strong> Each has a program of a dozen lines in <code>reproducers/</code> that can be checked with an unmodified compiler. Eight of them should be uncontroversial. The seventh depends on questions 1 and 2.</li>
+      <li><strong>Answers to the questions</strong>, where there is one. Four decide most: 1 and 2 (are conformances coherent across equal types), 8 (which witness a requirement gets), and 11 (the status of the bound on derivations). A short answer to each is enough to say which parts of the fixes should be relaxed, tightened or removed.</li>
+      <li><strong>A judgement on two mechanisms</strong> that are larger than a fix usually is: computing the types of extensions and givens in rounds, so that results do not depend on declaration order (problem 5), and proving requirements that mention an associated type of another requirement. Together they are about 1,100 lines and the least reviewed part of the work.</li>
+    </ol>
+  </section>
+
+  <section id="confidence">
+    <h2>Provenance and confidence</h2>
+    <p>The implementation, the test programs and the documents were produced with an AI coding agent (Claude), directed by the sender. No part has been reviewed by a second person, and no argument is mechanized. What supports the results is the following.</p>
+    <ul>
+      <li><strong>Every change is behind a flag</strong> that is off by default. Without flags, the patched compiler is the existing implementation.</li>
+      <li><strong>Unchanged output on the test suite.</strong> A dump of every inferred type, name binding, conformance table, diagnostic and elaborated witness is identical to that of the existing implementation on the 192 compiler tests and 24 workloads, for the result-preserving techniques and also with every fix enabled. The fixes change results only on programs that exercise the defects, and the test suite has none.</li>
+      <li><strong>A self-checking mode</strong> re-does the work that each technique avoids and compares. It reports no violation on 1,651 programs.</li>
+      <li><strong>Independent tests.</strong> A reference resolver written from the compiler's tests, compared on 21,500 generated queries, and 15,206 metamorphic variants of 760 programs. They found problems 6, 7 and 9.</li>
+      <li><strong>Adversarial review.</strong> Each design and each new mechanism was attacked with programs written to break it, about 550 in all. The attacks found more than twenty defects in first implementations, six of them wrong acceptances; all are fixed and kept as tests. The last round of attacks was not judged by a second reviewer.</li>
+    </ul>
+    <p>The arguments for correctness are informal. For problems 5 to 9 and for dependent requirements, the attacks found errors in arguments that had seemed complete, and nothing guarantees that they found the last one. Hylo has little generic code so far: the standard library has no equality constraint and no associated type in a signature, so the mechanisms that concern them are exercised only by programs written for this study and by four patterns translated from the Swift and Rust standard libraries.</p>
+  </section>
+
+  <section id="findings">
+    <h2>Findings in the existing implementation</h2>
+    <p>Problems 1, 6, 7, 8 and 9 let an ill-typed program through: in the reproducers of 6 and 9 a value of one concrete type is passed where another is expected, and in that of 8 a method is called on a type that does not have it. Problem 4 is a crash, problem 5 is two verdicts for one program, and problems 2 and 3 are costs that become failures on slightly larger programs. "Existing" is the unpatched compiler; "With the fixes" is the recommended configuration.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Problem</th><th>Program in <code>reproducers/</code></th><th>Existing</th><th>With the fixes</th><th>Document</th></tr></thead>
+        <tbody>
+          <tr><td>1. Unrelated equalities make types interchangeable</td><td><code>s1-unrelated-equalities.hylo</code></td><td>accepted</td><td>rejected</td><td><a href="soundness/1-unrelated-equalities.md">details</a></td></tr>
+          <tr><td></td><td><code>s1b-unrelated-equality-call.hylo</code></td><td>accepted</td><td>rejected</td><td></td></tr>
+          <tr><td>2. Equality chains are slow or rejected</td><td><code>s2-equality-chain.hylo</code></td><td>accepted in 1.2 s</td><td>accepted in 1.3 ms</td><td><a href="soundness/2-equality-chains.md">details</a></td></tr>
+          <tr><td>3. Associated types through a callee's requirements are not simplified</td><td><code>s3-conditional-extension.hylo</code></td><td>accepted in 1.7 s</td><td>accepted in 6.5 ms</td><td><a href="soundness/3-unsimplified-projections.md">details</a></td></tr>
+          <tr><td>4. Cyclic type bindings crash the compiler</td><td><code>s4-cyclic-binding.hylo</code></td><td>crash (stack overflow)</td><td>rejected</td><td><a href="soundness/4-cyclic-bindings.md">details</a></td></tr>
+          <tr><td>5. Results depend on declaration order</td><td><code>s5-declaration-order.hylo</code></td><td>accepted in 9 of 24 orders</td><td>accepted in 24 of 24</td><td><a href="soundness/5-declaration-order.md">details</a></td></tr>
+          <tr><td>6. Associated types of a generic conformance are one type for every instance</td><td><code>s6-generic-conformance.hylo</code></td><td>accepted</td><td>rejected</td><td><a href="soundness/6-generic-conformance-associated-types.md">details</a></td></tr>
+          <tr><td>7. Inside a trait, <code>Self.X</code> is equated with another witness's <code>T.X</code></td><td><code>s7-self-projection.hylo</code></td><td>accepted</td><td>rejected</td><td><a href="soundness/7-self-projection.md">details</a></td></tr>
+          <tr><td>8. A conformance satisfies the trait it refines with itself</td><td><code>s8-refinement.hylo</code></td><td>accepted</td><td>rejected</td><td><a href="soundness/8-refinement-satisfied-by-itself.md">details</a></td></tr>
+          <tr><td>9. Members selected through an alias lose the type arguments</td><td><code>s9-alias-arguments.hylo</code></td><td>accepted</td><td>rejected</td><td><a href="soundness/9-members-through-aliases.md">details</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Two kinds of valid programs are rejected by the existing implementation. Every collection-like library needs both.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Kind</th><th>Program in <code>reproducers/</code></th><th>Existing</th><th>With the fixes</th><th>Document</th></tr></thead>
+        <tbody>
+          <tr><td>Requirements that mention another requirement</td><td><code>c1-dependent-requirement.hylo</code></td><td>rejected</td><td>accepted</td><td><a href="completeness/1-dependent-requirements.md">details</a></td></tr>
+          <tr><td>Associated types of a requirement in a signature</td><td><code>c2-collection.hylo</code></td><td>rejected</td><td>accepted</td><td><a href="completeness/2-projections-in-signatures.md">details</a></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <pre><code>trait Collection { type Element; fun first() -&gt; Element }
+trait Showable {}
+fun head&lt;C where C is Collection&gt;(c: C) -&gt; C.Element { c.first() }     // no caller could use the result
+fun show&lt;C where C is Collection, C.Element is Showable&gt;(c: C) {}       // no caller could satisfy the clause</code></pre>
+    <p class="muted">Times are type-checking times of the user module on one core. Orders are orders of the top-level declarations, 24 tried.</p>
+  </section>
+
+  <section id="questions">
+    <h2>Questions on the language</h2>
+    <p>Each entry gives the question, a program, what the type checker does with it today, what the fixes assume, and what would change with the other answer. The programs are in <code>questions/</code>; <code>questions/README.md</code> has the same list as text, convenient for answering inline. Questions 3, 4, 7, 10, 15 and 16 describe behaviour that this work leaves unchanged; they are listed because every technique had to reproduce it, and a different answer would simplify the implementation.</p>
+    <h3 class="group">Conformances and equalities</h3>
+    <div class="bug" id="q1">
+      <h3>1. Are conformances coherent across equal types? <span class="pill fix">decides most</span></h3>
+      <p>With <code>T == U</code>, <code>T is P</code> and <code>U is P</code>, are the two requirements the same witness, so that <code>T.X</code> and <code>U.X</code> are the same type?</p>
+<div class="prog"><div class="flag">questions/q01-coherence.hylo</div><pre><code>trait P { type X }
+fun check&lt;T&gt;(x: T) {}
+fun f0&lt;T, U where T == U, T is P, U is P&gt;(x: U.X) {
+  check&lt;T.X&gt;(x)
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>Rejected, by the existing implementation and by the fixes. This is the compiler's negative test <code>associated-type-inequality</code>.</dd>
+        <dt>Assumed</dt><dd>No: two requirements are two witnesses, which may define <code>X</code> differently. Every fix follows this reading.</dd>
+        <dt>Otherwise</dt><dd>If conformances are coherent, problem 7 below is not a defect, types can be rewritten to a representative of their equality class (rejected here as unsafe, because a conformance is selected by the way a type is written), and the restrictions of <span class="flag">abstractstrict</span> can be lifted.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q2">
+      <h3>2. Inside a trait, is <code>Self.X</code> equal to <code>T.X</code> when <code>T == Self</code> and <code>T is P</code>? <span class="pill fix">decides most</span></h3>
+      <p><code>T is P</code> is a second requirement, which the caller satisfies independently of the witness that the trait stands for.</p>
+<div class="prog"><div class="flag">questions/q02a-self-projection.hylo</div><pre><code>trait P {
+  type X
+  fun f&lt;T where T == Self, T is P&gt;(x: X) { check&lt;T.X&gt;(x) }
+}
+fun check&lt;T&gt;(x: T) {}</code></pre></div>
+<div class="prog"><div class="flag">questions/q02b-self-projection-conversion.hylo</div><pre><code>fun conv&lt;A, B where A == B&gt;(x: A) -&gt; B { x }
+fun check&lt;T&gt;(x: T) {}
+trait P {
+  type X
+  fun cast&lt;T, U where T == Self, T is P, T.X == U&gt;(x: U) -&gt; X { conv&lt;U, X&gt;(x) }
+}
+fun f&lt;V, W where V == W, V is P, W is P&gt;(v: V, x: W.X) {
+  check&lt;V.X&gt;(v.cast&lt;W, W.X&gt;(x))
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q02a</code>: accepted by the existing implementation, rejected by the fixes. <code>q02b</code> uses the rule to convert a <code>W.X</code> into a <code>V.X</code> under the where clause of question 1: the existing implementation exhausts memory on it; with the equality procedure alone it is accepted; with the fix it is rejected.</dd>
+        <dt>Assumed</dt><dd>No, for consistency with question 1: a selection through the trait's own witness equals only a selection through that same witness (<span class="flag">abstractstrict</span>). Eight test programs of the shape of <code>q02a</code> are rejected as a result.</dd>
+        <dt>Otherwise</dt><dd>If they are equal, the rule must be reconciled with question 1, since <code>q02b</code> performs exactly the conversion that the negative test forbids.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q3">
+      <h3>3. What do equalities between concrete types mean?</h3>
+      <p>Does <code>Box&lt;T&gt; == Box&lt;U&gt;</code> give <code>T == U</code>? Is <code>where T == A, T == B</code>, for two distinct structs, an error where it is declared?</p>
+<div class="prog"><div class="flag">questions/q03a-injectivity.hylo</div><pre><code>struct Box&lt;X&gt; { public memberwise init }
+fun check&lt;T&gt;(x: T) {}
+fun f&lt;T, U where Box&lt;T&gt; == Box&lt;U&gt;&gt;(x: T) { check&lt;U&gt;(x) }</code></pre></div>
+<div class="prog"><div class="flag">questions/q03b-two-concrete-types.hylo</div><pre><code>struct A { public memberwise init }
+struct B { public memberwise init }
+fun check&lt;T&gt;(x: T) {}
+fun f&lt;T where T == A, T == B&gt;(x: A) { check&lt;B&gt;(x) }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q03a</code> is rejected: type constructors are not injective for equalities. <code>q03b</code> is accepted: in the body, an <code>A</code> is passed where a <code>B</code> is expected. No caller can satisfy the clause. Both behaviours are those of the existing implementation and are unchanged.</dd>
+        <dt>Assumed</dt><dd>Nothing is assumed; the equality procedure reproduces both behaviours.</dd>
+        <dt>Otherwise</dt><dd>Injectivity would be a new rule of the congruence closure. Rejecting <code>q03b</code> at the declaration would be a new check for clauses that equate two distinct nominal types.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q4">
+      <h3>4. Are the members of <code>A</code> available on a <code>T</code> when <code>T == A</code>?</h3>
+      <p>Members of a trait are found through an equality; members of a struct, and its extensions, are not.</p>
+<div class="prog"><div class="flag">questions/q04a-struct-member-through-equality.hylo</div><pre><code>struct A {
+  public memberwise init
+  fun foo() {}
+}
+fun f&lt;T where T == A&gt;(x: T) { x.foo() }</code></pre></div>
+<div class="prog"><div class="flag">questions/q04b-trait-member-through-equality.hylo</div><pre><code>trait P { fun p() }
+fun f&lt;T, U where T == U, U is P&gt;(x: T) { x.p() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q04a</code> is rejected ("type 'T' has no member 'foo'"), <code>q04b</code> is accepted. Unchanged.</dd>
+        <dt>Assumed</dt><dd>Nothing is assumed.</dd>
+        <dt>Otherwise</dt><dd>If struct members should be found, member lookup has to consult the equalities in scope.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q5">
+      <h3>5. How should a trait state an equality between its associated types?</h3>
+      <p>Swift's <code>Sequence</code> has <code>Iterator.Element == Element</code>. In a survey of the Swift standard library, swift-collections and Rust's iterator library, 6% to 24% of the functions have an equality in scope, mostly through traits.</p>
+<div class="prog"><div class="flag">questions/q05-equality-in-trait.hylo</div><pre><code>trait IteratorProtocol { type Element }
+trait Sequence {
+  type Element
+  type Iterator
+  given Iterator is IteratorProtocol
+  given Iterator.Element == Element
+}
+fun need&lt;A, B where A == B&gt;() {}
+fun f&lt;S where S is Sequence&gt;() { need&lt;S.Iterator.Element, S.Element&gt;() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>A syntax error: "expected 'is'".</dd>
+        <dt>Assumed</dt><dd>Nothing is assumed; the feature does not exist.</dd>
+        <dt>Otherwise</dt><dd>An equality stated by a trait holds for every conforming type, so it is not ground. Two of the techniques (<span class="flag">eqindex</span>, <span class="flag">coeset</span>) rely on the equalities in scope being ground; they fall back to the general path otherwise and would need to be revisited.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q6">
+      <h3>6. Does anything depend on the shape of an equality proof?</h3>
+      <p>The decision procedure builds the term of an equality proof differently from the search. On the compiler's tests, this is the only difference in the elaborated output (two files).</p>
+      <dl>
+        <dt>Today</dt><dd>No program: the question is about later phases.</dd>
+        <dt>Assumed</dt><dd>No: any proof term of the right type is as good as another.</dd>
+        <dt>Otherwise</dt><dd>If lowering, or a checker of derivations, needs a particular form, the procedure must build that form.</dd>
+      </dl>
+    </div>
+    <h3 class="group">Requirements of a where clause</h3>
+    <div class="bug" id="q7">
+      <h3>7. Is the order of requirements meant to be significant?</h3>
+      <p>A requirement is an assumption for the requirements written after it, so reordering a clause changes how many steps a call needs.</p>
+<div class="prog"><div class="flag">questions/q07a-where-order.hylo</div><pre><code>trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct C {}
+struct S&lt;T&gt; {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given &lt;where A0 is P, A1 is P, A2 is P, A3 is P&gt; =&gt; C is P {}
+given &lt;T where T is P&gt; =&gt; S&lt;T&gt; is Q {}
+fun f&lt;where C is P, S&lt;C&gt; is Q&gt;() {}
+public fun main() { f() }</code></pre></div>
+<div class="prog"><div class="flag">questions/q07b-where-order-swapped.hylo</div><pre><code>trait P {}
+trait Q {}
+struct A0 {}
+struct A1 {}
+struct A2 {}
+struct A3 {}
+struct C {}
+struct S&lt;T&gt; {}
+given A0 is P {}
+given A1 is P {}
+given A2 is P {}
+given A3 is P {}
+given &lt;where A0 is P, A1 is P, A2 is P, A3 is P&gt; =&gt; C is P {}
+given &lt;T where T is P&gt; =&gt; S&lt;T&gt; is Q {}
+fun f&lt;where S&lt;C&gt; is Q, C is P&gt;() {}
+public fun main() { f() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q07a</code> is accepted (8 steps); <code>q07b</code>, the same program with the two requirements swapped, is rejected (12 steps, past the bound of question 11). Unchanged.</dd>
+        <dt>Assumed</dt><dd>The existing rule is kept.</dd>
+        <dt>Otherwise</dt><dd>If the order should not matter, the requirements must be assumptions for each other in both directions, or in neither. The experiment <span class="flag">heightbound</span> accepts both programs by changing the bound instead.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q8">
+      <h3>8. Which witness does a requirement get when another requirement mentions it? <span class="pill fix">decides most</span></h3>
+      <p>For <code>where T is P, T.X is Q</code>: is the witness of <code>T is P</code> the one that resolving it alone gives, or may the second requirement select among the conformances in scope?</p>
+<div class="prog"><div class="flag">questions/q08-which-witness.hylo</div><pre><code>trait P { type X }
+trait Q {}
+struct A {}
+struct B {}
+struct C {}
+given B is Q {}
+given A is P { type X = B }
+fun f&lt;T where T is P, T.X is Q&gt;() {}
+public fun main() {
+  given A is P { type X = C }
+  f&lt;A&gt;()
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>Rejected by both. The existing implementation rejects every call whose requirements mention an associated type of another requirement. The fix rejects this one because <code>A is P</code> alone resolves to the local conformance, for which <code>A.X</code> is <code>C</code>, and <code>C</code> is not <code>Q</code>.</dd>
+        <dt>Assumed</dt><dd>On its own: the requirement is resolved first, a tie is an ambiguity, and the dependent requirement is then proved for that witness (<span class="flag">premcommit</span>).</dd>
+        <dt>Otherwise</dt><dd>Solving the requirements together accepts <code>q08</code> through the shadowed conformance of the module. Five programs of the test corpus differ between the two readings.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q9">
+      <h3>9. Is an associated type selected through a declared conformance equal to its definition?</h3>
+      <p>In particular for a generic conformance, where the definition mentions the conformance's own parameters.</p>
+<div class="prog"><div class="flag">questions/q09a-generic-conformance-unsound.hylo</div><pre><code>trait P { type X; fun get() -&gt; X; fun put(x: X) }
+struct A { public memberwise init }
+struct C { public memberwise init }
+given &lt;T&gt; =&gt; T is P {
+  type X = T
+  fun get() -&gt; T { self }
+  fun put(x: T) {}
+}
+fun q(a: A, c: C) { c.put(a.get()) }</code></pre></div>
+<div class="prog"><div class="flag">questions/q09b-generic-conformance-valid.hylo</div><pre><code>trait P { type X; fun get() -&gt; X; fun put(x: X) }
+struct A { public memberwise init }
+given &lt;T&gt; =&gt; T is P {
+  type X = T
+  fun get() -&gt; T { self }
+  fun put(x: T) {}
+}
+fun check&lt;T&gt;(x: T) {}
+fun q(a: A) { check&lt;A&gt;(a.get()) }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q09a</code> is accepted by the existing implementation: an <code>A</code> is passed where a <code>C</code> is expected. <code>q09b</code>, which is valid, is rejected by it. The fix reverses both.</dd>
+        <dt>Assumed</dt><dd>Yes: <code>A.X</code> through <code>given &lt;T&gt; =&gt; T is P { type X = T }</code> is <code>A</code>, with the arguments and the witnesses of the conformance substituted into the definition (<span class="flag">assocsubst</span>).</dd>
+        <dt>Otherwise</dt><dd>Probably uncontroversial. One related case has no diagnostic: a parameter of a conformance that neither its head nor its requirements determine (<code>given &lt;T, U&gt; =&gt; Box&lt;T&gt; is P { type X = U }</code>) yields a fresh type at each use. Should it be an error at the declaration?</dd>
+      </dl>
+    </div>
+    <h3 class="group">Ranking and the bound on derivations</h3>
+    <div class="bug" id="q10">
+      <h3>10. Is the ranking of derivations through equalities intended?</h3>
+      <p>Which of two conformances wins depends on the side on which an equality is written, because penalties count pending requirements and a derivation that uses symmetry is longer.</p>
+<div class="prog"><div class="flag">questions/q10a-ranking.hylo</div><pre><code>trait P {}
+fun g&lt;V where V is P&gt;() {}
+fun f&lt;A, B, C where B is P, C is P, B == A, A == C&gt;() { g&lt;A&gt;() }</code></pre></div>
+<div class="prog"><div class="flag">questions/q10b-ranking-other-side.hylo</div><pre><code>trait P {}
+fun g&lt;V where V is P&gt;() {}
+fun f&lt;A, B, C where B is P, C is P, B == A, C == A&gt;() { g&lt;A&gt;() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q10a</code> (<code>B == A, A == C</code>) is accepted; <code>q10b</code> (<code>B == A, C == A</code>) is rejected as ambiguous. Of 800 generated goals with two symmetric derivations, 408 are accepted and 392 reported as ambiguous. Unchanged: the fixes reproduce the ranking exactly.</dd>
+        <dt>Assumed</dt><dd>The ranking is treated as part of the language, and every technique was required to preserve it.</dd>
+        <dt>Otherwise</dt><dd>If symmetric derivations should always be ambiguous (or never), the ranking can be defined on the equality classes, and the techniques no longer need to reproduce step counts.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q11">
+      <h3>11. Is the bound of ten steps part of the language? <span class="pill fix">decides most</span></h3>
+      <p>Does it bound the size of a derivation (all the givens used for a call) or its depth? Do the steps that prove equalities count? Is reaching it an error, or a silent failure after which another extension or overload is selected?</p>
+<div class="prog"><div class="flag">questions/q11a-bound-four.hylo</div><pre><code>trait P {}
+struct A {}
+struct Pair&lt;X, Y&gt; {}
+given A is P {}
+given &lt;X, Y where X is P, Y is P&gt; =&gt; Pair&lt;X, Y&gt; is P {}
+fun need&lt;T where T is P&gt;() {}
+public fun main() { need&lt;Pair&lt;A, Pair&lt;A, Pair&lt;A, Pair&lt;A, A&gt;&gt;&gt;&gt;&gt;() }</code></pre></div>
+<div class="prog"><div class="flag">questions/q11b-bound-five.hylo</div><pre><code>trait P {}
+struct A {}
+struct Pair&lt;X, Y&gt; {}
+given A is P {}
+given &lt;X, Y where X is P, Y is P&gt; =&gt; Pair&lt;X, Y&gt; is P {}
+fun need&lt;T where T is P&gt;() {}
+public fun main() { need&lt;Pair&lt;A, Pair&lt;A, Pair&lt;A, Pair&lt;A, Pair&lt;A, A&gt;&gt;&gt;&gt;&gt;&gt;() }</code></pre></div>
+<div class="prog"><div class="flag">questions/q11c-bound-selects-member.hylo</div><pre><code>struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct A3 { public memberwise init }
+struct A4 { public memberwise init }
+struct A5 { public memberwise init }
+struct A6 { public memberwise init }
+struct A7 { public memberwise init }
+struct A8 { public memberwise init }
+struct W&lt;X0, X1, X2, X3, X4, X5, X6, X7, X8&gt; { public memberwise init }
+extension W&lt;A0, A1, A2, A3, A4, A5, A6, A7, A8&gt; { fun m() {} }
+extension &lt;X8&gt; W&lt;A0, A1, A2, A3, A4, A5, A6, A7, X8&gt; { fun m() {} }
+fun f&lt;T0, T1, T2, T3, T4, T5, T6, T7, T8 where T0 == A0, T1 == A1, T2 == A2, T3 == A3, T4 == A4, T5 == A5, T6 == A6, T7 == A7, T8 == A8&gt;(x: W&lt;T0, T1, T2, T3, T4, T5, T6, T7, T8&gt;) { x.m() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q11a</code> (9 givens) is accepted. <code>q11b</code> (11 givens, valid) is rejected with "no coercion", without mention of the bound. In <code>q11c</code> two extensions apply, and proving so needs nine equalities for the first and eight for the second: the existing implementation exhausts memory; with the equality procedure alone the member of the second extension is called; in the recommended configuration, where equalities proved by the procedure are not counted, the member of the first is.</dd>
+        <dt>Assumed</dt><dd>The bound is kept as it is, on the size of a derivation, with silent failure. Equalities decided by the procedure are not counted (<span class="flag">eqeager</span>), which is the one intended change of behaviour among the performance techniques.</dd>
+        <dt>Otherwise</dt><dd>The experiment <span class="flag">heightbound</span> bounds the depth instead and accepts <code>q11b</code> and <code>q07b</code>. If reaching the bound were an error, <code>q11c</code> would have one meaning.</dd>
+      </dl>
+    </div>
+    <h3 class="group">Declaration order</h3>
+    <div class="bug" id="q12">
+      <h3>12. May the types of extensions and givens depend on each other?</h3>
+      <p>Looking up the type that one extension extends can require the other extension, and conversely.</p>
+<div class="prog"><div class="flag">questions/q12-mutually-dependent-extensions.hylo</div><pre><code>struct A { struct Inner {} }
+extension A.Inner.Foo { type Inner = Bool }
+extension A.Inner { type Foo = Int }
+fun use(x: Int.Inner) {}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>The existing implementation accepts <code>q12</code> in 12 of the 24 orders of its declarations. The fix accepts it in all 24: it computes these types in rounds until they are stable, and reports the declarations for which no stable reading is found.</dd>
+        <dt>Assumed</dt><dd>Yes, when the iteration reaches a stable reading (<span class="flag">sigrounds</span>).</dd>
+        <dt>Otherwise</dt><dd>A stricter rule, rejecting every such dependency, can be added as a check on the stable result. It would also remove the remaining unproved step in the argument that the overload techniques preserve results.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q13">
+      <h3>13. May a given be a candidate in its own initializer, and what is a given with an inferred type worth outside a function?</h3>
+      <p>Today a given is hidden while its own type is computed, and a given without a written type is typed on demand, inside the first resolution that meets it.</p>
+<div class="prog"><div class="flag">questions/q13a-given-in-own-initializer.hylo</div><pre><code>struct A { public memberwise init }
+fun make&lt;where let u: A&gt;() -&gt; A { u }
+given let other: A = A()
+given let w = make()
+public fun main() {}</code></pre></div>
+<div class="prog"><div class="flag">questions/q13b-given-initialized-with-itself.hylo</div><pre><code>struct A { public memberwise init }
+fun make&lt;where let u: A&gt;() -&gt; A { u }
+given let w: A = make()
+public fun main() {}</code></pre></div>
+<div class="prog"><div class="flag">questions/q13c-inferred-given-order.hylo</div><pre><code>struct A { public memberwise init }
+let s = A()
+given let g = s
+fun need&lt;where let u: A&gt;() {}
+public fun main() { need() }</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd><code>q13a</code> is accepted: <code>w</code> is initialized with <code>other</code>. <code>q13b</code> is accepted by every configuration: a given with a written type is the only candidate for its own initializer. <code>q13c</code> is accepted in 15 of the 24 orders of its declarations, by the existing implementation and by the fixes alike.</dd>
+        <dt>Assumed</dt><dd>The fix for declaration order covers declarations whose type is written; <code>q13c</code> is not fixed.</dd>
+        <dt>Otherwise</dt><dd>Four options were tried and none is adopted (<code>experiments/inferred-givens/README.md</code>). The simplest is a rule: a given declared outside a function must have a written type. The most complete one makes <code>q13c</code> independent of the order but rejects <code>q13a</code>, because the given then sees itself.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q14">
+      <h3>14. Is the order of givens in a function body meant to matter, and may a where clause name a declaration of the body it governs?</h3>
+      <p>Givens declared in a body are visible in the whole body, before their declaration.</p>
+<div class="prog"><div class="flag">questions/q14a-givens-in-body.hylo</div><pre><code>trait P { type E }
+trait Q { type F }
+struct A {}
+struct C {}
+given A is P { type E = Int }
+given A is Q { type F = Int }
+extension Int { type T = A }
+extension Bool { type T = C }
+fun h() {
+  given A.F.T is P { type E = Bool }
+  given A.E.T is Q { type F = Bool }
+  let z: A.E = true
+}</code></pre></div>
+<div class="prog"><div class="flag">questions/q14b-givens-in-body-swapped.hylo</div><pre><code>trait P { type E }
+trait Q { type F }
+struct A {}
+struct C {}
+given A is P { type E = Int }
+given A is Q { type F = Int }
+extension Int { type T = A }
+extension Bool { type T = C }
+fun h() {
+  given A.E.T is Q { type F = Bool }
+  given A.F.T is P { type E = Bool }
+  let z: A.E = true
+}</code></pre></div>
+<div class="prog"><div class="flag">questions/q14c-where-clause-uses-body.hylo</div><pre><code>trait P { type X }
+trait Q {}
+fun f&lt;T where T is P, LA is Q&gt;() {
+  type LA = T.X
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>The existing implementation rejects <code>q14a</code> and accepts <code>q14b</code>, which differs in the order of two local givens. The fix rejects both: each given can shadow the top-level one that the other needs, and no stable reading is found. <code>q14c</code> is accepted by both.</dd>
+        <dt>Assumed</dt><dd>Local givens are treated like top-level ones, so their order does not matter.</dd>
+        <dt>Otherwise</dt><dd>If the order in a body is meant to matter, local givens must be excluded from the rounds.</dd>
+      </dl>
+    </div>
+    <h3 class="group">Overload resolution</h3>
+    <div class="bug" id="q15">
+      <h3>15. Is the nested ranking of overloads intended?</h3>
+      <p>Only the outermost overloaded name of a statement is ranked across all combinations; the inner ones are ranked inside each choice of the outer one.</p>
+<div class="prog"><div class="flag">questions/q15-nested-ranking.hylo</div><pre><code>struct X { public memberwise init }
+struct Y { public memberwise init }
+struct S {
+  public memberwise init
+  public static fun a() -&gt; Y { Y() }
+  public static fun b() -&gt; X { X() }
+}
+fun k&lt;V&gt;(x: V, y: V) -&gt; V { x }
+fun takeX(x: X) {}
+fun takeY(y: Y) {}
+fun main() {
+  extension S {
+    static fun a() -&gt; X { X() }
+    static fun b() -&gt; Y { Y() }
+  }
+  let p = k(S.a(), S.b())
+  takeX(p)
+  let q = k(S.b(), S.a())
+  takeY(q)
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>Accepted: <code>k(S.a(), S.b())</code> is an <code>X</code> and <code>k(S.b(), S.a())</code> is a <code>Y</code>. Unchanged.</dd>
+        <dt>Assumed</dt><dd>The existing ranking is preserved exactly.</dd>
+        <dt>Otherwise</dt><dd>A ranking of whole combinations would be independent of the order of arguments.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q16">
+      <h3>16. Should a solution with more errors than the best one stay viable?</h3>
+      <p>A preferred candidate with an error can win over one whose only diagnostic is a nested ambiguity.</p>
+<div class="prog"><div class="flag">questions/q16-erroneous-candidate-wins.hylo</div><pre><code>struct A {
+  public memberwise init
+  public fun n() -&gt; A { A() }
+  public fun n() -&gt; A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -&gt; B { B() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -&gt; A { A() }
+}
+fun takeA(x: A) {}
+public fun main() {
+  extension S { static fun f() -&gt; B { B() } }
+  takeA(S.f().n())
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>Rejected with the error of the preferred candidate ("cannot pass value of type 'B' to parameter 'A'"). Unchanged.</dd>
+        <dt>Assumed</dt><dd>The existing behaviour is preserved exactly.</dd>
+        <dt>Otherwise</dt><dd>If only the candidates with the fewest diagnostics stayed viable, more of the search could be cut once a clean solution is known.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q17">
+      <h3>17. Should a member and the trait requirement that it implements be two candidates?</h3>
+      <p>For a concrete receiver they denote the same function.</p>
+<div class="prog"><div class="flag">questions/q17-member-and-requirement.hylo</div><pre><code>public fun main() {
+  let a = 1
+  let b = a + a + a + a + a + a + a + a + a + a + a + a + a + a + a
+}</code></pre></div>
+      <dl>
+        <dt>Today</dt><dd>Accepted. The existing solver makes 32,766 forks for 14 operators; with <span class="flag">twins</span>, which shares the search between two candidates of the same type, 14.</dd>
+        <dt>Assumed</dt><dd>Both candidates are kept, and the second reuses the result of the first.</dd>
+        <dt>Otherwise</dt><dd>If name resolution kept one candidate, the exponential cost would disappear at its source and <span class="flag">twins</span> would not be needed.</dd>
+      </dl>
+    </div>
+    <div class="bug" id="q18">
+      <h3>18. Are the diagnostics of an ill-typed statement part of the contract?</h3>
+      <p>May an implementation report a different, smaller set of errors for a statement that has none of the solutions?</p>
+      <dl>
+        <dt>Today</dt><dd>No program: the question is about what must be preserved.</dd>
+        <dt>Assumed</dt><dd>Yes: an erroneous statement is solved by the existing search, so that its diagnostics are unchanged. The overload techniques therefore speed up well-typed statements only.</dd>
+        <dt>Otherwise</dt><dd>If the set of diagnostics may differ, erroneous statements can be made fast as well.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section id="performance">
+    <h2>Performance in brief</h2>
+    <p>Type-checking time in milliseconds, one core. The full table, the contribution of each technique and an assessment of which ones are worth their complexity are in <a href="report.html">report.html</a>.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Workload</th><th class="num">Existing</th><th class="num">Recommended</th></tr></thead>
+        <tbody>
+          <tr><td>Standard library</td><td class="num">605</td><td class="num">134</td></tr>
+          <tr><td>2,000 extensions, 1,000 member lookups</td><td class="num">13,423</td><td class="num">380</td></tr>
+          <tr><td>40 unrelated conformances in scope</td><td class="num">4,985</td><td class="num">43</td></tr>
+          <tr><td><code>a + a + … + a</code>, 14 operators</td><td class="num">1,436</td><td class="num">2.5</td></tr>
+          <tr><td>Signature of Swift's <code>Collection</code>, translated (7 traits, 14 equalities)</td><td class="num">21,719</td><td class="num">44</td></tr>
+          <tr><td>Swift's <code>StringProtocol</code>, translated</td><td class="num">timeout (90 s)</td><td class="num">44</td></tr>
+          <tr><td>Rust's <code>Flatten</code>, translated</td><td class="num">crash</td><td class="num">691</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul>
+      <li>On code without equality constraints, five simple techniques give the whole gain: indexing givens by the head constructor of their conclusion, skipping extensions that do not declare the requested name, and three constant-factor improvements. They are about 450 lines and leave every result unchanged.</li>
+      <li>On code with equality constraints, the gain comes from deciding equalities by congruence closure instead of by search, which is also what removes problems 1 to 3.</li>
+      <li>One technique is not recommended: an abstract model that refutes underivable goals. It removes an exponential cost on constructed programs, but made only one of 687 ill-typed variants of real programs more than ten times cheaper to reject, for about 600 lines.</li>
+    </ul>
+  </section>
+
+  <section id="open">
+    <h2>What is not solved</h2>
+    <ul>
+      <li><strong>Nested nominal types.</strong> A struct declared inside a generic conformance or a generic type is one type for all instances. This is unsound, exists in the unpatched compiler, and is outside the mechanisms studied.</li>
+      <li><strong>Givens with an inferred type outside a function</strong> are still typed on demand, and the verdict can depend on declaration order (question 13).</li>
+      <li><strong>The bound on derivations</strong> rejects valid programs (question 11).</li>
+      <li><strong>Function values.</strong> A generic function whose signature mentions an associated type of its requirement can be called, but not passed as a value at a concrete type.</li>
+      <li><strong>Associated types through a refinement</strong> are opaque: <code>T.X</code> selected through <code>T is R</code>, where <code>R</code> refines <code>P</code>, is not identified with the definition in the conformance to <code>P</code>.</li>
+      <li><strong>Cost of dependent signatures.</strong> A chain of <em>d</em> extensions or givens whose types depend on each other costs <em>d</em> + 2 rounds over the whole module.</li>
+    </ul>
+    <p>The complete list is in the section "Limitations" of <a href="report.html">report.html</a>.</p>
+  </section>
+
+  <section id="reproducing">
+    <h2>Reproducing the results</h2>
+    <h3>The existing behaviour, with an unmodified compiler</h3>
+    <p>The programs of <code>reproducers/</code> and <code>questions/</code> are single files with the header of the compiler's tests (<code>//! stage:typing no-std</code>), so they can be copied into <code>Tests/CompilerTests/positive</code> or <code>negative</code>, or type-checked directly. The first lines of each file state the expected result. The results quoted on this page were obtained with the benchmark tool described below, run without flags, on commit <code>3ce4aa0</code> of <code>main</code> (4 November 2026); they were not re-run with <code>hc</code>.</p>
+    <h3>The fixes</h3>
+    <p>The patch series applies to the same commit:</p>
+    <pre><code>git checkout -b type-checker-review 3ce4aa0
+git apply --index patches/0000-base-harness-flags-and-first-techniques.diff
+git commit -m "Benchmark harness, flags and first techniques"
+git am patches/00*.patch
+swift build -c release --product tc-bench</code></pre>
+    <p><code>patches/all-in-one.diff</code> is the same change as a single diff, for reading: 14 files, about 5,100 added lines, almost all in <code>Typer.swift</code>, <code>Solver.swift</code> and <code>TypeStore.swift</code>. Applied in this way, the series was checked to reproduce exactly the sources that produced the results.</p>
+    <p><code>tc-bench</code> type-checks the files given to it and prints the diagnostics, their number and the time. The environment variable <code>HYLO_TC_EXPERIMENTS</code> selects the techniques:</p>
+    <pre><code># the existing implementation
+.build/release/tc-bench reproducers/s6-generic-conformance.hylo
+
+# the recommended configuration
+export REC=index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,premcommit,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead
+HYLO_TC_EXPERIMENTS=$REC .build/release/tc-bench reproducers/s6-generic-conformance.hylo
+
+# with the self-check, and with a trace of each completed resolution
+HYLO_TC_EXPERIMENTS=$REC,selfcheck,trace .build/release/tc-bench reproducers/c2-collection.hylo</code></pre>
+    <p><code>patches/README.md</code> lists what each patch contains and which flags depend on each other. <code>reproducers/observed.txt</code> and <code>questions/observed.txt</code> hold the output of both configurations on every program.</p>
+  </section>
+
+  <section id="contents">
+    <h2>Contents of the archive</h2>
+    <div class="scroll">
+      <table>
+        <thead><tr><th>Path</th><th>Contents</th></tr></thead>
+        <tbody>
+          <tr><td><code>START-HERE.html</code></td><td>This page</td></tr>
+          <tr><td><code>reproducers/</code></td><td>One program per finding, with the observed output</td></tr>
+          <tr><td><code>questions/</code></td><td>The programs of the questions, the questions as text, and the observed output</td></tr>
+          <tr><td><code>report.html</code></td><td>The full report: every technique, every fix, results, assessment, limitations, validation, related work (about 30 minutes)</td></tr>
+          <tr><td><code>soundness/</code></td><td>One document per soundness problem: symptom, cause, fix, what remains</td></tr>
+          <tr><td><code>completeness/</code></td><td>One document per kind of valid program that was rejected</td></tr>
+          <tr><td><code>techniques/</code></td><td>One document per performance technique: how it works, why it is correct, what it costs</td></tr>
+          <tr><td><code>experiments/inferred-givens/</code></td><td>Four options for question 13, with their test programs and a patch; none is adopted</td></tr>
+          <tr><td><code>patches/</code></td><td>The implementation: a series against <code>main</code>, and the same as one diff</td></tr>
+          <tr><td><code>validation/</code></td><td>Test-suite comparison, verdicts on 1,651 programs, declaration-order sweeps, timings</td></tr>
+          <tr><td><code>test-programs/</code></td><td>About 540 programs by topic, each folder with an index of verdicts</td></tr>
+          <tr><td><code>follow-up/</code></td><td>Supporting studies, kept as working documents: growth laws, cost of errors, use of equalities in Swift and Rust libraries, the reference resolver, metamorphic tests, the designs with their open questions, the attacks. <code>follow-up/README.md</code> is their guide</td></tr>
+          <tr><td><code>rejected/</code></td><td>Approaches that are faster but change results</td></tr>
+          <tr><td><code>papers/</code></td><td>The cited papers, linked from the references of the report</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="muted">The designs in <code>follow-up/designs/</code> each end with their own list of questions for the language designers; the eighteen above are those lists merged, without the ones that the work answered on the way.</p>
+  </section>
+</main>

@@ -1,0 +1,1352 @@
+diff --git a/Package.swift b/Package.swift
+index 4415326..274f441 100644
+--- a/Package.swift
++++ b/Package.swift
+@@ -72,6 +72,14 @@ let package = Package(
+       ],
+       swiftSettings: commonSwiftSettings),
+ 
++    .executableTarget(
++      name: "tc-bench",
++      dependencies: [
++        .target(name: "FrontEnd"),
++        .target(name: "StandardLibrary"),
++      ],
++      swiftSettings: commonSwiftSettings),
++
+     .executableTarget(
+       name: "frontend-smoke-test",
+       dependencies: [
+diff --git a/Sources/FrontEnd/Typer/AbstractResolution.swift b/Sources/FrontEnd/Typer/AbstractResolution.swift
+new file mode 100644
+index 0000000..0041613
+--- /dev/null
++++ b/Sources/FrontEnd/Typer/AbstractResolution.swift
+@@ -0,0 +1,405 @@
++import Utilities
++
++/// A sound pre-check for implicit resolution based on an abstract least model of the givens.
++///
++/// Givens are read as definite Horn clauses over first-order terms: a given of type
++/// `<X...> A1, ..., An ==> H` is the clause `H :- A1, ..., An`, whose variables are `X...`.
++/// Implicit resolution is SLD resolution over these clauses (with a size-ordered search), so any
++/// type it can derive is in the least Herbrand model of the clauses. That model is infinite in
++/// general, so we compute an over-approximation by bottom-up (Datalog-style) saturation in the
++/// domain of depth-k truncated terms, where subterms below depth `k` are replaced by `⊤`
++/// (Sato & Tamaki's depth-k abstraction). The abstract model is finite, so saturation terminates.
++///
++/// If a query does not unify with any atom of the abstract model, then resolution must fail and
++/// can be skipped. The converse does not hold: a query matching the abstract model may still be
++/// underivable (false negatives are allowed, false positives are not).
++///
++/// Coercions break the syntactic view of matching (two types may be "equal" without unifying),
++/// so the analysis gives up on any set of givens containing a potential source of coercions
++/// (i.e., a given whose head is an equality witness or a bare variable).
++internal struct AbstractResolutionModel {
++
++  /// A key identifying a term constructor.
++  internal enum Key: Hashable {
++
++    /// A nominal type constructor or rigid type (struct, trait, skolem, machine type, ...).
++    case type(AnyTypeIdentity)
++
++    /// The constructor of a non-empty tuple, applied to its head and tail.
++    case cons
++
++    /// The empty tuple.
++    case empty
++
++    /// An equality witness.
++    case equality
++
++  }
++
++  /// A depth-k abstraction of a type.
++  internal indirect enum Term: Hashable {
++
++    /// Any term.
++    case top
++
++    /// A variable, local to a clause or a fact.
++    case variable(Int)
++
++    /// The application of a constructor to zero or more arguments.
++    case node(Key, [Term])
++
++    /// The key of the term's head constructor, if any.
++    var key: Key? {
++      if case .node(let k, _) = self { k } else { nil }
++    }
++
++  }
++
++  /// A definite Horn clause `head :- premises`.
++  internal struct Clause {
++
++    /// The conclusion of the clause.
++    let head: Term
++
++    /// The premises of the clause.
++    let premises: [Term]
++
++  }
++
++  /// The depth at which terms are truncated.
++  internal let depth: Int
++
++  /// The maximum number of facts before the analysis gives up.
++  internal let factLimit: Int
++
++  /// The clauses of the model.
++  private(set) var clauses: [Clause] = []
++
++  /// The facts of the model, bucketed by the key of their head constructor.
++  private(set) var facts: [Key: [Term]] = [:]
++
++  /// The number of facts in the model.
++  private(set) var factCount: Int = 0
++
++  /// `true` iff the analysis can't be used to refute queries.
++  private(set) var isInconclusive: Bool = false
++
++  /// Statistics: the number of clause applications attempted during saturation.
++  private(set) var work: Int = 0
++
++  /// Creates an empty model.
++  internal init(depth: Int, factLimit: Int = 20_000) {
++    self.depth = depth
++    self.factLimit = factLimit
++  }
++
++  /// Marks the model inconclusive.
++  internal mutating func giveUp() {
++    isInconclusive = true
++  }
++
++  /// Adds `c` to the clauses of this model. Call `saturate` once all clauses have been added.
++  internal mutating func add(_ c: Clause) {
++    switch c.head {
++    case .top, .variable:
++      isInconclusive = true
++    case .node(.equality, _):
++      isInconclusive = true
++    case .node:
++      // Equalities are derived by built-in givens (reflexivity, symmetry, transitivity) that are
++      // not modeled, so equality premises are assumed to hold (over-approximation).
++      let ps = c.premises.filter({ (p) in p.key != .equality })
++      clauses.append(.init(head: c.head, premises: ps))
++    }
++  }
++
++  /// Returns `true` if `query` may be derivable, `false` if it is definitely not derivable.
++  internal func mayDerive(_ query: Term) -> Bool {
++    if isInconclusive { return true }
++    guard let k = query.key, k != .equality else { return true }
++    for f in facts[k] ?? [] {
++      var s: [Int: Term] = [:]
++      // Variables of facts are renamed apart from those of the query by offsetting them.
++      let g = f.isGround ? f : f.offsettingVariables(by: 1 << 20)
++      if Self.unify(query, g, &s) { return true }
++    }
++    return false
++  }
++
++  /// Computes the least fixed point of the clauses, assuming that the current facts are closed
++  /// under the clauses before `firstNew`.
++  ///
++  /// The algorithm is semi-naive evaluation: after the first round, a clause instance is only
++  /// considered if at least one of its premises is matched by a fact derived in the last round.
++  /// Buckets are append-only, so a "generation" is a prefix of each bucket.
++  internal mutating func saturate(from firstNew: Int = 0) {
++    if isInconclusive { return }
++
++    // Clauses depending on each key.
++    var dependents: [Key: [Int]] = [:]
++    for (i, c) in clauses.enumerated() {
++      for k in Set(c.premises.compactMap(\.key)) { dependents[k, default: []].append(i) }
++    }
++
++    // Round 0: new clauses against all facts.
++    var lo: [Key: Int] = facts.mapValues(\.count)  // End of the "old" prefix.
++    var hi = lo                                     // End of the "delta" segment.
++    for i in firstNew ..< clauses.count {
++      if !run(clauses[i], delta: nil, lo: lo, hi: hi) { return }
++    }
++
++    while true {
++      // The delta of this round is what has been added since the last round.
++      lo = hi
++      hi = facts.mapValues(\.count)
++      var touched: Set<Int> = []
++      for (k, n) in hi where n > (lo[k] ?? 0) {
++        for i in dependents[k] ?? [] { touched.insert(i) }
++      }
++      if touched.isEmpty { return }
++      for i in touched.sorted() {
++        let c = clauses[i]
++        for (j, p) in c.premises.enumerated() {
++          guard let k = p.key, (hi[k] ?? 0) > (lo[k] ?? 0) else { continue }
++          if !run(c, delta: j, lo: lo, hi: hi) { return }
++        }
++      }
++    }
++  }
++
++  /// Applies `c`, using only facts in the delta segment for premise `delta` (if any), facts in the
++  /// old prefix for premises before `delta`, and old or delta facts for those after. Returns
++  /// `false` iff the analysis gave up.
++  private mutating func run(_ c: Clause, delta: Int?, lo: [Key: Int], hi: [Key: Int]) -> Bool {
++    var result: [Term] = []
++    var s: [Int: Term] = [:]
++    match(c.premises[...], 0, delta, lo, hi, &s, c, &result)
++    for h in result {
++      _ = insert(h)
++      if factCount > factLimit {
++        isInconclusive = true
++        return false
++      }
++    }
++    return true
++  }
++
++  /// Extends `result` with the instances of `c.head` derivable by matching `ps`, whose first
++  /// element is the `j`-th premise of `c`, against the facts selected by `delta`, `lo`, and `hi`.
++  private mutating func match(
++    _ ps: ArraySlice<Term>, _ j: Int, _ delta: Int?, _ lo: [Key: Int], _ hi: [Key: Int],
++    _ s: inout [Int: Term], _ c: Clause, _ result: inout [Term]
++  ) {
++    guard let p = ps.first else {
++      result.append(canonical(truncated(Self.applying(s, to: c.head), at: depth)))
++      return
++    }
++
++    // A premise that is not headed by a constructor may match anything; skip it.
++    guard let k = p.key else {
++      match(ps.dropFirst(), j + 1, delta, lo, hi, &s, c, &result)
++      return
++    }
++
++    let bucket = facts[k] ?? []
++    let range: Range<Int>
++    switch delta {
++    case .some(let d) where j < d: range = 0 ..< (lo[k] ?? 0)
++    case .some(let d) where j == d: range = (lo[k] ?? 0) ..< (hi[k] ?? 0)
++    default: range = 0 ..< min(hi[k] ?? 0, bucket.count)
++    }
++    for f in bucket[range] {
++      work += 1
++      var t = s
++      let g = f.isGround ? f : f.offsettingVariables(by: (1 << 20) + (work << 8))
++      if Self.unify(p, g, &t) {
++        match(ps.dropFirst(), j + 1, delta, lo, hi, &t, c, &result)
++      }
++    }
++  }
++
++  /// Inserts `f` into the facts unless it is subsumed by an existing fact, returning `true` iff
++  /// the model has changed.
++  private mutating func insert(_ f: Term) -> Bool {
++    let k = f.key!
++    var bucket = facts[k] ?? []
++    if bucket.contains(where: { (g) in Self.subsumes(g, f) }) { return false }
++    bucket.append(f)
++    factCount += 1
++    facts[k] = bucket
++    return true
++  }
++
++  // MARK: Term algebra
++
++  /// Returns `t` with subterms deeper than `d` replaced by `⊤`.
++  internal func truncated(_ t: Term, at d: Int) -> Term {
++    if d <= 0 { return .top }
++    if case .node(let k, let xs) = t {
++      return .node(k, xs.map({ (x) in truncated(x, at: d - 1) }))
++    }
++    return t
++  }
++
++  /// Returns `t` with its variables renamed in order of first occurrence.
++  internal func canonical(_ t: Term) -> Term {
++    var m: [Int: Int] = [:]
++    func go(_ t: Term) -> Term {
++      switch t {
++      case .top: return .top
++      case .variable(let v):
++        if let w = m[v] { return .variable(w) }
++        let w = m.count
++        m[v] = w
++        return .variable(w)
++      case .node(let k, let xs): return .node(k, xs.map(go))
++      }
++    }
++    return go(t)
++  }
++
++  /// Returns `t` with the substitution `s` applied.
++  internal static func applying(_ s: [Int: Term], to t: Term) -> Term {
++    switch t {
++    case .top: return .top
++    case .variable(let v):
++      if let u = s[v] { return applying(s, to: u) }
++      return t
++    case .node(let k, let xs):
++      return .node(k, xs.map({ (x) in applying(s, to: x) }))
++    }
++  }
++
++  /// Resolves the binding of `t` in `s`.
++  private static func walk(_ t: Term, _ s: [Int: Term]) -> Term {
++    var t = t
++    while case .variable(let v) = t, let u = s[v] { t = u }
++    return t
++  }
++
++  /// Returns `true` iff `a` and `b` are unifiable, extending `s`.
++  ///
++  /// `⊤` unifies with anything. There is no occurs check, mirroring the concrete unifier.
++  internal static func unify(_ a: Term, _ b: Term, _ s: inout [Int: Term]) -> Bool {
++    let x = walk(a, s)
++    let y = walk(b, s)
++    switch (x, y) {
++    case (.top, _), (_, .top):
++      return true
++    case (.variable(let v), .variable(let w)) where v == w:
++      return true
++    case (.variable(let v), _):
++      s[v] = y
++      return true
++    case (_, .variable(let w)):
++      s[w] = x
++      return true
++    case (.node(let k, let xs), .node(let l, let ys)):
++      if k != l || xs.count != ys.count { return false }
++      for (u, v) in zip(xs, ys) where !unify(u, v, &s) { return false }
++      return true
++    }
++  }
++
++  /// Returns `true` iff every instance of `specific` is an instance of `general`.
++  internal static func subsumes(_ general: Term, _ specific: Term) -> Bool {
++    var s: [Int: Term] = [:]
++    func go(_ g: Term, _ t: Term) -> Bool {
++      switch (g, t) {
++      case (.top, _):
++        return true
++      case (.variable(let v), _):
++        if let u = s[v] { return u == t }
++        s[v] = t
++        return true
++      case (.node(let k, let xs), .node(let l, let ys)):
++        if k != l || xs.count != ys.count { return false }
++        for (a, b) in zip(xs, ys) where !go(a, b) { return false }
++        return true
++      default:
++        return false
++      }
++    }
++    return go(general, specific)
++  }
++
++}
++
++extension AbstractResolutionModel.Term {
++
++  /// `true` iff `self` contains no variable.
++  fileprivate var isGround: Bool {
++    switch self {
++    case .top: return true
++    case .variable: return false
++    case .node(_, let xs): return xs.allSatisfy(\.isGround)
++    }
++  }
++
++  /// Returns `self` with every variable `v` renamed to `v + n`.
++  fileprivate func offsettingVariables(by n: Int) -> Self {
++    switch self {
++    case .top: return .top
++    case .variable(let v): return .variable(v + n)
++    case .node(let k, let xs): return .node(k, xs.map({ (x) in x.offsettingVariables(by: n) }))
++    }
++  }
++
++}
++
++extension TypeStore {
++
++  /// Returns the abstraction of `t` in which the generic parameters in `bound` and the type
++  /// variables are replaced by abstract variables, and in which types that are not first-order
++  /// terms are replaced by `⊤`.
++  internal func abstraction(
++    of t: AnyTypeIdentity, binding bound: [GenericParameter.ID: Int],
++    variables: inout [AnyTypeIdentity: Int]
++  ) -> AbstractResolutionModel.Term {
++    if t.isVariable {
++      if let v = variables[t] { return .variable(v) }
++      let v = (1 << 30) + variables.count
++      variables[t] = v
++      return .variable(v)
++    }
++
++    switch self[t] {
++    case let u as GenericParameter:
++      _ = u
++      if let v = bound[GenericParameter.ID(uncheckedFrom: t)] { return .variable(v) }
++      return .node(.type(t), [])
++    case is Struct, is Enum, is Trait, is MachineType:
++      return .node(.type(t), [])
++    case let u as TypeApplication:
++      switch self[u.abstraction] {
++      case is Struct, is Enum, is Trait:
++        let xs = u.arguments.values.map { (a) in
++          abstraction(of: a, binding: bound, variables: &variables)
++        }
++        return .node(.type(u.abstraction), xs)
++      default:
++        return .top
++      }
++    case let u as Tuple:
++      switch u {
++      case .empty:
++        return .node(.empty, [])
++      case .cons(let h, let r):
++        return .node(.cons, [
++          abstraction(of: h, binding: bound, variables: &variables),
++          abstraction(of: r, binding: bound, variables: &variables),
++        ])
++      }
++    case let u as EqualityWitness:
++      return .node(.equality, [
++        abstraction(of: u.lhs, binding: bound, variables: &variables),
++        abstraction(of: u.rhs, binding: bound, variables: &variables),
++      ])
++    case let u as TypeAlias:
++      return abstraction(of: u.aliasee, binding: bound, variables: &variables)
++    default:
++      return .top
++    }
++  }
++
++}
+diff --git a/Sources/FrontEnd/Typer/SemanticDump.swift b/Sources/FrontEnd/Typer/SemanticDump.swift
+new file mode 100644
+index 0000000..e2ad898
+--- /dev/null
++++ b/Sources/FrontEnd/Typer/SemanticDump.swift
+@@ -0,0 +1,29 @@
++/// Research instrumentation: a textual, identity-independent dump of the results of type checking.
++extension Program {
++
++  /// Returns one line per typed syntax tree, name binding, and witness table of `m`, sorted.
++  ///
++  /// The dump shows types and declaration references textually so that it does not depend on the
++  /// order in which types were interned. Two runs of the type checker computing the same
++  /// elaboration produce the same dump.
++  public func semanticDump(of m: Module.ID) -> [String] {
++    var lines: [String] = []
++    for (f, s) in self[m].sources.values.enumerated() {
++      for (n, t) in s.syntaxToType {
++        lines.append("\(f):\(n) : \(show(t))")
++      }
++      for (n, r) in s.nameToDeclaration {
++        lines.append("\(f):\(n) -> \(show(r))")
++      }
++      for (n, w) in s.witnessTables {
++        lines.append("\(f):\(n) witness \(show(w.concept))")
++        let e = w.researchEntries
++        for (r, x) in e.conformances { lines.append("\(f):\(n) witness.c\(r) = \(show(x))") }
++        for (r, x) in e.types { lines.append("\(f):\(n) witness.t\(r) = \(show(x))") }
++        for (r, x) in e.members { lines.append("\(f):\(n) witness.m\(r) = \(show(x))") }
++      }
++    }
++    return lines.sorted()
++  }
++
++}
+diff --git a/Sources/FrontEnd/Typer/Solver.swift b/Sources/FrontEnd/Typer/Solver.swift
+index 515d069..48ddafe 100644
+--- a/Sources/FrontEnd/Typer/Solver.swift
++++ b/Sources/FrontEnd/Typer/Solver.swift
+@@ -27,6 +27,15 @@ internal struct Solver {
+   /// The number of root goals.
+   private let rootCount: Int
+ 
++  /// Experiment: overload constraints whose resolution is deferred until other goals settle.
++  private var parked: [GoalIdentity] = []
++
++  /// Experiment: `true` iff this solver is probing the consequences of a single choice.
++  private var probing: Bool = false
++
++  /// Experiment: `true` iff a probe has run to quiescence.
++  private var probeFinished: Bool = false
++
+   /// The type and term substitutions made by the solver.
+   ///
+   /// This map is monotonically extended during constraint solving to assign a type or term to each
+@@ -77,6 +86,7 @@ internal struct Solver {
+   /// Returns a solution discharging the goals in `self` using `typer` for querying type relations
+   /// and resolve names.
+   internal mutating func solution(using typer: inout Typer) -> Solution {
++    TyperCounters.bump("solver.systems")
+     log("steps:")
+     return solution(betterThanOrEqualTo: .worst, using: &typer)!
+   }
+@@ -89,7 +99,25 @@ internal struct Solver {
+     self.typer = consume typer
+     defer { typer = self.typer.sink() }
+ 
+-    while let g = fresh.popLast() {
++    let deferring = TyperExperiments.solver
++    while true {
++      guard let g = fresh.popLast() else {
++        if !deferring { break }
++        if probing {
++          probeFinished = true
++          return nil
++        }
++        if !parked.isEmpty {
++          switch resolveParked() {
++          case .running: continue
++          case .canceled: return nil
++          case .terminated(let r): return r
++          }
++        }
++        refreshCoercionAndWideningConstraints()
++        if fresh.isEmpty { break } else { continue }
++      }
++      TyperCounters.bump("solver.goalSteps")
+       goals[g].update { (t) in
+         self.typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
+       }
+@@ -117,6 +145,10 @@ internal struct Solver {
+         case is TupleMemberConstraint:
+           o = me.solve(tupleMember: g)
+         case is OverloadConstraint:
++          if deferring {
++            me.parked.append(g)
++            return .running
++          }
+           return me.solve(overload: g).map(SolverStatus.terminated(_:)) ?? .canceled
+         default:
+           unreachable()
+@@ -131,7 +163,7 @@ internal struct Solver {
+ 
+       switch status {
+       case .running:
+-        if fresh.isEmpty { refreshCoercionAndWideningConstraints() }
++        if fresh.isEmpty && !deferring { refreshCoercionAndWideningConstraints() }
+       case .canceled:
+         return nil
+       case .terminated(let result):
+@@ -551,13 +583,85 @@ internal struct Solver {
+     }
+   }
+ 
++  /// Experiment: resolves one parked overload constraint, either by committing to its only viable
++  /// choice or by branching over its viable choices.
++  ///
++  /// The viability of each choice is determined by forward checking: the consequences of binding
++  /// the overloaded name to that choice are propagated (without branching on other overloads)
++  /// and the choice is discarded if this propagation produces more errors than another choice.
++  /// Pruning is only applied when at least one choice propagates without any error, in which
++  /// case discarded choices could not have led to an error-free solution.
++  private mutating func resolveParked() -> SolverStatus {
++    var selected: (index: Int, survivors: [NameResolutionCandidate])? = nil
++
++    for (i, g) in parked.enumerated() {
++      let k = goals[g] as! OverloadConstraint
++      var scores: [(NameResolutionCandidate, Int)] = []
++      for choice in k.candidates {
++        if let e = probe(g, choice) { scores.append((choice, e)) }
++      }
++      let least = scores.map(\.1).min()
++      let survivors = (least == 0) ? scores.filter({ $0.1 == 0 }).map(\.0) : k.candidates
++      TyperCounters.bump("solver.probedChoices", by: k.candidates.count)
++      TyperCounters.bump("solver.prunedChoices", by: k.candidates.count - survivors.count)
++
++      if survivors.count == 1 {
++        selected = (i, survivors)
++        break
++      } else if selected == nil || (survivors.count < selected!.survivors.count) {
++        selected = (i, survivors)
++      }
++    }
++
++    let (i, survivors) = selected!
++    let g = parked.remove(at: i)
++    let k = goals[g] as! OverloadConstraint
++
++    // Commit without forking if there's only one viable choice.
++    if let choice = survivors.uniqueElement {
++      TyperCounters.bump("solver.commits")
++      let subgoal = insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
++      outcomes[g] = delegate([subgoal])
++      bindings[k.name] = choice.reference
++      return .running
++    }
++
++    return solve(overload: g, among: survivors).map(SolverStatus.terminated(_:)) ?? .canceled
++  }
++
++  /// Experiment: returns the number of errors after propagating the consequences of binding the
++  /// name of `g` to `choice`, or `nil` if propagation is canceled.
++  private mutating func probe(_ g: GoalIdentity, _ choice: NameResolutionCandidate) -> Int? {
++    let k = goals[g] as! OverloadConstraint
++    TyperCounters.bump("solver.probes")
++    var fork = Self(forking: self)
++    fork.probing = true
++    fork.parked.removeAll(where: { $0 == g })
++    let subgoal = fork.insert(fresh: EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site))
++    fork.outcomes[g] = fork.delegate([subgoal])
++    fork.bindings[k.name] = choice.reference
++    _ = fork.solution(betterThanOrEqualTo: best, using: &typer)
++    return fork.probeFinished ? fork.current.errors : nil
++  }
++
+   /// Discharges `g`, which is an overload constraint.
+   private mutating func solve(overload g: GoalIdentity) -> Solution? {
+     let k = goals[g] as! OverloadConstraint
++    return solve(overload: g, among: k.candidates)
++  }
++
++  /// Discharges `g`, which is an overload constraint, considering only `candidates`.
++  private mutating func solve(
++    overload g: GoalIdentity, among candidates: [NameResolutionCandidate]
++  ) -> Solution? {
++    let k = goals[g] as! OverloadConstraint
++    TyperCounters.bump("solver.overloads")
+ 
+     var viable: [(choice: NameResolutionCandidate, solution: Solution)] = []
+-    for choice in k.candidates {
++    for choice in candidates {
++
+       let equality = EqualityConstraint(lhs: k.type, rhs: choice.type, site: k.site)
++      TyperCounters.bump("solver.forks")
+       log("- pick: \(program.show(equality))")
+ 
+       let s = indenting { (me) in
+@@ -642,6 +746,7 @@ internal struct Solver {
+     var end = stale.count
+     for i in (0 ..< stale.count).reversed() {
+       var changed = false
++      TyperCounters.bump("solver.refreshScans")
+       goals[stale[i]].update { (t) in
+         let u = typer.program.types.reify(t, applying: substitutions, withVariables: .kept)
+         if t != u { changed = true }
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 4f47e4c..1321a74 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -114,6 +114,15 @@ public struct Typer {
+     /// The cache of `Typer.canDeriveCoercion(_:applying:)`.
+     fileprivate var canDeriveCoercion: [Given: [TypePair: UInt8]]
+ 
++    /// The cache of `Typer.givenIndex(visibleFrom:)`.
++    fileprivate var scopeToGivenIndex: [ScopeIdentity: GivenIndex] = [:]
++
++    /// The cache of `Typer.abstractModel(visibleFrom:)`.
++    fileprivate var scopeToAbstractModel: [ScopeIdentity: AbstractResolutionModel] = [:]
++
++    /// The abstract model of the givens visible at the top level of each module.
++    fileprivate var moduleToAbstractModel: [Module.ID: AbstractResolutionModel] = [:]
++
+     /// The cache of `Typer.applies(_:to:in:)`.
+     fileprivate var scopeToExtensionApplies: [ScopeIdentity: [ExtensionAndType: SummonResult]]
+ 
+@@ -3500,12 +3509,17 @@ public struct Typer {
+       /// The identifier of the next assumed given.
+       let nextGivenIdentifier: Int
+ 
++      /// Experiment: for each assumed given introduced as the premise of a given, the goals of
++      /// which the premise is a (transitive) subgoal.
++      var ancestry: [Int: [AnyTypeIdentity]] = [:]
++
+       /// Returns a copy of `self` in which `ts` are assumed given.
+       func assuming(givens ts: [AnyTypeIdentity]) -> Environment {
+         let gs = ts.enumerated().map({ (i, t) in Given.assumed(nextGivenIdentifier + i, t) })
+-        let e = Environment(
++        var e = Environment(
+           substitutions: substitutions, givens: givens + gs,
+           nextGivenIdentifier: nextGivenIdentifier + gs.count)
++        e.ancestry = ancestry
+         return e
+       }
+ 
+@@ -3514,8 +3528,9 @@ public struct Typer {
+       func assuming(given t: AnyTypeIdentity) -> (Environment, WitnessExpression) {
+         let i = nextGivenIdentifier
+         let g = Given.assumed(i, t)
+-        let e = Environment(
++        var e = Environment(
+           substitutions: substitutions, givens: givens.appending(g), nextGivenIdentifier: i + 1)
++        e.ancestry = ancestry
+         return (e, .init(value: .assumed(i), type: t))
+       }
+ 
+@@ -3575,8 +3590,10 @@ public struct Typer {
+   internal mutating func summon(
+     _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity
+   ) -> [SummonResult] {
++    TyperCounters.bump("summon.calls")
+     // Did we already compute the result?
+     if let table = cache.scopeToSummoned[scopeOfUse], let result = table[t] {
++      TyperCounters.bump("summon.cacheHits")
+       return result
+     }
+ 
+@@ -3615,8 +3632,31 @@ public struct Typer {
+     _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
+     where environment: ResolutionThread.Environment,
+     then continuation: [ResolutionThread.ContinuationItem],
+-    penalties: Int
++    penalties: Int,
++    ancestors: [AnyTypeIdentity] = []
+   ) -> [ResolutionThread] {
++    TyperCounters.bump("summon.subgoals")
++
++    // Experiment: a subgoal identical to one of its ancestors can't be part of a smallest
++    // derivation, since the derivation of the ancestor could be replaced by that of the subgoal.
++    if TyperExperiments.loopcheck && !ancestors.isEmpty {
++      let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++      for a in ancestors {
++        let b = program.types.reify(a, applying: environment.substitutions, withVariables: .kept)
++        if b == u {
++          TyperCounters.bump("loopcheck.pruned")
++          return []
++        }
++      }
++    }
++    if TyperExperiments.index || TyperExperiments.absmodel,
++      let r = indexedSummon(
++        t, in: scopeOfUse, where: environment, then: continuation, penalties: penalties,
++        ancestors: ancestors)
++    {
++      return r
++    }
++
+     var gs: [[Given]] = []
+ 
+     // Assumed givens.
+@@ -3638,7 +3678,7 @@ public struct Typer {
+         let w = expression(referringTo: g)
+         let r = formThread(
+           matching: w, to: u, in: environment, then: continuation,
+-          penalties: penalties + grouping.offset)
++          penalties: penalties + grouping.offset, ancestors: ancestors)
+         result.append(r)
+       }
+     }
+@@ -3654,7 +3694,8 @@ public struct Typer {
+     matching witness: WitnessExpression, to queried: AnyTypeIdentity,
+     in environment: ResolutionThread.Environment,
+     then tail: [ResolutionThread.ContinuationItem] = [],
+-    penalties: Int = 0
++    penalties: Int = 0,
++    ancestors: [AnyTypeIdentity] = []
+   ) -> ResolutionThread {
+     var environment = environment
+     var witness = program.types.reify(
+@@ -3676,7 +3717,10 @@ public struct Typer {
+       if let i = program.types[witness.type] as? Implication {
+         // Assume that the implication has a non-empty context.
+         let h = i.usings.first!
+-        let (e, v) = environment.assuming(given: h)
++        var (e, v) = environment.assuming(given: h)
++        if TyperExperiments.loopcheck {
++          e.ancestry[environment.nextGivenIdentifier] = ancestors.appending(queried)
++        }
+         witness = WitnessExpression(
+           value: .termApplication(witness, v),
+           type: program.types.dropFirstRequirement(.init(uncheckedFrom: witness.type)))
+@@ -3700,6 +3744,7 @@ public struct Typer {
+     _ thread: ResolutionThread, in scopeOfUse: ScopeIdentity
+   ) -> ResolutionThread.Advanced {
+     assert(!program.types.hasContext(thread.witness.type))
++    TyperCounters.bump("summon.matches")
+     let (a, b) = (thread.witness.type, thread.queried)
+ 
+     // The witness has a simple type; attempt a match.
+@@ -3713,6 +3758,7 @@ public struct Typer {
+     // No coercion required?
+     if coercions.isEmpty {
+       let s = thread.environment.substitutions.union(substitutions)
++      TyperCounters.bump("summon.matchOK")
+       let w = program.types.reify(thread.witness, applying: s, withVariables: .kept)
+       if w.type[.hasError] { return .next([]) }
+ 
+@@ -3750,13 +3796,17 @@ public struct Typer {
+   ) -> ResolutionThread.Advanced {
+     // Are there assumptions to discharge?
+     if case .assumed(let i, let assumed) = thread.environment.givens.last {
+-      let e = ResolutionThread.Environment(
++      var e = ResolutionThread.Environment(
+         substitutions: operand.substitutions, givens: thread.environment.givens.dropLast(),
+         nextGivenIdentifier: thread.environment.nextGivenIdentifier)
++      e.ancestry = thread.environment.ancestry
++      let ancestors = e.ancestry.removeValue(forKey: i) ?? []
+       var t = thread.tail
+       t.append(.init(i, in: operand))
+       return .next(
+-        summon(assumed, in: scopeOfUse, where: e, then: t, penalties: operand.penalties))
++        summon(
++          assumed, in: scopeOfUse, where: e, then: t, penalties: operand.penalties,
++          ancestors: ancestors))
+     }
+ 
+     // We're done; apply the continuation.
+@@ -3805,11 +3855,248 @@ public struct Typer {
+       }
+       depth += 1
+       swap(&next, &work)
++      TyperCounters.bump("summon.layers")
++      if depth == maxImplicitDepth && done.isEmpty && !work.isEmpty {
++        TyperCounters.bump("summon.depthExhausted")
++      }
+     }
+ 
+     return done.minimalElements(by: StrictOrdering.comparing(\SummonResult.penalties))
+   }
+ 
++  // MARK: Experiments: indexed and refuted implicit resolution
++
++  /// The givens visible from a scope, indexed by the head constructor of their conclusion.
++  internal struct GivenIndex {
++
++    /// A given together with the offset of its group in `givens(visibleFrom:)` and its position
++    /// in the flattened sequence of visible givens.
++    typealias Entry = (group: Int, position: Int, given: Given)
++
++    /// The givens whose conclusion is headed by a nominal constructor, by constructor.
++    var byHead: [AnyTypeIdentity: [Entry]] = [:]
++
++    /// The givens whose conclusion has no nominal head (they may match anything).
++    var wildcards: [Entry] = []
++
++    /// All visible givens, in order.
++    var all: [Entry] = []
++
++    /// The givens that may be used to derive a coercion (i.e., `T ~ U` or `<T> T` heads).
++    var coercionSources: [Given] = []
++
++    /// The number of groups.
++    var groupCount: Int = 0
++
++    /// Returns the entries whose conclusion may match a type headed by `k`, in order.
++    func candidates(headedBy k: AnyTypeIdentity?) -> [Entry] {
++      guard let k else { return all }
++      let xs = byHead[k] ?? []
++      if wildcards.isEmpty { return xs }
++      if xs.isEmpty { return wildcards }
++      return (xs + wildcards).sorted(by: { (a, b) in a.position < b.position })
++    }
++
++  }
++
++  /// Returns the nominal constructor heading `t`, if any.
++  private func nominalHead(_ t: AnyTypeIdentity) -> AnyTypeIdentity? {
++    if t.isVariable { return nil }
++    switch program.types[t] {
++    case is Struct, is Enum, is Trait, is MachineType:
++      return t
++    case let u as TypeApplication:
++      switch program.types[u.abstraction] {
++      case is Struct, is Enum, is Trait: return u.abstraction
++      default: return nil
++      }
++    case let u as TypeAlias:
++      return nominalHead(u.aliasee)
++    default:
++      return nil
++    }
++  }
++
++  /// Returns the index of the givens visible from `scopeOfUse`, or `nil` if it can't be computed
++  /// because some declarations are being typed.
++  internal mutating func givenIndex(visibleFrom scopeOfUse: ScopeIdentity) -> GivenIndex? {
++    if !declarationsOnStack.isEmpty {
++      TyperCounters.bump("index.unavailable")
++      return nil
++    }
++    if givens(lexicallyIn: scopeOfUse).isEmpty, let p = program.parent(containing: scopeOfUse) {
++      return givenIndex(visibleFrom: p)
++    }
++    if let ix = cache.scopeToGivenIndex[scopeOfUse] { return ix }
++
++    var ix = GivenIndex()
++    let groups = givens(visibleFrom: scopeOfUse)
++    ix.groupCount = groups.count
++    var position = 0
++    for (o, gs) in groups.enumerated() {
++      for g in gs {
++        let e: GivenIndex.Entry = (o, position, g)
++        position += 1
++        ix.all.append(e)
++        let gt = declaredType(of: g)
++        let (context, head) = program.types.contextAndHead(gt)
++        if context.parameters.contains(where: { (p) in p.erased == head })
++          || program.types.isEquality(head)
++        {
++          ix.coercionSources.append(g)
++        }
++        if let k = nominalHead(head) {
++          ix.byHead[k, default: []].append(e)
++        } else {
++          ix.wildcards.append(e)
++        }
++      }
++    }
++
++    if declarationsOnStack.isEmpty {
++      cache.scopeToGivenIndex[scopeOfUse] = ix
++    }
++    return ix
++  }
++
++  /// Returns the abstract model of the givens visible from `scopeOfUse`, or `nil` if it can't be
++  /// computed because some declarations are being typed.
++  internal mutating func abstractModel(
++    visibleFrom scopeOfUse: ScopeIdentity
++  ) -> AbstractResolutionModel? {
++    if !declarationsOnStack.isEmpty { return nil }
++    if givens(lexicallyIn: scopeOfUse).isEmpty, let p = program.parent(containing: scopeOfUse) {
++      return abstractModel(visibleFrom: p)
++    }
++    if let m = cache.scopeToAbstractModel[scopeOfUse] { return m }
++
++    // The givens visible from `scopeOfUse` are those of its lexical parent plus those declared
++    // in `scopeOfUse`. Since least models are monotonic, start from the parent's model.
++    var m: AbstractResolutionModel
++    var local: [Given]
++    if let p = program.parent(containing: scopeOfUse), let n = abstractModel(visibleFrom: p) {
++      m = n
++      local = givens(lexicallyIn: scopeOfUse).filter(notOnStack(_:))
++    } else if let n = cache.moduleToAbstractModel[scopeOfUse.module] {
++      // All files of a module see the same set of givens.
++      cache.scopeToAbstractModel[scopeOfUse] = n
++      return n
++    } else {
++      m = AbstractResolutionModel(depth: TyperExperiments.absDepth)
++      local = Array(givens(visibleFrom: scopeOfUse).joined())
++    }
++    let start = TyperCounters.enabled ? TyperClock.now() : 0
++    let firstNew = m.clauses.count
++    for g in local {
++      let gt = declaredType(of: g)
++      m.add(abstractClause(of: gt))
++    }
++    m.saturate(from: firstNew)
++    if TyperCounters.enabled {
++      TyperCounters.bump("absmodel.built")
++      TyperCounters.bump("absmodel.facts", by: m.factCount)
++      TyperCounters.bump("absmodel.work", by: m.work)
++      TyperCounters.bump("absmodel.micros", by: Int((TyperClock.now() - start) * 1000))
++      if m.isInconclusive { TyperCounters.bump("absmodel.inconclusive") }
++    }
++
++    if declarationsOnStack.isEmpty {
++      cache.scopeToAbstractModel[scopeOfUse] = m
++      if program.parent(containing: scopeOfUse) == nil {
++        cache.moduleToAbstractModel[scopeOfUse.module] = m
++      }
++    }
++    return m
++  }
++
++  /// Returns the Horn clause abstracting a given of type `t`.
++  private func abstractClause(of t: AnyTypeIdentity) -> AbstractResolutionModel.Clause {
++    let (context, head) = program.types.contextAndHead(t)
++    var bound: [GenericParameter.ID: Int] = [:]
++    for (i, p) in context.parameters.enumerated() { bound[p] = i }
++    var vs: [AnyTypeIdentity: Int] = [:]
++    let h = program.types.abstraction(of: head, binding: bound, variables: &vs)
++    // Premises that are themselves quantified or conditional are dropped (over-approximation).
++    let ps = context.usings.compactMap { (u) -> AbstractResolutionModel.Term? in
++      program.types.hasContext(u)
++        ? nil : program.types.abstraction(of: u, binding: bound, variables: &vs)
++    }
++    return .init(head: h, premises: ps)
++  }
++
++  /// Returns `true` iff `t` might be derivable from the givens visible from `scopeOfUse`.
++  ///
++  /// A `false` result is a proof that implicit resolution of `t` fails.
++  internal mutating func mayDerive(_ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity) -> Bool {
++    guard let m = abstractModel(visibleFrom: scopeOfUse) else { return true }
++    var vs: [AnyTypeIdentity: Int] = [:]
++    let q = program.types.abstraction(of: t, binding: [:], variables: &vs)
++    let r = m.mayDerive(m.truncated(q, at: m.depth))
++    if !r { TyperCounters.bump("absmodel.refuted") }
++    return r
++  }
++
++  /// Returns the resolution threads for `t` computed using the index of givens visible from
++  /// `scopeOfUse`, or `nil` if the index can't be used.
++  ///
++  /// The result is the same as that of the unindexed algorithm (modulo threads that are bound to
++  /// fail at their first step) when no coercion can be derived in `scopeOfUse`.
++  private mutating func indexedSummon(
++    _ t: AnyTypeIdentity, in scopeOfUse: ScopeIdentity,
++    where environment: ResolutionThread.Environment,
++    then continuation: [ResolutionThread.ContinuationItem],
++    penalties: Int,
++    ancestors: [AnyTypeIdentity]
++  ) -> [ResolutionThread]? {
++    let u = program.types.reify(t, applying: environment.substitutions, withVariables: .kept)
++
++    // Refutation by the abstract model.
++    if TyperExperiments.absmodel && !u.isVariable && !mayDerive(u, in: scopeOfUse) {
++      return []
++    }
++    if !TyperExperiments.index { return nil }
++
++    guard let ix = givenIndex(visibleFrom: scopeOfUse), ix.coercionSources.isEmpty else {
++      TyperCounters.bump("index.fallback")
++      return nil
++    }
++    if environment.givens.contains(where: { (g) in
++      if case .assumed(_, let gt) = g { return program.types.isEquality(program.types.head(gt)) }
++      return true
++    }) {
++      TyperCounters.bump("index.fallback")
++      return nil
++    }
++
++    var result: [ResolutionThread] = []
++    let a = environment.givens.count
++    for (i, g) in environment.givens.reversed().enumerated() {
++      result.append(formThread(
++        matching: expression(referringTo: g), to: u, in: environment, then: continuation,
++        penalties: penalties + i, ancestors: ancestors))
++    }
++
++    let k = nominalHead(u)
++    let cs = ix.candidates(headedBy: k)
++    TyperCounters.bump("index.skipped", by: ix.all.count - cs.count)
++    for e in cs {
++      result.append(formThread(
++        matching: expression(referringTo: e.given), to: u, in: environment, then: continuation,
++        penalties: penalties + a + e.group, ancestors: ancestors))
++    }
++
++    // Built-in givens only conclude equalities.
++    if k == nil {
++      for g in [Given.coercion(.reflexivity), .coercion(.symmetry), .coercion(.transitivity)] {
++        result.append(formThread(
++          matching: expression(referringTo: g), to: u, in: environment, then: continuation,
++          penalties: penalties + a + ix.groupCount, ancestors: ancestors))
++      }
++    }
++    return result
++  }
++
++
+   /// Returns the givens whose definitions are at the top-level of `m`.
+   private mutating func givens(atTopLevelOf m: Module.ID) -> [Given] {
+     if let memoized = cache.moduleToGivens[m] { return memoized }
+@@ -3933,6 +4220,7 @@ public struct Typer {
+     // Slow path: compute an elaboration.
+     let scopeOfUse = program.parent(containing: e)
+     let root = WitnessExpression(value: .identity(e), type: head)
++    TyperCounters.bump("coerced.slowPath")
+     var threads = [formThread(matching: root, to: goal, in: .empty)]
+ 
+     if canDeriveCoercions(root.type, goal, in: scopeOfUse, where: .empty) {
+@@ -3977,7 +4265,13 @@ public struct Typer {
+ 
+     // Check if there are givens in scope that could be used to derive a coercion.
+     var result: UInt8 = 0
+-    for g in chain(environment.givens, givens(visibleFrom: scopeOfUse).joined())  {
++    let sources: [Given]
++    if TyperExperiments.index, let ix = givenIndex(visibleFrom: scopeOfUse) {
++      sources = ix.coercionSources
++    } else {
++      sources = Array(givens(visibleFrom: scopeOfUse).joined())
++    }
++    for g in chain(environment.givens, sources)  {
+       result |= canDeriveCoercion(p, applying: g)
+       if result == 0b11 {
+         if memoizable && !hasImplicitOnStack() {
+@@ -4385,6 +4679,12 @@ public struct Typer {
+   ) -> [NameResolutionCandidate] {
+     var candidates: [NameResolutionCandidate] = []
+     for e in extensions where !declarationsOnStack.contains(.init(e)) {
++      // Experiment: skip extensions that do not declare any member named `n`.
++      if TyperExperiments.names && (declarations(lexicallyIn: .init(node: e))[n.identifier] == nil) {
++        TyperCounters.bump("names.skippedExtensions")
++        continue
++      }
++      TyperCounters.bump("names.appliesCalls")
+       if let a = applies(e, to: q, in: scopeOfUse) {
+         let w = program.types.reify(
+           a.witness, applying: a.substitutions, withVariables: .substitutedByError)
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+new file mode 100644
+index 0000000..94be01f
+--- /dev/null
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -0,0 +1,82 @@
++#if canImport(Glibc)
++import Glibc
++#elseif canImport(Darwin)
++import Darwin
++#elseif canImport(WASILibc)
++import WASILibc
++#endif
++
++/// Research instrumentation: event counters for the type checker.
++///
++/// Not thread-safe; only meaningful when a single module is typed at a time.
++public enum TyperCounters {
++
++  /// The values of the counters, indexed by name.
++  nonisolated(unsafe) public static var values: [String: Int] = [:]
++
++  /// `true` iff counting is enabled.
++  nonisolated(unsafe) public static var enabled = false
++
++  /// Increments the counter `k` by `n`.
++  @inline(__always)
++  public static func bump(_ k: StaticString, by n: Int = 1) {
++    if enabled { values["\(k)", default: 0] += n }
++  }
++
++  /// Resets all counters.
++  public static func reset() { values = [:] }
++
++  /// Returns a textual snapshot of the counters.
++  public static func snapshot() -> String {
++    values.sorted(by: { $0.key < $1.key }).map({ "\($0.key)=\($0.value)" }).joined(separator: " ")
++  }
++
++}
++
++/// Research flags enabling experimental optimizations, read from `HYLO_TC_EXPERIMENTS`
++/// (a comma-separated list, e.g. `names,unify,index,absmodel`).
++public enum TyperExperiments {
++
++  /// The set of enabled experiments.
++  nonisolated(unsafe) public static var enabled: Set<String> = {
++    guard let p = getenv("HYLO_TC_EXPERIMENTS") else { return [] }
++    return Set(String(cString: p).split(separator: ",").map(String.init))
++  }()
++
++  /// Name-filter extensions before checking whether they apply to a type.
++  nonisolated(unsafe) public static var names: Bool = enabled.contains("names")
++
++  /// Dispatch unification on type tags before casting.
++  nonisolated(unsafe) public static var unify: Bool = enabled.contains("unify")
++
++  /// Index givens by the head constructor of their conclusion.
++  nonisolated(unsafe) public static var index: Bool = enabled.contains("index")
++
++  /// Defer overload branching and prune choices by forward checking.
++  nonisolated(unsafe) public static var solver: Bool = enabled.contains("solver")
++
++  /// Prune resolution subgoals identical to one of their ancestors.
++  nonisolated(unsafe) public static var loopcheck: Bool = enabled.contains("loopcheck")
++
++  /// Refute queries using an abstract least model of the givens.
++  nonisolated(unsafe) public static var absmodel: Bool = enabled.contains("absmodel")
++
++  /// The truncation depth of the abstract model.
++  nonisolated(unsafe) public static var absDepth: Int = {
++    guard let p = getenv("HYLO_TC_ABSDEPTH") else { return 3 }
++    return Int(String(cString: p)) ?? 3
++  }()
++
++}
++
++/// A monotonic clock for research instrumentation.
++public enum TyperClock {
++
++  /// Returns the current time in milliseconds.
++  public static func now() -> Double {
++    var t = timespec()
++    clock_gettime(CLOCK_MONOTONIC, &t)
++    return Double(t.tv_sec) * 1e3 + Double(t.tv_nsec) / 1e6
++  }
++
++}
+diff --git a/Sources/FrontEnd/Typer/WitnessTable.swift b/Sources/FrontEnd/Typer/WitnessTable.swift
+index f6dc074..b2aa5b3 100644
+--- a/Sources/FrontEnd/Typer/WitnessTable.swift
++++ b/Sources/FrontEnd/Typer/WitnessTable.swift
+@@ -64,6 +64,16 @@ public struct WitnessTable: Hashable, Sendable {
+     associatedConformances[r.offset]
+   }
+ 
++  /// Research instrumentation: the contents of the table, sorted by requirement offset.
++  internal var researchEntries: (
++    conformances: [(Int, WitnessExpression)], types: [(Int, AnyTypeIdentity)],
++    members: [(Int, DeclarationReference)]
++  ) {
++    (associatedConformances.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }),
++     associatedTypes.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }),
++     members.sorted(by: { $0.key < $1.key }).map({ ($0.key, $0.value) }))
++  }
++
+   /// Returns the member implementing the function or subscript requirement `r`.
+   internal func member(implementing r: DeclarationIdentity) -> DeclarationReference? {
+     members[r.offset]
+diff --git a/Sources/FrontEnd/Types/TypeStore.swift b/Sources/FrontEnd/Types/TypeStore.swift
+index 223d079..41c13aa 100644
+--- a/Sources/FrontEnd/Types/TypeStore.swift
++++ b/Sources/FrontEnd/Types/TypeStore.swift
+@@ -1003,6 +1003,10 @@ public struct TypeStore: Sendable {
+ 
+     // The two types have the same shape?
+     let result: Bool
++    if TyperExperiments.unify {
++      result = unifiableSameShape(a, b, extending: &ss, handlingCoercionsWith: areCoercible)
++      return result || areCoercible(a, b)
++    }
+     switch (self[a], self[b]) {
+     case (let t as Arrow, let u as Arrow):
+       result = unifiable(t, u, extending: &ss, handlingCoercionsWith: areCoercible)
+@@ -1054,6 +1058,46 @@ public struct TypeStore: Sendable {
+     return result || areCoercible(a, b)
+   }
+ 
++  /// Experiment: same as the shape dispatch of `unifiable(_:_:extending:handlingCoercionsWith:)`
++  /// but compares type tags before projecting and casting each operand once.
++  private func unifiableSameShape(
++    _ a: AnyTypeIdentity, _ b: AnyTypeIdentity, extending ss: inout SubstitutionTable,
++    handlingCoercionsWith h: CoercionHandler
++  ) -> Bool {
++    let x = self[a]
++    let y = self[b]
++    let tx = ObjectIdentifier(type(of: x))
++    if tx != ObjectIdentifier(type(of: y)) { return false }
++    switch x {
++    case let t as TypeApplication:
++      return unifiable(t, y as! TypeApplication, extending: &ss, handlingCoercionsWith: h)
++    case let t as Arrow:
++      return unifiable(t, y as! Arrow, extending: &ss, handlingCoercionsWith: h)
++    case let t as Tuple:
++      return unifiable(t, y as! Tuple, extending: &ss, handlingCoercionsWith: h)
++    case let t as EqualityWitness:
++      return unifiable(t, y as! EqualityWitness, extending: &ss, handlingCoercionsWith: h)
++    case let t as AssociatedType:
++      return unifiable(t, y as! AssociatedType, extending: &ss, handlingCoercionsWith: h)
++    case let t as Bundle:
++      return unifiable(t, y as! Bundle, extending: &ss, handlingCoercionsWith: h)
++    case let t as FunctionPointer:
++      return unifiable(t, y as! FunctionPointer, extending: &ss, handlingCoercionsWith: h)
++    case let t as Implication:
++      return unifiable(t, y as! Implication, extending: &ss, handlingCoercionsWith: h)
++    case let t as Metatype:
++      return unifiable(t, y as! Metatype, extending: &ss, handlingCoercionsWith: h)
++    case let t as RemoteType:
++      return unifiable(t, y as! RemoteType, extending: &ss, handlingCoercionsWith: h)
++    case let t as UniversalType:
++      return unifiable(t, y as! UniversalType, extending: &ss, handlingCoercionsWith: h)
++    default:
++      // Nominal and atomic types (structs, traits, parameters, ...) unify only if identical,
++      // which has been checked by the caller.
++      return false
++    }
++  }
++
+   /// Returns `true` if `lhs` and `rhs` are unifiable.
+   private func unifiable(
+     _ lhs: Arrow, _ rhs: Arrow, extending ss: inout SubstitutionTable,
+diff --git a/Sources/tc-bench/Entry.swift b/Sources/tc-bench/Entry.swift
+new file mode 100644
+index 0000000..610172b
+--- /dev/null
++++ b/Sources/tc-bench/Entry.swift
+@@ -0,0 +1,94 @@
++import Foundation
++import FrontEnd
++import StandardLibrary
++
++/// Research harness: times the front-end phases on the standard library and on user files.
++///
++/// Usage: tc-bench [--repeat N] [--quiet] [--per-file] file.hylo ...
++@main
++struct TypeCheckBench {
++
++  static func now() -> Double {
++    var t = timespec()
++    clock_gettime(CLOCK_MONOTONIC, &t)
++    return Double(t.tv_sec) * 1e3 + Double(t.tv_nsec) / 1e6
++  }
++
++  static func main() async throws {
++    var args = Array(CommandLine.arguments.dropFirst())
++    var repeats = 1
++    var quiet = false
++    if let i = args.firstIndex(of: "--repeat") {
++      repeats = Int(args[i + 1])!
++      args.removeSubrange(i ... i + 1)
++    }
++    if let i = args.firstIndex(of: "--quiet") {
++      quiet = true
++      args.remove(at: i)
++    }
++    var dumpPath: String? = nil
++    if let i = args.firstIndex(of: "--dump") {
++      dumpPath = args[i + 1]
++      args.removeSubrange(i ... i + 1)
++    }
++    if let i = args.firstIndex(of: "--count") {
++      TyperCounters.enabled = true
++      args.remove(at: i)
++    }
++
++    var best: [String: Double] = [:]
++    for _ in 0 ..< repeats {
++      TyperCounters.reset()
++      var p = Program(forTesting: true)
++      var phases: [(String, Double)] = []
++      var t0 = now()
++
++      let s = p.demandModule(Module.standardLibraryName)
++      try SourceFile.forEach(in: bundledStandardLibrarySources) { (f) in
++        _ = p[s].addSource(f)
++      }
++      let m = p.demandModule(.init("Test"))
++      p[m].addDependency(Module.standardLibraryName)
++      for a in args {
++        let f = try SourceFile(contentsOf: URL(fileURLWithPath: a))
++        _ = p[m].addSource(f)
++      }
++      phases.append(("parse", now() - t0)); t0 = now()
++
++      for m in p.moduleIdentities { await p.assignScopes(m) }
++      phases.append(("scope", now() - t0)); t0 = now()
++
++      if getenv("TC_NO_STD") == nil { p.assignTypes(s, loggingInferenceWhere: nil) }
++      phases.append(("type.stdlib", now() - t0)); t0 = now()
++      let stdlibCounters = TyperCounters.snapshot()
++      TyperCounters.reset()
++
++      p.assignTypes(m, loggingInferenceWhere: nil)
++      phases.append(("type.user", now() - t0)); t0 = now()
++      let userCounters = TyperCounters.snapshot()
++
++      if let path = dumpPath {
++        var out = ""
++        for x in [s, m] {
++          out += "== module \(p[x].name)\n"
++          for l in p.semanticDump(of: x) { out += l; out += "\n" }
++        }
++        for d in Array(p.diagnostics).map({ "\($0)" }).sorted() { out += "diag \(d)\n" }
++        try out.write(toFile: path, atomically: true, encoding: .utf8)
++      }
++      for (k, v) in phases { best[k] = min(best[k] ?? .infinity, v) }
++      best["_stdlibCounters"] = 0
++      if !quiet {
++        print("counters.stdlib:", stdlibCounters)
++        print("counters.user:  ", userCounters)
++        let ds = Array(p.diagnostics)
++        print("diagnostics:", ds.count)
++        for d in ds.map({ "\($0)" }).sorted() { print("  ", d) }
++      }
++    }
++    for k in ["parse", "scope", "type.stdlib", "type.user"] {
++      print(String(format: "%-12@ %9.2f ms", k as NSString, best[k]!))
++    }
++  }
++
++}

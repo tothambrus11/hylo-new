@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// Soundness 9. `b.g()` is a `K`; `a.f` expects a `Void`.
+// Expected: an error at the call, as when `A<Void>` and `A<K>` are written without the aliases.
+struct K {}
+struct A<U> {
+  public fun f(x: U) {}
+  public fun g() -> U { self.g() }
+}
+type AV = A<Void>
+type AK = A<K>
+fun use(a: AV, b: AK) { a.f(b.g()) }

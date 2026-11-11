@@ -1,0 +1,4 @@
+//! stage:typing no-std
+// Question 4. With `T == U` and `U is P`, a member of the trait is available on a value of type `T`.
+trait P { fun p() }
+fun f<T, U where T == U, U is P>(x: T) { x.p() }

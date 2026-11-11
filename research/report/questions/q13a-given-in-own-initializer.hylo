@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 13. The initializer of `w` needs a given of type `A`. Is `w` itself a candidate, next
+// to `other`?
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { u }
+given let other: A = A()
+given let w = make()
+public fun main() {}

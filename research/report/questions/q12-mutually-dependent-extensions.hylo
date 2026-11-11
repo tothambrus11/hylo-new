@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 12. Each extension needs the other to find the type it extends. There is one
+// consistent reading: the second extends `A.Inner`, so `A.Inner.Foo` is `Int`, which the first
+// extends. Is the program legal?
+struct A { struct Inner {} }
+extension A.Inner.Foo { type Inner = Bool }
+extension A.Inner { type Foo = Int }
+fun use(x: Int.Inner) {}

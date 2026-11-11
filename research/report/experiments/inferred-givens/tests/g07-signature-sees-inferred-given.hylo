@@ -1,0 +1,10 @@
+// The signature of a conformance makes a resolution that an inferred given could answer.
+// Expected: the same verdict in every order.
+trait P { type X }
+struct A { public memberwise init }
+struct W<T> { public memberwise init }
+given A is P { type X = A }
+given let g = W<A>()
+given W<A.X> is P { type X = A }
+fun need<T where T is P>(x: T) {}
+public fun main() { need(W<A>()) }

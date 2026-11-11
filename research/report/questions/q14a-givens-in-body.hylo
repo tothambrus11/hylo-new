@@ -1,0 +1,16 @@
+//! stage:typing no-std
+// Question 14. Two givens declared in a function body; each can shadow the top-level given that
+// the type of the other needs. Is the order of the two meant to matter?
+trait P { type E }
+trait Q { type F }
+struct A {}
+struct C {}
+given A is P { type E = Int }
+given A is Q { type F = Int }
+extension Int { type T = A }
+extension Bool { type T = C }
+fun h() {
+  given A.F.T is P { type E = Bool }
+  given A.E.T is Q { type F = Bool }
+  let z: A.E = true
+}

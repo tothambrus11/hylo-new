@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// Question 10. `B is P` and `C is P` both give `A is P` through an equality.
+// Here the equalities are written `B == A, A == C`.
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B, C where B is P, C is P, B == A, A == C>() { g<A>() }

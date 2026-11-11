@@ -1,0 +1,5 @@
+//! stage:typing no-std
+// Soundness 1. `g` requires `T == U`; in `f` nothing says `D == V`.
+// Expected: an error at the call.
+fun g<T, U where T == U>() {}
+fun f<V, W, D where V == W>() { g<D, V>() }

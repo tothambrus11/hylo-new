@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// Soundness 3 (cost). The member `first` comes from an extension conditioned on
+// `T.Element == Flag`. Expected: accepted, in milliseconds.
+trait Collection { type Element }
+struct Box<T> { public memberwise init }
+struct Flag { public memberwise init }
+extension <T where T is Collection, T.Element == Flag> Box<T> {
+  type Element = Flag
+  fun first() -> Element { Flag() }
+}
+fun g<T where T is Collection, T.Element == Flag>(b: Box<T>) {
+  let f: Flag = b.first()
+}

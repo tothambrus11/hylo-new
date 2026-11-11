@@ -1,0 +1,7 @@
+// The given is initialized by a binding whose initializer needs the given: a cycle.
+// Expected: rejected in every order.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { u }
+let s = make()
+given let g = s
+public fun main() { _ = s }

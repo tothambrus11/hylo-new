@@ -1,0 +1,5 @@
+//! stage:typing no-std
+// Question 3. Does `Box<T> == Box<U>` give `T == U`?
+struct Box<X> { public memberwise init }
+fun check<T>(x: T) {}
+fun f<T, U where Box<T> == Box<U>>(x: T) { check<U>(x) }

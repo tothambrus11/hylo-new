@@ -1,0 +1,22 @@
+//! stage:typing
+// Question 16. The candidate of `S.f` declared in `main` returns a `B`, and the call is then an
+// error. The other candidate returns an `A`, whose `n` is ambiguous. The first is preferred and
+// its error is reported; no candidate is free of diagnostics.
+struct A {
+  public memberwise init
+  public fun n() -> A { A() }
+  public fun n() -> A { A() }
+}
+struct B {
+  public memberwise init
+  public fun n() -> B { B() }
+}
+struct S {
+  public memberwise init
+  public static fun f() -> A { A() }
+}
+fun takeA(x: A) {}
+public fun main() {
+  extension S { static fun f() -> B { B() } }
+  takeA(S.f().n())
+}

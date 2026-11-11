@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 2. Inside the trait, `T == Self` and `T is P` is a second requirement:
+// is `Self.X` the same type as `T.X`?
+trait P {
+  type X
+  fun f<T where T == Self, T is P>(x: X) { check<T.X>(x) }
+}
+fun check<T>(x: T) {}

@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 1. `T == U`, `T is P` and `U is P`: is `T.X` the same type as `U.X`?
+// This is the compiler's negative test `associated-type-inequality.hylo`.
+trait P { type X }
+fun check<T>(x: T) {}
+fun f0<T, U where T == U, T is P, U is P>(x: U.X) {
+  check<T.X>(x)
+}

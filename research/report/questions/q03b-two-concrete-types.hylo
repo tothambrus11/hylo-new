@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// Question 3. `T == A` and `T == B` for two distinct structs: is the clause an error where it is
+// declared, or does it make `A` and `B` interchangeable in the body?
+struct A { public memberwise init }
+struct B { public memberwise init }
+fun check<T>(x: T) {}
+fun f<T where T == A, T == B>(x: A) { check<B>(x) }

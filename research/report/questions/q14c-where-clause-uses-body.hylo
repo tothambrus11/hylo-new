@@ -1,0 +1,8 @@
+//! stage:typing no-std
+// Question 14. The where clause of `f` names the alias `LA`, which is declared in the body of `f`
+// and needs the first requirement of that clause.
+trait P { type X }
+trait Q {}
+fun f<T where T is P, LA is Q>() {
+  type LA = T.X
+}

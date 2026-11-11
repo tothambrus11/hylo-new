@@ -1,0 +1,147 @@
+Output of the type checker on each program, without flags ("existing") and in the recommended configuration.
+For each: the verdict and the diagnostics.
+
+q01-coherence.hylo
+  existing     rejected
+               error: cannot pass value of type '(U::P).X' to parameter '(T::P).X'
+  recommended  rejected
+               error: cannot pass value of type '(U::P).X' to parameter '(T::P).X'
+
+q02a-self-projection.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type '(Self::P).X' to parameter '(T::P).X'
+
+q02b-self-projection-conversion.hylo
+  existing     memory exhausted (limit 2.4 GB)
+  recommended  rejected
+               error: no coercion from '(U ~ (Self::P).X) ==> [Void](let U) let -> (Self::P).X' to '[Void](let U) let -> (Self::P).X'
+
+q03a-injectivity.hylo
+  existing     rejected
+               error: cannot pass value of type 'T' to parameter 'U'
+  recommended  rejected
+               error: cannot pass value of type 'T' to parameter 'U'
+
+q03b-two-concrete-types.hylo
+  existing     accepted
+  recommended  accepted
+
+q04a-struct-member-through-equality.hylo
+  existing     rejected
+               error: type 'T' has no member 'foo'
+  recommended  rejected
+               error: type 'T' has no member 'foo'
+
+q04b-trait-member-through-equality.hylo
+  existing     accepted
+  recommended  accepted
+
+q05-equality-in-trait.hylo
+  existing     rejected
+               error: no coercion from '(#! ~ (S::Sequence).Element) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+               error: expected 'is'
+  recommended  rejected
+               error: no coercion from '(((S::Sequence).Iterator::IteratorProtocol).Element ~ (S::Sequence).Element) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+               error: expected 'is'
+
+q07a-where-order.hylo
+  existing     accepted
+  recommended  accepted
+
+q07b-where-order-swapped.hylo
+  existing     rejected
+               error: no coercion from '(Q<S<C>>, P<C>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  rejected
+               error: no coercion from '(Q<S<C>>, P<C>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+q08-which-witness.hylo
+  existing     rejected
+               error: no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  rejected
+               error: no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+q09a-generic-conformance-unsound.hylo
+  existing     accepted
+  recommended  rejected
+               error: cannot pass value of type 'A' to parameter 'C'
+
+q09b-generic-conformance-valid.hylo
+  existing     rejected
+               error: cannot pass value of type 'X' to parameter 'A'
+  recommended  accepted
+
+q10a-ranking.hylo
+  existing     accepted
+  recommended  accepted
+
+q10b-ranking-other-side.hylo
+  existing     rejected
+               error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  rejected
+               error: no coercion from 'P<A> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+q11a-bound-four.hylo
+  existing     accepted
+  recommended  accepted
+
+q11b-bound-five.hylo
+  existing     rejected
+               error: no coercion from 'P<Pair<A, Pair<A, Pair<A, Pair<A, Pair<A, A>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  rejected
+               error: no coercion from 'P<Pair<A, Pair<A, Pair<A, Pair<A, Pair<A, A>>>>>> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+q11c-bound-selects-member.hylo
+  existing     memory exhausted (limit 2.4 GB)
+  recommended  accepted
+
+q12-mutually-dependent-extensions.hylo
+  existing     accepted
+  recommended  accepted
+
+q13a-given-in-own-initializer.hylo
+  existing     accepted
+  recommended  accepted
+
+q13b-given-initialized-with-itself.hylo
+  existing     accepted
+  recommended  accepted
+
+q13c-inferred-given-order.hylo
+  existing     rejected
+               error: declaration refers to itself
+               error: no coercion from 'A ==> [Void]() let -> Void' to '[Void]() let -> Void'
+  recommended  rejected
+               error: declaration refers to itself
+               error: no coercion from 'A ==> [Void]() let -> Void' to '[Void]() let -> Void'
+
+q14a-givens-in-body.hylo
+  existing     rejected
+               error: no coercion from 'Bool' to 'E'
+  recommended  rejected
+               error: the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+               error: the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+
+q14b-givens-in-body-swapped.hylo
+  existing     accepted
+  recommended  rejected
+               error: the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+               error: the type of this declaration depends on a name lookup or an implicit resolution that it changes; no stable interpretation was found
+
+q14c-where-clause-uses-body.hylo
+  existing     accepted
+  recommended  accepted
+
+q15-nested-ranking.hylo
+  existing     accepted  [solver forks: 12]
+  recommended  accepted  [solver forks: 12]
+
+q16-erroneous-candidate-wins.hylo
+  existing     rejected  [solver forks: 4]
+               error: cannot pass value of type 'B' to parameter 'A'
+  recommended  rejected  [solver forks: 6]
+               error: cannot pass value of type 'B' to parameter 'A'
+
+q17-member-and-requirement.hylo
+  existing     accepted  [solver forks: 32766]
+  recommended  accepted  [solver forks: 14]

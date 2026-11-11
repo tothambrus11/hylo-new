@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// Question 13. The type of `w` is written, and `w` is the only given of type `A`.
+struct A { public memberwise init }
+fun make<where let u: A>() -> A { u }
+given let w: A = make()
+public fun main() {}

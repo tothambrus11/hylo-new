@@ -1,0 +1,7 @@
+//! stage:typing no-std
+// Question 4. With `T == A`, is a member of the struct `A` available on a value of type `T`?
+struct A {
+  public memberwise init
+  fun foo() {}
+}
+fun f<T where T == A>(x: T) { x.foo() }

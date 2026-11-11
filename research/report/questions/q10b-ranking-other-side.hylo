@@ -1,0 +1,5 @@
+//! stage:typing no-std
+// Question 10. The same program with the second equality written `C == A`.
+trait P {}
+fun g<V where V is P>() {}
+fun f<A, B, C where B is P, C is P, B == A, C == A>() { g<A>() }

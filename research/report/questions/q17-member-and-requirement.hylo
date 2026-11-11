@@ -1,0 +1,7 @@
+//! stage:typing
+// Question 17. Each `+` on `Int` has two candidates of the same type: the member of `Int` and the
+// requirement of the trait that it implements. The solver forks on each.
+public fun main() {
+  let a = 1
+  let b = a + a + a + a + a + a + a + a + a + a + a + a + a + a + a
+}
