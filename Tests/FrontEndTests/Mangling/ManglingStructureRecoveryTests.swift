@@ -7,12 +7,13 @@ import XCTest
 /// Getting the end of a declaration chain wrong typically produces symbols that demangle without
 /// any error but into the wrong structure. Hence, these tests compare demangled symbols with the
 /// program from which they have been mangled rather than checking for the absence of `#!`.
-final class ManglingAmbiguityTests: XCTestCase {
+final class ManglingStructureRecoveryTests: XCTestCase {
 
   /// Tests that each declaration of `program` demangles to a qualified name whose components
   /// describe the scopes containing that declaration.
   func testDeclarationNames() async {
-    let (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program + labels))
+    let (p, m0) = await typeCheckedWithMinimalStandardLibrary(
+      .init(contents: program + syntheticFunctionsCode))
     for n in p.select(from: m0, .satisfies({ (n) in p.isDeclaration(n) })) {
       let d = DeclarationIdentity(uncheckedFrom: n)
       let m = p.mangled(d)
@@ -23,13 +24,70 @@ final class ManglingAmbiguityTests: XCTestCase {
     }
   }
 
-  /// Tests that IR function names demangle to the entities they denote, for every kind of name,
-  /// wrapped at most twice, with a range of tags.
+  /// Tests that IR function names demangle to the entities they denote, for every kind of name
+  /// that does not contain another name.
+  func testFunctionNames() async {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
+    for b in baseNames(in: m0, of: &p) {
+      let m = p.mangled(b.name)
+      guard let e = entity(m) else { continue }
+      XCTAssert(
+        b.isExpectedDemangling(e),
+        "demangling of \(b.name) has the wrong structure: \(e)\n(mangled: \(m))")
+    }
+  }
+
+  /// Tests that IR function names demangle to the entities they denote, for every kind of name
+  /// that contains another name, with a range of tags.
   func testWrappedFunctionNames() async {
-    let (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
-    let g = p.findDeclaration(FunctionDeclaration.self, in: m0) { $0.hasPrefix("g(") }!
-    let origin = p.firstDeclaration(BindingDeclaration.self, named: "origin", in: m0)!
-    let greet = p.findDeclaration(FunctionDeclaration.self, in: m0) {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
+
+    // Small tags, including all those encoded with a single character (some of which read as
+    // entity operators), and tags at the boundaries of the variable-length integer encoding.
+    let tags = Array(0 ..< 64) + [114, 115, 4209, 4210, 1 << 20]
+
+    for b in baseNames(in: m0, of: &p) {
+      guard let e = entity(p.mangled(b.name)) else { continue }
+      for w in wrappers(tags: tags) {
+        assertDemangling(of: w.name(b.name), is: w.entity(e), in: p)
+      }
+    }
+  }
+
+  /// Tests that IR function names demangle to the entities they denote, for every kind of name
+  /// that contains another name itself containing another name.
+  func testNestedWrappedFunctionNames() async {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
+
+    // A few of the tags used by `testWrappedFunctionNames`.
+    let tags = [0, 9, 10, 36, 46, 51, 115]
+
+    for b in baseNames(in: m0, of: &p) {
+      guard let e = entity(p.mangled(b.name)) else { continue }
+      for v in wrappers(tags: tags) {
+        // The two wrappers use different tags so that they are distinguishable.
+        for w in wrappers(tags: tags) where (v.tag == nil) || (v.tag != w.tag) {
+          assertDemangling(of: w.name(v.name(b.name)), is: w.entity(v.entity(e)), in: p)
+        }
+      }
+    }
+  }
+
+  /// An IR function name that does not contain another name, paired with a predicate that holds
+  /// iff its argument has the structure of the entity to which that name should demangle.
+  private typealias BaseName = (
+    name: IRFunction.Name,
+    isExpectedDemangling: (DemangledEntity) -> Bool
+  )
+
+  /// Returns one IR function name of each kind that does not contain another name, each denoting
+  /// an entity of `m`, which is the module of `p` containing `program`.
+  ///
+  /// The types occurring in the result are demanded from `p`.
+  private func baseNames(in m: Module.ID, of p: inout Program) -> [BaseName] {
+    let g = p.findDeclaration(FunctionDeclaration.self, in: m) { $0.hasPrefix("g(") }!
+    let origin = p.firstDeclaration(BindingDeclaration.self, named: "origin", in: m)!
+    let greet = p.findDeclaration(FunctionDeclaration.self, in: m) {
       $0.hasPrefix("$<ConformanceDeclaration") && $0.hasSuffix(".greet")
     }!
     let c = p.cast(p.parent(containing: greet).node!, to: ConformanceDeclaration.self)!
@@ -38,66 +96,67 @@ final class ManglingAmbiguityTests: XCTestCase {
     // the qualification of `greet` and once for `c` itself.
     XCTAssertEqual(p[c].contextParameters.usings.count, 2)
 
-    // Each base name, paired with a predicate that checks if the given demangled entity corresponds to it.
-    let bases: [(IRFunction.Name, (DemangledEntity) -> Bool)] = [
-      (.lowered(g), { (e) in self.qualifiedName(e, describes: g, relativeTo: nil, in: p) }),
+    // The constructor is that of `<T> E`, where `E` is deliberately not applied to `T`, so that
+    // the mangling of its type ends with a declaration chain.
+    let e = p.firstDeclaration(EnumDeclaration.self, named: "E", in: m)!
+    let t = p.types.demand(GenericParameter.user(p[e].parameters[0], .proper))
+    let constructor = p.types.demand(
+      UniversalType(parameters: [t], head: p.types.demand(Enum(declaration: e)).erased))
+
+    // `p` is not modified past this point.
+    let p = p
+    return [
+      (.lowered(g), { (x) in self.qualifiedName(x, describes: g, relativeTo: nil, in: p) }),
       (
         .initializer(origin),
-        { (e) in
-          guard case .initializer(let x) = e else { return false }
-          return self.qualifiedName(x, describes: .init(origin), relativeTo: nil, in: p)
+        { (x) in
+          guard case .initializer(let y) = x else { return false }
+          return self.qualifiedName(y, describes: .init(origin), relativeTo: nil, in: p)
         }
       ),
       (
         .synthesized(g, TypeArguments()),
-        { (e) in
-          guard case .synthesizedFunction(let x, []) = e else { return false }
-          return self.qualifiedName(x, describes: g, relativeTo: nil, in: p)
+        { (x) in
+          guard case .synthesizedFunction(let y, []) = x else { return false }
+          return self.qualifiedName(y, describes: g, relativeTo: nil, in: p)
         }
       ),
       (
         .implementation(greet, c, TypeArguments()),
-        { (e) in
-          guard case .implementation(let x, let y, []) = e else { return false }
-          return self.qualifiedName(x, describes: greet, relativeTo: nil, in: p)
-            && self.component(y, describes: .node(c.erased), in: p)
+        { (x) in
+          guard case .implementation(let y, let z, []) = x else { return false }
+          return self.qualifiedName(y, describes: greet, relativeTo: nil, in: p)
+            && self.component(z, describes: .node(c.erased), in: p)
+        }
+      ),
+      (
+        .typeWitnessConstructor(constructor),
+        { (x) in
+          guard
+            case .typeWitnessConstructor(.universalType(let parameters, .enumType(let y))) = x
+          else { return false }
+          return (parameters.count == 1)
+            && self.qualifiedName(y, describes: .init(e), relativeTo: nil, in: p)
         }
       ),
     ]
-
-    // Single-character tags (some of which read as entity operators), and tags at the boundaries
-    // of the variable-length integer encoding.
-    let tags = Array(0 ..< 64) + [114, 115, 4209, 4210, 1 << 20]
-
-    // Tags with which wrappers are nested, so that nested wrappers are distinguishable.
-    let nestedTags = [0, 9, 10, 36, 46, 51, 115]
-
-    for (b, isExpected) in bases {
-      let m = p.mangled(b)
-      guard let e = entity(m) else { continue }
-      XCTAssert(isExpected(e), "demangling of \(b) has the wrong structure: \(e)\n(mangled: \(m))")
-
-      for w in wrappers(tags: tags) {
-        assertDemangling(of: w.name(b), is: w.entity(e), in: p)
-      }
-
-      for v in wrappers(tags: nestedTags) {
-        for w in wrappers(tags: nestedTags) where (v.tag == nil) || (v.tag != w.tag) {
-          assertDemangling(of: w.name(v.name(b)), is: w.entity(v.entity(e)), in: p)
-        }
-      }
-    }
   }
 
-  /// A way of wrapping an IR function name, paired with the way it wraps the entity to which the
-  /// wrapped name demangles, and the tag it uses, if any.
+  /// A case of `IRFunction.Name` that contains another name (i.e., `existentialized`, `slide`,
+  /// `plateau`, or `applied`), together with its tag if it has one.
+  ///
+  /// - `name` returns the name of that case containing its argument.
+  /// - `entity` returns the entity to which `name(n)` should demangle, given the entity to which
+  ///   `n` demangles.
+  /// - `tag` is the tag of the names returned by `name`, if any.
   private typealias Wrapper = (
     name: (IRFunction.Name) -> IRFunction.Name,
     entity: (DemangledEntity) -> DemangledEntity,
     tag: Int?
   )
 
-  /// Returns every way of wrapping an IR function name, using the tags in `tags`.
+  /// Returns the wrapper for `existentialized` followed by, for each `i` in `tags`, the wrappers
+  /// for `slide`, `plateau`, and `applied` with tag `i`.
   private func wrappers(tags: [Int]) -> [Wrapper] {
     var result: [Wrapper] = [({ .existentialized($0) }, { .existentialized($0) }, nil)]
     for i in tags {
@@ -164,10 +223,13 @@ final class ManglingAmbiguityTests: XCTestCase {
     """
   }
 
-  /// Declarations of functions with a parameter labeled so that the mangled length of the label,
-  /// possibly followed by its first characters, reads as an operator continuing a declaration
-  /// chain, right after the mangling of the struct `A` declared in `program`.
-  private var labels: String {
+  /// The Hylo source code of synthetic function declarations, meant to be appended to `program`.
+  ///
+  /// These functions do not occur in `program`. Each of them has a parameter of type `A`, which is
+  /// a struct declared in `program`, followed by a parameter whose label is chosen so that its
+  /// mangled length, possibly followed by its first characters, reads as an operator continuing a
+  /// declaration chain, right after the mangling of `A`.
+  private var syntheticFunctionsCode: String {
     var source = ""
     var seen = Set<[String]>()
     for n in 1 ... 120 {
