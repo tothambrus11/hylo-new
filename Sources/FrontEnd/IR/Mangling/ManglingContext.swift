@@ -16,6 +16,13 @@ internal struct ManglingContext {
   /// A table mapping mangled symbols to their position in the symbol lookup table.
   private var symbolPosition: [MangledSymbol: Int] = [:]
 
+  /// The number of entries in the symbol lookup table of the demangler.
+  ///
+  /// The demangler adds an entry to its table each time it reads a symbol that is not a lookup,
+  /// even if it has already read that symbol. Hence, this number may be greater than the number of
+  /// symbols in `symbolPosition`.
+  private var symbolCount = 0
+
   /// The innermost scope being mangled, if any.
   private var qualification: ScopeIdentity?
 
@@ -25,7 +32,8 @@ internal struct ManglingContext {
   /// The number of declaration chains that ended with the last symbol added to `output`.
   ///
   /// A `declarationEnd` operator is written for each of these chains before the next symbol unless
-  /// that symbol can't be read as a continuation of a declaration chain.
+  /// that symbol is known not to read as the continuation of a declaration chain, i.e., unless it
+  /// is an operator that ends declaration chains or an integer less than 10.
   private var declarationChainsToDisambiguate: UInt8 = 0
 
   /// Creates an instance for mangling symbols in `program`.
@@ -153,10 +161,16 @@ internal struct ManglingContext {
     declarationChainsToDisambiguate += 1
   }
 
-  /// Records `s` in the symbol lookup table if it is not reserved or already recorded.
+  /// Records that `s` has just been written in full (i.e., not as a lookup), associating it with
+  /// its position in the symbol lookup table if it is not reserved or already recorded.
+  ///
+  /// A symbol may be written in full more than once. That happens when it is recorded while its
+  /// own qualification is being written (e.g., a generic parameter occurring in the type of the
+  /// function that declares it). Each occurrence takes a position in the table of the demangler.
   internal mutating func record(symbol s: MangledSymbol) {
+    defer { symbolCount += 1 }
     if symbolPosition.keys.contains(s) || reserved.keys.contains(s) { return }
-    symbolPosition[s] = symbolPosition.count
+    symbolPosition[s] = symbolCount
   }
 
   /// Records `q` as the innermost scope being mangled, and returns the previous recorded value.
@@ -210,8 +224,8 @@ internal struct ManglingContext {
     }
   }
 
-  /// If `q` is known, meaning we can trivially reference it without emitting more qualifications
-  /// manually, writes a lookup reference to it.
+  /// Writes a lookup reference to `q` iff `q` is reserved, has already been inserted in the symbol
+  /// lookup table, or is the innermost scope being mangled.
   internal mutating func addIf(referenceable q: ScopeIdentity) -> Bool {
     addIf(reservedOrRecorded: q.asSymbol) || addIf(qualification: q)
   }
