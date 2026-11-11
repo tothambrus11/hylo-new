@@ -85,6 +85,32 @@ final class ManglingStructureRecoveryTests: XCTestCase {
     }
   }
 
+  /// Tests that the number of inputs of an arrow is not read as the continuation of the
+  /// declaration chain that ends the environment of that arrow.
+  func testItemCountAfterDeclarationChain() async {
+    var (p, m0) = await typeCheckedWithMinimalStandardLibrary(.init(contents: program))
+    let a = p.firstDeclaration(StructDeclaration.self, named: "A", in: m0)!
+    let t = p.types.demand(Struct(declaration: a)).erased
+    guard let x = type(p.mangled(t)) else { return }
+
+    // 10 is the smallest number encoded with a letter (i.e., "a"). The label of the first input
+    // has 39 characters so that its mangled length (i.e., "F") reads as an operator continuing a
+    // declaration chain when it comes right after "a" (i.e., "aF").
+    let labels = [String(repeating: "x", count: 39)] + (1 ..< 10).map({ (i) in "l\(i)" })
+    let arrow = p.types.demand(
+      Arrow(
+        environment: t,
+        inputs: labels.map({ (l) in .init(label: l, access: .let, type: t) }),
+        output: t))
+    let expected = DemangledType.arrow(
+      style: .parenthesized, effect: .let, environment: x,
+      inputs: labels.map({ (l) in .init(label: l, type: x) }), output: x)
+
+    let m = p.mangled(arrow)
+    XCTAssertEqual(
+      type(m), expected, "demangling of an arrow with 10 inputs is incorrect\n(mangled: \(m))")
+  }
+
   /// An IR function name that does not contain another name, paired with a predicate that holds
   /// iff its argument has the structure of the entity to which that name should demangle.
   private typealias BaseName = (
@@ -451,6 +477,21 @@ final class ManglingStructureRecoveryTests: XCTestCase {
     } else {
       XCTFail(
         "expected an entity, got: \(DemangledSymbol(m))\n(mangled: \(m))", file: file, line: line)
+      return nil
+    }
+  }
+
+  /// Returns the type demangled from `m`, failing the current test if `m` does not demangle to a
+  /// type without error.
+  private func type(
+    _ m: String, file: StaticString = #filePath, line: UInt = #line
+  ) -> DemangledType? {
+    assertDemanglingIsOk(mangled: m, file: file, line: line)
+    if case .type(let t) = DemangledSymbol(m) {
+      return t
+    } else {
+      XCTFail(
+        "expected a type, got: \(DemangledSymbol(m))\n(mangled: \(m))", file: file, line: line)
       return nil
     }
   }
