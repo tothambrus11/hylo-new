@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// `f` has the where clause of the negative test `associated-type-inequality`, in which `V.X` and
+// `W.X` are different types. `v.cast<W>(x)` takes a `W.X` and returns a `V.X`.
+trait P {
+  type X
+  fun cast<T where T == Self, T is P>(x: T.X) -> X { x }
+}
+fun check<T>(x: T) {}
+fun f<V, W where V == W, V is P, W is P>(v: V, x: W.X) {
+  check<V.X>(v.cast<W>(x))
+}

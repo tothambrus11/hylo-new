@@ -47,7 +47,7 @@ HYLO_TC_EXPERIMENTS=index,typevec,symindex,traitindex,memberskip,twins,stackscan
 That list is the result-preserving set for the existing implementation. The recommended configuration adds the fixes and the techniques that depend on them:
 
 ```bash
-HYLO_TC_EXPERIMENTS=index,typevec,symindex,traitindex,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,premcommit,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead .build/release/tc-bench program.hylo
+HYLO_TC_EXPERIMENTS=index,typevec,symindex,traitindex,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead .build/release/tc-bench program.hylo
 ```
 
 | Variable | Meaning |
@@ -60,7 +60,7 @@ HYLO_TC_EXPERIMENTS=index,typevec,symindex,traitindex,twins,stackscan,coeset,rei
 
 Dependencies between flags:
 - `fixsubst` needs `occurs` (otherwise cyclic bindings crash) and `eqsolve` (otherwise equality chains hit the bound);
-- `premcommit` and `dedup` belong with `premsubst`; `headsubst` needs `assocsubst` and `abstractstrict`;
+- `dedup` belongs with `premsubst`; `premcommit` (a requirement gets the witness that resolving it alone gives) is no longer recommended, after the language designer's answer that requirements are solved together (`../questions/ANSWERS.md`); `headsubst` needs `assocsubst` and `abstractstrict`;
 - `cleanfirst` and `lookahead` are result-preserving only with `sigrounds`;
 - with `sigrounds`, the earlier order checks (`extorder`, `givencheck`) and `memberskip` are inactive.
 

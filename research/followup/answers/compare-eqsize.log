@@ -1,0 +1,5 @@
+1696 programs; verdict changes: 3 ; violations: 0 ; selfcheck verdict differs: 6
+   accept -> reject  ../report/test-programs/equalities/pen-ref-3.hylo                      expression does not denote a type
+   accept -> reject  ../report/test-programs/performance/pending-var-3.hylo                 no coercion from 'P<T0> ==> [Void]() let -> Void' to '[Void]() let -> Void'
+   accept -> reject  ../report/test-programs/performance/pending-var-4.hylo                 implicit resolution is too complex: more than 100000 candidate derivations; cons
+finished

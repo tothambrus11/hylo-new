@@ -1,0 +1,6 @@
+//! stage:typing no-std
+// Inside the trait, a `T.X` is returned as an `X`, with `T == Self` and `T is P`.
+trait P {
+  type X
+  fun cast<T where T == Self, T is P>(x: T.X) -> X { x }
+}

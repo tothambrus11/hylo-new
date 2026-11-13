@@ -1,0 +1,13 @@
+//! stage:typing no-std
+// Example for question 18. Six arguments have a matching candidate of `h`; the seventh has none.
+// Today six diagnostics are reported, five of them "ambiguous use of 'h'", after 3,279 forks of
+// the solver. A search that stops at the argument that cannot be satisfied would report one.
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct A2 { public memberwise init }
+struct Z { public memberwise init }
+fun h() -> A0 { A0() }
+fun h() -> A1 { A1() }
+fun h() -> A2 { A2() }
+fun g(x0: A0, x1: A1, x2: A2, x3: A0, x4: A1, x5: A2, z: Z) {}
+public fun main() { g(h(), h(), h(), h(), h(), h(), h()) }

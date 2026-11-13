@@ -1,0 +1,432 @@
+{"file": "../report/test-programs/equalities/a01-self-trait.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "../report/test-programs/equalities/a02-conformance-def.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/a03-generic-given-body.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/a04-cond-given.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/a05-quantified.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "searchLarger": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/a06-tuple-arrow.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/a07-open.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/a08-assoc-generic.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 6, "searchSmaller": 1, "sizeConfirmed": 5}
+{"file": "../report/test-programs/equalities/a09-conf-via-eq.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/abs-launder-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/abs-launder-3.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/abs-launder-direct.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/abs-launder.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/abs-trans-0.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/abs-trans-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/abs-trans-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/abs-trans-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/abs-trans-4.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/abs-trans-5.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/absinst-0.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/absinst-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/absinst-ok.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/absleak-0.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/absleak-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/absleak-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/absleak-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/absleak-4.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/alias-hk-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/alias-hk-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/alias-proj-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/assoc-eq-call-incomplete.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/assoceq-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/assoceq-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/assoceq-3.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assoceq-4.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assoceq-5.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assoceq-6.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assoceq-8.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assocneg-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/assocneg-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assocneg-4.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assocneg-5.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assocneg-6.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/assocneg-8.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/ate-f1.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/ate.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/ati.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/bug-assoc-eq-two-links.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/c01-single-eq-call.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c02-no-eq-call.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c03-single-eq-given.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c04-single-assoc-call.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c05-single-eq-both-unrelated.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c06-single-eq-struct.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/c07-single-assoc-arg.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/cong-0.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/cong-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/cong-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/decomp-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/decomp-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/decomp-3.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/dump-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/e01-orient-amb.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e01b-both-direct.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/e02-penalty.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e03-penalty2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e04-penalty-scope.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e05-penalty-scope2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e06-elab-change.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/e07-refine.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/e08-shapes.hylo", "verdict": "accept", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/e09-trait-self-assoc.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e04-penalty-scope.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e05-penalty-scope2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e06-elab-change.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2b-call-infer.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2d-order.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/eq-regress-judge-p01-cc-big.hylo", "verdict": "accept", "violations": [], "inconclusive": 17, "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "../report/test-programs/equalities/eq-regress-judge-p02-cc-big.hylo", "verdict": "accept", "violations": [], "inconclusive": 27, "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x01-ext-arg-member.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x03-ext-nested-struct.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x06-nested-ext-no-alias.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x09-ext-generic-where-assoc.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x10b-ext-where-assoc.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/eq-unsound-v-abs-7.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/eqbug-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqbug-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqbug-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqbug-4.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqbug-5.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/eqbug1-plain.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqbug1-struct.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-3.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-4.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-5.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-6.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-3.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-4.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-5.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-6.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/extwhere-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 1, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/extwhere-1ok.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "../report/test-programs/equalities/extwhere-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/extwhere-3.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/mirror-0.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/mirror-1.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/mirror-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/n-nested-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/n-params-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/n-params-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/n-params-3.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/n-three-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/n-tuple-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/nested-eq.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/o1-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/o2-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/o2b-call-infer.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/o2c-call-explicit.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/o2d-order.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/o3-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/o4-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/o5-open-chain.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/open-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/open-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/open-3.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/open-4.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/openchain-4.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/openchain-5.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/p01-cc-big.hylo", "verdict": "accept", "violations": [], "inconclusive": 17, "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "../report/test-programs/equalities/p02-cc-big.hylo", "verdict": "accept", "violations": [], "inconclusive": 27, "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "../report/test-programs/equalities/pen-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/pen-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/pen-ref-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/pen-ref-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/pen-ref-3.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/pen-ref-4.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/pend-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 4}
+{"file": "../report/test-programs/equalities/pend-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 4}
+{"file": "../report/test-programs/equalities/perf-alias-7.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/perf-alias.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/perf-deep-100.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/perf-deep-200.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/perf-deep-50.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "../report/test-programs/equalities/quant-1.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/quant-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/quant-2b.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/quant-2c.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/quant-2d.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/quant-3.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/quant-4.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/structwhere-1.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/structwhere-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/trans-1.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-3.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-4.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-5.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-6.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/trans-8.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-2.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-3.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-4.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-5.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-6.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transconf-8.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-3.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-4.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-5.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-6.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/transneg-8.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-abs-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-abs-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-abs-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-abs-4.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-abs-5.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-abs-6.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-abs-7.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-abs-8.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-abs-9.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-alias-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-alias-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-alias-3.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/v-chain-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-chain-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-chain3-assoc.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/v-chain3-mixed.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/v-chain3-par.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/v-congr-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-congr-2.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v-congr-3.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-congr-4.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-congr-5.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-congr-6.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/v-def-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-def-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v-def-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/test-programs/equalities/v-def-4.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/v01-single.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v02-params.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/v03-box.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v04-boxside.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "../report/test-programs/equalities/v05-single-struct.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v06-onesided.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/v07-samegiven.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/test-programs/equalities/x01-ext-arg-member.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x02-ext-nested.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x03-ext-nested-struct.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x04-generic-ext-where.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/x05-alias-ext.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x06-nested-ext-no-alias.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x07-given-arg-member.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x08-ext-arg-member-reordered.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x09-ext-generic-where-assoc.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x10-ext-where-assoc.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/x10b-ext-where-assoc.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/test-programs/equalities/x11-ext-forward.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/test-programs/equalities/x12-ext-members-kinds.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/x13-ext-body-lookup.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/test-programs/equalities/x14-ext-generic-arg-assoc-std.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/attack-01-alias-given-skipped-by-index.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-02-alias-goal-skipped-by-index.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/attack-03-alias-extension-root.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-04-budget-beyond-depth.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-05-initializer-position.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-06-return-position.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-07-newcomer-wins-silently.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/attack-08-class-member-choice.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/attack-09-cyclic-class.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/attack-10-extension-selection-after-depth.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/cost-01-index-under-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/cost-02-index-without-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/gain-01-wide-given.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/gain-02-wide-value.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/gain-03-compound-equality-in-given.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/gain-04-congruence-then-fact.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/gain-05-parameter-equal-to-concrete.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/gain-06-projection-equal-to-concrete.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-01-two-witnesses.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-02-two-witnesses-stated.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "design-eqnorm/tests/keep-03-projection-through-equal-type.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/keep-04-conformance-via-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/keep-05-refl-sym-trans.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "design-eqnorm/tests/keep-06-unrelated-equality.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "design-eqnorm/tests/keep-07-unrelated-nested.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-08-chain-8.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/keep-09-assoc-chain-broken.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-10-assoc-chain-8.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "design-eqnorm/tests/keep-11-no-injectivity.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-12-self-projection.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "design-eqnorm/tests/keep-13-open-requirement.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/keep-14-equality-premise.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "design-eqnorm/tests/keep-15-pending-premise-projection.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "design-eqnorm/tests/keep-16-pending-premise-wrong.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "design-eqnorm/tests/keep-17-local-witness-is-opaque.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-18-nested-scope.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "design-eqnorm/tests/keep-19-nested-scope-leak.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "design-eqnorm/tests/keep-20-tuple-arrow.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "design-eqnorm/tests/keep-21-cache-across-hypotheses.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "design-eqnorm/tests/keep-22-divergent-givens-with-equality.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/keep-23-premises-after-coercion.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "design-eqnorm/tests/keep-24-extension-through-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/lang-01-member-through-equality.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/lang-02-trait-member-through-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/lang-03-conflicting-concrete-types.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "design-eqnorm/tests/rank-01-orientation-a.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/rank-02-orientation-b.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/rank-03-nearer-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/rank-04-syntactic-beats-equal.hylo", "verdict": "reject", "violations": []}
+{"file": "design-eqnorm/tests/rank-05-fewer-parts-first.hylo", "verdict": "accept", "violations": []}
+{"file": "design-eqnorm/tests/rank-06-newly-matching-given.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/a05-quantified.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "searchLarger": 1, "searchSmaller": 1}
+{"file": "reference/hand/a06-tuple.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 2, "searchLarger": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/a08-assoc-generic.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 4, "sizeConfirmed": 4}
+{"file": "reference/hand/a09-conf-via-eq.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/ambiguity.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/assoc-decl.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "reference/hand/assoceq-2.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "reference/hand/associated-type-equality.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/associated-type-inequality.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/assocneg-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "reference/hand/blanket-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/blanket-2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/blanket-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/blanket-4.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/blanket-5.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/blanket.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "reference/hand/budget.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/c01-single-eq-call.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/conf-basic.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/conformance-via-equivalence.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/cong-0.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/cong-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "reference/hand/decomp-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/decomp-2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/decomp-3.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/e01-orient-amb.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/e01b-both-direct.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/ematch.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/equality.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "reference/hand/goal-agreement.hylo", "verdict": "reject", "violations": [], "inconclusive": 1, "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "reference/hand/n-params-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/no-injectivity.hylo", "verdict": "reject", "violations": [], "inconclusive": 3}
+{"file": "reference/hand/p01.hylo", "verdict": "reject", "violations": [], "inconclusive": 4, "proofConfirmed": 2, "searchLarger": 1, "searchSmaller": 1}
+{"file": "reference/hand/p02.hylo", "verdict": "reject", "violations": [], "inconclusive": 4, "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "reference/hand/p03.hylo", "verdict": "reject", "violations": [], "inconclusive": 6, "proofConfirmed": 2, "searchLarger": 2}
+{"file": "reference/hand/p04.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 4, "sizeConfirmed": 4}
+{"file": "reference/hand/p05.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/premise-eq.hylo", "verdict": "reject", "violations": [], "inconclusive": 6, "proofConfirmed": 4, "sizeConfirmed": 4}
+{"file": "reference/hand/proj-through-application.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/quant-1.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/quant-2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/quant-2b.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/self/cast-only.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/self/cast-two.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/self/confusion-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 6, "searchLarger": 1, "sizeConfirmed": 5}
+{"file": "reference/hand/self/confusion-2.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 4, "searchLarger": 1, "sizeConfirmed": 3}
+{"file": "reference/hand/self/confusion-3.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "reference/hand/self/conv.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/self/launder-1.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "reference/hand/self/launder-2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/self/launder-3.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/self/launder-4.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "reference/hand/self/launder-5-def.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/self/launder-5.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 3, "searchLarger": 1, "sizeConfirmed": 2}
+{"file": "reference/hand/self/launder-6.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 3, "searchLarger": 1, "sizeConfirmed": 2}
+{"file": "reference/hand/transconf-3.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/hand/transneg-2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/tuple-tail.hylo", "verdict": "reject", "violations": [], "inconclusive": 4}
+{"file": "reference/hand/v-chain3-mixed.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "reference/hand/v-congr-1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/v-def-1.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/hand/v-def-3.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/hand/v02-params.hylo", "verdict": "reject", "violations": [], "inconclusive": 1}
+{"file": "reference/hand/v03-box.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/hand/v07-samegiven.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "reference/hand/where-order.hylo", "verdict": "reject", "violations": [], "inconclusive": 2, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/judge/p/budget-pos.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 4, "sizeConfirmed": 4}
+{"file": "reference/judge/p/budget-q0.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/budget-q0b.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/ematch-q2.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/ematch-q2neg.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/ga-q0.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "reference/judge/p/ga-q1.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/ga-q2.hylo", "verdict": "accept", "violations": [], "inconclusive": 1}
+{"file": "reference/judge/p/i2-var.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 3, "searchSmaller": 1, "sizeConfirmed": 2}
+{"file": "reference/judge/p/i3-ground.hylo", "verdict": "accept", "violations": []}
+{"file": "reference/judge/p/i3-var.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-a.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-alias.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-box.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-call-blanket.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-call.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-confusion-box.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-confusion-ctl.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-confusion.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-ctl.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u1-value.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u2-a.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 2, "sizeConfirmed": 2}
+{"file": "reference/judge/p/u2-b.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 3, "searchLarger": 1, "sizeConfirmed": 2}
+{"file": "reference/judge/p/u2-c.hylo", "verdict": "reject", "violations": []}
+{"file": "reference/judge/p/u2-d.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "reference/judge/p/u2-e.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 1, "searchLarger": 1}
+{"file": "reference/judge/p/wo-q0.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "reference/judge/p/wo-q1.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "reference/judge/p/wo-q1c.hylo", "verdict": "reject", "violations": []}
+{"file": "usage/benchmarks/gaps/associated-type-premise.hylo", "verdict": "accept", "violations": []}
+{"file": "usage/benchmarks/gaps/equality-determined-parameter.hylo", "verdict": "accept", "violations": []}
+{"file": "usage/benchmarks/gaps/error-type-accepted.hylo", "verdict": "accept", "violations": []}
+{"file": "usage/benchmarks/gaps/generic-projection.hylo", "verdict": "reject", "violations": []}
+{"file": "usage/benchmarks/gaps/inherited-associated-type.hylo", "verdict": "reject", "violations": []}
+{"file": "usage/benchmarks/gaps/restated-conformance.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "usage/benchmarks/gaps/trait-equality.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "usage/benchmarks/gaps/trait-given-not-used-for-lookup.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "usage/benchmarks/gaps/two-equality-conditions.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 4, "searchLarger": 1, "sizeConfirmed": 3}
+{"file": "usage/benchmarks/gaps/unsatisfiable-conformance.hylo", "verdict": "reject", "violations": []}
+{"file": "usage/benchmarks/gaps/where-clause-order.hylo", "verdict": "reject", "violations": []}
+{"file": "usage/benchmarks/generated/rust-flatten.control.hylo", "verdict": "reject", "violations": [], "inconclusive": 15, "proofConfirmed": 8, "searchLarger": 5, "sizeConfirmed": 3}
+{"file": "usage/benchmarks/generated/rust-flatten.neg.hylo", "verdict": "reject", "violations": [], "inconclusive": 17, "proofConfirmed": 9, "searchLarger": 5, "sizeConfirmed": 4}
+{"file": "usage/benchmarks/generated/swift-collection-signature.control.hylo", "verdict": "reject", "violations": [], "inconclusive": 33}
+{"file": "usage/benchmarks/generated/swift-collection-signature.fn-one.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 6, "sizeConfirmed": 6}
+{"file": "usage/benchmarks/generated/swift-collection-signature.fn-two.hylo", "verdict": "accept", "violations": [], "inconclusive": 3, "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "usage/benchmarks/generated/swift-collection-signature.neg.hylo", "verdict": "reject", "violations": [], "inconclusive": 15, "proofConfirmed": 7, "sizeConfirmed": 7}
+{"file": "usage/benchmarks/generated/swift-string-protocol.control.hylo", "verdict": "reject", "violations": [], "inconclusive": 30}
+{"file": "usage/benchmarks/generated/swift-string-protocol.fn-decoding.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "usage/benchmarks/generated/swift-string-protocol.fn-overString.hylo", "verdict": "accept", "violations": [], "inconclusive": 1, "proofConfirmed": 7, "searchSmaller": 2, "sizeConfirmed": 5}
+{"file": "usage/benchmarks/generated/swift-string-protocol.neg.hylo", "verdict": "reject", "violations": [], "inconclusive": 11, "proofConfirmed": 8, "searchSmaller": 3, "sizeConfirmed": 5}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.control.hylo", "verdict": "reject", "violations": [], "inconclusive": 8, "proofConfirmed": 6, "sizeConfirmed": 6}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-anyCollectionInit.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 3, "sizeConfirmed": 3}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-chainUse.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-rangeSetInit.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 4, "sizeConfirmed": 4}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.neg.hylo", "verdict": "reject", "violations": [], "inconclusive": 8, "proofConfirmed": 8, "sizeConfirmed": 8}
+{"file": "usage/benchmarks/rust-flatten.hylo", "verdict": "accept", "violations": [], "inconclusive": 11, "proofConfirmed": 9, "searchLarger": 5, "sizeConfirmed": 4}
+{"file": "usage/benchmarks/swift-collection-signature.hylo", "verdict": "accept", "violations": [], "inconclusive": 3, "proofConfirmed": 7, "sizeConfirmed": 7}
+{"file": "usage/benchmarks/swift-string-protocol.hylo", "verdict": "accept", "violations": [], "inconclusive": 1, "proofConfirmed": 8, "searchSmaller": 3, "sizeConfirmed": 5}
+{"file": "usage/benchmarks/swift-transitive-parameters.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 8, "sizeConfirmed": 8}
+{"file": "../report/questions/follow-up/r18a-one-bad-argument.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/follow-up/r18b-one-bad-argument-of-seven.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/follow-up/r2a-conversion.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 4, "searchLarger": 1, "sizeConfirmed": 3}
+{"file": "../report/questions/follow-up/r2b-without-second-requirement.hylo", "verdict": "reject", "violations": [], "proofConfirmed": 2, "searchLarger": 1, "sizeConfirmed": 1}
+{"file": "../report/questions/follow-up/r2c-without-second-requirement-valid.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "sizeConfirmed": 1}
+{"file": "../report/questions/q01-coherence.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q02a-self-projection.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q02b-self-projection-conversion.hylo", "verdict": "reject", "violations": [], "inconclusive": 3, "proofConfirmed": 3, "searchLarger": 1, "sizeConfirmed": 2}
+{"file": "../report/questions/q03a-injectivity.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q03b-two-concrete-types.hylo", "verdict": "accept", "violations": [], "proofConfirmed": 1, "searchSmaller": 1}
+{"file": "../report/questions/q04a-struct-member-through-equality.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q04b-trait-member-through-equality.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q05-equality-in-trait.hylo", "verdict": "reject", "violations": [], "inconclusive": 2}
+{"file": "../report/questions/q07a-where-order.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q07b-where-order-swapped.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q08-which-witness.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q09a-generic-conformance-unsound.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q09b-generic-conformance-valid.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q10a-ranking.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q10b-ranking-other-side.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q11a-bound-four.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q11b-bound-five.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q11c-bound-selects-member.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q12-mutually-dependent-extensions.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q13a-given-in-own-initializer.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q13b-given-initialized-with-itself.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q13c-inferred-given-order.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q14a-givens-in-body.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q14b-givens-in-body-swapped.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q14c-where-clause-uses-body.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q15-nested-ranking.hylo", "verdict": "accept", "violations": []}
+{"file": "../report/questions/q16-erroneous-candidate-wins.hylo", "verdict": "reject", "violations": []}
+{"file": "../report/questions/q17-member-and-requirement.hylo", "verdict": "accept", "violations": []}

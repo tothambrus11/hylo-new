@@ -1,0 +1,29 @@
+1691 programs; verdict changes: 27 ; violations: 0 ; selfcheck verdict differs: 7
+   reject -> accept  attack-premsubst/p/b01-ambiguous-consistent-value.hylo                 no coercion from '(P<A>, Q<(A::P).X>) ==> [Void](let A) let -> Void' to '[Void](
+   reject -> accept  attack-premsubst/p/b01c-ambiguous-order-swapped.hylo                   no coercion from '(P<A>, Q<(A::P).X>) ==> [Void](let A) let -> Void' to '[Void](
+   reject -> accept  attack-premsubst/p/b02c-shadowed-requirement-result-ctl.hylo           no coercion from '(P<A>, Q<(A::P).X>) ==> [Void](let A) let -> (A::P).X' to '[Vo
+   reject -> accept  attack-premsubst/p/b04-same-type-two-witnesses-eq.hylo                 no coercion from '(P<V>, Q<(V::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  attack-premsubst/p/b04w-same-type-two-witnesses-value-ctl.hylo         no coercion from '(P<V>, Q<(V::P).X>) ==> [Void](let V) let -> (V::P).X' to '[Vo
+   reject -> accept  attack-premsubst/p/c06-a7-explicit-nested.hylo                         no coercion from '(P<T>, Q<(T::P).X>, R<(T::P).X>) ==> [Void](let T, let (T::P).
+   reject -> accept  attack-premsubst/p/c08v-a7-alias-capture-valid.hylo                    no coercion from '(P<T>, Q<(T::P).X>, R<(T::P).X>, R<TX>) ==> [Void](let T, let 
+   reject -> accept  attack-premsubst/p/e07-premise-dropped-closed.hylo                     no coercion from '(P<Box<A>>, Q<(Box<A>::P).X>) ==> [Void](let Box<A>) let -> Vo
+   reject -> accept  attack-premsubst/p/e08-premise-dropped-where.hylo                      no coercion from '(P<Box<A>>, Q<(Box<A>::P).X>) ==> [Void](let Box<A>) let -> Vo
+   reject -> accept  attack-premsubst/p/j01-probe-local-given-block.hylo                    no coercion from '(P<T>, Q<(T::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  attack-premsubst/p/j02-probe-nested-function.hylo                      no coercion from '(P<T>, Q<(T::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  attack-premsubst/p/j03-probe-nested-where.hylo                         no coercion from '(P<T>, Q<(T::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  attack-premsubst/p/j04-recursion-shadow-value.hylo                     no coercion from '(P<T>, Q<(T::P).X>) ==> [Void](let T) let -> Void' to '[Void](
+   reject -> accept  attack-premsubst/p/j05-recursion-shadow-tie.hylo                       no coercion from '(P<T>, Q<(T::P).X>) ==> [Void](let T) let -> Void' to '[Void](
+   reject -> accept  attack-premsubst/p/j05b-recursion-shadow-local-q.hylo                  no coercion from '(P<T>, Q<(T::P).X>) ==> [Void](let T) let -> Void' to '[Void](
+   reject -> accept  attack-premsubst/p/n07-method-recursion-shadow.hylo                    no coercion from '(P<T>, Q<(T::P).X>) ==> [let K](let T) let -> Void' to '[let K
+   reject -> accept  attack-premsubst/p/p01c-head-ambiguous-value-ctl.hylo                  no coercion from '(P<A>, Q<(A::P).X>) ==> [Void](let A, let (A::P).X) let -> Voi
+   reject -> accept  attack-premsubst/p/v01-two-params-same-type-pairing.hylo               no coercion from '(P<A>, P<A>, Q<(A::P).X>, R<(A::P).X>) ==> [Void](let A, let A
+   reject -> accept  attack-premsubst/p/v04-given-dependent-pairing.hylo                    no coercion from '<T> S<T> ==> [Void](let T) let -> Void' to '[Void](let Box<A>)
+   reject -> accept  design-engine/tests/s1-attack-nonminimal-witness.hylo                  no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-attack-other-conformance-equality.hylo          no coercion from '(P<U>, ((U::P).X ~ B)) ==> [Void]() let -> Void' to '[Void]() 
+   reject -> accept  design-engine/tests/s1-attack-shadowed-local-given.hylo                no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-attack-shadowed-requirement.hylo                no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-attack-shadowed-result-type.hylo                no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> W<(A::P).X>' to '[Void
+   reject -> accept  design-engine/tests/s1-open-ambiguous-dependency.hylo                  no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  design-engine/tests/s1-reject-other-conformance.hylo                   no coercion from '(P<U>, Q<(U::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+   reject -> accept  ../report/questions/q08-which-witness.hylo                             no coercion from '(P<A>, Q<(A::P).X>) ==> [Void]() let -> Void' to '[Void]() let
+finished

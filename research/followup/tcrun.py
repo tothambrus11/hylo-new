@@ -15,6 +15,12 @@ CONFIGS["NEWX"] = CONFIGS["NEW"] + ",eqfilter,eqouter,eqclass"
 CONFIGS["MINR"] = "index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset"
 CONFIGS["REC"] = (CONFIGS["MINR"] + ",reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,"
                   "hidecache,aliasargs,premsubst,premcommit,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead")
+# Variants after the answers of the language designer: RECJ proves the requirements of a clause
+# together (no commit rule); RECS also uses the original rule for `Self.X`.
+CONFIGS["RECJ"] = ",".join(x for x in CONFIGS["REC"].split(",") if x != "premcommit")
+CONFIGS["RECS"] = ",".join(x for x in CONFIGS["RECJ"].split(",") if x != "abstractstrict")
+# RECJ with equality proofs ranked by their size (`eqsize`).
+CONFIGS["RECZ"] = CONFIGS["RECJ"] + ",eqsize"
 def flags(config):
     parts = config.split("+")
     return ",".join(x for x in [CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)

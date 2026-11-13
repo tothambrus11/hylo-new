@@ -1,10 +1,15 @@
-"""Regression checks for the mechanisms of the follow-up: expected verdicts under NEW+selfcheck.
+"""Regression checks for the mechanisms of the follow-up: expected verdicts under RECJ+selfcheck (the recommended configuration).
 
-usage: regress.py BINID [--config NEW+selfcheck]"""
+usage: regress.py BINID [--config RECJ+selfcheck]"""
 import sys, glob, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__))); import tcrun
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
-B = sys.argv[1]; config = sys.argv[3] if len(sys.argv) > 3 else "NEW+selfcheck"
+B = sys.argv[1]; config = sys.argv[3] if len(sys.argv) > 3 else "RECJ+selfcheck"
+# The language designer's answer to "which witness does a requirement get": whichever satisfies the
+# whole clause. Without the commit rule (`premcommit`), these programs are accepted, as intended.
+JOINT = {'s1-attack-nonminimal-witness', 's1-attack-other-conformance-equality', 's1-attack-shadowed-local-given',
+         's1-attack-shadowed-requirement', 's1-attack-shadowed-result-type', 's1-open-ambiguous-dependency',
+         's1-reject-other-conformance', 'e07-premise-dropped-closed'}
 checks = []
 for f in sorted(glob.glob('headsubst/tests/*.hylo')): checks.append((f, 'reject' if 'reject' in f else 'accept'))
 for l in open('design-order/tests/MANIFEST.tsv'):
@@ -36,7 +41,9 @@ attack-headsubst/p/k07-function-value-shadow.hylo attack-headsubst/p/r01-regress
 design-eqnorm/tests/gain-01-wide-given.hylo design-eqnorm/tests/attack-01-alias-given-skipped-by-index.hylo design-eqnorm/tests/attack-04-budget-beyond-depth.hylo'''.split()
 checks += [(f, 'reject') for f in REJECT] + [(f, 'accept') for f in ACCEPT]
 bad = 0
+joint = 'premcommit' not in tcrun.flags(config).split(',')
 for f, e in checks:
+    if joint and os.path.basename(f)[:-5] in JOINT: e = 'accept'
     r = tcrun.run(B, config, f, 180)
     if r['verdict'] != e or r['violations']:
         bad += 1; print('BAD', f, 'expected', e, 'got', r['verdict'], (r['violations'] or r['errors'] or [''])[0][:140])

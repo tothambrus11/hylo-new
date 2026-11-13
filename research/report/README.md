@@ -2,6 +2,8 @@
 
 Techniques that make Hylo's type checker faster, fixes for nine soundness problems of the existing implementation, and fixes that let ordinary generic programs with associated types type-check.
 
+**Update, 13 November 2026:** the language designer answered the questions; `questions/ANSWERS.md` records the answers and what they change (the commit rule for dependent requirements is withdrawn; the equality procedure does not preserve the ranking by proof size; the rule for `Self.X` is disputed).
+
 **Start with `START-HERE.html`.** It summarizes the findings, states the open questions on the language with a program for each, and says how to reproduce everything (about 20 minutes). `report.html` is the complete overview (about 30 minutes). The rest of this folder gives the details behind them.
 
 | Folder | Contents |

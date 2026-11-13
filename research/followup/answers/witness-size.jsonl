@@ -1,0 +1,1196 @@
+{"file": "../report/test-programs/equalities/a01-self-trait.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a02-conformance-def.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a03-generic-given-body.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/a04-cond-given.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a05-quantified.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a06-tuple-arrow.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a07-open.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a08-assoc-generic.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/a09-conf-via-eq.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/abs-launder-2.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-launder-3.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-launder-direct.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-launder.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-0.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-3.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-4.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/abs-trans-5.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absinst-0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absinst-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absinst-ok.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/absleak-0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/absleak-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absleak-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absleak-3.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/absleak-4.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/alias-hk-1.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/alias-hk-2.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/alias-proj-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assoc-eq-call-incomplete.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-1.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-2.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-3.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-4.hylo", "base": {"verdict": "accept", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-5.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-6.hylo", "base": {"verdict": "accept", "appliesCalls": 56}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assoceq-8.hylo", "base": {"verdict": "accept", "appliesCalls": 72}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/assocneg-2.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assocneg-3.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assocneg-4.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assocneg-5.hylo", "base": {"verdict": "accept", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assocneg-6.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/assocneg-8.hylo", "base": {"verdict": "accept", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/ate-f1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/ate.hylo", "base": {"verdict": "accept", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/ati.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/bug-assoc-eq-two-links.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c01-single-eq-call.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c02-no-eq-call.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c03-single-eq-given.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c04-single-assoc-call.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c05-single-eq-both-unrelated.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c06-single-eq-struct.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/c07-single-assoc-arg.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/cong-0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/cong-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/cong-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/decomp-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/decomp-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/decomp-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/dump-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e01-orient-amb.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e01b-both-direct.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/e02-penalty.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e03-penalty2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e04-penalty-scope.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e05-penalty-scope2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e06-elab-change.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e07-refine.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/e08-shapes.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/e09-trait-self-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e04-penalty-scope.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e05-penalty-scope2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-e06-elab-change.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2b-call-infer.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-o2d-order.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-p01-cc-big.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-p02-cc-big.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x01-ext-arg-member.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x03-ext-nested-struct.hylo", "base": {"verdict": "accept", "appliesCalls": 39}, "REC": {"verdict": "accept", "appliesCalls": 6}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x06-nested-ext-no-alias.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x09-ext-generic-where-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 9}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../report/test-programs/equalities/eq-regress-judge-x10b-ext-where-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/eq-unsound-v-abs-7.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug-1.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug-2.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug-3.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug-4.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug-5.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqbug1-plain.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqbug1-struct.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-2.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-3.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-4.hylo", "base": {"verdict": "accept", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-5.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-assoceq-6.hylo", "base": {"verdict": "accept", "appliesCalls": 56}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-3.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-4.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-5.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/eqchain-fix-trans-6.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/extwhere-1.hylo", "base": {"verdict": "reject", "appliesCalls": 15}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "../report/test-programs/equalities/extwhere-1ok.hylo", "base": {"verdict": "accept", "appliesCalls": 15}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../report/test-programs/equalities/extwhere-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/extwhere-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/mirror-0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/mirror-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/mirror-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-nested-1.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-params-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-params-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-params-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-three-1.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/n-tuple-1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/nested-eq.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/o1-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o2-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o2b-call-infer.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o2c-call-explicit.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o2d-order.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o3-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o4-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/o5-open-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/open-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/open-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/open-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/open-4.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/openchain-4.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/openchain-5.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/p01-cc-big.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/p02-cc-big.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/pen-1.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/pen-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/pen-ref-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/pen-ref-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/pen-ref-3.hylo", "base": {"verdict": "reject", "appliesCalls": 8, "decidedByWitnessSize": 1, "decidedByWitnessSizeWithCoercion": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/pen-ref-4.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/pend-1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/pend-2.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/perf-alias-7.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/perf-alias.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/perf-deep-100.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/perf-deep-200.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/perf-deep-50.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/quant-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/quant-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/quant-2b.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/quant-2c.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/quant-2d.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/quant-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/quant-4.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/structwhere-1.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/structwhere-2.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/trans-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-3.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-4.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-5.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-6.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/trans-8.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-4.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-5.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-6.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transconf-8.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/transneg-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/transneg-3.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/transneg-4.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/transneg-5.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/transneg-6.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/transneg-8.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-1.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-2.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-3.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-4.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-5.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-6.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-7.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-8.hylo", "base": {"verdict": "reject", "appliesCalls": 5}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-abs-9.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-alias-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-alias-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-alias-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-chain-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-chain-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-chain3-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-chain3-mixed.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-chain3-par.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-congr-1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-congr-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-congr-3.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-congr-4.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-congr-5.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-congr-6.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-def-1.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-def-2.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v-def-3.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v-def-4.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/v01-single.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v02-params.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v03-box.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v04-boxside.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v05-single-struct.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v06-onesided.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/equalities/v07-samegiven.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/x01-ext-arg-member.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/x02-ext-nested.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/x03-ext-nested-struct.hylo", "base": {"verdict": "accept", "appliesCalls": 39}, "REC": {"verdict": "accept", "appliesCalls": 6}}
+{"file": "../report/test-programs/equalities/x04-generic-ext-where.hylo", "base": {"verdict": "reject", "appliesCalls": 15}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "../report/test-programs/equalities/x05-alias-ext.hylo", "base": {"verdict": "accept", "appliesCalls": 39}, "REC": {"verdict": "accept", "appliesCalls": 6}}
+{"file": "../report/test-programs/equalities/x06-nested-ext-no-alias.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/x07-given-arg-member.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/equalities/x08-ext-arg-member-reordered.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/x09-ext-generic-where-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 9}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../report/test-programs/equalities/x10-ext-where-assoc.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../report/test-programs/equalities/x10b-ext-where-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/test-programs/equalities/x11-ext-forward.hylo", "base": {"verdict": "accept", "appliesCalls": 5}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../report/test-programs/equalities/x12-ext-members-kinds.hylo", "base": {"verdict": "reject", "appliesCalls": 35}, "REC": {"verdict": "reject", "appliesCalls": 7}}
+{"file": "../report/test-programs/equalities/x13-ext-body-lookup.hylo", "base": {"verdict": "reject", "appliesCalls": 35}, "REC": {"verdict": "reject", "appliesCalls": 4}}
+{"file": "../report/test-programs/equalities/x14-ext-generic-arg-assoc-std.hylo", "base": {"verdict": "reject", "appliesCalls": 5}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/j1-box-nongeneric.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/j2-generic-conf-alias.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/min.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t10-wrongx.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/t11-generic-conf.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/t12-assoc-in-body-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t13-generic-conf-const.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/t14-generic-conf-call.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t2-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/t3-param.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t4-generic-caller.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t5-concrete-x.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t6-ret.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t7-cond-direct.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/t8-cond-call.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/t9-two-conf.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v2-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/test-programs/unsimplified-projections/v3-param.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v4-plaineq.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v5-generic.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v6-refl.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v7-ret.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/test-programs/unsimplified-projections/v8-proj.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/attack-01-alias-given-skipped-by-index.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/attack-02-alias-goal-skipped-by-index.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/attack-03-alias-extension-root.hylo", "base": {"verdict": "accept", "appliesCalls": 5}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "design-eqnorm/tests/attack-04-budget-beyond-depth.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "design-eqnorm/tests/attack-05-initializer-position.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/attack-06-return-position.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/attack-07-newcomer-wins-silently.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/attack-08-class-member-choice.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/attack-09-cyclic-class.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/attack-10-extension-selection-after-depth.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept", "appliesCalls": 2, "decidedByWitnessSize": 1, "decidedByWitnessSizeWithCoercion": 1, "tiedOnDistance": 1}}
+{"file": "design-eqnorm/tests/cost-01-index-under-equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/cost-02-index-without-equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/gain-01-wide-given.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/gain-02-wide-value.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/gain-03-compound-equality-in-given.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/gain-04-congruence-then-fact.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/gain-05-parameter-equal-to-concrete.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/gain-06-projection-equal-to-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-01-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-02-two-witnesses-stated.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-03-projection-through-equal-type.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-04-conformance-via-equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-05-refl-sym-trans.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-06-unrelated-equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-07-unrelated-nested.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-08-chain-8.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-09-assoc-chain-broken.hylo", "base": {"verdict": "reject", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-10-assoc-chain-8.hylo", "base": {"verdict": "accept", "appliesCalls": 72}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-11-no-injectivity.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-12-self-projection.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-13-open-requirement.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-14-equality-premise.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-15-pending-premise-projection.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "design-eqnorm/tests/keep-16-pending-premise-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 19}, "REC": {"verdict": "reject", "appliesCalls": 3}}
+{"file": "design-eqnorm/tests/keep-17-local-witness-is-opaque.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-18-nested-scope.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-19-nested-scope-leak.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-20-tuple-arrow.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-21-cache-across-hypotheses.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-22-divergent-givens-with-equality.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/keep-23-premises-after-coercion.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/keep-24-extension-through-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 5}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "design-eqnorm/tests/lang-01-member-through-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/lang-02-trait-member-through-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/lang-03-conflicting-concrete-types.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/rank-01-orientation-a.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/rank-02-orientation-b.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/rank-03-nearer-equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/rank-04-syntactic-beats-equal.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-eqnorm/tests/rank-05-fewer-parts-first.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-eqnorm/tests/rank-06-newly-matching-given.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-capture-recursion-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-capture-recursion.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-coerced-witness-own-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-coerced-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-initializer.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-method.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-nonminimal-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-other-conformance-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-shadowed-local-given.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-shadowed-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-shadowed-result-type-own.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-shadowed-result-type.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-attack-trait-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-where-order-a.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-attack-where-order-b.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-gain-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-conformance-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-conformance-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-conformance-two.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-equal-parameters.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-equality-concrete.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-extension-concrete.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "design-engine/tests/s1-gain-extension.hylo", "base": {"verdict": "reject", "appliesCalls": 14}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "design-engine/tests/s1-gain-given-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-given.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-middle.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-nested-dependent-given.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-open-variable-a.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-open-variable-b.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-gain-static-method.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-keep-equality-generic.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-keep-extension-generic.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "design-engine/tests/s1-keep-extension-sibling.hylo", "base": {"verdict": "accept", "appliesCalls": 9}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "design-engine/tests/s1-keep-hypothesis.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-keep-recursion.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-keep-result-type.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-open-ambiguous-dependency.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-open-parameter-type.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s1-reject-ambiguous-both.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-capture-control.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-concrete-mismatch.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-cyclic-definition.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-duplicate-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 8, "tiedOnDistance": 1}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "design-engine/tests/s1-reject-given-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-missing-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s1-reject-other-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s2-keep-shared-premise.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s2-keep-wide-loop-ok.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s3-cost-div-branch.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-cost-wide-loop-fail.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-gain-three-requirements-nostd.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-gain-three-requirements.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-gain-tuple5.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-gain-where-order-b.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "design-engine/tests/s3-keep-tuple4.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s3-keep-where-order-a.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "design-engine/tests/s3-reject-chain9.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/a05-quantified.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/a06-tuple.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/a08-assoc-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/a09-conf-via-eq.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/ambiguity.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/assoc-decl.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/assoceq-2.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/associated-type-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/associated-type-inequality.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/assocneg-3.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/blanket-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/blanket-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/blanket-3.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/blanket-4.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/blanket-5.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/blanket.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/budget.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/c01-single-eq-call.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/conf-basic.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/conformance-via-equivalence.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/cong-0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/cong-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/decomp-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/decomp-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/decomp-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/e01-orient-amb.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/e01b-both-direct.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/ematch.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/goal-agreement.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/n-params-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/no-injectivity.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/p01.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/p02.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "reference/hand/p03.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/p04.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/p05.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/premise-eq.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/proj-through-application.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/quant-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/quant-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/quant-2b.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/self/cast-only.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/cast-two.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/confusion-1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/confusion-2.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/confusion-3.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/self/conv.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/self/launder-1.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-2.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-3.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-4.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-5-def.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-5.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/self/launder-6.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/transconf-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/transneg-2.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/tuple-tail.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/v-chain3-mixed.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/v-congr-1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/v-def-1.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/v-def-3.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/v02-params.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/v03-box.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "reference/hand/v07-samegiven.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/hand/where-order.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/budget-pos.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/judge/p/budget-q0.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/budget-q0b.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/ematch-q2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/ematch-q2neg.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/ga-q0.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/judge/p/ga-q1.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/ga-q2.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "reference/judge/p/i2-var.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/i3-ground.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "reference/judge/p/i3-var.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-a.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-alias.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-box.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-call-blanket.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-call.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-confusion-box.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-confusion-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-confusion.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u1-value.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u2-a.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u2-b.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u2-c.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u2-d.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/u2-e.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/wo-q0.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "reference/judge/p/wo-q1.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "reference/judge/p/wo-q1c.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-assoc-conf.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-coerce-nested.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-conf-eq-app.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-decl-head.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-decl-through-equality.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-fact-under-constructor.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-prefilter-coerce.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/inc-prefilter-conf.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "reference/minimized/unsound-blanket.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a01-term-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a02-term-witness-twin.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a02c-term-witness-twin-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a03-value-crossing.hylo", "base": {"verdict": "accept", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a04-nested-scopes.hylo", "base": {"verdict": "accept", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a04c-nested-scopes-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a05-param-not-in-head.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a05b-param-not-in-head-pair.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a05c-param-not-in-head-value.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a05d-param-not-in-head-methods.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a05e-param-not-in-head-lets.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a05f-param-not-in-head-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a06-two-params.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a06v-two-params-valid.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a07-nested-box.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a07n-nested-box-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a08-pair-of-param.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a09-bare-param.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a10-adjunct.hylo", "base": {"verdict": "reject", "appliesCalls": 28, "decidedByWitnessSize": 7, "tiedOnDistance": 7}, "REC": {"verdict": "reject", "decidedByWitnessSize": 7, "tiedOnDistance": 7}}
+{"file": "attack-assoc/p/a11-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a11b-refinement-silent.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a12-trait-param.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a13-struct-in-conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a13b-struct-in-conformance-field.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a13c-struct-in-generic-struct.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a14-member-alias.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a14c-member-alias-struct-only.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a14d-member-alias-value.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a14v-member-alias-valid.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a15-alias-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a16-generic-alias.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a17-recursive-conditional.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a18-pick.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a18n-pick-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a19-param-twice.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a20-nested-head.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a21-tuple-arrow.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a22-bare-param-where.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a23-conformance-mismatch.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a24-inside-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/a24n-inside-conformance-neg.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a25-param-through-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a26-param-through-trait-arg.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a26b-param-through-trait-arg-check.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/a27-param-ambiguous-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 28, "tiedOnDistance": 3}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "attack-assoc/p/b10-refinement-twin.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/b10c-refinement-twin-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/b10d-refinement-no-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/b11-refinement-twin-value.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/b12-launder-refinement.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/b12c-launder-refinement-ctl.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/c01-capture.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/c01c-capture-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/c01v-capture-valid.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/c02-capture-value.hylo", "base": {"verdict": "reject", "appliesCalls": 52}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/d01-equality-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/d02-ground-equality-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/d03-tuple-head.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/d04-alias-head.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/d05-member-order.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/e01-extension-from-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 50}, "REC": {"verdict": "accept", "appliesCalls": 4}}
+{"file": "attack-assoc/p/e02-extension-twin.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/e02c-extension-twin-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/e02d-extension-no-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/e03-function-twin.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/e03b-function-twin-explicit.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/e04-extension-twin-value.hylo", "base": {"verdict": "reject", "appliesCalls": 50}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/e05-extension-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 50}, "REC": {"verdict": "accept", "appliesCalls": 4}}
+{"file": "attack-assoc/p/e05n-extension-concrete-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 50}, "REC": {"verdict": "reject", "appliesCalls": 4}}
+{"file": "attack-assoc/p/k01-self-cycle.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/k02-growing.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k03-recursive-no-base.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/k04-polymorphic-recursion.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/k05-mutual.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k05n-mutual-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/k06-deep-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k06n-deep-chain-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/k07-chain-2.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k08-chain-3.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k08b-chain-3-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/k09-chain-2-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/n01-given-in-generic-struct.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/n02-given-in-extension.hylo", "base": {"verdict": "reject", "appliesCalls": 15}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/n03-given-in-generic-function.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/o01-head-through-assoc.hylo", "base": {"verdict": "reject", "appliesCalls": 10}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-assoc/p/o01n-head-through-assoc-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 10}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "attack-assoc/p/o02-dependent-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/o02n-dependent-premise-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/o03-param-order.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/o03n-param-order-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/r01-nested-given.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r01c-nested-given-ctl.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r02-trait-calls-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r02b-trait-calls-generic-explicit.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r03-trait-calls-pick.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r04-self-equal-param.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r05-trait-calls-extension.hylo", "base": {"verdict": "accept", "appliesCalls": 15}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-assoc/p/r06-explicit-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r07-other-self.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r08-method-on-equal-param.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r09-conformance-uses-default.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r09n-conformance-uses-default-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-assoc/p/r10-trait-two-values.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r11-conditional-given-on-assoc.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r11b-conditional-given-on-assoc-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r12-trait-calls-dependent.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r13-nested-given-in-extension.hylo", "base": {"verdict": "accept", "appliesCalls": 5}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r16-conditional-conformance-on-self.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r22-method-on-assoc-value.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r22c-method-on-assoc-value-ctl.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r23-nested-given-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r24-extension-equality-from-trait.hylo", "base": {"verdict": "accept", "appliesCalls": 14}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-assoc/p/r25-nested-given-compound.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/r26-extension-of-box-from-trait.hylo", "base": {"verdict": "accept", "appliesCalls": 10}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-assoc/p/r26b-extension-of-box-from-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 15}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-assoc/p/v1c.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/v2c.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/v4c.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/v7c.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/v7d.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-assoc/p/wo/e02-wo-01.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-02.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-03.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-04.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-05.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-06.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-07.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-08.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-09.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-10.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-11.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-12.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-13.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-14.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-15.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-16.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-17.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-18.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-19.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-20.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-21.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-22.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-23.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-assoc/p/wo/e02-wo-24.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-headsubst/p/a01-silent-result.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a02-nested-param-mismatch.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a02c-nested-param-match.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/a03-nested-param-value.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a03c-nested-param-value-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/a04-nested-result.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a04c-nested-result-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/a05-lambda-param.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a05b-lambda-inferred.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a05c-lambda-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/a06-lambda-result.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a06c-lambda-result-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/a07-bare-two.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a08-tuple-param.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/a08c-tuple-param-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/b01-method-generic-struct.hylo", "base": {"verdict": "reject", "appliesCalls": 56}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b02-method-in-conditional-extension.hylo", "base": {"verdict": "reject", "appliesCalls": 100}, "REC": {"verdict": "reject", "appliesCalls": 3}}
+{"file": "attack-headsubst/p/b03-initializer.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b04-static-method.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b05-trait-generic-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 84}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b06-explicit-application-stored.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b07-function-value.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b08-higher-order.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b09-equality-head.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b10-callee-with-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/b11-callee-equality-on-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c01-leak-function-value.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c01a-leak-probe.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c01b-nested-given-probe.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c01c-leak-function-value-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c02-leak-let-annotation.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c03-leak-global-vs-local.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c04-leak-function-last.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/c05-leak-two-functions.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d01-equality-nested-arg.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d01c-equality-bare-arg.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d02-equality-nested-result.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d03-equality-lambda.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d04-two-witness-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d04c-one-witness-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d05-shadow-twin.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d06-recursion-other-args.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d06c-recursion-same-args.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/d07-recursion-local-given.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d08-mutual-recursion.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/d08c-mutual-recursion-ok.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/e01-result-receiver.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-headsubst/p/e02-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e03-infer-from-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/e04-overload-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/e04n-overload-projection-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 48, "tiedOnDistance": 1}, "REC": {"verdict": "reject", "tiedOnDistance": 2}}
+{"file": "attack-headsubst/p/e05-overload-result.hylo", "base": {"verdict": "reject", "appliesCalls": 48, "tiedOnDistance": 3}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "attack-headsubst/p/e06-overloaded-argument.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/e06n-overloaded-argument-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "attack-headsubst/p/e07-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e08-conditional-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 72}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e09-witness-with-variable.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e10-nested-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 80}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e11-trait-body.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/e12-default-inout.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f01-refinement-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f01c-refinement-two-witnesses-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f01d-refinement-one-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/f02-refinement-value.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f03-refinement-callee.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f04-infer-order-a.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f04-infer-order-b.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f05-infer-shadow.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/f05b-infer-shadow-value.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/f05c-infer-no-projection.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/g01-refinement-anything.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g01c-refinement-anything-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g02-refinement-concrete-value.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g03-deep-conditional.hylo", "base": {"verdict": "reject", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g03c-deep-conditional-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g04-cyclic-definition.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g05-deep7-cross.hylo", "base": {"verdict": "reject", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/g05-deep8-cross.hylo", "base": {"verdict": "reject", "appliesCalls": 64}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/h01-extension-head-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 74}, "REC": {"verdict": "reject", "appliesCalls": 6}}
+{"file": "attack-headsubst/p/h02-extension-head-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 34}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-headsubst/p/h03-given-head-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/h04-given-head-nondetermined.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/h05-extension-member-regress.hylo", "base": {"verdict": "reject", "appliesCalls": 198}, "REC": {"verdict": "accept", "appliesCalls": 17}}
+{"file": "attack-headsubst/p/h05n-extension-member-neg.hylo", "base": {"verdict": "reject", "appliesCalls": 120}, "REC": {"verdict": "reject", "appliesCalls": 7}}
+{"file": "attack-headsubst/p/h06-extension-equality-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 108}, "REC": {"verdict": "reject", "appliesCalls": 4}}
+{"file": "attack-headsubst/p/h07-trait-generic-method.hylo", "base": {"verdict": "reject", "appliesCalls": 128}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/h08-type-application-argument.hylo", "base": {"verdict": "reject", "appliesCalls": 52}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/h09-premsubst-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i01-nested-given-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i01c-nested-given-one-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i02-nested-given-value.hylo", "base": {"verdict": "reject", "appliesCalls": 56}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i03-nested-given-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 72}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i04-refinement-box.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i05-alias-in-signature.hylo", "base": {"verdict": "reject", "appliesCalls": 85}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "attack-headsubst/p/i06-subscript-bundle.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i07-where-permutation-a.hylo", "base": {"verdict": "reject", "appliesCalls": 96}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i07-where-permutation-b.hylo", "base": {"verdict": "reject", "appliesCalls": 96}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i07-where-permutation-c.hylo", "base": {"verdict": "reject", "appliesCalls": 96}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/i07-where-permutation-d.hylo", "base": {"verdict": "reject", "appliesCalls": 96}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/j01-early-binding-receiver-call.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/j02-if-branches.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/j03-generic-arg-from-result.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/j04-lambda-calls-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/j05-struct-field.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k01-extension-method-own-where.hylo", "base": {"verdict": "reject", "appliesCalls": 70}, "REC": {"verdict": "reject", "appliesCalls": 3}}
+{"file": "attack-headsubst/p/k02-alias-where.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k03-struct-context-bound.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k04-function-value-own-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k04c-function-value-own-requirement-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/k04d-call-own-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k05-context-bound-callee.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k06-conformance-body.hylo", "base": {"verdict": "reject", "appliesCalls": 56}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/k07-function-value-shadow.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/k07c-function-value-no-shadow.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/k08-function-value-shadow-last.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m01-refinement-in-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/m02-refinement-valid-uses.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m03-chain-stress.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m03b-chain-stress-12.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m04-overload-chain-stress.hylo", "base": {"verdict": "reject", "appliesCalls": 1036, "tiedOnDistance": 1}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m04b-overload-chain-stress-4.hylo", "base": {"verdict": "reject", "appliesCalls": 76, "tiedOnDistance": 1}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m04c-overload-chain-stress-10.hylo", "base": {"verdict": "reject", "appliesCalls": 4108, "tiedOnDistance": 1}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m05-requirement-on-compound.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/m06-literals-defaults.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/m07-subscript.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/m08-cyclic-assoc.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/m09-overload-chain-noproj-10.hylo", "base": {"verdict": "accept", "appliesCalls": 4100}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m09-overload-chain-noproj-4.hylo", "base": {"verdict": "accept", "appliesCalls": 68}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/m09-overload-chain-noproj-8.hylo", "base": {"verdict": "accept", "appliesCalls": 1028}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/n01-projection-through-equal-parameter.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n02-trait-parameter.hylo", "base": {"verdict": "reject", "appliesCalls": 72}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n03-caller-where-a.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n03-caller-where-b.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n03-caller-where-c.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n03-caller-where-d.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/n04-bare-param-first-arg-call.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/n05-bare-param-variable-arg.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/n05b-bare-param-call-arg-void.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r01-regress-recursion-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r01b-regress-recursion-equality-param.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r01c-recursion-equality-void.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r01d-recursion-no-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r02-regress-recursion-nested.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r02b-regress-recursion-nested-param.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r03-regress-recursion-inferred.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r04-nonrecursive-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r04-part1.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r04-part2.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r04-part3.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/r04-part4.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-headsubst/p/s01-trait-given-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/s01c-trait-given-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/s01v-trait-given-value.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/s02-extension-member-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-headsubst/p/s02c-extension-member-refinement-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-headsubst/p/t01-lambda-scope.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/t02-conditional-over-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 68}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/t02c-conditional-over-plain.hylo", "base": {"verdict": "reject", "appliesCalls": 68}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/t03-conditional-over-refinement-members.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/u01-unqualified-member.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject"}}
+{"file": "attack-headsubst/p/u02-extension-of-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "attack-headsubst/p/u02c-extension-of-plain-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "attack-headsubst/p/u03-extension-trait-given.hylo", "base": {"verdict": "reject", "appliesCalls": 65}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "attack-headsubst/p/u04-extension-refinement-box.hylo", "base": {"verdict": "reject", "appliesCalls": 110}, "REC": {"verdict": "accept", "appliesCalls": 8}}
+{"file": "attack-premsubst/p/a01-two-usings-same-type.hylo", "base": {"verdict": "reject", "appliesCalls": 8, "tiedOnDistance": 1}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "attack-premsubst/p/a02-dependent-middle.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a02b-dependent-middle-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a03-dependent-first.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/a04-two-earlier-equality.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a04b-two-earlier-equality-concrete.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a04c-two-earlier-equality-mismatch.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/a05-two-earlier-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a05b-two-earlier-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/a06-chain4-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 80}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a06b-chain5-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 120}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a06c-chain5-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a06d-chain5-concrete-missing.hylo", "base": {"verdict": "reject", "appliesCalls": 60}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/a07-mentioned-by-hypothesis.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a08-mentioned-by-coercion.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a08b-mentioned-by-coercion-vx.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a09-given-with-dependent-premises.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a09b-given-dependent-three-deep.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a09c-given-dependent-generic-caller.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/a09d-given-dependent-missing.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b01-ambiguous-consistent-value.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b01b-ambiguous-both-hold.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b01c-ambiguous-order-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b02-shadowed-requirement-result.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b02c-shadowed-requirement-result-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b03-pairing-two-params.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b03c-pairing-two-params-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/b04-same-type-two-witnesses-eq.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b04v-same-type-two-witnesses-value.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/b04w-same-type-two-witnesses-value-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c01-a7-self-call-shadow.hylo", "base": {"verdict": "reject", "appliesCalls": 12, "tiedOnDistance": 4}, "REC": {"verdict": "reject", "tiedOnDistance": 4}}
+{"file": "attack-premsubst/p/c01c-a7-self-call-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c02-a7-self-call-no-head.hylo", "base": {"verdict": "reject", "appliesCalls": 12, "tiedOnDistance": 3}, "REC": {"verdict": "reject", "tiedOnDistance": 3}}
+{"file": "attack-premsubst/p/c03-recursion-local-given.hylo", "base": {"verdict": "reject", "appliesCalls": 4, "tiedOnDistance": 1}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "attack-premsubst/p/c04-a7-nested-capture.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c04c-a7-nested-capture-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c05-a7-nested-capture-param.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/c06-a7-explicit-nested.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c07-a7-block-capture-value.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c07c-a7-block-capture-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c07d-a7-block-capture-other-callee.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c08-a7-alias-capture-value.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c08c-a7-alias-capture-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c08d-a7-alias-other-callee.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c08v-a7-alias-capture-valid.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c09-a7-minimal.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c09b-a7-nested-where.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c09c-a7-minimal-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c09d-a7-head-binder.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c09f-a7-nested-where-other-callee.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/c10-a7-nonparam-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/d01-extension-dependent-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 14}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/d01b-extension-dependent-concrete-missing.hylo", "base": {"verdict": "reject", "appliesCalls": 14}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/d02-extension-dependent-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 14}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/d02b-extension-dependent-generic-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 14}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/d03-given-dependent-concrete-and-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/d03b-given-dependent-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e01-conformance-without-definition.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e02-recursive-definition-two.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e03-self-definition.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e04-generic-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e04b-generic-conformance-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e05-generic-conformance-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e05b-generic-conformance-projection-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e06-premise-dropped-value.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e07-premise-dropped-closed.hylo", "base": {"verdict": "reject", "appliesCalls": 48}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/e07c-premise-dropped-closed-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e07d-premise-dropped-closed-b.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/e08-premise-dropped-where.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/g01-eqworkaround-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g02-eqworkaround-flipped.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g03-eqworkaround-then-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g04-eq-between-projections-same-param.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g05-eq-transitive-use.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g06-eqworkaround-two-witnesses.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g07-eqworkaround-two-witnesses-one-valid.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/g08-eq-local-shadow.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h01-absmodel-hypothesis-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h01b-absmodel-hypothesis-chain-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h02-absmodel-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h03-nondependent-uses-dependent.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h04a-order-bound.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/h04b-order-bound-swapped.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/i01-context-bound-sugar.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/i02-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/i02b-refinement-concrete.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/i03-member-requirement-of-extension.hylo", "base": {"verdict": "reject", "appliesCalls": 25}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/j01-probe-local-given-block.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/j02-probe-nested-function.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/j03-probe-nested-where.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/j04-recursion-shadow-value.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/j05-recursion-shadow-tie.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/j05b-recursion-shadow-local-q.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/k01-alias-type-argument.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/k02-alias-generic-caller.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/k03-alias-in-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/l01-chain-result.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/l01b-chain-result-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/l02-chain-result-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/m01-open-argument.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/m02-open-result.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/n02-struct-where.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/n03-static-and-init.hylo", "base": {"verdict": "accept", "appliesCalls": 9}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/n04-method-own-parameter.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/n05-extension-method-own-parameter.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/n07-method-recursion-shadow.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/o01-signature-uses-dependent-given.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/p01-head-ambiguous-value.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/p01c-head-ambiguous-value-ctl.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/q01-chain-head-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 32}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/q01c-chain-head-one-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/q02-head-two-witnesses.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/r03-false-hypothesis-cache.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/r03b-false-hypothesis-cache-swapped.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/r04-generic-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/r05-blanket-opaque.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/s01-cost-ambiguous-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 144}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/s01c-cost-chain-one.hylo", "base": {"verdict": "reject", "appliesCalls": 144}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/s02-chain9-generic.hylo", "base": {"verdict": "reject", "appliesCalls": 360}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/s03-cost-ambiguous-chain-4x9.hylo", "base": {"verdict": "reject", "appliesCalls": 180}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/t01-open-witness.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/t01c-open-witness-closed.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/t02-trait-nested-given-bound.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/t03-inside-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/t04-trait-extension-self.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/t04b-trait-extension-self-wrong.hylo", "base": {"verdict": "reject", "appliesCalls": 19}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/u01a-order-same-type-accept.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/u01b-order-same-type-reject.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/u02-same-type-twice.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/u02c-two-types-ctl.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/u02g-same-type-twice-generic.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/u02n-same-type-twice-nodep.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/v01-two-params-same-type-pairing.hylo", "base": {"verdict": "reject", "appliesCalls": 40}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/v02-extension-ambiguous-both.hylo", "base": {"verdict": "reject", "appliesCalls": 44}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/v03-extension-member-result.hylo", "base": {"verdict": "reject", "appliesCalls": 39}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "attack-premsubst/p/v03b-extension-member-result-shadow.hylo", "base": {"verdict": "reject", "appliesCalls": 39}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/v03c-extension-member-result-shadow-nodep.hylo", "base": {"verdict": "accept", "appliesCalls": 35}, "REC": {"verdict": "reject", "appliesCalls": 2}}
+{"file": "attack-premsubst/p/v04-given-dependent-pairing.hylo", "base": {"verdict": "reject", "appliesCalls": 36}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/w01-equality-then-projection.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "attack-premsubst/p/w01b-equality-then-projection-wrong.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "attack-premsubst/p/x01-stress-wide-requirement.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/associated-type-premise.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/equality-determined-parameter.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/error-type-accepted.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/generic-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/gaps/inherited-associated-type.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/gaps/restated-conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 52}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/gaps/trait-equality.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/gaps/trait-given-not-used-for-lookup.hylo", "base": {"verdict": "reject", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/two-equality-conditions.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/gaps/unsatisfiable-conformance.hylo", "base": {"verdict": "crash -11"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/gaps/where-clause-order.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/rust-flatten.control.hylo", "base": {"verdict": "crash -11"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/rust-flatten.neg.hylo", "base": {"verdict": "crash -11"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-collection-signature.control.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-collection-signature.fn-one.hylo", "base": {"verdict": "accept", "appliesCalls": 196}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-collection-signature.fn-two.hylo", "base": {"verdict": "accept", "appliesCalls": 272}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-collection-signature.neg.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-string-protocol.control.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-string-protocol.fn-decoding.hylo", "base": {"verdict": "accept", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-string-protocol.fn-overString.hylo", "base": {"verdict": "reject", "appliesCalls": 292, "decidedByWitnessSize": 9, "decidedByWitnessSizeWithCoercion": 9, "tiedOnDistance": 13}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-string-protocol.neg.hylo", "base": {"verdict": "timeout"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.control.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-anyCollectionInit.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-chainUse.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.fn-rangeSetInit.hylo", "base": {"verdict": "accept", "appliesCalls": 40}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/generated/swift-transitive-parameters.neg.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "usage/benchmarks/rust-flatten.hylo", "base": {"verdict": "crash -11"}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/swift-collection-signature.hylo", "base": {"verdict": "accept", "appliesCalls": 468}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/swift-string-protocol.hylo", "base": {"verdict": "reject", "appliesCalls": 328, "decidedByWitnessSize": 9, "decidedByWitnessSizeWithCoercion": 9, "tiedOnDistance": 13}, "REC": {"verdict": "accept"}}
+{"file": "usage/benchmarks/swift-transitive-parameters.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/c1-collection.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h1-concrete-parameter.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h10-nested-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h11-two-requirements.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h12-reject-two-requirements.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "headsubst/tests/h13-reject-result-annotation.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "headsubst/tests/h2-concrete-result.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h3-generic-caller.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h4-reject-mismatch.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "headsubst/tests/h5-reject-other-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "headsubst/tests/h6-generic-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h7-reject-generic-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "headsubst/tests/h8-equality-on-projection.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "headsubst/tests/h9-chain.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q01-coherence.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q02a-self-projection.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q02b-self-projection-conversion.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q03a-injectivity.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q03b-two-concrete-types.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q04a-struct-member-through-equality.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q04b-trait-member-through-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q05-equality-in-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q07a-where-order.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q07b-where-order-swapped.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q08-which-witness.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q09a-generic-conformance-unsound.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q09b-generic-conformance-valid.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q10a-ranking.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q10b-ranking-other-side.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q11a-bound-four.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q11b-bound-five.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q11c-bound-selects-member.hylo", "base": {"verdict": "crash -6"}, "REC": {"verdict": "accept", "appliesCalls": 2, "decidedByWitnessSize": 1, "decidedByWitnessSizeWithCoercion": 1, "tiedOnDistance": 1}}
+{"file": "../report/questions/q12-mutually-dependent-extensions.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept", "appliesCalls": 5}}
+{"file": "../report/questions/q13a-given-in-own-initializer.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q13b-given-initialized-with-itself.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q13c-inferred-given-order.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/questions/q14a-givens-in-body.hylo", "base": {"verdict": "reject", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 24}}
+{"file": "../report/questions/q14b-givens-in-body-swapped.hylo", "base": {"verdict": "accept", "appliesCalls": 30}, "REC": {"verdict": "reject", "appliesCalls": 24}}
+{"file": "../report/questions/q14c-where-clause-uses-body.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/questions/q15-nested-ranking.hylo", "base": {"verdict": "accept", "appliesCalls": 38}, "REC": {"verdict": "accept", "appliesCalls": 4}}
+{"file": "../report/questions/q16-erroneous-candidate-wins.hylo", "base": {"verdict": "reject", "appliesCalls": 36, "tiedOnDistance": 1}, "REC": {"verdict": "reject", "appliesCalls": 1, "tiedOnDistance": 2}}
+{"file": "../report/questions/q17-member-and-requirement.hylo", "base": {"verdict": "accept", "appliesCalls": 65536, "decidedByWitnessSize": 16383, "tiedOnDistance": 16383}, "REC": {"verdict": "accept", "decidedByWitnessSize": 14, "tiedOnDistance": 14}}
+{"file": "../report/reproducers/c1-dependent-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/reproducers/c2-collection.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../report/reproducers/s1-unrelated-equalities.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s1b-unrelated-equality-call.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s2-equality-chain.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../report/reproducers/s3-conditional-extension.hylo", "base": {"verdict": "accept", "appliesCalls": 19}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../report/reproducers/s4-cyclic-binding.hylo", "base": {"verdict": "crash -11"}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s5-declaration-order.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../report/reproducers/s6-generic-conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s7-self-projection.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s8-refinement.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../report/reproducers/s9-alias-arguments.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/ambiguous-implementation.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/ambiguous-overload.hylo", "base": {"verdict": "reject", "tiedOnDistance": 1}, "REC": {"verdict": "reject", "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/negative/argument-labels.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/associated-type-inequality.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/bodyless-local-function.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/conditional-sink.hylo", "base": {"verdict": "accept", "appliesCalls": 24, "decidedByWitnessSize": 2, "tiedOnDistance": 2}, "REC": {"verdict": "accept", "decidedByWitnessSize": 2, "tiedOnDistance": 2}}
+{"file": "../../Tests/CompilerTests/negative/cyclic-binding.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/cyclic-typealias.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/empty-initialization.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/exclusivity-violation.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/extern-c-indirect-llvm.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/extern-c-indirect-typing.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/extern-c-indirect.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/generic-requirement.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-conditional-expression.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-enum-case.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-inlining.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-loop-control.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-memberwise-init.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-move-sink-subscript.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-mutation-marker.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-nested-yield.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-remote-type.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-return-yield.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-sink-global.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-sink-let.hylo", "base": {"verdict": "accept", "appliesCalls": 132}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-stored-properties.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-trait-extension.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/illegal-yield.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/impossible-implicit-deinit.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/incompatible-if-branches.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/incomplete-type-declaration.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-alias.hylo", "base": {"verdict": "reject", "appliesCalls": 12}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-annotation.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-ascription.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-binding-declaration.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-builtin-dereference.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-call.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-captures.hylo", "base": {"verdict": "reject", "appliesCalls": 52}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-deconstruction.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-modifier-1.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-modifier-2.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-redeclaration.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-return.hylo", "base": {"verdict": "reject", "appliesCalls": 8}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-toplevel-redeclaration.package/src/a.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-toplevel-redeclaration.package/src/b.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/invalid-wildcard.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-argument.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-associated-type-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-binding-ascription.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-comma.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-context.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-identifiers.package/src/main.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-implementation.hylo", "base": {"verdict": "reject", "appliesCalls": 15}, "REC": {"verdict": "reject", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/negative/missing-initializer.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/missing-parameter-ascription.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-return-ascription.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-semicolon.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-type-identifier.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-variant.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/missing-yield-value.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/no-conversion.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/no-given-1.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/no-given-2.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/no-given-3.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/polycephalic-trait.hylo", "base": {"verdict": "reject", "appliesCalls": 16}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/recursive-implicit-deinit.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/recursive-inlining.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/static-call.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/static-member-via-instance.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/synthetic-conformance.hylo", "base": {"verdict": "reject", "appliesCalls": 20}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/trait-refinement.hylo", "base": {"verdict": "reject", "appliesCalls": 28}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/undefined-module.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/undefined-symbol.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/undefined-variant.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/unmatched-comment-delimiter.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/unterminated-call-at-eof.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/unused-value-1.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/unused-value-2.hylo", "base": {"verdict": "reject", "appliesCalls": 4}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/negative/use-before-declaration.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/negative/use-before-init.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/abstract-given.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/adjunct-conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/assignment.hylo", "base": {"verdict": "accept", "appliesCalls": 44, "decidedByWitnessSize": 2, "tiedOnDistance": 2}, "REC": {"verdict": "accept", "decidedByWitnessSize": 2, "tiedOnDistance": 2}}
+{"file": "../../Tests/CompilerTests/positive/associated-type-equality.hylo", "base": {"verdict": "accept", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/big-return.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/branch-inference.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/buffer-literal.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/builtins.hylo", "base": {"verdict": "accept", "appliesCalls": 2496}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/bundle-application-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/bundle-application-2.hylo", "base": {"verdict": "accept", "appliesCalls": 40}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/positive/bundle-requirement.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/c-ffi-calls.package/LibC.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/c-ffi-calls.package/main.hylo", "base": {"verdict": "reject", "appliesCalls": 135}, "REC": {"verdict": "reject", "appliesCalls": 4}}
+{"file": "../../Tests/CompilerTests/positive/chained-type-aliases.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/coercion-derivability-cache.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/conformance-via-equivalence.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 15}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../../Tests/CompilerTests/positive/context-bound.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/control-flow.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/conversion.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/division-by-zero-signed.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/division-by-zero-unsigned.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/division-result-unrepresentable.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/division-succeeds.hylo", "base": {"verdict": "accept", "appliesCalls": 120}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/enum-constructor.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/enum-inference.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/equality.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/existentialization-1.hylo", "base": {"verdict": "accept", "appliesCalls": 24, "decidedByWitnessSize": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept", "decidedByWitnessSize": 1, "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/positive/existentialization-2.hylo", "base": {"verdict": "accept", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/existentialization-3.hylo", "base": {"verdict": "accept", "appliesCalls": 208, "decidedByWitnessSize": 4, "tiedOnDistance": 4}, "REC": {"verdict": "accept", "decidedByWitnessSize": 4, "tiedOnDistance": 4}}
+{"file": "../../Tests/CompilerTests/positive/existentialization-4.hylo", "base": {"verdict": "accept", "appliesCalls": 96, "decidedByWitnessSize": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept", "decidedByWitnessSize": 1, "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/positive/existentialization-5.hylo", "base": {"verdict": "accept", "appliesCalls": 112}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../../Tests/CompilerTests/positive/explicit-deinit.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/extension.hylo", "base": {"verdict": "accept", "appliesCalls": 21}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../../Tests/CompilerTests/positive/factorial.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/fibonacci.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/file-reading.package/main.hylo", "base": {"verdict": "accept", "appliesCalls": 12, "decidedByWitnessSize": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept", "decidedByWitnessSize": 1, "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/positive/float-arithmetic.hylo", "base": {"verdict": "accept", "appliesCalls": 548, "decidedByWitnessSize": 77, "tiedOnDistance": 77}, "REC": {"verdict": "accept", "decidedByWitnessSize": 50, "tiedOnDistance": 50}}
+{"file": "../../Tests/CompilerTests/positive/float-literal.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-bundle.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-call-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-call-2.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-constructor.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-extension.hylo", "base": {"verdict": "accept", "appliesCalls": 10}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../../Tests/CompilerTests/positive/generic-given.hylo", "base": {"verdict": "accept", "appliesCalls": 10}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../../Tests/CompilerTests/positive/generic-member.hylo", "base": {"verdict": "accept", "appliesCalls": 35}, "REC": {"verdict": "accept", "appliesCalls": 2}}
+{"file": "../../Tests/CompilerTests/positive/generic-qualification.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/generic-witness-table.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/global-binding.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/higher-kinded.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/implicit-qualification.hylo", "base": {"verdict": "accept", "appliesCalls": 84}, "REC": {"verdict": "accept", "appliesCalls": 11}}
+{"file": "../../Tests/CompilerTests/positive/inlining-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/inlining-2.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/inlining-broken-cycle.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/inlining-deep-chain.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/inlining-existentialized.hylo", "base": {"verdict": "accept", "appliesCalls": 32, "decidedByWitnessSize": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept", "decidedByWitnessSize": 1, "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/positive/inlining-shared-callee.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/inlining-with-extensions.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/positive/integer-bits.hylo", "base": {"verdict": "accept", "appliesCalls": 1084, "decidedByWitnessSize": 20, "tiedOnDistance": 20}, "REC": {"verdict": "accept", "decidedByWitnessSize": 20, "tiedOnDistance": 20}}
+{"file": "../../Tests/CompilerTests/positive/integer-conversions.hylo", "base": {"verdict": "accept", "appliesCalls": 1116, "decidedByWitnessSize": 9, "tiedOnDistance": 9}, "REC": {"verdict": "accept", "decidedByWitnessSize": 4, "tiedOnDistance": 4}}
+{"file": "../../Tests/CompilerTests/positive/integer-literal.hylo", "base": {"verdict": "accept", "appliesCalls": 52}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/internal-given.package/src/a.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/positive/internal-given.package/src/main.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/positive/keyword-identifiers.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/lambda-inference.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/lexical-distance.package/src/ABC.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/lexical-distance.package/src/E.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/positive/lexical-distance.package/src/S.hylo", "base": {"verdict": "reject", "appliesCalls": 10}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/positive/lexical-distance.package/src/main.hylo", "base": {"verdict": "reject"}, "REC": {"verdict": "reject"}}
+{"file": "../../Tests/CompilerTests/positive/local-given.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/loop-break.hylo", "base": {"verdict": "accept", "appliesCalls": 144, "decidedByWitnessSize": 11, "tiedOnDistance": 11}, "REC": {"verdict": "accept", "decidedByWitnessSize": 11, "tiedOnDistance": 11}}
+{"file": "../../Tests/CompilerTests/positive/loop-continue.hylo", "base": {"verdict": "accept", "appliesCalls": 136, "decidedByWitnessSize": 10, "tiedOnDistance": 10}, "REC": {"verdict": "accept", "decidedByWitnessSize": 10, "tiedOnDistance": 10}}
+{"file": "../../Tests/CompilerTests/positive/member-bundle.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/memberwise-init-1.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/memberwise-init-2.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/memberwise-init-3.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/metatype.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/nested-given-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/nested-given-2.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/new-expression.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/nullary-conformance.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/overload-priority.hylo", "base": {"verdict": "accept", "appliesCalls": 25}, "REC": {"verdict": "accept", "appliesCalls": 3}}
+{"file": "../../Tests/CompilerTests/positive/overloading-1.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/overloading-2.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/partial-type-substitution.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/pattern-matching.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/pointer-place-roundtrip.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/refinement.hylo", "base": {"verdict": "accept", "appliesCalls": 28}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/remote-binding.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/resolution-in-extension.hylo", "base": {"verdict": "accept", "appliesCalls": 5}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/positive/return-in-if-1.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/return-in-if-2.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/runtime-record-offsets.hylo", "base": {"verdict": "accept", "appliesCalls": 500, "decidedByWitnessSize": 8, "tiedOnDistance": 8}, "REC": {"verdict": "accept", "decidedByWitnessSize": 8, "tiedOnDistance": 8}}
+{"file": "../../Tests/CompilerTests/positive/self-where-clause.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/sink-subscript-locally-movable.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/sink-subscript.hylo", "base": {"verdict": "accept", "appliesCalls": 48}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/standard-library.hylo", "base": {"verdict": "accept", "appliesCalls": 144, "decidedByWitnessSize": 9, "tiedOnDistance": 9}, "REC": {"verdict": "accept", "appliesCalls": 15, "decidedByWitnessSize": 9, "tiedOnDistance": 9}}
+{"file": "../../Tests/CompilerTests/positive/static-function.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/static-member-name-clash.hylo", "base": {"verdict": "accept", "appliesCalls": 15}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/positive/stored-binding.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-1.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-2.hylo", "base": {"verdict": "accept", "appliesCalls": 12}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-3.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-4.hylo", "base": {"verdict": "accept", "appliesCalls": 20}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-5.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-6.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-decomposition-7.hylo", "base": {"verdict": "accept", "appliesCalls": 60, "decidedByWitnessSize": 1, "tiedOnDistance": 1}, "REC": {"verdict": "accept", "decidedByWitnessSize": 1, "tiedOnDistance": 1}}
+{"file": "../../Tests/CompilerTests/positive/subscript-load-across-yieldpoint.hylo", "base": {"verdict": "accept", "appliesCalls": 36}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-optimized.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/subscript-use-erased-parameter-in-slide.hylo", "base": {"verdict": "accept", "appliesCalls": 32, "decidedByWitnessSize": 2, "tiedOnDistance": 2}, "REC": {"verdict": "accept", "decidedByWitnessSize": 2, "tiedOnDistance": 2}}
+{"file": "../../Tests/CompilerTests/positive/synthesized-deinit-1.hylo", "base": {"verdict": "accept", "appliesCalls": 32}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/synthesized-deinit-2.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/ternary.hylo", "base": {"verdict": "accept", "appliesCalls": 12, "decidedByWitnessSize": 2, "tiedOnDistance": 2}, "REC": {"verdict": "accept", "decidedByWitnessSize": 2, "tiedOnDistance": 2}}
+{"file": "../../Tests/CompilerTests/positive/trap-1.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/trap-2.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/trap-3.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/trap-4.hylo", "base": {"verdict": "accept"}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/tuple-consing.hylo", "base": {"verdict": "accept", "appliesCalls": 16}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/typealias-transparent.hylo", "base": {"verdict": "accept", "appliesCalls": 4}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/typealiases.hylo", "base": {"verdict": "accept", "appliesCalls": 24}, "REC": {"verdict": "accept", "appliesCalls": 1}}
+{"file": "../../Tests/CompilerTests/positive/unsigned-multiplication-succeeds.hylo", "base": {"verdict": "accept", "appliesCalls": 100}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/while-project.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}
+{"file": "../../Tests/CompilerTests/positive/while-with-alloca.hylo", "base": {"verdict": "accept", "appliesCalls": 8}, "REC": {"verdict": "accept"}}

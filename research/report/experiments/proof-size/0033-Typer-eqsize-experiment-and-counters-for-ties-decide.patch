@@ -1,0 +1,189 @@
+From 86b4e07735b11401e8ca04fe127d16fb6d012f44 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 03:10:51 +0000
+Subject: [PATCH] Typer: eqsize experiment, and counters for ties decided by
+ witness size
+
+eqsize makes a proof returned by the equality procedure complete after as
+many layers as its derivation has steps, as it would if search had found it.
+Off by default: it restores the ranking by size but brings back search work.
+The self-check counts whether search completes in the reported layer.
+Name resolution counts the comparisons decided by the size of a witness.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ .../Typer/NameResolutionCandidate.swift       | 22 ++++++++
+ Sources/FrontEnd/Typer/Typer.swift            | 52 ++++++++++++++++---
+ Sources/FrontEnd/Typer/TyperCounters.swift    |  5 ++
+ 3 files changed, 72 insertions(+), 7 deletions(-)
+
+diff --git a/Sources/FrontEnd/Typer/NameResolutionCandidate.swift b/Sources/FrontEnd/Typer/NameResolutionCandidate.swift
+index e92c9c4..cfa9902 100644
+--- a/Sources/FrontEnd/Typer/NameResolutionCandidate.swift
++++ b/Sources/FrontEnd/Typer/NameResolutionCandidate.swift
+@@ -36,6 +36,28 @@ extension Program {
+       }
+     }
+ 
++    // Instrumentation: how often the size of the witnesses decides, and how often one of them
++    // contains a coercion, whose proof the equality procedure may build differently.
++    if TyperCounters.enabled, case .equal = d {
++      TyperCounters.bump("names.tiedOnDistance")
++      if lhs.reference.elaborationCost != rhs.reference.elaborationCost {
++        TyperCounters.bump("names.decidedByWitnessSize")
++        func coerces(_ w: WitnessExpression) -> Bool {
++          switch w.value {
++          case .builtin(.coercion): return true
++          case .termApplication(let a, let b): return coerces(a) || coerces(b)
++          case .typeApplication(let a, _), .nested(let a): return coerces(a)
++          default: return false
++          }
++        }
++        func coerces(_ r: DeclarationReference) -> Bool {
++          if case .inherited(let w, _, _) = r { return coerces(w) } else { return false }
++        }
++        if coerces(lhs.reference) || coerces(rhs.reference) {
++          TyperCounters.bump("names.decidedByWitnessSizeWithCoercion")
++        }
++      }
++    }
+     return d.inequalElse(
+       .init(between: lhs.reference.elaborationCost, and: rhs.reference.elaborationCost))
+   }
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index a893bd3..6e7a90f 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -74,6 +74,9 @@ public struct Typer {
+   /// `true` iff the last resolution stopped at the depth bound with work left.
+   private var lastResolutionExhaustedDepth = false
+ 
++  /// The number of layers that the last resolution explored.
++  private var lastResolutionDepth = 0
++
+   /// The scopes in which implicit resolution was abandoned (`budget`).
+   private var reportedBudgetScopes: Set<ScopeIdentity> = []
+ 
+@@ -4663,17 +4666,35 @@ public struct Typer {
+           switch searchDerives(t, in: scopeOfUse, where: environment, verifying: .equality) {
+           case .some(true):
+             TyperCounters.bump("selfcheck.equality.proofConfirmed")
++            // Does search find a derivation of the size that the procedure reports?
++            let n = derivationSize(w)
++            if lastResolutionDepth == n {
++              TyperCounters.bump("selfcheck.equality.sizeConfirmed")
++            } else if lastResolutionDepth < n {
++              TyperCounters.bump("selfcheck.equality.searchSmaller")
++            } else {
++              TyperCounters.bump("selfcheck.equality.searchLarger")
++            }
+           case .some(false):
+             TyperCounters.bump("selfcheck.equality.proofNotFoundBySearch")
+           case .none:
+             TyperCounters.bump("selfcheck.equality.inconclusive")
+           }
+         }
++        // Fix (`eqsize`): the proof completes in the layer in which search would have found it.
++        var e = environment
++        let wait = TyperExperiments.eqsize ? max(derivationSize(w) - 1, 0) : 0
++        e.credit += wait
++        let th = formThread(
++          matching: w, to: u, in: e, then: continuation,
++          penalties: penalties + (TyperExperiments.eqsolveCost ? cost : 0),
++          ancestors: ancestors)
++        if wait == 0 { return [th] }
++        TyperCounters.bump("eqsize.waited", by: wait)
+         return [
+-          formThread(
+-            matching: w, to: u, in: environment, then: continuation,
+-            penalties: penalties + (TyperExperiments.eqsolveCost ? cost : 0),
+-            ancestors: ancestors)
++          ResolutionThread(
++            matching: th.witness, to: th.queried, in: th.environment, then: th.tail,
++            penalties: th.penalties, delay: wait)
+         ]
+       }
+     }
+@@ -5199,16 +5220,19 @@ public struct Typer {
+ 
+     var cost = 0
+     var refuted = false
++    var layers = 0
+     for i in parts.indices {
+       switch solveEquality(parts[i], in: scopeOfUse, where: e.assuming(givens: Array(parts[..<i]))) {
+       case .notApplicable:
+         return nil
+       case .refuted:
+         refuted = true
+-      case .proved(_, let c):
++      case .proved(let p, let c):
+         cost += TyperExperiments.eqsolveCost ? c : 0
++        layers += TyperExperiments.eqsize ? max(derivationSize(p), 1) : 1
+       }
+     }
++    e.credit = thread.environment.credit + layers
+     eagerDecisions += 1
+     if refuted {
+       TyperCounters.bump("eqeager.refuted")
+@@ -5224,10 +5248,23 @@ public struct Typer {
+     return .next([
+       ResolutionThread(
+         matching: w, to: b, in: e, then: thread.tail,
+-        penalties: thread.penalties + cost, delay: parts.count)
++        penalties: thread.penalties + cost, delay: layers)
+     ])
+   }
+ 
++  /// Returns the number of givens that the derivation `w` uses, which is the number of layers
++  /// that search spends to complete it.
++  private func derivationSize(_ w: WitnessExpression) -> Int {
++    switch w.value {
++    case .termApplication(let a, let b):
++      return derivationSize(a) + derivationSize(b)
++    case .typeApplication(let a, _), .nested(let a):
++      return derivationSize(a)
++    default:
++      return 1
++    }
++  }
++
+   /// Returns the continuation of `thread` after having resolved `operand` in `scopeOfUse`.
+   private mutating func threadContinuation(
+     appending operand: SummonResult, to thread: ResolutionThread, in scopeOfUse: ScopeIdentity
+@@ -5539,7 +5576,7 @@ public struct Typer {
+ 
+     // Layers spent waiting for equalities decided in `match` do not count against the bound.
+     func bound(_ ts: [ResolutionThread]) -> Int {
+-      TyperExperiments.eqeager
++      (TyperExperiments.eqeager || TyperExperiments.eqsize)
+         ? maxImplicitDepth + (ts.lazy.map(\.environment.credit).max() ?? 0) : maxImplicitDepth
+     }
+ 
+@@ -5602,6 +5639,7 @@ public struct Typer {
+         work = []
+       }
+     }
++    lastResolutionDepth = depth
+     if done.isEmpty && (exhausted || heightExhausted || !work.isEmpty) {
+       TyperCounters.bump("summon.depthExhausted")
+       lastResolutionExhaustedDepth = true
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index 6b67ba7..c999044 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -115,6 +115,11 @@ public enum TyperExperiments {
+   /// have given them (on by default with `eqsolve`; `eqsolvefree` turns it off).
+   nonisolated(unsafe) public static var eqsolveCost: Bool = !enabled.contains("eqsolvefree")
+ 
++  /// SEMANTIC FIX: an equality proved by the decision procedure completes after as many layers as
++  /// its derivation has steps, as it would if search had found it, so that derivations are still
++  /// ranked by their size. These layers do not count against the depth bound.
++  nonisolated(unsafe) public static var eqsize: Bool = enabled.contains("eqsize")
++
+   /// Variant of `absmodel`: ground equality givens make the types they relate opaque (`⊤`)
+   /// instead of making the model inconclusive.
+   nonisolated(unsafe) public static var absquotient: Bool = enabled.contains("absquotient")
+-- 
+2.43.0
+

@@ -118,6 +118,7 @@ h3.group { margin-top: 18px; font-size: 0.86rem; font-family: var(--font-mono); 
     <p class="lede">This package describes a study of the type checker of <code>hylo-new</code>: nine soundness problems of the existing implementation with a fix for each, two kinds of valid generic programs that it rejects, and a set of techniques that make it 4.5× faster on the standard library. Several of the fixes rest on a reading of the language that only its designer can confirm. Those readings are stated here as eighteen questions, each with a small program.</p>
     <p>This page is the entry point. It takes about twenty minutes to read; everything else in the archive is supporting detail.</p>
     <ul class="toc">
+      <li><a href="#update">Update: the questions were answered</a></li>
       <li><a href="#asked">What is asked</a></li>
       <li><a href="#confidence">Provenance and confidence</a></li>
       <li><a href="#findings">Findings in the existing implementation</a></li>
@@ -128,6 +129,18 @@ h3.group { margin-top: 18px; font-size: 0.86rem; font-family: var(--font-mono); 
       <li><a href="#contents">Contents of the archive</a></li>
     </ul>
   </header>
+
+  <section id="update">
+    <h2>Update: the questions were answered</h2>
+    <p><a href="questions/ANSWERS.md">questions/ANSWERS.md</a> records the answers of 13 November 2026 and what follows from them. In short:</p>
+    <ul>
+      <li>the commit rule for dependent requirements (question 8) is withdrawn: requirements are solved together, as the designer intends, and <code>premcommit</code> leaves the recommended configuration;</li>
+      <li>the equality procedure does not preserve the ranking of derivations by size (questions 6 and 10), contrary to what this page says below; one test program is accepted where it should be ambiguous, and the simple correction is too costly to adopt;</li>
+      <li>the rule for <code>Self.X</code> (question 2) is disputed and returned to the designer with a program in which the alternative converts a value of one struct type into another;</li>
+      <li>three answers call for new work: a given is invisible in its own initializer, a where clause does not see the body it governs, and the members of <code>A</code> are available on a <code>T</code> equal to it.</li>
+    </ul>
+    <p class="muted">The rest of this page is as it was when the questions were asked.</p>
+  </section>
 
   <section id="asked">
     <h2>What is asked</h2>
@@ -642,7 +655,7 @@ swift build -c release --product tc-bench</code></pre>
 .build/release/tc-bench reproducers/s6-generic-conformance.hylo
 
 # the recommended configuration
-export REC=index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,premcommit,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead
+export REC=index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset,reifymemo,occurs,fixsubst,eqsolve,eqmgu,arrowenv,budget,sigrounds,assocsubst,abstractstrict,hidecache,aliasargs,premsubst,headsubst,dedup,eqindex,eqeager,cleanfirst,lookahead
 HYLO_TC_EXPERIMENTS=$REC .build/release/tc-bench reproducers/s6-generic-conformance.hylo
 
 # with the self-check, and with a trace of each completed resolution

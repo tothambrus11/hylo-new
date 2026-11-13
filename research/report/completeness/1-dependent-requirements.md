@@ -1,6 +1,8 @@
 # 1. Requirements that mention another requirement
 
-**Flags:** `premsubst`, with `premcommit`. About 450 lines. Design, invariants, test plan and adversarial review: `../follow-up/designs/engine.md`.
+**Update:** the language designer's answer is that the requirements of a clause are solved together: any witness that satisfies the whole clause will do. The commitment rule below (`premcommit`) is therefore withdrawn from the recommended configuration, and the last limit listed at the end no longer applies. See `../questions/ANSWERS.md`, question 8.
+
+**Flags:** `premsubst`; `premcommit` is the withdrawn rule. About 450 lines. Design, invariants, test plan and adversarial review: `../follow-up/designs/engine.md`.
 
 ## Symptom
 

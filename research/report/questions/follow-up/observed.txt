@@ -1,0 +1,61 @@
+Output of the type checker on each program: without flags ("existing"), in the recommended configuration
+(without the commit rule), and with the original rule for Self.X in place of `abstractstrict`.
+
+r18a-one-bad-argument.hylo
+  existing               rejected  [solver forks: 6]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+  recommended            rejected  [solver forks: 10]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+  original Self.X rule   rejected  [solver forks: 10]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+
+r18b-one-bad-argument-of-seven.hylo
+  existing               rejected  [solver forks: 3279]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+  recommended            rejected  [solver forks: 3300]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+  original Self.X rule   rejected  [solver forks: 3300]
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: ambiguous use of 'h'
+                         error: cannot pass value of type 'A0' to parameter 'Z'
+
+r2a-conversion.hylo
+  existing               rejected
+                         error: cannot pass value of type 'C' to parameter '(A::P).X'
+                         error: no coercion from '(A::P).X' to 'B'
+  recommended            rejected
+                         error: no coercion from '(T::P).X' to '(Self::P).X'
+  original Self.X rule   accepted
+
+r2b-without-second-requirement.hylo
+  existing               rejected
+                         error: cannot pass value of type 'C' to parameter '(S::P).X'
+                         error: no coercion from '(A::P).X' to 'B'
+  recommended            rejected
+                         error: cannot pass value of type 'C' to parameter '(S::P).X'
+  original Self.X rule   rejected
+                         error: cannot pass value of type 'C' to parameter '(S::P).X'
+
+r2c-without-second-requirement-valid.hylo
+  existing               accepted
+  recommended            accepted
+  original Self.X rule   accepted

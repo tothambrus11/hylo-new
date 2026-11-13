@@ -1,0 +1,11 @@
+//! stage:typing no-std
+// Example for question 18. No candidate of `h` returns a `Z`, so the second argument is an error.
+// Today three diagnostics are reported: "ambiguous use of 'h'" for each of the two calls, and
+// "cannot pass value of type 'A0' to parameter 'Z'".
+struct A0 { public memberwise init }
+struct A1 { public memberwise init }
+struct Z { public memberwise init }
+fun h() -> A0 { A0() }
+fun h() -> A1 { A1() }
+fun g(x0: A0, z: Z) {}
+public fun main() { g(h(), h()) }
