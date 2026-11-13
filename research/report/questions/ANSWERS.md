@@ -18,7 +18,7 @@ The eighteen questions of `../START-HERE.html` were answered on 13 November 2026
 | 10 | Is the ranking through equalities intended? | Yes; symmetry makes the proof longer | Yes | Same defect as question 6 |
 | 11 | Is the bound of ten steps part of the language? | No | Kept as it is | Valid programs rejected at the bound are defects; the bound should become an error or disappear |
 | 12 | May the types of extensions and givens depend on each other? | Yes | Yes | None |
-| 13 | May a given be a candidate in its own initializer? What is a given with an inferred type worth? | No; it is worth the value of its initializer | Not fixed | **New work**; decides between the options of `../experiments/inferred-givens` |
+| 13 | May a given be a candidate in its own initializer? What is a given with an inferred type worth? | No; it is worth the value of its initializer | Not fixed | **Implemented as an experiment** (option 5 of `../experiments/inferred-givens`) |
 | 14 | Does the order of givens in a body matter? May a where clause name a declaration of the body? | No and no | No; not addressed | **New work** for the second part: today such a clause is accepted |
 | 15 | Is the nested ranking of overloads intended? | Yes, closest wins | Preserved | None |
 | 16 | Should a solution with more errors stay viable? | It does not matter | Preserved | Freedom to prune |
@@ -131,7 +131,15 @@ The answer has two parts: a given is not a candidate in its own initializer, and
 - The first part is not what happens today for a given with a written type. `q13b`, in which a given is the only candidate for the goal of its own initializer, is accepted by the existing implementation and by the fixes: the given is hidden only while its *type* is computed, and a written type needs no computation. By the answer it should be rejected.
 - The fourth option of the experiments (inferred givens as entries of the table of signatures, with a check for initialization cycles) makes verdicts independent of declaration order but lets a given see itself, and therefore rejects `q13a`, which by the answer is valid.
 
-What the answer calls for is a lexical rule: a resolution made inside the initializer of a given does not see that given, whatever is being computed at the time. With visibility read from the table everywhere else, this keeps the order independence of the fourth option and accepts `q13a`. It is not implemented.
+What the answer calls for is a lexical rule: a resolution made inside the initializer of a given does not see that given, whatever is being computed at the time. With visibility read from the table everywhere else, this keeps the order independence of the fourth option and accepts `q13a`.
+
+**Implemented as `givenself`** (about 30 lines), after the pattern that the compiler already uses for conformances: `anonymousImplementation` hides a conformance around the one resolution that finds the traits it refines. Combined with the fourth option (`givenself,givennodes,givencycle`):
+
+- `q13a` is accepted, `q13b` is rejected, `q13c` is accepted in all 24 orders;
+- 38 programs about givens have one verdict in every order, with no self-check violation;
+- on 1,708 programs, 10 verdicts change, all about the initializer of a given; the output on the compiler's tests is identical (216 of 216 files).
+
+It is not yet part of the recommended configuration. Details: `../experiments/inferred-givens/README.md`, option 5.
 
 ## Question 14: where clauses and bodies
 
@@ -180,7 +188,7 @@ index,typevec,symindex,traitindex,memberskip,twins,stackscan,coeset,reifymemo,oc
 | Item | From | Size |
 |---|---|---|
 | Settle `Self.X` (which of the three lines of `r2a` is the error) | 2 | a question, then a rule of about 20 lines either way |
-| A given is invisible in its own initializer, lexically; inferred givens as entries of the table | 13 | about 100 lines, on top of the fourth option of the experiments |
+| A given is invisible in its own initializer; inferred givens as entries of the table | 13 | **done as an experiment** (`givenself,givennodes,givencycle`); to be adopted or not |
 | A where clause does not see the declarations of the body it governs | 14 | a check in name lookup |
 | Members of `A` on a `T` when `T == A` | 4 | member lookup and receiver coercion; the largest item |
 | Replace the bound by a budget that reports an error | 11 | the mechanisms exist (`budget`, `heightbound`); the default must change |

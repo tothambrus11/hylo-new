@@ -21,6 +21,10 @@ CONFIGS["RECJ"] = ",".join(x for x in CONFIGS["REC"].split(",") if x != "premcom
 CONFIGS["RECS"] = ",".join(x for x in CONFIGS["RECJ"].split(",") if x != "abstractstrict")
 # RECJ with equality proofs ranked by their size (`eqsize`).
 CONFIGS["RECZ"] = CONFIGS["RECJ"] + ",eqsize"
+# RECJ with a given hidden in its own initializer, alone (RECG) and with inferred givens outside
+# functions as entries of the table of signatures, checked for initialization cycles (RECN).
+CONFIGS["RECG"] = CONFIGS["RECJ"] + ",givenself"
+CONFIGS["RECN"] = CONFIGS["RECJ"] + ",givenself,givennodes,givencycle"
 def flags(config):
     parts = config.split("+")
     return ",".join(x for x in [CONFIGS.get(parts[0], parts[0])] + parts[1:] if x)

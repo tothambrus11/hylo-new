@@ -1,0 +1,108 @@
+From 68563bf3daed1f813bbbade33cf6d6d716666dc3 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Fri, 13 Nov 2026 09:19:56 +0000
+Subject: [PATCH] Typer: givenself, a given is not a candidate in its own
+ initializer
+
+The given is hidden from the resolutions made while its initializer is
+typed, as a conformance is hidden while the traits it refines are resolved,
+but not while another declaration is typed from inside the initializer.
+Answers computed meanwhile are not memoized and the index of givens is not
+used. Off by default.
+
+Co-Authored-By: Claude Mythos 5.2 <noreply@anthropic.com>
+Claude-Session: https://claude.ai/code/session_011CH6tJP7hLkrpGFxEq7K6r
+---
+ Sources/FrontEnd/Typer/Typer.swift         | 21 ++++++++++++++++++++-
+ Sources/FrontEnd/Typer/TyperCounters.swift |  7 +++++++
+ 2 files changed, 27 insertions(+), 1 deletion(-)
+
+diff --git a/Sources/FrontEnd/Typer/Typer.swift b/Sources/FrontEnd/Typer/Typer.swift
+index 6e7a90fb..705d5cf8 100644
+--- a/Sources/FrontEnd/Typer/Typer.swift
++++ b/Sources/FrontEnd/Typer/Typer.swift
+@@ -107,6 +107,10 @@ public struct Typer {
+   /// yet (`sigrounds`).
+   private var skippedInferredGivens: Set<DeclarationIdentity> = []
+ 
++  /// The givens whose initializer is being typed, innermost last, each with the number of
++  /// declarations that were being typed when its initializer was entered (`givenself`).
++  private var initializersInProgress: [(given: DeclarationIdentity, depth: Int)] = []
++
+   /// The given with an inferred type whose entry in the table of signatures is being computed.
+   private var inferredNodeInProgress: DeclarationIdentity? = nil
+ 
+@@ -889,7 +893,10 @@ public struct Typer {
+ 
+     case .using, .given, .unconditional:
+       if let i = program[d].initializer {
++        let own = TyperExperiments.givenself && (program[d].role == .given)
++        if own { initializersInProgress.append((.init(d), declarationsOnStack.count)) }
+         check(i, requiring: t)
++        if own { initializersInProgress.removeLast() }
+       }
+     }
+ 
+@@ -1776,6 +1783,9 @@ public struct Typer {
+     if declarationsOnStack.insert(.init(d)).inserted {
+       defer { declarationsOnStack.remove(.init(d)) }
+       let cuts = cycleCuts
++      let own = TyperExperiments.givenself && (program[d].role == .given)
++      if own { initializersInProgress.append((.init(d), declarationsOnStack.count)) }
++      defer { if own { initializersInProgress.removeLast() } }
+ 
+       var c = InferenceContext()
+       let p = inferredType(of: d, in: &c)
+@@ -5749,7 +5759,7 @@ public struct Typer {
+   /// Returns the index of the givens visible from `scopeOfUse`, or `nil` if it can't be computed
+   /// because some declarations are being typed.
+   internal mutating func givenIndex(visibleFrom scopeOfUse: ScopeIdentity) -> GivenIndex? {
+-    if !declarationsOnStack.isEmpty || settlingSignatures {
++    if !declarationsOnStack.isEmpty || settlingSignatures || !initializersInProgress.isEmpty {
+       TyperCounters.bump("index.unavailable")
+       return nil
+     }
+@@ -7634,6 +7644,13 @@ public struct Typer {
+   private mutating func isVisible(_ g: Given) -> Bool {
+     switch g {
+     case .user(let d):
++      // Fix (`givenself`): a given is not a candidate in its own initializer.
++      if let own = initializersInProgress.last, own.given == d,
++        declarationsOnStack.count == own.depth
++      {
++        TyperCounters.bump("givenself.hidden")
++        return false
++      }
+       if settlingSignatures && isSignatureNode(d) {
+         if signatureTable[d] != nil { return true }
+         hiddenCandidateSeen = true
+@@ -8483,6 +8500,8 @@ public struct Typer {
+ 
+   /// Returns `true` iff there is a declaration introducing an implicit that is being typed.
+   private func hasImplicitOnStack() -> Bool {
++    // An answer computed while a given is hidden in its own initializer is not to be shared.
++    if !initializersInProgress.isEmpty { return true }
+     if TyperExperiments.stackscan {
+       if declarationsOnStack.isEmpty { return false }
+       for d in declarationsOnStack {
+diff --git a/Sources/FrontEnd/Typer/TyperCounters.swift b/Sources/FrontEnd/Typer/TyperCounters.swift
+index c9990446..77c2674a 100644
+--- a/Sources/FrontEnd/Typer/TyperCounters.swift
++++ b/Sources/FrontEnd/Typer/TyperCounters.swift
+@@ -176,6 +176,13 @@ public enum TyperExperiments {
+   /// given whose initializer is resolved, directly or through others, with itself is rejected.
+   nonisolated(unsafe) public static var givencycle: Bool = enabled.contains("givencycle")
+ 
++  /// SEMANTIC FIX: a given is not a candidate of the resolutions made in its own initializer.
++  ///
++  /// The given is hidden while its initializer is typed, in the way a conformance is hidden while
++  /// the conformances that it refines are resolved, but not while another declaration is typed
++  /// from inside the initializer.
++  nonisolated(unsafe) public static var givenself: Bool = enabled.contains("givenself")
++
+   /// EXPERIMENT (with `sigrounds`): a given whose inferred type depends on a declaration being
+   /// typed is not a candidate of the resolutions made by that declaration.
+   nonisolated(unsafe) public static var givenlazy: Bool = enabled.contains("givenlazy")
+-- 
+2.43.0
+

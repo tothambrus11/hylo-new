@@ -1,0 +1,12 @@
+1708 programs; verdict changes: 10 ; violations: 0 ; selfcheck verdict differs: 4
+   reject -> accept  attack-sigrounds/p/f04-global-given-from-global-let.hylo               declaration refers to itself
+   reject -> accept  attack-sigrounds/p/k28-inferred-given-enters-function.hylo             the type of this given must be written: it is visible to the implicit resolution
+   accept -> reject  attack-sigrounds/p/s02-ascribed-given-initialized-from-itself.hylo     no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+   reject -> accept  design-order/tests/28-inferred-given-enters-function.hylo              the type of this given must be written: it is visible to the implicit resolution
+   reject -> accept  design-order/tests/35-inferred-given-at-top-level.hylo                 the type of this given must be written: it is visible to the implicit resolution
+   accept -> reject  ../report/questions/q13b-given-initialized-with-itself.hylo            no coercion from 'A ==> [Void]() let -> A' to '[Void]() let -> A'
+   reject -> accept  ../report/questions/q13c-inferred-given-order.hylo                     declaration refers to itself
+   reject -> accept  ../report/experiments/inferred-givens/tests/g01-given-from-global.hylo declaration refers to itself
+   reject -> accept  ../report/experiments/inferred-givens/tests/g04-given-needs-given.hylo no coercion from 'A ==> [Void]() let -> B' to '[Void]() let -> B'
+   reject -> accept  ../report/experiments/inferred-givens/tests/g07-signature-sees-inferre the type of this given must be written: it is visible to the implicit resolution
+finished

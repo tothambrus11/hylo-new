@@ -52,6 +52,35 @@ Each was run on the 12 programs of `tests/` and on the 23 earlier programs about
 - Regression: 150 of the 152 expected verdicts of `../../follow-up/scripts/regress.py`; the two differences are `28` and `35`, intended. On the compiler's tests and the programs of the order design and attack (351 files), no other verdict changes and no self-check violation. The semantic oracle on the 216 test-suite files was not re-run for this flag; the suite has no such given, so no difference is expected.
 - It has not been reviewed adversarially. Program `28` is the one that broke the first attempt at treating these givens as entries (accepted in 12 of 24 orders then); it now has one verdict, but one program is not a proof.
 
+## After the designer's answers: option 5
+
+The designer answered that a given is not a candidate in its own initializer, and that a given with an inferred type is worth the value of its initializer (`../../questions/ANSWERS.md`, question 13). That excludes option 1, and it asks of option 4 that the given be hidden in its own initializer, which is what made option 4 reject `g11`.
+
+**Option 5: `givenself,givennodes,givencycle`** (`0034-*.patch`, about 30 lines on top of option 4). While the initializer of a given is typed, that given is not a candidate; as soon as another declaration is typed from inside the initializer, it is visible again. The rule is modelled on what the compiler already does for a conformance: `anonymousImplementation` in `Typer.swift` puts the conformance on the stack of hidden declarations around the one resolution that finds the traits it refines ("we cannot use `d` to resolve `P<Self>`"). Here the scope of the hiding is one initializer. The answers computed meanwhile are not memoized, and the index of givens is not used.
+
+It also applies to a given with a written type, which today is a candidate in its own initializer.
+
+| Program | Existing and recommended | Option 4 | Option 5 |
+|---|---|---|---|
+| `g01` given from a global binding | A12/R12 | A24 | A24 |
+| `g04` given that needs another given | A12/R12 | A24 | A24 |
+| `g05` given initialized with itself | R24 | R24 | R24 |
+| `g06` cycle through a global binding | R24 | R24 | R24 |
+| `g09` given from a generic call | A22/R2 | A24 | A24 |
+| `g10` two givens initialized with each other | R24 | R24 | R24 |
+| `g11` initializer needs its own type; a written given exists | A24 | **R24** | A24 |
+| `g12` chain of three givens | A5/R19 | A24 | A24 |
+| `questions/q13b` written given, only candidate for its own initializer | **A24** | A24 | R24 |
+
+Validation of option 5:
+
+- 38 programs about givens (the 12 of `tests/`, the three of question 13 and the 23 earlier ones), each in up to 24 orders with the self-check on: one verdict per program, no violation (`orders-givenself.jsonl`). `givenself` alone leaves the order dependence, as expected.
+- 1,708 programs, against the recommended configuration: 10 verdicts change, all of them programs about the initializer of a given: 8 become accepted (inferred givens that were order-dependent or rejected with "the type of this given must be written"), 2 become rejected (a written given that is the only candidate for its own initializer: `q13b` and `attack-sigrounds/p/s02`). No self-check violation (`compare-givenself.jsonl`).
+- Semantic dump of the compiler's tests: identical to the existing implementation, 216 of 216 files.
+- 150 of the 152 regression verdicts; the other two are `28` and `35`, which expected the rule "the type of this given must be written".
+
+What it leaves open is what option 4 leaves open, minus `g11`: the cycle check sees uses between inferred givens only, the initializer of each such given is typed twice per round, and it has not been reviewed adversarially. One imprecision is inherited from the pattern it copies: a declaration whose type is first computed from inside the initializer, such as a global binding with an inferred type, is typed with the given visible, which is the lexical reading; a resolution made directly in the initializer is the only place where the given is hidden.
+
 ## Data
 
-`orders.jsonl` (the 12 programs, all options), `orders2.jsonl` (the 23 earlier programs, recommended configuration and option 4), `compare-d.jsonl` (recommended against option 4, 351 files).
+`orders.jsonl` (the 12 programs, options 1 to 4), `orders2.jsonl` (the 23 earlier programs, recommended configuration and option 4), `compare-d.jsonl` (recommended against option 4, 351 files), `orders-givenself.jsonl` and `compare-givenself.jsonl` (option 5).
